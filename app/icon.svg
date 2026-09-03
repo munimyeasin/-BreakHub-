@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#120D2C"/>
+      <stop offset="50%" stop-color="#1A123D"/>
+      <stop offset="100%" stop-color="#080614"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#00F0FF"/>
+    </linearGradient>
+    <linearGradient id="padGrad" x1="12" y1="20" x2="52" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2D1B69"/>
+      <stop offset="100%" stop-color="#110B29"/>
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#00F0FF" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Background Rounded Shield -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" stroke="url(#glowGrad)" stroke-width="2.5" stroke-opacity="0.9"/>
+
+  <!-- Gamepad Body -->
+  <path d="M18 22 C13 22, 10 26, 11 36 L13 45 C13.8 48.5, 17.5 50, 20.5 48 C23.5 46, 25 40, 27 40 L37 40 C39 40, 40.5 46, 43.5 48 C46.5 50, 50.2 48.5, 51 45 L53 36 C54 26, 51 22, 46 22 Z"
+        fill="url(#padGrad)"
+        stroke="url(#glowGrad)"
+        stroke-width="2"/>
+
+  <!-- D-Pad (Left) -->
+  <rect x="19" y="28" width="4" height="10" rx="1" fill="#00F0FF" filter="url(#neonGlow)"/>
+  <rect x="16" y="31" width="10" height="4" rx="1" fill="#00F0FF" filter="url(#neonGlow)"/>
+  <circle cx="21" cy="33" r="1.2" fill="#070414"/>
+
+  <!-- Action Buttons (Right) -->
+  <circle cx="43" cy="29" r="2" fill="#F43F5E" filter="url(#neonGlow)"/>
+  <circle cx="47" cy="33" r="2" fill="#00F0FF" filter="url(#neonGlow)"/>
+  <circle cx="39" cy="33" r="2" fill="#EAB308" filter="url(#neonGlow)"/>
+  <circle cx="43" cy="37" r="2" fill="#10B981" filter="url(#neonGlow)"/>
+
+  <!-- Center Status LED Indicator -->
+  <circle cx="32" cy="27" r="1.5" fill="#00F0FF" filter="url(#neonGlow)"/>
+  <line x1="29" y1="34" x2="31" y2="34" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="33" y1="34" x2="35" y2="34" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
