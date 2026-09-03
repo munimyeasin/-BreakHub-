@@ -88,7 +88,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Retro-arcade space combat simulator with plasma lasers and drone swarms.",
-      "play_count": 184,
+      "play_count": 0,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -101,7 +101,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/quantum-xo.svg",
       "description": "Futuristic 3x3 tactical showdown against Overthinker Final Boss.",
-      "play_count": 37,
+      "play_count": 0,
       "rating": 4.8,
       "rating_count": 16,
       "status": "active"
@@ -113,7 +113,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/quantum-2048.svg",
       "description": "Cyberpunk sliding block merger. Combine identical energy nodes to forge the 2048 core.",
-      "play_count": 5,
+      "play_count": 0,
       "rating": 4.9,
       "rating_count": 15,
       "status": "active"
@@ -125,7 +125,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/memory-matrix.svg",
       "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
-      "play_count": 5,
+      "play_count": 0,
       "rating": 4.9,
       "rating_count": 11,
       "status": "active"
@@ -137,7 +137,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/hyper-tapper.svg",
       "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
-      "play_count": 14,
+      "play_count": 0,
       "rating": 4.9,
       "rating_count": 22,
       "status": "active"
@@ -149,7 +149,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-snake.svg",
       "description": "Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
-      "play_count": 42,
+      "play_count": 0,
       "hype_count": 0,
       "status": "coming_soon"
     },
@@ -171,7 +171,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-dash.svg",
       "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
-      "play_count": 12,
+      "play_count": 0,
       "rating": 4.9,
       "rating_count": 19,
       "status": "hidden"
@@ -183,7 +183,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/geometry-dash.svg",
       "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
-      "play_count": 48,
+      "play_count": 0,
       "rating": 5,
       "rating_count": 31,
       "status": "hidden"
@@ -195,7 +195,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/cyber-breaker.svg",
       "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
-      "play_count": 16,
+      "play_count": 0,
       "rating": 4.8,
       "rating_count": 12,
       "status": "hidden"
@@ -207,7 +207,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/chroma-reflex.svg",
       "description": "Simon-inspired 4-quadrant chromatic memory sequence & audio tone reflex test.",
-      "play_count": 15,
+      "play_count": 0,
       "rating": 4.8,
       "rating_count": 9,
       "status": "hidden"
@@ -219,7 +219,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/paper-io.svg",
       "description": "Conquer the cyber grid! Expand your neon territory, encircle massive zones, and slice enemy tails before they cut yours.",
-      "play_count": 720,
+      "play_count": 0,
       "rating": 5,
       "rating_count": 25,
       "status": "hidden"
