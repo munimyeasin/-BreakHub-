@@ -2,8 +2,18 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Trophy, Check, Edit3, Maximize2, Minimize2 } from 'lucide-react';
+import NeonSnakeGame from '@/components/games/NeonSnakeGame';
+import MemoryMatrixGame from '@/components/games/MemoryMatrixGame';
+import QuantumXOGame from '@/components/games/QuantumXOGame';
+import HyperTapperGame from '@/components/games/HyperTapperGame';
+import CyberDashGame from '@/components/games/CyberDashGame';
 import NeonStarfighterGame from '@/components/games/NeonStarfighterGame';
+import CyberBreakerGame from '@/components/games/CyberBreakerGame';
+import Cyber2048Game from '@/components/games/Cyber2048Game';
+import ChromaReflexGame from '@/components/games/ChromaReflexGame';
+import GeometryDashGame from '@/components/games/GeometryDashGame';
 import CyberSlicerGame from '@/components/games/CyberSlicerGame';
+import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -239,12 +249,52 @@ export default function GameModal({
 
         {/* Dynamic Game Component Viewport */}
         <div className={`p-2 sm:p-3 flex flex-col items-center justify-center overflow-y-auto ${isFullscreen ? 'flex-1 my-auto w-full h-full' : ''}`}>
+          {(game.id === 'g_snake_01' || game.slug === 'neon-snake') && (
+            <NeonSnakeGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_flip_02' || game.slug === 'memory-matrix') && (
+            <MemoryMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_ttt_03' || game.slug === 'quantum-xo') && (
+            <QuantumXOGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_tap_04' || game.slug === 'hyper-tapper') && (
+            <HyperTapperGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_action_06' || game.slug === 'cyber-dash') && (
+            <CyberDashGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
           {(game.id === 'g_shooter_07' || game.slug === 'neon-starfighter') && (
             <NeonStarfighterGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
 
+          {(game.id === 'g_breaker_08' || game.slug === 'cyber-breaker') && (
+            <CyberBreakerGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_card_05' || game.slug === 'quantum-2048') && (
+            <Cyber2048Game gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_reflex_09' || game.slug === 'chroma-reflex') && (
+            <ChromaReflexGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_geometry_10' || game.slug === 'geometry-dash') && (
+            <GeometryDashGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
           {(game.id === 'g_slicer_11' || game.slug === 'cyber-slicer') && (
             <CyberSlicerGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_paper_12' || game.slug === 'paper-io' || game.slug === 'neon-paper-io') && (
+            <NeonPaperIoGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
         </div>
       </div>

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="geoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05011a" />
+      <stop offset="50%" stop-color="#120436" />
+      <stop offset="100%" stop-color="#2d004d" />
+    </linearGradient>
+    <filter id="cubeGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00ff66" flood-opacity="0.9" />
+    </filter>
+    <filter id="spikeGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff0055" flood-opacity="0.9" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#geoBg)" />
+
+  <!-- Geometric Grid Background Pattern -->
+  <g stroke="#00f0ff" stroke-width="1" opacity="0.1">
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+  </g>
+
+  <!-- Platform Floor -->
+  <rect x="0" y="300" width="400" height="100" fill="#0d0724" />
+  <line x1="0" y1="300" x2="400" y2="300" stroke="#00ff66" stroke-width="5" />
+
+  <!-- Platform Checkered Tiles -->
+  <g fill="#1a0f44" stroke="#331b7a" stroke-width="2">
+    <rect x="0" y="305" width="50" height="50" />
+    <rect x="100" y="305" width="50" height="50" />
+    <rect x="200" y="305" width="50" height="50" />
+    <rect x="300" y="305" width="50" height="50" />
+  </g>
+
+  <!-- Sharp Neon Spikes Hazard (Right) -->
+  <g filter="url(#spikeGlow)">
+    <!-- Spike 1 -->
+    <polygon points="255,300 275,235 295,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
+    <polygon points="268,300 275,245 282,300" fill="#ffffff" opacity="0.6" />
+
+    <!-- Spike 2 -->
+    <polygon points="295,300 315,235 335,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
+    <polygon points="308,300 315,245 322,300" fill="#ffffff" opacity="0.6" />
+
+    <!-- Spike 3 -->
+    <polygon points="335,300 355,235 375,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
+  </g>
+
+  <!-- Yellow Jump Pad Booster Ring on Floor -->
+  <g transform="translate(130, 290)">
+    <ellipse cx="0" cy="8" rx="28" ry="10" fill="#ffe600" stroke="#ffffff" stroke-width="3" />
+    <ellipse cx="0" cy="5" rx="16" ry="6" fill="#ffaa00" />
+  </g>
+
+  <!-- Iconic Cute Geometry Cube Hero in Mid-Air Flip Jump! -->
+  <g filter="url(#cubeGlow)" transform="translate(180, 150) rotate(-28)">
+    <!-- Outer Lime Neon Cube Body -->
+    <rect x="-42" y="-42" width="84" height="84" rx="18" fill="#00ff66" stroke="#ffffff" stroke-width="5" />
+
+    <!-- Inner Dark Face Square -->
+    <rect x="-26" y="-26" width="52" height="52" rx="10" fill="#0d0221" stroke="#00ff66" stroke-width="3.5" />
+
+    <!-- Cute Eyes inside Cube Face -->
+    <rect x="-18" y="-16" width="14" height="14" rx="4" fill="#00f0ff" stroke="#ffffff" stroke-width="2" />
+    <rect x="4" y="-16" width="14" height="14" rx="4" fill="#00f0ff" stroke="#ffffff" stroke-width="2" />
+
+    <!-- Confident Smiling Mouth -->
+    <rect x="-10" y="6" width="20" height="7" rx="3" fill="#00ff66" stroke="#ffffff" stroke-width="1.5" />
+  </g>
+
+  <!-- Flying Cyber Coin / Secret Star (Top Right) -->
+  <g transform="translate(275, 100)" filter="url(#cubeGlow)">
+    <circle cx="0" cy="0" r="18" fill="#ffe600" stroke="#ffffff" stroke-width="3.5" />
+    <polygon points="0,-9 3,-3 9,-3 4,1 6,7 0,3 -6,7 -4,1 -9,-3 -3,-3" fill="#ff7700" />
+  </g>
+
+  <!-- Action Speed Lines behind Cube -->
+  <g stroke="#ffffff" stroke-width="2.5" opacity="0.4" stroke-linecap="round">
+    <line x1="80" y1="210" x2="130" y2="180" />
+    <line x1="60" y1="240" x2="110" y2="210" />
+    <line x1="100" y1="260" x2="140" y2="240" />
+  </g>
+
+  <!-- Title Badge -->
+  <rect x="25" y="345" width="150" height="30" rx="10" fill="#00ff66" opacity="0.2" stroke="#00ff66" stroke-width="1.5" />
+  <text x="100" y="365" fill="#00ff66" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">GEOMETRY DASH</text>
+</svg>

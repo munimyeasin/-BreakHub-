@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tapBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#140600" />
+      <stop offset="50%" stop-color="#2d1000" />
+      <stop offset="100%" stop-color="#05081f" />
+    </linearGradient>
+    <filter id="btnGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#ffe600" flood-opacity="0.95" />
+    </filter>
+    <filter id="rippleGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.8" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#tapBg)" />
+
+  <!-- Speed Shockwave Ripple Rings -->
+  <g filter="url(#rippleGlow)">
+    <ellipse cx="200" cy="260" rx="160" ry="60" fill="none" stroke="#00f0ff" stroke-width="2" opacity="0.3" />
+    <ellipse cx="200" cy="260" rx="120" ry="45" fill="none" stroke="#ffe600" stroke-width="3" opacity="0.5" />
+    <ellipse cx="200" cy="260" rx="80" ry="30" fill="none" stroke="#ff007f" stroke-width="4" opacity="0.7" />
+  </g>
+
+  <!-- Giant Glowing Arcade Button Base (3D Perspective) -->
+  <g filter="url(#btnGlow)" transform="translate(200, 240)">
+    <!-- Outer Button Ring Base -->
+    <ellipse cx="0" cy="20" rx="90" ry="38" fill="#1b120c" stroke="#553311" stroke-width="6" />
+    <!-- Pressed Down Golden Cap -->
+    <ellipse cx="0" cy="5" rx="75" ry="30" fill="#ffaa00" />
+    <ellipse cx="0" cy="0" rx="72" ry="28" fill="#ffe600" stroke="#ffffff" stroke-width="5" />
+    <!-- Button Top Highlight -->
+    <ellipse cx="-15" cy="-8" rx="45" ry="14" fill="#ffffff" opacity="0.5" />
+    <text x="0" y="8" font-family="'Arial Black', sans-serif" font-size="18" fill="#000000" font-weight="900" text-anchor="middle">TAP!</text>
+  </g>
+
+  <!-- Cute Cartoon Lightning Robo-Finger Tapping Down -->
+  <g transform="translate(180, 50)">
+    <!-- Lightning Sparks Bursting from Tip -->
+    <path d="M 20,180 L 0,160 L 15,145 L -10,120 L 25,120 L 5,90" stroke="#ffe600" stroke-width="4" fill="none" stroke-linecap="round" />
+    <path d="M 40,180 L 60,155 L 45,145 L 70,120 L 40,115 L 60,85" stroke="#00f0ff" stroke-width="4" fill="none" stroke-linecap="round" />
+
+    <!-- Cute Glove / Hand Tapping Pose -->
+    <!-- Arm -->
+    <rect x="-10" y="0" width="60" height="90" rx="16" fill="#00f0ff" stroke="#ffffff" stroke-width="4.5" />
+    <rect x="-14" y="70" width="68" height="20" rx="8" fill="#0088ff" stroke="#ffffff" stroke-width="3" />
+
+    <!-- Cute Index Finger extended downward -->
+    <rect x="5" y="80" width="30" height="95" rx="15" fill="#ffffff" stroke="#000000" stroke-width="4.5" />
+
+    <!-- Thumb folded in -->
+    <ellipse cx="-5" cy="115" rx="14" ry="18" fill="#ffffff" stroke="#000000" stroke-width="4" />
+
+    <!-- Cute Smiling Face on Glove! -->
+    <circle cx="10" cy="40" r="3" fill="#000" />
+    <circle cx="30" cy="40" r="3" fill="#000" />
+    <path d="M 16,48 Q 20,54 24,48" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- CPS / APM Meter Bubble (Top Right) -->
+  <g transform="translate(310, 80)">
+    <rect x="-35" y="-20" width="70" height="40" rx="12" fill="#ff007f" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="-3" font-family="'Arial Black', sans-serif" font-size="10" fill="#ffffff" font-weight="900" text-anchor="middle">MAX</text>
+    <text x="0" y="12" font-family="'Arial Black', sans-serif" font-size="13" fill="#ffe600" font-weight="900" text-anchor="middle">CPS ⚡</text>
+  </g>
+
+  <!-- Title Badge -->
+  <rect x="25" y="345" width="130" height="30" rx="10" fill="#ffe600" opacity="0.2" stroke="#ffe600" stroke-width="1.5" />
+  <text x="90" y="365" fill="#ffe600" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">HYPER TAPPER</text>
+</svg>

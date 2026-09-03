@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="breakerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b001a" />
+      <stop offset="60%" stop-color="#180436" />
+      <stop offset="100%" stop-color="#050e26" />
+    </linearGradient>
+    <filter id="neonGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.8" />
+    </filter>
+    <filter id="ballGlow">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ffe600" flood-opacity="0.95" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#breakerBg)" />
+
+  <!-- Colorful Cartoon Bricks Rows -->
+  <!-- Row 1: Magenta -->
+  <g stroke="#ffffff" stroke-width="2.5">
+    <rect x="40" y="50" width="65" height="24" rx="8" fill="#ff007f" />
+    <rect x="115" y="50" width="65" height="24" rx="8" fill="#ff007f" />
+    <rect x="190" y="50" width="65" height="24" rx="8" fill="#ff007f" />
+    <rect x="265" y="50" width="65" height="24" rx="8" fill="#ff007f" />
+    <rect x="340" y="50" width="20" height="24" rx="6" fill="#ff007f" />
+
+    <!-- Row 2: Cyan -->
+    <rect x="40" y="85" width="65" height="24" rx="8" fill="#00f0ff" />
+    <rect x="115" y="85" width="65" height="24" rx="8" fill="#00f0ff" />
+    <!-- Smashed brick explosion here at 190 -->
+    <rect x="265" y="85" width="65" height="24" rx="8" fill="#00f0ff" />
+
+    <!-- Row 3: Lime Green -->
+    <rect x="40" y="120" width="65" height="24" rx="8" fill="#00ff66" />
+    <rect x="115" y="120" width="65" height="24" rx="8" fill="#00ff66" />
+    <rect x="265" y="120" width="65" height="24" rx="8" fill="#00ff66" />
+
+    <!-- Row 4: Bright Gold -->
+    <rect x="40" y="155" width="65" height="24" rx="8" fill="#ffe600" />
+    <rect x="265" y="155" width="65" height="24" rx="8" fill="#ffe600" />
+  </g>
+
+  <!-- Brick Shatter Explosion & Sparkles at (210, 100) -->
+  <g transform="translate(210, 100)">
+    <!-- Exploding brick shards -->
+    <rect x="-25" y="-18" width="16" height="12" rx="4" fill="#00f0ff" stroke="#fff" stroke-width="2" transform="rotate(-25)" />
+    <rect x="15" y="-22" width="14" height="10" rx="3" fill="#00f0ff" stroke="#fff" stroke-width="2" transform="rotate(35)" />
+    <rect x="-18" y="15" width="12" height="12" rx="3" fill="#ff007f" stroke="#fff" stroke-width="2" transform="rotate(45)" />
+    <rect x="20" y="12" width="15" height="10" rx="3" fill="#00ff66" stroke="#fff" stroke-width="2" transform="rotate(-40)" />
+
+    <!-- Cartoon Star Burst -->
+    <polygon points="0,-25 7,-8 25,-8 11,3 17,21 0,10 -17,21 -11,3 -25,-8 -7,-8" fill="#ffe600" />
+    <!-- "POW!" comic burst -->
+    <text x="0" y="5" font-family="'Arial Black', sans-serif" font-size="11" fill="#000" font-weight="900" text-anchor="middle">HIT!</text>
+  </g>
+
+  <!-- Cute Smiling Bouncing Energy Ball -->
+  <g filter="url(#ballGlow)" transform="translate(195, 205)">
+    <!-- Ball trail -->
+    <ellipse cx="10" cy="35" rx="14" ry="8" fill="#ffe600" opacity="0.4" transform="rotate(25 10 35)" />
+    <circle cx="0" cy="0" r="28" fill="#ffe600" stroke="#ffffff" stroke-width="4" />
+
+    <!-- Cute Eyes -->
+    <ellipse cx="-8" cy="-5" rx="5" ry="7" fill="#0d0221" />
+    <circle cx="-6" cy="-7" r="2" fill="#ffffff" />
+    <ellipse cx="8" cy="-5" rx="5" ry="7" fill="#0d0221" />
+    <circle cx="10" cy="-7" r="2" fill="#ffffff" />
+
+    <!-- Cute Smile -->
+    <path d="M -7,6 Q 0,14 7,6" stroke="#0d0221" stroke-width="3" fill="none" stroke-linecap="round" />
+    <!-- Cheeks -->
+    <circle cx="-15" cy="4" r="3.5" fill="#ff0055" />
+    <circle cx="15" cy="4" r="3.5" fill="#ff0055" />
+  </g>
+
+  <!-- Cute Neon Paddle with rounded cartoon edges -->
+  <g filter="url(#neonGlow)" transform="translate(140, 310)">
+    <rect x="-10" y="0" width="140" height="24" rx="12" fill="#00f0ff" stroke="#ffffff" stroke-width="4" />
+    <!-- Paddle Center Light -->
+    <circle cx="60" cy="12" r="6" fill="#ffffff" />
+    <!-- Grip pads -->
+    <rect x="10" y="6" width="25" height="12" rx="4" fill="#0088ff" />
+    <rect x="85" y="6" width="25" height="12" rx="4" fill="#0088ff" />
+  </g>
+
+  <!-- Title Badge -->
+  <rect x="25" y="345" width="145" height="30" rx="10" fill="#00f0ff" opacity="0.2" stroke="#00f0ff" stroke-width="1.5" />
+  <text x="97" y="365" fill="#00f0ff" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">CYBER BREAKER</text>
+</svg>

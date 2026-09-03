@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="paperBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050a18" />
+      <stop offset="50%" stop-color="#0a122c" />
+      <stop offset="100%" stop-color="#02050f" />
+    </linearGradient>
+    <linearGradient id="cyanTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#0080ff" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="pinkTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff0055" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#aa0044" stop-opacity="0.5" />
+    </linearGradient>
+    <linearGradient id="limeTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ff66" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#009944" stop-opacity="0.4" />
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.9" />
+    </filter>
+    <filter id="pinkGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff0055" flood-opacity="0.9" />
+    </filter>
+  </defs>
+
+  <!-- Dark Cyberpunk Grid Background -->
+  <rect width="400" height="400" fill="url(#paperBg)" />
+
+  <!-- Subtle Map Grid Lines -->
+  <g stroke="#00f0ff" stroke-width="0.75" opacity="0.12">
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
+  </g>
+
+  <!-- Bot Enemy Territory (Pink / Red) -->
+  <path d="M 240,40 L 360,40 L 360,160 L 290,160 L 290,110 L 240,110 Z" fill="url(#pinkTerritory)" stroke="#ff0055" stroke-width="2.5" />
+
+  <!-- Bot Enemy Territory (Lime) -->
+  <path d="M 40,260 L 140,260 L 140,360 L 40,360 Z" fill="url(#limeTerritory)" stroke="#00ff66" stroke-width="2" opacity="0.8" />
+
+  <!-- Player Main Territory Polygon (Cyan) -->
+  <path d="M 60,70 L 190,70 L 190,200 L 110,200 L 110,140 L 60,140 Z" fill="url(#cyanTerritory)" stroke="#00f0ff" stroke-width="3" filter="url(#neonGlow)" />
+
+  <!-- Player Active Enclosure Expansion Trail -->
+  <path d="M 190,140 L 280,140 L 280,270 L 140,270 L 140,200" fill="none" stroke="#00f0ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonGlow)" />
+  <path d="M 190,140 L 280,140 L 280,270 L 140,270 L 140,200" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Enemy Trail being sliced -->
+  <path d="M 290,140 L 290,210 L 330,210" fill="none" stroke="#ff0055" stroke-width="10" stroke-linecap="round" filter="url(#pinkGlow)" />
+
+  <!-- Slice Explosion Flash Particles -->
+  <g fill="#ff0055">
+    <circle cx="280" cy="180" r="5" filter="url(#pinkGlow)" />
+    <circle cx="295" cy="170" r="3.5" />
+    <circle cx="305" cy="195" r="4.5" />
+  </g>
+  <g fill="#ffffff">
+    <circle cx="285" cy="182" r="3" />
+    <circle cx="290" cy="175" r="2" />
+  </g>
+
+  <!-- Player Avatar Head Cube -->
+  <rect x="130" y="190" width="22" height="22" rx="4" fill="#ffffff" stroke="#00f0ff" stroke-width="3" filter="url(#neonGlow)" />
+
+  <!-- Crown Icon Above Player -->
+  <path d="M 132,184 L 136,177 L 141,182 L 146,177 L 150,184 Z" fill="#ffb800" stroke="#ffd700" stroke-width="1" />
+
+  <!-- Sparkle Particles around territory -->
+  <circle cx="75" cy="85" r="2" fill="#ffffff" />
+  <circle cx="170" cy="90" r="2.5" fill="#00f0ff" />
+  <circle cx="150" cy="170" r="2" fill="#ffffff" />
+  <circle cx="250" cy="250" r="3" fill="#00f0ff" />
+  <circle cx="220" cy="150" r="2.5" fill="#ffffff" />
+
+  <!-- Paper.io Futuristic Badge / Logo at bottom center -->
+  <rect x="85" y="320" width="230" height="42" rx="12" fill="#04091a" stroke="#00f0ff" stroke-width="2" opacity="0.95" />
+  <text x="200" y="347" fill="#00f0ff" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="18" text-anchor="middle" letter-spacing="3">NEON PAPER.IO</text>
+</svg>

@@ -69,6 +69,30 @@
   ],
   "games": [
     {
+      "id": "g_snake_01",
+      "slug": "neon-snake",
+      "title": "Neon Snake 2077",
+      "category": "ARCADE",
+      "thumbnail_url": "/thumbnails/neon-snake.svg",
+      "description": "Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
+      "play_count": 42,
+      "rating": 5,
+      "status": "active",
+      "rating_count": 14
+    },
+    {
+      "id": "g_action_06",
+      "slug": "cyber-dash",
+      "title": "Cyber Dash Runner",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/cyber-dash.svg",
+      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
+      "play_count": 12,
+      "rating": 4.9,
+      "status": "active",
+      "rating_count": 19
+    },
+    {
       "id": "g_shooter_07",
       "slug": "neon-starfighter",
       "title": "Neon Starfighter",
@@ -79,6 +103,66 @@
       "rating": 4.9,
       "status": "active",
       "rating_count": 28
+    },
+    {
+      "id": "g_breaker_08",
+      "slug": "cyber-breaker",
+      "title": "Cyber Breaker",
+      "category": "ARCADE",
+      "thumbnail_url": "/thumbnails/cyber-breaker.svg",
+      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
+      "play_count": 16,
+      "rating": 4.8,
+      "status": "active",
+      "rating_count": 12
+    },
+    {
+      "id": "g_card_05",
+      "slug": "quantum-2048",
+      "title": "Quantum 2048",
+      "category": "PUZZLE",
+      "thumbnail_url": "/thumbnails/quantum-2048.svg",
+      "description": "Cyberpunk sliding block merger. Combine identical energy nodes to forge the 2048 core.",
+      "play_count": 5,
+      "rating": 4.9,
+      "status": "active",
+      "rating_count": 15
+    },
+    {
+      "id": "g_flip_02",
+      "slug": "memory-matrix",
+      "title": "Memory Matrix",
+      "category": "PUZZLE",
+      "thumbnail_url": "/thumbnails/memory-matrix.svg",
+      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
+      "play_count": 5,
+      "rating": 4.9,
+      "status": "active",
+      "rating_count": 11
+    },
+    {
+      "id": "g_reflex_09",
+      "slug": "chroma-reflex",
+      "title": "Chroma Reflex",
+      "category": "STRATEGY",
+      "thumbnail_url": "/thumbnails/chroma-reflex.svg",
+      "description": "Simon-inspired 4-quadrant chromatic memory sequence & audio tone reflex test.",
+      "play_count": 15,
+      "rating": 4.8,
+      "status": "active",
+      "rating_count": 9
+    },
+    {
+      "id": "g_ttt_03",
+      "slug": "quantum-xo",
+      "title": "Quantum XO",
+      "category": "STRATEGY",
+      "thumbnail_url": "/thumbnails/quantum-xo.svg",
+      "description": "Futuristic 3x3 tactical showdown against Overthinker Final Boss.",
+      "play_count": 37,
+      "rating": 4.8,
+      "status": "active",
+      "rating_count": 16
     },
     {
       "id": "g_multi_xo_13",
@@ -92,6 +176,30 @@
       "status": "coming_soon"
     },
     {
+      "id": "g_tap_04",
+      "slug": "hyper-tapper",
+      "title": "Hyper Tapper",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/hyper-tapper.svg",
+      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
+      "play_count": 14,
+      "rating": 4.9,
+      "status": "active",
+      "rating_count": 22
+    },
+    {
+      "id": "g_geometry_10",
+      "slug": "geometry-dash",
+      "title": "Geometry Dash Cyber",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/geometry-dash.svg",
+      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
+      "play_count": 48,
+      "rating": 5,
+      "status": "active",
+      "rating_count": 31
+    },
+    {
       "id": "g_slicer_11",
       "slug": "cyber-slicer",
       "title": "Cyber Slicer",
@@ -101,6 +209,18 @@
       "play_count": 0,
       "hype_count": 91,
       "status": "coming_soon"
+    },
+    {
+      "id": "g_paper_12",
+      "slug": "paper-io",
+      "title": "Neon Paper.io",
+      "category": "STRATEGY",
+      "thumbnail_url": "/thumbnails/paper-io.svg",
+      "description": "Conquer the cyber grid! Expand your neon territory, encircle massive zones, and slice enemy tails before they cut yours.",
+      "play_count": 720,
+      "rating": 5,
+      "status": "active",
+      "rating_count": 25
     }
   ],
   "scores": [
@@ -7551,6 +7671,13 @@
       "user_id": "usr_yfg1qz2",
       "score": 2200,
       "created_at": "2026-09-03T17:42:11.525Z"
+    },
+    {
+      "id": "sc_rymm2kfly",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_ctvl8ln",
+      "score": 900,
+      "created_at": "2026-09-03T19:57:30.187Z"
     }
   ],
   "ratings": []
