@@ -16,6 +16,7 @@ import {
   X
 } from 'lucide-react';
 import GameGrid from '@/components/games/GameGrid';
+import SpotlightBanner from '@/components/games/SpotlightBanner';
 import GameModal from '@/components/ui/GameModal';
 import LeaderboardModal from '@/components/leaderboard/LeaderboardModal';
 import UsernamePromptModal from '@/components/ui/UsernamePromptModal';
@@ -430,6 +431,17 @@ export default function ArcadePortalDashboard() {
             />
           ) : (
             <>
+              {/* SPOTLIGHT HERO BANNER (Top featured: Cyber Slicer & Neon Starfighter) */}
+              {activeTab === 'all' && selectedCategory === 'ALL' && !searchQuery && (
+                <SpotlightBanner
+                  games={games}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  onPlayGame={(game) => handleLaunchGame(game)}
+                  onViewLeaderboard={(gameId) => handleOpenLeaderboard(gameId)}
+                />
+              )}
+
               {/* Active Filter Bar & Breadcrumb Status */}
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-portal-border/40">
                 <div className="flex items-center gap-2 flex-wrap">

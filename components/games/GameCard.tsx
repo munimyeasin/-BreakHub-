@@ -91,7 +91,7 @@ export default function GameCard({
         )}
 
         {/* Featured Top Ribbon */}
-        {!isComingSoon && (game.featured || game.slug === 'neon-starfighter') && (
+        {!isComingSoon && (game.featured || game.slug === 'cyber-slicer' || game.slug === 'neon-starfighter') && (
           <div className="absolute top-1 left-1 sm:top-1.5 sm:left-1.5 z-10">
             <span className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-md bg-cyan-500/90 text-black text-[8px] sm:text-[9px] font-black uppercase tracking-wider shadow-md backdrop-blur-sm border border-cyan-300">
               <Star className="w-2 h-2 sm:w-2.5 sm:h-2.5 fill-black" /> <span className="hidden xs:inline sm:inline">FEATURED</span><span className="xs:hidden sm:hidden">HOT</span>

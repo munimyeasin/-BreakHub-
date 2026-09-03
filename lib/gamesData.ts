@@ -2,12 +2,25 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_slicer_11',
+    slug: 'cyber-slicer',
+    title: 'Cyber Slicer',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-slicer.svg',
+    description: 'Neon Katana Fruit Slicer! Slash flying cyber fruits, chain multi-slice combos, and dodge explosive plasma bombs.',
+    play_count: 0,
+    rating: 4.9,
+    rating_count: 36,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
     category: 'ARCADE',
     thumbnail_url: '/thumbnails/neon-starfighter.svg',
-    description: 'Retro-arcade space combat simulator with plasma lasers and drone swarms.',
+    description: 'Retro-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.',
     play_count: 0,
     rating: 4.9,
     rating_count: 28,
@@ -15,39 +28,16 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
-    id: 'g_snake_01',
-    slug: 'neon-snake',
-    title: 'Neon Snake 2077',
-    category: 'ARCADE',
-    thumbnail_url: '/thumbnails/neon-snake.svg',
-    description: 'Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
-    play_count: 0,
-    hype_count: 142,
-    status: 'coming_soon'
-  },
-  {
-    id: 'g_action_06',
-    slug: 'cyber-dash',
-    title: 'Cyber Dash Runner',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-dash.svg',
-    description: 'Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.',
-    play_count: 0,
-    rating: 4.9,
-    rating_count: 19,
-    status: 'hidden'
-  },
-  {
-    id: 'g_breaker_08',
-    slug: 'cyber-breaker',
-    title: 'Cyber Breaker',
-    category: 'ARCADE',
-    thumbnail_url: '/thumbnails/cyber-breaker.svg',
-    description: 'Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.',
+    id: 'g_ttt_03',
+    slug: 'quantum-xo',
+    title: 'Quantum XO',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/quantum-xo.svg',
+    description: 'Futuristic 3x3 tactical showdown against Overthinker Final Boss.',
     play_count: 0,
     rating: 4.8,
-    rating_count: 12,
-    status: 'hidden'
+    rating_count: 16,
+    status: 'active'
   },
   {
     id: 'g_card_05',
@@ -74,28 +64,27 @@ export const INITIAL_GAMES: Game[] = [
     status: 'active'
   },
   {
-    id: 'g_reflex_09',
-    slug: 'chroma-reflex',
-    title: 'Chroma Reflex',
-    category: 'STRATEGY',
-    thumbnail_url: '/thumbnails/chroma-reflex.svg',
-    description: 'Simon-inspired 4-quadrant chromatic memory sequence & audio tone reflex test.',
+    id: 'g_tap_04',
+    slug: 'hyper-tapper',
+    title: 'Hyper Tapper',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/hyper-tapper.svg',
+    description: 'Precision reaction-time clicker testing ultra-high APM speeds.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 9,
-    status: 'hidden'
+    rating: 4.9,
+    rating_count: 22,
+    status: 'active'
   },
   {
-    id: 'g_ttt_03',
-    slug: 'quantum-xo',
-    title: 'Quantum XO',
-    category: 'STRATEGY',
-    thumbnail_url: '/thumbnails/quantum-xo.svg',
-    description: 'Futuristic 3x3 tactical showdown against Overthinker Final Boss.',
+    id: 'g_snake_01',
+    slug: 'neon-snake',
+    title: 'Neon Snake 2077',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/neon-snake.svg',
+    description: 'Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 16,
-    status: 'active'
+    hype_count: 142,
+    status: 'coming_soon'
   },
   {
     id: 'g_multi_xo_13',
@@ -109,16 +98,16 @@ export const INITIAL_GAMES: Game[] = [
     status: 'coming_soon'
   },
   {
-    id: 'g_tap_04',
-    slug: 'hyper-tapper',
-    title: 'Hyper Tapper',
+    id: 'g_action_06',
+    slug: 'cyber-dash',
+    title: 'Cyber Dash Runner',
     category: 'ACTION',
-    thumbnail_url: '/thumbnails/hyper-tapper.svg',
-    description: 'Precision reaction-time clicker testing ultra-high APM speeds.',
+    thumbnail_url: '/thumbnails/cyber-dash.svg',
+    description: 'Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.',
     play_count: 0,
     rating: 4.9,
-    rating_count: 22,
-    status: 'active'
+    rating_count: 19,
+    status: 'hidden'
   },
   {
     id: 'g_geometry_10',
@@ -133,16 +122,28 @@ export const INITIAL_GAMES: Game[] = [
     status: 'hidden'
   },
   {
-    id: 'g_slicer_11',
-    slug: 'cyber-slicer',
-    title: 'Cyber Slicer',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-slicer.svg',
-    description: 'Neon Katana Fruit Slicer! Slash flying cyber fruits, chain multi-slice combos, and dodge explosive plasma bombs.',
+    id: 'g_breaker_08',
+    slug: 'cyber-breaker',
+    title: 'Cyber Breaker',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/cyber-breaker.svg',
+    description: 'Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 36,
-    status: 'active'
+    rating: 4.8,
+    rating_count: 12,
+    status: 'hidden'
+  },
+  {
+    id: 'g_reflex_09',
+    slug: 'chroma-reflex',
+    title: 'Chroma Reflex',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/chroma-reflex.svg',
+    description: 'Simon-inspired 4-quadrant chromatic memory sequence & audio tone reflex test.',
+    play_count: 0,
+    rating: 4.8,
+    rating_count: 9,
+    status: 'hidden'
   },
   {
     id: 'g_paper_12',
