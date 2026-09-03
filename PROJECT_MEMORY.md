@@ -17,6 +17,7 @@
 - **Framework**: Next.js 16 (App Router) + TypeScript
 - **Styling**: Tailwind CSS + Custom Neon Theme Palettes + Lucide Icons
 - **Responsive Dual-Pane & Left Slide Bar Navigation**: `components/navigation/Sidebar.tsx` relocates all top-level navigation tabs ("All Games", "Favorites", "Hall of Fame", "About Team") and genre filters into an interactive left sidebar (sticky on desktop, sliding drawer with backdrop on mobile/touch screens). Includes active category badge counters, filter status pill indicators, and quick reset actions in `app/page.tsx`.
+- **Spotlight Showcase Hero Banner**: `components/games/SpotlightBanner.tsx` prominently highlights the top featured games (**Cyber Slicer** and **Neon Starfighter**) with interactive tab switching, glowing artwork previews, 60-144 FPS / 9:16 portrait verification chips, instant "PLAY NOW" CTAs, leaderboard shortcuts, and favorite toggles.
 - **Mobile Homepage Game Grid**: Responsive 4x3 grid system (`grid-cols-3` for 4 rows x 3 columns on mobile, scaling to 4/5/6 columns on larger screens) with compact card styling, micro-badges, and high-density typography in `components/games/GameGrid.tsx` and `components/games/GameCard.tsx`.
 - **Game Visibility & Interactive Hype System**: Non-destructive game lifecycle control in `lib/types.ts` via `status?: 'active' | 'coming_soon' | 'hidden'`.
   - `status: 'coming_soon'`: Replaces placeholder star ratings with an interactive Player Interest / Hype system (`hype_count?: number`).
