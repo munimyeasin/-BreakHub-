@@ -60,16 +60,16 @@ export default function ArcadePortalDashboard() {
   // 2. Load LocalStorage player data, favorites, hyped games & user ratings
   useEffect(() => {
     try {
-      const savedFavorites = localStorage.getItem('nexus_favorites');
+      const savedFavorites = localStorage.getItem('stressbuster_favorites') || localStorage.getItem('nexus_favorites');
       if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
 
-      const savedHyped = localStorage.getItem('nexus_hyped_games');
+      const savedHyped = localStorage.getItem('stressbuster_hyped_games') || localStorage.getItem('nexus_hyped_games');
       if (savedHyped) setHypedGames(JSON.parse(savedHyped));
 
-      const savedRatings = localStorage.getItem('nexus_user_ratings');
+      const savedRatings = localStorage.getItem('stressbuster_user_ratings') || localStorage.getItem('nexus_user_ratings');
       if (savedRatings) setUserRatings(JSON.parse(savedRatings));
 
-      const savedTag = localStorage.getItem('nexus_player_tag');
+      const savedTag = localStorage.getItem('stressbuster_player_tag') || localStorage.getItem('nexus_player_tag');
       if (savedTag && savedTag.trim().length >= 2) {
         setPlayerTag(savedTag.trim());
       } else {
@@ -83,7 +83,9 @@ export default function ArcadePortalDashboard() {
     e.stopPropagation();
     setFavorites(prev => {
       const updated = prev.includes(gameId) ? prev.filter(id => id !== gameId) : [...prev, gameId];
-      localStorage.setItem('nexus_favorites', JSON.stringify(updated));
+      try {
+        localStorage.setItem('stressbuster_favorites', JSON.stringify(updated));
+      } catch {}
       return updated;
     });
   };
@@ -94,7 +96,7 @@ export default function ArcadePortalDashboard() {
     setHypedGames(prev => {
       const updated = isAdding ? [...prev, gameId] : prev.filter(id => id !== gameId);
       try {
-        localStorage.setItem('nexus_hyped_games', JSON.stringify(updated));
+        localStorage.setItem('stressbuster_hyped_games', JSON.stringify(updated));
       } catch {}
       return updated;
     });
@@ -172,7 +174,7 @@ export default function ArcadePortalDashboard() {
     const previousTag = playerTag;
     setPlayerTag(clean);
     try {
-      localStorage.setItem('nexus_player_tag', clean);
+      localStorage.setItem('stressbuster_player_tag', clean);
       fetch('/api/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

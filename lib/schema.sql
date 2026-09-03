@@ -1,5 +1,5 @@
 -- =========================================================
--- DATABASE SCHEMA: NEXUS ARCADE MINI-GAME PORTAL
+-- DATABASE SCHEMA: STRESSBUSTER MINI-GAME PORTAL
 -- =========================================================
 
 -- 1. Users Table

@@ -29,7 +29,7 @@ export default function MobileGamepad({
   // Sync preference with localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('nexus_mobile_control_type');
+      const saved = localStorage.getItem('stressbuster_mobile_control_type') || localStorage.getItem('nexus_mobile_control_type');
       if (saved === 'dpad' || saved === 'joystick') {
         setControlType(saved);
       }
@@ -39,7 +39,7 @@ export default function MobileGamepad({
   const handleSwitchType = (type: MobileControlType) => {
     setControlType(type);
     try {
-      localStorage.setItem('nexus_mobile_control_type', type);
+      localStorage.setItem('stressbuster_mobile_control_type', type);
     } catch {}
     if (onRelease) onRelease();
   };

@@ -1,4 +1,4 @@
-# Nexus Arcade — Mobile-First HTML5 Mini-Game Portal & Leaderboards
+# StressBuster — Mobile-First HTML5 Mini-Game Portal & Leaderboards
 
 A modern, high-performance mobile-first HTML5 mini-game portal web application featuring a cyberpunk dark-themed UI, responsive multi-column layouts, integrated playable mini-games, and a live competitive global and per-game leaderboard system.
 
