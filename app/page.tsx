@@ -203,10 +203,13 @@ export default function ArcadePortalDashboard() {
 
   // Dynamic category counts for non-hidden games
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { ALL: 0 };
+    const counts: Record<string, number> = { ALL: 0, UPCOMING: 0 };
     games.forEach(g => {
       if (g.status === 'hidden') return;
       counts['ALL'] = (counts['ALL'] || 0) + 1;
+      if (g.status === 'coming_soon') {
+        counts['UPCOMING'] = (counts['UPCOMING'] || 0) + 1;
+      }
       counts[g.category] = (counts[g.category] || 0) + 1;
     });
     return counts;
@@ -219,7 +222,11 @@ export default function ArcadePortalDashboard() {
       const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             game.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             game.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'ALL' || game.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'ALL'
+        ? true
+        : selectedCategory === 'UPCOMING'
+        ? game.status === 'coming_soon'
+        : game.category === selectedCategory;
       const matchesTab = activeTab === 'favorites' ? favorites.includes(game.id) : true;
       return matchesSearch && matchesCategory && matchesTab;
     });
@@ -453,7 +460,7 @@ export default function ArcadePortalDashboard() {
 
                   {selectedCategory !== 'ALL' && activeTab === 'all' && (
                     <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-portal-cyan/15 text-portal-cyan text-[10px] font-black border border-portal-cyan/40">
-                      Category: {selectedCategory}
+                      {selectedCategory === 'UPCOMING' ? 'Filter: Upcoming / Soon' : `Category: ${selectedCategory}`}
                       <button
                         onClick={() => setSelectedCategory('ALL')}
                         className="hover:text-white ml-0.5"

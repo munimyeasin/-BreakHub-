@@ -14,6 +14,7 @@ import {
   X,
   Edit3,
   Flame,
+  Clock,
   ChevronRight,
   SlidersHorizontal,
   Compass
@@ -37,6 +38,7 @@ interface SidebarProps {
 
 const CATEGORIES = [
   { id: 'ALL', label: 'All Genres', icon: Sparkles, color: 'text-portal-cyan', activeBg: 'bg-cyan-500/15 border-cyan-400 text-portal-cyan shadow-glow-cyan/30' },
+  { id: 'UPCOMING', label: 'Upcoming / Soon', icon: Clock, color: 'text-amber-400', activeBg: 'bg-amber-500/15 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]' },
   { id: 'ARCADE', label: 'Arcade Classics', icon: Gamepad2, color: 'text-cyan-400', activeBg: 'bg-cyan-500/15 border-cyan-400 text-cyan-300 shadow-glow-cyan/30' },
   { id: 'ACTION', label: 'Action & Rush', icon: Zap, color: 'text-rose-400', activeBg: 'bg-rose-500/15 border-rose-400 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.3)]' },
   { id: 'PUZZLE', label: 'Neural Puzzles', icon: Grid, color: 'text-purple-400', activeBg: 'bg-purple-500/15 border-purple-400 text-purple-300 shadow-[0_0_15px_rgba(192,132,252,0.3)]' },

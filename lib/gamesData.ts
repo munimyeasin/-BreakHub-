@@ -83,7 +83,7 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-snake.svg',
     description: 'Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
     play_count: 0,
-    hype_count: 142,
+    hype_count: 0,
     status: 'coming_soon'
   },
   {
@@ -94,7 +94,7 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/multidimension-xo.svg',
     description: 'Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.',
     play_count: 0,
-    hype_count: 156,
+    hype_count: 0,
     status: 'coming_soon'
   },
   {
