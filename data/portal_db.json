@@ -76,9 +76,8 @@
       "thumbnail_url": "/thumbnails/neon-snake.svg",
       "description": "Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
       "play_count": 42,
-      "rating": 5,
-      "status": "active",
-      "rating_count": 14
+      "hype_count": 142,
+      "status": "coming_soon"
     },
     {
       "id": "g_action_06",
@@ -89,7 +88,7 @@
       "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
       "play_count": 12,
       "rating": 4.9,
-      "status": "active",
+      "status": "hidden",
       "rating_count": 19
     },
     {
@@ -196,7 +195,7 @@
       "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
       "play_count": 48,
       "rating": 5,
-      "status": "active",
+      "status": "hidden",
       "rating_count": 31
     },
     {
@@ -207,8 +206,9 @@
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Fruit Slicer! Slash flying cyber fruits, chain multi-slice combos, and dodge explosive plasma bombs.",
       "play_count": 0,
-      "hype_count": 91,
-      "status": "coming_soon"
+      "rating": 4.9,
+      "status": "active",
+      "rating_count": 36
     },
     {
       "id": "g_paper_12",

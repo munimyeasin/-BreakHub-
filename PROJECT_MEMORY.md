@@ -36,9 +36,14 @@
 ---
 
 ## 🎮 Active & Coming Soon Games Catalog
-1. **Neon Starfighter** (`g_shooter_07` / `neon-starfighter`): Active spotlight game. High-speed 60–144 FPS space shooter in 9:16 vertical ratio (360x640px) featuring locked horizontal-only navigation (A/D, arrows, direct touch drag across screen at `Y = 565px`), indestructible deflecting meteors, gravitational black holes with non-linear exponential singularity suction & touch drag damping, 3X spread lasers, energy shields, EMP screen-clearing nukes, and complete Game Over Revive System with animated cosmic nebula death backdrop, 1-per-flight revive limit, hazard safety shockwave clearing, temporary invulnerability shield, score/wave continuity, and mock ad network integration hooks.
-2. **Multidimension XO** (`g_multi_xo_13` / `multidimension-xo`): Coming soon. Ultimate 9-field nested Tic-Tac-Toe in 9:16 vertical layout. Features 9 nested 3x3 boards (81 local cells), local board win transformations into giant neon macro-symbols, macro-board win conditions (3 aligned macro-cells), active board routing mechanics, and adaptive Minimax AI.
-3. **Cyber Slicer** (`g_slicer_11` / `cyber-slicer`): Coming soon. Fruit Ninja style neon katana blade slicing game in 9:16 vertical ratio with parabolic gravity arcs, split fruit halves, juice splatter particles, combo multiplier chains, hazardous cyber bombs, and procedural Web Audio blade swoosh/slice synthesizers.
+1. **Neon Starfighter** (`g_shooter_07` / `neon-starfighter`): Active spotlight game. High-speed 60–144 FPS space shooter in 9:16 vertical ratio (360x640px) featuring locked horizontal-only navigation (A/D, arrows, direct touch drag across screen at `Y = 565px`), indestructible deflecting meteors, gravitational black holes with non-linear exponential singularity suction & touch drag damping, 3X spread lasers, energy shields, EMP screen-clearing nukes, and complete Game Over Revive System.
+2. **Cyber Slicer** (`g_slicer_11` / `cyber-slicer`): Active game. Fruit Ninja style neon katana blade slicing game in 9:16 vertical ratio with parabolic gravity arcs, split fruit halves, juice splatter particles, combo multiplier chains, hazardous cyber bombs, and procedural Web Audio blade swoosh/slice synthesizers.
+3. **Quantum XO** (`g_ttt_03` / `quantum-xo`): Active game. Futuristic 3x3 tactical showdown with default Single-Player vs Overthinker AI Boss, guaranteed player-first move, round-robin turn cycling, and Web Audio sound synthesizer.
+4. **Quantum 2048** (`g_card_05` / `quantum-2048`): Active game. Cyberpunk sliding block merger in 9:16 vertical ratio.
+5. **Memory Matrix** (`g_flip_02` / `memory-matrix`): Active game. Neural memory card matching grid with multiplier streaks.
+6. **Hyper Tapper** (`g_tap_04` / `hyper-tapper`): Active game. Precision reaction-time clicker testing ultra-high APM speeds.
+7. **Multidimension XO** (`g_multi_xo_13` / `multidimension-xo`): Coming soon. Ultimate 9-field nested Tic-Tac-Toe with 9 nested 3x3 boards and macro-node capture mechanics.
+8. **Neon Snake 2077** (`g_snake_01` / `neon-snake`): Coming soon. Cyberpunk canvas snake with hyper-speed combos and interactive community hype registration.
 
 ---
 

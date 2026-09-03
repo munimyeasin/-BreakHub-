@@ -22,9 +22,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-snake.svg',
     description: 'Cyberpunk canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 14,
-    status: 'active'
+    hype_count: 142,
+    status: 'coming_soon'
   },
   {
     id: 'g_action_06',
@@ -36,7 +35,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.9,
     rating_count: 19,
-    status: 'active'
+    status: 'hidden'
   },
   {
     id: 'g_breaker_08',
@@ -131,7 +130,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 31,
-    status: 'active'
+    status: 'hidden'
   },
   {
     id: 'g_slicer_11',
@@ -141,8 +140,9 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-slicer.svg',
     description: 'Neon Katana Fruit Slicer! Slash flying cyber fruits, chain multi-slice combos, and dodge explosive plasma bombs.',
     play_count: 0,
-    hype_count: 89,
-    status: 'coming_soon'
+    rating: 4.9,
+    rating_count: 36,
+    status: 'active'
   },
   {
     id: 'g_paper_12',
