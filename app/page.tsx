@@ -238,8 +238,8 @@ export default function ArcadePortalDashboard() {
     <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black">
 
       {/* 1. STICKY APP HEADER */}
-      <header className="sticky top-0 z-30 backdrop-blur-xl bg-portal-bg/95 border-b border-portal-border/80 px-3 sm:px-6 py-2.5 sm:py-3">
-        <div className="max-w-7xl mx-auto flex flex-col gap-2.5 sm:gap-3">
+      <header className="sticky top-0 z-30 backdrop-blur-xl bg-portal-bg/95 border-b border-portal-border/80 px-3 sm:px-6 py-1.5 sm:py-2.5">
+        <div className="max-w-7xl mx-auto flex flex-col gap-1.5 sm:gap-2.5">
 
           {/* Top Bar */}
           <div className="flex items-center justify-between gap-2.5 sm:gap-3">
@@ -426,7 +426,7 @@ export default function ArcadePortalDashboard() {
         />
 
         {/* MAIN CONTENT ARENA */}
-        <main className="flex-1 w-full min-w-0 px-3 sm:px-6 py-4 pb-24 overflow-x-hidden">
+        <main className="flex-1 w-full min-w-0 px-2.5 sm:px-6 py-2.5 sm:py-3 pb-24 overflow-x-hidden">
           {activeTab === 'about' ? (
             <AboutSection
               onExploreGames={() => {
@@ -450,10 +450,10 @@ export default function ArcadePortalDashboard() {
               )}
 
               {/* Active Filter Bar & Breadcrumb Status */}
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-portal-border/40">
+              <div className="flex items-center justify-between mb-2.5 sm:mb-3 pb-1 sm:pb-1.5 border-b border-portal-border/40">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-sm font-black tracking-wider uppercase text-slate-200 flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-portal-cyan" />
+                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-slate-200 flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-portal-cyan" />
                     {activeTab === 'favorites' ? 'Your Saved Games' : 'Available Mini-Games'}
                     <span className="text-xs text-slate-500 font-bold">({filteredGames.length})</span>
                   </h2>
