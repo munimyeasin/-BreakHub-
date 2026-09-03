@@ -171,73 +171,85 @@ export default function SpotlightBanner({
         )}
       </div>
 
-      {/* MOBILE VIEW (< md): Cinematic 2-Grid Height Showcase Card with Smooth Transitions */}
-      <div key={`mobile-${currentGame.id}-${transitionKey}`} className="md:hidden relative z-10 space-y-2 animate-spotlight">
-        {/* Cinematic Artwork with Center Play Overlay & Corner Badges */}
+      {/* MOBILE VIEW (< md): Taller Cinematic Showcase Card (+4cm / ~150px) with Smooth Transitions */}
+      <div key={`mobile-${currentGame.id}-${transitionKey}`} className="md:hidden relative z-10 space-y-2.5 animate-spotlight">
+        {/* Cinematic Artwork with Center Play Overlay & Corner Badges (Increased height by 4cm) */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="relative group w-full aspect-[2.2/1] xs:aspect-[2.4/1] rounded-xl overflow-hidden bg-slate-900 border border-cyan-400/40 shadow-lg cursor-pointer"
+          className="relative group w-full h-[245px] xs:h-[275px] rounded-xl overflow-hidden bg-slate-900 border border-cyan-400/40 shadow-lg cursor-pointer"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
 
           {/* Center Play Button Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-11 h-11 xs:w-12 xs:h-12 rounded-full flex items-center justify-center shadow-glow-cyan transform group-hover:scale-110 group-active:scale-95 transition-transform ${
+            <div className={`w-12 h-12 xs:w-14 xs:h-14 rounded-full flex items-center justify-center shadow-glow-cyan transform group-hover:scale-110 group-active:scale-95 transition-transform ${
               isComingSoon
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.5)]'
+                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_0_22px_rgba(245,158,11,0.55)]'
                 : 'bg-portal-cyan text-black'
             }`}>
               {isComingSoon ? (
-                <Flame className="w-5 h-5 xs:w-6 xs:h-6 fill-black" />
+                <Flame className="w-6 h-6 xs:w-7 xs:h-7 fill-black" />
               ) : (
-                <Play className="w-5 h-5 xs:w-6 xs:h-6 fill-black translate-x-0.5" />
+                <Play className="w-6 h-6 xs:w-7 xs:h-7 fill-black translate-x-0.5" />
               )}
             </div>
           </div>
 
           {/* Top In-Artwork Badges */}
-          <div className="absolute top-2 left-2 right-2 flex items-center justify-between text-white pointer-events-none">
-            <span className="px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-[9px] font-black text-portal-cyan border border-cyan-500/40 uppercase">
+          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+            <span className="px-2.5 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-[9px] font-black text-portal-cyan border border-cyan-500/40 uppercase">
               {currentGame.category}
             </span>
             {isComingSoon ? (
-              <span className="flex items-center gap-1 text-amber-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/50 px-2 py-0.5 rounded-md shadow-glow-gold">
+              <span className="flex items-center gap-1 text-amber-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/50 px-2.5 py-0.5 rounded-md shadow-glow-gold">
                 <Flame className="w-2.5 h-2.5 fill-amber-400 text-amber-400" /> {currentGame.hype_count || 0} HYPES
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-portal-gold text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/40 px-2 py-0.5 rounded-md">
+              <span className="flex items-center gap-1 text-portal-gold text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/40 px-2.5 py-0.5 rounded-md">
                 <Star className="w-2.5 h-2.5 fill-portal-gold" /> {currentGame.rating?.toFixed(1) || '4.9'}
               </span>
             )}
           </div>
 
           {/* Bottom In-Artwork Badges */}
-          <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white pointer-events-none">
-            <span className="flex items-center gap-1 text-emerald-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-emerald-500/40 px-2 py-0.5 rounded-md">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+            <span className="flex items-center gap-1 text-emerald-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-emerald-500/40 px-2.5 py-0.5 rounded-md">
               <Zap className="w-2.5 h-2.5 text-portal-cyan" /> {isComingSoon ? '9 NESTED BOARDS' : '60-144 FPS'}
             </span>
-            <span className="text-[9px] font-bold text-slate-300 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-slate-700/50">
+            <span className="text-[9px] font-bold text-slate-300 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-slate-700/50">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
         </div>
 
         {/* Title & Description Row */}
-        <div className="flex items-center justify-between gap-2 pt-0.5">
-          <div className="min-w-0 flex-1">
-            <h1 className="text-sm xs:text-base font-black tracking-tight text-white truncate">
+        <div className="flex flex-col gap-1 pt-0.5">
+          <div className="min-w-0">
+            <h1 className="text-base xs:text-lg font-black tracking-tight text-white truncate">
               <span className="bg-gradient-to-r from-white via-cyan-100 to-portal-cyan bg-clip-text text-transparent">
                 {currentGame.title}
               </span>
             </h1>
-            <p className="text-[10px] text-slate-300 line-clamp-1 font-medium mt-0.5">
+            <p className="text-[11px] text-slate-300 line-clamp-2 font-medium mt-0.5 leading-snug">
               {currentGame.description}
             </p>
+          </div>
+
+          {/* Feature Chips on Mobile */}
+          <div className="flex flex-wrap gap-1.5 pt-0.5">
+            {tags.slice(0, 3).map((tag, i) => (
+              <span
+                key={i}
+                className="px-2 py-0.5 rounded-md bg-portal-surface/90 border border-portal-border/80 text-[9px] font-bold text-slate-300"
+              >
+                ⚡ {tag}
+              </span>
+            ))}
           </div>
         </div>
 
