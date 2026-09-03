@@ -113,7 +113,7 @@
       "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
       "play_count": 16,
       "rating": 4.8,
-      "status": "active",
+      "status": "hidden",
       "rating_count": 12
     },
     {
@@ -149,7 +149,7 @@
       "description": "Simon-inspired 4-quadrant chromatic memory sequence & audio tone reflex test.",
       "play_count": 15,
       "rating": 4.8,
-      "status": "active",
+      "status": "hidden",
       "rating_count": 9
     },
     {
@@ -219,7 +219,7 @@
       "description": "Conquer the cyber grid! Expand your neon territory, encircle massive zones, and slice enemy tails before they cut yours.",
       "play_count": 720,
       "rating": 5,
-      "status": "active",
+      "status": "hidden",
       "rating_count": 25
     }
   ],

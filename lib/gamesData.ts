@@ -48,7 +48,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.8,
     rating_count: 12,
-    status: 'active'
+    status: 'hidden'
   },
   {
     id: 'g_card_05',
@@ -84,7 +84,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.8,
     rating_count: 9,
-    status: 'active'
+    status: 'hidden'
   },
   {
     id: 'g_ttt_03',
@@ -154,6 +154,6 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 25,
-    status: 'active'
+    status: 'hidden'
   }
 ];
