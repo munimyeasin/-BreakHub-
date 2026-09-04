@@ -13,7 +13,9 @@ import {
   Users,
   Menu,
   SlidersHorizontal,
-  X
+  X,
+  Target,
+  Dices
 } from 'lucide-react';
 import GameGrid from '@/components/games/GameGrid';
 import SpotlightBanner from '@/components/games/SpotlightBanner';
@@ -23,6 +25,13 @@ import UsernamePromptModal from '@/components/ui/UsernamePromptModal';
 import ComingSoonModal from '@/components/ui/ComingSoonModal';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar from '@/components/navigation/Sidebar';
+import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
+import DailyQuestsModal from '@/components/gamification/DailyQuestsModal';
+import TrophyRoomModal from '@/components/gamification/TrophyRoomModal';
+import LevelUpCelebrationModal from '@/components/gamification/LevelUpCelebrationModal';
+import GameRouletteModal from '@/components/gamification/GameRouletteModal';
+import ActivityTicker from '@/components/gamification/ActivityTicker';
+import { gamification, GamificationState, LevelInfo } from '@/lib/gamification';
 import { Game } from '@/lib/types';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 import { getAvatarUrl } from '@/lib/avatar';
@@ -47,6 +56,33 @@ export default function ArcadePortalDashboard() {
   const [comingSoonGame, setComingSoonGame] = useState<Game | null>(null);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [leaderboardGameId, setLeaderboardGameId] = useState<string | 'global'>('global');
+
+  // Gamification Modal States
+  const [isQuestsModalOpen, setIsQuestsModalOpen] = useState(false);
+  const [isTrophiesModalOpen, setIsTrophiesModalOpen] = useState(false);
+  const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false);
+  const [levelUpInfo, setLevelUpInfo] = useState<LevelInfo | null>(null);
+  const [gameState, setGameState] = useState<GamificationState>(() => gamification.getState());
+
+  // Listen to gamification state changes and level-ups
+  useEffect(() => {
+    const handleSync = (e: CustomEvent<GamificationState>) => {
+      setGameState(e.detail || gamification.getState());
+    };
+
+    const handleLevelUp = (e: CustomEvent<LevelInfo>) => {
+      if (e.detail) {
+        setLevelUpInfo(e.detail);
+      }
+    };
+
+    window.addEventListener('stressbuster_gamification_sync' as any, handleSync);
+    window.addEventListener('stressbuster_levelup' as any, handleLevelUp);
+    return () => {
+      window.removeEventListener('stressbuster_gamification_sync' as any, handleSync);
+      window.removeEventListener('stressbuster_levelup' as any, handleLevelUp);
+    };
+  }, []);
 
   // 1. Fetch live games catalog
   useEffect(() => {
@@ -79,6 +115,38 @@ export default function ArcadePortalDashboard() {
       }
     } catch {}
   }, []);
+
+  const handleRateGame = async (gameId: string, rating: number) => {
+    setUserRatings(prev => {
+      const updated = { ...prev, [gameId]: rating };
+      try {
+        localStorage.setItem('stressbuster_user_ratings', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    // Gamification Hook: Record rating XP & daily quest progression
+    try {
+      gamification.recordGameRating(gameId, rating);
+    } catch {}
+
+    try {
+      await fetch('/api/games/rate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId, rating }),
+      });
+    } catch {}
+  };
+
+  const handleSelectGameFromRoulette = (selectedGame: any) => {
+    setIsRouletteModalOpen(false);
+    handleLaunchGame(selectedGame);
+  };
+
+  const unclaimedQuestsCount = useMemo(() => {
+    return (gameState.dailyQuests?.quests || []).filter(q => q.progress >= q.target && !q.claimed).length;
+  }, [gameState]);
 
   const toggleFavorite = (gameId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -338,8 +406,13 @@ export default function ArcadePortalDashboard() {
               </button>
             </div>
 
-            {/* Player Gamer Tag */}
+            {/* Gamification Player XP Badge & Gamer Tag */}
             <div className="flex items-center gap-2 shrink-0">
+              <PlayerXpBadge
+                onOpenQuests={() => setIsQuestsModalOpen(true)}
+                onOpenTrophies={() => setIsTrophiesModalOpen(true)}
+              />
+
               {playerTag ? (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
@@ -399,6 +472,9 @@ export default function ArcadePortalDashboard() {
         </div>
       </header>
 
+      {/* Real-time Cyber Activity Marquee Ticker */}
+      <ActivityTicker />
+
       {/* 2. DUAL-PANE LAYOUT: LEFT SLIDE BAR + MAIN PORTAL ARENA */}
       <div className="flex w-full min-h-[calc(100vh-61px)]">
 
@@ -421,6 +497,10 @@ export default function ArcadePortalDashboard() {
           playerTag={playerTag}
           avatarUrl={avatarUrl}
           onOpenUsernameModal={() => setIsUsernameModalOpen(true)}
+          onOpenQuests={() => setIsQuestsModalOpen(true)}
+          onOpenTrophies={() => setIsTrophiesModalOpen(true)}
+          onOpenRoulette={() => setIsRouletteModalOpen(true)}
+          unclaimedQuestsCount={unclaimedQuestsCount}
           categoryCounts={categoryCounts}
           totalGamesCount={categoryCounts['ALL'] || 0}
         />
@@ -563,6 +643,15 @@ export default function ArcadePortalDashboard() {
           }}
           onClose={() => setActiveGame(null)}
           onOpenLeaderboard={(gameId) => handleOpenLeaderboard(gameId)}
+          onNextGameRoulette={() => {
+            const activeGames = games.filter(g => g.status === 'active' && g.id !== activeGame.id);
+            if (activeGames.length > 0) {
+              const nextGame = activeGames[Math.floor(Math.random() * activeGames.length)];
+              handleLaunchGame(nextGame);
+            }
+          }}
+          userRating={userRatings[activeGame.id] || null}
+          onRateGame={handleRateGame}
         />
       )}
 
@@ -589,6 +678,41 @@ export default function ArcadePortalDashboard() {
           }}
         />
       )}
+
+      {/* 9. DAILY QUESTS & BOUNTIES MODAL */}
+      <DailyQuestsModal
+        isOpen={isQuestsModalOpen}
+        onClose={() => setIsQuestsModalOpen(false)}
+        onOpenGame={(gameId) => {
+          setIsQuestsModalOpen(false);
+          const g = games.find(item => item.id === gameId);
+          if (g) handleLaunchGame(g);
+        }}
+      />
+
+      {/* 10. HOLOGRAPHIC TROPHY VAULT MODAL */}
+      <TrophyRoomModal
+        isOpen={isTrophiesModalOpen}
+        onClose={() => setIsTrophiesModalOpen(false)}
+      />
+
+      {/* 11. CYBER LEVEL-UP CELEBRATION MODAL */}
+      <LevelUpCelebrationModal
+        levelInfo={levelUpInfo}
+        onClose={() => setLevelUpInfo(null)}
+        onOpenTrophies={() => {
+          setLevelUpInfo(null);
+          setIsTrophiesModalOpen(true);
+        }}
+      />
+
+      {/* 12. NEURAL GAME ROULETTE MODAL */}
+      <GameRouletteModal
+        isOpen={isRouletteModalOpen}
+        onClose={() => setIsRouletteModalOpen(false)}
+        games={games}
+        onSelectGame={handleSelectGameFromRoulette}
+      />
     </div>
   );
 }

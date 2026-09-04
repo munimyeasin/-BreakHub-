@@ -1,5 +1,7 @@
 # Stress Buster Portal — Persistent Context & Memory
 
+- **Live Production URL**: `https://stress-buster-delta.vercel.app/`
+
 > **Note**: This is the workspace mirror of the AI persistent memory. The active system store is located at:  
 > `C:\Users\munim\.claude-omniroute\projects\C--Users-munim-Desktop----InterShip---Project-\memory\`
 
@@ -32,6 +34,15 @@
 - **Mandatory First-Time Player Naming**: First-time players without a saved `stressbuster_player_tag` cannot start any game as an anonymous guest. Game clicks are intercepted by `handleLaunchGame` in `app/page.tsx`, buffering `pendingGameToPlay` and presenting `UsernamePromptModal` ("Enter Your Gamer Tag", "CONFIRM & PLAY NOW"). Upon confirmation, the tag is persisted locally, synchronized to the backend user database via `/api/user`, and the target game launches automatically.
 - **Database & Play Tracking**: Local persistent JSON store at `data/portal_db.json` with CRUD methods in `lib/db.ts` (supports user accounts, personal bests, global cumulative scores, username updates with historical score migration, and real-time play counter persistence via `POST /api/games/play`).
 - **Dynamic Play Count Formatter**: `formatPlayCount` in `components/games/GameCard.tsx` renders exact readable integers (`0 plays`, `1 play`, `42 plays`) for counts < 1,000 and metric formatting (`1.2k plays`, `1M plays`) for $\ge 1,000$.
+- **Behavioral UX Gamification & Web Audio Suite**: Complete high-retention engagement architecture based on UX behavioral psychology principles:
+  - **Daily Play Streaks & Loss Aversion**: Tracks consecutive calendar days (`YYYY-MM-DD`) with streak preservation, rollover checks, flame status badges (`🔥 {streak}`), and streak XP rewards.
+  - **Dynamic Leveling & Cyber Clearance Titles**: Exponential leveling curve ($L = \lfloor (\text{XP} / 100)^{1/1.5} \rfloor + 1$) featuring 14 distinct Cyber Rank Titles (*Novice Netrunner* $\rightarrow$ *Byte Runner* $\rightarrow$ *Grid Pilot* $\rightarrow$ *Arcade Prodigy* $\rightarrow$ *Cyberpunk Legend* $\rightarrow$ *Apex Cybernetic Deity*).
+  - **Deterministic Seeded Daily Quests**: 3 daily missions generated per calendar day (Easy, Medium, Hard tiers) via deterministic date hashing (`hashString(YYYY-MM-DD)`) with midnight countdown timer and a 3/3 Daily Master Bonus (+100 XP).
+  - **Holographic Trophy Vault**: 16 cyberpunk achievements across Bronze, Silver, Gold, and Platinum rarity tiers with completion tracking and XP payouts in `components/gamification/TrophyRoomModal.tsx`.
+  - **Procedural Web Audio Engine**: Zero-asset audio synthesis in `lib/audio.ts` using native browser `AudioContext` (sine, triangle, sawtooth oscillators with exponential gain envelopes) for XP chimes, level-up arpeggios, quest completions, sub-bass trophy drops, roulette clicks, and streak flame sounds.
+  - **Neural Game Roulette & Quick Switch**: 1-click random active game selector with animated mechanical roulette and sound effects in `components/gamification/GameRouletteModal.tsx` and `GameModal.tsx`.
+  - **Live Cyber Activity Ticker**: Animated marquee feed in `components/gamification/ActivityTicker.tsx` combining community milestones with local player achievements.
+  - **Cross-Component React Synchronization**: Singleton service (`GamificationService`) in `lib/gamification.ts` with dual-layer `localStorage` persistence (`'stressbuster_gamification_v1'`) and `window.dispatchEvent` events (`stressbuster_gamification_sync`, `stressbuster_levelup`).
 - **Audio Engine**: Custom Web Audio API procedural synthesis with persistent `AudioContext` and gain ramps (zero buffer pops).
 - **Display Standard**: Standardized **9:16 vertical portrait aspect ratio** (`aspect-[9/16]`, `360x640px` internal coordinate grid, `max-w-[380px]`) and ultra-slim single-line HUDs (`py-1.5 px-3 mb-1.5 rounded-xl bg-portal-surface/90`) across all active games and `GameModal.tsx` to maximize playable screen real estate for mobile, touchscreens, and vertical monitors.
 - **Universal Native Fullscreen API**: Native browser fullscreen integration across all games with dynamic viewport fitting, vendor prefix support (`webkit`, `moz`, `ms`), and `'F'` keyboard shortcut.

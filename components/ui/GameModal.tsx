@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Trophy, Check, Edit3, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Trophy, Check, Edit3, Maximize2, Minimize2, Dices, Sparkles } from 'lucide-react';
 import NeonSnakeGame from '@/components/games/NeonSnakeGame';
 import MemoryMatrixGame from '@/components/games/MemoryMatrixGame';
 import QuantumXOGame from '@/components/games/QuantumXOGame';
@@ -17,6 +17,8 @@ import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
+import { gamification } from '@/lib/gamification';
+import { audio } from '@/lib/audio';
 
 interface GameModalProps {
   game: Game;
@@ -26,6 +28,7 @@ interface GameModalProps {
   onChangeUsername: () => void;
   onClose: () => void;
   onOpenLeaderboard: (gameId: string) => void;
+  onNextGameRoulette?: () => void;
 }
 
 export default function GameModal({
@@ -35,7 +38,8 @@ export default function GameModal({
   onRateGame,
   onChangeUsername,
   onClose,
-  onOpenLeaderboard
+  onOpenLeaderboard,
+  onNextGameRoulette
 }: GameModalProps) {
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -129,6 +133,16 @@ export default function GameModal({
     if (score <= 0) return;
     setStatusMsg('Syncing score...');
 
+    // Gamification Integration: Award XP, update streak, track daily quest, and check trophy achievements
+    try {
+      const result = gamification.recordGamePlay(game.id, score);
+      if (result.leveledUp) {
+        audio.playLevelUpSound();
+      } else {
+        audio.playXpGainSound();
+      }
+    } catch {}
+
     try {
       const res = await fetch('/api/scores', {
         method: 'POST',
@@ -177,6 +191,16 @@ export default function GameModal({
           </div>
 
           <div className="flex items-center gap-1.5">
+            {onNextGameRoulette && (
+              <button
+                onClick={onNextGameRoulette}
+                className="hidden xs:flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-portal-cyan text-[11px] font-black hover:bg-cyan-500/25 hover:shadow-glow-cyan/40 active:scale-95 transition-all"
+                title="Next Random Game Roulette"
+              >
+                <Dices className="w-3 h-3 text-portal-cyan" />
+                <span>Next</span>
+              </button>
+            )}
             <button
               onClick={() => onOpenLeaderboard(game.id)}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-portal-gold text-[11px] font-black hover:shadow-glow-gold active:scale-95 transition-all"

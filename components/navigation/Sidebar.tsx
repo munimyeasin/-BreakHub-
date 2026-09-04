@@ -17,7 +17,10 @@ import {
   Clock,
   ChevronRight,
   SlidersHorizontal,
-  Compass
+  Compass,
+  Target,
+  Dices,
+  Award
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -32,6 +35,10 @@ interface SidebarProps {
   playerTag: string;
   avatarUrl: string | null;
   onOpenUsernameModal: () => void;
+  onOpenQuests?: () => void;
+  onOpenTrophies?: () => void;
+  onOpenRoulette?: () => void;
+  unclaimedQuestsCount?: number;
   categoryCounts?: Record<string, number>;
   totalGamesCount?: number;
 }
@@ -58,6 +65,10 @@ export default function Sidebar({
   playerTag,
   avatarUrl,
   onOpenUsernameModal,
+  onOpenQuests,
+  onOpenTrophies,
+  onOpenRoulette,
+  unclaimedQuestsCount = 0,
   categoryCounts = {},
   totalGamesCount = 0
 }: SidebarProps) {
@@ -202,6 +213,82 @@ export default function Sidebar({
                   4 Devs
                 </span>
               </button>
+            </div>
+          </div>
+
+          {/* SECTION: GAMIFICATION & QUESTS */}
+          <div>
+            <div className="px-2 mb-2 flex items-center justify-between">
+              <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
+                <Target className="w-3 h-3 text-purple-400" />
+                QUESTS & REWARDS
+              </span>
+              <span className="text-[9px] text-purple-400 font-black uppercase bg-purple-500/10 px-1.5 py-0.2 rounded border border-purple-500/30">
+                LIVE
+              </span>
+            </div>
+
+            <div className="space-y-1">
+              {/* Daily Quests Button */}
+              {onOpenQuests && (
+                <button
+                  onClick={() => {
+                    onOpenQuests();
+                    onClose();
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-purple-950/40 via-portal-surface/60 to-slate-900/60 text-purple-300 border border-purple-500/40 hover:border-purple-400 hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Target className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                    <span>Daily Quests</span>
+                  </div>
+                  {unclaimedQuestsCount > 0 ? (
+                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-cyan-400 text-black animate-bounce shadow-glow-cyan">
+                      {unclaimedQuestsCount} CLAIM
+                    </span>
+                  ) : (
+                    <span className="text-[9px] font-bold text-purple-400/80 bg-purple-500/15 px-1.5 py-0.2 rounded border border-purple-500/30">
+                      3/day
+                    </span>
+                  )}
+                </button>
+              )}
+
+              {/* Holographic Trophy Vault Button */}
+              {onOpenTrophies && (
+                <button
+                  onClick={() => {
+                    onOpenTrophies();
+                    onClose();
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-amber-950/30 via-portal-surface/60 to-slate-900/60 text-amber-300 border border-amber-500/40 hover:border-amber-400 hover:text-white hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] transition-all group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Award className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                    <span>Trophy Vault</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-amber-500/70 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              )}
+
+              {/* Game Roulette Quick-Picker */}
+              {onOpenRoulette && (
+                <button
+                  onClick={() => {
+                    onOpenRoulette();
+                    onClose();
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-cyan-950/40 via-teal-950/40 to-portal-surface/60 text-portal-cyan border border-cyan-500/40 hover:border-cyan-300 hover:text-white hover:shadow-glow-cyan/30 transition-all group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Dices className="w-4 h-4 text-portal-cyan group-hover:rotate-180 transition-transform duration-500" />
+                    <span>Game Roulette</span>
+                  </div>
+                  <span className="px-1.5 py-0.2 rounded text-[8px] font-black uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    RANDOM
+                  </span>
+                </button>
+              )}
             </div>
           </div>
 
