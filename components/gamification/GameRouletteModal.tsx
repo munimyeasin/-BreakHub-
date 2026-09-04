@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { X, Dices, Sparkles, Play, Flame, Trophy, Shuffle } from 'lucide-react';
 import Image from 'next/image';
 import { audio } from '@/lib/audio';
-import { Game } from '@/types/game';
+import { Game } from '@/lib/types';
+import { gamification } from '@/lib/gamification';
 
 interface GameRouletteModalProps {
   isOpen: boolean;
@@ -60,6 +61,9 @@ export default function GameRouletteModal({
         audio.playRouletteLockSound();
         setSelectedGame(randomGame);
         setIsSpinning(false);
+        try {
+          gamification.recordRouletteSpin();
+        } catch {}
       }
     };
 
@@ -104,7 +108,7 @@ export default function GameRouletteModal({
             {/* Thumbnail Container */}
             <div className="relative w-full h-36 rounded-xl overflow-hidden border border-portal-border mb-3">
               <Image
-                src={displayGame.thumbnail}
+                src={displayGame.thumbnail_url}
                 alt={displayGame.title}
                 fill
                 className="object-cover"

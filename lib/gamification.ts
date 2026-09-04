@@ -824,6 +824,25 @@ class GamificationService {
     return this.grantXp(30, `Rated game ${gameId}`);
   }
 
+  public recordGameRating(gameId: string, rating: number): XpGrantResult {
+    return this.recordGameRated(gameId, rating);
+  }
+
+  public recordGamePlay(gameId: string, categoryOrScore?: string | number): XpGrantResult {
+    if (typeof categoryOrScore === 'number') {
+      return this.recordScoreSubmitted(gameId, categoryOrScore);
+    }
+    return this.recordGamePlayed(gameId, categoryOrScore);
+  }
+
+  public getUnclaimedQuestsCount(): number {
+    this.reconcileDailyState();
+    const unclaimedIndividual = this.state.dailyQuests.progress.filter(p => p.completed && !p.claimed).length;
+    const allClaimed = this.state.dailyQuests.progress.every(p => p.claimed);
+    const bonusUnclaimed = (allClaimed && !this.state.dailyQuests.dailyMasterClaimed) ? 1 : 0;
+    return unclaimedIndividual + bonusUnclaimed;
+  }
+
   /**
    * Called when player toggles a favorite game
    */

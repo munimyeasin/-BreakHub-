@@ -135,8 +135,8 @@ export default function GameModal({
 
     // Gamification Integration: Award XP, update streak, track daily quest, and check trophy achievements
     try {
-      const result = gamification.recordGamePlay(game.id, score);
-      if (result.leveledUp) {
+      const result = gamification.recordScoreSubmitted(game.id, score, game.category);
+      if (result.didLevelUp) {
         audio.playLevelUpSound();
       } else {
         audio.playXpGainSound();

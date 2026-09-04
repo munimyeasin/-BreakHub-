@@ -127,7 +127,7 @@ export default function ArcadePortalDashboard() {
 
     // Gamification Hook: Record rating XP & daily quest progression
     try {
-      gamification.recordGameRating(gameId, rating);
+      gamification.recordGameRated(gameId, rating);
     } catch {}
 
     try {
@@ -145,7 +145,7 @@ export default function ArcadePortalDashboard() {
   };
 
   const unclaimedQuestsCount = useMemo(() => {
-    return (gameState.dailyQuests?.quests || []).filter(q => q.progress >= q.target && !q.claimed).length;
+    return (gameState.dailyQuests?.progress || []).filter(p => p.completed && !p.claimed).length;
   }, [gameState]);
 
   const toggleFavorite = (gameId: string, e: React.MouseEvent) => {
@@ -683,10 +683,16 @@ export default function ArcadePortalDashboard() {
       <DailyQuestsModal
         isOpen={isQuestsModalOpen}
         onClose={() => setIsQuestsModalOpen(false)}
-        onOpenGame={(gameId) => {
+        onPlayGame={(gameId) => {
           setIsQuestsModalOpen(false);
-          const g = games.find(item => item.id === gameId);
-          if (g) handleLaunchGame(g);
+          if (gameId) {
+            const g = games.find(item => item.id === gameId);
+            if (g) handleLaunchGame(g);
+          }
+        }}
+        onOpenTrophies={() => {
+          setIsQuestsModalOpen(false);
+          setIsTrophiesModalOpen(true);
         }}
       />
 
