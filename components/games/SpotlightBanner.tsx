@@ -14,6 +14,7 @@ interface SpotlightBannerProps {
 }
 
 const HIGHLIGHT_TAGS: Record<string, string[]> = {
+  'cyber-drift': ['2D Infinite Drifting', '10X Apex Multipliers', 'Garage Car Tuning', 'Procedural Web Audio'],
   'cyber-slicer': ['Katana Multi-Slice', 'Combo Multipliers', 'Plasma Bombs', '9:16 Portrait'],
   'neon-starfighter': ['Singularity Black Holes', 'EMP Nukes', '3X Spread Laser', '60-144 FPS Space Combat'],
   'multidimension-xo': ['9 Nested 3x3 Boards', 'Macro-Node Capture', 'Ultimate Tic-Tac-Toe', 'Overthinker AI Boss'],
@@ -28,9 +29,9 @@ export default function SpotlightBanner({
   onPlayGame,
   onViewLeaderboard
 }: SpotlightBannerProps) {
-  // Get all featured games (Cyber Slicer, Neon Starfighter, and Multidimension XO prioritized)
+  // Get all featured games (Cyber Drift, Cyber Slicer, Neon Starfighter, and Multidimension XO prioritized)
   const featuredGames = games.filter(
-    g => g.status !== 'hidden' && (g.featured || g.slug === 'cyber-slicer' || g.slug === 'neon-starfighter' || g.slug === 'multidimension-xo')
+    g => g.status !== 'hidden' && (g.featured || g.slug === 'cyber-drift' || g.slug === 'cyber-slicer' || g.slug === 'neon-starfighter' || g.slug === 'multidimension-xo')
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,6 +49,7 @@ export default function SpotlightBanner({
   const tags = HIGHLIGHT_TAGS[currentGame.slug] || ['Cyber Arcade', 'Web Audio Engine', 'Instant Play'];
 
   const getGameIcon = (slug: string) => {
+    if (slug === 'cyber-drift') return <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-portal-cyan" />;
     if (slug === 'cyber-slicer') return <Swords className="w-2.5 h-2.5 sm:w-3 sm:h-3" />;
     if (slug === 'neon-starfighter') return <Rocket className="w-2.5 h-2.5 sm:w-3 sm:h-3" />;
     if (slug === 'multidimension-xo') return <Grid3X3 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />;

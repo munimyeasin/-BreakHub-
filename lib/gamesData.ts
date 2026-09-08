@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_drift_14',
+    slug: 'cyber-drift',
+    title: 'Cyber Drift 2077',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/cyber-drift.svg',
+    description: 'High-speed 2D infinite cyber drift racer! Execute counter-steered slides, clip apex beacons, trigger nitro boost, and chain 10X drift combos.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 42,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_slicer_11',
     slug: 'cyber-slicer',
     title: 'Cyber Slicer',

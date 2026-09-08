@@ -14,6 +14,7 @@ import ChromaReflexGame from '@/components/games/ChromaReflexGame';
 import GeometryDashGame from '@/components/games/GeometryDashGame';
 import CyberSlicerGame from '@/components/games/CyberSlicerGame';
 import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
+import CyberDriftGame from '@/components/games/CyberDriftGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -319,6 +320,10 @@ export default function GameModal({
 
           {(game.id === 'g_paper_12' || game.slug === 'paper-io' || game.slug === 'neon-paper-io') && (
             <NeonPaperIoGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_drift_14' || game.slug === 'cyber-drift') && (
+            <CyberDriftGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
         </div>
       </div>
