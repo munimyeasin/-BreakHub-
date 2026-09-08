@@ -9,9 +9,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-drift.svg',
     description: 'High-speed 2D infinite cyber drift racer! Execute counter-steered slides, clip apex beacons, trigger nitro boost, and chain 10X drift combos.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 42,
-    status: 'active',
+    hype_count: 0,
+    status: 'coming_soon',
     featured: true
   },
   {

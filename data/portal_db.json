@@ -75,10 +75,9 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/cyber-drift.svg",
       "description": "High-speed 2D infinite cyber drift racer! Execute counter-steered slides, clip apex beacons, trigger nitro boost, and chain 10X drift combos.",
-      "play_count": 1,
-      "rating": 5,
-      "rating_count": 42,
-      "status": "active",
+      "play_count": 0,
+      "hype_count": 0,
+      "status": "coming_soon",
       "featured": true
     },
     {

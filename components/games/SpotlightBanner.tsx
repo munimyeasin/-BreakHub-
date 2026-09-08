@@ -221,7 +221,7 @@ export default function SpotlightBanner({
           {/* Bottom In-Artwork Badges */}
           <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
             <span className="flex items-center gap-1 text-emerald-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-emerald-500/40 px-2.5 py-0.5 rounded-md">
-              <Zap className="w-2.5 h-2.5 text-portal-cyan" /> {isComingSoon ? '9 NESTED BOARDS' : '60-144 FPS'}
+              <Zap className="w-2.5 h-2.5 text-portal-cyan" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? '9 NESTED BOARDS' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : '60-144 FPS'}
             </span>
             <span className="text-[9px] font-bold text-slate-300 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-slate-700/50">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
@@ -367,7 +367,7 @@ export default function SpotlightBanner({
                 </span>
               )}
               <span className="flex items-center gap-1 text-portal-cyan text-xs font-black bg-cyan-500/15 border border-cyan-500/30 px-2.5 py-0.5 rounded-md">
-                <Zap className="w-3 h-3" /> {isComingSoon ? 'STRATEGY ENGINE' : 'VERIFIED 60-144 FPS'}
+                <Zap className="w-3 h-3" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? 'STRATEGY ENGINE' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : 'VERIFIED 60-144 FPS'}
               </span>
               <span className="flex items-center gap-1 text-emerald-400 text-xs font-black bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-md">
                 <Shield className="w-3 h-3" /> 9:16 PORTRAIT READY
