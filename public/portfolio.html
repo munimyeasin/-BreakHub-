@@ -1,0 +1,1304 @@
+<title>Munim Yeasin — Systems & Full-Stack Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.344.0/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          display: ['Plus Jakarta Sans', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          brand: {
+            cyan: 'var(--color-accent)',
+            violet: 'var(--color-violet)',
+            gold: 'var(--color-gold)',
+            emerald: 'var(--color-emerald)'
+          }
+        },
+        boxShadow: {
+          'glow-cyan': '0 0 25px rgba(0, 240, 255, 0.25)',
+          'glow-violet': '0 0 25px rgba(139, 92, 246, 0.25)',
+          'glow-gold': '0 0 25px rgba(245, 158, 11, 0.25)'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --bg-ground: #070a12;
+    --bg-surface: #0e1424;
+    --bg-surface-elev: #151f36;
+    --bg-surface-card: rgba(14, 20, 36, 0.75);
+    --border-subtle: rgba(0, 240, 255, 0.15);
+    --border-active: rgba(0, 240, 255, 0.45);
+    --color-accent: #00f0ff;
+    --color-violet: #a78bfa;
+    --color-gold: #fbbf24;
+    --color-emerald: #34d399;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --grid-line: rgba(0, 240, 255, 0.04);
+  }
+
+  :root[data-theme="light"] {
+    --bg-ground: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-surface-elev: #f1f5f9;
+    --bg-surface-card: rgba(255, 255, 255, 0.85);
+    --border-subtle: rgba(2, 132, 199, 0.15);
+    --border-active: rgba(2, 132, 199, 0.5);
+    --color-accent: #0284c7;
+    --color-violet: #7c3aed;
+    --color-gold: #d97706;
+    --color-emerald: #059669;
+    --text-primary: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #94a3b8;
+    --grid-line: rgba(2, 132, 199, 0.05);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg-ground: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elev: #f1f5f9;
+      --bg-surface-card: rgba(255, 255, 255, 0.85);
+      --border-subtle: rgba(2, 132, 199, 0.15);
+      --border-active: rgba(2, 132, 199, 0.5);
+      --color-accent: #0284c7;
+      --color-violet: #7c3aed;
+      --color-gold: #d97706;
+      --color-emerald: #059669;
+      --text-primary: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      --grid-line: rgba(2, 132, 199, 0.05);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-ground);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Grid overlay */
+  .bg-cyber-grid {
+    background-size: 36px 36px;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  }
+
+  /* Glassmorphism card */
+  .glass-panel {
+    background: var(--bg-surface-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-panel:hover {
+    border-color: var(--border-active);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-ground);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+
+  .terminal-cursor::after {
+    content: '▋';
+    animation: blink 1s infinite;
+    color: var(--color-accent);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes pulseSlow {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.04); opacity: 1; }
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 4s ease-in-out infinite;
+  }
+</style>
+
+<div class="relative min-h-screen bg-cyber-grid selection:bg-cyan-500/30 selection:text-cyan-200">
+  <!-- Interactive Canvas Background -->
+  <canvas id="ambient-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] bg-[var(--bg-ground)]/80 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-display font-black text-black text-base shadow-glow-cyan group-hover:scale-105 transition-transform">
+          MY
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-bold text-sm tracking-tight text-[var(--text-primary)] group-hover:text-[var(--color-accent)] transition-colors">Munim Yeasin</span>
+          <span class="text-[10px] font-mono tracking-widest uppercase text-[var(--text-dim)]">Systems Architect</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+        <a href="#about" class="hover:text-[var(--color-accent)] transition-colors">About</a>
+        <a href="#architecture" class="hover:text-[var(--color-accent)] transition-colors">Architecture</a>
+        <a href="#projects" class="hover:text-[var(--color-accent)] transition-colors">Projects</a>
+        <a href="#playground" class="hover:text-[var(--color-accent)] transition-colors">Interactive Demo</a>
+        <a href="#terminal" class="hover:text-[var(--color-accent)] transition-colors">CLI Console</a>
+        <a href="#contact" class="hover:text-[var(--color-accent)] transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <button id="theme-toggle" class="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-active)] transition-all active:scale-95" title="Toggle Theme">
+          <i data-lucide="moon" class="w-4 h-4 dark-icon"></i>
+          <i data-lucide="sun" class="w-4 h-4 light-icon hidden"></i>
+        </button>
+
+        <button id="audio-toggle" class="p-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] hover:text-[var(--color-accent)] hover:border-[var(--border-active)] transition-all active:scale-95" title="Audio FX: On">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+
+        <a href="#contact" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black shadow-glow-cyan active:scale-95 transition-all">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          <span>Let's Build</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative z-10 pt-12 pb-16 md:pt-20 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+
+      <!-- Left Column: Manifesto & Value Proposition -->
+      <div class="lg:col-span-7 space-y-6 text-left">
+        <!-- Status Chip -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[var(--color-accent)] font-mono text-xs font-semibold tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400 -ml-4"></span>
+          <span>AVAILABLE FOR FULL-STACK & SYSTEMS ARCHITECTURE</span>
+        </div>
+
+        <h1 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight text-[var(--text-primary)] leading-[1.1]">
+          Building <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">Ultra-Fast Engines</span>, Scalable Platforms & High-Impact UX.
+        </h1>
+
+        <p class="text-base sm:text-lg text-[var(--text-muted)] max-w-2xl font-normal leading-relaxed">
+          I'm <strong class="text-[var(--text-primary)] font-semibold">Munim Yeasin</strong> — a Full-Stack Engineer and Interactive Systems Architect. I specialize in designing real-time 60–144 FPS canvas rendering engines, high-throughput backend services, Web Audio synthesizers, and modern distributed applications.
+        </p>
+
+        <!-- KPI Metrics Strip -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-2 max-w-xl">
+          <div class="glass-panel p-3.5 rounded-2xl border-l-2 border-l-cyan-400">
+            <div class="text-xl sm:text-2xl font-mono font-black text-[var(--color-accent)]">60–144</div>
+            <div class="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-wider">FPS Engine Render</div>
+          </div>
+          <div class="glass-panel p-3.5 rounded-2xl border-l-2 border-l-violet-400">
+            <div class="text-xl sm:text-2xl font-mono font-black text-[var(--color-violet)]">10+</div>
+            <div class="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-wider">Shipped Games</div>
+          </div>
+          <div class="glass-panel p-3.5 rounded-2xl border-l-2 border-l-amber-400">
+            <div class="text-xl sm:text-2xl font-mono font-black text-[var(--color-gold)]">0-Pop</div>
+            <div class="text-[11px] font-mono text-[var(--text-dim)] uppercase tracking-wider">Web Audio Synth</div>
+          </div>
+        </div>
+
+        <!-- Hero Actions -->
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <a href="#projects" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-display font-bold text-sm bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black shadow-glow-cyan active:scale-95 transition-all">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>Explore Systems & Projects</span>
+          </a>
+
+          <a href="https://github.com/munimyeasin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl font-display font-semibold text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-active)] text-[var(--text-primary)] hover:text-[var(--color-accent)] active:scale-95 transition-all">
+            <i data-lucide="github" class="w-4 h-4"></i>
+            <span>GitHub Profile</span>
+          </a>
+
+          <button onclick="copyEmail(this)" class="inline-flex items-center gap-2 px-4 py-3 rounded-xl font-display font-semibold text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--border-active)] text-[var(--text-primary)] hover:text-cyan-400 active:scale-95 transition-all">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span id="email-btn-text">Copy Email</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Cyber Architect HUD Card -->
+      <div class="lg:col-span-5 relative">
+        <div class="relative glass-panel rounded-3xl p-6 sm:p-7 overflow-hidden shadow-2xl border border-[var(--border-active)] group">
+          <!-- Background Ambient Glow -->
+          <div class="absolute -top-12 -right-12 w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Header badge -->
+          <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 p-0.5 shadow-glow-cyan">
+                <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center font-display font-black text-cyan-300 text-lg">
+                  MY
+                </div>
+              </div>
+              <div>
+                <h3 class="font-display font-bold text-base text-[var(--text-primary)]">Munim Yeasin</h3>
+                <p class="text-xs font-mono text-[var(--text-dim)]">Lead Architect · StressBuster</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-bold">
+              SYS::ONLINE
+            </span>
+          </div>
+
+          <!-- Core Attributes List -->
+          <div class="space-y-3 font-mono text-xs">
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)]">
+              <span class="text-[var(--text-dim)] flex items-center gap-2">
+                <i data-lucide="cpu" class="w-3.5 h-3.5 text-cyan-400"></i> Core Stack
+              </span>
+              <span class="font-bold text-[var(--text-primary)]">Next.js 16 · TS · React 18</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)]">
+              <span class="text-[var(--text-dim)] flex items-center gap-2">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> Graphics Engine
+              </span>
+              <span class="font-bold text-amber-300">HTML5 Canvas 2D · Δt Physics</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)]">
+              <span class="text-[var(--text-dim)] flex items-center gap-2">
+                <i data-lucide="radio" class="w-3.5 h-3.5 text-purple-400"></i> Audio Engine
+              </span>
+              <span class="font-bold text-purple-300">Procedural Web Audio API</span>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)]">
+              <span class="text-[var(--text-dim)] flex items-center gap-2">
+                <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-400"></i> Edge & Node Infra
+              </span>
+              <span class="font-bold text-emerald-300">Vercel · PM2 · Cloudflare</span>
+            </div>
+          </div>
+
+          <!-- Quick Action CTA -->
+          <div class="mt-5 pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs">
+            <span class="text-[var(--text-dim)] font-mono">Location: Global / Remote</span>
+            <a href="mailto:munimyeasin@gmail.com" class="font-mono font-bold text-[var(--color-accent)] hover:underline flex items-center gap-1">
+              <span>munimyeasin@gmail.com</span>
+              <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Architectural Pillars Section -->
+  <section id="architecture" class="py-16 bg-[var(--bg-surface)]/50 border-y border-[var(--border-subtle)] relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl my-8">
+    <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="code-2" class="w-3.5 h-3.5"></i> Engineering Specialties
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-[var(--text-primary)]">
+        Full-Stack Systems & Real-Time Engines
+      </h2>
+      <p class="text-sm sm:text-base text-[var(--text-muted)]">
+        Architecting robust end-to-end applications that balance extreme performance, scalable modular codebases, and engaging user experiences.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- Pillar 1 -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+        <div class="space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center">
+            <i data-lucide="layout" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-base text-[var(--text-primary)]">Modern Web Platforms</h3>
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            High-performance Next.js App Router applications, responsive dual-pane views, dynamic server actions, and type-safe component architectures.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border-subtle)] flex flex-wrap gap-1.5 font-mono text-[10px] text-cyan-300">
+          <span class="px-2 py-0.5 rounded bg-cyan-500/10">Next.js 16</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-500/10">TypeScript</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-500/10">Tailwind</span>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+        <div class="space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-400 flex items-center justify-center">
+            <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-base text-[var(--text-primary)]">Real-Time Game Engines</h3>
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            Deterministic delta-time physics engines, particle emitters, multi-touch drag controls, collision grids, and continuous 60–144 FPS loops.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border-subtle)] flex flex-wrap gap-1.5 font-mono text-[10px] text-violet-300">
+          <span class="px-2 py-0.5 rounded bg-violet-500/10">Canvas 2D</span>
+          <span class="px-2 py-0.5 rounded bg-violet-500/10">Physics Math</span>
+          <span class="px-2 py-0.5 rounded bg-violet-500/10">9:16 Standard</span>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+        <div class="space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-base text-[var(--text-primary)]">Behavioral Gamification</h3>
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            UX psychology retention loops, calendar play streaks, exponential XP leveling curves, daily quest hashing, and holographic trophy vaults.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border-subtle)] flex flex-wrap gap-1.5 font-mono text-[10px] text-amber-300">
+          <span class="px-2 py-0.5 rounded bg-amber-500/10">Loss Aversion</span>
+          <span class="px-2 py-0.5 rounded bg-amber-500/10">XP Formulas</span>
+          <span class="px-2 py-0.5 rounded bg-amber-500/10">Daily Seeds</span>
+        </div>
+      </div>
+
+      <!-- Pillar 4 -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition-all">
+        <div class="space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="server" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-display font-bold text-base text-[var(--text-primary)]">DevOps & Micro-Servers</h3>
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            Automated production deployments on Vercel, lightweight edge runtime APIs, Linux/Termux micro-server clusters, PM2 process management, and Cloudflare tunnels.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border-subtle)] flex flex-wrap gap-1.5 font-mono text-[10px] text-emerald-300">
+          <span class="px-2 py-0.5 rounded bg-emerald-500/10">Vercel Edge</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/10">PM2 / Node</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/10">Cloudflare</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section id="projects" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+      <div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider mb-2">
+          <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i> Featured Work
+        </div>
+        <h2 class="font-display font-black text-2xl sm:text-4xl text-[var(--text-primary)]">
+          Architectural Highlights & Deployments
+        </h2>
+      </div>
+
+      <!-- Project Filter Pills -->
+      <div id="project-filters" class="flex items-center gap-1.5 bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-subtle)] text-xs font-mono">
+        <button class="px-3 py-1.5 rounded-lg bg-[var(--color-accent)] text-black font-bold active-filter" onclick="filterProjects('all', this)">All (5)</button>
+        <button class="px-3 py-1.5 rounded-lg text-[var(--text-muted)] hover:text-white" onclick="filterProjects('games', this)">Games & Physics</button>
+        <button class="px-3 py-1.5 rounded-lg text-[var(--text-muted)] hover:text-white" onclick="filterProjects('systems', this)">Systems & Web</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Project 1: StressBuster Portal -->
+      <div class="project-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group border border-[var(--border-subtle)] hover:border-cyan-400/60 transition-all" data-category="systems games">
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-mono text-[10px] font-bold uppercase">
+              Flagship Portal · Production
+            </span>
+            <span class="flex items-center gap-1 text-emerald-400 font-mono text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live on Vercel
+            </span>
+          </div>
+
+          <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-cyan-400 transition-colors">
+            StressBuster Cyber Arcade Portal
+          </h3>
+
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            Full-stack responsive gaming portal featuring 10+ custom mini-games, dynamic spotlight showcases, persistent JSON/Cloud database tracking, username management, and behavioral UX gamification.
+          </p>
+
+          <div class="space-y-1.5 font-mono text-[11px] text-[var(--text-dim)]">
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Architecture</span>
+              <span class="text-white font-semibold">Next.js 16 (App Router) + TS</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Audio Synthesis</span>
+              <span class="text-white font-semibold">Procedural Web Audio API</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Aspect Ratio</span>
+              <span class="text-white font-semibold">Standardized 9:16 Portrait</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 flex items-center gap-3">
+          <a href="https://stress-buster-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-black hover:opacity-90 shadow-glow-cyan active:scale-95 transition-all">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Live Site</span>
+          </a>
+          <a href="https://github.com/munimyeasin/-StressBuster-" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] hover:text-cyan-400 transition-colors" title="GitHub Repository">
+            <i data-lucide="github" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 2: Cyber Drift 2077 Engine -->
+      <div class="project-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group border border-[var(--border-subtle)] hover:border-amber-400/60 transition-all" data-category="games">
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold uppercase">
+              2D Physics & Audio Engine
+            </span>
+            <span class="text-amber-400 font-mono text-[11px]">10X Multipliers</span>
+          </div>
+
+          <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-amber-400 transition-colors">
+            Cyber Drift 2077 Simulator
+          </h3>
+
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            High-speed 2D infinite drifting arcade racer. Features counter-steered slide physics, apex clipping beacons, nitro warp boost, 3 selectable garage cybercars, and tire friction audio synthesis.
+          </p>
+
+          <div class="space-y-1.5 font-mono text-[11px] text-[var(--text-dim)]">
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Physics Model</span>
+              <span class="text-white font-semibold">Slip Angle & Lateral Friction</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Audio Synthesis</span>
+              <span class="text-white font-semibold">Tire Screech & Turbo Blow-off</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Road Generation</span>
+              <span class="text-white font-semibold">Procedural Bezier Streaming</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 flex items-center gap-3">
+          <a href="https://stress-buster-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-amber-400 to-orange-500 text-black hover:opacity-90 shadow-glow-gold active:scale-95 transition-all">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            <span>Preview in Portal</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 3: Neon Starfighter Combat System -->
+      <div class="project-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group border border-[var(--border-subtle)] hover:border-violet-400/60 transition-all" data-category="games">
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-lg bg-violet-500/15 border border-violet-500/40 text-violet-300 font-mono text-[10px] font-bold uppercase">
+              Real-Time Space Combat
+            </span>
+            <span class="text-violet-400 font-mono text-[11px]">60–144 FPS</span>
+          </div>
+
+          <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-violet-400 transition-colors">
+            Neon Starfighter Engine
+          </h3>
+
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            High-speed space combat engine with non-linear singularity black holes, touch drag damping, indestructible deflecting meteors, EMP nukes, and Game Over revive mechanics.
+          </p>
+
+          <div class="space-y-1.5 font-mono text-[11px] text-[var(--text-dim)]">
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Singularity Physics</span>
+              <span class="text-white font-semibold">Inverse-Square Gravitational Pull</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Weapon Matrix</span>
+              <span class="text-white font-semibold">3X Spread Laser + EMP Blast</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Touch Controls</span>
+              <span class="text-white font-semibold">Sub-Pixel Horizontal Drag</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 flex items-center gap-3">
+          <a href="https://stress-buster-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-violet-400 to-indigo-500 text-white hover:opacity-90 shadow-glow-violet active:scale-95 transition-all">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            <span>Play Game</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 4: Termux Linux Micro-Server Cluster -->
+      <div class="project-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group border border-[var(--border-subtle)] hover:border-emerald-400/60 transition-all" data-category="systems">
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] font-bold uppercase">
+              DevOps & Micro-Clusters
+            </span>
+            <span class="text-emerald-400 font-mono text-[11px]">Zero-Cost Edge</span>
+          </div>
+
+          <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-emerald-400 transition-colors">
+            Mobile Termux Micro-Server Cluster
+          </h3>
+
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            Engineered an automated Android Termux micro-server deployment running PM2 cluster processes, local Webpack engines, and Cloudflare tunnel public ingress.
+          </p>
+
+          <div class="space-y-1.5 font-mono text-[11px] text-[var(--text-dim)]">
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Process Manager</span>
+              <span class="text-white font-semibold">PM2 Clustered Runtime</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Ingress Network</span>
+              <span class="text-white font-semibold">Cloudflare Tunnel Daemon</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Environment</span>
+              <span class="text-white font-semibold">Android Linux (ARM64)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 flex items-center gap-3">
+          <a href="#terminal" class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-display font-bold text-xs bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] hover:text-emerald-300 transition-all">
+            <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+            <span>View Architecture CLI</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Project 5: Behavioral UX Gamification Suite -->
+      <div class="project-card glass-panel rounded-3xl overflow-hidden flex flex-col justify-between group border border-[var(--border-subtle)] hover:border-pink-400/60 transition-all" data-category="systems">
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-lg bg-pink-500/15 border border-pink-500/40 text-pink-300 font-mono text-[10px] font-bold uppercase">
+              Psychology Engine
+            </span>
+            <span class="text-pink-400 font-mono text-[11px]">16 Trophies</span>
+          </div>
+
+          <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-pink-400 transition-colors">
+            Behavioral Gamification & Retention
+          </h3>
+
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">
+            Full player progression ecosystem: loss-aversion streak tracking, exponential rank formulas, deterministic daily quest generators, and live activity feeds.
+          </p>
+
+          <div class="space-y-1.5 font-mono text-[11px] text-[var(--text-dim)]">
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>Level Curve</span>
+              <span class="text-white font-semibold">L = ⌊(XP / 100)^(1/1.5)⌋ + 1</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-1">
+              <span>State Sync</span>
+              <span class="text-white font-semibold">Window Dispatch + LocalStore</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Trophy Vault</span>
+              <span class="text-white font-semibold">Bronze · Silver · Gold · Platinum</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 pt-0 flex items-center gap-3">
+          <a href="https://stress-buster-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:opacity-90 active:scale-95 transition-all">
+            <i data-lucide="trophy" class="w-3.5 h-3.5"></i>
+            <span>Inspect Achievements</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Mini Playground: Canvas Particle / Physics Demo -->
+  <section id="playground" class="py-16 bg-[var(--bg-surface)]/70 border-y border-[var(--border-subtle)] relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl my-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+      <div class="lg:col-span-5 space-y-4">
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider">
+          <i data-lucide="play-circle" class="w-3.5 h-3.5"></i> Live Interactive Demo
+        </div>
+        <h2 class="font-display font-black text-2xl sm:text-3xl text-[var(--text-primary)]">
+          Real-Time Physics & Particle Playground
+        </h2>
+        <p class="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
+          Move your cursor or touch and drag on the interactive canvas. Demonstrates high-performance canvas math, gravitational attractor repulsion, and velocity dampening rendered at a verified 60–144 FPS.
+        </p>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button onclick="triggerSupernova()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-display font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-black shadow-glow-cyan active:scale-95 transition-all">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            <span>Trigger Particle Supernova</span>
+          </button>
+          <button onclick="resetPlayground()" class="px-4 py-2.5 rounded-xl font-mono text-xs bg-[var(--bg-surface-elev)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-white transition-colors">
+            Reset Grid
+          </button>
+        </div>
+
+        <div class="font-mono text-xs text-[var(--text-dim)] flex items-center gap-4 pt-2">
+          <span>Particles: <strong id="particle-count" class="text-cyan-400">120</strong></span>
+          <span>FPS: <strong id="fps-counter" class="text-emerald-400">60</strong></span>
+          <span>Physics Mode: <strong class="text-purple-400">Newtonian</strong></span>
+        </div>
+      </div>
+
+      <!-- Playground Canvas Container -->
+      <div class="lg:col-span-7">
+        <div class="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden border border-cyan-500/40 bg-slate-950 shadow-2xl flex items-center justify-center">
+          <canvas id="physics-canvas" class="w-full h-full cursor-crosshair"></canvas>
+          <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md border border-cyan-500/30 text-[10px] font-mono text-cyan-300 pointer-events-none">
+            [DRAG TO APPLY GRAVITATIONAL VORTEX]
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive CLI Terminal Section -->
+  <section id="terminal" class="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
+    <div class="text-center mb-8 space-y-2">
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="terminal" class="w-3.5 h-3.5"></i> Architect CLI v2.4.0
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-3xl text-[var(--text-primary)]">
+        Interactive Developer Terminal
+      </h2>
+      <p class="text-xs sm:text-sm text-[var(--text-muted)]">
+        Type commands or click quick-run chips to inspect technical capabilities, system stats, or launch actions.
+      </p>
+    </div>
+
+    <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-[var(--border-active)]">
+      <!-- Terminal Window Bar -->
+      <div class="px-4 py-3 bg-[var(--bg-surface-elev)] border-b border-[var(--border-subtle)] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+          <span class="ml-2 font-mono text-xs text-[var(--text-dim)]">munim@architect-node:~</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="runCommand('help')" class="px-2 py-0.5 rounded bg-black/40 text-[10px] font-mono text-cyan-400 hover:bg-cyan-500/20">help</button>
+          <button onclick="runCommand('skills')" class="px-2 py-0.5 rounded bg-black/40 text-[10px] font-mono text-purple-400 hover:bg-purple-500/20">skills</button>
+          <button onclick="runCommand('projects')" class="px-2 py-0.5 rounded bg-black/40 text-[10px] font-mono text-amber-400 hover:bg-amber-500/20">projects</button>
+          <button onclick="runCommand('contact')" class="px-2 py-0.5 rounded bg-black/40 text-[10px] font-mono text-emerald-400 hover:bg-emerald-500/20">contact</button>
+          <button onclick="clearTerminal()" class="px-2 py-0.5 rounded bg-black/40 text-[10px] font-mono text-slate-400 hover:text-white">clear</button>
+        </div>
+      </div>
+
+      <!-- Terminal Output Buffer -->
+      <div id="terminal-screen" class="p-5 font-mono text-xs text-slate-300 h-80 overflow-y-auto space-y-2 bg-slate-950/90 leading-relaxed">
+        <div class="text-cyan-400 font-bold">Munim Yeasin Architect Console [Version 2.4.0-edge]</div>
+        <div class="text-slate-400">Type <span class="text-yellow-400">help</span> to view all commands, or click the quick-run chips above.</div>
+        <div class="border-b border-slate-800 my-2"></div>
+      </div>
+
+      <!-- Terminal Input Line -->
+      <div class="p-3.5 bg-[var(--bg-surface-elev)]/80 border-t border-[var(--border-subtle)] flex items-center gap-2 font-mono text-xs">
+        <span class="text-cyan-400 font-bold">munim@edge:~$</span>
+        <input
+          type="text"
+          id="terminal-input"
+          placeholder="type command (e.g. 'skills', 'projects', 'whoami', 'email')..."
+          class="flex-1 bg-transparent text-[var(--text-primary)] focus:outline-none placeholder-slate-600"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button onclick="submitTerminalInput()" class="px-3 py-1 rounded-lg bg-cyan-500 text-black font-bold font-mono text-xs hover:bg-cyan-400">
+          EXEC
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Skills & Arsenal Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Technical Arsenal
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-[var(--text-primary)]">
+        Languages, Frameworks & Infrastructure
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- Category 1 -->
+      <div class="glass-panel p-5 rounded-2xl space-y-3">
+        <h4 class="font-display font-bold text-sm text-cyan-400 flex items-center gap-2">
+          <i data-lucide="layout" class="w-4 h-4"></i> Frontend & UI
+        </h4>
+        <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Next.js 16</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">React 18</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">TypeScript</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Tailwind CSS</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">HTML5 Canvas</span>
+        </div>
+      </div>
+
+      <!-- Category 2 -->
+      <div class="glass-panel p-5 rounded-2xl space-y-3">
+        <h4 class="font-display font-bold text-sm text-purple-400 flex items-center gap-2">
+          <i data-lucide="server" class="w-4 h-4"></i> Backend & Engines
+        </h4>
+        <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Node.js</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Web Audio API</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">REST / JSON APIs</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Python</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">PHP</span>
+        </div>
+      </div>
+
+      <!-- Category 3 -->
+      <div class="glass-panel p-5 rounded-2xl space-y-3">
+        <h4 class="font-display font-bold text-sm text-amber-400 flex items-center gap-2">
+          <i data-lucide="database" class="w-4 h-4"></i> Data & Storage
+        </h4>
+        <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">PostgreSQL</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Supabase</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">SQLite / JSON</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Redis Cache</span>
+        </div>
+      </div>
+
+      <!-- Category 4 -->
+      <div class="glass-panel p-5 rounded-2xl space-y-3">
+        <h4 class="font-display font-bold text-sm text-emerald-400 flex items-center gap-2">
+          <i data-lucide="cloud" class="w-4 h-4"></i> DevOps & Tools
+        </h4>
+        <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Vercel</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Git / GitHub</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">PM2 Runtime</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Cloudflare Tunnels</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elev)] text-[var(--text-primary)] border border-[var(--border-subtle)]">Linux / Termux</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact & Collaboration Section -->
+  <section id="contact" class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative z-10">
+    <div class="glass-panel rounded-3xl p-8 sm:p-12 border-2 border-cyan-500/40 relative overflow-hidden shadow-glow-cyan text-center space-y-6">
+
+      <!-- Glow ambient -->
+      <div class="absolute -top-24 -left-24 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="sparkles" class="w-4 h-4"></i> Ready For Impact
+      </div>
+
+      <h2 class="font-display font-black text-3xl sm:text-5xl text-[var(--text-primary)] tracking-tight">
+        Let’s Build Something Exceptional
+      </h2>
+
+      <p class="text-sm sm:text-base text-[var(--text-muted)] max-w-xl mx-auto leading-relaxed">
+        Whether you are seeking a full-stack architect to build a high-performance web platform, a real-time canvas engine, or an ambitious software product — my inbox is open.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+        <a href="mailto:munimyeasin@gmail.com" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-display font-black text-sm bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500 text-black shadow-glow-cyan hover:scale-105 active:scale-95 transition-all">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+          <span>munimyeasin@gmail.com</span>
+        </a>
+
+        <a href="https://github.com/munimyeasin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-display font-bold text-sm bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-cyan-400 text-[var(--text-primary)] hover:text-cyan-400 active:scale-95 transition-all">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>github.com/munimyeasin</span>
+        </a>
+      </div>
+
+      <div class="pt-6 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-center gap-6 font-mono text-xs text-[var(--text-dim)]">
+        <span>⚡ Direct Response: &lt; 24h</span>
+        <span>🌐 Global / Timezone Agnostic</span>
+        <span>🔒 Secure & Scalable Architecture</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 border-t border-[var(--border-subtle)] bg-[var(--bg-ground)] relative z-10 text-center font-mono text-xs text-[var(--text-dim)]">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        © 2026 Munim Yeasin. Designed & Engineered with Extreme Craft.
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#hero" class="hover:text-cyan-400 transition-colors">Back to Top ↑</a>
+        <a href="https://github.com/munimyeasin" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">GitHub</a>
+        <a href="https://stress-buster-delta.vercel.app/" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">StressBuster Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 font-mono text-xs bg-slate-900 border border-cyan-400 text-cyan-300 px-4 py-2.5 rounded-xl shadow-glow-cyan flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+</div>
+
+<!-- Application Logic & Scripts -->
+<script>
+  // Initialize Lucide Icons
+  lucide.createIcons();
+
+  // Audio Feedback Synthesizer (Web Audio API)
+  let audioEnabled = true;
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        audioCtx = new AudioContextClass();
+      }
+    }
+  }
+
+  function playTone(freq = 440, type = 'sine', duration = 0.12, gainLevel = 0.08) {
+    if (!audioEnabled) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch (e) {}
+  }
+
+  // Audio Toggle
+  const audioToggleBtn = document.getElementById('audio-toggle');
+  audioToggleBtn.addEventListener('click', () => {
+    audioEnabled = !audioEnabled;
+    audioToggleBtn.innerHTML = audioEnabled
+      ? '<i data-lucide="volume-2" class="w-4 h-4"></i>'
+      : '<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>';
+    lucide.createIcons();
+    showToast(audioEnabled ? "Audio FX Enabled" : "Audio FX Muted");
+    if (audioEnabled) playTone(580, 'triangle', 0.1);
+  });
+
+  // Theme Toggle Logic
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  themeToggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeToggleBtn.querySelector('.dark-icon').classList.add('hidden');
+      themeToggleBtn.querySelector('.light-icon').classList.remove('hidden');
+      showToast('Light Theme Activated');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggleBtn.querySelector('.light-icon').classList.add('hidden');
+      themeToggleBtn.querySelector('.dark-icon').classList.remove('hidden');
+      showToast('Obsidian Cyber Theme Activated');
+    }
+    playTone(720, 'sine', 0.15);
+  });
+
+  // Toast Function
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    toastMsg.textContent = msg;
+    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+    }, 2800);
+  }
+
+  // Copy Email Function
+  function copyEmail(btn) {
+    const email = 'munimyeasin@gmail.com';
+    navigator.clipboard.writeText(email).then(() => {
+      showToast('Email copied to clipboard: ' + email);
+      playTone(880, 'triangle', 0.2);
+      try {
+        confetti({
+          particleCount: 40,
+          spread: 60,
+          origin: { y: 0.85 }
+        });
+      } catch(e) {}
+    });
+  }
+
+  // Filter Projects Logic
+  function filterProjects(category, btn) {
+    playTone(500, 'sine', 0.08);
+    const buttons = document.querySelectorAll('#project-filters button');
+    buttons.forEach(b => {
+      b.className = 'px-3 py-1.5 rounded-lg text-[var(--text-muted)] hover:text-white';
+    });
+    btn.className = 'px-3 py-1.5 rounded-lg bg-[var(--color-accent)] text-black font-bold active-filter';
+
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => {
+      const cardCategories = card.getAttribute('data-category').split(' ');
+      if (category === 'all' || cardCategories.includes(category)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Ambient Starfield Canvas
+  const ambientCanvas = document.getElementById('ambient-canvas');
+  const actx = ambientCanvas.getContext('2d');
+  let stars = [];
+
+  function resizeAmbient() {
+    ambientCanvas.width = window.innerWidth;
+    ambientCanvas.height = window.innerHeight;
+    stars = Array.from({ length: 70 }, () => ({
+      x: Math.random() * ambientCanvas.width,
+      y: Math.random() * ambientCanvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.7 + 0.2,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2
+    }));
+  }
+
+  window.addEventListener('resize', resizeAmbient);
+  resizeAmbient();
+
+  function drawAmbient() {
+    actx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+    actx.fillStyle = '#00f0ff';
+    for (let s of stars) {
+      s.x += s.vx;
+      s.y += s.vy;
+      if (s.x < 0) s.x = ambientCanvas.width;
+      if (s.x > ambientCanvas.width) s.x = 0;
+      if (s.y < 0) s.y = ambientCanvas.height;
+      if (s.y > ambientCanvas.height) s.y = 0;
+
+      actx.globalAlpha = s.alpha;
+      actx.beginPath();
+      actx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+      actx.fill();
+    }
+    requestAnimationFrame(drawAmbient);
+  }
+  drawAmbient();
+
+  // Physics Playground Canvas
+  const physCanvas = document.getElementById('physics-canvas');
+  const pctx = physCanvas.getContext('2d');
+  let particles = [];
+  let mouse = { x: -1000, y: -1000, isDown: false };
+  let lastTime = performance.now();
+  let frameCount = 0;
+  let fps = 60;
+
+  function resizePhysics() {
+    const rect = physCanvas.getBoundingClientRect();
+    physCanvas.width = rect.width;
+    physCanvas.height = rect.height;
+    initParticles();
+  }
+
+  function initParticles() {
+    particles = [];
+    const count = 120;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * physCanvas.width,
+        y: Math.random() * physCanvas.height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        radius: Math.random() * 2.5 + 1.5,
+        color: ['#00f0ff', '#8b5cf6', '#fbbf24', '#34d399'][Math.floor(Math.random() * 4)]
+      });
+    }
+  }
+
+  window.addEventListener('resize', resizePhysics);
+  setTimeout(resizePhysics, 100);
+
+  physCanvas.addEventListener('mousemove', (e) => {
+    const rect = physCanvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  physCanvas.addEventListener('mousedown', () => { mouse.isDown = true; playTone(300, 'sawtooth', 0.1); });
+  window.addEventListener('mouseup', () => { mouse.isDown = false; });
+
+  physCanvas.addEventListener('touchmove', (e) => {
+    const rect = physCanvas.getBoundingClientRect();
+    if (e.touches[0]) {
+      mouse.x = e.touches[0].clientX - rect.left;
+      mouse.y = e.touches[0].clientY - rect.top;
+      mouse.isDown = true;
+    }
+  }, { passive: true });
+
+  physCanvas.addEventListener('touchend', () => { mouse.isDown = false; });
+
+  function triggerSupernova() {
+    playTone(650, 'sawtooth', 0.3);
+    for (let p of particles) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 12 + 6;
+      p.vx = Math.cos(angle) * speed;
+      p.vy = Math.sin(angle) * speed;
+    }
+    showToast('Supernova Explosion Triggered!');
+  }
+
+  function resetPlayground() {
+    initParticles();
+    playTone(400, 'sine', 0.1);
+  }
+
+  function updatePhysics() {
+    const now = performance.now();
+    frameCount++;
+    if (now - lastTime >= 1000) {
+      fps = frameCount;
+      frameCount = 0;
+      lastTime = now;
+      document.getElementById('fps-counter').textContent = fps;
+    }
+
+    pctx.fillStyle = 'rgba(2, 6, 23, 0.25)';
+    pctx.fillRect(0, 0, physCanvas.width, physCanvas.height);
+
+    for (let i = 0; i < particles.length; i++) {
+      let p = particles[i];
+
+      // Gravity attractor toward mouse
+      if (mouse.x > 0 && mouse.y > 0) {
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 220) {
+          const force = mouse.isDown ? -80 / (dist + 20) : 40 / (dist + 30);
+          p.vx += (dx / dist) * force * 0.15;
+          p.vy += (dy / dist) * force * 0.15;
+        }
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Friction
+      p.vx *= 0.985;
+      p.vy *= 0.985;
+
+      // Boundary bounce
+      if (p.x < 0 || p.x > physCanvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > physCanvas.height) p.vy *= -1;
+
+      // Draw particle
+      pctx.fillStyle = p.color;
+      pctx.shadowColor = p.color;
+      pctx.shadowBlur = 8;
+      pctx.beginPath();
+      pctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      pctx.fill();
+      pctx.shadowBlur = 0;
+
+      // Draw connecting lines between close particles
+      for (let j = i + 1; j < particles.length; j++) {
+        let p2 = particles[j];
+        let d = Math.hypot(p.x - p2.x, p.y - p2.y);
+        if (d < 50) {
+          pctx.strokeStyle = `rgba(0, 240, 255, ${0.3 * (1 - d / 50)})`;
+          pctx.lineWidth = 0.8;
+          pctx.beginPath();
+          pctx.moveTo(p.x, p.y);
+          pctx.lineTo(p2.x, p2.y);
+          pctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(updatePhysics);
+  }
+  requestAnimationFrame(updatePhysics);
+
+  // Interactive Terminal Logic
+  const terminalScreen = document.getElementById('terminal-screen');
+  const terminalInput = document.getElementById('terminal-input');
+
+  const COMMANDS = {
+    help: () => `
+<div class="text-cyan-400 font-bold">AVAILABLE ARCHITECT COMMANDS:</div>
+  <span class="text-yellow-400">whoami</span>       - Display architect profile & core mission
+  <span class="text-yellow-400">skills</span>       - List tech stack, engines & infrastructure arsenal
+  <span class="text-yellow-400">projects</span>     - Print flagship deployments and repos
+  <span class="text-yellow-400">architecture</span> - Technical summary of StressBuster portal
+  <span class="text-yellow-400">email</span>        - Copy direct contact address
+  <span class="text-yellow-400">supernova</span>    - Trigger physics particle explosion
+  <span class="text-yellow-400">clear</span>        - Flush terminal buffer
+`,
+    whoami: () => `
+<div class="text-emerald-400 font-bold">MUNIM YEASIN</div>
+  Role: Systems & Full-Stack Architect
+  Specialization: Real-time 60-144 FPS game engines, Next.js 16 platforms, Web Audio synthesizers, edge node clusters.
+  Status: <span class="text-cyan-300">ONLINE</span> · Available for architecture consulting & high-impact full-stack roles.
+`,
+    skills: () => `
+<div class="text-purple-400 font-bold">CORE TECHNICAL ARSENAL:</div>
+  Frontend:       Next.js 16 (App Router), TypeScript, React 18, Tailwind CSS, Canvas 2D
+  Engines:        Delta-Time Physics, Web Audio API procedural synthesis, 9:16 portrait standard
+  Backend & Data: Node.js, Python, PHP, PostgreSQL, Supabase, SQLite, Redis
+  DevOps & Edge:  Vercel, PM2 clusters, Cloudflare Tunnels, Android Termux nodes, Git
+`,
+    projects: () => `
+<div class="text-amber-400 font-bold">FEATURED ARCHITECTURAL DEPLOYMENTS:</div>
+  1. <span class="text-cyan-300">StressBuster Portal</span>: Flagship cyber arcade portal with 10+ games, live DB, & behavioral gamification.
+     URL: https://stress-buster-delta.vercel.app/
+  2. <span class="text-amber-300">Cyber Drift 2077</span>: 2D counter-steering drift racer with dynamic tire screech audio synthesis.
+  3. <span class="text-purple-300">Neon Starfighter</span>: Space combat simulator with singularity black holes & 60-144 FPS canvas loop.
+  4. <span class="text-emerald-300">Termux Micro-Cluster</span>: Clustered edge node deployment with PM2 & Cloudflare tunnels.
+`,
+    architecture: () => `
+<div class="text-cyan-300 font-bold">STRESSBUSTER PORTAL ARCHITECTURE:</div>
+  • Framework: Next.js 16 App Router with Turbopack & Tailwind CSS
+  • Physics Loops: Deterministic delta-time (dt) with sub-pixel touch tracking
+  • Zero-Asset Audio: Procedural multi-oscillator Web Audio API (zero buffer pops)
+  • Gamification: Seeded deterministic daily quests + 14 Cyber Clearance Rank tiers
+`,
+    email: () => {
+      copyEmail();
+      return `<div class="text-emerald-400">Copied munimyeasin@gmail.com to your clipboard!</div>`;
+    },
+    contact: () => {
+      return `
+<div class="text-cyan-400">GET IN TOUCH:</div>
+  Direct Email: <a href="mailto:munimyeasin@gmail.com" class="text-white underline">munimyeasin@gmail.com</a>
+  GitHub:       <a href="https://github.com/munimyeasin" target="_blank" class="text-white underline">github.com/munimyeasin</a>
+  Portal:       <a href="https://stress-buster-delta.vercel.app/" target="_blank" class="text-white underline">stress-buster-delta.vercel.app</a>
+`;
+    },
+    supernova: () => {
+      triggerSupernova();
+      return `<div class="text-yellow-400 font-bold">Supernova detonated! Check the interactive physics canvas above.</div>`;
+    },
+    clear: () => {
+      terminalScreen.innerHTML = '';
+      return '';
+    }
+  };
+
+  function runCommand(cmd) {
+    cmd = cmd.trim().toLowerCase();
+    playTone(520, 'sine', 0.08);
+
+    const inputLine = document.createElement('div');
+    inputLine.innerHTML = `<span class="text-cyan-400 font-bold">munim@edge:~$</span> <span class="text-white font-semibold">${cmd}</span>`;
+    terminalScreen.appendChild(inputLine);
+
+    if (COMMANDS[cmd]) {
+      const output = COMMANDS[cmd]();
+      if (output) {
+        const outputDiv = document.createElement('div');
+        outputDiv.innerHTML = output;
+        terminalScreen.appendChild(outputDiv);
+      }
+    } else if (cmd === '') {
+      // Empty input
+    } else {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'text-rose-400';
+      errorDiv.textContent = `command not found: ${cmd}. Type 'help' for available commands.`;
+      terminalScreen.appendChild(errorDiv);
+      playTone(220, 'sawtooth', 0.15);
+    }
+
+    terminalScreen.scrollTop = terminalScreen.scrollHeight;
+  }
+
+  function submitTerminalInput() {
+    const val = terminalInput.value;
+    if (val) {
+      runCommand(val);
+      terminalInput.value = '';
+    }
+  }
+
+  terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      submitTerminalInput();
+    }
+  });
+
+  function clearTerminal() {
+    terminalScreen.innerHTML = '';
+    playTone(400, 'sine', 0.08);
+  }
+</script>
