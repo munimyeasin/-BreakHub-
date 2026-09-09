@@ -48,6 +48,7 @@
 - **Universal Native Fullscreen API**: Native browser fullscreen integration across all games with dynamic viewport fitting, vendor prefix support (`webkit`, `moz`, `ms`), and `'F'` keyboard shortcut.
 - **Public Tunnel Ingress**: `allowedDevOrigins` configured in `next.config.mjs` for Cloudflare, LocalTunnel, Ngrok, and Pinggy tunnels.
 - **Project Backup**: Complete byte-level duplicate backup preserved at `C:\Users\munim\Desktop\___InterShip___Project__Backup` containing all legacy/hidden games and full asset catalog.
+- **Personal Portfolio Web Application**: `public/portfolio.html` — Interactive developer portfolio for Munim Yeasin featuring real-time Newtonian canvas physics particle engine with gravity vortex/supernova triggers, developer CLI terminal with executable commands, zero-asset Web Audio synthesizer, filterable engineering project matrix, theme switching, and live performance metrics. Accessible at `/portfolio.html`.
 
 ---
 
