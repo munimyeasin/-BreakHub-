@@ -93,14 +93,17 @@ export default function SpotlightBanner({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
       onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
-      className="relative w-full rounded-2xl sm:rounded-3xl bg-gradient-to-br from-portal-surface via-slate-950 to-portal-bg border border-cyan-500/30 sm:border-2 sm:border-cyan-500/40 p-3 sm:p-4 md:p-5 mb-3 sm:mb-4 md:mb-6 shadow-[0_0_25px_rgba(6,182,212,0.15)] md:shadow-[0_0_35px_rgba(6,182,212,0.18)] overflow-hidden"
+      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden"
     >
+      {/* Top Tri-Color Accent Line */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
+
       {/* Dynamic Keyframes for Smooth Spotlight Animation */}
       <style jsx>{`
         @keyframes spotlightFadeScale {
           0% {
             opacity: 0;
-            transform: scale(0.97) translateY(4px);
+            transform: scale(0.98) translateY(4px);
           }
           100% {
             opacity: 1;
@@ -108,22 +111,18 @@ export default function SpotlightBanner({
           }
         }
         .animate-spotlight {
-          animation: spotlightFadeScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: spotlightFadeScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
 
-      {/* Background Ambient Glow & Cyber Grid */}
-      <div className="absolute top-0 right-0 -mr-16 -mt-16 sm:-mr-20 sm:-mt-20 w-48 sm:w-80 h-48 sm:h-80 bg-portal-cyan/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -ml-16 -mb-16 sm:-ml-20 sm:-mb-20 w-48 sm:w-80 h-48 sm:h-80 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
-
       {/* Top Bar: Spotlight Pill + Selector Switcher + Nav Arrows */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2.5 mb-2.5 sm:mb-3 md:mb-4 pb-2 sm:pb-2.5 border-b border-portal-border/60">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2.5 mb-2.5 sm:mb-3 md:mb-4 pt-1 pb-2 sm:pb-2.5 border-b-3 border-black">
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-black text-[9px] sm:text-[10px] md:text-xs uppercase tracking-wider shadow-glow-cyan animate-pulse">
-            <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-black" />
+          <span className="flex items-center gap-1 sm:gap-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
+            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>SPOTLIGHT SHOWCASE</span>
           </span>
-          <span className="text-[9px] sm:text-[10px] md:text-xs font-bold text-slate-400 hidden xs:inline">
+          <span className="text-[10px] sm:text-xs font-black text-slate-300 uppercase hidden xs:inline">
             Featured Highlights
           </span>
         </div>
@@ -134,24 +133,24 @@ export default function SpotlightBanner({
             {/* Prev Arrow */}
             <button
               onClick={handlePrev}
-              className="p-1 sm:p-1.5 rounded-lg bg-portal-bg/90 hover:bg-portal-surface border border-portal-border/80 text-slate-400 hover:text-white transition-all active:scale-95"
+              className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
               title="Previous Game"
             >
-              <ChevronLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
 
             {/* Game Tabs */}
-            <div className="flex items-center gap-1 bg-portal-bg/90 p-0.5 sm:p-1 rounded-lg sm:rounded-xl border border-portal-border/80">
+            <div className="flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm">
               {featuredGames.map((game, idx) => {
                 const isActive = idx === activeIndex;
                 return (
                   <button
                     key={game.id}
                     onClick={() => handleSelect(idx)}
-                    className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-black transition-all duration-300 ${
+                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-black transition-all border uppercase ${
                       isActive
-                        ? 'bg-portal-cyan text-black shadow-glow-cyan scale-105'
-                        : 'text-slate-400 hover:text-white hover:bg-portal-surface'
+                        ? 'bg-portal-cyan text-black border-black shadow-neo-sm font-black'
+                        : 'border-transparent text-slate-300 hover:text-white hover:bg-portal-surface'
                     }`}
                   >
                     {getGameIcon(game.slug)}
@@ -164,80 +163,78 @@ export default function SpotlightBanner({
             {/* Next Arrow */}
             <button
               onClick={handleNext}
-              className="p-1 sm:p-1.5 rounded-lg bg-portal-bg/90 hover:bg-portal-surface border border-portal-border/80 text-slate-400 hover:text-white transition-all active:scale-95"
+              className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
               title="Next Game"
             >
-              <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
           </div>
         )}
       </div>
 
-      {/* MOBILE VIEW (< md): Taller Cinematic Showcase Card (+4cm / ~150px) with Smooth Transitions */}
-      <div key={`mobile-${currentGame.id}-${transitionKey}`} className="md:hidden relative z-10 space-y-2.5 animate-spotlight">
-        {/* Cinematic Artwork with Center Play Overlay & Corner Badges (Increased height by 4cm) */}
+      {/* MOBILE VIEW (< md): Taller Cinematic Showcase Card */}
+      <div key={`mobile-${currentGame.id}-${transitionKey}`} className="md:hidden relative z-10 space-y-3 animate-spotlight">
+        {/* Cinematic Artwork with Center Play Overlay & Corner Badges */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="relative group w-full h-[245px] xs:h-[275px] rounded-xl overflow-hidden bg-slate-900 border border-cyan-400/40 shadow-lg cursor-pointer"
+          className="relative group w-full h-[245px] xs:h-[275px] rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo cursor-pointer"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
           {/* Center Play Button Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-12 h-12 xs:w-14 xs:h-14 rounded-full flex items-center justify-center shadow-glow-cyan transform group-hover:scale-110 group-active:scale-95 transition-transform ${
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border-3 border-black shadow-neo transform group-hover:scale-110 group-active:translate-x-1 group-active:translate-y-1 transition-all ${
               isComingSoon
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_0_22px_rgba(245,158,11,0.55)]'
+                ? 'bg-portal-yellow text-black'
                 : 'bg-portal-cyan text-black'
             }`}>
               {isComingSoon ? (
-                <Flame className="w-6 h-6 xs:w-7 xs:h-7 fill-black" />
+                <Flame className="w-7 h-7 fill-black stroke-[2.5]" />
               ) : (
-                <Play className="w-6 h-6 xs:w-7 xs:h-7 fill-black translate-x-0.5" />
+                <Play className="w-7 h-7 fill-black stroke-[2.5] ml-0.5" />
               )}
             </div>
           </div>
 
           {/* Top In-Artwork Badges */}
           <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
-            <span className="px-2.5 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-[9px] font-black text-portal-cyan border border-cyan-500/40 uppercase">
+            <span className="px-2.5 py-0.5 rounded-md bg-portal-cyan text-black text-[9px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
             {isComingSoon ? (
-              <span className="flex items-center gap-1 text-amber-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/50 px-2.5 py-0.5 rounded-md shadow-glow-gold">
-                <Flame className="w-2.5 h-2.5 fill-amber-400 text-amber-400" /> {currentGame.hype_count || 0} HYPES
+              <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-yellow border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
+                <Flame className="w-3 h-3 fill-black text-black stroke-[2.5]" /> {currentGame.hype_count || 0} HYPES
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-portal-gold text-[9px] font-black bg-black/80 backdrop-blur-md border border-amber-500/40 px-2.5 py-0.5 rounded-md">
-                <Star className="w-2.5 h-2.5 fill-portal-gold" /> {currentGame.rating?.toFixed(1) || '4.9'}
+              <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-yellow border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
+                <Star className="w-3 h-3 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '4.9'}
               </span>
             )}
           </div>
 
           {/* Bottom In-Artwork Badges */}
           <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
-            <span className="flex items-center gap-1 text-emerald-400 text-[9px] font-black bg-black/80 backdrop-blur-md border border-emerald-500/40 px-2.5 py-0.5 rounded-md">
-              <Zap className="w-2.5 h-2.5 text-portal-cyan" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? '9 NESTED BOARDS' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : '60-144 FPS'}
+            <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-lime border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
+              <Zap className="w-3 h-3 text-black stroke-[2.5]" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? '9 NESTED BOARDS' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : '60-144 FPS'}
             </span>
-            <span className="text-[9px] font-bold text-slate-300 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-slate-700/50">
+            <span className="text-[9px] font-black text-white bg-portal-surface px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
         </div>
 
         {/* Title & Description Row */}
-        <div className="flex flex-col gap-1 pt-0.5">
+        <div className="flex flex-col gap-1.5 pt-0.5">
           <div className="min-w-0">
-            <h1 className="text-base xs:text-lg font-black tracking-tight text-white truncate">
-              <span className="bg-gradient-to-r from-white via-cyan-100 to-portal-cyan bg-clip-text text-transparent">
-                {currentGame.title}
-              </span>
+            <h1 className="text-lg xs:text-xl font-black tracking-tight text-white uppercase truncate">
+              {currentGame.title}
             </h1>
-            <p className="text-[11px] text-slate-300 line-clamp-2 font-medium mt-0.5 leading-snug">
+            <p className="text-xs text-slate-300 line-clamp-2 font-bold mt-0.5 leading-snug">
               {currentGame.description}
             </p>
           </div>
@@ -247,7 +244,7 @@ export default function SpotlightBanner({
             {tags.slice(0, 3).map((tag, i) => (
               <span
                 key={i}
-                className="px-2 py-0.5 rounded-md bg-portal-surface/90 border border-portal-border/80 text-[9px] font-bold text-slate-300"
+                className="px-2.5 py-0.5 rounded-lg bg-portal-card border border-black text-[9px] font-black text-slate-200 uppercase shadow-neo-sm"
               >
                 ⚡ {tag}
               </span>
@@ -256,23 +253,23 @@ export default function SpotlightBanner({
         </div>
 
         {/* Action Button Strip */}
-        <div className="flex items-center gap-2 pt-0.5">
+        <div className="flex items-center gap-2 pt-1">
           <button
             onClick={() => onPlayGame(currentGame)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg font-black text-xs uppercase tracking-wider active:scale-95 transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
               isComingSoon
-                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 hover:from-amber-300 hover:to-rose-400 text-black shadow-[0_0_18px_rgba(245,158,11,0.4)]'
-                : 'bg-gradient-to-r from-portal-cyan via-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black shadow-glow-cyan'
+                ? 'bg-portal-yellow text-black'
+                : 'bg-portal-cyan text-black'
             }`}
           >
             {isComingSoon ? (
               <>
-                <Flame className="w-3.5 h-3.5 fill-black text-black" />
+                <Flame className="w-4 h-4 fill-black stroke-[2.5]" />
                 <span>HYPE / PREVIEW</span>
               </>
             ) : (
               <>
-                <Play className="w-3.5 h-3.5 fill-black" />
+                <Play className="w-4 h-4 fill-black stroke-[2.5]" />
                 <span>PLAY NOW</span>
               </>
             )}
@@ -280,70 +277,70 @@ export default function SpotlightBanner({
 
           <button
             onClick={() => isComingSoon ? onPlayGame(currentGame) : onViewLeaderboard(currentGame.id)}
-            className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg bg-portal-surface border border-portal-border hover:border-amber-400/60 text-portal-gold font-black text-xs hover:bg-amber-500/10 active:scale-95 transition-all"
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-portal-yellow hover:text-black border-3 border-black font-black text-xs uppercase shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
           >
             {isComingSoon ? (
               <>
-                <Sparkles className="w-3.5 h-3.5 text-portal-gold" />
-                <span>Hype Info</span>
+                <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Hype</span>
               </>
             ) : (
               <>
-                <Trophy className="w-3.5 h-3.5 text-portal-gold" />
-                <span>Scores</span>
+                <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Ranks</span>
               </>
             )}
           </button>
 
           <button
             onClick={(e) => onToggleFavorite(currentGame.id, e)}
-            className={`p-2 rounded-lg border transition-all active:scale-95 ${
+            className={`p-2.5 rounded-xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
               isFavorite
-                ? 'bg-rose-500/20 border-rose-500/60 text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.3)]'
-                : 'bg-portal-surface border-portal-border text-slate-400 hover:text-white hover:border-slate-500'
+                ? 'bg-portal-pink text-white'
+                : 'bg-portal-card text-slate-300 hover:text-white'
             }`}
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
-            <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-rose-500 text-rose-500' : ''}`} />
+            <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
           </button>
         </div>
       </div>
 
-      {/* DESKTOP VIEW (≥ md): Full Rich Dual-Pane Showcase Grid with Smooth Transitions */}
+      {/* DESKTOP VIEW (≥ md): Full Rich Dual-Pane Showcase Grid */}
       <div key={`desktop-${currentGame.id}-${transitionKey}`} className="hidden md:grid relative z-10 grid-cols-12 gap-6 items-center animate-spotlight">
         {/* Left: Big Preview Artwork */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="col-span-4 relative group aspect-square w-full rounded-2xl overflow-hidden bg-slate-900 border border-cyan-400/40 shadow-xl cursor-pointer"
+          className="col-span-4 relative group aspect-square w-full rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo-lg cursor-pointer"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
           {/* Hover Play/Hype Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 backdrop-blur-xs">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-glow-cyan transform group-hover:scale-110 transition-transform ${
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-3 border-black shadow-neo transform group-hover:scale-110 transition-transform ${
               isComingSoon
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_0_25px_rgba(245,158,11,0.5)]'
+                ? 'bg-portal-yellow text-black'
                 : 'bg-portal-cyan text-black'
             }`}>
               {isComingSoon ? (
-                <Flame className="w-7 h-7 fill-black" />
+                <Flame className="w-8 h-8 fill-black stroke-[2.5]" />
               ) : (
-                <Play className="w-7 h-7 fill-black translate-x-0.5" />
+                <Play className="w-8 h-8 fill-black stroke-[2.5] ml-1" />
               )}
             </div>
           </div>
 
           {/* In-Preview Feature Badge */}
           <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-xs text-white">
-            <span className="px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-black text-portal-cyan border border-cyan-500/40">
+            <span className="px-2.5 py-0.5 rounded-md bg-portal-cyan text-black text-[10px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
-            <span className="text-[10px] font-bold text-slate-300 bg-black/70 px-2 py-0.5 rounded-md backdrop-blur-md">
+            <span className="text-[10px] font-black text-white bg-portal-surface px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
@@ -353,45 +350,43 @@ export default function SpotlightBanner({
         <div className="col-span-8 flex flex-col justify-between space-y-4">
           <div>
             {/* Meta badges row */}
-            <div className="flex items-center gap-2 flex-wrap mb-1.5">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
               {isComingSoon ? (
-                <span className="flex items-center gap-1 text-amber-400 text-xs font-black bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded-md shadow-[0_0_12px_rgba(245,158,11,0.2)]">
-                  <Flame className="w-3 h-3 fill-amber-400 text-amber-400" /> {currentGame.hype_count || 0} HYPE VOTES
+                <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-yellow border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
+                  <Flame className="w-3.5 h-3.5 fill-black text-black stroke-[2.5]" /> {currentGame.hype_count || 0} HYPE VOTES
                 </span>
               ) : (
-                <span className="flex items-center gap-1 text-portal-gold text-xs font-black bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
-                  <Star className="w-3 h-3 fill-portal-gold" /> {currentGame.rating?.toFixed(1) || '4.9'}
+                <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-yellow border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
+                  <Star className="w-3.5 h-3.5 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '4.9'}
                   {currentGame.rating_count ? (
-                    <span className="text-slate-400 font-normal">({currentGame.rating_count} reviews)</span>
+                    <span className="text-black/80 font-bold">({currentGame.rating_count} reviews)</span>
                   ) : null}
                 </span>
               )}
-              <span className="flex items-center gap-1 text-portal-cyan text-xs font-black bg-cyan-500/15 border border-cyan-500/30 px-2.5 py-0.5 rounded-md">
-                <Zap className="w-3 h-3" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? 'STRATEGY ENGINE' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : 'VERIFIED 60-144 FPS'}
+              <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-cyan border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
+                <Zap className="w-3.5 h-3.5 stroke-[2.5]" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? 'STRATEGY ENGINE' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : 'VERIFIED 60-144 FPS'}
               </span>
-              <span className="flex items-center gap-1 text-emerald-400 text-xs font-black bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-md">
-                <Shield className="w-3 h-3" /> 9:16 PORTRAIT READY
+              <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-lime border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
+                <Shield className="w-3.5 h-3.5 stroke-[2.5]" /> 9:16 PORTRAIT READY
               </span>
             </div>
 
             {/* Game Title */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white flex items-center gap-2">
-              <span className="bg-gradient-to-r from-white via-cyan-100 to-portal-cyan bg-clip-text text-transparent">
-                {currentGame.title}
-              </span>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white uppercase">
+              {currentGame.title}
             </h1>
 
             {/* Game Description */}
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mt-1.5 max-w-2xl font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mt-1.5 max-w-2xl font-bold">
               {currentGame.description}
             </p>
 
             {/* Feature Chips */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-3">
+            <div className="flex flex-wrap gap-2 mt-3">
               {tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="px-2.5 py-1 rounded-lg bg-portal-surface/90 border border-portal-border/80 text-[10px] sm:text-xs font-bold text-slate-300"
+                  className="px-3 py-1 rounded-xl bg-portal-card border-2 border-black text-xs font-black text-slate-200 uppercase shadow-neo-sm"
                 >
                   ⚡ {tag}
                 </span>
@@ -400,23 +395,23 @@ export default function SpotlightBanner({
           </div>
 
           {/* Action Button Strip */}
-          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap pt-1">
+          <div className="flex items-center gap-3 flex-wrap pt-1">
             <button
               onClick={() => onPlayGame(currentGame)}
-              className={`flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider active:scale-95 transition-all ${
+              className={`flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
                 isComingSoon
-                  ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 hover:from-amber-300 hover:to-rose-400 text-black shadow-[0_0_22px_rgba(245,158,11,0.45)]'
-                  : 'bg-gradient-to-r from-portal-cyan via-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black shadow-glow-cyan'
+                  ? 'bg-portal-yellow text-black'
+                  : 'bg-portal-cyan text-black'
               }`}
             >
               {isComingSoon ? (
                 <>
-                  <Flame className="w-4 h-4 fill-black text-black" />
+                  <Flame className="w-4 h-4 fill-black stroke-[2.5]" />
                   <span>HYPE / PREVIEW</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-4 h-4 fill-black" />
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" />
                   <span>PLAY NOW</span>
                 </>
               )}
@@ -424,16 +419,16 @@ export default function SpotlightBanner({
 
             <button
               onClick={() => isComingSoon ? onPlayGame(currentGame) : onViewLeaderboard(currentGame.id)}
-              className="flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-portal-surface border border-portal-border hover:border-amber-400/60 text-portal-gold font-black text-xs sm:text-sm hover:bg-amber-500/10 active:scale-95 transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-portal-card hover:bg-portal-yellow text-portal-yellow hover:text-black border-3 border-black font-black text-sm uppercase tracking-wider shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
             >
               {isComingSoon ? (
                 <>
-                  <Sparkles className="w-4 h-4 text-portal-gold" />
+                  <Sparkles className="w-4 h-4 stroke-[2.5]" />
                   <span>Hype Details</span>
                 </>
               ) : (
                 <>
-                  <Trophy className="w-4 h-4 text-portal-gold" />
+                  <Trophy className="w-4 h-4 stroke-[2.5]" />
                   <span>Leaderboard</span>
                 </>
               )}
@@ -441,14 +436,14 @@ export default function SpotlightBanner({
 
             <button
               onClick={(e) => onToggleFavorite(currentGame.id, e)}
-              className={`p-2.5 sm:p-3 rounded-xl border transition-all active:scale-95 ${
+              className={`p-3 rounded-xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
                 isFavorite
-                  ? 'bg-rose-500/20 border-rose-500/60 text-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.3)]'
-                  : 'bg-portal-surface border-portal-border text-slate-400 hover:text-white hover:border-slate-500'
+                  ? 'bg-portal-pink text-white'
+                  : 'bg-portal-card text-slate-300 hover:text-white'
               }`}
               title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-rose-500 text-rose-500' : ''}`} />
+              <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
             </button>
           </div>
         </div>

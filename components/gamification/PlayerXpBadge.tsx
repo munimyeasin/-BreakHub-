@@ -51,14 +51,14 @@ export default function PlayerXpBadge({
       {/* 1. Daily Streak Pill */}
       <div
         onClick={onOpenQuests}
-        className="group relative flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-xl bg-gradient-to-r from-amber-500/10 via-orange-500/15 to-red-500/10 border border-orange-500/40 hover:border-orange-400 cursor-pointer shadow-[0_0_10px_rgba(249,115,22,0.2)] hover:shadow-[0_0_15px_rgba(249,115,22,0.45)] transition-all active:scale-95 shrink-0 select-none"
+        className="group relative flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none font-black"
         title={`Active Play Streak: ${state.streak.current} ${state.streak.current === 1 ? 'day' : 'days'}. Click to view Daily Quests.`}
       >
         <span className="relative flex items-center justify-center">
-          <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400 fill-orange-500 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
-          <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-orange-400 rounded-full animate-ping" />
+          <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black fill-black group-hover:scale-110 transition-transform" />
+          <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-portal-pink rounded-full border border-black animate-ping" />
         </span>
-        <span className="text-[11px] sm:text-xs font-black text-orange-300 tracking-tight">
+        <span className="text-[11px] sm:text-xs font-black text-black tracking-tight">
           {state.streak.current}d
         </span>
       </div>
@@ -68,12 +68,12 @@ export default function PlayerXpBadge({
         onClick={onOpenTrophies}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-xl bg-gradient-to-r from-portal-surface/90 via-slate-900/95 to-portal-card border border-cyan-500/40 hover:border-cyan-300 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all active:scale-95 shrink-0 select-none"
+        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none"
         title={`Player Level ${levelInfo.level}: ${levelInfo.title} (${levelInfo.xpIntoCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP). Click to open Trophy Room.`}
       >
         {/* Level Tag */}
         <div className="flex items-center gap-1">
-          <Zap className="w-3 h-3 text-portal-cyan fill-portal-cyan animate-pulse" />
+          <Zap className="w-3.5 h-3.5 text-portal-yellow fill-portal-yellow stroke-[2.5]" />
           <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-portal-cyan">
             LVL {levelInfo.level}
           </span>
@@ -81,13 +81,13 @@ export default function PlayerXpBadge({
 
         {/* XP Mini Bar */}
         <div className="hidden xs:flex flex-col gap-0.5 w-14 sm:w-20">
-          <div className="flex justify-between items-center text-[8px] font-bold text-slate-400 leading-none">
-            <span className="truncate max-w-[45px] text-slate-300">{levelInfo.title}</span>
+          <div className="flex justify-between items-center text-[8px] font-black text-slate-300 leading-none">
+            <span className="truncate max-w-[45px] text-white">{levelInfo.title}</span>
             <span>{Math.round(levelInfo.progressPercent)}%</span>
           </div>
-          <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden border border-cyan-500/30">
+          <div className="w-full h-2 bg-black rounded-md overflow-hidden border border-black">
             <div
-              className="h-full bg-gradient-to-r from-cyan-400 via-teal-300 to-portal-neon rounded-full transition-all duration-500 shadow-glow-cyan"
+              className="h-full bg-portal-lime border-r border-black transition-all duration-500"
               style={{ width: `${levelInfo.progressPercent}%` }}
             />
           </div>
@@ -95,13 +95,13 @@ export default function PlayerXpBadge({
 
         {/* Hover Detailed XP Tooltip */}
         {isHovered && (
-          <div className="absolute top-full mt-1.5 right-0 z-50 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-cyan-400/60 shadow-[0_0_20px_rgba(6,182,212,0.4)] text-[10px] whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
-            <div className="font-extrabold text-white flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-portal-cyan" />
+          <div className="absolute top-full mt-2 right-0 z-50 px-3 py-2 rounded-xl bg-portal-surface border-3 border-black shadow-neo text-[11px] whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
+            <div className="font-black text-white flex items-center gap-1.5 uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
               <span>{levelInfo.title}</span>
             </div>
-            <div className="text-slate-400 mt-0.5 font-semibold">
-              <span className="text-portal-cyan font-bold">{state.xp} Total XP</span> ({levelInfo.xpIntoCurrentLevel} / {levelInfo.xpNeededForNextLevel} to LVL {levelInfo.level + 1})
+            <div className="text-slate-300 mt-0.5 font-bold">
+              <span className="text-portal-yellow font-black">{state.xp} Total XP</span> ({levelInfo.xpIntoCurrentLevel} / {levelInfo.xpNeededForNextLevel} to LVL {levelInfo.level + 1})
             </div>
           </div>
         )}
@@ -110,13 +110,13 @@ export default function PlayerXpBadge({
       {/* 3. Daily Quests Shortcut Button with Unclaimed Badge */}
       <button
         onClick={onOpenQuests}
-        className="relative p-1.5 rounded-xl bg-portal-surface/80 border border-portal-border hover:border-purple-400 text-purple-300 hover:text-white transition-all shadow-sm active:scale-95"
+        className="relative p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-purple text-portal-purple hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Daily Quests"
         aria-label="Daily Quests"
       >
-        <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
+        <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
         {completedUnclaimedQuests > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-black text-white shadow-lg animate-bounce">
+          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-portal-pink text-[9px] font-black text-white border border-black shadow-neo-sm animate-bounce">
             {completedUnclaimedQuests}
           </span>
         )}
@@ -125,25 +125,25 @@ export default function PlayerXpBadge({
       {/* 4. Trophy Room Shortcut Button */}
       <button
         onClick={onOpenTrophies}
-        className="p-1.5 rounded-xl bg-portal-surface/80 border border-portal-border hover:border-amber-400 text-amber-300 hover:text-white transition-all shadow-sm active:scale-95"
+        className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-yellow text-portal-yellow hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Holographic Trophy Vault"
         aria-label="Trophy Vault"
       >
-        <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+        <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
       </button>
 
       {/* 5. Audio Synthesizer Mute/Unmute Toggle */}
       <button
         onClick={toggleMute}
-        className={`p-1.5 rounded-xl border transition-all shadow-sm active:scale-95 ${
+        className={`p-2 rounded-xl border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
           isMuted
-            ? 'bg-portal-surface/40 border-slate-700 text-slate-500 hover:text-slate-300'
-            : 'bg-cyan-950/40 border-cyan-500/40 text-portal-cyan hover:border-cyan-300 hover:text-white shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+            ? 'bg-portal-card text-slate-500 hover:text-slate-200'
+            : 'bg-portal-cyan text-black'
         }`}
         title={isMuted ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Active (Click to Mute)'}
         aria-label="Toggle Sound"
       >
-        {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+        {isMuted ? <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" /> : <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />}
       </button>
     </div>
   );

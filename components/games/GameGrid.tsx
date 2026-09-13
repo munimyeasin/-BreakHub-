@@ -35,16 +35,18 @@ export default function GameGrid({
   if (games.length === 0) {
     if (isFavoritesTab) {
       return (
-        <div className="text-center py-16 bg-portal-surface/40 rounded-3xl border border-portal-border px-4">
-          <Heart className="w-12 h-12 text-rose-500/50 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-200">No favorite games saved yet</h3>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+        <div className="text-center py-16 bg-portal-surface rounded-3xl border-3 border-black p-6 shadow-neo-lg max-w-lg mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto mb-4 shadow-neo-sm">
+            <Heart className="w-8 h-8 fill-white text-white stroke-[2.5]" />
+          </div>
+          <h3 className="text-lg font-black text-white uppercase tracking-tight">No favorite games saved yet</h3>
+          <p className="text-xs text-slate-300 font-bold mt-1.5 max-w-sm mx-auto leading-relaxed">
             Click the heart icon on any game card to add it to your personal favorites collection!
           </p>
           {onResetFilters && (
             <button
               onClick={onResetFilters}
-              className="mt-4 px-5 py-2 rounded-xl bg-portal-cyan text-black text-xs font-bold shadow-glow-cyan hover:brightness-110 transition-all"
+              className="mt-5 px-6 py-2.5 rounded-xl bg-portal-cyan text-black text-xs font-black uppercase tracking-wider border-2 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
             >
               Browse All Games
             </button>
@@ -54,14 +56,16 @@ export default function GameGrid({
     }
 
     return (
-      <div className="text-center py-16 bg-portal-surface/40 rounded-3xl border border-portal-border px-4">
-        <Gamepad2 className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-        <h3 className="text-base font-bold text-slate-300">No games match your search</h3>
-        <p className="text-xs text-slate-500 mt-1">Try searching for a different keyword or reset your filters.</p>
+      <div className="text-center py-16 bg-portal-surface rounded-3xl border-3 border-black p-6 shadow-neo-lg max-w-lg mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-portal-card border-3 border-black flex items-center justify-center mx-auto mb-4 shadow-neo-sm">
+          <Gamepad2 className="w-8 h-8 text-portal-cyan stroke-[2.5]" />
+        </div>
+        <h3 className="text-lg font-black text-white uppercase tracking-tight">No games match your search</h3>
+        <p className="text-xs text-slate-300 font-bold mt-1.5 leading-relaxed">Try searching for a different keyword or reset your genre filters.</p>
         {onResetFilters && (
           <button
             onClick={onResetFilters}
-            className="mt-4 px-4 py-2 rounded-xl bg-portal-surface border border-portal-border text-xs text-portal-cyan font-bold hover:border-portal-cyan transition-all"
+            className="mt-5 px-6 py-2.5 rounded-xl bg-portal-yellow text-black text-xs font-black uppercase tracking-wider border-2 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
           >
             Reset Filters
           </button>

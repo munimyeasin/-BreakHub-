@@ -306,8 +306,8 @@ export default function ArcadePortalDashboard() {
     <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black">
 
       {/* 1. STICKY APP HEADER */}
-      <header className="sticky top-0 z-30 backdrop-blur-xl bg-portal-bg/95 border-b border-portal-border/80 px-3 sm:px-6 py-1.5 sm:py-2.5">
-        <div className="max-w-7xl mx-auto flex flex-col gap-1.5 sm:gap-2.5">
+      <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
+        <div className="max-w-7xl mx-auto flex flex-col gap-2">
 
           {/* Top Bar */}
           <div className="flex items-center justify-between gap-2.5 sm:gap-3">
@@ -316,36 +316,32 @@ export default function ArcadePortalDashboard() {
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
-                className="relative group flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-cyan-950/80 via-slate-900/90 to-purple-950/80 border border-cyan-400/70 hover:border-cyan-300 text-cyan-300 hover:text-white shadow-[0_0_15px_rgba(6,182,212,0.35)] hover:shadow-[0_0_25px_rgba(6,182,212,0.65)] transition-all duration-300 active:scale-95 shrink-0"
+                className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
+                  isSidebarOpen ? 'bg-portal-pink text-white' : 'bg-portal-yellow text-black'
+                }`}
                 title="Open Genres, Navigation & Filters"
                 aria-label="Toggle navigation slide bar"
               >
-                {/* Ambient pulsing neon background glow */}
-                <span className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-portal-cyan via-purple-500 to-portal-neon opacity-40 group-hover:opacity-90 blur-sm transition-opacity duration-300 pointer-events-none" />
-
-                {/* Inner button content */}
-                <div className="relative flex items-center gap-1.5 sm:gap-2 z-10">
+                <div className="flex items-center gap-1.5 z-10">
                   {isSidebarOpen ? (
-                    <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-portal-cyan animate-in fade-in zoom-in duration-200" />
+                    <X className="w-4 h-4 stroke-[2.5]" />
                   ) : (
                     <div className="relative flex items-center justify-center">
-                      <SlidersHorizontal className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-portal-cyan group-hover:rotate-180 transition-transform duration-500" />
+                      <SlidersHorizontal className="w-4 h-4 stroke-[2.5] group-hover:rotate-180 transition-transform duration-300" />
                       {(selectedCategory !== 'ALL' || activeTab !== 'all') && (
                         <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-portal-cyan opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-portal-cyan shadow-glow-cyan"></span>
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-portal-pink opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-portal-pink"></span>
                         </span>
                       )}
                     </div>
                   )}
 
-                  <span className="font-black text-[11px] sm:text-xs tracking-wider uppercase bg-gradient-to-r from-cyan-200 via-white to-portal-cyan bg-clip-text text-transparent">
-                    {isSidebarOpen ? 'CLOSE' : 'GENRES'}
-                  </span>
+                  <span>{isSidebarOpen ? 'CLOSE' : 'GENRES'}</span>
 
                   {/* Active filter counter pill if active */}
                   {selectedCategory !== 'ALL' && !isSidebarOpen && (
-                    <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded bg-portal-cyan/20 text-portal-cyan border border-portal-cyan/40">
+                    <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded bg-black text-white border border-black">
                       {selectedCategory}
                     </span>
                   )}
@@ -353,22 +349,22 @@ export default function ArcadePortalDashboard() {
               </button>
 
               <div
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer group"
                 onClick={() => { setActiveTab('all'); setSelectedCategory('ALL'); setSearchQuery(''); }}
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-portal-neon to-portal-cyan flex items-center justify-center shadow-glow-cyan">
-                  <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-portal-cyan border-2 border-black flex items-center justify-center shadow-neo-sm group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
+                  <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5 text-black stroke-[2.5]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-black text-sm sm:text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-portal-cyan bg-clip-text text-transparent">
+                    <span className="font-black text-sm sm:text-base tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
                       STRESS<span className="text-portal-cyan">BUSTER</span>
                     </span>
-                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded bg-portal-neon/30 text-purple-300 border border-purple-500/40">
+                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-white border border-black shadow-neo-sm">
                       PORTAL
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-slate-400 font-bold hidden xs:block">HTML5 Mini-Games</p>
+                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">12 Mini-Games</p>
                 </div>
               </div>
             </div>
@@ -385,12 +381,12 @@ export default function ArcadePortalDashboard() {
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck={false}
-                  className="w-full pl-10 pr-8 py-2 bg-portal-surface border border-portal-border rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:border-portal-cyan focus:ring-1 focus:ring-portal-cyan transition-all appearance-none"
+                  className="w-full pl-10 pr-8 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs font-bold p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs font-black p-1"
                   >
                     ✕
                   </button>
@@ -398,11 +394,11 @@ export default function ArcadePortalDashboard() {
               </div>
               <button
                 onClick={() => handleOpenLeaderboard('global')}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 border border-amber-500/50 hover:border-amber-400 text-portal-gold font-black text-xs hover:shadow-glow-gold active:scale-95 transition-all shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)] group"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 group"
                 title="Open Global Leaderboard"
               >
-                <Trophy className="w-3.5 h-3.5 text-portal-gold group-hover:scale-110 transition-transform" />
-                <span>Leaderboard</span>
+                <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Ranks</span>
               </button>
             </div>
 
@@ -416,19 +412,19 @@ export default function ArcadePortalDashboard() {
               {playerTag ? (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-surface border border-portal-border hover:border-portal-cyan/50 text-xs font-bold transition-all shadow-sm"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title="Change Player Handle"
                 >
-                  {avatarUrl && <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-portal-cyan/40 shrink-0" />}
-                  <span className="text-portal-cyan font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
+                  {avatarUrl && <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black shadow-neo-sm shrink-0" />}
+                  <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
                   <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
                 </button>
               ) : (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-surface border border-portal-border hover:border-portal-cyan text-slate-300 text-xs font-bold transition-all"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <User className="w-3.5 h-3.5 text-portal-cyan" />
+                  <User className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span className="hidden sm:inline">Set Handle</span>
                 </button>
               )}
@@ -447,12 +443,12 @@ export default function ArcadePortalDashboard() {
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
-                className="w-full pl-10 pr-9 py-2 bg-portal-surface border border-portal-border rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:border-portal-cyan focus:ring-1 focus:ring-portal-cyan transition-all appearance-none"
+                className="w-full pl-10 pr-9 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-sm font-bold p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-sm font-black p-1"
                 >
                   ✕
                 </button>
@@ -462,11 +458,11 @@ export default function ArcadePortalDashboard() {
             {/* Mobile Leaderboard Button near Search */}
             <button
               onClick={() => handleOpenLeaderboard('global')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-500/50 text-portal-gold font-black text-xs hover:shadow-glow-gold active:scale-95 transition-all shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)]"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
               title="Open Global Leaderboard"
             >
-              <Trophy className="w-3.5 h-3.5 text-portal-gold animate-bounce" />
-              <span>Leaderboard</span>
+              <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Ranks</span>
             </button>
           </div>
         </div>
@@ -530,20 +526,24 @@ export default function ArcadePortalDashboard() {
               )}
 
               {/* Active Filter Bar & Breadcrumb Status */}
-              <div className="flex items-center justify-between mb-2.5 sm:mb-3 pb-1 sm:pb-1.5 border-b border-portal-border/40">
+              <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 sm:pb-2.5 border-b-3 border-black">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-slate-200 flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-portal-cyan" />
-                    {activeTab === 'favorites' ? 'Your Saved Games' : 'Available Mini-Games'}
-                    <span className="text-xs text-slate-500 font-bold">({filteredGames.length})</span>
+                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-white flex items-center gap-1.5">
+                    <div className="w-5 h-5 rounded-md bg-portal-yellow border border-black shadow-neo-sm flex items-center justify-center">
+                      <Zap className="w-3 h-3 text-black stroke-[3]" />
+                    </div>
+                    <span>{activeTab === 'favorites' ? 'Your Saved Games' : 'Available Mini-Games'}</span>
+                    <span className="px-1.5 py-0.2 rounded bg-portal-surface text-portal-cyan text-[11px] font-black border border-black shadow-neo-sm">
+                      {filteredGames.length}
+                    </span>
                   </h2>
 
                   {selectedCategory !== 'ALL' && activeTab === 'all' && (
-                    <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-portal-cyan/15 text-portal-cyan text-[10px] font-black border border-portal-cyan/40">
-                      {selectedCategory === 'UPCOMING' ? 'Filter: Upcoming / Soon' : `Category: ${selectedCategory}`}
+                    <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-portal-cyan text-black text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm">
+                      <span>{selectedCategory === 'UPCOMING' ? 'Filter: Upcoming' : `Category: ${selectedCategory}`}</span>
                       <button
                         onClick={() => setSelectedCategory('ALL')}
-                        className="hover:text-white ml-0.5"
+                        className="hover:scale-125 ml-0.5 font-black"
                         title="Clear category filter"
                       >
                         ✕
@@ -560,9 +560,9 @@ export default function ArcadePortalDashboard() {
                       setSearchQuery('');
                       setActiveTab('all');
                     }}
-                    className="text-[11px] font-bold text-slate-400 hover:text-portal-cyan underline transition-colors"
+                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-white text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   >
-                    Reset All Filters
+                    Reset Filters
                   </button>
                 )}
               </div>
@@ -588,14 +588,14 @@ export default function ArcadePortalDashboard() {
               />
 
               {/* FOOTER TEAM STRIP */}
-              <footer className="mt-14 pt-8 border-t border-portal-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-400">
+              <footer className="mt-14 p-5 sm:p-6 bg-portal-surface border-3 border-black rounded-2xl shadow-neo flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-slate-300 font-bold">
-                    <Gamepad2 className="w-4 h-4 text-portal-cyan shrink-0" />
+                  <div className="flex items-center gap-2 text-portal-yellow font-black uppercase tracking-wider">
+                    <Gamepad2 className="w-4 h-4 text-portal-cyan stroke-[2.5] shrink-0" />
                     <span>Stress Buster Project • Developed by:</span>
                   </div>
-                  <div className="pl-6 text-slate-200 font-semibold">
-                    <strong className="text-white">Tahida</strong>, <strong className="text-white">Marzia</strong>, <strong className="text-white">Rahul</strong>, & <strong className="text-white">Munim Yeasin</strong>
+                  <div className="text-slate-200 font-bold">
+                    <strong className="text-white">Tahida</strong>, <strong className="text-white">Marzia</strong>, <strong className="text-white">Rahul</strong>, & <strong className="text-portal-cyan">Munim Yeasin</strong>
                   </div>
                 </div>
                 <button
@@ -603,10 +603,10 @@ export default function ArcadePortalDashboard() {
                     setActiveTab('about');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="flex items-center gap-1.5 text-portal-cyan hover:underline font-bold self-start sm:self-center"
+                  className="px-4 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5 self-start sm:self-center"
                 >
-                  <Users className="w-3.5 h-3.5" />
-                  View Full Team & Project Details →
+                  <Users className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Team & Project Details →</span>
                 </button>
               </footer>
             </>

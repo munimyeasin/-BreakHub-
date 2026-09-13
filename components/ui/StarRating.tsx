@@ -169,30 +169,28 @@ export default function StarRating({
             setIsOpen(prev => !prev);
           }
         }}
-        className={`group/rate flex items-center gap-1 rounded-md transition-all ${
-          interactive ? 'cursor-pointer hover:bg-amber-500/15 px-1.5 py-0.5 border border-transparent hover:border-amber-500/30' : 'cursor-default'
-        } ${userRating ? 'text-amber-400 font-extrabold' : 'text-slate-300'}`}
+        className={`group/rate flex items-center gap-1 rounded-lg transition-all ${
+          interactive
+            ? 'cursor-pointer bg-portal-surface hover:bg-portal-yellow text-slate-200 hover:text-black px-1.5 py-0.5 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1'
+            : 'cursor-default px-1 py-0.5'
+        }`}
         title={userRating ? `Your rating: ${userRating} ★ (Click to change)` : `Rating: ${rating.toFixed(1)} ★ (${ratingCount} reviews) - Click to rate!`}
       >
         <Star
-          className={`${starSizeClass} ${
-            userRating
-              ? 'fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]'
-              : 'fill-amber-400 text-amber-400 group-hover/rate:scale-110 transition-transform'
-          }`}
+          className={`${starSizeClass} fill-portal-yellow text-portal-yellow group-hover/rate:text-black group-hover/rate:fill-black stroke-[2.5] transition-colors`}
         />
-        <span className="text-[10px] sm:text-[11px] font-black text-amber-400 tracking-tight">
+        <span className="text-[10px] sm:text-[11px] font-black tracking-tight uppercase group-hover/rate:text-black">
           {rating.toFixed(1)}
         </span>
 
         {showCount && ratingCount > 0 && (
-          <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium">
+          <span className="text-[9px] sm:text-[10px] text-slate-400 group-hover/rate:text-black font-bold">
             ({ratingCount})
           </span>
         )}
 
         {userRating && (
-          <span className="ml-0.5 px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[8px] font-extrabold uppercase tracking-wider border border-amber-400/40">
+          <span className="ml-0.5 px-1 py-0.2 rounded bg-portal-yellow text-black text-[8px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
             {userRating}★
           </span>
         )}
@@ -203,7 +201,7 @@ export default function StarRating({
         <>
           {/* Backdrop overlay for closing */}
           <div
-            className="fixed inset-0 z-40"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(false);
@@ -212,32 +210,35 @@ export default function StarRating({
 
           <div
             onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50 w-56 p-3 bg-portal-surface/98 backdrop-blur-xl border border-amber-500/40 rounded-2xl shadow-2xl shadow-black/80 flex flex-col items-center animate-fadeIn select-none"
+            className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-60 p-3.5 bg-portal-surface border-3 border-black rounded-2xl shadow-neo-lg flex flex-col items-center animate-fadeIn select-none overflow-hidden"
           >
+            {/* Top Tri-Color Strip */}
+            <div className="h-1.5 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black w-[calc(100%+1.75rem)] -mt-3.5 mb-2.5 shrink-0" />
+
             {/* Header */}
-            <div className="w-full flex items-center justify-between mb-1.5 text-center">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1">
-                <Sparkles className="w-2.5 h-2.5" />
+            <div className="w-full flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-portal-yellow flex items-center gap-1">
+                <Sparkles className="w-3 h-3 stroke-[2.5]" />
                 {userRating ? 'Update Your Rating' : 'Rate This Game'}
               </span>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-white text-xs px-1"
+                className="w-5 h-5 flex items-center justify-center rounded-md bg-portal-card hover:bg-portal-pink text-white hover:text-black border border-black shadow-neo-sm text-xs font-black transition-all"
               >
                 ✕
               </button>
             </div>
 
             {gameTitle && (
-              <p className="text-[11px] font-bold text-slate-200 line-clamp-1 mb-2 text-center w-full">
+              <p className="text-xs font-black text-white uppercase line-clamp-1 mb-2 text-center w-full">
                 {gameTitle}
               </p>
             )}
 
             {/* Interactive Stars Row */}
             <div
-              className="flex items-center justify-center gap-1.5 py-1 px-2 bg-black/40 rounded-xl border border-amber-500/20 w-full mb-2"
+              className="flex items-center justify-center gap-1.5 py-1.5 px-2 bg-portal-card rounded-xl border-2 border-black shadow-neo-sm w-full mb-2.5"
               onMouseLeave={() => setHoverRating(null)}
             >
               {[1, 2, 3, 4, 5].map((starVal) => {
@@ -251,15 +252,15 @@ export default function StarRating({
                     onClick={(e) => handleStarClick(starVal, e)}
                     onMouseEnter={() => handleMouseEnterStar(starVal)}
                     disabled={isSubmitting}
-                    className="p-1 rounded-lg hover:scale-125 active:scale-95 transition-all duration-150 focus:outline-none"
+                    className="p-1 rounded-lg hover:bg-portal-yellow/20 active:translate-y-0.5 transition-all focus:outline-none"
                     title={RATING_LABELS[starVal]}
                   >
                     <Star
-                      className={`w-5 h-5 transition-all ${
+                      className={`w-5 h-5 stroke-[2.5] transition-all ${
                         isLit
-                          ? 'fill-amber-400 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)] scale-110'
-                          : 'fill-transparent text-slate-600 hover:text-amber-300'
-                      } ${isUserCurrent ? 'ring-1 ring-amber-400 rounded-sm' : ''}`}
+                          ? 'fill-portal-yellow text-portal-yellow scale-110'
+                          : 'fill-transparent text-slate-500 hover:text-portal-yellow'
+                      } ${isUserCurrent ? 'drop-shadow-[0_0_4px_#FFE600]' : ''}`}
                     />
                   </button>
                 );
@@ -269,22 +270,22 @@ export default function StarRating({
             {/* Helper label / Submitting Feedback */}
             <div className="min-h-[18px] flex items-center justify-center text-center">
               {justRated ? (
-                <span className="text-[10px] font-black text-emerald-400 flex items-center gap-1 animate-bounce">
-                  <Check className="w-3 h-3" /> Rating Saved!
+                <span className="text-[10px] font-black text-black bg-portal-lime px-2 py-0.5 rounded-md border border-black shadow-neo-sm flex items-center gap-1 uppercase animate-bounce">
+                  <Check className="w-3 h-3 stroke-[2.5]" /> Rating Saved!
                 </span>
               ) : (
-                <span className="text-[10px] font-bold text-slate-400">
+                <span className="text-[10px] font-black uppercase text-slate-300 tracking-wide">
                   {hoverRating
                     ? RATING_LABELS[hoverRating]
                     : userRating
                     ? `You rated this ${userRating} Stars`
-                    : 'Tap stars to score (1-5)'}
+                    : 'Tap stars to rate (1-5)'}
                 </span>
               )}
             </div>
 
-            {/* Arrow Pointer */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-amber-500/40" />
+            {/* Neo-Brutalist Arrow Pointer */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[2px] w-3 h-3 bg-portal-surface border-r-3 border-b-3 border-black rotate-45" />
           </div>
         </>
       )}

@@ -130,12 +130,12 @@ export default function ActivityTicker() {
     <div
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative w-full overflow-hidden bg-gradient-to-r from-portal-surface/80 via-slate-900/90 to-portal-surface/80 border-y border-portal-border/60 py-1.5 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none"
+      className="relative w-full overflow-hidden bg-portal-surface border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm"
     >
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[9px] font-black uppercase text-portal-cyan tracking-wider">
-          <span className="w-1.5 h-1.5 rounded-full bg-portal-cyan animate-ping" />
-          <Radio className="w-2.5 h-2.5 ml-0.5" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-white tracking-wider shadow-neo-sm">
+          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+          <Radio className="w-3 h-3 stroke-[2.5]" />
           <span className="hidden xs:inline">LIVE FEED</span>
         </div>
       </div>
@@ -147,12 +147,12 @@ export default function ActivityTicker() {
           className="flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300 truncate"
         >
           <span className="shrink-0">{current.icon}</span>
-          <span className="text-white font-extrabold">{current.user}</span>
-          <span className="text-slate-400 hidden sm:inline">{current.action}</span>
-          <span className={`font-black underline decoration-dashed underline-offset-2 ${current.color.split(' ')[1]}`}>
+          <span className="text-white font-black">{current.user}</span>
+          <span className="text-slate-300 font-bold hidden sm:inline">{current.action}</span>
+          <span className="font-black text-portal-yellow underline decoration-2 underline-offset-2">
             {current.highlight}
           </span>
-          <span className={`px-1.5 py-0.2 rounded text-[8px] font-black uppercase border shrink-0 ${current.color}`}>
+          <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-portal-yellow text-black border-2 border-black shadow-neo-sm shrink-0">
             {current.tag}
           </span>
         </div>
@@ -164,8 +164,8 @@ export default function ActivityTicker() {
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`w-1.5 h-1.5 rounded-full transition-all ${
-              idx === currentIndex ? 'bg-portal-cyan w-3' : 'bg-slate-700 hover:bg-slate-500'
+            className={`w-2 h-2 rounded-sm border border-black transition-all ${
+              idx === currentIndex ? 'bg-portal-yellow w-4 shadow-neo-sm' : 'bg-portal-card hover:bg-slate-400'
             }`}
             aria-label={`Slide ${idx + 1}`}
           />

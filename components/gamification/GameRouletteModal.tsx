@@ -75,55 +75,54 @@ export default function GameRouletteModal({
   const displayGame = selectedGame || previewGame || playableGames[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-gradient-to-b from-slate-900 via-portal-bg to-slate-950 border border-portal-cyan/50 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.3)] overflow-hidden flex flex-col items-center p-6 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="relative w-full max-w-md bg-portal-surface border-4 border-black rounded-2xl sm:rounded-3xl shadow-neo-lg overflow-hidden flex flex-col items-center p-6 text-center">
+
+        {/* Top Decorative Color Bar */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-cyan via-portal-yellow to-portal-pink border-b-2 border-black" />
 
         {/* Modal Top Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl bg-portal-card text-slate-400 hover:text-white border border-portal-border hover:border-portal-cyan transition-all active:scale-95"
+          className="absolute top-4 right-4 p-2 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
           aria-label="Close modal"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4 stroke-[2.5]" />
         </button>
 
         {/* Header Icon */}
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-black shadow-glow-cyan mb-3">
-          <Dices className={`w-7 h-7 text-white ${isSpinning ? 'animate-spin' : ''}`} />
+        <div className="w-14 h-14 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center text-black shadow-neo mt-2 mb-3">
+          <Dices className={`w-7 h-7 stroke-[2.5] ${isSpinning ? 'animate-spin' : ''}`} />
         </div>
 
-        <h3 className="font-black text-lg sm:text-xl text-white tracking-wide">
-          NEURAL GAME ROULETTE
+        <h3 className="font-black text-lg sm:text-xl text-white tracking-tight uppercase">
+          GAME ROULETTE
         </h3>
-        <p className="text-xs text-slate-400 font-medium max-w-xs mt-1">
-          Eliminate decision fatigue. Let the cyber oracle choose your next stress-busting challenge!
+        <p className="text-xs text-slate-300 font-bold max-w-xs mt-1">
+          Eliminate decision fatigue. Let the oracle choose your next stress-busting challenge!
         </p>
 
         {/* Game Preview Card */}
         {displayGame && (
-          <div className="w-full my-5 p-4 rounded-2xl bg-portal-card/90 border border-portal-border relative overflow-hidden flex flex-col items-center">
-            {/* Background Glow */}
-            <div className="absolute inset-0 bg-gradient-to-t from-portal-surface/90 via-transparent to-transparent pointer-events-none" />
-
+          <div className="w-full my-4 p-3.5 rounded-2xl bg-portal-card border-3 border-black shadow-neo relative overflow-hidden flex flex-col items-center">
             {/* Thumbnail Container */}
-            <div className="relative w-full h-36 rounded-xl overflow-hidden border border-portal-border mb-3">
+            <div className="relative w-full h-36 rounded-xl overflow-hidden border-2 border-black mb-3 bg-black">
               <Image
                 src={displayGame.thumbnail_url}
                 alt={displayGame.title}
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-portal-cyan/20 text-portal-cyan border border-portal-cyan/40">
+              <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
                 {displayGame.category}
               </span>
             </div>
 
             {/* Title & Details */}
-            <h4 className="text-base font-black text-white leading-tight">
+            <h4 className="text-base font-black text-white uppercase leading-tight">
               {displayGame.title}
             </h4>
-            <p className="text-[11px] text-slate-400 line-clamp-2 mt-1 px-2">
+            <p className="text-[11px] text-slate-300 font-bold line-clamp-2 mt-1 px-2">
               {displayGame.description}
             </p>
           </div>
@@ -137,30 +136,30 @@ export default function GameRouletteModal({
                 onClose();
                 onSelectGame(selectedGame);
               }}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-portal-cyan via-teal-400 to-portal-neon text-black font-black text-sm tracking-wide shadow-glow-cyan hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 animate-bounce"
+              className="w-full py-3 rounded-xl bg-portal-lime text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
             >
-              <Play className="w-4 h-4 fill-black" />
+              <Play className="w-4 h-4 fill-black stroke-[2.5]" />
               <span>LAUNCH {selectedGame.title.toUpperCase()}</span>
             </button>
           ) : (
             <button
               onClick={handleSpin}
               disabled={isSpinning}
-              className={`w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500 text-white font-black text-sm tracking-wide shadow-[0_0_25px_rgba(168,85,247,0.4)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 ${
+              className={`w-full py-3 rounded-xl bg-portal-cyan text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 ${
                 isSpinning ? 'opacity-80 cursor-not-allowed' : ''
               }`}
             >
-              <Shuffle className={`w-4 h-4 ${isSpinning ? 'animate-spin' : ''}`} />
-              <span>{isSpinning ? 'SCANNING ARCADE VAULT...' : 'SPIN ROULETTE'}</span>
+              <Shuffle className={`w-4 h-4 stroke-[2.5] ${isSpinning ? 'animate-spin' : ''}`} />
+              <span>{isSpinning ? 'SCANNING VAULT...' : 'SPIN ROULETTE'}</span>
             </button>
           )}
 
           {selectedGame && (
             <button
               onClick={handleSpin}
-              className="w-full py-2 rounded-xl bg-portal-surface/60 border border-portal-border hover:border-purple-400 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 rounded-xl bg-portal-card hover:bg-portal-yellow hover:text-black border-2 border-black shadow-neo-sm text-white text-xs font-black uppercase transition-all hover:translate-x-0.5 hover:translate-y-0.5 flex items-center justify-center gap-1.5"
             >
-              <Shuffle className="w-3.5 h-3.5 text-purple-400" />
+              <Shuffle className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Reroll / Spin Again</span>
             </button>
           )}

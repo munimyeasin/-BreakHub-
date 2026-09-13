@@ -97,62 +97,65 @@ export default function DailyQuestsModal({
   const completedCount = state.dailyQuests.progress.filter(p => p.completed).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-gradient-to-b from-slate-900 via-portal-bg to-slate-950 border border-purple-500/40 rounded-3xl shadow-[0_0_50px_rgba(168,85,247,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="relative w-full max-w-lg bg-portal-surface border-4 border-black rounded-2xl sm:rounded-3xl shadow-neo-lg overflow-hidden flex flex-col max-h-[92vh]">
+
+        {/* Top Decorative Accent Bar */}
+        <div className="h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black shrink-0" />
 
         {/* Modal Top Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-portal-border bg-portal-surface/90">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b-3 border-black bg-portal-surface shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-              <Target className="w-5 h-5 text-white animate-pulse" />
+            <div className="w-10 h-10 rounded-xl bg-portal-purple border-2 border-black flex items-center justify-center text-white shadow-neo-sm shrink-0">
+              <Target className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-black text-base sm:text-lg text-white tracking-wide">
+                <h3 className="font-black text-base sm:text-lg text-white tracking-tight uppercase">
                   DAILY QUESTS
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
                   {completedCount}/3 DONE
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-semibold mt-0.5">
-                <Clock className="w-3.5 h-3.5 text-portal-cyan" />
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-300 font-bold mt-0.5">
+                <Clock className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
                 <span>Resets in:</span>
-                <span className="font-mono font-black text-portal-cyan tracking-wider">{timeLeft || '00:00:00'}</span>
+                <span className="font-mono font-black text-portal-cyan">{timeLeft || '00:00:00'}</span>
               </div>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-portal-card text-slate-400 hover:text-white border border-portal-border hover:border-purple-400 transition-all active:scale-95"
+            className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
             aria-label="Close modal"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
 
         {/* Modal Body / Quest Cards */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-3.5 scrollbar-thin scrollbar-thumb-portal-border">
+        <div className="p-3.5 sm:p-5 overflow-y-auto space-y-3">
 
           {/* Streak Banner Strip */}
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/20 to-red-500/15 border border-orange-500/40 shadow-sm">
+          <div className="flex items-center justify-between p-3 rounded-xl sm:rounded-2xl bg-portal-card border-3 border-black shadow-neo-sm">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center shadow-[0_0_10px_rgba(249,115,22,0.5)]">
+              <div className="w-8 h-8 rounded-xl bg-portal-yellow border-2 border-black flex items-center justify-center shadow-neo-sm shrink-0">
                 <Flame className="w-4 h-4 text-black fill-black" />
               </div>
               <div>
-                <p className="text-xs font-black text-white flex items-center gap-1">
-                  Active Play Streak: <span className="text-orange-400 font-black">{state.streak.current} Days</span>
+                <p className="text-xs font-black text-white uppercase flex items-center gap-1">
+                  Active Streak: <span className="text-portal-yellow font-black">{state.streak.current} Days</span>
                 </p>
-                <p className="text-[10px] text-slate-300 font-medium">
-                  Play any game today to keep your cyber flame burning!
+                <p className="text-[10px] text-slate-300 font-bold">
+                  Play any game today to keep your streak alive!
                 </p>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Best Streak</span>
-              <span className="text-xs font-black text-amber-300">{state.streak.longest}d</span>
+            <div className="text-right shrink-0">
+              <span className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Best</span>
+              <span className="text-xs font-black text-portal-cyan bg-portal-surface px-2 py-0.5 rounded border border-black">{state.streak.longest}d</span>
             </div>
           </div>
 
@@ -172,35 +175,35 @@ export default function DailyQuestsModal({
               return (
                 <div
                   key={questDef.id}
-                  className={`p-3.5 rounded-2xl border transition-all duration-300 ${
+                  className={`p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 border-black shadow-neo-sm transition-all duration-200 ${
                     progress.claimed
-                      ? 'bg-slate-900/40 border-slate-800 opacity-60'
+                      ? 'bg-portal-card/60 opacity-60'
                       : progress.completed
-                      ? 'bg-gradient-to-r from-cyan-950/40 via-purple-950/40 to-slate-900/90 border-cyan-400/60 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                      : 'bg-portal-card/80 border-portal-border hover:border-slate-600'
+                      ? 'bg-portal-card border-portal-cyan'
+                      : 'bg-portal-card'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3 min-w-0">
-                      <span className="text-2xl shrink-0 p-1 bg-slate-800/80 rounded-xl border border-slate-700/60">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <span className="text-2xl shrink-0 p-1 bg-portal-surface rounded-xl border-2 border-black shadow-neo-sm">
                         {questDef.icon}
                       </span>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="text-xs sm:text-sm font-black text-white leading-tight">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h4 className="text-xs sm:text-sm font-black text-white uppercase leading-tight">
                             {questDef.title}
                           </h4>
-                          <span className={`px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider ${
+                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider border border-black shadow-neo-sm ${
                             questDef.tier === 'easy'
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              ? 'bg-portal-lime text-black'
                               : questDef.tier === 'medium'
-                              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                              : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                              ? 'bg-portal-cyan text-black'
+                              : 'bg-portal-purple text-white'
                           }`}>
                             {questDef.tier}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                        <p className="text-[11px] text-slate-300 font-bold mt-1 leading-snug">
                           {questDef.description}
                         </p>
                       </div>
@@ -209,21 +212,21 @@ export default function DailyQuestsModal({
                     {/* Reward Badge or Claim Button */}
                     <div className="shrink-0">
                       {progress.claimed ? (
-                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800 text-slate-400 text-[10px] font-bold border border-slate-700">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-portal-surface text-slate-400 text-[10px] font-black border border-black">
+                          <CheckCircle2 className="w-3 h-3 text-portal-lime stroke-[2.5]" />
                           <span>Claimed</span>
                         </div>
                       ) : progress.completed ? (
                         <button
                           onClick={(e) => handleClaim(questDef.id, e)}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-portal-cyan to-portal-neon text-black font-black text-xs hover:scale-105 active:scale-95 shadow-glow-cyan transition-all animate-bounce"
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                         >
-                          <Gift className="w-3.5 h-3.5" />
+                          <Gift className="w-3.5 h-3.5 stroke-[2.5]" />
                           <span>CLAIM +{questDef.xpReward} XP</span>
                         </button>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] font-black">
-                          <Sparkles className="w-3 h-3 text-portal-cyan" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-portal-surface border border-black text-portal-yellow text-[10px] font-black shadow-neo-sm">
+                          <Sparkles className="w-3 h-3 text-portal-yellow stroke-[2.5]" />
                           <span>+{questDef.xpReward} XP</span>
                         </span>
                       )}
@@ -232,17 +235,17 @@ export default function DailyQuestsModal({
 
                   {/* Progress Bar */}
                   <div className="mt-2.5 flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60">
+                    <div className="flex-1 h-2.5 bg-black rounded-md overflow-hidden border-2 border-black">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${
+                        className={`h-full border-r border-black transition-all duration-500 ${
                           progress.completed
-                            ? 'bg-gradient-to-r from-emerald-400 to-cyan-400'
-                            : 'bg-gradient-to-r from-purple-500 to-cyan-400'
+                            ? 'bg-portal-lime'
+                            : 'bg-portal-yellow'
                         }`}
                         style={{ width: `${percent}%` }}
                       />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-300 shrink-0 font-mono">
+                    <span className="text-[10px] font-black text-slate-200 shrink-0">
                       {currentVal}/{questDef.target}
                     </span>
                   </div>
@@ -252,28 +255,28 @@ export default function DailyQuestsModal({
           </div>
 
           {/* 3/3 Daily Master Bonus Chest */}
-          <div className={`p-4 rounded-2xl border transition-all ${
+          <div className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border-3 border-black shadow-neo transition-all ${
             allClaimed
               ? state.dailyQuests.dailyMasterClaimed
-                ? 'bg-slate-900/40 border-slate-800 opacity-70'
-                : 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border-amber-400/80 shadow-[0_0_25px_rgba(245,158,11,0.35)]'
-              : 'bg-portal-surface/40 border-portal-border/60'
+                ? 'bg-portal-card/60 opacity-70'
+                : 'bg-portal-card'
+              : 'bg-portal-surface'
           }`}>
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black shadow-glow-gold shrink-0">
-                  <Trophy className="w-5 h-5 fill-black" />
+                <div className="w-10 h-10 rounded-xl bg-portal-yellow border-2 border-black flex items-center justify-center text-black shadow-neo-sm shrink-0">
+                  <Trophy className="w-5 h-5 fill-black stroke-[2.5]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs sm:text-sm font-black text-amber-300">
+                    <h4 className="text-xs sm:text-sm font-black text-portal-yellow uppercase">
                       DAILY MASTER 3/3 CHEST
                     </h4>
-                    <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[8px] font-black border border-amber-500/40">
+                    <span className="px-1.5 py-0.5 rounded bg-portal-pink text-white text-[8px] font-black uppercase border border-black shadow-neo-sm">
                       BONUS
                     </span>
                   </div>
-                  <p className="text-[10px] sm:text-[11px] text-slate-300">
+                  <p className="text-[10px] sm:text-[11px] text-slate-300 font-bold">
                     Complete all 3 daily quests to harvest an extra +100 XP!
                   </p>
                 </div>
@@ -281,20 +284,20 @@ export default function DailyQuestsModal({
 
               <div>
                 {state.dailyQuests.dailyMasterClaimed ? (
-                  <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 text-xs font-bold border border-slate-700">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-portal-surface text-slate-400 text-xs font-black border border-black">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-portal-lime stroke-[2.5]" />
                     <span>Unlocked</span>
                   </div>
                 ) : allClaimed ? (
                   <button
                     onClick={handleClaimMasterBonus}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black font-black text-xs hover:scale-105 active:scale-95 shadow-glow-gold transition-all animate-pulse"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   >
-                    <Gift className="w-4 h-4" />
+                    <Gift className="w-4 h-4 stroke-[2.5]" />
                     <span>CLAIM +100 XP</span>
                   </button>
                 ) : (
-                  <span className="text-[10px] font-bold text-slate-500">
+                  <span className="text-[10px] font-black text-slate-400 bg-portal-card px-2 py-1 rounded border border-black">
                     {completedCount}/3 Completed
                   </span>
                 )}
@@ -304,21 +307,21 @@ export default function DailyQuestsModal({
         </div>
 
         {/* Modal Footer Quick Actions */}
-        <div className="p-4 border-t border-portal-border/80 bg-portal-surface/60 flex items-center justify-between gap-3">
+        <div className="p-3.5 sm:p-4 border-t-3 border-black bg-portal-surface flex items-center justify-between gap-3 shrink-0">
           <button
             onClick={() => {
               onClose();
               onOpenTrophies?.();
             }}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-portal-cyan transition-colors"
+            className="flex items-center gap-1.5 text-xs font-black uppercase text-slate-300 hover:text-portal-yellow transition-colors"
           >
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <Trophy className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
             <span>View Trophy Vault →</span>
           </button>
 
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-portal-card border border-portal-border hover:border-portal-cyan text-white text-xs font-black transition-all active:scale-95"
+            className="px-4 py-2 rounded-xl bg-portal-card hover:bg-portal-yellow hover:text-black border-2 border-black text-white text-xs font-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 uppercase tracking-wider"
           >
             GOT IT
           </button>

@@ -44,13 +44,13 @@ interface SidebarProps {
 }
 
 const CATEGORIES = [
-  { id: 'ALL', label: 'All Genres', icon: Sparkles, color: 'text-portal-cyan', activeBg: 'bg-cyan-500/15 border-cyan-400 text-portal-cyan shadow-glow-cyan/30' },
-  { id: 'UPCOMING', label: 'Upcoming / Soon', icon: Clock, color: 'text-amber-400', activeBg: 'bg-amber-500/15 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]' },
-  { id: 'ARCADE', label: 'Arcade Classics', icon: Gamepad2, color: 'text-cyan-400', activeBg: 'bg-cyan-500/15 border-cyan-400 text-cyan-300 shadow-glow-cyan/30' },
-  { id: 'ACTION', label: 'Action & Rush', icon: Zap, color: 'text-rose-400', activeBg: 'bg-rose-500/15 border-rose-400 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.3)]' },
-  { id: 'PUZZLE', label: 'Neural Puzzles', icon: Grid, color: 'text-purple-400', activeBg: 'bg-purple-500/15 border-purple-400 text-purple-300 shadow-[0_0_15px_rgba(192,132,252,0.3)]' },
-  { id: 'STRATEGY', label: 'Tactical Strategy', icon: Cpu, color: 'text-emerald-400', activeBg: 'bg-emerald-500/15 border-emerald-400 text-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.3)]' },
-  { id: 'CARD', label: 'Card & Memory', icon: Layers, color: 'text-amber-400', activeBg: 'bg-amber-500/15 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.3)]' },
+  { id: 'ALL', label: 'All Genres', icon: Sparkles, color: 'text-portal-cyan', activeBg: 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm' },
+  { id: 'UPCOMING', label: 'Upcoming / Soon', icon: Clock, color: 'text-portal-yellow', activeBg: 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm' },
+  { id: 'ARCADE', label: 'Arcade Classics', icon: Gamepad2, color: 'text-portal-cyan', activeBg: 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm' },
+  { id: 'ACTION', label: 'Action & Rush', icon: Zap, color: 'text-portal-pink', activeBg: 'bg-portal-pink text-white border-2 border-black shadow-neo-sm' },
+  { id: 'PUZZLE', label: 'Neural Puzzles', icon: Grid, color: 'text-portal-purple', activeBg: 'bg-portal-purple text-white border-2 border-black shadow-neo-sm' },
+  { id: 'STRATEGY', label: 'Tactical Strategy', icon: Cpu, color: 'text-portal-lime', activeBg: 'bg-portal-lime text-black border-2 border-black shadow-neo-sm' },
+  { id: 'CARD', label: 'Card & Memory', icon: Layers, color: 'text-portal-yellow', activeBg: 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm' },
 ];
 
 export default function Sidebar({
@@ -91,7 +91,7 @@ export default function Sidebar({
       {/* 1. Mobile Backdrop Overlay */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 bg-black/75 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 bg-black/85 backdrop-blur-md z-40 transition-opacity duration-300 lg:hidden ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         aria-hidden="true"
@@ -99,83 +99,83 @@ export default function Sidebar({
 
       {/* 2. Slide Bar Container */}
       <aside
-        className={`fixed lg:sticky top-0 lg:top-[61px] left-0 z-50 lg:z-20 h-full lg:h-[calc(100vh-61px)] w-72 sm:w-80 lg:w-64 shrink-0 bg-portal-bg/95 lg:bg-portal-surface/40 backdrop-blur-2xl lg:backdrop-blur-none border-r border-portal-border flex flex-col justify-between transition-transform duration-300 ease-in-out select-none shadow-2xl lg:shadow-none ${
+        className={`fixed lg:sticky top-0 lg:top-[61px] left-0 z-50 lg:z-20 h-full lg:h-[calc(100vh-61px)] w-72 sm:w-80 lg:w-64 shrink-0 bg-portal-surface border-r-3 lg:border-r-4 border-black flex flex-col justify-between transition-transform duration-300 ease-in-out select-none shadow-neo-lg lg:shadow-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        {/* Top Header of Slide Bar */}
-        <div className="p-4 border-b border-portal-border/60 flex items-center justify-between lg:hidden bg-gradient-to-r from-portal-surface/90 via-slate-900/90 to-portal-bg/90">
+        {/* Top Header of Slide Bar (Mobile Only) */}
+        <div className="p-4 border-b-3 border-black flex items-center justify-between lg:hidden bg-portal-surface">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-portal-neon to-portal-cyan flex items-center justify-center shadow-glow-cyan">
-              <SlidersHorizontal className="w-4 h-4 text-white animate-pulse" />
+            <div className="w-8 h-8 rounded-xl bg-portal-yellow border-2 border-black flex items-center justify-center shadow-neo-sm">
+              <SlidersHorizontal className="w-4 h-4 text-black stroke-[2.5]" />
             </div>
             <div>
-              <span className="font-black text-sm text-white tracking-wide bg-gradient-to-r from-white via-slate-100 to-portal-cyan bg-clip-text text-transparent">PORTAL MENU</span>
-              <p className="text-[10px] text-portal-cyan font-bold">Navigation & Genres</p>
+              <span className="font-black text-sm text-white tracking-wide uppercase">PORTAL MENU</span>
+              <p className="text-[10px] text-portal-yellow font-black uppercase">Navigation & Genres</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl bg-portal-surface border border-portal-border hover:border-portal-cyan text-slate-400 hover:text-white transition-all shadow-sm active:scale-95"
+            className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm transition-all"
             aria-label="Close sidebar"
           >
-            <X className="w-4 h-4 text-portal-cyan" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
 
         {/* Scrollable Navigation Area */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-6 scrollbar-thin scrollbar-thumb-portal-border">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-5 scrollbar-thin scrollbar-thumb-black">
 
           {/* SECTION 1: PRIMARY NAVIGATION TABS */}
           <div>
             <div className="px-2 mb-2 flex items-center justify-between">
               <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
-                <Compass className="w-3 h-3 text-portal-cyan" />
+                <Compass className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
                 EXPLORE
               </span>
               {totalGamesCount > 0 && (
-                <span className="text-[9px] font-black text-portal-cyan bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/30">
+                <span className="text-[9px] font-black text-black bg-portal-cyan px-2 py-0.5 rounded-md border-2 border-black shadow-neo-sm uppercase">
                   {totalGamesCount} Games
                 </span>
               )}
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {/* All Games Tab */}
               <button
                 onClick={() => handleTabClick('all')}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
                   activeTab === 'all'
-                    ? 'bg-portal-card text-portal-cyan border-portal-cyan/50 shadow-glow-cyan/20'
-                    : 'bg-portal-surface/60 text-slate-300 border-portal-border/60 hover:bg-portal-card hover:text-white hover:border-portal-border'
+                    ? 'bg-portal-cyan text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                    : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Sparkles className={`w-4 h-4 shrink-0 ${activeTab === 'all' ? 'text-portal-cyan' : 'text-slate-400'}`} />
+                  <Sparkles className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'all' ? 'text-black' : 'text-portal-cyan'}`} />
                   <span>All Games</span>
                 </div>
-                {activeTab === 'all' && <div className="w-1.5 h-1.5 rounded-full bg-portal-cyan shadow-glow-cyan animate-pulse" />}
+                {activeTab === 'all' && <div className="w-2 h-2 rounded-full bg-black" />}
               </button>
 
               {/* Favorites Tab */}
               <button
                 onClick={() => handleTabClick('favorites')}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
                   activeTab === 'favorites'
-                    ? 'bg-portal-card text-rose-400 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
-                    : 'bg-portal-surface/60 text-slate-300 border-portal-border/60 hover:bg-portal-card hover:text-white hover:border-portal-border'
+                    ? 'bg-portal-pink text-white shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                    : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Heart className={`w-4 h-4 shrink-0 ${favoritesCount > 0 ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
+                  <Heart className={`w-4 h-4 stroke-[2.5] shrink-0 ${favoritesCount > 0 ? 'fill-portal-pink text-portal-pink' : 'text-slate-400'}`} />
                   <span>Favorites</span>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                <span className={`px-2 py-0.5 rounded-md text-[10px] font-black border border-black ${
                   activeTab === 'favorites'
-                    ? 'bg-rose-500 text-black'
+                    ? 'bg-black text-white'
                     : favoritesCount > 0
-                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                    : 'bg-portal-surface text-slate-500'
+                    ? 'bg-portal-pink text-white'
+                    : 'bg-portal-surface text-slate-400'
                 }`}>
                   {favoritesCount}
                 </span>
@@ -187,29 +187,29 @@ export default function Sidebar({
                   onOpenLeaderboard();
                   onClose();
                 }}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-surface/60 text-portal-gold border border-portal-border/60 hover:bg-amber-500/10 hover:border-amber-500/40 hover:text-amber-300 transition-all group"
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-yellow text-portal-yellow hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
               >
                 <div className="flex items-center gap-2.5">
-                  <Trophy className="w-4 h-4 text-portal-gold group-hover:scale-110 transition-transform" />
+                  <Trophy className="w-4 h-4 stroke-[2.5]" />
                   <span>Hall of Fame</span>
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 text-amber-500/70 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
               </button>
 
               {/* About Team Tab */}
               <button
                 onClick={() => handleTabClick('about')}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
                   activeTab === 'about'
-                    ? 'bg-portal-card text-purple-400 border-purple-500/50 shadow-[0_0_15px_rgba(192,132,252,0.2)]'
-                    : 'bg-portal-surface/60 text-slate-300 border-portal-border/60 hover:bg-portal-card hover:text-white hover:border-portal-border'
+                    ? 'bg-portal-purple text-white shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                    : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Users className={`w-4 h-4 shrink-0 ${activeTab === 'about' ? 'text-purple-400' : 'text-slate-400'}`} />
+                  <Users className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'about' ? 'text-white' : 'text-portal-purple'}`} />
                   <span>About Team</span>
                 </div>
-                <span className="text-[9px] font-bold text-purple-400/80 bg-purple-500/10 px-1.5 py-0.5 rounded border border-purple-500/30">
+                <span className="text-[9px] font-black text-white bg-portal-purple px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
                   4 Devs
                 </span>
               </button>
@@ -220,15 +220,15 @@ export default function Sidebar({
           <div>
             <div className="px-2 mb-2 flex items-center justify-between">
               <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
-                <Target className="w-3 h-3 text-purple-400" />
+                <Target className="w-3.5 h-3.5 text-portal-purple stroke-[2.5]" />
                 QUESTS & REWARDS
               </span>
-              <span className="text-[9px] text-purple-400 font-black uppercase bg-purple-500/10 px-1.5 py-0.2 rounded border border-purple-500/30">
+              <span className="text-[9px] text-black font-black uppercase bg-portal-lime px-2 py-0.5 rounded-md border-2 border-black shadow-neo-sm">
                 LIVE
               </span>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {/* Daily Quests Button */}
               {onOpenQuests && (
                 <button
@@ -236,18 +236,18 @@ export default function Sidebar({
                     onOpenQuests();
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-purple-950/40 via-portal-surface/60 to-slate-900/60 text-purple-300 border border-purple-500/40 hover:border-purple-400 hover:text-white hover:shadow-[0_0_15px_rgba(168,85,247,0.25)] transition-all group"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-purple text-slate-200 hover:text-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Target className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                    <Target className="w-4 h-4 text-portal-purple group-hover:text-white stroke-[2.5]" />
                     <span>Daily Quests</span>
                   </div>
                   {unclaimedQuestsCount > 0 ? (
-                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-cyan-400 text-black animate-bounce shadow-glow-cyan">
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-portal-cyan text-black border border-black shadow-neo-sm animate-bounce">
                       {unclaimedQuestsCount} CLAIM
                     </span>
                   ) : (
-                    <span className="text-[9px] font-bold text-purple-400/80 bg-purple-500/15 px-1.5 py-0.2 rounded border border-purple-500/30">
+                    <span className="text-[9px] font-black text-white bg-portal-surface px-1.5 py-0.5 rounded border border-black">
                       3/day
                     </span>
                   )}
@@ -261,13 +261,13 @@ export default function Sidebar({
                     onOpenTrophies();
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-amber-950/30 via-portal-surface/60 to-slate-900/60 text-amber-300 border border-amber-500/40 hover:border-amber-400 hover:text-white hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] transition-all group"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Award className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                    <Award className="w-4 h-4 text-portal-yellow group-hover:text-black stroke-[2.5]" />
                     <span>Trophy Vault</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-amber-500/70 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
                 </button>
               )}
 
@@ -278,13 +278,13 @@ export default function Sidebar({
                     onOpenRoulette();
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-cyan-950/40 via-teal-950/40 to-portal-surface/60 text-portal-cyan border border-cyan-500/40 hover:border-cyan-300 hover:text-white hover:shadow-glow-cyan/30 transition-all group"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-cyan text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Dices className="w-4 h-4 text-portal-cyan group-hover:rotate-180 transition-transform duration-500" />
+                    <Dices className="w-4 h-4 text-portal-cyan group-hover:text-black stroke-[2.5]" />
                     <span>Game Roulette</span>
                   </div>
-                  <span className="px-1.5 py-0.2 rounded text-[8px] font-black uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                  <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase bg-portal-surface text-portal-cyan border border-black">
                     RANDOM
                   </span>
                 </button>
@@ -296,13 +296,13 @@ export default function Sidebar({
           <div>
             <div className="px-2 mb-2 flex items-center justify-between">
               <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
-                <Flame className="w-3 h-3 text-portal-neon" />
+                <Flame className="w-3.5 h-3.5 text-portal-pink stroke-[2.5]" />
                 GENRES & MODES
               </span>
-              <span className="text-[9px] text-slate-500 font-bold uppercase">Filter</span>
+              <span className="text-[9px] text-slate-400 font-black uppercase">Filter</span>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {CATEGORIES.map((cat) => {
                 const IconComponent = cat.icon;
                 const isSelected = selectedCategory === cat.id && activeTab === 'all';
@@ -312,22 +312,22 @@ export default function Sidebar({
                   <button
                     key={cat.id}
                     onClick={() => handleCategoryClick(cat.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-black transition-all border ${
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
                       isSelected
                         ? cat.activeBg
-                        : 'bg-portal-surface/40 text-slate-300 border-portal-border/40 hover:bg-portal-card hover:text-white hover:border-portal-border'
+                        : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <IconComponent className={`w-3.5 h-3.5 shrink-0 ${isSelected ? '' : cat.color}`} />
+                      <IconComponent className={`w-3.5 h-3.5 stroke-[2.5] shrink-0 ${isSelected ? 'text-black' : cat.color}`} />
                       <span className="tracking-wide text-[11px] sm:text-xs">{cat.label}</span>
                     </div>
 
                     {count > 0 && (
-                      <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
+                      <span className={`text-[10px] font-black px-2 py-0.5 rounded-md border border-black ${
                         isSelected
-                          ? 'bg-black/40 text-white'
-                          : 'text-slate-500 bg-portal-bg/60'
+                          ? 'bg-black text-white'
+                          : 'text-slate-300 bg-portal-surface'
                       }`}>
                         {count}
                       </span>
@@ -340,10 +340,10 @@ export default function Sidebar({
         </div>
 
         {/* Bottom Profile Quick Widget */}
-        <div className="p-3 border-t border-portal-border/60 bg-portal-surface/50">
+        <div className="p-3 border-t-3 border-black bg-portal-surface">
           <div
             onClick={onOpenUsernameModal}
-            className="flex items-center justify-between p-2 rounded-xl bg-portal-card border border-portal-border/80 hover:border-portal-cyan/60 cursor-pointer group transition-all"
+            className="flex items-center justify-between p-2.5 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black cursor-pointer group transition-all shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5"
             title="Edit Player Handle"
           >
             <div className="flex items-center gap-2 min-w-0">
@@ -351,20 +351,20 @@ export default function Sidebar({
                 <img
                   src={avatarUrl}
                   alt={playerTag}
-                  className="w-7 h-7 rounded-full bg-slate-800 border border-portal-cyan/50 shrink-0 object-cover"
+                  className="w-7 h-7 rounded-full bg-slate-800 border-2 border-black shrink-0 object-cover shadow-neo-sm"
                 />
               ) : (
-                <div className="w-7 h-7 rounded-full bg-portal-surface border border-portal-cyan/50 flex items-center justify-center shrink-0">
-                  <Gamepad2 className="w-3.5 h-3.5 text-portal-cyan" />
+                <div className="w-7 h-7 rounded-full bg-portal-surface border-2 border-black flex items-center justify-center shrink-0">
+                  <Gamepad2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Player Tag</p>
-                <p className="text-xs font-black text-portal-cyan truncate">{playerTag || 'Set Gamer Tag'}</p>
+                <p className="text-[9px] font-black text-slate-400 group-hover:text-black uppercase tracking-wider">Player Tag</p>
+                <p className="text-xs font-black text-portal-cyan group-hover:text-black truncate uppercase">{playerTag || 'Set Gamer Tag'}</p>
               </div>
             </div>
-            <div className="p-1 rounded-lg bg-portal-surface group-hover:bg-portal-cyan group-hover:text-black text-slate-400 transition-colors">
-              <Edit3 className="w-3 h-3" />
+            <div className="p-1.5 rounded-lg bg-portal-surface group-hover:bg-black group-hover:text-white text-slate-300 border border-black shadow-neo-sm transition-colors">
+              <Edit3 className="w-3 h-3 stroke-[2.5]" />
             </div>
           </div>
         </div>

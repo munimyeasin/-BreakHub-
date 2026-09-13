@@ -76,7 +76,7 @@
       "thumbnail_url": "/thumbnails/cyber-maze.svg",
       "description": "10-Level Cyber Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.",
       "play_count": 0,
-      "rating": 5.0,
+      "rating": 5,
       "rating_count": 42,
       "status": "active",
       "featured": true
@@ -114,7 +114,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Retro-arcade space combat simulator with plasma lasers and drone swarms.",
-      "play_count": 0,
+      "play_count": 1,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",

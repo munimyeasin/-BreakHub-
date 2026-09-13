@@ -25,32 +25,32 @@ const RARITY_COLORS: Record<TrophyRarity, {
   glow: string;
 }> = {
   BRONZE: {
-    border: 'border-amber-700/60 hover:border-amber-600',
-    badge: 'bg-amber-900/40 text-amber-300 border-amber-700/50',
+    border: 'border-2 border-black',
+    badge: 'bg-amber-700 text-white border border-black shadow-neo-sm',
     text: 'text-amber-400',
-    bg: 'from-amber-950/20 via-slate-900/60 to-slate-950/90',
-    glow: 'rgba(217,119,6,0.2)',
+    bg: 'bg-portal-card',
+    glow: 'none',
   },
   SILVER: {
-    border: 'border-slate-400/60 hover:border-slate-300',
-    badge: 'bg-slate-700/40 text-slate-200 border-slate-500/50',
+    border: 'border-2 border-black',
+    badge: 'bg-slate-300 text-black border border-black shadow-neo-sm',
     text: 'text-slate-200',
-    bg: 'from-slate-800/30 via-slate-900/60 to-slate-950/90',
-    glow: 'rgba(203,213,225,0.25)',
+    bg: 'bg-portal-card',
+    glow: 'none',
   },
   GOLD: {
-    border: 'border-yellow-500/60 hover:border-yellow-400',
-    badge: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50',
-    text: 'text-yellow-400',
-    bg: 'from-yellow-950/25 via-slate-900/60 to-slate-950/90',
-    glow: 'rgba(234,179,8,0.35)',
+    border: 'border-3 border-black',
+    badge: 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm',
+    text: 'text-portal-yellow',
+    bg: 'bg-portal-card',
+    glow: 'none',
   },
   PLATINUM: {
-    border: 'border-cyan-400/80 hover:border-cyan-300',
-    badge: 'bg-cyan-500/25 text-cyan-200 border-cyan-400/60 shadow-glow-cyan',
+    border: 'border-3 border-black',
+    badge: 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm',
     text: 'text-portal-cyan',
-    bg: 'from-cyan-950/35 via-purple-950/30 to-slate-950/90',
-    glow: 'rgba(6,182,212,0.45)',
+    bg: 'bg-portal-card',
+    glow: 'none',
   },
 };
 
@@ -86,49 +86,52 @@ export default function TrophyRoomModal({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-gradient-to-b from-slate-900 via-portal-bg to-slate-950 border border-amber-500/40 rounded-3xl shadow-[0_0_50px_rgba(245,158,11,0.2)] overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="relative w-full max-w-2xl bg-portal-surface border-4 border-black rounded-2xl sm:rounded-3xl shadow-neo-lg overflow-hidden flex flex-col max-h-[92vh]">
+
+        {/* Top Decorative Accent Bar */}
+        <div className="h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black shrink-0" />
 
         {/* Modal Top Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-portal-border bg-portal-surface/90">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b-3 border-black bg-portal-surface shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black shadow-glow-gold">
-              <Trophy className="w-5 h-5 fill-black" />
+            <div className="w-10 h-10 rounded-xl bg-portal-yellow border-2 border-black flex items-center justify-center text-black shadow-neo-sm shrink-0">
+              <Trophy className="w-5 h-5 fill-black stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-black text-base sm:text-lg text-white tracking-wide">
+                <h3 className="font-black text-base sm:text-lg text-white tracking-tight uppercase">
                   HOLOGRAPHIC TROPHY VAULT
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
                   {unlockedCount}/{totalTrophies} UNLOCKED
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-semibold mt-0.5">
-                Current Rank: <span className="text-portal-cyan font-bold">{levelInfo.title}</span> (LVL {levelInfo.level})
+              <p className="text-[11px] text-slate-300 font-bold mt-0.5">
+                Current Rank: <span className="text-portal-cyan font-black">{levelInfo.title}</span> (LVL {levelInfo.level})
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-portal-card text-slate-400 hover:text-white border border-portal-border hover:border-amber-400 transition-all active:scale-95"
+            className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
             aria-label="Close modal"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
 
         {/* Master Progress Strip */}
-        <div className="px-5 py-3 bg-gradient-to-r from-portal-card/90 via-slate-900/90 to-portal-surface/90 border-b border-portal-border/60 flex items-center justify-between gap-4">
+        <div className="px-4 sm:px-6 py-2.5 sm:py-3 bg-portal-card border-b-3 border-black flex items-center justify-between gap-4 shrink-0">
           <div className="flex-1">
-            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">
+            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-slate-200 mb-1">
               <span>Vault Completion</span>
-              <span className="text-amber-400 font-bold">{completionPercentage}%</span>
+              <span className="text-portal-yellow font-black">{completionPercentage}%</span>
             </div>
-            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+            <div className="w-full h-2.5 bg-black rounded-md overflow-hidden border-2 border-black">
               <div
-                className="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-portal-cyan rounded-full transition-all duration-500 shadow-glow-gold"
+                className="h-full bg-portal-yellow border-r-2 border-black transition-all duration-500"
                 style={{ width: `${completionPercentage}%` }}
               />
             </div>
@@ -136,14 +139,14 @@ export default function TrophyRoomModal({
 
           <div className="flex items-center gap-2 shrink-0">
             <div className="text-right">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Total XP</span>
-              <span className="text-xs font-black text-portal-cyan">{state.xp} XP</span>
+              <span className="text-[9px] font-black text-slate-300 uppercase tracking-wider block">Total XP</span>
+              <span className="text-xs font-black text-portal-cyan bg-portal-surface px-2 py-0.5 rounded border border-black">{state.xp} XP</span>
             </div>
           </div>
         </div>
 
         {/* Rarity Filter Tabs */}
-        <div className="px-5 py-2.5 bg-slate-950/60 border-b border-portal-border/40 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+        <div className="px-4 sm:px-6 py-2 bg-portal-surface border-b-3 border-black flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
           {['ALL', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM'].map((rarity) => {
             const isSelected = selectedRarity === rarity;
             const count = rarity === 'ALL'
@@ -154,21 +157,21 @@ export default function TrophyRoomModal({
               <button
                 key={rarity}
                 onClick={() => setSelectedRarity(rarity)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all whitespace-nowrap border ${
+                className={`px-3 py-1 rounded-xl text-xs font-black tracking-wider uppercase transition-all whitespace-nowrap border-2 border-black ${
                   isSelected
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-400/80 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                    : 'bg-portal-surface/40 text-slate-400 border-portal-border/60 hover:text-white hover:border-slate-600'
+                    ? 'bg-portal-yellow text-black shadow-neo-sm'
+                    : 'bg-portal-card text-slate-300 hover:bg-slate-800 hover:text-white'
                 }`}
               >
                 <span>{rarity}</span>
-                <span className="ml-1 text-[10px] opacity-70">({count})</span>
+                <span className="ml-1 text-[10px] opacity-80">({count})</span>
               </button>
             );
           })}
         </div>
 
         {/* Trophy Grid */}
-        <div className="p-4 sm:p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-3 scrollbar-thin scrollbar-thumb-portal-border">
+        <div className="p-3.5 sm:p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filteredTrophies.map((trophy) => {
             const isUnlocked = Boolean(state.unlockedTrophies[trophy.id]);
             const unlockedData = state.unlockedTrophies[trophy.id];
@@ -177,27 +180,23 @@ export default function TrophyRoomModal({
             return (
               <div
                 key={trophy.id}
-                className={`relative p-3.5 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${
+                className={`relative p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 border-black shadow-neo-sm transition-all duration-200 flex flex-col justify-between ${
                   isUnlocked
-                    ? `bg-gradient-to-br ${rarityStyle.bg} ${rarityStyle.border} shadow-[0_0_20px_${rarityStyle.glow}]`
-                    : 'bg-portal-surface/40 border-slate-800/80 opacity-55 hover:opacity-75'
+                    ? 'bg-portal-card'
+                    : 'bg-portal-card/50 opacity-50 grayscale'
                 }`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <span className={`text-2xl p-1.5 rounded-xl border ${
-                        isUnlocked
-                          ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
-                          : 'bg-slate-900/60 border-slate-800 grayscale'
-                      }`}>
+                      <span className="text-2xl p-1.5 rounded-xl border-2 border-black bg-portal-surface shadow-neo-sm">
                         {trophy.icon}
                       </span>
                       <div>
-                        <h4 className={`text-xs sm:text-sm font-black leading-tight ${isUnlocked ? 'text-white' : 'text-slate-400'}`}>
+                        <h4 className="text-xs sm:text-sm font-black text-white leading-tight uppercase">
                           {trophy.title}
                         </h4>
-                        <span className={`inline-block px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider mt-0.5 border ${rarityStyle.badge}`}>
+                        <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider mt-0.5 ${rarityStyle.badge}`}>
                           {trophy.rarity}
                         </span>
                       </div>
@@ -205,32 +204,32 @@ export default function TrophyRoomModal({
 
                     <div className="shrink-0">
                       {isUnlocked ? (
-                        <div className="flex items-center gap-1 text-emerald-400 text-[10px] font-black bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/30">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-black text-[10px] font-black bg-portal-lime px-2 py-0.5 rounded-md border border-black shadow-neo-sm">
+                          <CheckCircle2 className="w-3 h-3 stroke-[2.5]" />
                           <span>Unlocked</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-slate-500 text-[10px] font-bold bg-slate-800/60 px-2 py-0.5 rounded-lg border border-slate-700">
-                          <Lock className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-slate-300 text-[10px] font-black bg-portal-surface px-2 py-0.5 rounded-md border border-black">
+                          <Lock className="w-3 h-3 stroke-[2.5]" />
                           <span>Locked</span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <p className="text-[11px] text-slate-300 mt-2.5 leading-snug">
+                  <p className="text-[11px] text-slate-300 font-bold mt-2.5 leading-snug">
                     {trophy.description}
                   </p>
                 </div>
 
-                <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px]">
-                  <span className="font-extrabold text-amber-400 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-portal-cyan" />
+                <div className="mt-3 pt-2.5 border-t-2 border-black flex items-center justify-between text-[10px]">
+                  <span className="font-black text-portal-yellow flex items-center gap-1 uppercase">
+                    <Sparkles className="w-3 h-3 text-portal-yellow stroke-[2.5]" />
                     +{trophy.xpReward} XP Reward
                   </span>
 
                   {isUnlocked && unlockedData?.unlockedAt && (
-                    <span className="text-slate-400 font-mono text-[9px]">
+                    <span className="text-slate-300 font-black text-[9px] uppercase">
                       {new Date(unlockedData.unlockedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                     </span>
                   )}
@@ -241,20 +240,20 @@ export default function TrophyRoomModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t border-portal-border/80 bg-portal-surface/60 flex items-center justify-between gap-3">
+        <div className="p-3.5 sm:p-4 border-t-3 border-black bg-portal-surface flex items-center justify-between gap-3 shrink-0">
           <button
             onClick={() => {
               onClose();
               onOpenQuests?.();
             }}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-black uppercase text-slate-300 hover:text-portal-yellow transition-colors"
           >
             <span>← View Daily Quests</span>
           </button>
 
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-portal-card border border-portal-border hover:border-amber-400 text-white text-xs font-black transition-all active:scale-95"
+            className="px-4 py-2 rounded-xl bg-portal-card hover:bg-portal-yellow hover:text-black border-2 border-black text-white text-xs font-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 uppercase tracking-wider"
           >
             CLOSE VAULT
           </button>
