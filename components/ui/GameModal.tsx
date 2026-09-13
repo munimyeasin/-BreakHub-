@@ -15,6 +15,7 @@ import GeometryDashGame from '@/components/games/GeometryDashGame';
 import CyberSlicerGame from '@/components/games/CyberSlicerGame';
 import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
 import CyberDriftGame from '@/components/games/CyberDriftGame';
+import CyberMazeGame from '@/components/games/CyberMazeGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -324,6 +325,10 @@ export default function GameModal({
 
           {(game.id === 'g_drift_14' || game.slug === 'cyber-drift') && (
             <CyberDriftGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_maze_15' || game.slug === 'cyber-maze') && (
+            <CyberMazeGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
         </div>
       </div>

@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_maze_15',
+    slug: 'cyber-maze',
+    title: 'Cyber Maze Escape',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/cyber-maze.svg',
+    description: '10-Level Cyber Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 42,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_drift_14',
     slug: 'cyber-drift',
     title: 'Cyber Drift 2077',
@@ -9,8 +22,9 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-drift.svg',
     description: 'High-speed 2D infinite cyber drift racer! Execute counter-steered slides, clip apex beacons, trigger nitro boost, and chain 10X drift combos.',
     play_count: 0,
-    hype_count: 0,
-    status: 'coming_soon',
+    rating: 4.9,
+    rating_count: 24,
+    status: 'active',
     featured: true
   },
   {

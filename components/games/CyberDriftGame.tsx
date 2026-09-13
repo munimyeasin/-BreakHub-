@@ -17,7 +17,12 @@ import {
   Tv,
   AlertCircle,
   HelpCircle,
-  Crosshair
+  Crosshair,
+  Flag,
+  Timer,
+  Infinity as InfinityIcon,
+  Award,
+  CheckCircle2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -26,10 +31,38 @@ interface CyberDriftGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
+export type TrackMode = 'circuit' | 'infinite';
+
 const CANVAS_WIDTH = 360; // 9:16 Vertical Portrait Ratio (360x640)
 const CANVAS_HEIGHT = 640;
 const ROAD_HALF_WIDTH = 72; // Road total width ~ 144px
 const SEGMENT_LENGTH = 32; // Distance between road spine nodes
+const TOTAL_CIRCUIT_LAPS = 3; // 3 Laps for Grand Prix Circuit
+
+// Handcrafted Cyber Ring GP Grand Prix Circuit Waypoints
+const CIRCUIT_WAYPOINTS = [
+  { x: 0, y: 0 },          // Start/Finish Line (Grid Straight)
+  { x: 0, y: -450 },       // Main Straightaway End / Turn 1 Braking Zone
+  { x: 60, y: -660 },      // Turn 1 Entry (Right)
+  { x: 240, y: -800 },     // Turn 1 Apex (High-Speed Sweeper)
+  { x: 440, y: -740 },     // Turn 2 Apex / Exit
+  { x: 560, y: -540 },     // East Straight Entry
+  { x: 580, y: -340 },     // East Straight Mid
+  { x: 480, y: -180 },     // Cyber Esse 1 (Left Apex)
+  { x: 590, y: 0 },        // Cyber Esse 2 (Right Apex)
+  { x: 640, y: 220 },      // South-East Sweeper Entry
+  { x: 540, y: 440 },      // South-East Sweeper Apex
+  { x: 340, y: 540 },      // South Straight Speed Trap
+  { x: 140, y: 540 },      // South Straight / Hairpin Braking Zone
+  { x: -100, y: 460 },     // Omega Hairpin Entry
+  { x: -220, y: 300 },     // Omega Hairpin Mid (180° Left Drift)
+  { x: -240, y: 80 },      // Omega Hairpin Exit
+  { x: -180, y: -120 },    // West Chicane Entry (Left)
+  { x: -240, y: -280 },    // West Chicane Exit (Right)
+  { x: -180, y: -440 },    // Final Turn Entry
+  { x: -70, y: -260 },     // Final Turn Apex into Pit Straight
+  { x: 0, y: -90 },        // Straight Alignment onto Grid
+];
 
 // Available Cyber Cars
 export interface CyberCarConfig {
@@ -176,8 +209,14 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // React UI States
+  const [trackMode, setTrackMode] = useState<TrackMode>('circuit');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDead, setIsDead] = useState(false);
+  const [isRaceFinished, setIsRaceFinished] = useState(false);
+  const [currentLap, setCurrentLap] = useState(1);
+  const [lapTimer, setLapTimer] = useState(0);
+  const [bestLapTime, setBestLapTime] = useState<number | null>(null);
+  const [lapTimes, setLapTimes] = useState<number[]>([]);
   const [score, setScore] = useState(0);
   const [speedKmh, setSpeedKmh] = useState(0);
   const [displayMultiplier, setDisplayMultiplier] = useState(1);
@@ -194,11 +233,20 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     distance: 0,
     maxCombo: 1,
     apexClips: 0,
-    longestDrift: 0
+    longestDrift: 0,
+    totalRaceTime: 0
   });
 
   // Hot Loop Refs (Zero React Reconciliation Overhead)
+  const trackModeRef = useRef<TrackMode>('circuit');
   const isPlayingRef = useRef(false);
+  const isRaceFinishedRef = useRef(false);
+  const currentLapRef = useRef(1);
+  const currentLapTimeRef = useRef(0);
+  const bestLapTimeRef = useRef<number | null>(null);
+  const lapTimesRef = useRef<number[]>([]);
+  const checkpointsHitRef = useRef<number[]>([0]); // Sector tracking
+  const totalCheckpointsRef = useRef(4); // 4 sectors around circuit
   const soundEnabledRef = useRef(true);
   const onGameOverRef = useRef(onGameOver);
   const selectedCarRef = useRef<CyberCarConfig>(CARS[0]);
@@ -275,11 +323,16 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
   // Idle Screen Demo Animation State
   const demoAngleRef = useRef(0);
+  const lastClosestIndexRef = useRef(0);
 
   // Synchronize state changes with refs
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
   }, [soundEnabled]);
+
+  useEffect(() => {
+    trackModeRef.current = trackMode;
+  }, [trackMode]);
 
   useEffect(() => {
     onGameOverRef.current = onGameOver;
@@ -288,6 +341,13 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
   useEffect(() => {
     selectedCarRef.current = CARS[selectedCarIndex] || CARS[0];
   }, [selectedCarIndex]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    const ms = Math.floor((seconds * 100) % 100);
+    return `${m}:${s < 10 ? '0' : ''}${s}.${ms < 10 ? '0' : ''}${ms}`;
+  };
 
   // ==========================================
   // PROCEDURAL WEB AUDIO SYNTHESIZER
@@ -344,7 +404,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     } catch {}
   }, []);
 
-  const playSfx = useCallback((type: 'apex' | 'chip' | 'nitro' | 'turbo' | 'bank' | 'crash' | 'hit') => {
+  const playSfx = useCallback((type: 'apex' | 'chip' | 'nitro' | 'turbo' | 'bank' | 'crash' | 'hit' | 'checkpoint' | 'lap' | 'victory') => {
     if (!soundEnabledRef.current) return;
     initAudio();
     const ctx = audioCtxRef.current;
@@ -451,9 +511,193 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.11);
+      } else if (type === 'checkpoint') {
+        // Futuristic dual-tone checkpoint pass chime
+        const notes = [587.33, 880];
+        notes.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + i * 0.06);
+          gain.gain.setValueAtTime(0.14, now + i * 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.06);
+          osc.stop(now + i * 0.06 + 0.22);
+        });
+      } else if (type === 'lap') {
+        // Triumphant 4-note ascending lap completion fanfare
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.07);
+          gain.gain.setValueAtTime(0.16, now + i * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.07);
+          osc.stop(now + i * 0.07 + 0.32);
+        });
+      } else if (type === 'victory') {
+        // Grand Prix Championship Grand Fanfare
+        const chords = [
+          [523.25, 659.25, 783.99],
+          [587.33, 739.99, 880],
+          [659.25, 830.61, 987.77],
+          [783.99, 987.77, 1174.66, 1567.98]
+        ];
+        chords.forEach((chord, step) => {
+          chord.forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + step * 0.12);
+            gain.gain.setValueAtTime(0.12, now + step * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + step * 0.12 + 0.45);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + step * 0.12);
+            osc.stop(now + step * 0.12 + 0.48);
+          });
+        });
       }
     } catch {}
   }, [initAudio]);
+
+  // ==========================================
+  // FIXED CLOSED-CIRCUIT GRAND PRIX GENERATOR
+  // ==========================================
+  const generateFixedCircuitTrack = useCallback(() => {
+    const rawPoints: { x: number; y: number }[] = [];
+    const points: RoadPoint[] = [];
+    const objects: TrackObject[] = [];
+    nextObjectIdRef.current = 1;
+
+    const M = CIRCUIT_WAYPOINTS.length;
+
+    // Sample closed Catmull-Rom spline around all waypoints
+    for (let i = 0; i < M; i++) {
+      const p0 = CIRCUIT_WAYPOINTS[(i - 1 + M) % M];
+      const p1 = CIRCUIT_WAYPOINTS[i];
+      const p2 = CIRCUIT_WAYPOINTS[(i + 1) % M];
+      const p3 = CIRCUIT_WAYPOINTS[(i + 2) % M];
+
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const dist = Math.hypot(dx, dy);
+      const steps = Math.max(3, Math.round(dist / SEGMENT_LENGTH));
+
+      for (let s = 0; s < steps; s++) {
+        const t = s / steps;
+        const t2 = t * t;
+        const t3 = t2 * t;
+
+        // Catmull-Rom Spline Formula
+        const x = 0.5 * (
+          2 * p1.x +
+          (-p0.x + p2.x) * t +
+          (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+          (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3
+        );
+        const y = 0.5 * (
+          2 * p1.y +
+          (-p0.y + p2.y) * t +
+          (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+          (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3
+        );
+
+        rawPoints.push({ x, y });
+      }
+    }
+
+    const N = rawPoints.length;
+
+    // Convert raw points to road points with seamless tangent angles
+    for (let i = 0; i < N; i++) {
+      const p = rawPoints[i];
+      const nextP = rawPoints[(i + 1) % N];
+      const prevP = rawPoints[(i - 1 + N) % N];
+
+      // Central difference for smoother heading tangent
+      const headingAngle = Math.atan2(nextP.y - prevP.y, nextP.x - prevP.x);
+
+      // Estimate curvature from angle delta
+      const nextAngle = Math.atan2(rawPoints[(i + 2) % N].y - p.y, rawPoints[(i + 2) % N].x - p.x);
+      let angleDiff = nextAngle - headingAngle;
+      while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+      while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+
+      let curveType: RoadPoint['curveType'] = 'straight';
+      if (Math.abs(angleDiff) > 0.07) {
+        curveType = angleDiff > 0 ? 'right' : 'left';
+      }
+
+      points.push({
+        x: p.x,
+        y: p.y,
+        angle: headingAngle,
+        width: ROAD_HALF_WIDTH * 2,
+        curveType
+      });
+    }
+
+    // Place Track Objects for Circuit Mode
+    for (let i = 0; i < N; i++) {
+      const pt = points[i];
+      const normalAngle = pt.angle + Math.PI / 2;
+
+      // Speed Boost Pads on straightaways
+      if ((i === 6 || i === Math.floor(N * 0.28) || i === Math.floor(N * 0.56)) && i < N) {
+        objects.push({
+          id: nextObjectIdRef.current++,
+          x: pt.x,
+          y: pt.y,
+          type: 'boost_pad',
+          radius: 16,
+          active: true,
+          pulse: 0,
+          points: 200
+        });
+      }
+
+      // Apex Clipping Beacons on sharp corners
+      if (pt.curveType !== 'straight' && i % 8 === 0) {
+        const isLeft = pt.curveType.includes('left');
+        const apexOffset = (isLeft ? -1 : 1) * (ROAD_HALF_WIDTH - 14);
+        objects.push({
+          id: nextObjectIdRef.current++,
+          x: pt.x + Math.cos(normalAngle) * apexOffset,
+          y: pt.y + Math.sin(normalAngle) * apexOffset,
+          type: 'apex_pole',
+          radius: 12,
+          active: true,
+          pulse: 0,
+          points: 500
+        });
+      }
+
+      // Quantum Energy Chips along racing line
+      if (i % 3 === 0 && i !== 0 && i !== Math.floor(N * 0.25) && i !== Math.floor(N * 0.5) && i !== Math.floor(N * 0.75)) {
+        const lateralScatter = ((i % 5) - 2) * (ROAD_HALF_WIDTH * 0.25);
+        objects.push({
+          id: nextObjectIdRef.current++,
+          x: pt.x + Math.cos(normalAngle) * lateralScatter,
+          y: pt.y + Math.sin(normalAngle) * lateralScatter,
+          type: 'energy_chip',
+          radius: 8,
+          active: true,
+          pulse: 0,
+          points: 100
+        });
+      }
+    }
+
+    roadPointsRef.current = points;
+    trackObjectsRef.current = objects;
+  }, []);
 
   // ==========================================
   // PROCEDURAL TRACK GENERATOR
@@ -498,7 +742,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     trackObjectsRef.current = objects;
 
     // Append future procedural chunks ahead
-    appendProceduralTrackSegments(30);
+    appendProceduralTrackSegments(40);
   }, []);
 
   const appendProceduralTrackSegments = (count: number) => {
@@ -510,28 +754,42 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     let currentY = lastPoint.y;
     let currentAngle = lastPoint.angle;
 
-    const curvePatterns: Array<{
+    const allPatterns: Array<{
       type: RoadPoint['curveType'];
       segments: number;
       deltaAngle: number;
       hasApex: boolean;
       hasBoost: boolean;
     }> = [
-      { type: 'straight', segments: 8, deltaAngle: 0, hasApex: false, hasBoost: true },
-      { type: 'left', segments: 10, deltaAngle: -0.08, hasApex: true, hasBoost: false },
-      { type: 'right', segments: 10, deltaAngle: 0.08, hasApex: true, hasBoost: false },
-      { type: 'hairpin_left', segments: 12, deltaAngle: -0.13, hasApex: true, hasBoost: false },
-      { type: 'hairpin_right', segments: 12, deltaAngle: 0.13, hasApex: true, hasBoost: false },
-      { type: 'chicane', segments: 14, deltaAngle: 0.07, hasApex: true, hasBoost: false }
+      { type: 'straight', segments: 9, deltaAngle: 0, hasApex: false, hasBoost: true },
+      { type: 'left', segments: 10, deltaAngle: -0.075, hasApex: true, hasBoost: false },
+      { type: 'right', segments: 10, deltaAngle: 0.075, hasApex: true, hasBoost: false },
+      { type: 'hairpin_left', segments: 12, deltaAngle: -0.12, hasApex: true, hasBoost: false },
+      { type: 'hairpin_right', segments: 12, deltaAngle: 0.12, hasApex: true, hasBoost: false },
+      { type: 'chicane', segments: 14, deltaAngle: 0.065, hasApex: true, hasBoost: false }
     ];
 
     let chunksAdded = 0;
     while (chunksAdded < count) {
-      const pattern = curvePatterns[Math.floor(Math.random() * curvePatterns.length)];
+      // Heading deviation balancing relative to north (-PI/2)
+      let headingDev = currentAngle - (-Math.PI / 2);
+      while (headingDev > Math.PI) headingDev -= Math.PI * 2;
+      while (headingDev < -Math.PI) headingDev += Math.PI * 2;
+
+      let availablePatterns = [...allPatterns];
+      if (headingDev > 0.85) {
+        // Veering too far right -> steer back left
+        availablePatterns = allPatterns.filter((p) => p.type.includes('left') || p.type === 'straight' || p.type === 'chicane');
+      } else if (headingDev < -0.85) {
+        // Veering too far left -> steer back right
+        availablePatterns = allPatterns.filter((p) => p.type.includes('right') || p.type === 'straight' || p.type === 'chicane');
+      }
+
+      const pattern = availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
 
       let patternDeltaAngle = pattern.deltaAngle;
       if (pattern.type === 'chicane') {
-        patternDeltaAngle = (Math.random() > 0.5 ? 1 : -1) * 0.08;
+        patternDeltaAngle = (headingDev > 0 ? -1 : 1) * 0.07;
       }
 
       const startIndex = points.length;
@@ -680,6 +938,8 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     setIsPlaying(true);
     isPlayingRef.current = true;
     setIsDead(false);
+    setIsRaceFinished(false);
+    isRaceFinishedRef.current = false;
     setHasRevived(false);
     setAdNotice(null);
 
@@ -693,7 +953,20 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     totalDistanceRef.current = 0;
     setNitroFuel(100);
 
-    generateInitialTrack();
+    setCurrentLap(1);
+    currentLapRef.current = 1;
+    setLapTimer(0);
+    currentLapTimeRef.current = 0;
+    setLapTimes([]);
+    lapTimesRef.current = [];
+    checkpointsHitRef.current = [0];
+
+    if (trackModeRef.current === 'circuit') {
+      generateFixedCircuitTrack();
+    } else {
+      generateInitialTrack();
+    }
+    lastClosestIndexRef.current = 0;
 
     const firstPt = roadPointsRef.current[0];
     const initialHeading = firstPt.angle;
@@ -812,10 +1085,11 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
-    // Mathematically robust segment projection onto track spine
+    // Mathematically robust segment projection onto track spine with local window tracking
     const projectOntoTrack = (px: number, py: number) => {
       const pts = roadPointsRef.current;
-      if (pts.length < 2) {
+      const N = pts.length;
+      if (N < 2) {
         return {
           projX: px,
           projY: py,
@@ -826,47 +1100,98 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       }
 
       let minDistanceSq = Infinity;
-      let closestIdx = 0;
+      let closestIdx = lastClosestIndexRef.current;
       let bestProjX = px;
       let bestProjY = py;
       let bestAngle = pts[0].angle;
       let bestLateral = 0;
 
-      for (let i = 0; i < pts.length - 1; i++) {
-        const p1 = pts[i];
-        const p2 = pts[i + 1];
+      const isCircuit = trackModeRef.current === 'circuit';
 
-        const segX = p2.x - p1.x;
-        const segY = p2.y - p1.y;
-        const segLenSq = segX * segX + segY * segY;
+      if (isCircuit) {
+        // Circular Modulo search window around previous index to maintain continuous closed-loop tracking
+        const centerIdx = lastClosestIndexRef.current;
+        const searchRange = Math.min(32, Math.floor(N / 2));
 
-        if (segLenSq < 0.0001) continue;
+        for (let step = -searchRange; step <= searchRange; step++) {
+          const i = ((centerIdx + step) % N + N) % N;
+          const nextI = (i + 1) % N;
+          const p1 = pts[i];
+          const p2 = pts[nextI];
 
-        // Vector p1 -> P
-        const apX = px - p1.x;
-        const apY = py - p1.y;
+          const segX = p2.x - p1.x;
+          const segY = p2.y - p1.y;
+          const segLenSq = segX * segX + segY * segY;
+          if (segLenSq < 0.0001) continue;
 
-        // Clamped projection parameter t in [0, 1]
-        const t = Math.max(0, Math.min(1, (apX * segX + apY * segY) / segLenSq));
-        const projX = p1.x + t * segX;
-        const projY = p1.y + t * segY;
+          // Vector p1 -> P
+          const apX = px - p1.x;
+          const apY = py - p1.y;
 
-        const distSq = (px - projX) * (px - projX) + (py - projY) * (py - projY);
-        if (distSq < minDistanceSq) {
-          minDistanceSq = distSq;
-          closestIdx = i;
-          bestProjX = projX;
-          bestProjY = projY;
+          // Clamped projection parameter t in [0, 1]
+          const t = Math.max(0, Math.min(1, (apX * segX + apY * segY) / segLenSq));
+          const projX = p1.x + t * segX;
+          const projY = p1.y + t * segY;
 
-          // Segment tangent angle
-          bestAngle = Math.atan2(segY, segX);
+          const distSq = (px - projX) * (px - projX) + (py - projY) * (py - projY);
+          if (distSq < minDistanceSq) {
+            minDistanceSq = distSq;
+            closestIdx = i;
+            bestProjX = projX;
+            bestProjY = projY;
 
-          // Normal vector (-sin, cos)
-          const normalX = -Math.sin(bestAngle);
-          const normalY = Math.cos(bestAngle);
-          bestLateral = (px - projX) * normalX + (py - projY) * normalY;
+            // Segment tangent angle
+            bestAngle = Math.atan2(segY, segX);
+
+            // Normal vector (-sin, cos)
+            const normalX = -Math.sin(bestAngle);
+            const normalY = Math.cos(bestAngle);
+            bestLateral = (px - projX) * normalX + (py - projY) * normalY;
+          }
+        }
+      } else {
+        // Monotonic forward search window for infinite procedural highway
+        const centerIdx = Math.min(N - 2, Math.max(0, lastClosestIndexRef.current));
+        const searchStart = Math.max(0, centerIdx - 8);
+        const searchEnd = Math.min(N - 1, centerIdx + 32);
+
+        for (let i = searchStart; i < searchEnd; i++) {
+          const p1 = pts[i];
+          const p2 = pts[i + 1];
+
+          const segX = p2.x - p1.x;
+          const segY = p2.y - p1.y;
+          const segLenSq = segX * segX + segY * segY;
+          if (segLenSq < 0.0001) continue;
+
+          // Vector p1 -> P
+          const apX = px - p1.x;
+          const apY = py - p1.y;
+
+          // Clamped projection parameter t in [0, 1]
+          const t = Math.max(0, Math.min(1, (apX * segX + apY * segY) / segLenSq));
+          const projX = p1.x + t * segX;
+          const projY = p1.y + t * segY;
+
+          const distSq = (px - projX) * (px - projX) + (py - projY) * (py - projY);
+          if (distSq < minDistanceSq) {
+            minDistanceSq = distSq;
+            closestIdx = i;
+            bestProjX = projX;
+            bestProjY = projY;
+
+            // Segment tangent angle
+            bestAngle = Math.atan2(segY, segX);
+
+            // Normal vector (-sin, cos)
+            const normalX = -Math.sin(bestAngle);
+            const normalY = Math.cos(bestAngle);
+            bestLateral = (px - projX) * normalX + (py - projY) * normalY;
+          }
         }
       }
+
+      lastClosestIndexRef.current = closestIdx;
 
       return {
         projX: bestProjX,
@@ -982,9 +1307,10 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       if (keys.right) steerInput += 1;
       if (touchSteerRef.current !== 0) steerInput = touchSteerRef.current;
 
-      const isHandbrake = keys.down || keys.handbrake || touchHandbrakeRef.current;
+      const isHandbrake = keys.handbrake || touchHandbrakeRef.current;
       const isNitro = (keys.nitro || touchNitroRef.current) && state.nitroAmount > 0;
       const isGas = keys.up;
+      const isBrake = keys.down;
 
       // Smooth Steer Angle interpolation with frameScale
       const targetSteer = steerInput * car.handling;
@@ -1015,13 +1341,16 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       let vLat = state.vx * rightX + state.vy * rightY;
 
       // Accelerate forward if below top speed
-      if (vLong < currentTopSpeed) {
+      if (isGas && vLong < currentTopSpeed) {
         vLong += accelForce;
+      } else if (!isGas && !isBrake && !isHandbrake && vLong < car.topSpeed * 0.75) {
+        // Cruise throttle so the player stays in motion smoothly
+        vLong += car.accel * 0.6 * frameScale;
       }
 
-      // Brake / Reverse
-      if (keys.down && !isHandbrake) {
-        vLong = Math.max(-2.0, vLong - car.accel * 1.5 * frameScale);
+      // Brake / Deceleration
+      if (isBrake) {
+        vLong = Math.max(-2.5, vLong - car.accel * 1.8 * frameScale);
       }
 
       const currentSpeed = Math.sqrt(state.vx * state.vx + state.vy * state.vy);
@@ -1046,8 +1375,10 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       }
 
       // Counter-steering torque physics: turning into the slide stabilizes and extends drift!
-      const counterSteerBonus = steerInput * -Math.sign(vLat) > 0 ? 1.3 : 1.0;
-      state.heading += state.steerAngle * (currentSpeed / car.topSpeed) * counterSteerBonus * frameScale;
+      const isCounterSteer = steerInput * -Math.sign(vLat) > 0;
+      const counterSteerBonus = isCounterSteer ? 1.35 : 1.0;
+      const speedFactor = Math.min(1.2, currentSpeed / (car.topSpeed * 0.75));
+      state.heading += state.steerAngle * speedFactor * counterSteerBonus * frameScale;
 
       // Apply rolling resistance and lateral grip decay
       const longDecay = Math.pow(0.992, frameScale);
@@ -1169,45 +1500,154 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       setSpeedKmh(Math.floor(currentSpeed * 22));
 
       // ==========================================
-      // D. TRACK COLLISION & ROAD BOUNDARY CHECK
+      // D. TRACK COLLISION, PROGRESSION & CIRCUIT LAPS
       // ==========================================
       const trackProj = projectOntoTrack(state.x, state.y);
       const maxAllowedLateral = ROAD_HALF_WIDTH - 10;
+      const pts = roadPointsRef.current;
+      const isCircuit = trackModeRef.current === 'circuit';
 
-      // If close to the end of generated road, append more procedural chunks!
-      if (roadPointsRef.current.length - trackProj.closestIndex < 20) {
-        appendProceduralTrackSegments(20);
+      if (isCircuit) {
+        // Circuit Mode: Track Lap Timer & Sector Checkpoints
+        currentLapTimeRef.current += dt;
+        setLapTimer(currentLapTimeRef.current);
+
+        const currentIdx = trackProj.closestIndex;
+        const totalPoints = pts.length;
+        const sec1Idx = Math.floor(totalPoints * 0.25);
+        const sec2Idx = Math.floor(totalPoints * 0.50);
+        const sec3Idx = Math.floor(totalPoints * 0.75);
+
+        // Checkpoint 1 (25% track)
+        if (currentIdx >= sec1Idx && currentIdx < sec1Idx + 15 && !checkpointsHitRef.current.includes(1)) {
+          checkpointsHitRef.current.push(1);
+          playSfx('checkpoint');
+          addFloatingText(state.x, state.y - 25, 'SECTOR 1 CLEAR', '#00F0FF', 1.1);
+        }
+        // Checkpoint 2 (50% track)
+        if (currentIdx >= sec2Idx && currentIdx < sec2Idx + 15 && !checkpointsHitRef.current.includes(2)) {
+          checkpointsHitRef.current.push(2);
+          playSfx('checkpoint');
+          addFloatingText(state.x, state.y - 25, 'SECTOR 2 CLEAR', '#39FF14', 1.1);
+        }
+        // Checkpoint 3 (75% track)
+        if (currentIdx >= sec3Idx && currentIdx < sec3Idx + 15 && !checkpointsHitRef.current.includes(3)) {
+          checkpointsHitRef.current.push(3);
+          playSfx('checkpoint');
+          addFloatingText(state.x, state.y - 25, 'SECTOR 3 CLEAR', '#FFE600', 1.1);
+        }
+
+        // Start/Finish Line Crossing (Near Index 0, with all 3 sectors verified)
+        if (
+          checkpointsHitRef.current.includes(1) &&
+          checkpointsHitRef.current.includes(2) &&
+          checkpointsHitRef.current.includes(3) &&
+          (currentIdx <= 8 || currentIdx >= totalPoints - 8)
+        ) {
+          const completedLapTime = currentLapTimeRef.current;
+          lapTimesRef.current.push(completedLapTime);
+          setLapTimes([...lapTimesRef.current]);
+
+          setBestLapTime((prev) => (prev === null || completedLapTime < prev ? completedLapTime : prev));
+
+          if (currentLapRef.current < TOTAL_CIRCUIT_LAPS) {
+            // Next Lap
+            currentLapRef.current += 1;
+            setCurrentLap(currentLapRef.current);
+            currentLapTimeRef.current = 0;
+            checkpointsHitRef.current = [0];
+
+            playSfx('lap');
+            const lapBonus = 3000 * comboMultiplierRef.current;
+            scoreRef.current += lapBonus;
+            state.nitroAmount = Math.min(100, state.nitroAmount + 50);
+            addFloatingText(state.x, state.y - 30, `LAP ${currentLapRef.current}/${TOTAL_CIRCUIT_LAPS}! +${lapBonus}`, '#FF00EA', 1.4);
+            confetti({ particleCount: 40, spread: 60 });
+          } else {
+            // Grand Prix Championship Victory! (3 Laps Complete)
+            isRaceFinishedRef.current = true;
+            setIsRaceFinished(true);
+            setIsPlaying(false);
+            isPlayingRef.current = false;
+            updateScreechAudio(false, 0);
+
+            playSfx('victory');
+            confetti({ particleCount: 150, spread: 100 });
+
+            const totalRaceTime = lapTimesRef.current.reduce((a, b) => a + b, 0);
+            const victoryBonus = Math.max(5000, 25000 - Math.floor(totalRaceTime * 300));
+            scoreRef.current += victoryBonus;
+            setScore(scoreRef.current);
+
+            setRunStats({
+              distance: Math.floor(totalDistanceRef.current),
+              maxCombo: maxComboRef.current,
+              apexClips: apexClipsCountRef.current,
+              longestDrift: Number(longestDriftRef.current.toFixed(1)),
+              totalRaceTime: Number(totalRaceTime.toFixed(2))
+            });
+
+            setTimeout(() => onGameOverRef.current(scoreRef.current), 500);
+            cancelAnimationFrame(animId);
+            return;
+          }
+        }
+      } else {
+        // Infinite Mode: Dynamically append procedural highway segments & prune old memory
+        if (pts.length - trackProj.closestIndex < 100) {
+          appendProceduralTrackSegments(40);
+        }
+
+        if (trackProj.closestIndex > 60) {
+          const pruneCount = 25;
+          pts.splice(0, pruneCount);
+          lastClosestIndexRef.current = Math.max(0, lastClosestIndexRef.current - pruneCount);
+
+          // Memory-safe cleanup of off-screen track objects
+          trackObjectsRef.current = trackObjectsRef.current.filter((obj) => {
+            const dSq = (obj.x - state.x) * (obj.x - state.x) + (obj.y - state.y) * (obj.y - state.y);
+            return dSq < 2200 * 2200;
+          });
+        }
       }
 
-      // Clean up old road points behind the player
-      if (trackProj.closestIndex > 40) {
-        roadPointsRef.current.splice(0, 15);
-      }
-
-      // Boundary Wall Collision & Soft Repulsion
+      // Boundary Wall Collision & Vector Normal Elastic Rebound
       if (Math.abs(trackProj.lateralOffset) > maxAllowedLateral) {
         const sideSign = Math.sign(trackProj.lateralOffset);
         const normalX = -Math.sin(trackProj.angle);
         const normalY = Math.cos(trackProj.angle);
+        const tangentX = Math.cos(trackProj.angle);
+        const tangentY = Math.sin(trackProj.angle);
 
-        // Smoothly position car back on the legal track boundary
-        state.x = trackProj.projX + normalX * (maxAllowedLateral * sideSign);
-        state.y = trackProj.projY + normalY * (maxAllowedLateral * sideSign);
+        const vNorm = state.vx * normalX + state.vy * normalY;
+        const vTan = state.vx * tangentX + state.vy * tangentY;
 
-        // Soft elastic rebound
-        state.vx *= 0.8;
-        state.vy *= 0.8;
-        screenShakeRef.current = Math.min(10, screenShakeRef.current + 4);
-        spawnSparks(state.x, state.y, 8, '#FF0055');
-        playSfx('hit');
+        // Only bounce when velocity vector points towards or outside the boundary
+        if (vNorm * sideSign > 0) {
+          const bounceVNorm = -0.45 * vNorm;
+          const preservedVTan = Math.max(1.8, vTan * 0.88);
 
-        // Wall scrape damage only if hitting walls at high lateral angle without energy shield
-        if (absSlipAngleDeg > 75 && currentSpeed > car.topSpeed * 0.9 && state.shieldTimer <= 0) {
-          state.health -= 35 * dt;
-          if (state.health <= 0) {
-            handlePlayerCrash();
-            cancelAnimationFrame(animId);
-            return;
+          state.vx = tangentX * preservedVTan + normalX * bounceVNorm;
+          state.vy = tangentY * preservedVTan + normalY * bounceVNorm;
+
+          // Position car securely within road boundaries
+          state.x = trackProj.projX + normalX * (maxAllowedLateral * sideSign * 0.96);
+          state.y = trackProj.projY + normalY * (maxAllowedLateral * sideSign * 0.96);
+
+          // Realign heading slightly along road tangent
+          state.heading += (trackProj.angle - state.heading) * 0.25;
+          screenShakeRef.current = Math.min(8, screenShakeRef.current + 3);
+          spawnSparks(state.x, state.y, 8, '#FF0055');
+          playSfx('hit');
+
+          // Wall scrape damage only if hitting walls at high lateral angle without energy shield
+          if (absSlipAngleDeg > 75 && currentSpeed > car.topSpeed * 0.9 && state.shieldTimer <= 0) {
+            state.health -= 35 * dt;
+            if (state.health <= 0) {
+              handlePlayerCrash();
+              cancelAnimationFrame(animId);
+              return;
+            }
           }
         }
       }
@@ -1273,7 +1713,8 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           distance: Math.floor(totalDistanceRef.current),
           maxCombo: maxComboRef.current,
           apexClips: apexClipsCountRef.current,
-          longestDrift: Number(longestDriftRef.current.toFixed(1))
+          longestDrift: Number(longestDriftRef.current.toFixed(1)),
+          totalRaceTime: 0
         });
 
         const finalScore = scoreRef.current;
@@ -1324,13 +1765,24 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       ctx.fillRect(cam.x - 700, cam.y - 700, 1400, 1400);
 
       // 2. Render Road Surface & Curved Polygonal Asphalt
+      const isCircuitMode = trackModeRef.current === 'circuit';
       const roadPts = roadPointsRef.current;
-      const startIdx = Math.max(0, trackProj.closestIndex - 12);
-      const endIdx = Math.min(roadPts.length - 1, trackProj.closestIndex + 35);
+      const totalPoints = roadPts.length;
+
+      // In circuit mode, render all connected segments around the loop (or within camera range)
+      // In infinite mode, render from startIdx to endIdx
+      const startIdx = isCircuitMode ? 0 : Math.max(0, trackProj.closestIndex - 18);
+      const endIdx = isCircuitMode ? totalPoints : Math.min(totalPoints - 1, trackProj.closestIndex + 85);
+
+      const sec1Idx = Math.floor(totalPoints * 0.25);
+      const sec2Idx = Math.floor(totalPoints * 0.50);
+      const sec3Idx = Math.floor(totalPoints * 0.75);
 
       for (let i = startIdx; i < endIdx; i++) {
         const p1 = roadPts[i];
-        const p2 = roadPts[i + 1];
+        const nextI = isCircuitMode ? (i + 1) % totalPoints : i + 1;
+        if (!isCircuitMode && nextI >= totalPoints) break;
+        const p2 = roadPts[nextI];
 
         const n1X = -Math.sin(p1.angle) * ROAD_HALF_WIDTH;
         const n1Y = Math.cos(p1.angle) * ROAD_HALF_WIDTH;
@@ -1370,6 +1822,53 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
+        }
+
+        // Render Start/Finish Line & Sector Checkpoint Gates in Circuit Mode
+        if (isCircuitMode) {
+          if (i === 0) {
+            // Neon Checkered Start/Finish Line
+            const checkCount = 8;
+            for (let c = 0; c < checkCount; c++) {
+              const t1 = c / checkCount;
+              const t2 = (c + 1) / checkCount;
+              const cx1 = p1.x + n1X * (1 - 2 * t1);
+              const cy1 = p1.y + n1Y * (1 - 2 * t1);
+              const cx2 = p1.x + n1X * (1 - 2 * t2);
+              const cy2 = p1.y + n1Y * (1 - 2 * t2);
+
+              ctx.strokeStyle = c % 2 === 0 ? '#FFFFFF' : '#00F0FF';
+              ctx.lineWidth = 6;
+              ctx.beginPath();
+              ctx.moveTo(cx1, cy1);
+              ctx.lineTo(cx2, cy2);
+              ctx.stroke();
+            }
+          } else if (i === sec1Idx) {
+            // Sector 1 Laser Gate (Cyan)
+            ctx.strokeStyle = '#00F0FF';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(p1.x + n1X, p1.y + n1Y);
+            ctx.lineTo(p1.x - n1X, p1.y - n1Y);
+            ctx.stroke();
+          } else if (i === sec2Idx) {
+            // Sector 2 Laser Gate (Green)
+            ctx.strokeStyle = '#39FF14';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(p1.x + n1X, p1.y + n1Y);
+            ctx.lineTo(p1.x - n1X, p1.y - n1Y);
+            ctx.stroke();
+          } else if (i === sec3Idx) {
+            // Sector 3 Laser Gate (Gold)
+            ctx.strokeStyle = '#FFE600';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(p1.x + n1X, p1.y + n1Y);
+            ctx.lineTo(p1.x - n1X, p1.y - n1Y);
+            ctx.stroke();
+          }
         }
       }
 
@@ -1616,6 +2115,26 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           )}
         </div>
 
+        {/* Track Mode / Lap & Sector Counter */}
+        {isPlaying && (
+          <div className="flex items-center gap-1 text-[10px] font-black">
+            {trackMode === 'circuit' ? (
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-portal-card border border-cyan-500/30 text-portal-cyan shadow-sm">
+                <Trophy className="w-3 h-3 text-portal-gold" />
+                <span>LAP {currentLap}/{TOTAL_CIRCUIT_LAPS}</span>
+                <span className="text-slate-400 text-[9px] font-mono font-normal">
+                  {formatTime(lapTimer)}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-card border border-portal-border text-slate-300">
+                <span className="text-portal-pink">♾️</span>
+                <span>FREEWAY</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center gap-2">
           {/* Nitro Fuel Bar */}
           <div className="flex items-center gap-1">
@@ -1656,21 +2175,47 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         />
 
         {/* Start / Garage Screen Overlay */}
-        {!isPlaying && !isDead && (
-          <div className="absolute inset-0 flex flex-col justify-between p-4 bg-black/60 backdrop-blur-[2px] text-center animate-in fade-in duration-200">
+        {!isPlaying && !isDead && !isRaceFinished && (
+          <div className="absolute inset-0 flex flex-col justify-between p-3.5 bg-black/65 backdrop-blur-[2px] text-center animate-in fade-in duration-200 z-10">
             {/* Header Title */}
             <div>
               <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-portal-cyan border border-cyan-500/40 text-[9px] font-black uppercase tracking-widest">
-                INFINITE CYBER ARCADE
+                CYBER DRIFT CHAMPIONSHIP
               </span>
-              <h2 className="text-2xl font-black text-white mt-0.5 tracking-wider">
+              <h2 className="text-xl font-black text-white mt-0.5 tracking-wider">
                 CYBER <span className="text-portal-cyan">DRIFT</span> <span className="text-portal-pink">2077</span>
               </h2>
             </div>
 
+            {/* Track Mode Selector Tabs */}
+            <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-portal-border/80">
+              <button
+                onClick={() => setTrackMode('circuit')}
+                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 transition-all ${
+                  trackMode === 'circuit'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-sky-500/30 text-portal-cyan border border-cyan-400/60 shadow-[0_0_10px_rgba(0,240,255,0.2)]'
+                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                }`}
+              >
+                <Trophy className="w-3 h-3 text-portal-gold" />
+                <span>CYBER RING (3 LAPS)</span>
+              </button>
+              <button
+                onClick={() => setTrackMode('infinite')}
+                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 transition-all ${
+                  trackMode === 'infinite'
+                    ? 'bg-gradient-to-r from-pink-500/20 to-purple-500/30 text-portal-pink border border-pink-400/60 shadow-[0_0_10px_rgba(255,0,85,0.2)]'
+                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                }`}
+              >
+                <span>♾️</span>
+                <span>FREEWAY (ENDLESS)</span>
+              </button>
+            </div>
+
             {/* Garage Car Selector Carousel */}
-            <div className="bg-portal-surface/90 border border-portal-border rounded-2xl p-3 my-auto shadow-xl">
-              <div className="flex items-center justify-between mb-2">
+            <div className="bg-portal-surface/90 border border-portal-border rounded-2xl p-2.5 my-1 shadow-xl">
+              <div className="flex items-center justify-between mb-1.5">
                 <button
                   onClick={() => setSelectedCarIndex(prev => (prev - 1 + CARS.length) % CARS.length)}
                   className="p-1.5 rounded-xl bg-portal-card border border-portal-border text-slate-300 hover:text-white active:scale-95 transition-all"
@@ -1679,10 +2224,10 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
                 </button>
 
                 <div>
-                  <h4 className="text-sm font-black text-white" style={{ color: selectedCar.color }}>
+                  <h4 className="text-xs font-black text-white" style={{ color: selectedCar.color }}>
                     {selectedCar.name}
                   </h4>
-                  <p className="text-[10px] text-slate-400 font-bold">{selectedCar.model}</p>
+                  <p className="text-[9px] text-slate-400 font-bold">{selectedCar.model}</p>
                 </div>
 
                 <button
@@ -1694,26 +2239,26 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               </div>
 
               {/* Vehicle Stats Bars */}
-              <div className="space-y-1.5 text-[10px] text-slate-300 font-bold">
+              <div className="space-y-1 text-[9px] text-slate-300 font-bold">
                 <div className="flex items-center justify-between">
                   <span>Top Speed</span>
-                  <div className="w-28 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div className="h-full bg-portal-cyan" style={{ width: `${selectedCar.stats.speed}%` }} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Drift Angle</span>
-                  <div className="w-28 h-1.5 rounded-full bg-portal-pink" style={{ width: `${selectedCar.stats.drift}%` }} />
+                  <div className="w-24 h-1.5 rounded-full bg-portal-pink" style={{ width: `${selectedCar.stats.drift}%` }} />
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Nitro Boost</span>
-                  <div className="w-28 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div className="h-full bg-portal-gold" style={{ width: `${selectedCar.stats.nitro}%` }} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Agility</span>
-                  <div className="w-28 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                     <div className="h-full bg-emerald-400" style={{ width: `${selectedCar.stats.control}%` }} />
                   </div>
                 </div>
@@ -1721,29 +2266,83 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
             </div>
 
             {/* Launch Action */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <button
                 onClick={startGame}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-400 to-cyan-500 text-black font-black text-sm shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-400 to-cyan-500 text-black font-black text-xs shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
               >
-                <Play className="w-4 h-4 fill-black" /> START DRIFTING
+                <Play className="w-4 h-4 fill-black" /> {trackMode === 'circuit' ? 'START 3-LAP GRAND PRIX' : 'START ENDLESS DRIFT'}
               </button>
 
               <button
                 onClick={() => setShowControlsGuide(!showControlsGuide)}
-                className="text-[10px] text-slate-400 hover:text-white flex items-center justify-center gap-1 mx-auto underline"
+                className="text-[9px] text-slate-400 hover:text-white flex items-center justify-center gap-1 mx-auto underline"
               >
                 <HelpCircle className="w-3 h-3" /> {showControlsGuide ? 'Hide Controls' : 'How to Play & Controls'}
               </button>
 
               {showControlsGuide && (
-                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-[10px] text-slate-300 text-left space-y-1 animate-in fade-in">
+                <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-700 text-[9px] text-slate-300 text-left space-y-0.5 animate-in fade-in">
                   <p>• <strong>Steer</strong>: A/D or Left/Right Arrow keys</p>
                   <p>• <strong>E-Brake Drift</strong>: Space or Shift key</p>
                   <p>• <strong>Nitro Boost</strong>: E, B, or N key</p>
                   <p>• <strong>Apex Clips</strong>: Drift close to golden apex beacons for +500 PTS!</p>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Grand Prix Championship Victory Screen Overlay */}
+        {isRaceFinished && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-cyan-950/40 via-black/70 to-black/90 backdrop-blur-[3px] text-center animate-in fade-in duration-300 z-20">
+            <div className="space-y-3 w-full max-w-xs bg-portal-bg/95 backdrop-blur-md p-4 rounded-2xl border-2 border-portal-cyan shadow-[0_0_35px_rgba(0,240,255,0.35)]">
+              <div>
+                <span className="px-3 py-0.5 rounded-full bg-cyan-500/20 text-portal-cyan border border-cyan-400/60 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                  🏆 GRAND PRIX CHAMPION
+                </span>
+                <h3 className="text-2xl font-black text-white mt-1">CIRCUIT VICTORY!</h3>
+                <p className="text-xs text-portal-gold font-black">Score: {score}</p>
+              </div>
+
+              {/* Lap Times Breakdown */}
+              <div className="p-2 rounded-xl bg-slate-900/90 border border-portal-border text-[10px] text-slate-300 font-bold space-y-1">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-slate-400">
+                  <span>LAP</span>
+                  <span>TIME</span>
+                </div>
+                {lapTimes.map((lt, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <span className="text-slate-300">LAP {idx + 1}</span>
+                    <span className="font-mono text-portal-cyan font-bold">{formatTime(lt)}</span>
+                  </div>
+                ))}
+                {bestLapTime !== null && (
+                  <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-portal-gold font-black">
+                    <span>BEST LAP</span>
+                    <span className="font-mono">{formatTime(bestLapTime)}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Performance Stats Breakdown */}
+              <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-slate-900/80 border border-portal-border text-[10px] text-slate-300 font-bold">
+                <div className="p-1 text-left">
+                  <p className="text-[9px] text-slate-500 uppercase">Max Combo</p>
+                  <p className="text-portal-gold font-black text-xs">{runStats.maxCombo}X Multiplier</p>
+                </div>
+                <div className="p-1 text-left">
+                  <p className="text-[9px] text-slate-500 uppercase">Apex Clips</p>
+                  <p className="text-portal-cyan font-black text-xs">{runStats.apexClips} Hits</p>
+                </div>
+              </div>
+
+              <button
+                onClick={startGame}
+                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-black font-black text-xs shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5" /> RACE AGAIN
+              </button>
             </div>
           </div>
         )}
