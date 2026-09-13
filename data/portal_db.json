@@ -114,7 +114,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Retro-arcade space combat simulator with plasma lasers and drone swarms.",
-      "play_count": 1,
+      "play_count": 2,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -7706,6 +7706,13 @@
       "user_id": "usr_ctvl8ln",
       "score": 900,
       "created_at": "2026-09-03T19:57:30.187Z"
+    },
+    {
+      "id": "sc_0zra9zyys",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 2500,
+      "created_at": "2026-09-13T11:08:30.306Z"
     }
   ],
   "ratings": []

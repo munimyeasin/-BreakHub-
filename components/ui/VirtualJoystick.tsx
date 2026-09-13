@@ -225,7 +225,7 @@ export default function VirtualJoystick({
       className={`relative select-none flex flex-col items-center justify-center ${className}`}
       style={{ touchAction: 'none' }}
     >
-      {/* Outer PUBG-style Bounded Dial Base */}
+      {/* Outer Dial Base */}
       <div
         ref={containerRef}
         onTouchStart={handleTouchStart}
@@ -240,54 +240,54 @@ export default function VirtualJoystick({
           width: `${size}px`,
           height: `${size}px`,
         }}
-        className={`relative rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center transition-shadow duration-200 ${
+        className={`relative rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center transition-all duration-200 border-3 border-black ${
           isActive
-            ? 'bg-slate-900/80 border-2 border-portal-cyan shadow-[0_0_25px_rgba(0,240,255,0.45)]'
-            : 'bg-slate-950/60 border border-slate-700/60 shadow-[0_0_12px_rgba(0,0,0,0.6)] backdrop-blur-sm'
+            ? 'bg-portal-surface shadow-neo-cyan'
+            : 'bg-portal-card shadow-neo-sm'
         }`}
       >
-        {/* Subtle Cyberpunk Concentric Range Ring */}
+        {/* Subtle Concentric Range Ring */}
         <div
-          className="absolute rounded-full border border-white/10 pointer-events-none"
+          className="absolute rounded-full border-2 border-dashed border-white/20 pointer-events-none"
           style={{ width: `${size * 0.65}px`, height: `${size * 0.65}px` }}
         />
 
         {/* Directional Reticle Indicator Crosshairs */}
         {/* UP Tick */}
         <div
-          className={`absolute top-1.5 w-1.5 h-3 rounded-full transition-all duration-150 ${
+          className={`absolute top-1.5 w-2 h-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'UP'
-              ? 'bg-portal-cyan shadow-[0_0_8px_#00f0ff] scale-125'
-              : 'bg-slate-600/60'
+              ? 'bg-portal-yellow shadow-neo-sm scale-125'
+              : 'bg-slate-600'
           }`}
         />
         {/* DOWN Tick */}
         <div
-          className={`absolute bottom-1.5 w-1.5 h-3 rounded-full transition-all duration-150 ${
+          className={`absolute bottom-1.5 w-2 h-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'DOWN'
-              ? 'bg-portal-cyan shadow-[0_0_8px_#00f0ff] scale-125'
-              : 'bg-slate-600/60'
+              ? 'bg-portal-yellow shadow-neo-sm scale-125'
+              : 'bg-slate-600'
           }`}
         />
         {/* LEFT Tick */}
         <div
-          className={`absolute left-1.5 h-1.5 w-3 rounded-full transition-all duration-150 ${
+          className={`absolute left-1.5 h-2 w-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'LEFT'
-              ? 'bg-portal-cyan shadow-[0_0_8px_#00f0ff] scale-125'
-              : 'bg-slate-600/60'
+              ? 'bg-portal-cyan shadow-neo-sm scale-125'
+              : 'bg-slate-600'
           }`}
         />
         {/* RIGHT Tick */}
         <div
-          className={`absolute right-1.5 h-1.5 w-3 rounded-full transition-all duration-150 ${
+          className={`absolute right-1.5 h-2 w-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'RIGHT'
-              ? 'bg-portal-cyan shadow-[0_0_8px_#00f0ff] scale-125'
-              : 'bg-slate-600/60'
+              ? 'bg-portal-cyan shadow-neo-sm scale-125'
+              : 'bg-slate-600'
           }`}
         />
 
         {/* Center Target Crosshair */}
-        <div className="absolute w-2 h-2 rounded-full bg-slate-700 pointer-events-none" />
+        <div className="absolute w-2.5 h-2.5 rounded-full bg-black border border-white/40 pointer-events-none" />
 
         {/* Floating Thumb Knob / Puck */}
         <div
@@ -302,32 +302,28 @@ export default function VirtualJoystick({
         >
           {/* Knob Outer Layer */}
           <div
-            className={`w-full h-full rounded-full border-2 flex items-center justify-center transition-all ${
+            className={`w-full h-full rounded-full border-3 border-black flex items-center justify-center transition-all ${
               isActive
-                ? 'bg-gradient-to-tr from-cyan-950 via-slate-900 to-cyan-800 border-portal-cyan shadow-[0_0_18px_#00f0ff]'
-                : 'bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-700 border-slate-500 shadow-md'
+                ? 'bg-portal-cyan shadow-neo-sm'
+                : 'bg-portal-yellow shadow-neo-sm'
             }`}
           >
             {/* Concentric Grip Ring */}
             <div
-              className={`w-6 h-6 rounded-full border border-dashed flex items-center justify-center ${
-                isActive ? 'border-portal-cyan/60' : 'border-slate-500/40'
-              }`}
+              className={`w-6 h-6 rounded-full border-2 border-black border-dashed flex items-center justify-center`}
             >
               {/* Center Dot Indicator */}
               <div
-                className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                  isActive ? 'bg-portal-cyan shadow-[0_0_6px_#00f0ff]' : 'bg-slate-400'
-                }`}
+                className={`w-2.5 h-2.5 rounded-full bg-black`}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Optional HUD Label */}
+      {/* HUD Label */}
       {label && (
-        <span className="mt-1.5 text-[9px] font-black tracking-widest text-slate-400 uppercase pointer-events-none">
+        <span className="mt-2 text-[10px] font-black tracking-widest text-slate-300 uppercase pointer-events-none bg-portal-surface px-2 py-0.5 rounded-md border-2 border-black shadow-neo-sm">
           {label}
         </span>
       )}
