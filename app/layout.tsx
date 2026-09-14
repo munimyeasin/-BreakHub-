@@ -6,10 +6,14 @@ export const metadata: Metadata = {
   description: 'Cyberpunk dark-themed HTML5 mobile mini-game portal and competitive global leaderboards.',
   icons: {
     icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon.svg?v=3', type: 'image/svg+xml' },
+      { url: '/favicon.ico?v=3', sizes: 'any' },
+      { url: '/icon.png?v=3', type: 'image/png', sizes: '64x64' },
     ],
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    shortcut: '/favicon.ico?v=3',
+    apple: [
+      { url: '/apple-touch-icon.png?v=3', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 
@@ -28,6 +32,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="icon" href="/icon.svg?v=3" type="image/svg+xml" />
+        <link rel="alternate icon" href="/favicon.ico?v=3" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" />
+      </head>
       <body className="bg-portal-bg min-h-screen text-slate-100 antialiased selection:bg-portal-cyan selection:text-black">
         {children}
       </body>

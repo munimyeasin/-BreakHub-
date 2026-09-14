@@ -1,46 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#120D2C"/>
-      <stop offset="50%" stop-color="#1A123D"/>
-      <stop offset="100%" stop-color="#080614"/>
-    </linearGradient>
-    <linearGradient id="glowGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#A855F7"/>
-      <stop offset="100%" stop-color="#00F0FF"/>
-    </linearGradient>
-    <linearGradient id="padGrad" x1="12" y1="20" x2="52" y2="48" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#2D1B69"/>
-      <stop offset="100%" stop-color="#110B29"/>
-    </linearGradient>
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#00F0FF" flood-opacity="0.8"/>
-    </filter>
-  </defs>
+  <!-- Neo-Brutalist Hard Offset 3D Drop Shadow -->
+  <rect x="9" y="9" width="48" height="48" rx="13" fill="#000000"/>
 
-  <!-- Background Rounded Shield -->
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)"/>
-  <rect x="2" y="2" width="60" height="60" rx="16" stroke="url(#glowGrad)" stroke-width="2.5" stroke-opacity="0.9"/>
+  <!-- Main High-Voltage Badge Face (Electric Cyber Yellow) -->
+  <rect x="5" y="5" width="48" height="48" rx="13" fill="#FFE600" stroke="#000000" stroke-width="3.5" stroke-linejoin="round"/>
 
-  <!-- Gamepad Body -->
-  <path d="M18 22 C13 22, 10 26, 11 36 L13 45 C13.8 48.5, 17.5 50, 20.5 48 C23.5 46, 25 40, 27 40 L37 40 C39 40, 40.5 46, 43.5 48 C46.5 50, 50.2 48.5, 51 45 L53 36 C54 26, 51 22, 46 22 Z"
-        fill="url(#padGrad)"
-        stroke="url(#glowGrad)"
-        stroke-width="2"/>
+  <!-- Neo-Brutalism Cyber Cyan Corner Accent Stripe -->
+  <path d="M 5 20 L 20 5 H 30 L 5 30 Z" fill="#00F0FF" stroke="#000000" stroke-width="2.5" stroke-linejoin="round"/>
 
-  <!-- D-Pad (Left) -->
-  <rect x="19" y="28" width="4" height="10" rx="1" fill="#00F0FF" filter="url(#neonGlow)"/>
-  <rect x="16" y="31" width="10" height="4" rx="1" fill="#00F0FF" filter="url(#neonGlow)"/>
-  <circle cx="21" cy="33" r="1.2" fill="#070414"/>
+  <!-- Top-Right Punchy Neo Sparkle Star (Hot Pink) -->
+  <path d="M 47 7 C 47 11.5 44 13.5 41 14 C 44 14.5 47 16.5 47 21 C 47.5 16.5 50.5 14.5 53.5 14 C 50.5 13.5 47.5 11.5 47 7 Z" fill="#FF4081" stroke="#000000" stroke-width="1.6" stroke-linejoin="round"/>
+  <circle cx="47" cy="14" r="1" fill="#FFFFFF"/>
 
-  <!-- Action Buttons (Right) -->
-  <circle cx="43" cy="29" r="2" fill="#F43F5E" filter="url(#neonGlow)"/>
-  <circle cx="47" cy="33" r="2" fill="#00F0FF" filter="url(#neonGlow)"/>
-  <circle cx="39" cy="33" r="2" fill="#EAB308" filter="url(#neonGlow)"/>
-  <circle cx="43" cy="37" r="2" fill="#10B981" filter="url(#neonGlow)"/>
+  <!-- Gamepad 3D Offset Hard Shadow -->
+  <path d="M 18 25 H 40 C 45 25 48 28.5 47 34.5 L 45.5 42 C 44.2 45 40.5 45.5 38 43 C 35.5 40.5 34 38.5 29 38.5 C 24 38.5 22.5 40.5 20 43 C 17.5 45 13.8 45 12.5 42 L 11 34.5 C 10 28.5 13 25 18 25 Z" fill="#000000"/>
 
-  <!-- Center Status LED Indicator -->
-  <circle cx="32" cy="27" r="1.5" fill="#00F0FF" filter="url(#neonGlow)"/>
-  <line x1="29" y1="34" x2="31" y2="34" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="33" y1="34" x2="35" y2="34" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Gamepad Main Chassis (Pitch Violet Ground #0B0819 with 2.6px Solid Black Stroke) -->
+  <path d="M 18 22 H 40 C 45 22 48 25.5 47 31.5 L 45.5 39 C 44.2 42 40.5 42.5 38 40 C 35.5 37.5 34 35.5 29 35.5 C 24 35.5 22.5 37.5 20 40 C 17.5 42 13.8 42 12.5 39 L 11 31.5 C 10 25.5 13 22 18 22 Z" fill="#0B0819" stroke="#000000" stroke-width="2.6" stroke-linejoin="round"/>
+
+  <!-- D-Pad (Punchy Acid Lime #A3E635 with crisp Black Outline) -->
+  <path d="M 17.5 26.5 H 20.5 V 29 H 23 V 32 H 20.5 V 34.5 H 17.5 V 32 H 15 V 29 H 17.5 V 26.5 Z" fill="#A3E635" stroke="#000000" stroke-width="1.2" stroke-linejoin="miter"/>
+
+  <!-- Action ABXY Buttons (Punchy Neo Palette with Bold Outlines) -->
+  <circle cx="37.5" cy="26.5" r="2.2" fill="#00F0FF" stroke="#000000" stroke-width="1.2"/>
+  <circle cx="41.5" cy="30.5" r="2.2" fill="#FF4081" stroke="#000000" stroke-width="1.2"/>
+  <circle cx="37.5" cy="34.5" r="2.2" fill="#FFE600" stroke="#000000" stroke-width="1.2"/>
+  <circle cx="33.5" cy="30.5" r="2.2" fill="#A3E635" stroke="#000000" stroke-width="1.2"/>
+
+  <!-- Center Status LED + Pill Buttons -->
+  <circle cx="29" cy="25.5" r="1.2" fill="#00F0FF" stroke="#000000" stroke-width="0.8"/>
+  <rect x="25.5" y="29.5" width="2.8" height="1.3" rx="0.65" fill="#FF4081" stroke="#000000" stroke-width="0.7" transform="rotate(-15 26.9 30.1)"/>
+  <rect x="29.5" y="29.5" width="2.8" height="1.3" rx="0.65" fill="#FFE600" stroke="#000000" stroke-width="0.7" transform="rotate(-15 30.9 30.1)"/>
 </svg>
