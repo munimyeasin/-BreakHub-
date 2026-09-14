@@ -177,24 +177,34 @@ export default function GameModal({
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0 bg-black' : 'p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn'}`}>
       <div
         ref={modalRef}
-        className={`relative bg-portal-surface overflow-hidden flex flex-col transition-all duration-300 ${
+        className={`relative bg-white overflow-hidden flex flex-col transition-all duration-300 ${
           isFullscreen
             ? 'w-screen h-screen max-w-none max-h-none rounded-none border-none'
-            : `w-full ${isExpandedGame ? 'max-w-[460px] md:max-w-[620px] lg:max-w-[660px]' : 'max-w-[460px]'} border-4 border-black rounded-2xl sm:rounded-3xl max-h-[96vh] shadow-neo-lg`
+            : `w-full ${isExpandedGame ? 'max-w-[460px] md:max-w-[620px] lg:max-w-[660px]' : 'max-w-[460px]'} border-4 border-black rounded-2xl sm:rounded-3xl max-h-[96vh] shadow-neo-xl`
         }`}
       >
+        {/* Figma Selection Frame Transform Handles (Hidden in fullscreen) */}
+        {!isFullscreen && (
+          <>
+            <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+          </>
+        )}
+
         {/* Top Decorative Color Accent Bar (Hidden when in Fullscreen) */}
         {!isFullscreen && (
           <div className="h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black shrink-0" />
         )}
 
         {/* Modal Top Bar - Neo-Brutalist Compact */}
-        <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b-3 border-black bg-portal-surface shrink-0">
+        <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b-3 border-black bg-white shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             <img src={game.thumbnail_url} alt={game.title} className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover border-2 border-black shadow-neo-sm shrink-0" />
             <div className="min-w-0">
-              <h3 className="font-black text-xs sm:text-sm text-white leading-tight truncate uppercase">{game.title}</h3>
-              <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider">{game.category}</p>
+              <h3 className="font-black text-xs sm:text-sm text-black leading-tight truncate uppercase">{game.title}</h3>
+              <p className="text-[9px] sm:text-[10px] text-black font-black uppercase tracking-wider bg-portal-cyan px-1.5 py-0.2 rounded border border-black inline-block">{game.category}</p>
             </div>
           </div>
 
@@ -218,7 +228,7 @@ export default function GameModal({
             </button>
             <button
               onClick={toggleFullscreen}
-              className="p-1 sm:p-1.5 rounded-xl bg-portal-card text-slate-200 hover:text-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+              className="p-1 sm:p-1.5 rounded-xl bg-white text-black hover:bg-slate-100 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
               title={isFullscreen ? 'Exit Fullscreen (F)' : 'Enter Fullscreen (F)'}
               aria-label="Toggle Fullscreen"
             >
@@ -226,7 +236,7 @@ export default function GameModal({
             </button>
             <button
               onClick={onClose}
-              className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+              className="p-1 sm:p-1.5 rounded-xl bg-white hover:bg-portal-pink text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
               title="Close (Esc)"
               aria-label="Close Modal"
             >
@@ -236,20 +246,20 @@ export default function GameModal({
         </div>
 
         {/* Player Profile & Handle Strip - Neo-Brutalist Compact */}
-        <div className="px-3 sm:px-4 py-1.5 bg-portal-card border-b-3 border-black flex items-center justify-between text-[11px] shrink-0">
+        <div className="px-3 sm:px-4 py-1.5 bg-slate-50 border-b-3 border-black flex items-center justify-between text-[11px] shrink-0">
           <div className="flex items-center gap-1.5 min-w-0">
             <img
               src={avatarUrl}
               alt="Avatar"
-              className="w-5 h-5 rounded-full object-cover bg-slate-800 border-2 border-black shadow-neo-sm shrink-0"
+              className="w-5 h-5 rounded-full object-cover bg-slate-200 border-2 border-black shadow-neo-sm shrink-0"
             />
             <div className="flex items-center gap-1 min-w-0">
-              <span className="text-[10px] text-slate-300 font-black uppercase">Player:</span>
-              <span className="text-[11px] text-portal-cyan font-black tracking-wide truncate max-w-[90px] sm:max-w-[140px] uppercase">{username}</span>
+              <span className="text-[10px] text-slate-600 font-black uppercase">Player:</span>
+              <span className="text-[11px] text-black font-black tracking-wide truncate max-w-[90px] sm:max-w-[140px] uppercase">{username}</span>
             </div>
             <button
               onClick={onChangeUsername}
-              className="px-1.5 py-0.5 rounded bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-300 border border-black text-[9px] font-black uppercase shadow-neo-sm transition-all flex items-center gap-0.5"
+              className="px-1.5 py-0.5 rounded bg-white hover:bg-portal-yellow text-black border border-black text-[9px] font-black uppercase shadow-neo-sm transition-all flex items-center gap-0.5"
               title="Change Gamer Tag"
             >
               <Edit3 className="w-2.5 h-2.5" /> Edit
@@ -258,7 +268,7 @@ export default function GameModal({
 
           <div className="flex items-center gap-2 shrink-0">
             {statusMsg ? (
-              <span className="flex items-center gap-1 text-[10px] text-portal-lime font-black uppercase animate-pulse">
+              <span className="flex items-center gap-1 text-[10px] text-black bg-portal-green px-1.5 py-0.5 rounded border border-black font-black uppercase animate-pulse shadow-neo-sm">
                 <Check className="w-3 h-3 stroke-[2.5]" /> {statusMsg}
               </span>
             ) : (

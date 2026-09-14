@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B0819;
-  --foreground: #f8fafc;
+  --background: #FAF8F5;
+  --foreground: #000000;
 }
 
 body {
@@ -15,38 +15,38 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Neo-Brutalist Subtle Retro Dot Grid */
+/* Neo-Brutalist Light Retro Dot Grid & Wireframe Grid */
 .bg-neo-dots {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1.5px, transparent 1.5px);
   background-size: 24px 24px;
 }
 
 .bg-neo-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
-/* Custom Scrollbars */
+/* Custom Scrollbars in Neo-Brutalism style */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0819;
+  background: #FAF8F5;
   border-left: 2px solid #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FFE600;
+  background: #F7CB46;
   border: 2px solid #000;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F0FF;
+  background: #FE90E8;
 }
 
 /* Animations */

@@ -303,10 +303,10 @@ export default function ArcadePortalDashboard() {
   const avatarUrl = playerTag ? getAvatarUrl(playerTag) : null;
 
   return (
-    <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black">
+    <div className="min-h-screen bg-portal-bg bg-neo-dots text-black font-sans antialiased selection:bg-portal-cyan selection:text-black">
 
       {/* 1. STICKY APP HEADER */}
-      <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
+      <header className="sticky top-0 z-30 bg-white border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
         <div className="max-w-7xl mx-auto flex flex-col gap-2">
 
           {/* Top Bar */}
@@ -317,7 +317,7 @@ export default function ArcadePortalDashboard() {
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
                 className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
-                  isSidebarOpen ? 'bg-portal-pink text-white' : 'bg-portal-yellow text-black'
+                  isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
                 }`}
                 title="Open Genres, Navigation & Filters"
                 aria-label="Toggle navigation slide bar"
@@ -357,14 +357,14 @@ export default function ArcadePortalDashboard() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-black text-sm sm:text-base tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
-                      STRESS<span className="text-portal-cyan">BUSTER</span>
+                    <span className="font-black text-sm sm:text-base tracking-tight uppercase text-black">
+                      STRESS<span className="bg-portal-cyan px-1 rounded border border-black shadow-neo-xs ml-0.5">BUSTER</span>
                     </span>
-                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-white border border-black shadow-neo-sm">
+                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-black border border-black shadow-neo-sm">
                       PORTAL
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">12 Mini-Games</p>
+                  <p className="text-[9px] sm:text-[10px] text-slate-700 font-black uppercase tracking-wider hidden xs:block">12 Mini-Games</p>
                 </div>
               </div>
             </div>
@@ -372,7 +372,7 @@ export default function ArcadePortalDashboard() {
             {/* Desktop Search Bar & Leaderboard Action (Hidden on Mobile < md) */}
             <div className="hidden md:flex items-center gap-2 flex-1 max-w-lg mx-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search games, genres, puzzles..."
@@ -381,12 +381,12 @@ export default function ArcadePortalDashboard() {
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck={false}
-                  className="w-full pl-10 pr-8 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
+                  className="w-full pl-10 pr-8 py-2 bg-white border-2 border-black rounded-xl text-xs sm:text-sm text-black placeholder-slate-500 font-bold focus:outline-none focus:border-portal-pink shadow-neo-sm transition-all appearance-none"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs font-black p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-black text-xs font-black p-1"
                   >
                     ✕
                   </button>
@@ -412,12 +412,12 @@ export default function ArcadePortalDashboard() {
               {playerTag ? (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-white border-2 border-black hover:bg-portal-yellow text-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title="Change Player Handle"
                 >
-                  {avatarUrl && <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black shadow-neo-sm shrink-0" />}
-                  <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
-                  <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
+                  {avatarUrl && <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover bg-slate-100 border border-black shadow-neo-sm shrink-0" />}
+                  <span className="text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
+                  <Edit3 className="w-3 h-3 text-slate-600 shrink-0" />
                 </button>
               ) : (
                 <button
@@ -434,7 +434,7 @@ export default function ArcadePortalDashboard() {
           {/* Mobile Search Bar & Leaderboard Button Row (Visible on mobile/tablet < md) */}
           <div className="flex md:hidden items-center gap-2 w-full">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search games, genres..."
@@ -443,12 +443,12 @@ export default function ArcadePortalDashboard() {
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}
-                className="w-full pl-10 pr-9 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
+                className="w-full pl-10 pr-9 py-2 bg-white border-2 border-black rounded-xl text-xs sm:text-sm text-black placeholder-slate-500 font-bold focus:outline-none focus:border-portal-pink shadow-neo-sm transition-all appearance-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-sm font-black p-1"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-black text-sm font-black p-1"
                 >
                   ✕
                 </button>
@@ -528,12 +528,12 @@ export default function ArcadePortalDashboard() {
               {/* Active Filter Bar & Breadcrumb Status */}
               <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 sm:pb-2.5 border-b-3 border-black">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-white flex items-center gap-1.5">
+                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-black flex items-center gap-1.5">
                     <div className="w-5 h-5 rounded-md bg-portal-yellow border border-black shadow-neo-sm flex items-center justify-center">
                       <Zap className="w-3 h-3 text-black stroke-[3]" />
                     </div>
                     <span>{activeTab === 'favorites' ? 'Your Saved Games' : 'Available Mini-Games'}</span>
-                    <span className="px-1.5 py-0.2 rounded bg-portal-surface text-portal-cyan text-[11px] font-black border border-black shadow-neo-sm">
+                    <span className="px-1.5 py-0.2 rounded bg-white text-black text-[11px] font-black border border-black shadow-neo-sm">
                       {filteredGames.length}
                     </span>
                   </h2>
@@ -560,7 +560,7 @@ export default function ArcadePortalDashboard() {
                       setSearchQuery('');
                       setActiveTab('all');
                     }}
-                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-white text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-black text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   >
                     Reset Filters
                   </button>
@@ -588,14 +588,14 @@ export default function ArcadePortalDashboard() {
               />
 
               {/* FOOTER TEAM STRIP */}
-              <footer className="mt-14 p-5 sm:p-6 bg-portal-surface border-3 border-black rounded-2xl shadow-neo flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+              <footer className="mt-14 p-5 sm:p-6 bg-white border-3 border-black rounded-2xl shadow-neo flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-portal-yellow font-black uppercase tracking-wider">
-                    <Gamepad2 className="w-4 h-4 text-portal-cyan stroke-[2.5] shrink-0" />
+                  <div className="flex items-center gap-2 text-black font-black uppercase tracking-wider">
+                    <Gamepad2 className="w-4 h-4 text-black stroke-[2.5] shrink-0" />
                     <span>Stress Buster Project • Developed by:</span>
                   </div>
-                  <div className="text-slate-200 font-bold">
-                    <strong className="text-white">Tahida</strong>, <strong className="text-white">Marzia</strong>, <strong className="text-white">Rahul</strong>, & <strong className="text-portal-cyan">Munim Yeasin</strong>
+                  <div className="text-slate-800 font-bold">
+                    <strong className="text-black">Tahida</strong>, <strong className="text-black">Marzia</strong>, <strong className="text-black">Rahul</strong>, & <strong className="text-black bg-portal-cyan px-1 rounded border border-black shadow-neo-xs">Munim Yeasin</strong>
                   </div>
                 </div>
                 <button

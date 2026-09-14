@@ -38,21 +38,21 @@ const RATING_QUALITIES: Record<number, RatingQuality> = {
     label: 'Fair Game',
     description: 'Decent arcade loop with potential.',
     badgeBg: 'bg-portal-purple',
-    badgeText: 'text-white',
+    badgeText: 'text-black',
     icon: '🕹️'
   },
   3: {
     label: 'Good Fun',
     description: 'Solid mechanics and satisfying gameplay.',
-    badgeBg: 'bg-portal-lime',
+    badgeBg: 'bg-portal-green',
     badgeText: 'text-black',
     icon: '👍'
   },
   4: {
     label: 'Great Experience!',
     description: 'Super addictive, smooth controls and great audio!',
-    badgeBg: 'bg-portal-orange',
-    badgeText: 'text-white',
+    badgeBg: 'bg-portal-pink',
+    badgeText: 'text-black',
     icon: '🔥'
   },
   5: {
@@ -259,7 +259,7 @@ export default function StarRating({
         onClick={handleOpenModal}
         className={`group/rate inline-flex items-center gap-1.5 rounded-xl transition-all ${
           interactive
-            ? 'cursor-pointer bg-portal-surface hover:bg-portal-yellow text-slate-200 hover:text-black px-2 py-1 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
+            ? 'cursor-pointer bg-white hover:bg-portal-yellow text-black px-2 py-1 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
             : 'cursor-default px-1 py-0.5'
         }`}
         title={
@@ -269,14 +269,14 @@ export default function StarRating({
         }
       >
         <Star
-          className={`${starSizeClass} fill-portal-yellow text-portal-yellow group-hover/rate:text-black group-hover/rate:fill-black stroke-[2.5] transition-colors`}
+          className={`${starSizeClass} fill-portal-yellow text-black stroke-[2.5] transition-colors`}
         />
-        <span className="text-[10px] sm:text-[11px] font-black tracking-tight uppercase group-hover/rate:text-black">
+        <span className="text-[10px] sm:text-[11px] font-black tracking-tight uppercase text-black">
           {rating.toFixed(1)}
         </span>
 
         {showCount && ratingCount > 0 && (
-          <span className="text-[9px] sm:text-[10px] text-slate-400 group-hover/rate:text-black font-bold">
+          <span className="text-[9px] sm:text-[10px] text-slate-600 font-bold">
             ({ratingCount})
           </span>
         )}
@@ -299,22 +299,28 @@ export default function StarRating({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[390px] bg-portal-surface border-4 border-black rounded-2xl sm:rounded-3xl shadow-neo-xl overflow-hidden flex flex-col animate-scaleIn"
+            className="relative w-full max-w-[390px] bg-white border-4 border-black rounded-2xl sm:rounded-3xl shadow-neo-xl overflow-hidden flex flex-col animate-scaleIn"
           >
+            {/* Figma Selection Frame Transform Handles */}
+            <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+            <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
             {/* Top Neo Tri-Color Stripe */}
             <div className="h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black shrink-0" />
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-portal-surface border-b-3 border-black">
+            <div className="flex items-center justify-between px-4 py-3 bg-white border-b-3 border-black">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-xl bg-portal-yellow text-black border-2 border-black flex items-center justify-center shadow-neo-sm shrink-0">
                   <Sparkles className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-tight leading-tight">
+                  <h3 className="text-xs sm:text-sm font-black text-black uppercase tracking-tight leading-tight">
                     {userRating ? 'Update Your Rating' : 'Rate & Review'}
                   </h3>
-                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider">
+                  <p className="text-[9px] sm:text-[10px] text-black font-black uppercase tracking-wider">
                     Community Player Feedback
                   </p>
                 </div>
@@ -324,7 +330,7 @@ export default function StarRating({
                 type="button"
                 onClick={() => setIsOpen(false)}
                 disabled={isSubmitting}
-                className="w-7 h-7 rounded-lg bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm flex items-center justify-center text-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
+                className="w-7 h-7 rounded-lg bg-white hover:bg-portal-pink text-black border-2 border-black shadow-neo-sm flex items-center justify-center text-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
                 aria-label="Close Rating Screen"
               >
                 <X className="w-4 h-4 stroke-[3]" />
@@ -333,7 +339,7 @@ export default function StarRating({
 
             {/* Game Context Preview Strip */}
             {(gameTitle || thumbnailUrl) && (
-              <div className="px-4 py-2.5 bg-portal-card border-b-3 border-black flex items-center justify-between gap-2.5">
+              <div className="px-4 py-2.5 bg-slate-50 border-b-3 border-black flex items-center justify-between gap-2.5">
                 <div className="flex items-center gap-2.5 min-w-0">
                   {thumbnailUrl && (
                     <img
@@ -343,28 +349,28 @@ export default function StarRating({
                     />
                   )}
                   <div className="min-w-0">
-                    <h4 className="text-xs font-black text-white uppercase truncate">
+                    <h4 className="text-xs font-black text-black uppercase truncate">
                       {gameTitle || 'Arcade Game'}
                     </h4>
                     {gameCategory && (
-                      <span className="inline-block text-[9px] font-black uppercase text-portal-cyan tracking-wider">
+                      <span className="inline-block text-[9px] font-black uppercase text-black bg-portal-cyan px-1.5 py-0.2 rounded border border-black tracking-wider">
                         {gameCategory}
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm shrink-0">
-                  <Star className="w-3.5 h-3.5 fill-portal-yellow text-portal-yellow stroke-[2.5]" />
-                  <span className="text-xs font-black text-white">{rating.toFixed(1)}</span>
-                  <span className="text-[9px] text-slate-400 font-bold">({ratingCount})</span>
+                <div className="flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm shrink-0">
+                  <Star className="w-3.5 h-3.5 fill-portal-yellow text-black stroke-[2.5]" />
+                  <span className="text-xs font-black text-black">{rating.toFixed(1)}</span>
+                  <span className="text-[9px] text-slate-600 font-bold">({ratingCount})</span>
                 </div>
               </div>
             )}
 
             {/* Rating Body Content */}
-            <div className="p-4 sm:p-5 flex flex-col items-center text-center">
-              <p className="text-xs font-black text-slate-300 uppercase tracking-wide mb-3">
+            <div className="p-4 sm:p-5 flex flex-col items-center text-center bg-white">
+              <p className="text-xs font-black text-black uppercase tracking-wide mb-3">
                 How would you rate this experience?
               </p>
 
@@ -388,7 +394,7 @@ export default function StarRating({
                       className={`relative flex flex-col items-center justify-center py-3 rounded-2xl border-3 border-black transition-all ${
                         isActiveState
                           ? 'bg-portal-yellow text-black shadow-neo -translate-y-1 scale-105'
-                          : 'bg-portal-card text-slate-400 shadow-neo-sm hover:border-portal-yellow hover:text-white'
+                          : 'bg-white text-slate-400 shadow-neo-sm hover:border-black hover:text-black'
                       }`}
                       title={RATING_QUALITIES[starVal].label}
                     >
@@ -396,10 +402,10 @@ export default function StarRating({
                         className={`w-6 h-6 stroke-[2.5] transition-transform ${
                           isActiveState
                             ? 'fill-black text-black scale-110'
-                            : 'fill-transparent text-slate-500'
+                            : 'fill-transparent text-slate-300'
                         }`}
                       />
-                      <span className="text-xs font-black mt-1 uppercase">
+                      <span className="text-xs font-black mt-1 uppercase text-black">
                         {starVal}★
                       </span>
                     </button>
@@ -408,13 +414,13 @@ export default function StarRating({
               </div>
 
               {/* Dynamic Quality Indicator Badge */}
-              <div className="w-full bg-portal-card border-2 border-black rounded-xl p-3 shadow-neo-sm mb-4">
+              <div className="w-full bg-slate-50 border-2 border-black rounded-xl p-3 shadow-neo-sm mb-4">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border border-black shadow-neo-sm ${currentQuality.badgeBg} ${currentQuality.badgeText}`}>
                     {currentQuality.icon} {currentQuality.label}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 font-bold leading-tight">
+                <p className="text-[11px] text-slate-800 font-bold leading-tight">
                   {currentQuality.description}
                 </p>
               </div>
@@ -427,7 +433,7 @@ export default function StarRating({
                   disabled={isSubmitting}
                   className={`w-full py-3.5 px-4 rounded-xl border-3 border-black font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
                     justRated
-                      ? 'bg-portal-lime text-black shadow-none translate-x-1 translate-y-1'
+                      ? 'bg-portal-green text-black shadow-none translate-x-1 translate-y-1'
                       : 'bg-portal-yellow hover:bg-portal-cyan text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
                   }`}
                 >
@@ -448,7 +454,7 @@ export default function StarRating({
                   type="button"
                   onClick={() => setIsOpen(false)}
                   disabled={isSubmitting}
-                  className="w-full py-2 px-3 rounded-lg text-[10px] font-black uppercase text-slate-400 hover:text-white transition-colors"
+                  className="w-full py-2 px-3 rounded-lg text-[10px] font-black uppercase text-slate-600 hover:text-black transition-colors"
                 >
                   Cancel / Keep Browsing
                 </button>

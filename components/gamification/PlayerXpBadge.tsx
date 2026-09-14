@@ -68,26 +68,26 @@ export default function PlayerXpBadge({
         onClick={onOpenTrophies}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none"
+        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none"
         title={`Player Level ${levelInfo.level}: ${levelInfo.title} (${levelInfo.xpIntoCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP). Click to open Trophy Room.`}
       >
         {/* Level Tag */}
         <div className="flex items-center gap-1">
-          <Zap className="w-3.5 h-3.5 text-portal-yellow fill-portal-yellow stroke-[2.5]" />
-          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-portal-cyan">
+          <Zap className="w-3.5 h-3.5 text-black fill-portal-yellow stroke-[2.5]" />
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-black">
             LVL {levelInfo.level}
           </span>
         </div>
 
         {/* XP Mini Bar */}
         <div className="hidden xs:flex flex-col gap-0.5 w-14 sm:w-20">
-          <div className="flex justify-between items-center text-[8px] font-black text-slate-300 leading-none">
-            <span className="truncate max-w-[45px] text-white">{levelInfo.title}</span>
+          <div className="flex justify-between items-center text-[8px] font-black text-black leading-none">
+            <span className="truncate max-w-[45px] text-black">{levelInfo.title}</span>
             <span>{Math.round(levelInfo.progressPercent)}%</span>
           </div>
-          <div className="w-full h-2 bg-black rounded-md overflow-hidden border border-black">
+          <div className="w-full h-2 bg-slate-100 rounded-md overflow-hidden border border-black">
             <div
-              className="h-full bg-portal-lime border-r border-black transition-all duration-500"
+              className="h-full bg-portal-green border-r border-black transition-all duration-500"
               style={{ width: `${levelInfo.progressPercent}%` }}
             />
           </div>
@@ -95,13 +95,13 @@ export default function PlayerXpBadge({
 
         {/* Hover Detailed XP Tooltip */}
         {isHovered && (
-          <div className="absolute top-full mt-2 right-0 z-50 px-3 py-2 rounded-xl bg-portal-surface border-3 border-black shadow-neo text-[11px] whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
-            <div className="font-black text-white flex items-center gap-1.5 uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
+          <div className="absolute top-full mt-2 right-0 z-50 px-3 py-2 rounded-xl bg-white border-3 border-black shadow-neo text-[11px] whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
+            <div className="font-black text-black flex items-center gap-1.5 uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-portal-pink stroke-[2.5]" />
               <span>{levelInfo.title}</span>
             </div>
-            <div className="text-slate-300 mt-0.5 font-bold">
-              <span className="text-portal-yellow font-black">{state.xp} Total XP</span> ({levelInfo.xpIntoCurrentLevel} / {levelInfo.xpNeededForNextLevel} to LVL {levelInfo.level + 1})
+            <div className="text-slate-800 mt-0.5 font-bold">
+              <span className="text-black font-black bg-portal-yellow px-1 rounded border border-black">{state.xp} Total XP</span> ({levelInfo.xpIntoCurrentLevel} / {levelInfo.xpNeededForNextLevel} to LVL {levelInfo.level + 1})
             </div>
           </div>
         )}
@@ -110,7 +110,7 @@ export default function PlayerXpBadge({
       {/* 3. Daily Quests Shortcut Button with Unclaimed Badge */}
       <button
         onClick={onOpenQuests}
-        className="relative p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-purple text-portal-purple hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
+        className="relative p-2 rounded-xl bg-white border-2 border-black shadow-neo-sm hover:bg-portal-pink text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Daily Quests"
         aria-label="Daily Quests"
       >
@@ -125,7 +125,7 @@ export default function PlayerXpBadge({
       {/* 4. Trophy Room Shortcut Button */}
       <button
         onClick={onOpenTrophies}
-        className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-yellow text-portal-yellow hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
+        className="p-2 rounded-xl bg-white border-2 border-black shadow-neo-sm hover:bg-portal-yellow text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Holographic Trophy Vault"
         aria-label="Trophy Vault"
       >
@@ -137,7 +137,7 @@ export default function PlayerXpBadge({
         onClick={toggleMute}
         className={`p-2 rounded-xl border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
           isMuted
-            ? 'bg-portal-card text-slate-500 hover:text-slate-200'
+            ? 'bg-white text-slate-400 hover:text-black'
             : 'bg-portal-cyan text-black'
         }`}
         title={isMuted ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Active (Click to Mute)'}

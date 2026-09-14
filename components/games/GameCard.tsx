@@ -19,9 +19,9 @@ interface GameCardProps {
 
 const CATEGORY_THEMES: Record<string, { bg: string; text: string }> = {
   ARCADE: { bg: 'bg-portal-cyan', text: 'text-black' },
-  PUZZLE: { bg: 'bg-portal-purple', text: 'text-white' },
-  STRATEGY: { bg: 'bg-portal-lime', text: 'text-black' },
-  ACTION: { bg: 'bg-portal-pink', text: 'text-white' },
+  PUZZLE: { bg: 'bg-portal-purple', text: 'text-black' },
+  STRATEGY: { bg: 'bg-portal-green', text: 'text-black' },
+  ACTION: { bg: 'bg-portal-pink', text: 'text-black' },
   CARD: { bg: 'bg-portal-yellow', text: 'text-black' },
 };
 
@@ -63,7 +63,7 @@ export default function GameCard({
           onPlay(game);
         }
       }}
-      className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-200 select-none"
+      className="group relative flex flex-col bg-white rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-200 select-none"
     >
       {/* Thumbnail Container */}
       <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-black mb-2 border-2 border-black shadow-neo-sm">
@@ -75,7 +75,7 @@ export default function GameCard({
           }`}
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />
 
         {/* Coming Soon Top Ribbon */}
         {isComingSoon && (
@@ -98,17 +98,17 @@ export default function GameCard({
         {/* Favorite Icon */}
         <button
           onClick={(e) => onToggleFavorite(game.id, e)}
-          className="absolute top-1.5 right-1.5 p-1.5 rounded-xl bg-portal-surface hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all z-10"
+          className="absolute top-1.5 right-1.5 p-1.5 rounded-xl bg-white hover:bg-portal-pink text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all z-10"
           title={isFavorite ? "Remove favorite" : "Add to favorites"}
         >
-          <Heart className={`w-3.5 h-3.5 stroke-[2.5] ${isFavorite ? 'fill-portal-pink text-portal-pink' : 'text-slate-300'}`} />
+          <Heart className={`w-3.5 h-3.5 stroke-[2.5] ${isFavorite ? 'fill-portal-pink text-black' : 'text-black'}`} />
         </button>
 
         {/* Quick Trophy Leaderboard Button (Only for active games) */}
         {!isComingSoon && (
           <button
             onClick={(e) => onViewLeaderboard(game.id, e)}
-            className="absolute bottom-1.5 right-1.5 p-1.5 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo-sm opacity-90 sm:opacity-0 group-hover:opacity-100 transition-all z-10 hover:translate-x-0.5 hover:translate-y-0.5"
+            className="absolute bottom-1.5 right-1.5 p-1.5 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black border-2 border-black shadow-neo-sm opacity-90 sm:opacity-0 group-hover:opacity-100 transition-all z-10 hover:translate-x-0.5 hover:translate-y-0.5"
             title="View Top Scores"
           >
             <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -139,17 +139,17 @@ export default function GameCard({
             </span>
           </div>
           <h3 className={`font-black text-xs sm:text-sm leading-tight uppercase line-clamp-1 transition-colors ${
-            isComingSoon ? 'text-slate-200 group-hover:text-portal-yellow' : 'text-white group-hover:text-portal-cyan'
+            isComingSoon ? 'text-slate-800 group-hover:text-portal-pink' : 'text-black group-hover:text-portal-pink'
           }`}>
             {game.title}
           </h3>
         </div>
 
-        <div className="flex items-center justify-between mt-2 pt-1.5 border-t-2 border-black text-[10px] text-slate-300 font-black uppercase">
+        <div className="flex items-center justify-between mt-2 pt-1.5 border-t-2 border-black text-[10px] text-black font-black uppercase">
           {isComingSoon ? (
             <>
-              <span className="text-portal-yellow font-black flex items-center gap-1">
-                <Sparkles className="w-3 h-3 stroke-[2.5]" /> In Dev
+              <span className="text-black font-black flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-portal-pink stroke-[2.5]" /> In Dev
               </span>
               <button
                 type="button"
@@ -160,7 +160,7 @@ export default function GameCard({
                 className={`flex items-center gap-1 px-2 py-0.5 rounded-lg border-2 border-black text-[10px] font-black tracking-wide shadow-neo-sm transition-all z-10 hover:translate-x-0.5 hover:translate-y-0.5 ${
                   isHyped
                     ? 'bg-portal-yellow text-black'
-                    : 'bg-portal-surface text-portal-yellow hover:bg-portal-yellow hover:text-black'
+                    : 'bg-white text-black hover:bg-portal-yellow'
                 }`}
                 title={isHyped ? "You've hyped this game! Click to un-hype" : "Hype this game!"}
               >
@@ -170,7 +170,7 @@ export default function GameCard({
             </>
           ) : (
             <>
-              <span className="truncate tracking-wider">{formatPlayCount(game.play_count)}</span>
+              <span className="truncate tracking-wider text-slate-700">{formatPlayCount(game.play_count)}</span>
               <div onClick={(e) => e.stopPropagation()} className="shrink-0 z-10">
                 <StarRating
                   gameId={game.id}

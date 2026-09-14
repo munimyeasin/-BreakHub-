@@ -118,14 +118,14 @@ export default function MobileGamepad({
   return (
     <div className={`flex flex-col items-center w-full select-none ${className}`}>
       {/* Control Switcher Bar */}
-      <div className="flex items-center gap-1.5 bg-portal-surface border-2 border-black p-1 rounded-xl mb-3 shadow-neo-sm">
+      <div className="flex items-center gap-1.5 bg-white border-2 border-black p-1 rounded-xl mb-3 shadow-neo-sm">
         <button
           type="button"
           onClick={() => handleSwitchType('joystick')}
           className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider border-2 border-black transition-all ${
             controlType === 'joystick'
               ? 'bg-portal-cyan text-black shadow-neo-sm translate-x-0.5 translate-y-0.5'
-              : 'text-slate-300 hover:text-white border-transparent'
+              : 'text-slate-600 hover:text-black border-transparent'
           }`}
         >
           <Compass className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -138,7 +138,7 @@ export default function MobileGamepad({
           className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider border-2 border-black transition-all ${
             controlType === 'dpad'
               ? 'bg-portal-yellow text-black shadow-neo-sm translate-x-0.5 translate-y-0.5'
-              : 'text-slate-300 hover:text-white border-transparent'
+              : 'text-slate-600 hover:text-black border-transparent'
           }`}
         >
           <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -166,7 +166,7 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-portal-card border-3 border-black text-portal-cyan flex flex-col items-center justify-center font-black shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
+                className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white border-3 border-black text-black flex flex-col items-center justify-center font-black shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
               >
                 <ChevronLeft className="w-8 h-8 stroke-[3]" />
                 <span className="text-[10px] uppercase font-black tracking-wider">LEFT</span>
@@ -178,7 +178,7 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-portal-card border-3 border-black text-portal-cyan flex flex-col items-center justify-center font-black shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
+                className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white border-3 border-black text-black flex flex-col items-center justify-center font-black shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
               >
                 <ChevronRight className="w-8 h-8 stroke-[3]" />
                 <span className="text-[10px] uppercase font-black tracking-wider">RIGHT</span>
@@ -194,7 +194,7 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="absolute top-0 w-13 h-13 rounded-xl bg-portal-card border-3 border-black text-portal-yellow flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-yellow active:text-black transition-all touch-none"
+                className="absolute top-0 w-13 h-13 rounded-xl bg-white border-3 border-black text-black flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-yellow active:text-black transition-all touch-none"
               >
                 <ChevronUp className="w-7 h-7 stroke-[3]" />
               </button>
@@ -206,13 +206,13 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="absolute left-0 w-13 h-13 rounded-xl bg-portal-card border-3 border-black text-portal-cyan flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
+                className="absolute left-0 w-13 h-13 rounded-xl bg-white border-3 border-black text-black flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
               >
                 <ChevronLeft className="w-7 h-7 stroke-[3]" />
               </button>
 
               {/* Center Core */}
-              <div className="w-11 h-11 rounded-full bg-portal-surface border-2 border-black flex items-center justify-center shadow-neo-sm">
+              <div className="w-11 h-11 rounded-full bg-slate-100 border-2 border-black flex items-center justify-center shadow-neo-sm">
                 <div className="w-3 h-3 rounded-full bg-portal-pink animate-pulse" />
               </div>
 
@@ -223,7 +223,7 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="absolute right-0 w-13 h-13 rounded-xl bg-portal-card border-3 border-black text-portal-cyan flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
+                className="absolute right-0 w-13 h-13 rounded-xl bg-white border-3 border-black text-black flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-cyan active:text-black transition-all touch-none"
               >
                 <ChevronRight className="w-7 h-7 stroke-[3]" />
               </button>
@@ -235,7 +235,7 @@ export default function MobileGamepad({
                 onPointerUp={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerLeave={(e) => { e.preventDefault(); stopRepeat(); }}
                 onPointerCancel={(e) => { e.preventDefault(); stopRepeat(); }}
-                className="absolute bottom-0 w-13 h-13 rounded-xl bg-portal-card border-3 border-black text-portal-yellow flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-yellow active:text-black transition-all touch-none"
+                className="absolute bottom-0 w-13 h-13 rounded-xl bg-white border-3 border-black text-black flex items-center justify-center font-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none active:bg-portal-yellow active:text-black transition-all touch-none"
               >
                 <ChevronDown className="w-7 h-7 stroke-[3]" />
               </button>

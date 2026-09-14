@@ -242,13 +242,13 @@ export default function VirtualJoystick({
         }}
         className={`relative rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center transition-all duration-200 border-3 border-black ${
           isActive
-            ? 'bg-portal-surface shadow-neo-cyan'
-            : 'bg-portal-card shadow-neo-sm'
+            ? 'bg-white shadow-neo'
+            : 'bg-slate-100 shadow-neo-sm'
         }`}
       >
         {/* Subtle Concentric Range Ring */}
         <div
-          className="absolute rounded-full border-2 border-dashed border-white/20 pointer-events-none"
+          className="absolute rounded-full border-2 border-dashed border-black/30 pointer-events-none"
           style={{ width: `${size * 0.65}px`, height: `${size * 0.65}px` }}
         />
 
@@ -257,37 +257,37 @@ export default function VirtualJoystick({
         <div
           className={`absolute top-1.5 w-2 h-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'UP'
-              ? 'bg-portal-yellow shadow-neo-sm scale-125'
-              : 'bg-slate-600'
+              ? 'bg-portal-yellow shadow-neo-xs scale-125'
+              : 'bg-slate-400'
           }`}
         />
         {/* DOWN Tick */}
         <div
           className={`absolute bottom-1.5 w-2 h-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'DOWN'
-              ? 'bg-portal-yellow shadow-neo-sm scale-125'
-              : 'bg-slate-600'
+              ? 'bg-portal-yellow shadow-neo-xs scale-125'
+              : 'bg-slate-400'
           }`}
         />
         {/* LEFT Tick */}
         <div
           className={`absolute left-1.5 h-2 w-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'LEFT'
-              ? 'bg-portal-cyan shadow-neo-sm scale-125'
-              : 'bg-slate-600'
+              ? 'bg-portal-cyan shadow-neo-xs scale-125'
+              : 'bg-slate-400'
           }`}
         />
         {/* RIGHT Tick */}
         <div
           className={`absolute right-1.5 h-2 w-3.5 rounded-full border border-black transition-all duration-150 ${
             activeDirection === 'RIGHT'
-              ? 'bg-portal-cyan shadow-neo-sm scale-125'
-              : 'bg-slate-600'
+              ? 'bg-portal-cyan shadow-neo-xs scale-125'
+              : 'bg-slate-400'
           }`}
         />
 
         {/* Center Target Crosshair */}
-        <div className="absolute w-2.5 h-2.5 rounded-full bg-black border border-white/40 pointer-events-none" />
+        <div className="absolute w-2.5 h-2.5 rounded-full bg-black border border-white pointer-events-none" />
 
         {/* Floating Thumb Knob / Puck */}
         <div
@@ -323,7 +323,7 @@ export default function VirtualJoystick({
 
       {/* HUD Label */}
       {label && (
-        <span className="mt-2 text-[10px] font-black tracking-widest text-slate-300 uppercase pointer-events-none bg-portal-surface px-2 py-0.5 rounded-md border-2 border-black shadow-neo-sm">
+        <span className="mt-2 text-[10px] font-black tracking-widest text-black uppercase pointer-events-none bg-white px-2.5 py-0.5 rounded-md border-2 border-black shadow-neo-xs">
           {label}
         </span>
       )}

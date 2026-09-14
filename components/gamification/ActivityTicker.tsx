@@ -17,48 +17,48 @@ interface ActivityItem {
 const DEFAULT_ACTIVITIES: ActivityItem[] = [
   {
     id: '1',
-    icon: <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-400" />,
+    icon: <Flame className="w-3.5 h-3.5 text-black fill-portal-yellow" />,
     user: 'Munim',
     action: 'ignited a',
     highlight: '7-Day Play Streak',
     tag: 'STREAK',
-    color: 'border-orange-500/40 text-orange-300',
+    color: 'bg-portal-yellow text-black',
   },
   {
     id: '2',
-    icon: <Zap className="w-3.5 h-3.5 text-portal-cyan fill-portal-cyan" />,
+    icon: <Zap className="w-3.5 h-3.5 text-black fill-portal-cyan" />,
     user: 'Tahida',
     action: 'ascended to Rank',
     highlight: 'Grid Pilot (LVL 4)',
     tag: 'LEVEL UP',
-    color: 'border-cyan-500/40 text-portal-cyan',
+    color: 'bg-portal-cyan text-black',
   },
   {
     id: '3',
-    icon: <Trophy className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />,
+    icon: <Trophy className="w-3.5 h-3.5 text-black fill-portal-yellow" />,
     user: 'Marzia',
     action: 'unlocked Holographic Trophy',
     highlight: 'Night Owl Platinum',
     tag: 'TROPHY',
-    color: 'border-amber-500/40 text-amber-300',
+    color: 'bg-portal-yellow text-black',
   },
   {
     id: '4',
-    icon: <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />,
+    icon: <Star className="w-3.5 h-3.5 text-black fill-portal-pink" />,
     user: 'Nazmul',
     action: 'set new high score in',
     highlight: 'Cyber Slicer (3,450 pts)',
     tag: 'RECORD',
-    color: 'border-yellow-500/40 text-yellow-300',
+    color: 'bg-portal-pink text-black',
   },
   {
     id: '5',
-    icon: <Sparkles className="w-3.5 h-3.5 text-purple-400" />,
+    icon: <Sparkles className="w-3.5 h-3.5 text-black" />,
     user: 'CyberRunner_9',
     action: 'claimed',
     highlight: '3/3 Daily Master Bonus',
     tag: 'QUESTS',
-    color: 'border-purple-500/40 text-purple-300',
+    color: 'bg-portal-green text-black',
   },
 ];
 
@@ -78,12 +78,12 @@ export default function ActivityTicker() {
       if (state.streak.current >= 2) {
         combined.unshift({
           id: 'player_streak',
-          icon: <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-400 animate-bounce" />,
+          icon: <Flame className="w-3.5 h-3.5 text-black fill-portal-yellow animate-bounce" />,
           user: 'You',
           action: 'are rocking an active',
           highlight: `${state.streak.current}-Day Play Streak`,
           tag: 'YOUR STREAK',
-          color: 'border-orange-400/80 text-orange-300 shadow-[0_0_10px_rgba(249,115,22,0.3)]',
+          color: 'bg-portal-yellow text-black',
         });
       }
 
@@ -91,12 +91,12 @@ export default function ActivityTicker() {
       if (levelInfo.level >= 2) {
         combined.splice(2, 0, {
           id: 'player_rank',
-          icon: <Zap className="w-3.5 h-3.5 text-portal-cyan fill-portal-cyan animate-pulse" />,
+          icon: <Zap className="w-3.5 h-3.5 text-black fill-portal-cyan animate-pulse" />,
           user: 'You',
           action: 'hold Clearance Rank',
           highlight: `${levelInfo.title} (LVL ${levelInfo.level})`,
           tag: 'YOUR RANK',
-          color: 'border-cyan-400/80 text-portal-cyan shadow-[0_0_10px_rgba(6,182,212,0.3)]',
+          color: 'bg-portal-cyan text-black',
         });
       }
 
@@ -130,11 +130,11 @@ export default function ActivityTicker() {
     <div
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative w-full overflow-hidden bg-portal-surface border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm"
+      className="relative w-full overflow-hidden bg-white border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm"
     >
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-white tracking-wider shadow-neo-sm">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-black tracking-wider shadow-neo-sm">
+          <span className="w-2 h-2 rounded-full bg-black animate-ping" />
           <Radio className="w-3 h-3 stroke-[2.5]" />
           <span className="hidden xs:inline">LIVE FEED</span>
         </div>
@@ -147,12 +147,12 @@ export default function ActivityTicker() {
           className="flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300 truncate"
         >
           <span className="shrink-0">{current.icon}</span>
-          <span className="text-white font-black">{current.user}</span>
-          <span className="text-slate-300 font-bold hidden sm:inline">{current.action}</span>
-          <span className="font-black text-portal-yellow underline decoration-2 underline-offset-2">
+          <span className="text-black font-black uppercase">{current.user}</span>
+          <span className="text-slate-700 font-bold hidden sm:inline">{current.action}</span>
+          <span className="font-black text-black bg-portal-yellow px-1.5 py-0.2 rounded border border-black uppercase text-[10px] tracking-wide">
             {current.highlight}
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-portal-yellow text-black border-2 border-black shadow-neo-sm shrink-0">
+          <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-portal-cyan text-black border-2 border-black shadow-neo-sm shrink-0">
             {current.tag}
           </span>
         </div>
@@ -165,7 +165,7 @@ export default function ActivityTicker() {
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`w-2 h-2 rounded-sm border border-black transition-all ${
-              idx === currentIndex ? 'bg-portal-yellow w-4 shadow-neo-sm' : 'bg-portal-card hover:bg-slate-400'
+              idx === currentIndex ? 'bg-portal-yellow w-4 shadow-neo-sm' : 'bg-slate-200 hover:bg-slate-400'
             }`}
             aria-label={`Slide ${idx + 1}`}
           />

@@ -68,27 +68,34 @@ export default function ComingSoonModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-md bg-portal-surface border-4 border-black shadow-neo-lg rounded-2xl p-5 sm:p-6 text-white space-y-4 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn select-none">
+      <div className="relative w-full max-w-md bg-white border-4 border-black shadow-neo-xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 text-black space-y-4 overflow-hidden animate-scaleIn">
+
+        {/* Figma Selection Frame Transform Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         {/* Top Decorative Color Accent Bar */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
 
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl bg-portal-card hover:bg-portal-pink border-2 border-black text-white hover:text-black font-black z-10 transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+          className="absolute top-4 right-4 p-2 rounded-xl bg-white hover:bg-portal-pink border-2 border-black text-black font-black z-10 transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
           title="Close Modal"
         >
           <X className="w-4 h-4 stroke-[2.5]" />
         </button>
 
-        {/* Header with Visual Cyber Badge */}
+        {/* Header with Visual Badge */}
         <div className="text-center space-y-2.5 pt-1">
-          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-card border-3 border-black p-1 shadow-neo-sm flex items-center justify-center">
+          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 border-3 border-black p-1 shadow-neo flex items-center justify-center">
             <img
               src={game.thumbnail_url}
               alt={game.title}
-              className="w-full h-full rounded-xl object-cover bg-slate-900 filter brightness-90"
+              className="w-full h-full rounded-xl object-cover bg-black"
             />
             <div className="absolute -bottom-2.5 -right-2.5 p-1.5 bg-portal-yellow rounded-lg border-2 border-black text-black shadow-neo-sm">
               <Clock className="w-4 h-4 stroke-[2.5]" />
@@ -96,43 +103,43 @@ export default function ComingSoonModal({
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-portal-pink border-2 border-black text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-neo-sm">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-portal-pink border-2 border-black text-black text-[10px] sm:text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-neo-sm">
               <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Coming Soon • In Development</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase">
+            <h2 className="text-xl sm:text-2xl font-black text-black tracking-tight uppercase">
               {game.title}
             </h2>
-            <p className="text-[11px] font-black uppercase tracking-widest text-portal-yellow mt-0.5">
+            <p className="text-[11px] font-black uppercase tracking-widest text-slate-700 mt-0.5">
               {game.category} EDITION
             </p>
           </div>
         </div>
 
         {/* Game Brief & Status Box */}
-        <div className="bg-portal-card border-2 border-black shadow-neo-sm rounded-xl p-3.5 space-y-2.5 text-xs text-slate-300">
-          <p className="leading-relaxed text-slate-200 text-[11px] sm:text-xs font-bold">
+        <div className="bg-slate-50 border-2 border-black shadow-neo-sm rounded-xl p-3.5 space-y-2.5 text-xs text-slate-700">
+          <p className="leading-relaxed text-black text-[11px] sm:text-xs font-bold">
             {game.description}
           </p>
 
           <div className="pt-2 border-t-2 border-black flex items-center justify-between text-[11px] font-black">
-            <span className="flex items-center gap-1.5 text-portal-yellow">
-              <Rocket className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="flex items-center gap-1.5 text-black">
+              <Rocket className="w-3.5 h-3.5 text-black stroke-[2.5]" />
               Engineering in Progress
             </span>
-            <span className="flex items-center gap-1.5 text-portal-lime">
-              <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="flex items-center gap-1.5 text-black">
+              <ShieldCheck className="w-3.5 h-3.5 text-black stroke-[2.5]" />
               Canvas Engine Ready
             </span>
           </div>
         </div>
 
         {/* Interactive Hype & Player Interest Section */}
-        <div className="bg-portal-card border-3 border-black shadow-neo rounded-xl p-3.5 space-y-3">
+        <div className="bg-slate-50 border-3 border-black shadow-neo rounded-xl p-3.5 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-portal-yellow fill-portal-yellow" />
-              <span className="text-xs font-black uppercase tracking-wider text-portal-yellow">
+              <Flame className="w-4 h-4 text-black fill-portal-yellow" />
+              <span className="text-xs font-black uppercase tracking-wider text-black">
                 Player Interest Tracker
               </span>
             </div>
@@ -144,11 +151,11 @@ export default function ComingSoonModal({
 
           {/* Milestone Progress Bar */}
           <div className="space-y-1">
-            <div className="flex justify-between text-[10px] font-black uppercase text-slate-300">
+            <div className="flex justify-between text-[10px] font-black uppercase text-slate-700">
               <span>Community Release Priority</span>
-              <span className="text-portal-yellow">{currentHype} / {milestoneTarget} votes ({milestonePercent}%)</span>
+              <span className="text-black font-black">{currentHype} / {milestoneTarget} votes ({milestonePercent}%)</span>
             </div>
-            <div className="w-full h-3 rounded-lg bg-black border-2 border-black overflow-hidden">
+            <div className="w-full h-3 rounded-lg bg-slate-200 border-2 border-black overflow-hidden">
               <div
                 className="h-full bg-portal-yellow transition-all duration-500 border-r-2 border-black"
                 style={{ width: `${milestonePercent}%` }}
@@ -162,10 +169,10 @@ export default function ComingSoonModal({
             className={`w-full py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm tracking-wider uppercase flex items-center justify-center gap-2 border-3 border-black transition-all ${
               isHyped
                 ? 'bg-portal-yellow text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
-                : 'bg-portal-surface hover:bg-portal-pink text-white hover:text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                : 'bg-white hover:bg-portal-pink text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
             } ${animatingHype ? 'scale-105' : ''}`}
           >
-            <Flame className={`w-4 h-4 ${isHyped ? 'fill-black text-black' : 'text-portal-yellow animate-pulse'}`} />
+            <Flame className={`w-4 h-4 ${isHyped ? 'fill-black text-black' : 'text-black animate-pulse'}`} />
             <span>{isHyped ? '🔥 INTEREST REGISTERED! (HYPED)' : '🔥 HYPE THIS GAME (+1)'}</span>
           </button>
         </div>
@@ -186,7 +193,7 @@ export default function ComingSoonModal({
 
           <button
             onClick={onClose}
-            className="w-full py-2 rounded-xl bg-portal-card hover:bg-portal-surface border-2 border-black text-slate-300 hover:text-white font-black text-xs transition-all uppercase tracking-wider"
+            className="w-full py-2 rounded-xl bg-white hover:bg-slate-100 border-2 border-black text-slate-700 hover:text-black font-black text-xs transition-all uppercase tracking-wider"
           >
             Dismiss
           </button>

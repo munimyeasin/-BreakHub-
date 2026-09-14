@@ -93,10 +93,27 @@ export default function SpotlightBanner({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
       onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
-      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden"
+      className="relative w-full rounded-2xl sm:rounded-3xl bg-white border-3 sm:border-4 border-black p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-neo-lg select-none"
     >
+      {/* Figma Selection Frame Transform Handles (Corners & Midpoints) */}
+      <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="hidden sm:block absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="hidden sm:block absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="hidden sm:block absolute top-1/2 -left-1.5 -translate-y-1/2 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+      <div className="hidden sm:block absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
+      {/* Rotated Neo-Brutalist Sticker Badge on Top Right */}
+      <div className="absolute -top-3.5 right-6 sm:right-10 z-20 rotate-[-3deg] pointer-events-none">
+        <span className="px-3 py-1 rounded-md bg-portal-pink text-black text-[10px] sm:text-xs font-black uppercase tracking-wider border-2 border-black shadow-neo-sm">
+          ✦ 100% RETRO ENGINE
+        </span>
+      </div>
+
       {/* Top Tri-Color Accent Line */}
-      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b border-black rounded-t-2xl sm:rounded-t-3xl" />
 
       {/* Dynamic Keyframes for Smooth Spotlight Animation */}
       <style jsx>{`
@@ -116,31 +133,32 @@ export default function SpotlightBanner({
       `}</style>
 
       {/* Top Bar: Spotlight Pill + Selector Switcher + Nav Arrows */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2.5 mb-2.5 sm:mb-3 md:mb-4 pt-1 pb-2 sm:pb-2.5 border-b-3 border-black">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 sm:gap-2.5 mb-3 sm:mb-4 pt-1 pb-2.5 sm:pb-3 border-b-3 border-black">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <span className="flex items-center gap-1 sm:gap-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
             <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>SPOTLIGHT SHOWCASE</span>
           </span>
-          <span className="text-[10px] sm:text-xs font-black text-slate-300 uppercase hidden xs:inline">
-            Featured Highlights
+          <span className="text-[10px] sm:text-xs font-black text-black uppercase hidden xs:inline bg-portal-butter px-2 py-0.5 rounded-md border border-black shadow-neo-xs">
+            • [ FEATURED ARCADE ] •
           </span>
         </div>
 
         {/* Quick Switcher Tabs & Arrows */}
         {featuredGames.length > 1 && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {/* Prev Arrow */}
             <button
               onClick={handlePrev}
-              className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
+              className="p-1.5 rounded-xl bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
               title="Previous Game"
+              aria-label="Previous Spotlight Game"
             >
               <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
 
             {/* Game Tabs */}
-            <div className="flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border-2 border-black shadow-neo-sm">
               {featuredGames.map((game, idx) => {
                 const isActive = idx === activeIndex;
                 return (
@@ -150,7 +168,7 @@ export default function SpotlightBanner({
                     className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-black transition-all border uppercase ${
                       isActive
                         ? 'bg-portal-cyan text-black border-black shadow-neo-sm font-black'
-                        : 'border-transparent text-slate-300 hover:text-white hover:bg-portal-surface'
+                        : 'border-transparent text-slate-700 hover:text-black hover:bg-white'
                     }`}
                   >
                     {getGameIcon(game.slug)}
@@ -163,8 +181,9 @@ export default function SpotlightBanner({
             {/* Next Arrow */}
             <button
               onClick={handleNext}
-              className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
+              className="p-1.5 rounded-xl bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none"
               title="Next Game"
+              aria-label="Next Spotlight Game"
             >
               <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
@@ -184,7 +203,7 @@ export default function SpotlightBanner({
             alt={currentGame.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
           {/* Center Play Button Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -202,7 +221,7 @@ export default function SpotlightBanner({
           </div>
 
           {/* Top In-Artwork Badges */}
-          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
             <span className="px-2.5 py-0.5 rounded-md bg-portal-cyan text-black text-[9px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
@@ -218,11 +237,11 @@ export default function SpotlightBanner({
           </div>
 
           {/* Bottom In-Artwork Badges */}
-          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
             <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-lime border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
               <Zap className="w-3 h-3 text-black stroke-[2.5]" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? '9 NESTED BOARDS' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : '60-144 FPS'}
             </span>
-            <span className="text-[9px] font-black text-white bg-portal-surface px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
+            <span className="text-[9px] font-black text-black bg-white px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
@@ -231,10 +250,10 @@ export default function SpotlightBanner({
         {/* Title & Description Row */}
         <div className="flex flex-col gap-1.5 pt-0.5">
           <div className="min-w-0">
-            <h1 className="text-lg xs:text-xl font-black tracking-tight text-white uppercase truncate">
+            <h1 className="text-lg xs:text-xl font-black tracking-tight text-black uppercase truncate">
               {currentGame.title}
             </h1>
-            <p className="text-xs text-slate-300 line-clamp-2 font-bold mt-0.5 leading-snug">
+            <p className="text-xs text-slate-700 line-clamp-2 font-bold mt-0.5 leading-snug">
               {currentGame.description}
             </p>
           </div>
@@ -244,7 +263,7 @@ export default function SpotlightBanner({
             {tags.slice(0, 3).map((tag, i) => (
               <span
                 key={i}
-                className="px-2.5 py-0.5 rounded-lg bg-portal-card border border-black text-[9px] font-black text-slate-200 uppercase shadow-neo-sm"
+                className="px-2.5 py-0.5 rounded-lg bg-portal-butter border border-black text-[9px] font-black text-black uppercase shadow-neo-xs"
               >
                 ⚡ {tag}
               </span>
@@ -277,7 +296,7 @@ export default function SpotlightBanner({
 
           <button
             onClick={() => isComingSoon ? onPlayGame(currentGame) : onViewLeaderboard(currentGame.id)}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-portal-yellow hover:text-black border-3 border-black font-black text-xs uppercase shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+            className="flex items-center justify-center gap-1.5 py-2.5 px-3.5 rounded-xl bg-white hover:bg-portal-yellow text-black border-3 border-black font-black text-xs uppercase shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
           >
             {isComingSoon ? (
               <>
@@ -296,12 +315,13 @@ export default function SpotlightBanner({
             onClick={(e) => onToggleFavorite(currentGame.id, e)}
             className={`p-2.5 rounded-xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
               isFavorite
-                ? 'bg-portal-pink text-white'
-                : 'bg-portal-card text-slate-300 hover:text-white'
+                ? 'bg-portal-pink text-black'
+                : 'bg-white text-black hover:bg-portal-pink/30'
             }`}
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label="Toggle Favorite"
           >
-            <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
+            <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-black text-black' : 'text-black'}`} />
           </button>
         </div>
       </div>
@@ -318,7 +338,7 @@ export default function SpotlightBanner({
             alt={currentGame.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
           {/* Hover Play/Hype Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
@@ -340,7 +360,7 @@ export default function SpotlightBanner({
             <span className="px-2.5 py-0.5 rounded-md bg-portal-cyan text-black text-[10px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
-            <span className="text-[10px] font-black text-white bg-portal-surface px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
+            <span className="text-[10px] font-black text-black bg-white px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
               {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
@@ -359,7 +379,7 @@ export default function SpotlightBanner({
                 <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-yellow border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
                   <Star className="w-3.5 h-3.5 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '4.9'}
                   {currentGame.rating_count ? (
-                    <span className="text-black/80 font-bold">({currentGame.rating_count} reviews)</span>
+                    <span className="text-black font-bold">({currentGame.rating_count} reviews)</span>
                   ) : null}
                 </span>
               )}
@@ -372,12 +392,12 @@ export default function SpotlightBanner({
             </div>
 
             {/* Game Title */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white uppercase">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-black uppercase">
               {currentGame.title}
             </h1>
 
             {/* Game Description */}
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mt-1.5 max-w-2xl font-bold">
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed mt-1.5 max-w-2xl font-bold">
               {currentGame.description}
             </p>
 
@@ -386,7 +406,7 @@ export default function SpotlightBanner({
               {tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1 rounded-xl bg-portal-card border-2 border-black text-xs font-black text-slate-200 uppercase shadow-neo-sm"
+                  className="px-3 py-1 rounded-xl bg-portal-butter border-2 border-black text-xs font-black text-black uppercase shadow-neo-sm"
                 >
                   ⚡ {tag}
                 </span>
@@ -419,7 +439,7 @@ export default function SpotlightBanner({
 
             <button
               onClick={() => isComingSoon ? onPlayGame(currentGame) : onViewLeaderboard(currentGame.id)}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-portal-card hover:bg-portal-yellow text-portal-yellow hover:text-black border-3 border-black font-black text-sm uppercase tracking-wider shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-portal-yellow text-black border-3 border-black font-black text-sm uppercase tracking-wider shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
             >
               {isComingSoon ? (
                 <>
@@ -438,12 +458,13 @@ export default function SpotlightBanner({
               onClick={(e) => onToggleFavorite(currentGame.id, e)}
               className={`p-3 rounded-xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
                 isFavorite
-                  ? 'bg-portal-pink text-white'
-                  : 'bg-portal-card text-slate-300 hover:text-white'
+                  ? 'bg-portal-pink text-black'
+                  : 'bg-white text-black hover:bg-portal-pink/30'
               }`}
               title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              aria-label="Toggle Favorite"
             >
-              <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
+              <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-black text-black' : 'text-black'}`} />
             </button>
           </div>
         </div>
