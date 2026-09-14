@@ -1,63 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="chromaBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#070014" />
-      <stop offset="60%" stop-color="#14062e" />
-      <stop offset="100%" stop-color="#021526" />
-    </linearGradient>
-    <filter id="simonGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00f0ff" flood-opacity="0.9" />
+    <filter id="neoShadowSm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadowLg" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#000000" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#chromaBg)" />
+  <!-- Neo Ground -->
+  <rect width="400" height="400" fill="#FAF8F5" />
 
-  <!-- Simon Reflex 4-Quadrant Ring Body -->
-  <g transform="translate(200, 190)">
+  <!-- Dot Matrix Grid -->
+  <g fill="#000000" opacity="0.08">
+    <circle cx="40" cy="40" r="2" /><circle cx="100" cy="40" r="2" /><circle cx="160" cy="40" r="2" /><circle cx="220" cy="40" r="2" /><circle cx="280" cy="40" r="2" /><circle cx="340" cy="40" r="2" />
+    <circle cx="40" cy="100" r="2" /><circle cx="100" cy="100" r="2" /><circle cx="160" cy="100" r="2" /><circle cx="220" cy="100" r="2" /><circle cx="280" cy="100" r="2" /><circle cx="340" cy="100" r="2" />
+    <circle cx="40" cy="160" r="2" /><circle cx="100" cy="160" r="2" /><circle cx="160" cy="160" r="2" /><circle cx="220" cy="160" r="2" /><circle cx="280" cy="160" r="2" /><circle cx="340" cy="160" r="2" />
+    <circle cx="40" cy="220" r="2" /><circle cx="100" cy="220" r="2" /><circle cx="160" cy="220" r="2" /><circle cx="220" cy="220" r="2" /><circle cx="280" cy="220" r="2" /><circle cx="340" cy="220" r="2" />
+    <circle cx="40" cy="280" r="2" /><circle cx="100" cy="280" r="2" /><circle cx="160" cy="280" r="2" /><circle cx="220" cy="280" r="2" /><circle cx="280" cy="280" r="2" /><circle cx="340" cy="280" r="2" />
+    <circle cx="40" cy="340" r="2" /><circle cx="100" cy="340" r="2" /><circle cx="160" cy="340" r="2" /><circle cx="220" cy="340" r="2" /><circle cx="280" cy="340" r="2" /><circle cx="340" cy="340" r="2" />
+  </g>
+
+  <!-- Outer Border -->
+  <rect x="12" y="12" width="376" height="376" rx="20" fill="none" stroke="#000000" stroke-width="4" />
+
+  <!-- Main Container -->
+  <rect x="36" y="36" width="328" height="328" rx="16" fill="#FE90E8" stroke="#000000" stroke-width="3.5" filter="url(#neoShadowLg)" />
+
+  <!-- Simon Reflex 4-Quadrant Tactile Arcade Wheel -->
+  <g transform="translate(200, 200)" filter="url(#neoShadow)">
     <!-- Base Circular Outer Housing -->
-    <circle cx="0" cy="0" r="145" fill="#0f0926" stroke="#25174f" stroke-width="6" />
+    <circle cx="0" cy="0" r="130" fill="#FFFFFF" stroke="#000000" stroke-width="4" />
 
-    <!-- 1. Top-Left: Glowing Cyan Quadrant -->
-    <path d="M -15,-130 A 130 130 0 0 0 -130,-15 L -55,-10 A 55 55 0 0 1 -10,-55 Z" fill="#00f0ff" stroke="#ffffff" stroke-width="4" filter="url(#simonGlow)" />
-    <!-- Cute Face on Cyan quadrant -->
-    <circle cx="-65" cy="-65" r="5" fill="#000" />
-    <circle cx="-50" cy="-65" r="5" fill="#000" />
-    <path d="M -62,-55 Q -57,-50 -52,-55" stroke="#000" stroke-width="2.5" fill="none" />
+    <!-- 1. Top-Left: Cyan Quadrant -->
+    <path d="M -12,-116 A 116 116 0 0 0 -116,-12 L -48,-8 A 48 48 0 0 1 -8,-48 Z" fill="#C0F7FE" stroke="#000000" stroke-width="3" />
 
-    <!-- 2. Top-Right: Glowing Pink Quadrant -->
-    <path d="M 15,-130 A 130 130 0 0 1 130,-15 L 55,-10 A 55 55 0 0 0 10,-55 Z" fill="#ff007f" stroke="#ffffff" stroke-width="4" />
-    <circle cx="50" cy="-65" r="5" fill="#fff" />
-    <circle cx="65" cy="-65" r="5" fill="#fff" />
-    <path d="M 52,-55 Q 57,-50 62,-55" stroke="#fff" stroke-width="2.5" fill="none" />
+    <!-- 2. Top-Right: Pink Quadrant -->
+    <path d="M 12,-116 A 116 116 0 0 1 116,-12 L 48,-8 A 48 48 0 0 0 8,-48 Z" fill="#FE90E8" stroke="#000000" stroke-width="3" />
 
-    <!-- 3. Bottom-Left: Glowing Yellow Quadrant -->
-    <path d="M -15,130 A 130 130 0 0 1 -130,15 L -55,10 A 55 55 0 0 0 -10,55 Z" fill="#ffe600" stroke="#ffffff" stroke-width="4" />
-    <circle cx="-65" cy="65" r="5" fill="#000" />
-    <circle cx="-50" cy="65" r="5" fill="#000" />
-    <path d="M -62,75 Q -57,80 -52,75" stroke="#000" stroke-width="2.5" fill="none" />
+    <!-- 3. Bottom-Left: Yellow Quadrant -->
+    <path d="M -12,116 A 116 116 0 0 1 -116,12 L -48,8 A 48 48 0 0 0 -8,48 Z" fill="#F7CB46" stroke="#000000" stroke-width="3" />
 
-    <!-- 4. Bottom-Right: Glowing Lime Green Quadrant -->
-    <path d="M 15,130 A 130 130 0 0 0 130,15 L 55,10 A 55 55 0 0 1 10,55 Z" fill="#00ff66" stroke="#ffffff" stroke-width="4" />
-    <circle cx="50" cy="65" r="5" fill="#000" />
-    <circle cx="65" cy="65" r="5" fill="#000" />
-    <path d="M 52,75 Q 57,80 62,75" stroke="#000" stroke-width="2.5" fill="none" />
+    <!-- 4. Bottom-Right: Fresh Green Quadrant -->
+    <path d="M 12,116 A 116 116 0 0 0 116,12 L 48,8 A 48 48 0 0 1 8,48 Z" fill="#99E885" stroke="#000000" stroke-width="3" />
 
-    <!-- Center Cyber Core Button -->
-    <circle cx="0" cy="0" r="42" fill="#070014" stroke="#ffffff" stroke-width="4" />
-    <text x="0" y="-4" font-family="'Arial Black', sans-serif" font-size="12" fill="#00f0ff" font-weight="900" text-anchor="middle">REFLEX</text>
-    <text x="0" y="14" font-family="'Arial Black', sans-serif" font-size="14" fill="#ffe600" font-weight="900" text-anchor="middle">TEST</text>
+    <!-- Center Mechanical Core Push Button -->
+    <circle cx="0" cy="0" r="38" fill="#FFFFFF" stroke="#000000" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="28" fill="#FFDC8B" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'JetBrains Mono', monospace" font-size="10" fill="#000000" font-weight="900" text-anchor="middle">REFLEX</text>
   </g>
 
-  <!-- Musical Note Tone Burst (Cartoon Audio Reflex) -->
-  <g transform="translate(60, 60)">
-    <text x="0" y="0" font-size="28" fill="#00f0ff">🎵</text>
+  <!-- Musical Notes Stickers in Sky -->
+  <g transform="translate(90, 90) rotate(-12)" filter="url(#neoShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#F7CB46" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="6" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="14" fill="#000000" text-anchor="middle">♪</text>
   </g>
-  <g transform="translate(320, 60)">
-    <text x="0" y="0" font-size="28" fill="#ff007f">🎶</text>
+  <g transform="translate(310, 90) rotate(15)" filter="url(#neoShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#C0F7FE" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="6" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="14" fill="#000000" text-anchor="middle">♫</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="145" height="30" rx="10" fill="#00ff66" opacity="0.2" stroke="#00ff66" stroke-width="1.5" />
-  <text x="97" y="365" fill="#00ff66" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">CHROMA REFLEX</text>
+  <!-- Top Sequence Tag -->
+  <g transform="translate(200, 26) rotate(-2)">
+    <rect x="-80" y="-14" width="160" height="28" rx="8" fill="#F7CB46" stroke="#000000" stroke-width="2.5" filter="url(#neoShadowSm)" />
+    <text x="0" y="5" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">🧠 SIMON SEQUENCE</text>
+  </g>
+
+  <!-- Corner Figma Transform Nodes -->
+  <rect x="6" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="6" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
 </svg>

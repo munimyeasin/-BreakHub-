@@ -1,110 +1,87 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="dashBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#070014" />
-      <stop offset="60%" stop-color="#19063b" />
-      <stop offset="100%" stop-color="#3d0043" />
-    </linearGradient>
-    <linearGradient id="runnerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0066ff" />
-    </linearGradient>
-    <linearGradient id="thrusterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffe600" />
-      <stop offset="60%" stop-color="#ff0055" />
-      <stop offset="100%" stop-color="#7700ff" />
-    </linearGradient>
-    <filter id="dashGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.8" />
+    <filter id="neoShadowSm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" />
     </filter>
-    <filter id="laserGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ff007f" flood-opacity="0.9" />
+    <filter id="neoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadowLg" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#000000" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#dashBg)" />
+  <!-- Neo Ground -->
+  <rect width="400" height="400" fill="#FAF8F5" />
 
-  <!-- Speed Lines Background -->
-  <g stroke="#ffffff" stroke-width="2" opacity="0.15" stroke-linecap="round">
-    <line x1="30" y1="60" x2="180" y2="60" />
-    <line x1="10" y1="130" x2="120" y2="130" />
-    <line x1="40" y1="210" x2="220" y2="210" />
-    <line x1="20" y1="280" x2="160" y2="280" />
-    <line x1="50" y1="340" x2="260" y2="340" />
+  <!-- Dot Matrix Grid -->
+  <g fill="#000000" opacity="0.08">
+    <circle cx="40" cy="40" r="2" /><circle cx="100" cy="40" r="2" /><circle cx="160" cy="40" r="2" /><circle cx="220" cy="40" r="2" /><circle cx="280" cy="40" r="2" /><circle cx="340" cy="40" r="2" />
+    <circle cx="40" cy="100" r="2" /><circle cx="100" cy="100" r="2" /><circle cx="160" cy="100" r="2" /><circle cx="220" cy="100" r="2" /><circle cx="280" cy="100" r="2" /><circle cx="340" cy="100" r="2" />
+    <circle cx="40" cy="160" r="2" /><circle cx="100" cy="160" r="2" /><circle cx="160" cy="160" r="2" /><circle cx="220" cy="160" r="2" /><circle cx="280" cy="160" r="2" /><circle cx="340" cy="160" r="2" />
+    <circle cx="40" cy="220" r="2" /><circle cx="100" cy="220" r="2" /><circle cx="160" cy="220" r="2" /><circle cx="220" cy="220" r="2" /><circle cx="280" cy="220" r="2" /><circle cx="340" cy="220" r="2" />
+    <circle cx="40" cy="280" r="2" /><circle cx="100" cy="280" r="2" /><circle cx="160" cy="280" r="2" /><circle cx="220" cy="280" r="2" /><circle cx="280" cy="280" r="2" /><circle cx="340" cy="280" r="2" />
+    <circle cx="40" cy="340" r="2" /><circle cx="100" cy="340" r="2" /><circle cx="160" cy="340" r="2" /><circle cx="220" cy="340" r="2" /><circle cx="280" cy="340" r="2" /><circle cx="340" cy="340" r="2" />
   </g>
 
-  <!-- Neon Platform Floor -->
-  <rect x="0" y="320" width="400" height="80" fill="#0c0721" />
-  <line x1="0" y1="320" x2="400" y2="320" stroke="#00f0ff" stroke-width="5" filter="url(#dashGlow)" />
-  <g stroke="#00f0ff" stroke-width="1.5" opacity="0.3">
-    <line x1="50" y1="320" x2="30" y2="400" />
-    <line x1="120" y1="320" x2="100" y2="400" />
-    <line x1="190" y1="320" x2="170" y2="400" />
-    <line x1="260" y1="320" x2="240" y2="400" />
-    <line x1="330" y1="320" x2="310" y2="400" />
+  <!-- Outer Border -->
+  <rect x="12" y="12" width="376" height="376" rx="20" fill="none" stroke="#000000" stroke-width="4" />
+
+  <!-- Main Container -->
+  <rect x="36" y="36" width="328" height="328" rx="16" fill="#FE90E8" stroke="#000000" stroke-width="3.5" filter="url(#neoShadowLg)" />
+
+  <!-- Running Track Ground -->
+  <rect x="48" y="270" width="304" height="82" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
+  <line x1="48" y1="270" x2="352" y2="270" stroke="#000000" stroke-width="4" />
+  <!-- Diagonal Hazard Stripes on Track -->
+  <line x1="60" y1="270" x2="80" y2="352" stroke="#F7CB46" stroke-width="8" />
+  <line x1="110" y1="270" x2="130" y2="352" stroke="#F7CB46" stroke-width="8" />
+  <line x1="160" y1="270" x2="180" y2="352" stroke="#F7CB46" stroke-width="8" />
+  <line x1="210" y1="270" x2="230" y2="352" stroke="#F7CB46" stroke-width="8" />
+  <line x1="260" y1="270" x2="280" y2="352" stroke="#F7CB46" stroke-width="8" />
+  <line x1="310" y1="270" x2="330" y2="352" stroke="#F7CB46" stroke-width="8" />
+
+  <!-- Jumping Runner Bot Character -->
+  <g transform="translate(130, 180) rotate(-10)" filter="url(#neoShadow)">
+    <!-- Jetpack Thruster -->
+    <rect x="-24" y="-12" width="12" height="24" rx="4" fill="#99E885" stroke="#000000" stroke-width="2.5" />
+    <polygon points="-18,12 -12,26 -24,26" fill="#F7CB46" stroke="#000000" stroke-width="2" />
+
+    <!-- Head / Torso -->
+    <rect x="-14" y="-24" width="36" height="42" rx="8" fill="#C0F7FE" stroke="#000000" stroke-width="3" />
+    <!-- Visor -->
+    <rect x="2" y="-16" width="18" height="12" rx="3" fill="#000000" />
+    <circle cx="12" cy="-10" r="2.5" fill="#FE90E8" />
+
+    <!-- Legs in Mid-Air Leap -->
+    <path d="M-6 18 L-14 36 M12 18 L24 32" stroke="#000000" stroke-width="4" stroke-linecap="round" />
   </g>
 
-  <!-- Laser Hurdle Hazard (Cartoon Obstacle) -->
-  <g filter="url(#laserGlow)">
-    <rect x="315" y="240" width="18" height="80" rx="6" fill="#ff0055" stroke="#ffffff" stroke-width="3" />
-    <rect x="340" y="270" width="18" height="50" rx="6" fill="#ff0055" stroke="#ffffff" stroke-width="3" />
-    <line x1="324" y1="255" x2="349" y2="285" stroke="#ffffff" stroke-width="4" />
-    <!-- Hazard Warning icon -->
-    <polygon points="324,220 315,235 333,235" fill="#ffe600" stroke="#000" stroke-width="1.5" />
+  <!-- Obstacle Barrier Spike -->
+  <g transform="translate(290, 235)" filter="url(#neoShadowSm)">
+    <polygon points="0,-40 24,35 -24,35" fill="#F7CB46" stroke="#000000" stroke-width="3" />
+    <circle cx="0" cy="10" r="5" fill="#000000" />
   </g>
 
-  <!-- Cute Cartoon Runner Boy in mid-air Jump -->
-  <g filter="url(#dashGlow)" transform="translate(140, 110)">
-    <!-- Jetpack Flames -->
-    <path d="M -25,50 Q -65,65 -45,75 Q -55,90 -20,80 Q -35,65 -25,50" fill="url(#thrusterGrad)" />
-
-    <!-- Jetpack Box -->
-    <rect x="-28" y="25" width="22" height="35" rx="6" fill="#ffaa00" stroke="#ffffff" stroke-width="3" />
-
-    <!-- Runner Body / Hoodie -->
-    <rect x="-10" y="20" width="46" height="50" rx="16" fill="url(#runnerGrad)" stroke="#ffffff" stroke-width="4" />
-
-    <!-- Arms / Hands in running sprint pose -->
-    <path d="M 30,35 Q 55,20 65,38" stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round" />
-    <circle cx="65" cy="38" r="8" fill="#ffe600" stroke="#000" stroke-width="2" />
-
-    <path d="M -5,45 Q -25,35 -30,50" stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round" />
-    <circle cx="-30" cy="50" r="8" fill="#ffe600" stroke="#000" stroke-width="2" />
-
-    <!-- Legs in dynamic leap -->
-    <!-- Front Leg -->
-    <path d="M 22,65 Q 40,85 55,80" stroke="#ffffff" stroke-width="10" fill="none" stroke-linecap="round" />
-    <!-- Sneaker Front -->
-    <rect x="50" y="70" width="22" height="14" rx="6" fill="#ff007f" stroke="#ffffff" stroke-width="2.5" />
-
-    <!-- Back Leg -->
-    <path d="M 0,65 Q -20,85 -35,75" stroke="#ffffff" stroke-width="10" fill="none" stroke-linecap="round" />
-    <!-- Sneaker Back -->
-    <rect x="-48" y="70" width="22" height="14" rx="6" fill="#ff007f" stroke="#ffffff" stroke-width="2.5" />
-
-    <!-- Cute Round Head with Cyber Visor Helmet -->
-    <circle cx="15" cy="-2" r="32" fill="#0d0221" stroke="#ffffff" stroke-width="4" />
-    <!-- Cyber Visor / Goggles -->
-    <rect x="0" y="-12" width="38" height="20" rx="8" fill="#00f0ff" stroke="#ffffff" stroke-width="2.5" />
-    <!-- Cute Visor Highlight -->
-    <line x1="8" y1="-7" x2="30" y2="-7" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
-    <!-- Smiling Mouth -->
-    <path d="M 8,16 Q 16,24 24,16" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round" />
-    <!-- Cute Blushing Cheek -->
-    <circle cx="2" cy="12" r="4" fill="#ff007f" />
+  <!-- Gold Coins in Air -->
+  <g transform="translate(200, 110)" filter="url(#neoShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#F7CB46" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="6" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="16" fill="#000000" text-anchor="middle">★</text>
+  </g>
+  <g transform="translate(250, 120)" filter="url(#neoShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#F7CB46" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="6" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="16" fill="#000000" text-anchor="middle">★</text>
   </g>
 
-  <!-- Collectible Energy Coin -->
-  <g filter="url(#dashGlow)">
-    <circle cx="270" cy="120" r="18" fill="#ffe600" stroke="#ffffff" stroke-width="3" />
-    <circle cx="270" cy="120" r="12" fill="#ffaa00" />
-    <text x="270" y="125" font-family="'Arial Black', sans-serif" font-size="14" fill="#ffffff" font-weight="bold" text-anchor="middle">⚡</text>
-    <!-- Sparkles -->
-    <path d="M 270,90 L 273,98 L 281,101 L 273,104 L 270,112 L 267,104 L 259,101 L 267,98 Z" fill="#ffffff" />
+  <!-- Top Runner Tag -->
+  <g transform="translate(200, 26) rotate(-2)">
+    <rect x="-80" y="-14" width="160" height="28" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="2.5" filter="url(#neoShadowSm)" />
+    <text x="0" y="5" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">🏃 DOUBLE JUMP RUN</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="340" width="130" height="32" rx="10" fill="#ff007f" opacity="0.2" stroke="#ff007f" stroke-width="1.5" />
-  <text x="90" y="361" fill="#ff007f" font-family="'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1">CYBER DASH</text>
+  <!-- Corner Figma Transform Nodes -->
+  <rect x="6" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="6" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
 </svg>

@@ -1,98 +1,95 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="geoBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#05011a" />
-      <stop offset="50%" stop-color="#120436" />
-      <stop offset="100%" stop-color="#2d004d" />
-    </linearGradient>
-    <filter id="cubeGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00ff66" flood-opacity="0.9" />
+    <filter id="neoShadowSm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" />
     </filter>
-    <filter id="spikeGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff0055" flood-opacity="0.9" />
+    <filter id="neoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadowLg" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#000000" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#geoBg)" />
+  <!-- Neo Ground -->
+  <rect width="400" height="400" fill="#FAF8F5" />
 
-  <!-- Geometric Grid Background Pattern -->
-  <g stroke="#00f0ff" stroke-width="1" opacity="0.1">
-    <line x1="0" y1="50" x2="400" y2="50" />
-    <line x1="0" y1="100" x2="400" y2="100" />
-    <line x1="0" y1="150" x2="400" y2="150" />
-    <line x1="0" y1="200" x2="400" y2="200" />
-    <line x1="0" y1="250" x2="400" y2="250" />
-    <line x1="50" y1="0" x2="50" y2="400" />
-    <line x1="100" y1="0" x2="100" y2="400" />
-    <line x1="150" y1="0" x2="150" y2="400" />
-    <line x1="200" y1="0" x2="200" y2="400" />
-    <line x1="250" y1="0" x2="250" y2="400" />
-    <line x1="300" y1="0" x2="300" y2="400" />
+  <!-- Dot Matrix Grid -->
+  <g fill="#000000" opacity="0.08">
+    <circle cx="40" cy="40" r="2" /><circle cx="100" cy="40" r="2" /><circle cx="160" cy="40" r="2" /><circle cx="220" cy="40" r="2" /><circle cx="280" cy="40" r="2" /><circle cx="340" cy="40" r="2" />
+    <circle cx="40" cy="100" r="2" /><circle cx="100" cy="100" r="2" /><circle cx="160" cy="100" r="2" /><circle cx="220" cy="100" r="2" /><circle cx="280" cy="100" r="2" /><circle cx="340" cy="100" r="2" />
+    <circle cx="40" cy="160" r="2" /><circle cx="100" cy="160" r="2" /><circle cx="160" cy="160" r="2" /><circle cx="220" cy="160" r="2" /><circle cx="280" cy="160" r="2" /><circle cx="340" cy="160" r="2" />
+    <circle cx="40" cy="220" r="2" /><circle cx="100" cy="220" r="2" /><circle cx="160" cy="220" r="2" /><circle cx="220" cy="220" r="2" /><circle cx="280" cy="220" r="2" /><circle cx="340" cy="220" r="2" />
+    <circle cx="40" cy="280" r="2" /><circle cx="100" cy="280" r="2" /><circle cx="160" cy="280" r="2" /><circle cx="220" cy="280" r="2" /><circle cx="280" cy="280" r="2" /><circle cx="340" cy="280" r="2" />
+    <circle cx="40" cy="340" r="2" /><circle cx="100" cy="340" r="2" /><circle cx="160" cy="340" r="2" /><circle cx="220" cy="340" r="2" /><circle cx="280" cy="340" r="2" /><circle cx="340" cy="340" r="2" />
   </g>
+
+  <!-- Outer Border -->
+  <rect x="12" y="12" width="376" height="376" rx="20" fill="none" stroke="#000000" stroke-width="4" />
+
+  <!-- Main Showcase Container -->
+  <rect x="36" y="36" width="328" height="328" rx="16" fill="#99E885" stroke="#000000" stroke-width="3.5" filter="url(#neoShadowLg)" />
 
   <!-- Platform Floor -->
-  <rect x="0" y="300" width="400" height="100" fill="#0d0724" />
-  <line x1="0" y1="300" x2="400" y2="300" stroke="#00ff66" stroke-width="5" />
+  <rect x="48" y="270" width="304" height="82" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
+  <line x1="48" y1="270" x2="352" y2="270" stroke="#000000" stroke-width="4" />
+  <!-- Platform Checker Pattern -->
+  <rect x="70" y="285" width="40" height="40" rx="4" fill="#C0F7FE" stroke="#000000" stroke-width="2" />
+  <rect x="140" y="285" width="40" height="40" rx="4" fill="#FE90E8" stroke="#000000" stroke-width="2" />
+  <rect x="210" y="285" width="40" height="40" rx="4" fill="#F7CB46" stroke="#000000" stroke-width="2" />
+  <rect x="280" y="285" width="40" height="40" rx="4" fill="#99E885" stroke="#000000" stroke-width="2" />
 
-  <!-- Platform Checkered Tiles -->
-  <g fill="#1a0f44" stroke="#331b7a" stroke-width="2">
-    <rect x="0" y="305" width="50" height="50" />
-    <rect x="100" y="305" width="50" height="50" />
-    <rect x="200" y="305" width="50" height="50" />
-    <rect x="300" y="305" width="50" height="50" />
+  <!-- Sharp Hazard Spikes on Platform -->
+  <g transform="translate(285, 270)" filter="url(#neoShadowSm)">
+    <polygon points="-24,0 0,-48 24,0" fill="#FE90E8" stroke="#000000" stroke-width="3" />
+    <polygon points="12,0 36,-48 60,0" fill="#FE90E8" stroke="#000000" stroke-width="3" />
   </g>
 
-  <!-- Sharp Neon Spikes Hazard (Right) -->
-  <g filter="url(#spikeGlow)">
-    <!-- Spike 1 -->
-    <polygon points="255,300 275,235 295,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
-    <polygon points="268,300 275,245 282,300" fill="#ffffff" opacity="0.6" />
-
-    <!-- Spike 2 -->
-    <polygon points="295,300 315,235 335,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
-    <polygon points="308,300 315,245 322,300" fill="#ffffff" opacity="0.6" />
-
-    <!-- Spike 3 -->
-    <polygon points="335,300 355,235 375,300" fill="#ff0055" stroke="#ffffff" stroke-width="3.5" />
+  <!-- Yellow Jump Pad Booster on Floor -->
+  <g transform="translate(115, 268)">
+    <rect x="-24" y="-6" width="48" height="12" rx="6" fill="#F7CB46" stroke="#000000" stroke-width="2.5" />
+    <polygon points="-8,4 0,-4 8,4" fill="#000000" />
   </g>
 
-  <!-- Yellow Jump Pad Booster Ring on Floor -->
-  <g transform="translate(130, 290)">
-    <ellipse cx="0" cy="8" rx="28" ry="10" fill="#ffe600" stroke="#ffffff" stroke-width="3" />
-    <ellipse cx="0" cy="5" rx="16" ry="6" fill="#ffaa00" />
+  <!-- Iconic Rotating Geometry Dash Cube in Mid-Air Flip! -->
+  <g transform="translate(175, 155) rotate(-28)" filter="url(#neoShadow)">
+    <!-- Outer Neon Yellow Cube Body -->
+    <rect x="-40" y="-40" width="80" height="80" rx="14" fill="#F7CB46" stroke="#000000" stroke-width="3.5" />
+
+    <!-- Inner Pink Center Face -->
+    <rect x="-24" y="-24" width="48" height="48" rx="8" fill="#FE90E8" stroke="#000000" stroke-width="2.5" />
+
+    <!-- Eyes inside Cube Face -->
+    <rect x="-16" y="-14" width="12" height="12" rx="3" fill="#000000" />
+    <rect x="4" y="-14" width="12" height="12" rx="3" fill="#000000" />
+    <circle cx="-10" cy="-10" r="2" fill="#FFFFFF" />
+    <circle cx="10" cy="-10" r="2" fill="#FFFFFF" />
+
+    <!-- Smiling Mouth -->
+    <rect x="-8" y="6" width="16" height="6" rx="2" fill="#000000" />
   </g>
 
-  <!-- Iconic Cute Geometry Cube Hero in Mid-Air Flip Jump! -->
-  <g filter="url(#cubeGlow)" transform="translate(180, 150) rotate(-28)">
-    <!-- Outer Lime Neon Cube Body -->
-    <rect x="-42" y="-42" width="84" height="84" rx="18" fill="#00ff66" stroke="#ffffff" stroke-width="5" />
-
-    <!-- Inner Dark Face Square -->
-    <rect x="-26" y="-26" width="52" height="52" rx="10" fill="#0d0221" stroke="#00ff66" stroke-width="3.5" />
-
-    <!-- Cute Eyes inside Cube Face -->
-    <rect x="-18" y="-16" width="14" height="14" rx="4" fill="#00f0ff" stroke="#ffffff" stroke-width="2" />
-    <rect x="4" y="-16" width="14" height="14" rx="4" fill="#00f0ff" stroke="#ffffff" stroke-width="2" />
-
-    <!-- Confident Smiling Mouth -->
-    <rect x="-10" y="6" width="20" height="7" rx="3" fill="#00ff66" stroke="#ffffff" stroke-width="1.5" />
+  <!-- Secret Gold Coin in Sky -->
+  <g transform="translate(290, 100)" filter="url(#neoShadowSm)">
+    <circle cx="0" cy="0" r="18" fill="#F7CB46" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="7" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="18" fill="#000000" text-anchor="middle">★</text>
   </g>
 
-  <!-- Flying Cyber Coin / Secret Star (Top Right) -->
-  <g transform="translate(275, 100)" filter="url(#cubeGlow)">
-    <circle cx="0" cy="0" r="18" fill="#ffe600" stroke="#ffffff" stroke-width="3.5" />
-    <polygon points="0,-9 3,-3 9,-3 4,1 6,7 0,3 -6,7 -4,1 -9,-3 -3,-3" fill="#ff7700" />
+  <!-- Motion Velocity Speed Streaks -->
+  <g stroke="#000000" stroke-width="3" stroke-linecap="round">
+    <line x1="85" y1="210" x2="125" y2="185" />
+    <line x1="65" y1="235" x2="105" y2="210" />
   </g>
 
-  <!-- Action Speed Lines behind Cube -->
-  <g stroke="#ffffff" stroke-width="2.5" opacity="0.4" stroke-linecap="round">
-    <line x1="80" y1="210" x2="130" y2="180" />
-    <line x1="60" y1="240" x2="110" y2="210" />
-    <line x1="100" y1="260" x2="140" y2="240" />
+  <!-- Top Ribbon Tag -->
+  <g transform="translate(200, 26) rotate(-2)">
+    <rect x="-80" y="-14" width="160" height="28" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="2.5" filter="url(#neoShadowSm)" />
+    <text x="0" y="5" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">⚡ RHYTHM JUMP 100%</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="150" height="30" rx="10" fill="#00ff66" opacity="0.2" stroke="#00ff66" stroke-width="1.5" />
-  <text x="100" y="365" fill="#00ff66" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">GEOMETRY DASH</text>
+  <!-- Corner Figma Transform Nodes -->
+  <rect x="6" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="6" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
 </svg>

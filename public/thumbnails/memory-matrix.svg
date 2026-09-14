@@ -1,84 +1,69 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="memBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050819" />
-      <stop offset="60%" stop-color="#0d1b3e" />
-      <stop offset="100%" stop-color="#14062e" />
-    </linearGradient>
-    <filter id="cardGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.8" />
+    <filter id="neoShadowSm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" />
     </filter>
-    <filter id="goldGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#ffe600" flood-opacity="0.85" />
+    <filter id="neoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadowLg" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#000000" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#memBg)" />
+  <!-- Neo Ground -->
+  <rect width="400" height="400" fill="#FAF8F5" />
 
-  <!-- Background Cyber Circuit Matrix Lines -->
-  <g stroke="#00f0ff" stroke-width="1.5" opacity="0.15">
-    <path d="M 50,50 L 120,50 L 160,90 L 280,90 L 320,50 L 350,50" fill="none" />
-    <path d="M 50,350 L 100,350 L 150,300 L 250,300 L 300,350 L 350,350" fill="none" />
-    <circle cx="160" cy="90" r="4" fill="#00f0ff" />
-    <circle cx="280" cy="90" r="4" fill="#00f0ff" />
+  <!-- Dot Matrix Grid -->
+  <g fill="#000000" opacity="0.08">
+    <circle cx="40" cy="40" r="2" /><circle cx="100" cy="40" r="2" /><circle cx="160" cy="40" r="2" /><circle cx="220" cy="40" r="2" /><circle cx="280" cy="40" r="2" /><circle cx="340" cy="40" r="2" />
+    <circle cx="40" cy="100" r="2" /><circle cx="100" cy="100" r="2" /><circle cx="160" cy="100" r="2" /><circle cx="220" cy="100" r="2" /><circle cx="280" cy="100" r="2" /><circle cx="340" cy="100" r="2" />
+    <circle cx="40" cy="160" r="2" /><circle cx="100" cy="160" r="2" /><circle cx="160" cy="160" r="2" /><circle cx="220" cy="160" r="2" /><circle cx="280" cy="160" r="2" /><circle cx="340" cy="160" r="2" />
+    <circle cx="40" cy="220" r="2" /><circle cx="100" cy="220" r="2" /><circle cx="160" cy="220" r="2" /><circle cx="220" cy="220" r="2" /><circle cx="280" cy="220" r="2" /><circle cx="340" cy="220" r="2" />
+    <circle cx="40" cy="280" r="2" /><circle cx="100" cy="280" r="2" /><circle cx="160" cy="280" r="2" /><circle cx="220" cy="280" r="2" /><circle cx="280" cy="280" r="2" /><circle cx="340" cy="280" r="2" />
+    <circle cx="40" cy="340" r="2" /><circle cx="100" cy="340" r="2" /><circle cx="160" cy="340" r="2" /><circle cx="220" cy="340" r="2" /><circle cx="280" cy="340" r="2" /><circle cx="340" cy="340" r="2" />
   </g>
 
-  <!-- Cute Robot Brain Mascot in Center Top -->
-  <g transform="translate(200, 75)" filter="url(#goldGlow)">
-    <!-- Lightbulb idea on top -->
-    <path d="M -8,-25 Q 0,-35 8,-25 Q 12,-15 4,-12 L -4,-12 Q -12,-15 -8,-25" fill="#ffe600" stroke="#fff" stroke-width="2" />
-    <!-- Robot Brain Glass Dome -->
-    <ellipse cx="0" cy="0" rx="35" ry="26" fill="#1b254b" stroke="#00f0ff" stroke-width="3" />
-    <!-- Pink Brain Curves -->
-    <path d="M -22,3 Q -15,-12 -2,0 Q 12,-12 22,3" stroke="#ff007f" stroke-width="4" fill="none" stroke-linecap="round" />
-    <!-- Cute Robot Blinking Eyes -->
-    <ellipse cx="-12" cy="5" rx="5" ry="6" fill="#00ffff" />
-    <ellipse cx="12" cy="5" rx="5" ry="6" fill="#00ffff" />
-    <circle cx="-10" cy="3" r="2" fill="#ffffff" />
-    <circle cx="14" cy="3" r="2" fill="#ffffff" />
+  <!-- Outer Border -->
+  <rect x="12" y="12" width="376" height="376" rx="20" fill="none" stroke="#000000" stroke-width="4" />
+
+  <!-- Main Showcase Container -->
+  <rect x="36" y="36" width="328" height="328" rx="16" fill="#C0F7FE" stroke="#000000" stroke-width="3.5" filter="url(#neoShadowLg)" />
+
+  <!-- 4 Memory Flip Cards (Tactile Elevated Swatches) -->
+  <!-- Card 1: Matched Star (Neo Yellow) -->
+  <g transform="translate(125, 125)" filter="url(#neoShadow)">
+    <rect x="-56" y="-56" width="112" height="112" rx="14" fill="#F7CB46" stroke="#000000" stroke-width="3" />
+    <text x="0" y="18" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="52" fill="#000000" text-anchor="middle">★</text>
   </g>
 
-  <!-- Memory Cards Matrix in 3D Dynamic Spread -->
-  <!-- Card 1: Flipped with Star (Left) -->
-  <g filter="url(#cardGlow)" transform="translate(70, 150) rotate(-10)">
-    <rect width="80" height="110" rx="16" fill="#0d1b3e" stroke="#00f0ff" stroke-width="3.5" />
-    <circle cx="40" cy="55" r="26" fill="#00f0ff" opacity="0.2" />
-    <!-- Golden Star Symbol -->
-    <polygon points="40,32 46,47 62,47 49,57 54,72 40,62 26,72 31,57 18,47 34,47" fill="#ffe600" stroke="#fff" stroke-width="2" />
-    <text x="40" y="98" font-family="'Arial Black', sans-serif" font-size="10" fill="#00f0ff" font-weight="900" text-anchor="middle">MATCH!</text>
+  <!-- Card 2: Matched Star (Neo Yellow Pair) -->
+  <g transform="translate(275, 125)" filter="url(#neoShadow)">
+    <rect x="-56" y="-56" width="112" height="112" rx="14" fill="#F7CB46" stroke="#000000" stroke-width="3" />
+    <text x="0" y="18" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="52" fill="#000000" text-anchor="middle">★</text>
   </g>
 
-  <!-- Card 2: Flipped with Star (Matched Pair! - Right) -->
-  <g filter="url(#cardGlow)" transform="translate(250, 140) rotate(12)">
-    <rect width="80" height="110" rx="16" fill="#0d1b3e" stroke="#00f0ff" stroke-width="3.5" />
-    <circle cx="40" cy="55" r="26" fill="#00f0ff" opacity="0.2" />
-    <!-- Golden Star Symbol -->
-    <polygon points="40,32 46,47 62,47 49,57 54,72 40,62 26,72 31,57 18,47 34,47" fill="#ffe600" stroke="#fff" stroke-width="2" />
-    <text x="40" y="98" font-family="'Arial Black', sans-serif" font-size="10" fill="#00f0ff" font-weight="900" text-anchor="middle">MATCH!</text>
+  <!-- Card 3: Lightning Bolt (Neo Pink) -->
+  <g transform="translate(125, 275)" filter="url(#neoShadow)">
+    <rect x="-56" y="-56" width="112" height="112" rx="14" fill="#FE90E8" stroke="#000000" stroke-width="3" />
+    <polygon points="4,-36 -24,4 0,4 -6,36 28,-8 4,-8" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
   </g>
 
-  <!-- Card 3: Center Mid-Flip Card (Perspective Thin Card) -->
-  <g transform="translate(170, 160) scale(0.65, 1)">
-    <rect width="80" height="110" rx="16" fill="#ff007f" stroke="#ffffff" stroke-width="4" />
-    <!-- Lightning bolt inside -->
-    <polygon points="42,28 28,58 38,58 34,82 54,48 44,48" fill="#ffe600" stroke="#000" stroke-width="2" />
+  <!-- Card 4: Hidden Card (Neo Green with Question Mark) -->
+  <g transform="translate(275, 275)" filter="url(#neoShadow)">
+    <rect x="-56" y="-56" width="112" height="112" rx="14" fill="#99E885" stroke="#000000" stroke-width="3" />
+    <text x="0" y="20" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="60" fill="#000000" stroke="#000000" stroke-width="1.5" text-anchor="middle">?</text>
   </g>
 
-  <!-- Card 4 & 5: Facedown Cyber Back pattern -->
-  <g transform="translate(100, 270) rotate(5)">
-    <rect width="65" height="85" rx="12" fill="#14062e" stroke="#a855f7" stroke-width="3" />
-    <rect x="10" y="10" width="45" height="65" rx="8" fill="none" stroke="#a855f7" stroke-dasharray="4,4" stroke-width="2" />
-    <text x="32.5" y="48" font-family="'Arial Black', sans-serif" font-size="20" fill="#a855f7" font-weight="900" text-anchor="middle">?</text>
+  <!-- Match Banner Checkmark Stamp -->
+  <g transform="translate(200, 200) rotate(-6)" filter="url(#neoShadow)">
+    <rect x="-60" y="-18" width="120" height="36" rx="8" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
+    <text x="0" y="7" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="14" fill="#000000" text-anchor="middle">✔ MATCH!</text>
   </g>
 
-  <g transform="translate(230, 260) rotate(-6)">
-    <rect width="65" height="85" rx="12" fill="#14062e" stroke="#a855f7" stroke-width="3" />
-    <rect x="10" y="10" width="45" height="65" rx="8" fill="none" stroke="#a855f7" stroke-dasharray="4,4" stroke-width="2" />
-    <text x="32.5" y="48" font-family="'Arial Black', sans-serif" font-size="20" fill="#a855f7" font-weight="900" text-anchor="middle">?</text>
-  </g>
-
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="145" height="30" rx="10" fill="#00f0ff" opacity="0.2" stroke="#00f0ff" stroke-width="1.5" />
-  <text x="97" y="365" fill="#00f0ff" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">MEMORY MATRIX</text>
+  <!-- Corner Figma Transform Nodes -->
+  <rect x="6" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="6" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
 </svg>

@@ -1,92 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="paperBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050a18" />
-      <stop offset="50%" stop-color="#0a122c" />
-      <stop offset="100%" stop-color="#02050f" />
-    </linearGradient>
-    <linearGradient id="cyanTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.85" />
-      <stop offset="100%" stop-color="#0080ff" stop-opacity="0.6" />
-    </linearGradient>
-    <linearGradient id="pinkTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff0055" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#aa0044" stop-opacity="0.5" />
-    </linearGradient>
-    <linearGradient id="limeTerritory" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00ff66" stop-opacity="0.75" />
-      <stop offset="100%" stop-color="#009944" stop-opacity="0.4" />
-    </linearGradient>
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.9" />
+    <filter id="neoShadowSm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" />
     </filter>
-    <filter id="pinkGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff0055" flood-opacity="0.9" />
+    <filter id="neoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" />
+    </filter>
+    <filter id="neoShadowLg" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#000000" />
     </filter>
   </defs>
 
-  <!-- Dark Cyberpunk Grid Background -->
-  <rect width="400" height="400" fill="url(#paperBg)" />
+  <!-- Neo Ground -->
+  <rect width="400" height="400" fill="#FAF8F5" />
 
-  <!-- Subtle Map Grid Lines -->
-  <g stroke="#00f0ff" stroke-width="0.75" opacity="0.12">
-    <line x1="0" y1="50" x2="400" y2="50" />
-    <line x1="0" y1="100" x2="400" y2="100" />
-    <line x1="0" y1="150" x2="400" y2="150" />
-    <line x1="0" y1="200" x2="400" y2="200" />
-    <line x1="0" y1="250" x2="400" y2="250" />
-    <line x1="0" y1="300" x2="400" y2="300" />
-    <line x1="0" y1="350" x2="400" y2="350" />
-    <line x1="50" y1="0" x2="50" y2="400" />
-    <line x1="100" y1="0" x2="100" y2="400" />
-    <line x1="150" y1="0" x2="150" y2="400" />
-    <line x1="200" y1="0" x2="200" y2="400" />
-    <line x1="250" y1="0" x2="250" y2="400" />
-    <line x1="300" y1="0" x2="300" y2="400" />
-    <line x1="350" y1="0" x2="350" y2="400" />
+  <!-- Dot Matrix Grid -->
+  <g fill="#000000" opacity="0.08">
+    <circle cx="40" cy="40" r="2" /><circle cx="100" cy="40" r="2" /><circle cx="160" cy="40" r="2" /><circle cx="220" cy="40" r="2" /><circle cx="280" cy="40" r="2" /><circle cx="340" cy="40" r="2" />
+    <circle cx="40" cy="100" r="2" /><circle cx="100" cy="100" r="2" /><circle cx="160" cy="100" r="2" /><circle cx="220" cy="100" r="2" /><circle cx="280" cy="100" r="2" /><circle cx="340" cy="100" r="2" />
+    <circle cx="40" cy="160" r="2" /><circle cx="100" cy="160" r="2" /><circle cx="160" cy="160" r="2" /><circle cx="220" cy="160" r="2" /><circle cx="280" cy="160" r="2" /><circle cx="340" cy="160" r="2" />
+    <circle cx="40" cy="220" r="2" /><circle cx="100" cy="220" r="2" /><circle cx="160" cy="220" r="2" /><circle cx="220" cy="220" r="2" /><circle cx="280" cy="220" r="2" /><circle cx="340" cy="220" r="2" />
+    <circle cx="40" cy="280" r="2" /><circle cx="100" cy="280" r="2" /><circle cx="160" cy="280" r="2" /><circle cx="220" cy="280" r="2" /><circle cx="280" cy="280" r="2" /><circle cx="340" cy="280" r="2" />
+    <circle cx="40" cy="340" r="2" /><circle cx="100" cy="340" r="2" /><circle cx="160" cy="340" r="2" /><circle cx="220" cy="340" r="2" /><circle cx="280" cy="340" r="2" /><circle cx="340" cy="340" r="2" />
   </g>
 
-  <!-- Bot Enemy Territory (Pink / Red) -->
-  <path d="M 240,40 L 360,40 L 360,160 L 290,160 L 290,110 L 240,110 Z" fill="url(#pinkTerritory)" stroke="#ff0055" stroke-width="2.5" />
+  <!-- Outer Border -->
+  <rect x="12" y="12" width="376" height="376" rx="20" fill="none" stroke="#000000" stroke-width="4" />
 
-  <!-- Bot Enemy Territory (Lime) -->
-  <path d="M 40,260 L 140,260 L 140,360 L 40,360 Z" fill="url(#limeTerritory)" stroke="#00ff66" stroke-width="2" opacity="0.8" />
+  <!-- Main Container -->
+  <rect x="36" y="36" width="328" height="328" rx="16" fill="#99E885" stroke="#000000" stroke-width="3.5" filter="url(#neoShadowLg)" />
 
-  <!-- Player Main Territory Polygon (Cyan) -->
-  <path d="M 60,70 L 190,70 L 190,200 L 110,200 L 110,140 L 60,140 Z" fill="url(#cyanTerritory)" stroke="#00f0ff" stroke-width="3" filter="url(#neonGlow)" />
+  <!-- Map Paper Ground -->
+  <rect x="52" y="52" width="296" height="296" rx="12" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
 
-  <!-- Player Active Enclosure Expansion Trail -->
-  <path d="M 190,140 L 280,140 L 280,270 L 140,270 L 140,200" fill="none" stroke="#00f0ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonGlow)" />
-  <path d="M 190,140 L 280,140 L 280,270 L 140,270 L 140,200" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Enemy Territory 1 (Neo Pink) -->
+  <path d="M 220,52 L 348,52 L 348,160 L 270,160 L 270,110 L 220,110 Z" fill="#FE90E8" stroke="#000000" stroke-width="3" />
 
-  <!-- Enemy Trail being sliced -->
-  <path d="M 290,140 L 290,210 L 330,210" fill="none" stroke="#ff0055" stroke-width="10" stroke-linecap="round" filter="url(#pinkGlow)" />
+  <!-- Enemy Territory 2 (Neo Yellow) -->
+  <rect x="52" y="240" width="90" height="108" fill="#F7CB46" stroke="#000000" stroke-width="3" />
 
-  <!-- Slice Explosion Flash Particles -->
-  <g fill="#ff0055">
-    <circle cx="280" cy="180" r="5" filter="url(#pinkGlow)" />
-    <circle cx="295" cy="170" r="3.5" />
-    <circle cx="305" cy="195" r="4.5" />
-  </g>
-  <g fill="#ffffff">
-    <circle cx="285" cy="182" r="3" />
-    <circle cx="290" cy="175" r="2" />
+  <!-- Player Main Captured Territory (Neo Ice Cyan) -->
+  <g filter="url(#neoShadow)">
+    <path d="M 68,68 L 190,68 L 190,200 L 110,200 L 110,140 L 68,140 Z" fill="#C0F7FE" stroke="#000000" stroke-width="3" />
   </g>
 
-  <!-- Player Avatar Head Cube -->
-  <rect x="130" y="190" width="22" height="22" rx="4" fill="#ffffff" stroke="#00f0ff" stroke-width="3" filter="url(#neonGlow)" />
+  <!-- Player Active Enclosure Expansion Trail (Thick Solid Neo Ribbon) -->
+  <path d="M 190,140 L 280,140 L 280,270 L 130,270 L 130,200" fill="none" stroke="#000000" stroke-width="16" stroke-linecap="square" stroke-linejoin="miter" />
+  <path d="M 190,140 L 280,140 L 280,270 L 130,270 L 130,200" fill="none" stroke="#C0F7FE" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter" />
 
-  <!-- Crown Icon Above Player -->
-  <path d="M 132,184 L 136,177 L 141,182 L 146,177 L 150,184 Z" fill="#ffb800" stroke="#ffd700" stroke-width="1" />
+  <!-- Player Avatar Head Cube with Crown -->
+  <g transform="translate(130, 200)" filter="url(#neoShadowSm)">
+    <!-- Crown -->
+    <polygon points="-12,-16 -6,-8 0,-18 6,-8 12,-16 10,-4 -10,-4" fill="#F7CB46" stroke="#000000" stroke-width="2" />
+    <!-- Head Box -->
+    <rect x="-14" y="-4" width="28" height="28" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
+    <rect x="-6" y="4" width="12" height="12" rx="3" fill="#000000" />
+    <circle cx="0" cy="10" r="2" fill="#FE90E8" />
+  </g>
 
-  <!-- Sparkle Particles around territory -->
-  <circle cx="75" cy="85" r="2" fill="#ffffff" />
-  <circle cx="170" cy="90" r="2.5" fill="#00f0ff" />
-  <circle cx="150" cy="170" r="2" fill="#ffffff" />
-  <circle cx="250" cy="250" r="3" fill="#00f0ff" />
-  <circle cx="220" cy="150" r="2.5" fill="#ffffff" />
+  <!-- Land Percentage Pill -->
+  <g transform="translate(90, 85) rotate(-6)" filter="url(#neoShadowSm)">
+    <rect x="-30" y="-12" width="60" height="24" rx="6" fill="#F7CB46" stroke="#000000" stroke-width="2" />
+    <text x="0" y="4" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="10" fill="#000000" text-anchor="middle">👑 48.5%</text>
+  </g>
 
-  <!-- Paper.io Futuristic Badge / Logo at bottom center -->
-  <rect x="85" y="320" width="230" height="42" rx="12" fill="#04091a" stroke="#00f0ff" stroke-width="2" opacity="0.95" />
-  <text x="200" y="347" fill="#00f0ff" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="18" text-anchor="middle" letter-spacing="3">NEON PAPER.IO</text>
+  <!-- Top Ribbon Tag -->
+  <g transform="translate(200, 26) rotate(2)">
+    <rect x="-80" y="-14" width="160" height="28" rx="8" fill="#F7CB46" stroke="#000000" stroke-width="2.5" filter="url(#neoShadowSm)" />
+    <text x="0" y="5" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">🗺️ TERRITORY CONQUEST</text>
+  </g>
+
+  <!-- Corner Figma Transform Nodes -->
+  <rect x="6" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="6" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="6" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
+  <rect x="382" y="382" width="12" height="12" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
 </svg>
