@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Zap } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, Zap, Footprints, Trophy } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface CyberDashGameProps {
@@ -11,7 +11,7 @@ interface CyberDashGameProps {
 
 const CANVAS_WIDTH = 360; // 9:16 Vertical Ratio (360x640)
 const CANVAS_HEIGHT = 640;
-const GROUND_Y = 540;
+const GROUND_Y = 530;
 
 interface Obstacle {
   x: number;
@@ -53,9 +53,9 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
   // Player physics
   const playerRef = useRef({
     x: 40,
-    y: GROUND_Y - 32,
-    width: 24,
-    height: 32,
+    y: GROUND_Y - 34,
+    width: 26,
+    height: 34,
     vy: 0,
     isGrounded: true,
     jumpsLeft: 2,
@@ -79,8 +79,8 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
       gain.connect(ctx.destination);
 
       if (type === 'jump') {
-        osc.frequency.setValueAtTime(250, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.12);
+        osc.frequency.setValueAtTime(260, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(620, ctx.currentTime + 0.12);
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.12);
         osc.start();
@@ -94,9 +94,9 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
         osc.stop(ctx.currentTime + 0.15);
       } else if (type === 'crash') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, ctx.currentTime);
+        osc.frequency.setValueAtTime(180, ctx.currentTime);
         osc.frequency.linearRampToValueAtTime(40, ctx.currentTime + 0.35);
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.35);
         osc.start();
         osc.stop(ctx.currentTime + 0.35);
@@ -107,21 +107,22 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
   const jump = useCallback(() => {
     const p = playerRef.current;
     if (p.jumpsLeft > 0) {
-      p.vy = -9.2;
+      p.vy = -9.4;
       p.isGrounded = false;
       p.jumpsLeft -= 1;
       playSfx('jump');
 
-      // Jump dust
+      // Jump dust in Neo Brutalist colors
+      const colors = ['#FE90E8', '#C0F7FE', '#F7CB46', '#99E885'];
       for (let i = 0; i < 6; i++) {
         particlesRef.current.push({
           x: p.x + p.width / 2,
           y: p.y + p.height,
           vx: (Math.random() - 0.5) * 4,
-          vy: Math.random() * 2,
-          alpha: 0.8,
-          color: '#00F0FF',
-          size: Math.random() * 3 + 1
+          vy: Math.random() * 2 + 0.5,
+          alpha: 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 3 + 2,
         });
       }
     }
@@ -130,9 +131,9 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
   const startGame = () => {
     playerRef.current = {
       x: 40,
-      y: GROUND_Y - 32,
-      width: 24,
-      height: 32,
+      y: GROUND_Y - 34,
+      width: 26,
+      height: 34,
       vy: 0,
       isGrounded: true,
       jumpsLeft: 2,
@@ -202,26 +203,26 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
         if (rand < 0.45) {
           obstaclesRef.current.push({
             x: CANVAS_WIDTH,
-            y: GROUND_Y - 26,
-            width: 20,
-            height: 26,
-            type: 'spike'
+            y: GROUND_Y - 28,
+            width: 22,
+            height: 28,
+            type: 'spike',
           });
         } else if (rand < 0.75) {
           obstaclesRef.current.push({
             x: CANVAS_WIDTH,
-            y: GROUND_Y - 45,
-            width: 18,
-            height: 45,
-            type: 'laser'
+            y: GROUND_Y - 48,
+            width: 20,
+            height: 48,
+            type: 'laser',
           });
         } else {
           obstaclesRef.current.push({
             x: CANVAS_WIDTH,
-            y: GROUND_Y - 70,
-            width: 26,
-            height: 22,
-            type: 'drone'
+            y: GROUND_Y - 72,
+            width: 28,
+            height: 24,
+            type: 'drone',
           });
         }
       }
@@ -230,7 +231,7 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
       if (frameCountRef.current % 60 === 0 && Math.random() < 0.7) {
         coinsRef.current.push({
           x: CANVAS_WIDTH,
-          y: GROUND_Y - (Math.random() < 0.5 ? 30 : 65)
+          y: GROUND_Y - (Math.random() < 0.5 ? 32 : 68),
         });
       }
 
@@ -250,6 +251,7 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
           setIsPlaying(false);
           playSfx('crash');
 
+          const crashColors = ['#FE90E8', '#F7CB46', '#C0F7FE', '#000000'];
           for (let k = 0; k < 25; k++) {
             particlesRef.current.push({
               x: p.x + p.width / 2,
@@ -257,8 +259,8 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
               vx: (Math.random() - 0.5) * 8,
               vy: (Math.random() - 0.5) * 8,
               alpha: 1,
-              color: '#FF0055',
-              size: Math.random() * 4 + 2
+              color: crashColors[Math.floor(Math.random() * crashColors.length)],
+              size: Math.random() * 4 + 2,
             });
           }
 
@@ -296,8 +298,8 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
               vx: (Math.random() - 0.5) * 4,
               vy: (Math.random() - 0.5) * 4,
               alpha: 1,
-              color: '#00F0FF',
-              size: Math.random() * 3 + 1
+              color: '#F7CB46',
+              size: Math.random() * 3 + 1,
             });
           }
           coinsRef.current.splice(i, 1);
@@ -312,111 +314,186 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
       setDistance(distanceRef.current);
       setScore(scoreRef.current);
 
-      // RENDER
-      ctx.fillStyle = '#0B0819';
+      // ==========================================
+      // RENDER - Neo-Brutalist Canvas 2D
+      // ==========================================
+      // 1. Warm Ground Surface
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Cyber Grid Sky
-      ctx.strokeStyle = '#161138';
-      ctx.lineWidth = 1;
-      for (let x = (frameCountRef.current * currentSpeed * 0.3) % 40; x < CANVAS_WIDTH; x += 40) {
+      // 2. Neo-Brutalist Dot Grid
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      for (let x = 12; x < CANVAS_WIDTH; x += 24) {
+        for (let y = 12; y < GROUND_Y; y += 24) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 3. Scrolling Background Decorative Pillars
+      const offset = (frameCountRef.current * currentSpeed * 0.25) % 80;
+      for (let x = -offset; x < CANVAS_WIDTH + 80; x += 80) {
+        ctx.fillStyle = 'rgba(192, 247, 254, 0.35)'; // Soft cyan block
+        ctx.fillRect(x, 180, 24, GROUND_Y - 180);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.strokeRect(x, 180, 24, GROUND_Y - 180);
+      }
+
+      // 4. Ground Floor & Striped Neo-Underfill
+      ctx.fillStyle = '#FFDC8B'; // Warm Neo Butter
+      ctx.fillRect(0, GROUND_Y, CANVAS_WIDTH, CANVAS_HEIGHT - GROUND_Y);
+
+      // Black Ground Divider Line
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, GROUND_Y - 2, CANVAS_WIDTH, 4);
+
+      // Ground Diagonal Hatch Pattern
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      const groundScroll = (frameCountRef.current * currentSpeed) % 24;
+      for (let gx = -groundScroll - 24; gx < CANVAS_WIDTH + 48; gx += 24) {
         ctx.beginPath();
-        ctx.moveTo(CANVAS_WIDTH - x, 0);
-        ctx.lineTo(CANVAS_WIDTH - x, GROUND_Y);
+        ctx.moveTo(gx, GROUND_Y + 4);
+        ctx.lineTo(gx - 18, CANVAS_HEIGHT);
         ctx.stroke();
       }
 
-      // Glowing Ground Floor
-      ctx.strokeStyle = '#00F0FF';
-      ctx.lineWidth = 2;
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      ctx.moveTo(0, GROUND_Y);
-      ctx.lineTo(CANVAS_WIDTH, GROUND_Y);
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      // Ground underfill
-      ctx.fillStyle = '#110C29';
-      ctx.fillRect(0, GROUND_Y, CANVAS_WIDTH, CANVAS_HEIGHT - GROUND_Y);
-
-      // Draw Player Runner
-      ctx.fillStyle = '#9D00FF';
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = 12;
-      ctx.beginPath();
-      ctx.roundRect(p.x, p.y, p.width, p.height, 6);
-      ctx.fill();
-
-      // Cyber Visor
-      ctx.fillStyle = '#00F0FF';
-      ctx.fillRect(p.x + p.width - 8, p.y + 6, 6, 4);
-
-      // Draw Jet / Thruster Trail
-      if (!p.isGrounded) {
-        ctx.fillStyle = '#00F0FF';
-        ctx.beginPath();
-        ctx.arc(p.x + 4, p.y + p.height - 2, 4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Draw Obstacles
+      // 5. Draw Obstacles (Solid Swatches + 2.5px Black Border + Hard Drop Shadows)
       obstaclesRef.current.forEach(obs => {
         if (obs.type === 'spike') {
-          ctx.fillStyle = '#FF0055';
-          ctx.shadowColor = '#FF0055';
-          ctx.shadowBlur = 10;
+          // Hard Shadow
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.moveTo(obs.x + 3, obs.y + obs.height + 2);
+          ctx.lineTo(obs.x + obs.width / 2 + 3, obs.y + 2);
+          ctx.lineTo(obs.x + obs.width + 3, obs.y + obs.height + 2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Spike Face (Neo Pink)
+          ctx.fillStyle = '#FE90E8';
           ctx.beginPath();
           ctx.moveTo(obs.x, obs.y + obs.height);
           ctx.lineTo(obs.x + obs.width / 2, obs.y);
           ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
           ctx.closePath();
           ctx.fill();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#000000';
+          ctx.stroke();
         } else if (obs.type === 'laser') {
-          ctx.fillStyle = '#FF00EA';
-          ctx.shadowColor = '#FF00EA';
-          ctx.shadowBlur = 12;
+          // Hard Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(obs.x + 3, obs.y + 3, obs.width, obs.height);
+
+          // Pillar Swatch (Neo Cyan)
+          ctx.fillStyle = '#C0F7FE';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+
+          // Center hazard lines
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(obs.x + 4, obs.y + 8, obs.width - 8, 4);
+          ctx.fillRect(obs.x + 4, obs.y + obs.height - 12, obs.width - 8, 4);
         } else {
-          ctx.fillStyle = '#FFD700';
-          ctx.shadowColor = '#FFD700';
-          ctx.shadowBlur = 10;
-          ctx.beginPath();
-          ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 5);
-          ctx.fill();
+          // Drone (Neo Yellow Hovering Bot)
+          // Hard Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(obs.x + 3, obs.y + 3, obs.width, obs.height);
+
+          ctx.fillStyle = '#F7CB46';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+
+          // Drone Eye
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(obs.x + 6, obs.y + 8, 8, 8);
+          ctx.fillStyle = '#FE90E8';
+          ctx.fillRect(obs.x + 8, obs.y + 10, 4, 4);
         }
       });
 
-      // Draw Coins
+      // 6. Draw Energy Coins (Golden Swatch + Black Border + Hard Shadow)
       coinsRef.current.forEach(c => {
-        ctx.fillStyle = '#00F0FF';
-        ctx.shadowColor = '#00F0FF';
-        ctx.shadowBlur = 14;
+        // Shadow
+        ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.arc(c.x, c.y, 6, 0, Math.PI * 2);
+        ctx.arc(c.x + 2, c.y + 2, 7, 0, Math.PI * 2);
         ctx.fill();
+
+        // Coin Body
+        ctx.fillStyle = '#F7CB46';
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.stroke();
+
+        // Star / Sparkle Mark
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('★', c.x, c.y + 0.5);
       });
 
-      // Draw Particles
+      // 7. Draw Player Runner (Neo Pink Swatch + Hard Black Shadow + Visor)
+      // Hard Drop Shadow
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(p.x + 3, p.y + 3, p.width, p.height);
+
+      // Player Body
+      ctx.fillStyle = '#FE90E8';
+      ctx.fillRect(p.x, p.y, p.width, p.height);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = '#000000';
+      ctx.strokeRect(p.x, p.y, p.width, p.height);
+
+      // Cyber Visor / Face
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(p.x + p.width - 10, p.y + 6, 8, 7);
+      ctx.fillStyle = '#C0F7FE';
+      ctx.fillRect(p.x + p.width - 8, p.y + 8, 5, 4);
+
+      // Neo Jet Thruster Dust
+      if (!p.isGrounded) {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(p.x + 3, p.y + p.height + 2, 6, 6);
+        ctx.fillStyle = '#F7CB46';
+        ctx.fillRect(p.x + 2, p.y + p.height + 1, 6, 6);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#000000';
+        ctx.strokeRect(p.x + 2, p.y + p.height + 1, 6, 6);
+      }
+
+      // 8. Draw Particles (Hard Outlined Color Blobs)
       particlesRef.current.forEach((part, idx) => {
         part.x += part.vx;
         part.y += part.vy;
-        part.alpha -= 0.04;
+        part.alpha -= 0.035;
 
         if (part.alpha <= 0) {
           particlesRef.current.splice(idx, 1);
         } else {
           ctx.fillStyle = part.color;
-          ctx.globalAlpha = part.alpha;
+          ctx.globalAlpha = Math.max(0, part.alpha);
           ctx.beginPath();
           ctx.arc(part.x, part.y, part.size, 0, Math.PI * 2);
           ctx.fill();
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#000000';
+          ctx.stroke();
           ctx.globalAlpha = 1;
         }
       });
 
-      ctx.shadowBlur = 0;
       animId = requestAnimationFrame(loop);
     };
 
@@ -426,29 +503,44 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Dist</span>
-          <span className="text-sm font-black text-portal-cyan">{Math.floor(distance / 10)}m</span>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
+        {/* Distance */}
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Footprints className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] uppercase tracking-wider">Dist</span>
+          <span className="text-xs font-black">{Math.floor(distance / 10)}m</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{score}</span>
+
+        {/* Score */}
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Trophy className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] uppercase tracking-wider">Score</span>
+          <span className="text-xs font-black">{score}</span>
         </div>
+
+        {/* Audio Toggle */}
         <button
+          type="button"
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+          className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
+          title="Toggle Sound"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
         </button>
       </div>
 
-      {/* Screen Canvas (9:16 Aspect Ratio Frame) */}
+      {/* Screen Canvas (9:16 Aspect Ratio Frame) with Figma Handles */}
       <div
         onClick={() => { if (isPlaying && !isDead) jump(); }}
-        className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-pointer flex items-center justify-center"
+        className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-4 border-black shadow-neo-lg bg-[#FAF8F5] touch-none cursor-pointer flex items-center justify-center"
       >
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -456,35 +548,69 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
           className="w-full h-full object-contain"
         />
 
+        {/* Pre-Game & Game Over Neo-Brutalist Overlay */}
         {!isPlaying && (
-          <div className="absolute inset-0 bg-portal-bg/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-3">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
             {isDead ? (
-              <div className="space-y-3">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-                  Run Over
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {score}</h3>
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                  ⚡ RUN COMPLETED ⚡
+                </div>
+
+                <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Score</div>
+                  <div className="text-3xl font-black text-black tracking-tight">{score}</div>
+                  <div className="text-[11px] font-bold text-slate-800">
+                    Distance: {Math.floor(distance / 10)}m
+                  </div>
+                </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" /> TRY AGAIN
+                  <RotateCcw className="w-4 h-4 stroke-[3]" />
+                  <span>TRY AGAIN</span>
                 </button>
               </div>
             ) : (
-              <div className="space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-portal-neon/20 border border-portal-neon/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Zap className="w-7 h-7" />
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                  <Zap className="w-7 h-7 fill-black stroke-[2.5]" />
                 </div>
+
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Dash Runner</h3>
-                  <p className="text-xs text-slate-400 mt-1">Tap screen or Space to jump (Double jump available!).</p>
+                  <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                    • [ INFINITE RUNNER ] •
+                  </div>
+                  <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                    Cyber Dash
+                  </h3>
+                  <p className="text-[11px] font-bold text-slate-700 mt-1">
+                    Tap screen or Space to jump! Double jump to clear high obstacles and collect stars.
+                  </p>
                 </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-4 h-4 fill-black" /> START DASH
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                  <span>START DASH</span>
                 </button>
               </div>
             )}
@@ -495,9 +621,10 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
       {/* Mobile Jump Button */}
       <div className="mt-2.5 sm:hidden w-full px-1">
         <button
+          type="button"
           onClick={jump}
           disabled={!isPlaying || isDead}
-          className="w-full py-3 bg-portal-surface border border-portal-cyan/60 text-portal-cyan font-black text-sm rounded-xl active:bg-portal-cyan active:text-black shadow-glow-cyan"
+          className="w-full py-3 bg-portal-yellow active:bg-portal-pink border-3 border-black text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-neo active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
         >
           ▲ TAP TO JUMP (DOUBLE JUMP)
         </button>

@@ -61,11 +61,11 @@ interface FloatingText {
 }
 
 const FRUIT_CONFIGS: Record<Exclude<FruitKind, 'bomb'>, { color: string; innerColor: string; radius: number; points: number; name: string }> = {
-  watermelon: { color: '#00FF66', innerColor: '#FF0055', radius: 24, points: 20, name: 'Neon Melon' },
-  orange: { color: '#FF7700', innerColor: '#FFAA00', radius: 20, points: 15, name: 'Plasma Orange' },
-  apple: { color: '#00F0FF', innerColor: '#E0FFFF', radius: 19, points: 15, name: 'Cyber Apple' },
-  banana: { color: '#FFE600', innerColor: '#FFFBE6', radius: 18, points: 25, name: 'Quantum Banana' },
-  strawberry: { color: '#FF00EA', innerColor: '#FFAAF5', radius: 16, points: 30, name: 'Hyper Berry' },
+  watermelon: { color: '#99E885', innerColor: '#FE90E8', radius: 24, points: 20, name: 'Retro Melon' },
+  orange: { color: '#F7CB46', innerColor: '#FFDC8B', radius: 20, points: 15, name: 'Golden Orange' },
+  apple: { color: '#C0F7FE', innerColor: '#FFFFFF', radius: 19, points: 15, name: 'Cyan Apple' },
+  banana: { color: '#FFDC8B', innerColor: '#FAF8F5', radius: 18, points: 25, name: 'Butter Banana' },
+  strawberry: { color: '#FE90E8', innerColor: '#FFFFFF', radius: 16, points: 30, name: 'Pink Berry' },
 };
 
 export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameProps) {
@@ -197,8 +197,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           rotation: 0,
           vRot: (Math.random() - 0.5) * 0.08,
           sliced: false,
-          color: '#FF0055',
-          innerColor: '#FFFFFF',
+          color: '#FE90E8',
+          innerColor: '#000000',
           points: 0,
         });
       } else {
@@ -299,7 +299,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
             playSfx('bomb');
             screenShakeRef.current = 24;
 
-            // Massive red explosion particles
+            // Massive explosion particles
             for (let k = 0; k < 35; k++) {
               particlesRef.current.push({
                 x: fruit.x,
@@ -307,7 +307,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
                 vx: (Math.random() - 0.5) * 10,
                 vy: (Math.random() - 0.5) * 10,
                 radius: Math.random() * 4 + 2,
-                color: '#FF0055',
+                color: '#FE90E8',
                 alpha: 1,
                 life: 0,
                 maxLife: 28,
@@ -341,14 +341,14 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
               vRot: fruit.vRot + 0.08,
             };
 
-            // Splatter particles
+            // Splatter retro square particles
             for (let k = 0; k < 14; k++) {
               particlesRef.current.push({
                 x: fruit.x,
                 y: fruit.y,
                 vx: (Math.random() - 0.5) * 7,
                 vy: (Math.random() - 0.5) * 7,
-                radius: Math.random() * 3 + 1.5,
+                radius: Math.random() * 3 + 2,
                 color: fruit.color,
                 alpha: 1,
                 life: 0,
@@ -372,9 +372,9 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
             if (comboCount >= 3) {
               playSfx('combo');
-              addFloatingText(fruit.x, fruit.y, `${comboCount}X COMBO! +${pointsGained}`, '#FFE600');
+              addFloatingText(fruit.x, fruit.y, `${comboCount}X COMBO! +${pointsGained}`, '#F7CB46');
             } else {
-              addFloatingText(fruit.x, fruit.y, `+${pointsGained}`, fruit.color);
+              addFloatingText(fruit.x, fruit.y, `+${pointsGained}`, '#000000');
             }
           }
         }
@@ -396,7 +396,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     setTimeout(() => onGameOverRef.current(finalScore), 0);
   };
 
-  // 60-144+ FPS Idle Background Loop (Animated Cyber Dojo Start Screen)
+  // 60-144+ FPS Idle Background Loop (Neo-Brutalist Warm Ground + Floating Retro Swatch Fruits)
   useEffect(() => {
     if (isPlaying && !isDead) return;
 
@@ -408,38 +408,14 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     let animId: number;
     let lastTime = performance.now();
 
-    // Ambient floating neon fruits for the start dojo
+    // Ambient floating retro fruits for the start dojo
     const idleFruits = [
-      { x: 70, baseY: 130, radius: 22, color: '#00FF66', innerColor: '#FF0055', phase: 0, rot: 0, rotSpeed: 0.015 },
-      { x: 290, baseY: 170, radius: 18, color: '#00F0FF', innerColor: '#E0FFFF', phase: 1.5, rot: 1, rotSpeed: -0.018 },
-      { x: 60, baseY: 480, radius: 19, color: '#FF7700', innerColor: '#FFAA00', phase: 3.0, rot: 2, rotSpeed: 0.02 },
-      { x: 295, baseY: 450, radius: 16, color: '#FF00EA', innerColor: '#FFAAF5', phase: 4.5, rot: 3, rotSpeed: -0.022 },
-      { x: 180, baseY: 560, radius: 17, color: '#FFE600', innerColor: '#FFFBE6', phase: 2.2, rot: 0.5, rotSpeed: 0.012 },
+      { x: 70, baseY: 130, radius: 22, color: '#99E885', innerColor: '#FE90E8', phase: 0, rot: 0, rotSpeed: 0.015 },
+      { x: 290, baseY: 170, radius: 18, color: '#C0F7FE', innerColor: '#FFFFFF', phase: 1.5, rot: 1, rotSpeed: -0.018 },
+      { x: 60, baseY: 480, radius: 19, color: '#F7CB46', innerColor: '#FFDC8B', phase: 3.0, rot: 2, rotSpeed: 0.02 },
+      { x: 295, baseY: 450, radius: 16, color: '#FE90E8', innerColor: '#FFFFFF', phase: 4.5, rot: 3, rotSpeed: -0.022 },
+      { x: 180, baseY: 560, radius: 17, color: '#FFDC8B', innerColor: '#FAF8F5', phase: 2.2, rot: 0.5, rotSpeed: 0.012 },
     ];
-
-    // Ambient sparks
-    const idleSparks = Array.from({ length: 24 }, () => ({
-      x: Math.random() * CANVAS_WIDTH,
-      y: Math.random() * CANVAS_HEIGHT,
-      vy: Math.random() * 0.6 + 0.3,
-      vx: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 2 + 1,
-      alpha: Math.random() * 0.7 + 0.3,
-      color: Math.random() < 0.5 ? '#00F0FF' : Math.random() < 0.8 ? '#FF00EA' : '#FFE600',
-    }));
-
-    // Ambient slash line state
-    let nextSlashTime = performance.now() + 1200;
-    let activeSlash: {
-      startX: number;
-      startY: number;
-      endX: number;
-      endY: number;
-      progress: number;
-      particles: { x: number; y: number; vx: number; vy: number; alpha: number; color: string }[];
-    } | null = null;
-
-    let gridOffset = 0;
 
     const idleLoop = (timestamp: number) => {
       const rawDt = (timestamp - lastTime) / 1000;
@@ -447,83 +423,21 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
       const dt = Math.min(rawDt, 0.045);
       const timeScale = dt * 60;
 
-      // 1. Clear Dojo Background
-      ctx.fillStyle = '#060412';
+      // 1. Warm Ground Clear
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // 2. Cosmic Ambient Radial Glow
-      const radGrad = ctx.createRadialGradient(
-        CANVAS_WIDTH / 2,
-        CANVAS_HEIGHT * 0.42,
-        15,
-        CANVAS_WIDTH / 2,
-        CANVAS_HEIGHT * 0.42,
-        CANVAS_WIDTH * 0.75
-      );
-      if (isDead) {
-        radGrad.addColorStop(0, 'rgba(244, 63, 94, 0.2)');
-        radGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.08)');
-        radGrad.addColorStop(1, 'rgba(6, 4, 18, 0)');
-      } else {
-        radGrad.addColorStop(0, 'rgba(0, 240, 255, 0.16)');
-        radGrad.addColorStop(0.4, 'rgba(255, 0, 234, 0.08)');
-        radGrad.addColorStop(1, 'rgba(6, 4, 18, 0)');
-      }
-      ctx.fillStyle = radGrad;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-      // 3. Cyber Dojo Perspective Grid
-      const horizonY = CANVAS_HEIGHT * 0.68;
-      gridOffset = (gridOffset + 0.35 * timeScale) % 24;
-
-      ctx.save();
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
-      ctx.lineWidth = 1;
-
-      // Horizon line
-      ctx.beginPath();
-      ctx.moveTo(0, horizonY);
-      ctx.lineTo(CANVAS_WIDTH, horizonY);
-      ctx.stroke();
-
-      // Perspective vertical fan lines
-      const vanishingX = CANVAS_WIDTH / 2;
-      for (let x = -CANVAS_WIDTH; x <= CANVAS_WIDTH * 2; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(vanishingX, horizonY);
-        ctx.lineTo(x, CANVAS_HEIGHT);
-        ctx.stroke();
-      }
-
-      // Moving horizontal grid lines with perspective spacing
-      for (let y = horizonY + gridOffset; y < CANVAS_HEIGHT; y += 22) {
-        const factor = (y - horizonY) / (CANVAS_HEIGHT - horizonY);
-        ctx.strokeStyle = `rgba(0, 240, 255, ${factor * 0.18})`;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // 4. Ambient Floating Sparks / Embers
-      for (let i = 0; i < idleSparks.length; i++) {
-        const sp = idleSparks[i];
-        sp.y -= sp.vy * timeScale;
-        sp.x += sp.vx * timeScale;
-        if (sp.y < -10) {
-          sp.y = CANVAS_HEIGHT + 10;
-          sp.x = Math.random() * CANVAS_WIDTH;
+      // 2. Dot Matrix Texture
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      for (let x = 12; x < CANVAS_WIDTH; x += 24) {
+        for (let y = 12; y < CANVAS_HEIGHT; y += 24) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
         }
-        ctx.fillStyle = sp.color;
-        ctx.globalAlpha = sp.alpha * 0.7;
-        ctx.beginPath();
-        ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
-        ctx.fill();
       }
-      ctx.globalAlpha = 1;
 
-      // 5. Floating Ambient Cyber Fruits
+      // 3. Floating Ambient Neo Fruits
       for (let i = 0; i < idleFruits.length; i++) {
         const f = idleFruits[i];
         f.rot += f.rotSpeed * timeScale;
@@ -533,99 +447,31 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         ctx.translate(f.x, curY);
         ctx.rotate(f.rot);
 
-        // Outer glow halo
-        ctx.strokeStyle = f.color;
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 0.85;
+        // Hard Drop Shadow
+        ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.arc(0, 0, f.radius + 3, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.arc(3, 3, f.radius, 0, Math.PI * 2);
+        ctx.fill();
 
         // Fruit Body
         ctx.fillStyle = f.color;
-        ctx.globalAlpha = 0.9;
         ctx.beginPath();
         ctx.arc(0, 0, f.radius, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
 
         // Inner Core
         ctx.fillStyle = f.innerColor;
         ctx.beginPath();
         ctx.arc(-f.radius * 0.28, -f.radius * 0.28, f.radius * 0.35, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
 
         ctx.restore();
-      }
-      ctx.globalAlpha = 1;
-
-      // 6. Ambient Periodic Katana Slash Arc
-      if (timestamp >= nextSlashTime && !activeSlash) {
-        nextSlashTime = timestamp + Math.random() * 2000 + 1800;
-        const angle = (Math.random() - 0.5) * 1.2 - 0.4;
-        const midY = Math.random() * (CANVAS_HEIGHT * 0.4) + CANVAS_HEIGHT * 0.25;
-        const length = 220;
-        const startX = CANVAS_WIDTH / 2 - Math.cos(angle) * (length / 2);
-        const startY = midY - Math.sin(angle) * (length / 2);
-        const endX = CANVAS_WIDTH / 2 + Math.cos(angle) * (length / 2);
-        const endY = midY + Math.sin(angle) * (length / 2);
-
-        const particles: { x: number; y: number; vx: number; vy: number; alpha: number; color: string }[] = [];
-        for (let p = 0; p < 12; p++) {
-          particles.push({
-            x: (startX + endX) / 2 + (Math.random() - 0.5) * 60,
-            y: (startY + endY) / 2 + (Math.random() - 0.5) * 60,
-            vx: (Math.random() - 0.5) * 4,
-            vy: (Math.random() - 0.5) * 4,
-            alpha: 1,
-            color: Math.random() < 0.6 ? '#00F0FF' : '#FFFFFF',
-          });
-        }
-
-        activeSlash = { startX, startY, endX, endY, progress: 0, particles };
-      }
-
-      if (activeSlash) {
-        activeSlash.progress += 0.06 * timeScale;
-        const progress = activeSlash.progress;
-
-        if (progress <= 1.0) {
-          // Draw energetic katana blade stroke
-          const curX = activeSlash.startX + (activeSlash.endX - activeSlash.startX) * progress;
-          const curY = activeSlash.startY + (activeSlash.endY - activeSlash.startY) * progress;
-
-          // Outer cyan blur
-          ctx.strokeStyle = 'rgba(0, 240, 255, 0.85)';
-          ctx.lineWidth = 5;
-          ctx.beginPath();
-          ctx.moveTo(activeSlash.startX, activeSlash.startY);
-          ctx.lineTo(curX, curY);
-          ctx.stroke();
-
-          // White core
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(activeSlash.startX, activeSlash.startY);
-          ctx.lineTo(curX, curY);
-          ctx.stroke();
-        }
-
-        // Draw Slash Sparks
-        activeSlash.particles.forEach((pt) => {
-          pt.x += pt.vx * timeScale;
-          pt.y += pt.vy * timeScale;
-          pt.alpha -= 0.04 * timeScale;
-          if (pt.alpha > 0) {
-            ctx.fillStyle = pt.color;
-            ctx.globalAlpha = Math.max(0, pt.alpha);
-            ctx.fillRect(pt.x | 0, pt.y | 0, 2.5, 2.5);
-          }
-        });
-        ctx.globalAlpha = 1;
-
-        if (progress > 1.4) {
-          activeSlash = null;
-        }
       }
 
       animId = requestAnimationFrame(idleLoop);
@@ -700,7 +546,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
               playSfx('miss');
               livesRef.current -= 1;
               setLives(livesRef.current);
-              addFloatingText(fruit.x, CANVAS_HEIGHT - 30, '❌ MISS', '#FF0055');
+              addFloatingText(fruit.x, CANVAS_HEIGHT - 30, '❌ MISS', '#FE90E8');
 
               if (livesRef.current <= 0) {
                 handleGameOver(false);
@@ -731,27 +577,21 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         if (screenShakeRef.current < 0.5) screenShakeRef.current = 0;
       }
 
-      // Deep Cyber Dojo Background
-      ctx.fillStyle = '#070514';
+      // 1. Warm Ground Clear
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Subtle Dojo Grid Lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < CANVAS_WIDTH; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, CANVAS_HEIGHT);
-        ctx.stroke();
-      }
-      for (let y = 0; y < CANVAS_HEIGHT; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
-        ctx.stroke();
+      // 2. Dot Matrix Texture
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      for (let x = 12; x < CANVAS_WIDTH; x += 24) {
+        for (let y = 12; y < CANVAS_HEIGHT; y += 24) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      // 1. Render Splash Particles
+      // 3. Render Splash Particles (Retro Square Sparks)
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
         p.x += p.vx * timeScale;
@@ -764,14 +604,15 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         } else {
           ctx.fillStyle = p.color;
           ctx.globalAlpha = Math.max(0, p.alpha);
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(p.x | 0, p.y | 0, p.radius * 2, p.radius * 2);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(p.x | 0, p.y | 0, p.radius * 2, p.radius * 2);
         }
       }
       ctx.globalAlpha = 1;
 
-      // 2. Render Fruits & Cyber Bombs
+      // 4. Render Fruits & Bombs
       fruitsRef.current.forEach((fruit) => {
         if (fruit.sliced) {
           // Draw Halves
@@ -780,11 +621,25 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
             ctx.save();
             ctx.translate(fruit.half1.x, fruit.half1.y);
             ctx.rotate(fruit.half1.rot);
+
+            // Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(3, 3, fruit.radius, 0, Math.PI);
+            ctx.closePath();
+            ctx.fill();
+
+            // Outer
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Inner
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius * 0.7, 0, Math.PI);
@@ -796,11 +651,25 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
             ctx.save();
             ctx.translate(fruit.half2.x, fruit.half2.y);
             ctx.rotate(fruit.half2.rot);
+
+            // Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(3, 3, fruit.radius, Math.PI, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+
+            // Outer
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, Math.PI, Math.PI * 2);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Inner
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius * 0.7, Math.PI, Math.PI * 2);
@@ -815,45 +684,57 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           ctx.rotate(fruit.rotation);
 
           if (fruit.kind === 'bomb') {
-            // Cyber Spiked Bomb
-            ctx.fillStyle = '#1A1424';
-            ctx.strokeStyle = '#FF0055';
-            ctx.lineWidth = 2.5;
+            // Hard Drop Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(3, 3, fruit.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bomb Body
+            ctx.fillStyle = '#000000';
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.fill();
+            ctx.strokeStyle = '#FE90E8';
+            ctx.lineWidth = 2.5;
             ctx.stroke();
 
-            // Blinking Fuse Core
-            ctx.fillStyle = Math.sin(timestamp * 0.02) > 0 ? '#FFE600' : '#FF0055';
-            ctx.beginPath();
-            ctx.arc(0, -fruit.radius - 3, 3.5, 0, Math.PI * 2);
-            ctx.fill();
+            // Fuse Spark
+            ctx.fillStyle = '#FE90E8';
+            ctx.fillRect(-2, -fruit.radius - 5, 4, 4);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-2, -fruit.radius - 5, 4, 4);
 
-            // Danger 'X'
-            ctx.fillStyle = '#FF0055';
-            ctx.font = 'bold 12px sans-serif';
+            // Danger Label
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '900 11px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('💣', 0, 0);
           } else {
-            // Neon Fruit Orb
+            // Hard Drop Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(3, 3, fruit.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Neo Fruit Body
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
 
             // Core highlight
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
-            ctx.arc(-fruit.radius * 0.3, -fruit.radius * 0.3, fruit.radius * 0.35, 0, Math.PI * 2);
+            ctx.arc(-fruit.radius * 0.28, -fruit.radius * 0.28, fruit.radius * 0.35, 0, Math.PI * 2);
             ctx.fill();
-
-            // Outer Neon Rim
-            ctx.strokeStyle = fruit.innerColor;
+            ctx.strokeStyle = '#000000';
             ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.stroke();
           }
 
@@ -861,10 +742,9 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         }
       });
 
-      // 3. Render Neon Plasma Katana Blade Trail
+      // 5. Render Katana Blade Trail with Solid High-Contrast Edge
       const trail = bladeTrailRef.current;
       if (trail.length >= 2) {
-        ctx.strokeStyle = '#00F0FF';
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
@@ -873,17 +753,17 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           const p2 = trail[i];
           const progress = i / trail.length;
 
-          // Outer Glow Line
-          ctx.strokeStyle = `rgba(0, 240, 255, ${progress * 0.9})`;
-          ctx.lineWidth = progress * 6;
+          // Outer Black Stroke
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = progress * 7;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
 
-          // Bright White Core Blade
-          ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-          ctx.lineWidth = progress * 2.5;
+          // Bright Core Blade (Pink / Cyan / White)
+          ctx.strokeStyle = '#FE90E8';
+          ctx.lineWidth = progress * 3.5;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
@@ -891,7 +771,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         }
       }
 
-      // 4. Floating Score / Combo Texts
+      // 6. Floating Score / Combo Texts
       for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
         const ft = floatingTextsRef.current[i];
         ft.y += ft.vy * timeScale;
@@ -899,10 +779,16 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         if (ft.alpha <= 0) {
           floatingTextsRef.current.splice(i, 1);
         } else {
-          ctx.fillStyle = ft.color;
           ctx.globalAlpha = Math.max(0, ft.alpha);
-          ctx.font = 'black 13px sans-serif';
+          ctx.font = '900 13px sans-serif';
           ctx.textAlign = 'center';
+
+          // Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillText(ft.text, ft.x + 1.5, ft.y + 1.5);
+
+          // Front text
+          ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, ft.x, ft.y);
         }
       }
@@ -918,22 +804,30 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
         {/* Score */}
-        <div className="flex items-center gap-1.5">
-          <Swords className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className="text-[10px] text-slate-400 font-black uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{displayScore}</span>
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Swords className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] uppercase tracking-wider">Score</span>
+          <span className="text-xs font-black">{displayScore}</span>
         </div>
 
+        {/* Combo */}
+        {combo >= 3 && (
+          <div className="flex items-center gap-1 bg-portal-green px-2 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[10px] font-black text-black animate-pulse">
+            <Flame className="w-3 h-3 text-black stroke-[2.5]" />
+            <span>{combo}X COMBO</span>
+          </div>
+        )}
+
         {/* Lives / Strikes */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 bg-portal-pink px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs">
           {[1, 2, 3].map((heart) => (
             <Heart
               key={heart}
-              className={`w-3.5 h-3.5 transition-all ${
-                heart <= lives ? 'text-rose-500 fill-rose-500' : 'text-slate-600'
+              className={`w-3.5 h-3.5 stroke-[2.5] transition-all ${
+                heart <= lives ? 'text-black fill-black' : 'text-black/30 fill-transparent'
               }`}
             />
           ))}
@@ -941,15 +835,23 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
         {/* Sound Toggle */}
         <button
+          type="button"
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 transition-all"
+          className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
+          title="Toggle Sound"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
         </button>
       </div>
 
-      {/* Main Slicing Dojo Canvas (9:16 Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
+      {/* Main Slicing Dojo Canvas (9:16 Ratio) with Figma Handles */}
+      <div className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black p-0 overflow-hidden shadow-neo-lg flex items-center justify-center touch-none cursor-crosshair">
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -958,63 +860,87 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
-          className="w-full h-full object-contain block"
+          className="w-full h-full object-contain block select-none"
         />
 
         {/* Start / Game Over Overlay */}
         {!isPlaying && (
-          <div
-            className={`absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-5 text-center transition-all ${
-              isDead
-                ? 'bg-gradient-to-b from-rose-950/30 via-black/50 to-black/75 backdrop-blur-[1px]'
-                : 'bg-black/35 backdrop-blur-[1px]'
-            }`}
-          >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
             {isDead ? (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.25)] animate-in fade-in zoom-in duration-200">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-                  Dojo Run Ended
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {displayScore}</h3>
-                <p className="text-xs text-slate-400">Master the Plasma Katana</p>
+              /* Death / Game Over Modal */
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[300px] space-y-3.5 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                  ⚡ DOJO RUN ENDED ⚡
+                </div>
+
+                <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Slice Score</div>
+                  <div className="text-3xl font-black text-black tracking-tight">{displayScore}</div>
+                </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" /> RETRY BLADE RUN
+                  <RotateCcw className="w-4 h-4 stroke-[3]" />
+                  <span>RETRY BLADE RUN</span>
                 </button>
               </div>
             ) : (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.25)] animate-in fade-in zoom-in duration-200">
-                <div className="w-13 h-13 rounded-2xl bg-portal-cyan/20 border border-portal-cyan/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Swords className="w-6 h-6" />
+              /* Pre-Game Neo-Brutalist Card */
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[300px] space-y-3.5 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                  <Swords className="w-7 h-7 stroke-[2.5]" />
                 </div>
+
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Slicer</h3>
-                  <p className="text-xs text-slate-300 mt-0.5 font-medium">Neon Katana Blade Rush</p>
+                  <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                    • [ RETRO KATANA DOJO ] •
+                  </div>
+                  <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                    Cyber Slicer
+                  </h3>
+                  <p className="text-[11px] font-bold text-slate-700 mt-1">
+                    Swipe or Drag across screen to slash fruits!
+                  </p>
                 </div>
 
                 {/* Dojo Rules */}
-                <div className="bg-portal-surface/95 p-2.5 rounded-xl border border-portal-border text-[11px] text-slate-300 space-y-1.5 text-left">
-                  <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                    <span>Swipe / Drag to slash flying cyber fruits!</span>
+                <div className="bg-[#FAF8F5] p-3 rounded-xl border-2 border-black text-[10px] text-slate-800 space-y-1.5 text-left font-bold shadow-neo-xs">
+                  <div className="flex items-center gap-1.5 text-black">
+                    <Sparkles className="w-3.5 h-3.5 text-black stroke-[2.5] shrink-0" />
+                    <span>Swipe / Drag to slash flying fruits!</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-                    <Flame className="w-3.5 h-3.5 shrink-0" />
+                  <div className="flex items-center gap-1.5 text-black">
+                    <Flame className="w-3.5 h-3.5 text-black stroke-[2.5] shrink-0" />
                     <span>Multi-Slice: 3+ fruits in 1 swipe for Combos!</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-rose-400 font-bold">
+                  <div className="flex items-center gap-1.5 text-black">
                     <span className="shrink-0 text-xs">💣</span>
                     <span>AVOID BOMBS: Slicing a bomb is instant death!</span>
                   </div>
                 </div>
 
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-5 py-2.5 rounded-xl bg-gradient-to-r from-portal-cyan via-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-black text-sm uppercase tracking-wider shadow-glow-cyan hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] active:scale-95 transition-all"
+                  className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-4 h-4 fill-black" /> ENTER DOJO
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                  <span>ENTER DOJO</span>
                 </button>
               </div>
             )}
@@ -1022,8 +948,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         )}
       </div>
 
-      <p className="text-[10px] text-slate-500 font-bold mt-1.5 text-center">
-        Controls: Swipe or drag to wield your plasma blade
+      <p className="text-[10px] text-slate-600 font-black uppercase tracking-wider mt-2.5 text-center">
+        Controls: Swipe or drag to wield your blade
       </p>
     </div>
   );

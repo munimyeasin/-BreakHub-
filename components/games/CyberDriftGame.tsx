@@ -17,12 +17,10 @@ import {
   Tv,
   AlertCircle,
   HelpCircle,
-  Crosshair,
   Flag,
   Timer,
-  Infinity as InfinityIcon,
-  Award,
-  CheckCircle2
+  CheckCircle2,
+  Car
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -39,7 +37,7 @@ const ROAD_HALF_WIDTH = 72; // Road total width ~ 144px
 const SEGMENT_LENGTH = 32; // Distance between road spine nodes
 const TOTAL_CIRCUIT_LAPS = 3; // 3 Laps for Grand Prix Circuit
 
-// Handcrafted Cyber Ring GP Grand Prix Circuit Waypoints
+// Handcrafted Grand Prix Circuit Waypoints
 const CIRCUIT_WAYPOINTS = [
   { x: 0, y: 0 },          // Start/Finish Line (Grid Straight)
   { x: 0, y: -450 },       // Main Straightaway End / Turn 1 Braking Zone
@@ -64,7 +62,7 @@ const CIRCUIT_WAYPOINTS = [
   { x: 0, y: -90 },        // Straight Alignment onto Grid
 ];
 
-// Available Cyber Cars
+// Available Retro Cars
 export interface CyberCarConfig {
   id: string;
   name: string;
@@ -85,17 +83,17 @@ export interface CyberCarConfig {
 const CARS: CyberCarConfig[] = [
   {
     id: 'phantom_gtr',
-    name: 'CYBER GT-R',
-    model: 'Phantom R34 Spec-V',
-    color: '#00F0FF',
-    accentColor: '#0066FF',
-    trailColor: '#00F0FF',
+    name: 'NEO GT-R',
+    model: 'Phantom Spec-V',
+    color: '#C0F7FE',
+    accentColor: '#000000',
+    trailColor: '#000000',
     topSpeed: 9.0,
     accel: 0.18,
     handling: 0.052,
     driftGrip: 0.84,
     nitroPower: 1.45,
-    nitroColor: '#00F0FF',
+    nitroColor: '#FE90E8',
     comboGraceBonus: 0,
     stats: { speed: 85, drift: 80, nitro: 82, control: 88 }
   },
@@ -103,31 +101,31 @@ const CARS: CyberCarConfig[] = [
     id: 'apex_rx7',
     name: 'APEX RX-7',
     model: 'Rotary Spirit 2077',
-    color: '#FF00EA',
-    accentColor: '#9D00FF',
-    trailColor: '#FF00EA',
+    color: '#FE90E8',
+    accentColor: '#000000',
+    trailColor: '#000000',
     topSpeed: 8.7,
     accel: 0.17,
     handling: 0.058,
     driftGrip: 0.78,
     nitroPower: 1.5,
-    nitroColor: '#FF00EA',
+    nitroColor: '#F7CB46',
     comboGraceBonus: 0.4,
     stats: { speed: 82, drift: 96, nitro: 85, control: 78 }
   },
   {
     id: 'midnight_86',
-    name: 'MIDNIGHT 86',
+    name: 'SPRINTER 86',
     model: 'Apex Tofu Legend',
-    color: '#FFE600',
-    accentColor: '#FF6600',
-    trailColor: '#FFE600',
+    color: '#F7CB46',
+    accentColor: '#000000',
+    trailColor: '#000000',
     topSpeed: 8.4,
     accel: 0.16,
     handling: 0.056,
     driftGrip: 0.81,
     nitroPower: 1.38,
-    nitroColor: '#FFE600',
+    nitroColor: '#99E885',
     comboGraceBonus: 0.8,
     stats: { speed: 78, drift: 92, nitro: 76, control: 95 }
   },
@@ -135,15 +133,15 @@ const CARS: CyberCarConfig[] = [
     id: 'hyperion_ev',
     name: 'HYPERION EV',
     model: 'Quantum Hypercar',
-    color: '#39FF14',
-    accentColor: '#00FF99',
-    trailColor: '#39FF14',
+    color: '#99E885',
+    accentColor: '#000000',
+    trailColor: '#000000',
     topSpeed: 9.8,
     accel: 0.22,
     handling: 0.048,
     driftGrip: 0.87,
     nitroPower: 1.7,
-    nitroColor: '#39FF14',
+    nitroColor: '#C0F7FE',
     comboGraceBonus: -0.2,
     stats: { speed: 98, drift: 75, nitro: 98, control: 82 }
   }
@@ -321,10 +319,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
   const totalDistanceRef = useRef(0);
   const screenShakeRef = useRef(0);
 
-  // Idle Screen Demo Animation State
-  const demoAngleRef = useRef(0);
-  const lastClosestIndexRef = useRef(0);
-
   // Synchronize state changes with refs
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
@@ -349,9 +343,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     return `${m}:${s < 10 ? '0' : ''}${s}.${ms < 10 ? '0' : ''}${ms}`;
   };
 
-  // ==========================================
-  // PROCEDURAL WEB AUDIO SYNTHESIZER
-  // ==========================================
+  // Web Audio Synthesizer
   const initAudio = useCallback(() => {
     if (audioCtxRef.current) return;
     try {
@@ -359,7 +351,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       const ctx = new AudioContextClass();
       audioCtxRef.current = ctx;
 
-      // Create continuous looping screech noise node
       const bufferSize = ctx.sampleRate * 2;
       const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = noiseBuffer.getChannelData(0);
@@ -371,7 +362,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       noiseSource.buffer = noiseBuffer;
       noiseSource.loop = true;
 
-      // Bandpass filter for tire screech tone
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
       filter.frequency.value = 1600;
@@ -417,8 +407,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       const now = ctx.currentTime;
 
       if (type === 'apex') {
-        // High-tech ascending crystal arpeggio for Apex Clipping
-        const freqs = [587.33, 739.99, 880, 1174.66]; // D5, F#5, A5, D6
+        const freqs = [587.33, 739.99, 880, 1174.66];
         freqs.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -432,7 +421,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           osc.stop(now + idx * 0.04 + 0.24);
         });
       } else if (type === 'chip') {
-        // Dual cyber pickup chime
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
@@ -445,7 +433,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         osc.start(now);
         osc.stop(now + 0.16);
       } else if (type === 'turbo') {
-        // Turbo blow-off valve pop & hiss
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
@@ -458,7 +445,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         osc.start(now);
         osc.stop(now + 0.21);
       } else if (type === 'nitro') {
-        // Deep warp boost whoosh
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
@@ -471,7 +457,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         osc.start(now);
         osc.stop(now + 0.4);
       } else if (type === 'bank') {
-        // Combo points banked chime (Major triad)
         const notes = [440, 554.37, 659.25];
         notes.forEach((f, i) => {
           const osc = ctx.createOscillator();
@@ -486,7 +471,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           osc.stop(now + i * 0.05 + 0.28);
         });
       } else if (type === 'crash') {
-        // Low rumble crash explosion
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
@@ -499,7 +483,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         osc.start(now);
         osc.stop(now + 0.52);
       } else if (type === 'hit') {
-        // Soft wall scrape bump
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
@@ -512,7 +495,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         osc.start(now);
         osc.stop(now + 0.11);
       } else if (type === 'checkpoint') {
-        // Futuristic dual-tone checkpoint pass chime
         const notes = [587.33, 880];
         notes.forEach((f, i) => {
           const osc = ctx.createOscillator();
@@ -527,7 +509,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           osc.stop(now + i * 0.06 + 0.22);
         });
       } else if (type === 'lap') {
-        // Triumphant 4-note ascending lap completion fanfare
         const notes = [523.25, 659.25, 783.99, 1046.5];
         notes.forEach((f, i) => {
           const osc = ctx.createOscillator();
@@ -542,7 +523,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           osc.stop(now + i * 0.07 + 0.32);
         });
       } else if (type === 'victory') {
-        // Grand Prix Championship Grand Fanfare
         const chords = [
           [523.25, 659.25, 783.99],
           [587.33, 739.99, 880],
@@ -567,9 +547,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     } catch {}
   }, [initAudio]);
 
-  // ==========================================
-  // FIXED CLOSED-CIRCUIT GRAND PRIX GENERATOR
-  // ==========================================
+  // Circuit Generator
   const generateFixedCircuitTrack = useCallback(() => {
     const rawPoints: { x: number; y: number }[] = [];
     const points: RoadPoint[] = [];
@@ -578,7 +556,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
     const M = CIRCUIT_WAYPOINTS.length;
 
-    // Sample closed Catmull-Rom spline around all waypoints
     for (let i = 0; i < M; i++) {
       const p0 = CIRCUIT_WAYPOINTS[(i - 1 + M) % M];
       const p1 = CIRCUIT_WAYPOINTS[i];
@@ -595,7 +572,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         const t2 = t * t;
         const t3 = t2 * t;
 
-        // Catmull-Rom Spline Formula
         const x = 0.5 * (
           2 * p1.x +
           (-p0.x + p2.x) * t +
@@ -615,16 +591,12 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
     const N = rawPoints.length;
 
-    // Convert raw points to road points with seamless tangent angles
     for (let i = 0; i < N; i++) {
       const p = rawPoints[i];
       const nextP = rawPoints[(i + 1) % N];
       const prevP = rawPoints[(i - 1 + N) % N];
 
-      // Central difference for smoother heading tangent
       const headingAngle = Math.atan2(nextP.y - prevP.y, nextP.x - prevP.x);
-
-      // Estimate curvature from angle delta
       const nextAngle = Math.atan2(rawPoints[(i + 2) % N].y - p.y, rawPoints[(i + 2) % N].x - p.x);
       let angleDiff = nextAngle - headingAngle;
       while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
@@ -644,12 +616,11 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       });
     }
 
-    // Place Track Objects for Circuit Mode
+    // Place Track Objects
     for (let i = 0; i < N; i++) {
       const pt = points[i];
       const normalAngle = pt.angle + Math.PI / 2;
 
-      // Speed Boost Pads on straightaways
       if ((i === 6 || i === Math.floor(N * 0.28) || i === Math.floor(N * 0.56)) && i < N) {
         objects.push({
           id: nextObjectIdRef.current++,
@@ -663,7 +634,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         });
       }
 
-      // Apex Clipping Beacons on sharp corners
       if (pt.curveType !== 'straight' && i % 8 === 0) {
         const isLeft = pt.curveType.includes('left');
         const apexOffset = (isLeft ? -1 : 1) * (ROAD_HALF_WIDTH - 14);
@@ -679,7 +649,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         });
       }
 
-      // Quantum Energy Chips along racing line
       if (i % 3 === 0 && i !== 0 && i !== Math.floor(N * 0.25) && i !== Math.floor(N * 0.5) && i !== Math.floor(N * 0.75)) {
         const lateralScatter = ((i % 5) - 2) * (ROAD_HALF_WIDTH * 0.25);
         objects.push({
@@ -699,9 +668,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     trackObjectsRef.current = objects;
   }, []);
 
-  // ==========================================
-  // PROCEDURAL TRACK GENERATOR
-  // ==========================================
+  // Procedural Endless Track Generator
   const generateInitialTrack = useCallback(() => {
     const points: RoadPoint[] = [];
     const objects: TrackObject[] = [];
@@ -709,9 +676,8 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
     let currentX = 0;
     let currentY = 0;
-    let currentAngle = -Math.PI / 2; // Straight up
+    let currentAngle = -Math.PI / 2;
 
-    // 1. Initial Launch Straightaway
     for (let i = 0; i < 18; i++) {
       points.push({
         x: currentX,
@@ -724,7 +690,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       currentY += Math.sin(currentAngle) * SEGMENT_LENGTH;
     }
 
-    // Add initial quantum chips along straightaway
     for (let i = 5; i < 15; i += 2) {
       objects.push({
         id: nextObjectIdRef.current++,
@@ -741,7 +706,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     roadPointsRef.current = points;
     trackObjectsRef.current = objects;
 
-    // Append future procedural chunks ahead
     appendProceduralTrackSegments(40);
   }, []);
 
@@ -749,121 +713,61 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     const points = roadPointsRef.current;
     if (points.length === 0) return;
 
-    let lastPoint = points[points.length - 1];
-    let currentX = lastPoint.x;
-    let currentY = lastPoint.y;
-    let currentAngle = lastPoint.angle;
+    let lastPt = points[points.length - 1];
+    let curX = lastPt.x;
+    let curY = lastPt.y;
+    let curAngle = lastPt.angle;
 
-    const allPatterns: Array<{
-      type: RoadPoint['curveType'];
-      segments: number;
-      deltaAngle: number;
-      hasApex: boolean;
-      hasBoost: boolean;
-    }> = [
-      { type: 'straight', segments: 9, deltaAngle: 0, hasApex: false, hasBoost: true },
-      { type: 'left', segments: 10, deltaAngle: -0.075, hasApex: true, hasBoost: false },
-      { type: 'right', segments: 10, deltaAngle: 0.075, hasApex: true, hasBoost: false },
-      { type: 'hairpin_left', segments: 12, deltaAngle: -0.12, hasApex: true, hasBoost: false },
-      { type: 'hairpin_right', segments: 12, deltaAngle: 0.12, hasApex: true, hasBoost: false },
-      { type: 'chicane', segments: 14, deltaAngle: 0.065, hasApex: true, hasBoost: false }
+    const curvePatterns: Array<{ type: RoadPoint['curveType']; deltaAngle: number; length: number }> = [
+      { type: 'straight', deltaAngle: 0, length: 14 },
+      { type: 'left', deltaAngle: -0.065, length: 16 },
+      { type: 'right', deltaAngle: 0.065, length: 16 },
+      { type: 'hairpin_left', deltaAngle: -0.11, length: 14 },
+      { type: 'hairpin_right', deltaAngle: 0.11, length: 14 },
+      { type: 'chicane', deltaAngle: 0.08, length: 8 }
     ];
 
-    let chunksAdded = 0;
-    while (chunksAdded < count) {
-      // Heading deviation balancing relative to north (-PI/2)
-      let headingDev = currentAngle - (-Math.PI / 2);
-      while (headingDev > Math.PI) headingDev -= Math.PI * 2;
-      while (headingDev < -Math.PI) headingDev += Math.PI * 2;
+    let segmentsRemaining = count;
 
-      let availablePatterns = [...allPatterns];
-      if (headingDev > 0.85) {
-        // Veering too far right -> steer back left
-        availablePatterns = allPatterns.filter((p) => p.type.includes('left') || p.type === 'straight' || p.type === 'chicane');
-      } else if (headingDev < -0.85) {
-        // Veering too far left -> steer back right
-        availablePatterns = allPatterns.filter((p) => p.type.includes('right') || p.type === 'straight' || p.type === 'chicane');
-      }
+    while (segmentsRemaining > 0) {
+      const pattern = curvePatterns[Math.floor(Math.random() * curvePatterns.length)];
+      const runLength = Math.min(segmentsRemaining, pattern.length);
 
-      const pattern = availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
+      for (let s = 0; s < runLength; s++) {
+        curAngle += pattern.deltaAngle;
+        curX += Math.cos(curAngle) * SEGMENT_LENGTH;
+        curY += Math.sin(curAngle) * SEGMENT_LENGTH;
 
-      let patternDeltaAngle = pattern.deltaAngle;
-      if (pattern.type === 'chicane') {
-        patternDeltaAngle = (headingDev > 0 ? -1 : 1) * 0.07;
-      }
-
-      const startIndex = points.length;
-
-      for (let s = 0; s < pattern.segments; s++) {
-        if (pattern.type === 'chicane' && s > pattern.segments / 2) {
-          currentAngle -= patternDeltaAngle * 1.8;
-        } else {
-          currentAngle += patternDeltaAngle;
-        }
-
-        currentX += Math.cos(currentAngle) * SEGMENT_LENGTH;
-        currentY += Math.sin(currentAngle) * SEGMENT_LENGTH;
-
-        points.push({
-          x: currentX,
-          y: currentY,
-          angle: currentAngle,
+        const newPoint: RoadPoint = {
+          x: curX,
+          y: curY,
+          angle: curAngle,
           width: ROAD_HALF_WIDTH * 2,
           curveType: pattern.type
-        });
-      }
+        };
+        points.push(newPoint);
 
-      // Add Apex Clipping Beacon on the inside apex of curves
-      if (pattern.hasApex) {
-        const midIdx = startIndex + Math.floor(pattern.segments / 2);
-        if (midIdx < points.length) {
-          const pt = points[midIdx];
-          const isLeft = pattern.deltaAngle < 0 || pattern.type.includes('left');
-          const normalAngle = pt.angle + (isLeft ? -Math.PI / 2 : Math.PI / 2);
-          const apexOffset = ROAD_HALF_WIDTH - 14;
+        const normalAngle = curAngle + Math.PI / 2;
 
+        if (pattern.type !== 'straight' && s === Math.floor(runLength / 2)) {
+          const isLeft = pattern.type.includes('left');
+          const apexOffset = (isLeft ? -1 : 1) * (ROAD_HALF_WIDTH - 14);
           trackObjectsRef.current.push({
             id: nextObjectIdRef.current++,
-            x: pt.x + Math.cos(normalAngle) * apexOffset,
-            y: pt.y + Math.sin(normalAngle) * apexOffset,
+            x: curX + Math.cos(normalAngle) * apexOffset,
+            y: curY + Math.sin(normalAngle) * apexOffset,
             type: 'apex_pole',
             radius: 12,
             active: true,
             pulse: 0,
             points: 500
           });
-        }
-      }
-
-      // Add Speed Boost Pad on long straightaways
-      if (pattern.hasBoost && Math.random() > 0.4) {
-        const boostIdx = startIndex + Math.floor(pattern.segments / 2);
-        if (boostIdx < points.length) {
-          const pt = points[boostIdx];
+        } else if (s % 3 === 0 && Math.random() < 0.65) {
+          const lateralScatter = (Math.random() - 0.5) * (ROAD_HALF_WIDTH * 0.7);
           trackObjectsRef.current.push({
             id: nextObjectIdRef.current++,
-            x: pt.x,
-            y: pt.y,
-            type: 'boost_pad',
-            radius: 16,
-            active: true,
-            pulse: 0,
-            points: 200
-          });
-        }
-      }
-
-      // Add Quantum Energy Chips along the racing line
-      for (let k = startIndex; k < points.length; k += 2) {
-        if (Math.random() > 0.35) {
-          const pt = points[k];
-          const offset = (Math.random() - 0.5) * (ROAD_HALF_WIDTH * 0.7);
-          const normalAngle = pt.angle + Math.PI / 2;
-
-          trackObjectsRef.current.push({
-            id: nextObjectIdRef.current++,
-            x: pt.x + Math.cos(normalAngle) * offset,
-            y: pt.y + Math.sin(normalAngle) * offset,
+            x: curX + Math.cos(normalAngle) * lateralScatter,
+            y: curY + Math.sin(normalAngle) * lateralScatter,
             type: 'energy_chip',
             radius: 8,
             active: true,
@@ -872,186 +776,190 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           });
         }
       }
-
-      chunksAdded++;
+      segmentsRemaining -= runLength;
     }
   };
 
-  // ==========================================
-  // FLOATING TEXT & PARTICLES
-  // ==========================================
+  const projectOntoTrack = (px: number, py: number) => {
+    const pts = roadPointsRef.current;
+    if (pts.length === 0) return { lateralDist: 0, closestIndex: 0, trackAngle: 0 };
+
+    let minDistSq = Infinity;
+    let closestIndex = 0;
+
+    for (let i = 0; i < pts.length; i++) {
+      const pt = pts[i];
+      const dx = px - pt.x;
+      const dy = py - pt.y;
+      const dSq = dx * dx + dy * dy;
+      if (dSq < minDistSq) {
+        minDistSq = dSq;
+        closestIndex = i;
+      }
+    }
+
+    const closest = pts[closestIndex];
+    const dx = px - closest.x;
+    const dy = py - closest.y;
+
+    const normalAngle = closest.angle + Math.PI / 2;
+    const normalX = Math.cos(normalAngle);
+    const normalY = Math.sin(normalAngle);
+
+    const lateralDist = dx * normalX + dy * normalY;
+
+    return {
+      lateralDist,
+      closestIndex,
+      trackAngle: closest.angle
+    };
+  };
+
   const addFloatingText = (x: number, y: number, text: string, color: string, scale = 1.0) => {
+    if (floatingTextsRef.current.length > 12) floatingTextsRef.current.shift();
     floatingTextsRef.current.push({
       x,
       y,
       text,
       color,
       alpha: 1.0,
-      vy: -1.8,
+      vy: -1.4,
       scale
     });
   };
 
   const spawnDriftSmoke = (x: number, y: number, color: string, intensity: number) => {
-    if (particlesRef.current.length > 100) return;
-    const count = Math.min(3, Math.ceil(intensity * 2.5));
+    const count = Math.floor(Math.random() * 2) + 1;
     for (let i = 0; i < count; i++) {
+      if (particlesRef.current.length > 150) particlesRef.current.shift();
       particlesRef.current.push({
         x: x + (Math.random() - 0.5) * 6,
         y: y + (Math.random() - 0.5) * 6,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: (Math.random() - 0.5) * 1.2,
-        size: Math.random() * 4 + 3.5,
-        color,
-        alpha: 0.6,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5,
+        size: Math.random() * 4 + 3,
+        color: '#000000',
+        alpha: Math.min(0.7, 0.35 + intensity * 0.3),
+        maxLife: 22,
         life: 0,
-        maxLife: Math.random() * 16 + 12,
         type: 'smoke'
       });
     }
   };
 
-  const spawnSparks = (x: number, y: number, count = 8, color = '#FFE600') => {
+  const spawnSparks = (x: number, y: number, count = 8, color = '#F7CB46') => {
     for (let i = 0; i < count; i++) {
-      const ang = Math.random() * Math.PI * 2;
-      const spd = Math.random() * 3.5 + 1.5;
+      if (particlesRef.current.length > 150) particlesRef.current.shift();
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 5 + 2;
       particlesRef.current.push({
         x,
         y,
-        vx: Math.cos(ang) * spd,
-        vy: Math.sin(ang) * spd,
-        size: Math.random() * 2 + 1.2,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: Math.random() * 3 + 2,
         color,
         alpha: 1.0,
+        maxLife: 16,
         life: 0,
-        maxLife: Math.random() * 12 + 8,
         type: 'spark'
       });
     }
   };
 
-  // ==========================================
-  // GAME START / RESET / REVIVE
-  // ==========================================
   const startGame = () => {
     initAudio();
-    setIsPlaying(true);
-    isPlayingRef.current = true;
-    setIsDead(false);
-    setIsRaceFinished(false);
-    isRaceFinishedRef.current = false;
-    setHasRevived(false);
-    setAdNotice(null);
+    const isCircuit = trackModeRef.current === 'circuit';
 
-    scoreRef.current = 0;
-    setScore(0);
-    comboMultiplierRef.current = 1;
-    setDisplayMultiplier(1);
-    maxComboRef.current = 1;
-    apexClipsCountRef.current = 0;
-    longestDriftRef.current = 0;
-    totalDistanceRef.current = 0;
-    setNitroFuel(100);
-
-    setCurrentLap(1);
-    currentLapRef.current = 1;
-    setLapTimer(0);
-    currentLapTimeRef.current = 0;
-    setLapTimes([]);
-    lapTimesRef.current = [];
-    checkpointsHitRef.current = [0];
-
-    if (trackModeRef.current === 'circuit') {
+    if (isCircuit) {
       generateFixedCircuitTrack();
     } else {
       generateInitialTrack();
     }
-    lastClosestIndexRef.current = 0;
 
-    const firstPt = roadPointsRef.current[0];
-    const initialHeading = firstPt.angle;
+    const startPt = roadPointsRef.current[0] || { x: 0, y: 0, angle: -Math.PI / 2 };
 
     carStateRef.current = {
-      x: firstPt.x,
-      y: firstPt.y,
-      heading: initialHeading,
+      x: startPt.x,
+      y: startPt.y,
+      heading: startPt.angle,
       steerAngle: 0,
-      vx: Math.cos(initialHeading) * 2.0,
-      vy: Math.sin(initialHeading) * 2.0,
-      speed: 2.0,
+      vx: 0,
+      vy: 0,
+      speed: 0,
       slipAngle: 0,
       isDrifting: false,
       driftDuration: 0,
       currentDriftPoints: 0,
       nitroActive: false,
       nitroAmount: 100,
-      shieldTimer: 60, // 1 sec spawn shield
+      shieldTimer: 60,
       health: 100
     };
 
     cameraRef.current = {
-      x: firstPt.x,
-      y: firstPt.y,
-      angle: initialHeading
+      x: startPt.x,
+      y: startPt.y,
+      angle: startPt.angle
     };
 
     skidMarksRef.current = [];
     particlesRef.current = [];
     floatingTextsRef.current = [];
+
+    scoreRef.current = 0;
+    comboMultiplierRef.current = 1;
+    maxComboRef.current = 1;
+    comboTimerRef.current = 0;
+    apexClipsCountRef.current = 0;
+    longestDriftRef.current = 0;
+    totalDistanceRef.current = 0;
+    screenShakeRef.current = 0;
+
+    currentLapRef.current = 1;
+    currentLapTimeRef.current = 0;
+    lapTimesRef.current = [];
+    bestLapTimeRef.current = null;
+    checkpointsHitRef.current = [0];
+
+    setCurrentLap(1);
+    setLapTimer(0);
+    setBestLapTime(null);
+    setLapTimes([]);
+    setScore(0);
+    setNitroFuel(100);
+    setSpeedKmh(0);
+    setDisplayMultiplier(1);
+    setDriftTier('');
+    setHasRevived(false);
+    setAdNotice(null);
+    setIsDead(false);
+    setIsRaceFinished(false);
+    setIsPlaying(true);
+    isPlayingRef.current = true;
+    isRaceFinishedRef.current = false;
   };
 
-  const handleWatchAdForRevive = () => {
-    if (hasRevived) return;
-    setAdNotice('Connecting to Cyber Ad Network...');
-
-    if (adTimeoutRef.current) clearTimeout(adTimeoutRef.current);
-    adTimeoutRef.current = setTimeout(() => {
-      setAdNotice('Ad Verified! Emergency Energy Shield Deployed!');
-
-      setTimeout(() => {
-        setHasRevived(true);
-        setIsDead(false);
-        setIsPlaying(true);
-        isPlayingRef.current = true;
-        setAdNotice(null);
-
-        // Revive on track with Energy Shield & +60% Nitro
-        const p = carStateRef.current;
-        p.shieldTimer = 180; // 3 sec shield
-        p.health = 100;
-        p.nitroAmount = Math.min(100, p.nitroAmount + 60);
-        p.speed = selectedCarRef.current.topSpeed * 0.65;
-        p.vx = Math.cos(p.heading) * p.speed;
-        p.vy = Math.sin(p.heading) * p.speed;
-
-        playSfx('turbo');
-        addFloatingText(p.x, p.y - 30, 'REVIVED! SHIELD ACTIVE', '#00F0FF', 1.3);
-      }, 1000);
-    }, 1200);
-  };
-
-  // Keyboard Event Listeners
+  // Keyboard Event Handlers
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
-        e.preventDefault();
-      }
-
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keysRef.current.left = true;
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keysRef.current.right = true;
-      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keysRef.current.up = true;
-      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keysRef.current.down = true;
-      if (e.key === ' ' || e.key === 'Shift') keysRef.current.handbrake = true;
-      if (e.key === 'e' || e.key === 'E' || e.key === 'b' || e.key === 'B' || e.key === 'n' || e.key === 'N') keysRef.current.nitro = true;
+      const code = e.code;
+      if (code === 'ArrowLeft' || code === 'KeyA') keysRef.current.left = true;
+      if (code === 'ArrowRight' || code === 'KeyD') keysRef.current.right = true;
+      if (code === 'ArrowUp' || code === 'KeyW') keysRef.current.up = true;
+      if (code === 'ArrowDown' || code === 'KeyS') keysRef.current.down = true;
+      if (code === 'Space' || code === 'ShiftLeft' || code === 'ShiftRight') keysRef.current.handbrake = true;
+      if (code === 'KeyE' || code === 'KeyB' || code === 'KeyN') keysRef.current.nitro = true;
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keysRef.current.left = false;
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keysRef.current.right = false;
-      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keysRef.current.up = false;
-      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keysRef.current.down = false;
-      if (e.key === ' ' || e.key === 'Shift') keysRef.current.handbrake = false;
-      if (e.key === 'e' || e.key === 'E' || e.key === 'b' || e.key === 'B' || e.key === 'n' || e.key === 'N') keysRef.current.nitro = false;
+      const code = e.code;
+      if (code === 'ArrowLeft' || code === 'KeyA') keysRef.current.left = false;
+      if (code === 'ArrowRight' || code === 'KeyD') keysRef.current.right = false;
+      if (code === 'ArrowUp' || code === 'KeyW') keysRef.current.up = false;
+      if (code === 'ArrowDown' || code === 'KeyS') keysRef.current.down = false;
+      if (code === 'Space' || code === 'ShiftLeft' || code === 'ShiftRight') keysRef.current.handbrake = false;
+      if (code === 'KeyE' || code === 'KeyB' || code === 'KeyN') keysRef.current.nitro = false;
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -1062,640 +970,356 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     };
   }, []);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      isPlayingRef.current = false;
-      if (adTimeoutRef.current) clearTimeout(adTimeoutRef.current);
-      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
-        audioCtxRef.current.close().catch(() => {});
-      }
-    };
-  }, []);
+  const handleWatchAdForRevive = () => {
+    if (hasRevived) return;
+    setAdNotice('Connecting to sponsored ad network...');
+    if (adTimeoutRef.current) clearTimeout(adTimeoutRef.current);
 
-  // ==========================================
-  // MAIN HIGH-PERFORMANCE 60-144 FPS PHYSICS & RENDER LOOP
-  // ==========================================
-  useEffect(() => {
-    let animId: number;
-    let lastTimestamp = performance.now();
+    adTimeoutRef.current = setTimeout(() => {
+      setHasRevived(true);
+      setAdNotice(null);
+      setIsDead(false);
+      setIsPlaying(true);
+      isPlayingRef.current = true;
 
+      const state = carStateRef.current;
+      state.shieldTimer = 120;
+      state.nitroAmount = 100;
+      state.speed = 4.0;
+      state.vx = Math.cos(state.heading) * 4.0;
+      state.vy = Math.sin(state.heading) * 4.0;
+
+      addFloatingText(state.x, state.y - 30, 'REVIVED WITH 100% NITRO!', '#99E885', 1.3);
+      playSfx('nitro');
+    }, 1800);
+  };
+
+  // Main 60-144+ FPS Delta-Time Game Loop
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Mathematically robust segment projection onto track spine with local window tracking
-    const projectOntoTrack = (px: number, py: number) => {
-      const pts = roadPointsRef.current;
-      const N = pts.length;
-      if (N < 2) {
-        return {
-          projX: px,
-          projY: py,
-          angle: -Math.PI / 2,
-          lateralOffset: 0,
-          closestIndex: 0
-        };
-      }
+    let animId: number;
+    let lastTime = performance.now();
 
-      let minDistanceSq = Infinity;
-      let closestIdx = lastClosestIndexRef.current;
-      let bestProjX = px;
-      let bestProjY = py;
-      let bestAngle = pts[0].angle;
-      let bestLateral = 0;
+    const loop = (timestamp: number) => {
+      const rawDt = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      const dt = Math.min(rawDt, 0.045);
+      const frameScale = dt * 60;
 
-      const isCircuit = trackModeRef.current === 'circuit';
-
-      if (isCircuit) {
-        // Circular Modulo search window around previous index to maintain continuous closed-loop tracking
-        const centerIdx = lastClosestIndexRef.current;
-        const searchRange = Math.min(32, Math.floor(N / 2));
-
-        for (let step = -searchRange; step <= searchRange; step++) {
-          const i = ((centerIdx + step) % N + N) % N;
-          const nextI = (i + 1) % N;
-          const p1 = pts[i];
-          const p2 = pts[nextI];
-
-          const segX = p2.x - p1.x;
-          const segY = p2.y - p1.y;
-          const segLenSq = segX * segX + segY * segY;
-          if (segLenSq < 0.0001) continue;
-
-          // Vector p1 -> P
-          const apX = px - p1.x;
-          const apY = py - p1.y;
-
-          // Clamped projection parameter t in [0, 1]
-          const t = Math.max(0, Math.min(1, (apX * segX + apY * segY) / segLenSq));
-          const projX = p1.x + t * segX;
-          const projY = p1.y + t * segY;
-
-          const distSq = (px - projX) * (px - projX) + (py - projY) * (py - projY);
-          if (distSq < minDistanceSq) {
-            minDistanceSq = distSq;
-            closestIdx = i;
-            bestProjX = projX;
-            bestProjY = projY;
-
-            // Segment tangent angle
-            bestAngle = Math.atan2(segY, segX);
-
-            // Normal vector (-sin, cos)
-            const normalX = -Math.sin(bestAngle);
-            const normalY = Math.cos(bestAngle);
-            bestLateral = (px - projX) * normalX + (py - projY) * normalY;
-          }
-        }
-      } else {
-        // Monotonic forward search window for infinite procedural highway
-        const centerIdx = Math.min(N - 2, Math.max(0, lastClosestIndexRef.current));
-        const searchStart = Math.max(0, centerIdx - 8);
-        const searchEnd = Math.min(N - 1, centerIdx + 32);
-
-        for (let i = searchStart; i < searchEnd; i++) {
-          const p1 = pts[i];
-          const p2 = pts[i + 1];
-
-          const segX = p2.x - p1.x;
-          const segY = p2.y - p1.y;
-          const segLenSq = segX * segX + segY * segY;
-          if (segLenSq < 0.0001) continue;
-
-          // Vector p1 -> P
-          const apX = px - p1.x;
-          const apY = py - p1.y;
-
-          // Clamped projection parameter t in [0, 1]
-          const t = Math.max(0, Math.min(1, (apX * segX + apY * segY) / segLenSq));
-          const projX = p1.x + t * segX;
-          const projY = p1.y + t * segY;
-
-          const distSq = (px - projX) * (px - projX) + (py - projY) * (py - projY);
-          if (distSq < minDistanceSq) {
-            minDistanceSq = distSq;
-            closestIdx = i;
-            bestProjX = projX;
-            bestProjY = projY;
-
-            // Segment tangent angle
-            bestAngle = Math.atan2(segY, segX);
-
-            // Normal vector (-sin, cos)
-            const normalX = -Math.sin(bestAngle);
-            const normalY = Math.cos(bestAngle);
-            bestLateral = (px - projX) * normalX + (py - projY) * normalY;
-          }
-        }
-      }
-
-      lastClosestIndexRef.current = closestIdx;
-
-      return {
-        projX: bestProjX,
-        projY: bestProjY,
-        angle: bestAngle,
-        lateralOffset: bestLateral,
-        closestIndex: closestIdx
-      };
-    };
-
-    const loop = (currentTimestamp: number) => {
-      // Calculate delta-time and normalize to 60fps frameScale
-      const dt = Math.min((currentTimestamp - lastTimestamp) / 1000, 0.05); // Cap at 50ms
-      lastTimestamp = currentTimestamp;
-      const frameScale = dt * 60; // 1.0 @ 60fps, 0.416 @ 144fps
-
-      // ==========================================
-      // A. LIVE ANIMATED IDLE DEMO LOOP (WHEN NOT PLAYING)
-      // ==========================================
-      if (!isPlayingRef.current) {
-        demoAngleRef.current += 1.2 * dt;
+      if (isPlayingRef.current && !isRaceFinishedRef.current) {
         const car = selectedCarRef.current;
+        const state = carStateRef.current;
+        const keys = keysRef.current;
 
-        // Clear canvas
-        ctx.fillStyle = '#060214';
-        ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        // Steering & Throttle
+        let steerInput = 0;
+        if (keys.left) steerInput -= 1;
+        if (keys.right) steerInput += 1;
+        if (touchSteerRef.current !== 0) steerInput = touchSteerRef.current;
 
-        // Synthwave Background Grid
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
-        ctx.lineWidth = 1;
-        const gridSize = 28;
-        const gridOffsetY = (currentTimestamp * 0.04) % gridSize;
-        for (let x = 0; x < CANVAS_WIDTH; x += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, CANVAS_HEIGHT);
-          ctx.stroke();
-        }
-        for (let y = gridOffsetY; y < CANVAS_HEIGHT; y += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(CANVAS_WIDTH, y);
-          ctx.stroke();
-        }
+        const isHandbrake = keys.handbrake || touchHandbrakeRef.current;
+        const isNitro = (keys.nitro || touchNitroRef.current) && state.nitroAmount > 0;
+        const isGas = keys.up;
+        const isBrake = keys.down;
 
-        // Animated Drifting Donuts Demonstration
-        const centerX = CANVAS_WIDTH / 2;
-        const centerY = CANVAS_HEIGHT / 2 - 25;
-        const donutRadius = 75;
-        const demoCarX = centerX + Math.cos(demoAngleRef.current) * donutRadius;
-        const demoCarY = centerY + Math.sin(demoAngleRef.current) * donutRadius * 0.65;
-        const demoCarHeading = demoAngleRef.current + Math.PI / 2 + 0.55; // High drift angle!
+        const targetSteer = steerInput * car.handling;
+        state.steerAngle += (targetSteer - state.steerAngle) * Math.min(1, 0.22 * frameScale);
 
-        // Draw Donut Skid Marks
-        ctx.strokeStyle = car.trailColor;
-        ctx.globalAlpha = 0.35;
-        ctx.lineWidth = 6;
-        ctx.beginPath();
-        ctx.ellipse(centerX, centerY, donutRadius, donutRadius * 0.65, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.globalAlpha = 1.0;
-
-        // Draw Demo Smoke Puffs
-        if (Math.random() > 0.3) {
-          particlesRef.current.push({
-            x: demoCarX + (Math.random() - 0.5) * 8,
-            y: demoCarY + (Math.random() - 0.5) * 8,
-            vx: (Math.random() - 0.5) * 1.2,
-            vy: (Math.random() - 0.5) * 1.2,
-            size: Math.random() * 5 + 3,
-            color: car.trailColor,
-            alpha: 0.6,
-            life: 0,
-            maxLife: 20,
-            type: 'smoke'
-          });
+        let accelForce = (isGas ? car.accel * 1.3 : car.accel) * frameScale;
+        if (isNitro && state.nitroAmount > 0) {
+          accelForce *= car.nitroPower;
+          state.nitroAmount = Math.max(0, state.nitroAmount - 28 * dt);
+          state.nitroActive = true;
+          if (Math.random() > 0.4) playSfx('nitro');
+        } else {
+          state.nitroActive = false;
         }
 
-        // Render demo particles
-        for (let i = particlesRef.current.length - 1; i >= 0; i--) {
-          const pt = particlesRef.current[i];
-          pt.life += 1;
-          pt.alpha = 1 - pt.life / pt.maxLife;
-          if (pt.life >= pt.maxLife) {
-            particlesRef.current.splice(i, 1);
-          } else {
-            ctx.fillStyle = pt.color;
-            ctx.globalAlpha = Math.max(0, pt.alpha * 0.5);
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-            ctx.fill();
+        const currentTopSpeed = isNitro ? car.topSpeed * 1.38 : car.topSpeed;
+
+        const forwardX = Math.cos(state.heading);
+        const forwardY = Math.sin(state.heading);
+        const rightX = -Math.sin(state.heading);
+        const rightY = Math.cos(state.heading);
+
+        let vLong = state.vx * forwardX + state.vy * forwardY;
+        let vLat = state.vx * rightX + state.vy * rightY;
+
+        if (isGas && vLong < currentTopSpeed) {
+          vLong += accelForce;
+        } else if (!isGas && !isBrake && !isHandbrake && vLong < car.topSpeed * 0.75) {
+          vLong += car.accel * 0.6 * frameScale;
+        }
+
+        if (isBrake) {
+          vLong = Math.max(-2.5, vLong - car.accel * 1.8 * frameScale);
+        }
+
+        const currentSpeed = Math.sqrt(state.vx * state.vx + state.vy * state.vy);
+        state.speed = currentSpeed;
+        totalDistanceRef.current += currentSpeed * dt * 3.5;
+
+        state.slipAngle = Math.atan2(vLat, Math.max(1.2, Math.abs(vLong)));
+        const absSlipAngleDeg = (Math.abs(state.slipAngle) * 180) / Math.PI;
+
+        const isDriftingNow = (Math.abs(vLat) > 1.2 || isHandbrake) && currentSpeed > 2.5;
+        state.isDrifting = isDriftingNow;
+
+        let lateralGrip = car.driftGrip;
+        if (isHandbrake) {
+          lateralGrip *= 0.68;
+          vLong *= Math.pow(0.975, frameScale);
+        } else if (isDriftingNow) {
+          lateralGrip *= 0.88;
+        }
+
+        const isCounterSteer = steerInput * -Math.sign(vLat) > 0;
+        const counterSteerBonus = isCounterSteer ? 1.35 : 1.0;
+        const speedFactor = Math.min(1.2, currentSpeed / (car.topSpeed * 0.75));
+        state.heading += state.steerAngle * speedFactor * counterSteerBonus * frameScale;
+
+        const longDecay = Math.pow(0.992, frameScale);
+        const latDecay = Math.pow(lateralGrip, frameScale);
+
+        vLong *= longDecay;
+        vLat *= latDecay;
+
+        state.vx = forwardX * vLong + rightX * vLat;
+        state.vy = forwardY * vLong + rightY * vLat;
+
+        state.x += state.vx * frameScale;
+        state.y += state.vy * frameScale;
+
+        if (state.shieldTimer > 0) state.shieldTimer -= frameScale;
+
+        updateScreechAudio(isDriftingNow, absSlipAngleDeg / 40);
+
+        // Drift Scoring
+        if (isDriftingNow && absSlipAngleDeg > 8) {
+          state.driftDuration += dt;
+          if (state.driftDuration > longestDriftRef.current) {
+            longestDriftRef.current = state.driftDuration;
           }
-        }
-        ctx.globalAlpha = 1.0;
 
-        // Render Demo Car Sprite
-        renderCarSprite(ctx, demoCarX, demoCarY, demoCarHeading, 0.4, car, true);
-
-        animId = requestAnimationFrame(loop);
-        return;
-      }
-
-      // ==========================================
-      // B. ACTIVE GAMEPLAY SIMULATION & FRAME-RATE INDEPENDENT PHYSICS
-      // ==========================================
-      const car = selectedCarRef.current;
-      const state = carStateRef.current;
-      const keys = keysRef.current;
-
-      // Handle Inputs (Steering + Throttle + E-Brake + Nitro)
-      let steerInput = 0;
-      if (keys.left) steerInput -= 1;
-      if (keys.right) steerInput += 1;
-      if (touchSteerRef.current !== 0) steerInput = touchSteerRef.current;
-
-      const isHandbrake = keys.handbrake || touchHandbrakeRef.current;
-      const isNitro = (keys.nitro || touchNitroRef.current) && state.nitroAmount > 0;
-      const isGas = keys.up;
-      const isBrake = keys.down;
-
-      // Smooth Steer Angle interpolation with frameScale
-      const targetSteer = steerInput * car.handling;
-      state.steerAngle += (targetSteer - state.steerAngle) * Math.min(1, 0.22 * frameScale);
-
-      // Longitudinal Acceleration & Throttle
-      let accelForce = (isGas ? car.accel * 1.3 : car.accel) * frameScale;
-      if (isNitro && state.nitroAmount > 0) {
-        accelForce *= car.nitroPower;
-        state.nitroAmount = Math.max(0, state.nitroAmount - 28 * dt);
-        state.nitroActive = true;
-        if (Math.random() > 0.4) playSfx('nitro');
-      } else {
-        state.nitroActive = false;
-      }
-
-      // Max speed threshold
-      const currentTopSpeed = isNitro ? car.topSpeed * 1.38 : car.topSpeed;
-
-      // Forward and Normal Direction Vectors
-      const forwardX = Math.cos(state.heading);
-      const forwardY = Math.sin(state.heading);
-      const rightX = -Math.sin(state.heading);
-      const rightY = Math.cos(state.heading);
-
-      // Decompose current velocity into longitudinal and lateral components
-      let vLong = state.vx * forwardX + state.vy * forwardY;
-      let vLat = state.vx * rightX + state.vy * rightY;
-
-      // Accelerate forward if below top speed
-      if (isGas && vLong < currentTopSpeed) {
-        vLong += accelForce;
-      } else if (!isGas && !isBrake && !isHandbrake && vLong < car.topSpeed * 0.75) {
-        // Cruise throttle so the player stays in motion smoothly
-        vLong += car.accel * 0.6 * frameScale;
-      }
-
-      // Brake / Deceleration
-      if (isBrake) {
-        vLong = Math.max(-2.5, vLong - car.accel * 1.8 * frameScale);
-      }
-
-      const currentSpeed = Math.sqrt(state.vx * state.vx + state.vy * state.vy);
-      state.speed = currentSpeed;
-      totalDistanceRef.current += currentSpeed * dt * 3.5;
-
-      // Calculate Slip Angle (degrees & radians)
-      state.slipAngle = Math.atan2(vLat, Math.max(1.2, Math.abs(vLong)));
-      const absSlipAngleDeg = (Math.abs(state.slipAngle) * 180) / Math.PI;
-
-      // Drift State Detection
-      const isDriftingNow = (Math.abs(vLat) > 1.2 || isHandbrake) && currentSpeed > 2.5;
-      state.isDrifting = isDriftingNow;
-
-      // Dynamic friction simulation (frame-rate independent exponential decay)
-      let lateralGrip = car.driftGrip;
-      if (isHandbrake) {
-        lateralGrip *= 0.68; // Handbrake whips the tail out
-        vLong *= Math.pow(0.975, frameScale); // Handbrake deceleration
-      } else if (isDriftingNow) {
-        lateralGrip *= 0.88; // Dynamic slide friction
-      }
-
-      // Counter-steering torque physics: turning into the slide stabilizes and extends drift!
-      const isCounterSteer = steerInput * -Math.sign(vLat) > 0;
-      const counterSteerBonus = isCounterSteer ? 1.35 : 1.0;
-      const speedFactor = Math.min(1.2, currentSpeed / (car.topSpeed * 0.75));
-      state.heading += state.steerAngle * speedFactor * counterSteerBonus * frameScale;
-
-      // Apply rolling resistance and lateral grip decay
-      const longDecay = Math.pow(0.992, frameScale);
-      const latDecay = Math.pow(lateralGrip, frameScale);
-
-      vLong *= longDecay;
-      vLat *= latDecay;
-
-      // Reconstruct adjusted world velocity
-      state.vx = forwardX * vLong + rightX * vLat;
-      state.vy = forwardY * vLong + rightY * vLat;
-
-      // Update position with frameScale
-      state.x += state.vx * frameScale;
-      state.y += state.vy * frameScale;
-
-      if (state.shieldTimer > 0) state.shieldTimer -= frameScale;
-
-      // Update procedural tire screech audio
-      updateScreechAudio(isDriftingNow, absSlipAngleDeg / 40);
-
-      // ==========================================
-      // C. DRIFT SCORING & COMBO SYSTEM
-      // ==========================================
-      if (isDriftingNow && absSlipAngleDeg > 8) {
-        state.driftDuration += dt;
-        if (state.driftDuration > longestDriftRef.current) {
-          longestDriftRef.current = state.driftDuration;
-        }
-
-        // Tiers
-        let tierLabel = 'NICE SLIDE';
-        let tierColor = '#00F0FF';
-        if (absSlipAngleDeg > 42 || comboMultiplierRef.current >= 6) {
-          tierLabel = 'APEX DRIFT KING';
-          tierColor = '#FFE600';
-        } else if (absSlipAngleDeg > 28 || comboMultiplierRef.current >= 4) {
-          tierLabel = 'HYPER DRIFT';
-          tierColor = '#FF00EA';
-        } else if (absSlipAngleDeg > 15 || comboMultiplierRef.current >= 2) {
-          tierLabel = 'SICK SLIDE';
-          tierColor = '#39FF14';
-        }
-        setDriftTier(tierLabel);
-
-        // Drift Point Accrual
-        const driftPointsThisFrame = (absSlipAngleDeg * 1.8 * currentSpeed * comboMultiplierRef.current * dt) | 0;
-        state.currentDriftPoints += driftPointsThisFrame;
-        scoreRef.current += driftPointsThisFrame;
-
-        // Spawn Tire Smoke & Skid Marks
-        const rearWheelOffset = 18;
-        const leftTireX = state.x - forwardX * rearWheelOffset + rightX * 8;
-        const leftTireY = state.y - forwardY * rearWheelOffset + rightY * 8;
-        const rightTireX = state.x - forwardX * rearWheelOffset - rightX * 8;
-        const rightTireY = state.y - forwardY * rearWheelOffset - rightY * 8;
-
-        spawnDriftSmoke(leftTireX, leftTireY, car.trailColor, absSlipAngleDeg / 35);
-        spawnDriftSmoke(rightTireX, rightTireY, car.trailColor, absSlipAngleDeg / 35);
-
-        // Record persistent skid marks
-        if (skidMarksRef.current.length < 180) {
-          skidMarksRef.current.push({
-            x1: leftTireX,
-            y1: leftTireY,
-            x2: leftTireX - state.vx * 0.9,
-            y2: leftTireY - state.vy * 0.9,
-            alpha: 0.65,
-            color: car.trailColor
-          });
-          skidMarksRef.current.push({
-            x1: rightTireX,
-            y1: rightTireY,
-            x2: rightTireX - state.vx * 0.9,
-            y2: rightTireY - state.vy * 0.9,
-            alpha: 0.65,
-            color: car.trailColor
-          });
-        }
-
-        // Slowly recharge nitro while drifting
-        state.nitroAmount = Math.min(100, state.nitroAmount + 8 * dt);
-
-        // Advance combo tier when maintaining long drift
-        if (state.driftDuration > 1.2 && comboMultiplierRef.current < 10) {
-          comboMultiplierRef.current = Math.min(10, comboMultiplierRef.current + 1);
-          setDisplayMultiplier(comboMultiplierRef.current);
-          if (comboMultiplierRef.current > maxComboRef.current) {
-            maxComboRef.current = comboMultiplierRef.current;
+          let tierLabel = 'NICE SLIDE';
+          let tierColor = '#000000';
+          if (absSlipAngleDeg > 42 || comboMultiplierRef.current >= 6) {
+            tierLabel = 'APEX DRIFT KING';
+            tierColor = '#F7CB46';
+          } else if (absSlipAngleDeg > 28 || comboMultiplierRef.current >= 4) {
+            tierLabel = 'HYPER DRIFT';
+            tierColor = '#FE90E8';
+          } else if (absSlipAngleDeg > 15 || comboMultiplierRef.current >= 2) {
+            tierLabel = 'SICK SLIDE';
+            tierColor = '#99E885';
           }
-          state.driftDuration = 0.4;
-          addFloatingText(state.x, state.y - 25, `${comboMultiplierRef.current}X COMBO!`, tierColor, 1.2);
-        }
+          setDriftTier(tierLabel);
 
-        // Reset grace timer
-        comboTimerRef.current = 1.6 + car.comboGraceBonus;
-      } else {
-        // Not currently in a slide
-        if (comboTimerRef.current > 0) {
-          comboTimerRef.current -= dt;
-          if (comboTimerRef.current <= 0) {
-            // Smooth combo bank
-            if (state.currentDriftPoints > 0) {
-              playSfx('bank');
-              addFloatingText(state.x, state.y - 20, `+${state.currentDriftPoints} BANKED!`, '#FFE600', 1.1);
-              state.currentDriftPoints = 0;
-            }
-            comboMultiplierRef.current = 1;
-            setDisplayMultiplier(1);
-            setDriftTier('');
-          }
-        }
-        state.driftDuration = 0;
-      }
+          const driftPointsThisFrame = (absSlipAngleDeg * 1.8 * currentSpeed * comboMultiplierRef.current * dt) | 0;
+          state.currentDriftPoints += driftPointsThisFrame;
+          scoreRef.current += driftPointsThisFrame;
 
-      // Sync state to UI
-      setScore(scoreRef.current);
-      setNitroFuel(state.nitroAmount | 0);
-      setSpeedKmh(Math.floor(currentSpeed * 22));
+          const rearWheelOffset = 18;
+          const leftTireX = state.x - forwardX * rearWheelOffset + rightX * 8;
+          const leftTireY = state.y - forwardY * rearWheelOffset + rightY * 8;
+          const rightTireX = state.x - forwardX * rearWheelOffset - rightX * 8;
+          const rightTireY = state.y - forwardY * rearWheelOffset - rightY * 8;
 
-      // ==========================================
-      // D. TRACK COLLISION, PROGRESSION & CIRCUIT LAPS
-      // ==========================================
-      const trackProj = projectOntoTrack(state.x, state.y);
-      const maxAllowedLateral = ROAD_HALF_WIDTH - 10;
-      const pts = roadPointsRef.current;
-      const isCircuit = trackModeRef.current === 'circuit';
+          spawnDriftSmoke(leftTireX, leftTireY, car.trailColor, absSlipAngleDeg / 35);
+          spawnDriftSmoke(rightTireX, rightTireY, car.trailColor, absSlipAngleDeg / 35);
 
-      if (isCircuit) {
-        // Circuit Mode: Track Lap Timer & Sector Checkpoints
-        currentLapTimeRef.current += dt;
-        setLapTimer(currentLapTimeRef.current);
-
-        const currentIdx = trackProj.closestIndex;
-        const totalPoints = pts.length;
-        const sec1Idx = Math.floor(totalPoints * 0.25);
-        const sec2Idx = Math.floor(totalPoints * 0.50);
-        const sec3Idx = Math.floor(totalPoints * 0.75);
-
-        // Checkpoint 1 (25% track)
-        if (currentIdx >= sec1Idx && currentIdx < sec1Idx + 15 && !checkpointsHitRef.current.includes(1)) {
-          checkpointsHitRef.current.push(1);
-          playSfx('checkpoint');
-          addFloatingText(state.x, state.y - 25, 'SECTOR 1 CLEAR', '#00F0FF', 1.1);
-        }
-        // Checkpoint 2 (50% track)
-        if (currentIdx >= sec2Idx && currentIdx < sec2Idx + 15 && !checkpointsHitRef.current.includes(2)) {
-          checkpointsHitRef.current.push(2);
-          playSfx('checkpoint');
-          addFloatingText(state.x, state.y - 25, 'SECTOR 2 CLEAR', '#39FF14', 1.1);
-        }
-        // Checkpoint 3 (75% track)
-        if (currentIdx >= sec3Idx && currentIdx < sec3Idx + 15 && !checkpointsHitRef.current.includes(3)) {
-          checkpointsHitRef.current.push(3);
-          playSfx('checkpoint');
-          addFloatingText(state.x, state.y - 25, 'SECTOR 3 CLEAR', '#FFE600', 1.1);
-        }
-
-        // Start/Finish Line Crossing (Near Index 0, with all 3 sectors verified)
-        if (
-          checkpointsHitRef.current.includes(1) &&
-          checkpointsHitRef.current.includes(2) &&
-          checkpointsHitRef.current.includes(3) &&
-          (currentIdx <= 8 || currentIdx >= totalPoints - 8)
-        ) {
-          const completedLapTime = currentLapTimeRef.current;
-          lapTimesRef.current.push(completedLapTime);
-          setLapTimes([...lapTimesRef.current]);
-
-          setBestLapTime((prev) => (prev === null || completedLapTime < prev ? completedLapTime : prev));
-
-          if (currentLapRef.current < TOTAL_CIRCUIT_LAPS) {
-            // Next Lap
-            currentLapRef.current += 1;
-            setCurrentLap(currentLapRef.current);
-            currentLapTimeRef.current = 0;
-            checkpointsHitRef.current = [0];
-
-            playSfx('lap');
-            const lapBonus = 3000 * comboMultiplierRef.current;
-            scoreRef.current += lapBonus;
-            state.nitroAmount = Math.min(100, state.nitroAmount + 50);
-            addFloatingText(state.x, state.y - 30, `LAP ${currentLapRef.current}/${TOTAL_CIRCUIT_LAPS}! +${lapBonus}`, '#FF00EA', 1.4);
-            confetti({ particleCount: 40, spread: 60 });
-          } else {
-            // Grand Prix Championship Victory! (3 Laps Complete)
-            isRaceFinishedRef.current = true;
-            setIsRaceFinished(true);
-            setIsPlaying(false);
-            isPlayingRef.current = false;
-            updateScreechAudio(false, 0);
-
-            playSfx('victory');
-            confetti({ particleCount: 150, spread: 100 });
-
-            const totalRaceTime = lapTimesRef.current.reduce((a, b) => a + b, 0);
-            const victoryBonus = Math.max(5000, 25000 - Math.floor(totalRaceTime * 300));
-            scoreRef.current += victoryBonus;
-            setScore(scoreRef.current);
-
-            setRunStats({
-              distance: Math.floor(totalDistanceRef.current),
-              maxCombo: maxComboRef.current,
-              apexClips: apexClipsCountRef.current,
-              longestDrift: Number(longestDriftRef.current.toFixed(1)),
-              totalRaceTime: Number(totalRaceTime.toFixed(2))
+          if (skidMarksRef.current.length < 180) {
+            skidMarksRef.current.push({
+              x1: leftTireX,
+              y1: leftTireY,
+              x2: leftTireX - state.vx * 0.9,
+              y2: leftTireY - state.vy * 0.9,
+              alpha: 0.65,
+              color: '#000000'
             });
-
-            setTimeout(() => onGameOverRef.current(scoreRef.current), 500);
-            cancelAnimationFrame(animId);
-            return;
+            skidMarksRef.current.push({
+              x1: rightTireX,
+              y1: rightTireY,
+              x2: rightTireX - state.vx * 0.9,
+              y2: rightTireY - state.vy * 0.9,
+              alpha: 0.65,
+              color: '#000000'
+            });
           }
-        }
-      } else {
-        // Infinite Mode: Dynamically append procedural highway segments & prune old memory
-        if (pts.length - trackProj.closestIndex < 100) {
-          appendProceduralTrackSegments(40);
-        }
 
-        if (trackProj.closestIndex > 60) {
-          const pruneCount = 25;
-          pts.splice(0, pruneCount);
-          lastClosestIndexRef.current = Math.max(0, lastClosestIndexRef.current - pruneCount);
+          state.nitroAmount = Math.min(100, state.nitroAmount + 8 * dt);
 
-          // Memory-safe cleanup of off-screen track objects
-          trackObjectsRef.current = trackObjectsRef.current.filter((obj) => {
-            const dSq = (obj.x - state.x) * (obj.x - state.x) + (obj.y - state.y) * (obj.y - state.y);
-            return dSq < 2200 * 2200;
-          });
-        }
-      }
+          if (state.driftDuration > 1.2 && comboMultiplierRef.current < 10) {
+            comboMultiplierRef.current = Math.min(10, comboMultiplierRef.current + 1);
+            setDisplayMultiplier(comboMultiplierRef.current);
+            if (comboMultiplierRef.current > maxComboRef.current) {
+              maxComboRef.current = comboMultiplierRef.current;
+            }
+            state.driftDuration = 0.4;
+            addFloatingText(state.x, state.y - 25, `${comboMultiplierRef.current}X COMBO!`, tierColor, 1.2);
+          }
 
-      // Boundary Wall Collision & Vector Normal Elastic Rebound
-      if (Math.abs(trackProj.lateralOffset) > maxAllowedLateral) {
-        const sideSign = Math.sign(trackProj.lateralOffset);
-        const normalX = -Math.sin(trackProj.angle);
-        const normalY = Math.cos(trackProj.angle);
-        const tangentX = Math.cos(trackProj.angle);
-        const tangentY = Math.sin(trackProj.angle);
-
-        const vNorm = state.vx * normalX + state.vy * normalY;
-        const vTan = state.vx * tangentX + state.vy * tangentY;
-
-        // Only bounce when velocity vector points towards or outside the boundary
-        if (vNorm * sideSign > 0) {
-          const bounceVNorm = -0.45 * vNorm;
-          const preservedVTan = Math.max(1.8, vTan * 0.88);
-
-          state.vx = tangentX * preservedVTan + normalX * bounceVNorm;
-          state.vy = tangentY * preservedVTan + normalY * bounceVNorm;
-
-          // Position car securely within road boundaries
-          state.x = trackProj.projX + normalX * (maxAllowedLateral * sideSign * 0.96);
-          state.y = trackProj.projY + normalY * (maxAllowedLateral * sideSign * 0.96);
-
-          // Realign heading slightly along road tangent
-          state.heading += (trackProj.angle - state.heading) * 0.25;
-          screenShakeRef.current = Math.min(8, screenShakeRef.current + 3);
-          spawnSparks(state.x, state.y, 8, '#FF0055');
-          playSfx('hit');
-
-          // Wall scrape damage only if hitting walls at high lateral angle without energy shield
-          if (absSlipAngleDeg > 75 && currentSpeed > car.topSpeed * 0.9 && state.shieldTimer <= 0) {
-            state.health -= 35 * dt;
-            if (state.health <= 0) {
-              handlePlayerCrash();
-              cancelAnimationFrame(animId);
-              return;
+          comboTimerRef.current = 1.6 + car.comboGraceBonus;
+        } else {
+          if (comboTimerRef.current > 0) {
+            comboTimerRef.current -= dt;
+            if (comboTimerRef.current <= 0) {
+              if (state.currentDriftPoints > 0) {
+                playSfx('bank');
+                addFloatingText(state.x, state.y - 20, `+${state.currentDriftPoints} BANKED!`, '#F7CB46', 1.1);
+                state.currentDriftPoints = 0;
+              }
+              comboMultiplierRef.current = 1;
+              setDisplayMultiplier(1);
+              setDriftTier('');
             }
           }
+          state.driftDuration = 0;
         }
-      }
 
-      // ==========================================
-      // E. INTERACTIVE TRACK OBJECTS & APEX CLIPPING
-      // ==========================================
-      for (let i = trackObjectsRef.current.length - 1; i >= 0; i--) {
-        const obj = trackObjectsRef.current[i];
-        if (!obj.active) continue;
+        setScore(scoreRef.current);
+        setNitroFuel(state.nitroAmount | 0);
+        setSpeedKmh(Math.floor(currentSpeed * 22));
 
-        const dx = state.x - obj.x;
-        const dy = state.y - obj.y;
-        const distSq = dx * dx + dy * dy;
+        // Track Progression & Laps
+        const trackProj = projectOntoTrack(state.x, state.y);
+        const maxAllowedLateral = ROAD_HALF_WIDTH - 10;
+        const pts = roadPointsRef.current;
+        const isCircuit = trackModeRef.current === 'circuit';
 
-        if (obj.type === 'apex_pole') {
-          // Apex Clipping Zone (Drift close to pylon without hitting head-on!)
-          if (distSq < 36 * 36 && state.isDrifting) {
-            obj.active = false;
-            apexClipsCountRef.current += 1;
-            const pts = 500 * comboMultiplierRef.current;
-            scoreRef.current += pts;
-            state.nitroAmount = Math.min(100, state.nitroAmount + 25);
-            screenShakeRef.current = 4;
-            spawnSparks(obj.x, obj.y, 14, '#FFE600');
-            playSfx('apex');
-            addFloatingText(obj.x, obj.y - 25, `APEX CLIP! +${pts}`, '#FFE600', 1.3);
+        if (isCircuit) {
+          currentLapTimeRef.current += dt;
+          setLapTimer(currentLapTimeRef.current);
+
+          const currentIdx = trackProj.closestIndex;
+          const totalPoints = pts.length;
+          const sec1Idx = Math.floor(totalPoints * 0.25);
+          const sec2Idx = Math.floor(totalPoints * 0.50);
+          const sec3Idx = Math.floor(totalPoints * 0.75);
+
+          if (currentIdx >= sec1Idx && currentIdx < sec1Idx + 15 && !checkpointsHitRef.current.includes(1)) {
+            checkpointsHitRef.current.push(1);
+            playSfx('checkpoint');
+            addFloatingText(state.x, state.y - 25, 'SECTOR 1 CLEAR', '#C0F7FE', 1.1);
           }
-        } else if (obj.type === 'energy_chip') {
-          if (distSq < 24 * 24) {
-            obj.active = false;
-            const pts = 150 * comboMultiplierRef.current;
-            scoreRef.current += pts;
-            state.nitroAmount = Math.min(100, state.nitroAmount + 14);
-            spawnSparks(obj.x, obj.y, 8, '#00F0FF');
-            playSfx('chip');
-            addFloatingText(obj.x, obj.y - 15, `+${pts}`, '#00F0FF', 1.0);
+          if (currentIdx >= sec2Idx && currentIdx < sec2Idx + 15 && !checkpointsHitRef.current.includes(2)) {
+            checkpointsHitRef.current.push(2);
+            playSfx('checkpoint');
+            addFloatingText(state.x, state.y - 25, 'SECTOR 2 CLEAR', '#99E885', 1.1);
           }
-        } else if (obj.type === 'boost_pad') {
-          if (distSq < 28 * 28) {
-            // Speed Boost launch pad!
-            state.vx += forwardX * 4.0;
-            state.vy += forwardY * 4.0;
-            state.nitroAmount = Math.min(100, state.nitroAmount + 35);
-            screenShakeRef.current = 6;
-            spawnSparks(state.x, state.y, 14, '#39FF14');
-            playSfx('nitro');
-            addFloatingText(state.x, state.y - 30, 'WARP BOOST!', '#39FF14', 1.3);
+          if (currentIdx >= sec3Idx && currentIdx < sec3Idx + 15 && !checkpointsHitRef.current.includes(3)) {
+            checkpointsHitRef.current.push(3);
+            playSfx('checkpoint');
+            addFloatingText(state.x, state.y - 25, 'SECTOR 3 CLEAR', '#F7CB46', 1.1);
+          }
+
+          if (
+            checkpointsHitRef.current.includes(1) &&
+            checkpointsHitRef.current.includes(2) &&
+            checkpointsHitRef.current.includes(3) &&
+            (currentIdx <= 8 || currentIdx >= totalPoints - 8)
+          ) {
+            const completedLapTime = currentLapTimeRef.current;
+            lapTimesRef.current.push(completedLapTime);
+            setLapTimes([...lapTimesRef.current]);
+
+            setBestLapTime((prev) => (prev === null || completedLapTime < prev ? completedLapTime : prev));
+
+            if (currentLapRef.current < TOTAL_CIRCUIT_LAPS) {
+              currentLapRef.current += 1;
+              setCurrentLap(currentLapRef.current);
+              currentLapTimeRef.current = 0;
+              checkpointsHitRef.current = [0];
+
+              playSfx('lap');
+              const lapBonus = 3000 * comboMultiplierRef.current;
+              scoreRef.current += lapBonus;
+              state.nitroAmount = Math.min(100, state.nitroAmount + 50);
+              addFloatingText(state.x, state.y - 30, `LAP ${currentLapRef.current}/${TOTAL_CIRCUIT_LAPS}! +${lapBonus}`, '#FE90E8', 1.4);
+              confetti({ particleCount: 40, spread: 60 });
+            } else {
+              isRaceFinishedRef.current = true;
+              setIsRaceFinished(true);
+              setIsPlaying(false);
+              isPlayingRef.current = false;
+              updateScreechAudio(false, 0);
+
+              playSfx('victory');
+              confetti({ particleCount: 150, spread: 100 });
+
+              const totalRaceTime = lapTimesRef.current.reduce((a, b) => a + b, 0);
+              const victoryBonus = Math.max(5000, 25000 - Math.floor(totalRaceTime * 300));
+              scoreRef.current += victoryBonus;
+              setScore(scoreRef.current);
+
+              setRunStats({
+                distance: Math.floor(totalDistanceRef.current),
+                maxCombo: maxComboRef.current,
+                apexClips: apexClipsCountRef.current,
+                longestDrift: Number(longestDriftRef.current.toFixed(1)),
+                totalRaceTime: Number(totalRaceTime.toFixed(2))
+              });
+
+              setTimeout(() => onGameOverRef.current(scoreRef.current), 500);
+            }
+          }
+        } else {
+          if (pts.length - trackProj.closestIndex < 100) {
+            appendProceduralTrackSegments(40);
+          }
+        }
+
+        // Track Objects Collisions
+        trackObjectsRef.current.forEach((obj) => {
+          if (!obj.active) return;
+          const dx = state.x - obj.x;
+          const dy = state.y - obj.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (obj.type === 'apex_pole') {
+            if (dist < obj.radius + 18) {
+              obj.active = false;
+              apexClipsCountRef.current += 1;
+              const apexPts = obj.points * comboMultiplierRef.current;
+              scoreRef.current += apexPts;
+              state.nitroAmount = Math.min(100, state.nitroAmount + 25);
+              playSfx('apex');
+              spawnSparks(obj.x, obj.y, 14, '#F7CB46');
+              addFloatingText(obj.x, obj.y - 20, `APEX CLIP! +${apexPts}`, '#F7CB46', 1.3);
+            }
+          } else if (obj.type === 'energy_chip') {
+            if (dist < obj.radius + 16) {
+              obj.active = false;
+              const chipPts = obj.points * comboMultiplierRef.current;
+              scoreRef.current += chipPts;
+              state.nitroAmount = Math.min(100, state.nitroAmount + 15);
+              playSfx('chip');
+              spawnSparks(obj.x, obj.y, 8, '#C0F7FE');
+              addFloatingText(obj.x, obj.y - 15, `+${chipPts}`, '#C0F7FE', 1.0);
+            }
+          } else if (obj.type === 'boost_pad') {
+            if (dist < obj.radius + 16) {
+              vLong = Math.min(car.topSpeed * 1.6, vLong + 4.5);
+              state.nitroAmount = Math.min(100, state.nitroAmount + 35);
+              playSfx('turbo');
+              spawnSparks(state.x, state.y, 18, '#99E885');
+              addFloatingText(state.x, state.y - 20, 'BOOST PAD!', '#99E885', 1.3);
+            }
+          }
+        });
+
+        // Off-Road Wall Crash
+        if (Math.abs(trackProj.lateralDist) > maxAllowedLateral) {
+          if (state.shieldTimer <= 0) {
+            handlePlayerCrash();
+          } else {
+            vLong *= 0.8;
+            playSfx('hit');
+            spawnSparks(state.x, state.y, 6, '#FE90E8');
           }
         }
       }
@@ -1707,7 +1331,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         playSfx('crash');
         updateScreechAudio(false, 0);
         screenShakeRef.current = 18;
-        spawnSparks(state.x, state.y, 25, '#FF0055');
+        spawnSparks(carStateRef.current.x, carStateRef.current.y, 25, '#FE90E8');
 
         setRunStats({
           distance: Math.floor(totalDistanceRef.current),
@@ -1725,18 +1349,18 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       }
 
       // ==========================================
-      // F. RENDER ENGINE & CAMERA TRANSFORMATION
+      // CANVAS 2D RENDER ENGINE (NEO-BRUTALISM)
       // ==========================================
+      const state = carStateRef.current;
+      const car = selectedCarRef.current;
       const cam = cameraRef.current;
-      const lookAhead = Math.min(90, currentSpeed * 10);
+      const lookAhead = Math.min(90, state.speed * 10);
       const targetCamX = state.x + Math.cos(state.heading) * lookAhead;
       const targetCamY = state.y + Math.sin(state.heading) * lookAhead;
 
-      // Smooth camera position interpolation
       cam.x += (targetCamX - cam.x) * Math.min(1, 8 * dt);
       cam.y += (targetCamY - cam.y) * Math.min(1, 8 * dt);
 
-      // Smooth camera angle lag (allows player to see car drift angle on screen!)
       let angleDiff = state.heading - cam.angle;
       while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
       while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
@@ -1744,7 +1368,6 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
       ctx.save();
 
-      // Screen Shake
       let shakeX = 0;
       let shakeY = 0;
       if (screenShakeRef.current > 0) {
@@ -1754,23 +1377,35 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         if (screenShakeRef.current < 0.4) screenShakeRef.current = 0;
       }
 
-      // Center camera on screen
       ctx.translate(CANVAS_WIDTH / 2 + shakeX, CANVAS_HEIGHT * 0.7 + shakeY);
-      // Align viewport with smooth camera heading
       ctx.rotate(-cam.angle - Math.PI / 2);
       ctx.translate(-cam.x, -cam.y);
 
-      // 1. Background Grid Ground
-      ctx.fillStyle = '#060212';
+      // 1. Warm Ground Clear
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(cam.x - 700, cam.y - 700, 1400, 1400);
 
-      // 2. Render Road Surface & Curved Polygonal Asphalt
+      // 2. Dot Matrix Ground Grid
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      const startGridX = Math.floor((cam.x - 700) / 24) * 24;
+      const endGridX = cam.x + 700;
+      const startGridY = Math.floor((cam.y - 700) / 24) * 24;
+      const endGridY = cam.y + 700;
+
+      for (let gx = startGridX; gx < endGridX; gx += 24) {
+        for (let gy = startGridY; gy < endGridY; gy += 24) {
+          ctx.beginPath();
+          ctx.arc(gx, gy, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 3. Render Road Surface & High-Contrast Asphalt
       const isCircuitMode = trackModeRef.current === 'circuit';
       const roadPts = roadPointsRef.current;
       const totalPoints = roadPts.length;
 
-      // In circuit mode, render all connected segments around the loop (or within camera range)
-      // In infinite mode, render from startIdx to endIdx
+      const trackProj = projectOntoTrack(state.x, state.y);
       const startIdx = isCircuitMode ? 0 : Math.max(0, trackProj.closestIndex - 18);
       const endIdx = isCircuitMode ? totalPoints : Math.min(totalPoints - 1, trackProj.closestIndex + 85);
 
@@ -1789,8 +1424,18 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         const n2X = -Math.sin(p2.angle) * ROAD_HALF_WIDTH;
         const n2Y = Math.cos(p2.angle) * ROAD_HALF_WIDTH;
 
-        // Asphalt Base
-        ctx.fillStyle = '#0d0722';
+        // Road Hard Drop Shadow (+4, +4)
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.moveTo(p1.x + n1X + 4, p1.y + n1Y + 4);
+        ctx.lineTo(p1.x - n1X + 4, p1.y - n1Y + 4);
+        ctx.lineTo(p2.x - n2X + 4, p2.y - n2Y + 4);
+        ctx.lineTo(p2.x + n2X + 4, p2.y + n2Y + 4);
+        ctx.closePath();
+        ctx.fill();
+
+        // White Crisp Asphalt Body
+        ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
         ctx.moveTo(p1.x + n1X, p1.y + n1Y);
         ctx.lineTo(p1.x - n1X, p1.y - n1Y);
@@ -1799,9 +1444,8 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         ctx.closePath();
         ctx.fill();
 
-        // Glowing Neon Outer Curbs
-        const curbColor = i % 2 === 0 ? '#00F0FF' : '#FF00EA';
-        ctx.strokeStyle = curbColor;
+        // Solid Black Outer Perimeter Curbs
+        ctx.strokeStyle = '#000000';
         ctx.lineWidth = 3.5;
         // Left Curb
         ctx.beginPath();
@@ -1814,20 +1458,30 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         ctx.lineTo(p2.x - n2X, p2.y - n2Y);
         ctx.stroke();
 
+        // Alternating Pastel Curbs on corners
+        const curbColor = i % 2 === 0 ? '#FE90E8' : '#C0F7FE';
+        ctx.fillStyle = curbColor;
+        ctx.beginPath();
+        ctx.arc(p1.x + n1X, p1.y + n1Y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(p1.x - n1X, p1.y - n1Y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
         // Center Dashed Lane Marker
         if (i % 2 === 0) {
-          ctx.strokeStyle = 'rgba(255, 230, 0, 0.45)';
-          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
         }
 
-        // Render Start/Finish Line & Sector Checkpoint Gates in Circuit Mode
+        // Start/Finish Line & Sector Gates in Circuit Mode
         if (isCircuitMode) {
           if (i === 0) {
-            // Neon Checkered Start/Finish Line
+            // Checkered Start/Finish Line
             const checkCount = 8;
             for (let c = 0; c < checkCount; c++) {
               const t1 = c / checkCount;
@@ -1837,33 +1491,30 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               const cx2 = p1.x + n1X * (1 - 2 * t2);
               const cy2 = p1.y + n1Y * (1 - 2 * t2);
 
-              ctx.strokeStyle = c % 2 === 0 ? '#FFFFFF' : '#00F0FF';
-              ctx.lineWidth = 6;
+              ctx.strokeStyle = c % 2 === 0 ? '#000000' : '#F7CB46';
+              ctx.lineWidth = 7;
               ctx.beginPath();
               ctx.moveTo(cx1, cy1);
               ctx.lineTo(cx2, cy2);
               ctx.stroke();
             }
           } else if (i === sec1Idx) {
-            // Sector 1 Laser Gate (Cyan)
-            ctx.strokeStyle = '#00F0FF';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#C0F7FE';
+            ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.moveTo(p1.x + n1X, p1.y + n1Y);
             ctx.lineTo(p1.x - n1X, p1.y - n1Y);
             ctx.stroke();
           } else if (i === sec2Idx) {
-            // Sector 2 Laser Gate (Green)
-            ctx.strokeStyle = '#39FF14';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#99E885';
+            ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.moveTo(p1.x + n1X, p1.y + n1Y);
             ctx.lineTo(p1.x - n1X, p1.y - n1Y);
             ctx.stroke();
           } else if (i === sec3Idx) {
-            // Sector 3 Laser Gate (Gold)
-            ctx.strokeStyle = '#FFE600';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#F7CB46';
+            ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.moveTo(p1.x + n1X, p1.y + n1Y);
             ctx.lineTo(p1.x - n1X, p1.y - n1Y);
@@ -1872,14 +1523,14 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         }
       }
 
-      // 3. Render Skid Marks
+      // 4. Render Skid Marks
       for (let i = skidMarksRef.current.length - 1; i >= 0; i--) {
         const sm = skidMarksRef.current[i];
         sm.alpha -= 0.003 * frameScale;
         if (sm.alpha <= 0) {
           skidMarksRef.current.splice(i, 1);
         } else {
-          ctx.strokeStyle = sm.color;
+          ctx.strokeStyle = '#000000';
           ctx.globalAlpha = sm.alpha;
           ctx.lineWidth = 4.5;
           ctx.beginPath();
@@ -1890,45 +1541,76 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
       }
       ctx.globalAlpha = 1.0;
 
-      // 4. Render Track Objects (Apex Poles, Chips, Boost Pads)
+      // 5. Render Track Objects (Apex Poles, Chips, Boost Pads)
       trackObjectsRef.current.forEach((obj) => {
         if (!obj.active) return;
         obj.pulse = (obj.pulse + 0.08 * frameScale) % (Math.PI * 2);
 
         if (obj.type === 'apex_pole') {
-          // Neon Apex Pylon
-          const pulseR = obj.radius + Math.sin(obj.pulse) * 3;
-          ctx.fillStyle = '#FFE600';
+          // Hard Drop Shadow
+          ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.arc(obj.x, obj.y, pulseR, 0, Math.PI * 2);
+          ctx.arc(obj.x + 2.5, obj.y + 2.5, obj.radius, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(obj.x, obj.y, pulseR + 4, 0, Math.PI * 2);
-          ctx.stroke();
-        } else if (obj.type === 'energy_chip') {
-          // Rotating Quantum Chip
-          ctx.save();
-          ctx.translate(obj.x, obj.y);
-          ctx.rotate(obj.pulse);
-          ctx.fillStyle = '#00F0FF';
-          ctx.fillRect(-6, -6, 12, 12);
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(-6, -6, 12, 12);
-          ctx.restore();
-        } else if (obj.type === 'boost_pad') {
-          // Speed Boost Chevron Pad
-          ctx.fillStyle = '#39FF14';
+          // Apex Pylon
+          ctx.fillStyle = '#F7CB46';
           ctx.beginPath();
           ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
           ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // White Center Cap
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, obj.radius * 0.4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else if (obj.type === 'energy_chip') {
+          ctx.save();
+          ctx.translate(obj.x, obj.y);
+          ctx.rotate(obj.pulse);
+
+          // Hard Drop Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(-6 + 2, -6 + 2, 12, 12);
+
+          // Diamond Body
+          ctx.fillStyle = '#C0F7FE';
+          ctx.fillRect(-6, -6, 12, 12);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(-6, -6, 12, 12);
+          ctx.restore();
+        } else if (obj.type === 'boost_pad') {
+          // Hard Drop Shadow
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.arc(obj.x + 3, obj.y + 3, obj.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Boost Chevron Pad
+          ctx.fillStyle = '#99E885';
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#000000';
+          ctx.font = '900 11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('▲', obj.x, obj.y);
         }
       });
 
-      // 5. Render Particles (Smoke, Sparks, Nitro Flames)
+      // 6. Render Particles (Chunky Square Sparks & Smoke)
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const pt = particlesRef.current[i];
         pt.x += pt.vx * frameScale;
@@ -1941,17 +1623,18 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         } else {
           ctx.fillStyle = pt.color;
           ctx.globalAlpha = Math.max(0, pt.alpha);
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(pt.x | 0, pt.y | 0, pt.size * 2, pt.size * 2);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(pt.x | 0, pt.y | 0, pt.size * 2, pt.size * 2);
         }
       }
       ctx.globalAlpha = 1.0;
 
-      // 6. Render Player Car Sprite
+      // 7. Render Player Car Sprite
       renderCarSprite(ctx, state.x, state.y, state.heading, state.steerAngle, car, state.nitroActive);
 
-      // 7. Render Floating Reward Texts
+      // 8. Render Floating Reward Texts
       for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
         const ft = floatingTextsRef.current[i];
         ft.y += ft.vy * frameScale;
@@ -1961,10 +1644,16 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         } else {
           ctx.save();
           ctx.translate(ft.x, ft.y);
-          ctx.fillStyle = ft.color;
           ctx.globalAlpha = Math.max(0, ft.alpha);
-          ctx.font = `900 ${Math.floor(13 * ft.scale)}px Impact, sans-serif`;
+          ctx.font = `900 ${Math.floor(13 * ft.scale)}px sans-serif`;
           ctx.textAlign = 'center';
+
+          // Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillText(ft.text, 2, 2);
+
+          // Front text
+          ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, 0, 0);
           ctx.restore();
         }
@@ -1978,11 +1667,9 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [playSfx, updateScreechAudio]);
 
-  // ==========================================
-  // CAR SPRITE RENDER HELPER (CYBERPUNK VEHICLE)
-  // ==========================================
+  // Neo-Brutalist Car Sprite Renderer
   const renderCarSprite = (
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -1996,41 +1683,43 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     ctx.translate(x, y);
     ctx.rotate(heading);
 
-    // Neon Underglow Aura
-    ctx.fillStyle = car.color;
-    ctx.globalAlpha = 0.45;
+    // Hard Drop Shadow (+3.5, +3.5)
+    ctx.fillStyle = '#000000';
     ctx.beginPath();
-    ctx.ellipse(0, 0, 26, 15, 0, 0, Math.PI * 2);
+    ctx.moveTo(-18 + 3.5, -10 + 3.5);
+    ctx.lineTo(16 + 3.5, -10 + 3.5);
+    ctx.lineTo(24 + 3.5, -5 + 3.5);
+    ctx.lineTo(26 + 3.5, 0 + 3.5);
+    ctx.lineTo(24 + 3.5, 5 + 3.5);
+    ctx.lineTo(16 + 3.5, 10 + 3.5);
+    ctx.lineTo(-18 + 3.5, 10 + 3.5);
+    ctx.closePath();
     ctx.fill();
-    ctx.globalAlpha = 1.0;
 
     // Nitro Exhaust Flames when boosting
     if (nitroActive) {
-      ctx.fillStyle = car.nitroColor;
+      ctx.fillStyle = '#FE90E8';
       ctx.beginPath();
-      ctx.moveTo(-20, -5);
+      ctx.moveTo(-20, -6);
       ctx.lineTo(-38 - Math.random() * 12, 0);
-      ctx.lineTo(-20, 5);
+      ctx.lineTo(-20, 6);
       ctx.closePath();
       ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
     }
 
-    // 4 Wheels
-    // Rear Left & Right Wheels
-    ctx.fillStyle = '#111';
-    ctx.strokeStyle = car.color;
-    ctx.lineWidth = 1.5;
+    // 4 Wheels (Black blocks with Solid Borders)
+    ctx.fillStyle = '#000000';
     ctx.fillRect(-16, -15, 10, 5);
-    ctx.strokeRect(-16, -15, 10, 5);
     ctx.fillRect(-16, 10, 10, 5);
-    ctx.strokeRect(-16, 10, 10, 5);
 
     // Front Left Wheel (Steered)
     ctx.save();
     ctx.translate(14, -13);
     ctx.rotate(steerAngle * 2.5);
     ctx.fillRect(-5, -2.5, 10, 5);
-    ctx.strokeRect(-5, -2.5, 10, 5);
     ctx.restore();
 
     // Front Right Wheel (Steered)
@@ -2038,10 +1727,9 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     ctx.translate(14, 13);
     ctx.rotate(steerAngle * 2.5);
     ctx.fillRect(-5, -2.5, 10, 5);
-    ctx.strokeRect(-5, -2.5, 10, 5);
     ctx.restore();
 
-    // Car Main Body Chassis
+    // Car Main Body Chassis (Pastel Swatch with 3px Solid Black Outline)
     ctx.fillStyle = car.color;
     ctx.beginPath();
     ctx.moveTo(-18, -10);
@@ -2053,37 +1741,41 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
     ctx.lineTo(-18, 10);
     ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = '#FFFFFF';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 3;
     ctx.stroke();
 
     // Carbon Hood & Cabin Roof
-    ctx.fillStyle = '#080516';
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(-8, -7, 18, 14);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-8, -7, 18, 14);
 
-    // Windshield (Cyan Tinted Glass)
-    ctx.fillStyle = '#00F0FF';
-    ctx.globalAlpha = 0.85;
+    // Windshield
+    ctx.fillStyle = '#C0F7FE';
     ctx.beginPath();
-    ctx.moveTo(3, -6);
-    ctx.lineTo(11, -5);
-    ctx.lineTo(11, 5);
-    ctx.lineTo(3, 6);
+    ctx.moveTo(3, -5);
+    ctx.lineTo(10, -4);
+    ctx.lineTo(10, 4);
+    ctx.lineTo(3, 5);
     ctx.closePath();
     ctx.fill();
-    ctx.globalAlpha = 1.0;
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 
-    // Cyber GT Spoiler / Rear Wing
-    ctx.fillStyle = car.accentColor;
+    // Rear Spoiler Wing
+    ctx.fillStyle = '#000000';
     ctx.fillRect(-22, -12, 4, 24);
 
     // Twin Projector Headlights
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = '#F7CB46';
     ctx.fillRect(23, -8, 3, 4);
     ctx.fillRect(23, 4, 3, 4);
 
-    // Tail LED Strip
-    ctx.fillStyle = '#FF0055';
+    // Tail Brake Lights
+    ctx.fillStyle = '#FE90E8';
     ctx.fillRect(-19, -8, 2, 16);
 
     ctx.restore();
@@ -2093,24 +1785,24 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top Drift HUD - Single Line Compact Bar */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Gauge className="w-3.5 h-3.5 text-portal-cyan" />
-            <span className="text-[10px] text-slate-400 font-black uppercase">Score</span>
-            <span className="text-sm font-black text-portal-gold">{score}</span>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo-sm">
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 bg-portal-yellow px-2 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+            <Gauge className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="text-[10px] uppercase tracking-wider">Score</span>
+            <span className="text-xs font-black">{score}</span>
           </div>
 
           {displayMultiplier > 1 && (
-            <span className="px-1.5 py-0.5 rounded-md bg-amber-500/20 text-portal-gold border border-amber-500/40 text-[10px] font-black animate-pulse">
+            <span className="px-1.5 py-0.5 rounded-md bg-portal-pink text-black border-2 border-black text-[10px] font-black shadow-neo-xs animate-pulse">
               {displayMultiplier}X
             </span>
           )}
 
           {isPlaying && (
-            <span className="text-[10px] font-black text-slate-400">
-              {speedKmh} <span className="text-[8px] text-slate-500">KM/H</span>
+            <span className="px-2 py-1 rounded-lg bg-portal-butter border-2 border-black shadow-neo-xs text-[10px] font-black text-black">
+              {speedKmh} <span className="text-[8px] uppercase">KM/H</span>
             </span>
           )}
         </div>
@@ -2119,54 +1811,60 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
         {isPlaying && (
           <div className="flex items-center gap-1 text-[10px] font-black">
             {trackMode === 'circuit' ? (
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-portal-card border border-cyan-500/30 text-portal-cyan shadow-sm">
-                <Trophy className="w-3 h-3 text-portal-gold" />
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-portal-cyan border-2 border-black shadow-neo-xs text-black">
+                <Trophy className="w-3 h-3 stroke-[2.5]" />
                 <span>LAP {currentLap}/{TOTAL_CIRCUIT_LAPS}</span>
-                <span className="text-slate-400 text-[9px] font-mono font-normal">
+                <span className="text-slate-700 text-[9px] font-mono font-bold">
                   {formatTime(lapTimer)}
                 </span>
               </div>
             ) : (
-              <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-card border border-portal-border text-slate-300">
-                <span className="text-portal-pink">♾️</span>
-                <span>FREEWAY</span>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-portal-green border-2 border-black shadow-neo-xs text-black">
+                <span>♾️ FREEWAY</span>
               </div>
             )}
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Nitro Fuel Bar */}
-          <div className="flex items-center gap-1">
-            <Zap className={`w-3 h-3 ${nitroFuel > 25 ? 'text-portal-cyan' : 'text-slate-500'}`} />
-            <div className="w-14 h-2 rounded-full bg-slate-800 border border-slate-700 overflow-hidden">
+          <div className="flex items-center gap-1 bg-[#FAF8F5] px-2 py-1 rounded-lg border-2 border-black shadow-neo-xs">
+            <Zap className={`w-3.5 h-3.5 stroke-[2.5] ${nitroFuel > 25 ? 'text-black fill-black' : 'text-slate-400'}`} />
+            <div className="w-12 h-2 rounded-full bg-white border border-black overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-75"
+                className="h-full bg-portal-yellow transition-all duration-75 border-r border-black"
                 style={{ width: `${nitroFuel}%` }}
               />
             </div>
           </div>
 
           <button
+            type="button"
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 transition-all"
+            className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
             title="Toggle Sound"
           >
-            {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
           </button>
         </div>
       </div>
 
       {/* Active Drift Tier Banner */}
       {driftTier && (
-        <div className="w-full mb-1.5 px-2 py-0.5 rounded-lg bg-cyan-500/10 border border-cyan-500/40 flex items-center justify-center gap-1.5 text-[10px] font-black text-portal-cyan animate-pulse">
-          <Flame className="w-3 h-3 text-amber-400" />
+        <div className="w-full mb-2 px-3 py-1 rounded-xl bg-portal-yellow border-3 border-black shadow-neo-sm flex items-center justify-center gap-1.5 text-xs font-black text-black uppercase tracking-wider animate-pulse">
+          <Flame className="w-3.5 h-3.5 stroke-[2.5]" />
           <span>{driftTier}</span>
         </div>
       )}
 
-      {/* Main Game Screen Canvas (9:16 Vertical Portrait Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-full aspect-[9/16] flex items-center justify-center">
+      {/* Main Game Screen Canvas (9:16 Vertical Portrait Ratio) with Figma Corner Handles */}
+      <div className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black p-0 overflow-hidden shadow-neo-lg flex items-center justify-center touch-none cursor-crosshair">
+        {/* Figma Corner Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -2176,90 +1874,95 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
         {/* Start / Garage Screen Overlay */}
         {!isPlaying && !isDead && !isRaceFinished && (
-          <div className="absolute inset-0 flex flex-col justify-between p-3.5 bg-black/65 backdrop-blur-[2px] text-center animate-in fade-in duration-200 z-10">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-between p-3.5 text-center animate-fadeIn z-10">
             {/* Header Title */}
             <div>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-portal-cyan border border-cyan-500/40 text-[9px] font-black uppercase tracking-widest">
-                CYBER DRIFT CHAMPIONSHIP
-              </span>
-              <h2 className="text-xl font-black text-white mt-0.5 tracking-wider">
-                CYBER <span className="text-portal-cyan">DRIFT</span> <span className="text-portal-pink">2077</span>
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1 shadow-neo-xs">
+                • [ RETRO GRAND PRIX ] •
+              </div>
+              <h2 className="text-xl font-black text-white tracking-tight uppercase">
+                Cyber Drift 2077
               </h2>
             </div>
 
             {/* Track Mode Selector Tabs */}
-            <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-portal-border/80">
+            <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-white border-3 border-black shadow-neo-sm">
               <button
+                type="button"
                 onClick={() => setTrackMode('circuit')}
-                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 transition-all ${
+                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 border-2 transition-all ${
                   trackMode === 'circuit'
-                    ? 'bg-gradient-to-r from-cyan-500/20 to-sky-500/30 text-portal-cyan border border-cyan-400/60 shadow-[0_0_10px_rgba(0,240,255,0.2)]'
-                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                    ? 'bg-portal-yellow text-black border-black shadow-neo-xs'
+                    : 'bg-transparent text-slate-600 border-transparent hover:text-black'
                 }`}
               >
-                <Trophy className="w-3 h-3 text-portal-gold" />
+                <Trophy className="w-3 h-3 stroke-[2.5]" />
                 <span>CYBER RING (3 LAPS)</span>
               </button>
               <button
+                type="button"
                 onClick={() => setTrackMode('infinite')}
-                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 transition-all ${
+                className={`py-1.5 px-2 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 border-2 transition-all ${
                   trackMode === 'infinite'
-                    ? 'bg-gradient-to-r from-pink-500/20 to-purple-500/30 text-portal-pink border border-pink-400/60 shadow-[0_0_10px_rgba(255,0,85,0.2)]'
-                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                    ? 'bg-portal-pink text-black border-black shadow-neo-xs'
+                    : 'bg-transparent text-slate-600 border-transparent hover:text-black'
                 }`}
               >
-                <span>♾️</span>
-                <span>FREEWAY (ENDLESS)</span>
+                <span>♾️ FREEWAY (ENDLESS)</span>
               </button>
             </div>
 
             {/* Garage Car Selector Carousel */}
-            <div className="bg-portal-surface/90 border border-portal-border rounded-2xl p-2.5 my-1 shadow-xl">
+            <div className="bg-white border-3 border-black rounded-2xl p-2.5 my-1 shadow-neo-sm">
               <div className="flex items-center justify-between mb-1.5">
                 <button
+                  type="button"
                   onClick={() => setSelectedCarIndex(prev => (prev - 1 + CARS.length) % CARS.length)}
-                  className="p-1.5 rounded-xl bg-portal-card border border-portal-border text-slate-300 hover:text-white active:scale-95 transition-all"
+                  className="p-1.5 rounded-lg bg-portal-butter border-2 border-black text-black shadow-neo-xs hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none transition-all"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4 stroke-[3]" />
                 </button>
 
                 <div>
-                  <h4 className="text-xs font-black text-white" style={{ color: selectedCar.color }}>
+                  <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: selectedCar.color === '#FFFFFF' ? '#000000' : selectedCar.color }}>
                     {selectedCar.name}
                   </h4>
-                  <p className="text-[9px] text-slate-400 font-bold">{selectedCar.model}</p>
+                  <p className="text-[9px] text-slate-700 font-bold">{selectedCar.model}</p>
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setSelectedCarIndex(prev => (prev + 1) % CARS.length)}
-                  className="p-1.5 rounded-xl bg-portal-card border border-portal-border text-slate-300 hover:text-white active:scale-95 transition-all"
+                  className="p-1.5 rounded-lg bg-portal-butter border-2 border-black text-black shadow-neo-xs hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none transition-all"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4 stroke-[3]" />
                 </button>
               </div>
 
               {/* Vehicle Stats Bars */}
-              <div className="space-y-1 text-[9px] text-slate-300 font-bold">
+              <div className="space-y-1 text-[9px] text-slate-800 font-black text-left">
                 <div className="flex items-center justify-between">
                   <span>Top Speed</span>
-                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="w-24 h-2 rounded-full bg-slate-100 border border-black overflow-hidden">
                     <div className="h-full bg-portal-cyan" style={{ width: `${selectedCar.stats.speed}%` }} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Drift Angle</span>
-                  <div className="w-24 h-1.5 rounded-full bg-portal-pink" style={{ width: `${selectedCar.stats.drift}%` }} />
+                  <div className="w-24 h-2 rounded-full bg-slate-100 border border-black overflow-hidden">
+                    <div className="h-full bg-portal-pink" style={{ width: `${selectedCar.stats.drift}%` }} />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Nitro Boost</span>
-                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-portal-gold" style={{ width: `${selectedCar.stats.nitro}%` }} />
+                  <div className="w-24 h-2 rounded-full bg-slate-100 border border-black overflow-hidden">
+                    <div className="h-full bg-portal-yellow" style={{ width: `${selectedCar.stats.nitro}%` }} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Agility</span>
-                  <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                    <div className="h-full bg-emerald-400" style={{ width: `${selectedCar.stats.control}%` }} />
+                  <div className="w-24 h-2 rounded-full bg-slate-100 border border-black overflow-hidden">
+                    <div className="h-full bg-portal-green" style={{ width: `${selectedCar.stats.control}%` }} />
                   </div>
                 </div>
               </div>
@@ -2268,21 +1971,24 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
             {/* Launch Action */}
             <div className="space-y-1.5">
               <button
+                type="button"
                 onClick={startGame}
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-400 to-cyan-500 text-black font-black text-xs shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                className="w-full py-3 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
               >
-                <Play className="w-4 h-4 fill-black" /> {trackMode === 'circuit' ? 'START 3-LAP GRAND PRIX' : 'START ENDLESS DRIFT'}
+                <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                <span>{trackMode === 'circuit' ? 'START 3-LAP GRAND PRIX' : 'START ENDLESS DRIFT'}</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setShowControlsGuide(!showControlsGuide)}
-                className="text-[9px] text-slate-400 hover:text-white flex items-center justify-center gap-1 mx-auto underline"
+                className="text-[9px] text-white hover:text-portal-yellow flex items-center justify-center gap-1 mx-auto font-bold underline"
               >
                 <HelpCircle className="w-3 h-3" /> {showControlsGuide ? 'Hide Controls' : 'How to Play & Controls'}
               </button>
 
               {showControlsGuide && (
-                <div className="p-2 rounded-xl bg-slate-900/90 border border-slate-700 text-[9px] text-slate-300 text-left space-y-0.5 animate-in fade-in">
+                <div className="p-2 rounded-xl bg-white border-2 border-black text-[9px] text-slate-800 text-left space-y-0.5 font-bold shadow-neo-xs animate-fadeIn">
                   <p>• <strong>Steer</strong>: A/D or Left/Right Arrow keys</p>
                   <p>• <strong>E-Brake Drift</strong>: Space or Shift key</p>
                   <p>• <strong>Nitro Boost</strong>: E, B, or N key</p>
@@ -2295,30 +2001,36 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
         {/* Grand Prix Championship Victory Screen Overlay */}
         {isRaceFinished && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-cyan-950/40 via-black/70 to-black/90 backdrop-blur-[3px] text-center animate-in fade-in duration-300 z-20">
-            <div className="space-y-3 w-full max-w-xs bg-portal-bg/95 backdrop-blur-md p-4 rounded-2xl border-2 border-portal-cyan shadow-[0_0_35px_rgba(0,240,255,0.35)]">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center animate-fadeIn z-20">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-4 sm:p-5 shadow-neo-xl w-full max-w-[300px] space-y-3 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
               <div>
-                <span className="px-3 py-0.5 rounded-full bg-cyan-500/20 text-portal-cyan border border-cyan-400/60 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                <span className="inline-block px-3 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider shadow-neo-xs">
                   🏆 GRAND PRIX CHAMPION
                 </span>
-                <h3 className="text-2xl font-black text-white mt-1">CIRCUIT VICTORY!</h3>
-                <p className="text-xs text-portal-gold font-black">Score: {score}</p>
+                <h3 className="text-xl font-black text-black mt-1 uppercase">CIRCUIT VICTORY!</h3>
+                <p className="text-xs text-slate-700 font-black">Score: {score}</p>
               </div>
 
               {/* Lap Times Breakdown */}
-              <div className="p-2 rounded-xl bg-slate-900/90 border border-portal-border text-[10px] text-slate-300 font-bold space-y-1">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-slate-400">
+              <div className="p-2 rounded-xl bg-[#FAF8F5] border-2 border-black text-[10px] text-slate-800 font-bold space-y-1 shadow-neo-xs">
+                <div className="flex items-center justify-between border-b border-black/20 pb-1 text-slate-600 font-black">
                   <span>LAP</span>
                   <span>TIME</span>
                 </div>
                 {lapTimes.map((lt, idx) => (
                   <div key={idx} className="flex items-center justify-between">
-                    <span className="text-slate-300">LAP {idx + 1}</span>
-                    <span className="font-mono text-portal-cyan font-bold">{formatTime(lt)}</span>
+                    <span className="text-slate-800">LAP {idx + 1}</span>
+                    <span className="font-mono text-black font-black">{formatTime(lt)}</span>
                   </div>
                 ))}
                 {bestLapTime !== null && (
-                  <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-portal-gold font-black">
+                  <div className="flex items-center justify-between pt-1 border-t border-black/20 text-black font-black">
                     <span>BEST LAP</span>
                     <span className="font-mono">{formatTime(bestLapTime)}</span>
                   </div>
@@ -2326,22 +2038,24 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               </div>
 
               {/* Performance Stats Breakdown */}
-              <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-slate-900/80 border border-portal-border text-[10px] text-slate-300 font-bold">
+              <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-[#FAF8F5] border-2 border-black text-[10px] text-slate-800 font-bold shadow-neo-xs">
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Max Combo</p>
-                  <p className="text-portal-gold font-black text-xs">{runStats.maxCombo}X Multiplier</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Max Combo</p>
+                  <p className="text-black font-black text-xs">{runStats.maxCombo}X Multiplier</p>
                 </div>
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Apex Clips</p>
-                  <p className="text-portal-cyan font-black text-xs">{runStats.apexClips} Hits</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Apex Clips</p>
+                  <p className="text-black font-black text-xs">{runStats.apexClips} Hits</p>
                 </div>
               </div>
 
               <button
+                type="button"
                 onClick={startGame}
-                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-black font-black text-xs shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
               >
-                <RotateCcw className="w-3.5 h-3.5" /> RACE AGAIN
+                <RotateCcw className="w-3.5 h-3.5 stroke-[3]" />
+                <span>RACE AGAIN</span>
               </button>
             </div>
           </div>
@@ -2349,65 +2063,74 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
         {/* Game Over Screen Overlay */}
         {isDead && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-rose-950/30 via-black/55 to-black/80 backdrop-blur-[2px] text-center animate-in fade-in duration-200">
-            <div className="space-y-3 w-full max-w-xs bg-portal-bg/95 backdrop-blur-md p-4 rounded-2xl border border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.25)]">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center animate-fadeIn z-20">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-4 sm:p-5 shadow-neo-xl w-full max-w-[300px] space-y-3 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
               <div>
-                <span className="px-3 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-black uppercase tracking-wider">
-                  Vehicle Totaled
+                <span className="inline-block px-3 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider shadow-neo-xs">
+                  ⚡ VEHICLE TOTALED ⚡
                 </span>
-                <h3 className="text-2xl font-black text-white mt-1">Score: {score}</h3>
+                <h3 className="text-2xl font-black text-black mt-1">Score: {score}</h3>
               </div>
 
               {/* Performance Stats Breakdown */}
-              <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-slate-900/80 border border-portal-border text-[10px] text-slate-300 font-bold">
+              <div className="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-[#FAF8F5] border-2 border-black text-[10px] text-slate-800 font-bold shadow-neo-xs">
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Max Combo</p>
-                  <p className="text-portal-gold font-black text-xs">{runStats.maxCombo}X Multiplier</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Max Combo</p>
+                  <p className="text-black font-black text-xs">{runStats.maxCombo}X</p>
                 </div>
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Apex Clips</p>
-                  <p className="text-portal-cyan font-black text-xs">{runStats.apexClips} Hits</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Apex Clips</p>
+                  <p className="text-black font-black text-xs">{runStats.apexClips} Hits</p>
                 </div>
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Longest Slide</p>
-                  <p className="text-portal-pink font-black text-xs">{runStats.longestDrift}s</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Longest Slide</p>
+                  <p className="text-black font-black text-xs">{runStats.longestDrift}s</p>
                 </div>
                 <div className="p-1 text-left">
-                  <p className="text-[9px] text-slate-500 uppercase">Distance</p>
-                  <p className="text-emerald-400 font-black text-xs">{runStats.distance}m</p>
+                  <p className="text-[9px] text-slate-500 uppercase font-black">Distance</p>
+                  <p className="text-black font-black text-xs">{runStats.distance}m</p>
                 </div>
               </div>
 
               {/* Ad Revive Notice Alert */}
               {adNotice && (
-                <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs font-bold animate-in fade-in">
-                  <div className="flex items-center justify-center gap-1 mb-0.5 text-portal-gold font-black text-[10px]">
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                <div className="p-2 rounded-xl bg-portal-butter border-2 border-black text-black text-xs font-bold shadow-neo-xs animate-fadeIn">
+                  <div className="flex items-center justify-center gap-1 mb-0.5 font-black text-[10px]">
+                    <AlertCircle className="w-3.5 h-3.5 stroke-[2.5]" />
                     <span>AD NETWORK NOTICE</span>
                   </div>
-                  <p className="text-[10px] text-slate-300">{adNotice}</p>
+                  <p className="text-[10px] text-slate-800">{adNotice}</p>
                 </div>
               )}
 
               {/* Emergency Revive Action */}
               <button
+                type="button"
                 onClick={handleWatchAdForRevive}
                 disabled={hasRevived}
-                className={`flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl font-black text-xs transition-all ${
+                className={`flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl font-black text-xs border-3 border-black shadow-neo transition-all ${
                   hasRevived
-                    ? 'bg-slate-800/60 border border-slate-700/60 text-slate-500 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/80 hover:border-amber-300 text-amber-300 hover:text-white shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:shadow-glow-gold active:scale-95'
+                    ? 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed shadow-none'
+                    : 'bg-portal-butter hover:bg-portal-yellow text-black hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
                 }`}
               >
-                <Tv className={`w-3.5 h-3.5 ${hasRevived ? 'text-slate-500' : 'text-portal-gold animate-pulse'}`} />
+                <Tv className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{hasRevived ? 'REVIVE USED (1/RUN)' : 'WATCH AD TO REVIVE'}</span>
               </button>
 
               <button
+                type="button"
                 onClick={startGame}
-                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-portal-cyan text-black font-black text-xs shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
               >
-                <RotateCcw className="w-3.5 h-3.5" /> RESTART RUN
+                <RotateCcw className="w-3.5 h-3.5 stroke-[3]" />
+                <span>RESTART RUN</span>
               </button>
             </div>
           </div>
@@ -2416,10 +2139,11 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
       {/* Responsive Touch Controls for Mobile Devices */}
       {isPlaying && (
-        <div className="w-full mt-2 flex items-center justify-between px-1 gap-2 select-none">
+        <div className="w-full mt-2.5 flex items-center justify-between px-1 gap-2 select-none">
           {/* Left & Right Steering Touch Buttons */}
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onPointerDown={() => {
                 touchSteerRef.current = -1;
               }}
@@ -2432,11 +2156,12 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               onPointerLeave={() => {
                 touchSteerRef.current = 0;
               }}
-              className="w-13 h-12 rounded-xl bg-portal-surface border border-portal-border active:bg-cyan-500/30 text-white font-black text-base flex items-center justify-center active:scale-90 transition-transform shadow-md touch-none"
+              className="w-13 h-12 rounded-xl bg-white border-3 border-black text-black font-black text-base flex items-center justify-center shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all touch-none"
             >
               ◀
             </button>
             <button
+              type="button"
               onPointerDown={() => {
                 touchSteerRef.current = 1;
               }}
@@ -2449,7 +2174,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               onPointerLeave={() => {
                 touchSteerRef.current = 0;
               }}
-              className="w-13 h-12 rounded-xl bg-portal-surface border border-portal-border active:bg-cyan-500/30 text-white font-black text-base flex items-center justify-center active:scale-90 transition-transform shadow-md touch-none"
+              className="w-13 h-12 rounded-xl bg-white border-3 border-black text-black font-black text-base flex items-center justify-center shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all touch-none"
             >
               ▶
             </button>
@@ -2458,6 +2183,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
           {/* E-Brake & Nitro Touch Buttons */}
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onPointerDown={() => {
                 touchHandbrakeRef.current = true;
               }}
@@ -2470,12 +2196,14 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               onPointerLeave={() => {
                 touchHandbrakeRef.current = false;
               }}
-              className="px-3.5 h-12 rounded-xl bg-portal-surface border border-pink-500/40 active:bg-pink-500/30 text-portal-pink font-black text-xs flex items-center justify-center gap-1 active:scale-90 transition-transform shadow-md touch-none"
+              className="px-3.5 h-12 rounded-xl bg-portal-pink border-3 border-black text-black font-black text-xs flex items-center justify-center gap-1 shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all touch-none"
             >
-              <Flame className="w-3.5 h-3.5 text-portal-pink" /> DRIFT
+              <Flame className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>DRIFT</span>
             </button>
 
             <button
+              type="button"
               onPointerDown={() => {
                 touchNitroRef.current = true;
               }}
@@ -2488,9 +2216,10 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
               onPointerLeave={() => {
                 touchNitroRef.current = false;
               }}
-              className="px-3.5 h-12 rounded-xl bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border border-cyan-500/50 active:bg-cyan-500/40 text-portal-cyan font-black text-xs flex items-center justify-center gap-1 active:scale-90 transition-transform shadow-glow-cyan touch-none"
+              className="px-3.5 h-12 rounded-xl bg-portal-yellow border-3 border-black text-black font-black text-xs flex items-center justify-center gap-1 shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all touch-none"
             >
-              <Zap className="w-3.5 h-3.5 text-portal-cyan" /> NITRO
+              <Zap className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>NITRO</span>
             </button>
           </div>
         </div>

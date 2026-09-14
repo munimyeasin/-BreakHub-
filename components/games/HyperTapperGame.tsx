@@ -129,55 +129,76 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top HUD - Ultra Slim Neo-Brutalist Strip */}
-      <div className="w-full flex items-center justify-between bg-portal-surface px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo-sm">
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
         {/* Timer */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
-          <Timer className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          <span className={`text-xs font-black ${timeLeft <= 4 ? 'text-portal-pink animate-pulse' : 'text-white'}`}>
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Timer className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className={`text-xs font-black ${timeLeft <= 4 ? 'text-rose-600 animate-pulse' : 'text-black'}`}>
             {timeLeft}s
           </span>
         </div>
 
         {/* Taps count & CPS */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
-          <Flame className="w-3.5 h-3.5 text-portal-pink fill-portal-pink" />
-          <span className="text-xs font-black text-portal-cyan">{taps} Taps</span>
-          {isPlaying && <span className="text-[10px] text-slate-300">({cps})</span>}
+        <div className="flex items-center gap-1.5 bg-portal-pink px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Flame className="w-3.5 h-3.5 text-black fill-black" />
+          <span className="text-xs font-black text-black">{taps} Taps</span>
+          {isPlaying && <span className="text-[10px] text-slate-800">({cps})</span>}
         </div>
 
         {/* Live Score */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
-          <Trophy className="w-3.5 h-3.5 text-portal-yellow fill-portal-yellow" />
-          <span className="text-xs font-black text-portal-yellow">{taps * 120}</span>
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Trophy className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-xs font-black text-black">{taps * 120}</span>
         </div>
 
         {/* Audio Toggle */}
         <button
+          type="button"
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1.5 rounded-lg bg-portal-card text-white hover:bg-portal-yellow hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+          className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
           aria-label="Toggle sound"
         >
-          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
         </button>
       </div>
 
-      {/* Main Core Viewport (9:16 Aspect Ratio Frame) */}
-      <div className="relative w-full aspect-[9/16] bg-portal-bg bg-neo-dots rounded-2xl border-4 border-black p-4 shadow-neo-lg flex flex-col items-center justify-center overflow-hidden">
-        {/* Subtle Decorative Grid Lines */}
-        <div className="absolute inset-0 bg-neo-grid opacity-30 pointer-events-none" />
+      {/* Main Core Viewport (9:16 Aspect Ratio Frame) with Figma Handles */}
+      <div className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black p-4 shadow-neo-lg flex flex-col items-center justify-between overflow-hidden">
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
+        {/* Top Tag */}
+        <div className="w-full text-center py-1 z-10">
+          <span className="text-[10px] font-black tracking-wider uppercase text-black bg-white border-2 border-black px-3 py-1 rounded-full shadow-neo-xs">
+            {isPlaying ? '✦ SPEED RUSH IN PROGRESS ✦' : '• 15-SEC HYPER REFLEX •'}
+          </span>
+        </div>
 
         {!isPlaying ? (
-          <div className="text-center space-y-4 relative z-10 p-4">
-            <div className="w-16 h-16 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
-              <Zap className="w-8 h-8 fill-black stroke-[2.5]" />
+          /* Pre-Game & Game Over Neo-Brutalist Card */
+          <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 my-auto text-center z-10 animate-scaleIn text-black">
+            {/* Figma Handles */}
+            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+            <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+              <Zap className="w-7 h-7 fill-black stroke-[2.5]" />
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                {isFinished ? '⚡ TIME EXPIRED ⚡' : '• [ SPEED TEST ] •'}
+              </div>
+              <h3 className="text-xl font-black text-black tracking-tight uppercase">
                 {isFinished ? 'Rush Complete!' : 'Hyper Tapper'}
               </h3>
-              <p className="text-xs text-slate-300 font-bold mt-1.5 max-w-[240px] mx-auto leading-relaxed">
+              <p className="text-[11px] font-bold text-slate-700 mt-1">
                 {isFinished
                   ? `Achieved ${taps} taps (${(taps / 15).toFixed(1)} CPS) with ${taps * 120} pts!`
                   : 'Tap the quantum core as fast as possible in 15 seconds!'}
@@ -185,8 +206,9 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
             </div>
 
             <button
+              type="button"
               onClick={handleStart}
-              className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all mx-auto"
+              className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
             >
               {isFinished ? (
                 <>
@@ -203,12 +225,13 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
           <div className="relative flex flex-col items-center justify-center my-auto z-10">
             {/* Tactile Neo-Brutalist Core Puck */}
             <button
+              type="button"
               onPointerDown={handleTap}
               style={{ transform: `scale(${buttonScale})` }}
-              className="relative w-52 h-52 sm:w-60 sm:h-60 rounded-full bg-portal-yellow active:bg-portal-pink border-4 border-black shadow-neo-xl flex flex-col items-center justify-center cursor-pointer select-none touch-none transition-transform duration-75 group"
+              className="relative w-52 h-52 sm:w-56 sm:h-56 rounded-full bg-portal-yellow active:bg-portal-pink border-4 border-black shadow-neo-xl flex flex-col items-center justify-center cursor-pointer select-none touch-none transition-transform duration-75 group"
             >
               {/* Concentric Grip Ring */}
-              <div className="w-38 h-38 sm:w-44 sm:h-44 rounded-full border-3 border-dashed border-black flex flex-col items-center justify-center pointer-events-none">
+              <div className="w-38 h-38 sm:w-42 sm:h-42 rounded-full border-3 border-dashed border-black flex flex-col items-center justify-center pointer-events-none">
                 {/* Ripple Rings */}
                 {ripples.map((ripple) => (
                   <span
@@ -218,18 +241,18 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
                   />
                 ))}
 
-                <Zap className="w-12 h-12 sm:w-14 sm:h-14 text-black fill-black stroke-[2.5]" />
-                <span className="text-2xl sm:text-3xl font-black text-black tracking-widest uppercase mt-1">
+                <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-black fill-black stroke-[2.5]" />
+                <span className="text-2xl sm:text-3xl font-black text-black tracking-widest uppercase mt-0.5">
                   TAP!
                 </span>
-                <span className="text-[10px] sm:text-xs text-portal-yellow font-black bg-black px-2.5 py-0.5 rounded-md mt-1 border border-black shadow-neo-sm">
+                <span className="text-[10px] text-portal-yellow font-black bg-black px-2.5 py-0.5 rounded-md mt-1 border border-black shadow-neo-xs">
                   +120 PTS
                 </span>
               </div>
             </button>
 
             {/* Time progress bar */}
-            <div className="w-52 h-4 bg-black rounded-lg mt-6 overflow-hidden border-2 border-black p-0.5 shadow-neo-sm">
+            <div className="w-52 h-4 bg-white rounded-lg mt-6 overflow-hidden border-2 border-black p-0.5 shadow-neo-sm">
               <div
                 className="bg-portal-pink h-full rounded-sm border-r-2 border-black transition-all duration-100"
                 style={{ width: `${(timeLeft / TOTAL_GAME_TIME) * 100}%` }}
@@ -237,11 +260,14 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
             </div>
           </div>
         )}
-      </div>
 
-      <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mt-2.5 text-center">
-        ⚡ Pro-Tip: Alternate with two fingers or jitter-click for ultra-high CPS!
-      </p>
+        {/* Bottom Helper Hint */}
+        <div className="w-full text-center py-1 z-10">
+          <p className="text-[10px] text-slate-700 font-black uppercase tracking-wider bg-white/80 border border-black/30 px-2 py-0.5 rounded inline-block">
+            ⚡ Alternate with two fingers or jitter-click for max CPS!
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Activity } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Activity, Radio } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface ChromaReflexGameProps {
@@ -11,11 +11,11 @@ interface ChromaReflexGameProps {
 
 type ColorId = 'cyan' | 'magenta' | 'gold' | 'emerald';
 
-const PADS: { id: ColorId; label: string; bg: string; activeBg: string; border: string; glow: string; freq: number }[] = [
-  { id: 'cyan', label: 'CYAN', bg: 'bg-cyan-950/60', activeBg: 'bg-portal-cyan text-black', border: 'border-cyan-500/40', glow: 'shadow-glow-cyan', freq: 440 },
-  { id: 'magenta', label: 'NEON', bg: 'bg-fuchsia-950/60', activeBg: 'bg-fuchsia-500 text-black', border: 'border-fuchsia-500/40', glow: 'shadow-glow-purple', freq: 554 },
-  { id: 'gold', label: 'GOLD', bg: 'bg-amber-950/60', activeBg: 'bg-amber-400 text-black', border: 'border-amber-500/40', glow: 'shadow-glow-gold', freq: 659 },
-  { id: 'emerald', label: 'ACID', bg: 'bg-emerald-950/60', activeBg: 'bg-emerald-400 text-black', border: 'border-emerald-500/40', glow: 'shadow-glow-cyan', freq: 880 },
+const PADS: { id: ColorId; label: string; icon: string; bg: string; activeBg: string; freq: number }[] = [
+  { id: 'cyan', label: 'CYAN', icon: '✦', bg: 'bg-portal-cyan/30 text-black', activeBg: 'bg-portal-cyan text-black shadow-neo scale-105 ring-4 ring-black', freq: 440 },
+  { id: 'magenta', label: 'PINK', icon: '★', bg: 'bg-portal-pink/30 text-black', activeBg: 'bg-portal-pink text-black shadow-neo scale-105 ring-4 ring-black', freq: 554 },
+  { id: 'gold', label: 'GOLD', icon: '⚡', bg: 'bg-portal-yellow/30 text-black', activeBg: 'bg-portal-yellow text-black shadow-neo scale-105 ring-4 ring-black', freq: 659 },
+  { id: 'emerald', label: 'GREEN', icon: '◆', bg: 'bg-portal-green/30 text-black', activeBg: 'bg-portal-green text-black shadow-neo scale-105 ring-4 ring-black', freq: 880 },
 ];
 
 export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGameProps) {
@@ -117,68 +117,99 @@ export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGam
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5">
-          <Activity className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Round</span>
-          <span className="text-sm font-black text-portal-cyan">{round}</span>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Activity className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] uppercase tracking-wider">Round</span>
+          <span className="text-xs font-black">{round}</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{score}</span>
+
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <span className="text-[10px] uppercase tracking-wider">Score</span>
+          <span className="text-xs font-black">{score}</span>
         </div>
+
         <button
+          type="button"
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+          className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
+          title="Toggle Sound"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
         </button>
       </div>
 
-      {/* Screen / Pad Matrix (9:16 Standard Aspect Ratio Frame) */}
-      <div className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border p-4 shadow-2xl flex flex-col items-center justify-between overflow-hidden">
+      {/* Screen / Pad Matrix (9:16 Standard Aspect Ratio Frame) with Figma Handles */}
+      <div className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black p-4 shadow-neo-lg flex flex-col items-center justify-between overflow-hidden">
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         {/* Status prompt */}
-        <div className="w-full text-center py-1">
+        <div className="w-full text-center py-1 z-10">
           {isPlaying && (
-            <span className="text-[11px] font-black tracking-wider uppercase text-portal-cyan bg-portal-surface/80 border border-portal-border px-3 py-1 rounded-full">
-              {isShowingSequence ? '👀 Watch Sequence...' : '👉 Your Turn!'}
+            <span className="text-[10px] font-black tracking-wider uppercase text-black bg-white border-2 border-black px-3 py-1 rounded-full shadow-neo-xs">
+              {isShowingSequence ? '👀 WATCH SEQUENCE...' : '👉 REPEAT THE PATTERN!'}
             </span>
           )}
         </div>
 
-        {!isPlaying ? (
-          <div className="flex flex-col items-center justify-center p-6 text-center space-y-4 my-auto">
-            <div className="w-16 h-16 rounded-3xl bg-fuchsia-500/20 border border-fuchsia-500/40 flex items-center justify-center text-fuchsia-400 shadow-glow-purple">
-              <Activity className="w-8 h-8" />
+        {!isPlaying && !isDead ? (
+          /* Pre-Game Neo-Brutalist Card */
+          <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 my-auto text-center z-10 animate-scaleIn text-black">
+            {/* Figma Handles */}
+            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+            <div className="w-14 h-14 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+              <Radio className="w-7 h-7 stroke-[2.5]" />
             </div>
+
             <div>
-              <h3 className="text-xl font-black text-white">Chroma Reflex</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Memorize the glowing cyber sequence and repeat it!</p>
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                • [ PATTERN MEMORY ] •
+              </div>
+              <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                Chroma Reflex
+              </h3>
+              <p className="text-[11px] font-bold text-slate-700 mt-1">
+                Memorize the glowing color sequence and repeat it accurately!
+              </p>
             </div>
+
             <button
+              type="button"
               onClick={startGame}
-              className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
             >
-              <Play className="w-4 h-4 fill-black" /> START REFLEX
+              <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+              <span>START REFLEX</span>
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 w-full max-w-[320px] aspect-square my-auto">
+          /* Active Neo-Brutalist 2x2 Pad Arena */
+          <div className="grid grid-cols-2 gap-3.5 w-full max-w-[320px] aspect-square my-auto p-3 bg-white rounded-2xl border-3 border-black shadow-neo">
             {PADS.map(pad => {
               const isActive = activePad === pad.id;
               return (
                 <button
                   key={pad.id}
+                  type="button"
                   onClick={() => handlePadClick(pad)}
                   disabled={isShowingSequence}
-                  className={`rounded-2xl border flex flex-col items-center justify-center font-black text-sm transition-all duration-150 active:scale-95 ${
+                  className={`rounded-2xl border-3 border-black flex flex-col items-center justify-center font-black transition-all duration-150 select-none ${
                     isActive
-                      ? `${pad.activeBg} ${pad.glow} scale-105 border-white`
-                      : `${pad.bg} ${pad.border} text-slate-400 hover:border-white/40`
+                      ? pad.activeBg
+                      : `${pad.bg} shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none`
                   }`}
                 >
-                  <span className="text-xs uppercase tracking-wider">{pad.label}</span>
+                  <span className="text-2xl mb-1">{pad.icon}</span>
+                  <span className="text-xs uppercase tracking-wider font-black">{pad.label}</span>
                 </button>
               );
             })}
@@ -186,24 +217,40 @@ export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGam
         )}
 
         {/* Bottom hint */}
-        <div className="w-full text-center py-1">
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-            Simon-Says Style Audio Memory
+        <div className="w-full text-center py-1 z-10">
+          <p className="text-[10px] text-slate-700 font-black uppercase tracking-wider bg-white/80 border border-black/30 px-2 py-0.5 rounded inline-block">
+            • SIMON-SAYS AUDIO REFLEX ENGINE •
           </p>
         </div>
 
+        {/* Game Over Modal */}
         {isDead && (
-          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 space-y-3 animate-scaleIn">
-            <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-              Sequence Broken
-            </span>
-            <h3 className="text-2xl font-black text-white">Score: {score}</h3>
-            <button
-              onClick={startGame}
-              className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-portal-cyan text-black font-black text-xs shadow-glow-cyan active:scale-95 transition-all"
-            >
-              <RotateCcw className="w-4 h-4" /> Try Again
-            </button>
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+              <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                ⚡ SEQUENCE BROKEN ⚡
+              </div>
+
+              <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Score</div>
+                <div className="text-3xl font-black text-black tracking-tight">{score}</div>
+              </div>
+
+              <button
+                type="button"
+                onClick={startGame}
+                className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4 stroke-[3]" />
+                <span>TRY AGAIN</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

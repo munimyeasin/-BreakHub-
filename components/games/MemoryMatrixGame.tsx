@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Play, RotateCcw, Sparkles, Timer, Zap, Trophy } from 'lucide-react';
+import { Play, RotateCcw, Sparkles, Timer, Zap, Trophy, Brain } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface MemoryMatrixGameProps {
@@ -18,12 +18,12 @@ interface Card {
 }
 
 const ICONS = [
-  { symbol: '⚡', color: '#00F0FF' },
-  { symbol: '🔥', color: '#FF0055' },
-  { symbol: '💎', color: '#9D00FF' },
-  { symbol: '🛸', color: '#00FF66' },
-  { symbol: '👑', color: '#FFD700' },
-  { symbol: '👾', color: '#FF00EA' },
+  { symbol: '⚡', color: 'bg-portal-yellow' },
+  { symbol: '🔥', color: 'bg-portal-pink' },
+  { symbol: '💎', color: 'bg-portal-cyan' },
+  { symbol: '🛸', color: 'bg-portal-green' },
+  { symbol: '👑', color: 'bg-portal-butter' },
+  { symbol: '👾', color: 'bg-portal-pink' },
 ];
 
 export default function MemoryMatrixGame({ gameId, onGameOver }: MemoryMatrixGameProps) {
@@ -135,72 +135,111 @@ export default function MemoryMatrixGame({ gameId, onGameOver }: MemoryMatrixGam
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold">
-          <Timer className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className={`text-sm font-black ${timeLeft < 10 ? 'text-rose-400 animate-pulse' : 'text-slate-200'}`}>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Timer className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className={`text-xs font-black ${timeLeft < 10 ? 'text-rose-600 animate-pulse' : 'text-black'}`}>
             {timeLeft}s
           </span>
         </div>
 
-        {streak > 1 && (
-          <div className="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-black animate-pulse">
-            🔥 {streak}x MATCH
+        {streak > 1 ? (
+          <div className="px-2.5 py-1 rounded-lg bg-portal-pink border-2 border-black text-black text-[10px] font-black shadow-neo-xs animate-bounce">
+            🔥 {streak}X COMBO
+          </div>
+        ) : (
+          <div className="px-2.5 py-1 rounded-lg bg-white border-2 border-black text-slate-700 text-[10px] font-black shadow-neo-xs">
+            6 PAIRS
           </div>
         )}
 
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold">
-          <Trophy className="w-3.5 h-3.5 text-portal-gold" />
-          <span className="text-sm font-black text-portal-cyan">{score}</span>
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+          <Trophy className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-xs font-black text-black">{score}</span>
         </div>
       </div>
 
-      {/* Grid Canvas Container (9:16 Standard Aspect Ratio Frame) */}
-      <div className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border p-3 overflow-hidden shadow-2xl flex flex-col items-center justify-between">
+      {/* Grid Canvas Container (9:16 Standard Aspect Ratio Frame) with Figma Handles */}
+      <div className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black p-4 overflow-hidden shadow-neo-lg flex flex-col items-center justify-between">
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         {/* Status prompt */}
-        <div className="w-full text-center py-1">
+        <div className="w-full text-center py-1 z-10">
           {isPlaying && (
-            <span className="text-[11px] font-black tracking-wider uppercase text-portal-cyan bg-portal-surface/80 border border-portal-border px-3 py-1 rounded-full">
-              Find 6 Matching Pairs
+            <span className="text-[10px] font-black tracking-wider uppercase text-black bg-white border-2 border-black px-3 py-1 rounded-full shadow-neo-xs">
+              ✦ FIND 6 MATCHING PAIRS ✦
             </span>
           )}
         </div>
 
         {!isPlaying ? (
-          <div className="flex flex-col items-center justify-center p-6 text-center space-y-4 my-auto">
-            <div className="w-16 h-16 rounded-3xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-glow-purple">
-              <Sparkles className="w-8 h-8" />
+          /* Pre-Game & Game-Over Neo-Brutalist Card */
+          <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 my-auto text-center z-10 animate-scaleIn text-black">
+            {/* Figma Handles */}
+            <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+            <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+            <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+              <Brain className="w-7 h-7 stroke-[2.5]" />
             </div>
+
             <div>
-              <h3 className="text-xl font-black text-white">Memory Matrix</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Match matching neural tiles before the clock expires.</p>
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                {isFinished ? '⚡ PUZZLE OVER ⚡' : '• [ BRAIN MATRIX ] •'}
+              </div>
+              <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                Memory Matrix
+              </h3>
+              <p className="text-[11px] font-bold text-slate-700 mt-1">
+                {isFinished
+                  ? `Completed with ${score} points! Can you do it faster?`
+                  : 'Flip and match all 6 pairs of neural cards before time runs out!'}
+              </p>
             </div>
+
             <button
+              type="button"
               onClick={initGame}
-              className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
             >
-              <Play className="w-4 h-4 fill-black" /> {isFinished ? 'PLAY AGAIN' : 'START GAME'}
+              {isFinished ? (
+                <>
+                  <RotateCcw className="w-4 h-4 stroke-[3]" /> RETRY PUZZLE
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" /> START GAME
+                </>
+              )}
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-3 gap-2.5 w-full max-w-[320px] aspect-[3/4] my-auto">
+          /* Active Neo-Brutalist 3x4 Card Matrix */
+          <div className="grid grid-cols-3 gap-2.5 w-full max-w-[320px] aspect-[3/4] my-auto p-3 bg-white rounded-2xl border-3 border-black shadow-neo">
             {cards.map((card, idx) => (
               <button
                 key={card.id}
+                type="button"
                 onClick={() => handleCardClick(idx)}
-                className={`relative rounded-xl flex items-center justify-center text-3xl transition-all duration-300 transform perspective-1000 border ${
+                className={`relative rounded-xl flex items-center justify-center text-3xl transition-all duration-200 border-3 border-black ${
                   card.isMatched
-                    ? 'bg-emerald-500/10 border-emerald-500/40 opacity-40 scale-95'
+                    ? 'bg-portal-green/60 opacity-50 scale-95 shadow-none border-dashed'
                     : card.isFlipped
-                    ? 'bg-portal-card border-portal-cyan shadow-glow-cyan rotate-y-180 scale-105'
-                    : 'bg-portal-surface border-portal-border hover:border-slate-500 active:scale-95'
+                    ? `${card.color} shadow-neo scale-105`
+                    : 'bg-slate-50 shadow-neo-xs hover:bg-portal-butter active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer'
                 }`}
               >
                 {card.isFlipped || card.isMatched ? (
-                  <span className="animate-scaleIn">{card.symbol}</span>
+                  <span className="animate-scaleIn drop-shadow-sm">{card.symbol}</span>
                 ) : (
-                  <span className="text-xs font-black text-slate-600">❖</span>
+                  <span className="text-xs font-black text-slate-400">✦</span>
                 )}
               </button>
             ))}
@@ -208,9 +247,9 @@ export default function MemoryMatrixGame({ gameId, onGameOver }: MemoryMatrixGam
         )}
 
         {/* Bottom hint */}
-        <div className="w-full text-center py-1">
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-            Neural Pattern Memory Matrix
+        <div className="w-full text-center py-1 z-10">
+          <p className="text-[10px] text-slate-700 font-black uppercase tracking-wider bg-white/80 border border-black/30 px-2 py-0.5 rounded inline-block">
+            • 100% RETRO NEURAL MATRIX •
           </p>
         </div>
       </div>

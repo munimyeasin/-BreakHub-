@@ -56,9 +56,9 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
     id: 1,
     name: 'You',
     isBot: false,
-    color: '#00f0ff',
-    lightColor: 'rgba(0, 240, 255, 0.35)',
-    glowColor: '#00f0ff',
+    color: '#00C2EB',
+    lightColor: '#C0F7FE',
+    glowColor: '#000000',
     x: 22,
     y: 65,
     dir: 'UP',
@@ -66,11 +66,11 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
   },
   {
     id: 2,
-    name: 'Overthinker Final Boss',
+    name: 'Neo Boss',
     isBot: true,
-    color: '#ff0055',
-    lightColor: 'rgba(255, 0, 85, 0.32)',
-    glowColor: '#ff0055',
+    color: '#FE90E8',
+    lightColor: '#FED8F7',
+    glowColor: '#000000',
     x: 12,
     y: 15,
     dir: 'DOWN',
@@ -80,9 +80,9 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
     id: 3,
     name: 'Glitch',
     isBot: true,
-    color: '#00ff66',
-    lightColor: 'rgba(0, 255, 102, 0.32)',
-    glowColor: '#00ff66',
+    color: '#16A34A',
+    lightColor: '#99E885',
+    glowColor: '#000000',
     x: 32,
     y: 15,
     dir: 'DOWN',
@@ -92,9 +92,9 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
     id: 4,
     name: 'Nova',
     isBot: true,
-    color: '#ffaa00',
-    lightColor: 'rgba(255, 170, 0, 0.32)',
-    glowColor: '#ffaa00',
+    color: '#EAB308',
+    lightColor: '#F7CB46',
+    glowColor: '#000000',
     x: 12,
     y: 40,
     dir: 'RIGHT',
@@ -104,9 +104,9 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
     id: 5,
     name: 'Shadow',
     isBot: true,
-    color: '#aa00ff',
-    lightColor: 'rgba(170, 0, 255, 0.32)',
-    glowColor: '#aa00ff',
+    color: '#9333EA',
+    lightColor: '#E9D5FF',
+    glowColor: '#000000',
     x: 32,
     y: 40,
     dir: 'LEFT',
@@ -114,7 +114,7 @@ const PLAYERS_INIT: Omit<PlayerEntity, 'territoryCount' | 'percentage' | 'trail'
   },
 ];
 
-export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameProps) {
+export default function NeonPaperIoGame({ onGameOver }: NeonPaperIoGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -138,7 +138,7 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
   const killFeedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Web Audio Synthesizer
-  const playSfx = useCallback((type: 'turn' | 'capture' | 'kill' | 'death' | 'win', count = 1) => {
+  const playSfx = useCallback((type: 'turn' | 'capture' | 'kill' | 'death' | 'win') => {
     if (!soundEnabled || typeof window === 'undefined') return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -479,7 +479,6 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
           const dist = Math.abs(bot.x - t.x) + Math.abs(bot.y - t.y);
           if (dist < closestDist) {
             closestDist = dist;
-            // Pick safe direction that minimizes distance to target trail
             let bestD = safeDirs[0];
             let minD = 999;
             for (const sd of safeDirs) {
@@ -502,7 +501,6 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
 
     // Strategy 2: If trail is getting long (> 5-8 cells), return to home base
     if (trailLen >= 6 || (!isHome && trailLen >= 4 && Math.random() < 0.4)) {
-      // Find nearest owned cell
       let nearestHomeDist = 999;
       let targetHome: Point | null = null;
       for (let dy = -10; dy <= 10; dy++) {
@@ -678,7 +676,7 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
               const capturedCount = captureTerritory(p, grid);
               if (capturedCount > 0) {
                 if (!p.isBot) {
-                  playSfx('capture', capturedCount);
+                  playSfx('capture');
                   setScore(prev => prev + capturedCount * 5 + 50);
                   spawnParticles(p.x, p.y, p.color, 15);
                   if (capturedCount > 80) {
@@ -778,27 +776,22 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         setLeaderboard(sorted);
       }
 
-      // ==================== RENDERING ====================
-      ctx.fillStyle = '#060913';
+      // ==================== NEO-BRUTALIST RENDERING ====================
+      // Warm ground #FAF8F5
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // 1. Draw Map Grid Lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x <= CANVAS_WIDTH; x += CELL_SIZE * 5) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, CANVAS_HEIGHT);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= CANVAS_HEIGHT; y += CELL_SIZE * 5) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
-        ctx.stroke();
+      // 1. Draw Map Dot Matrix
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+      for (let x = CELL_SIZE; x < CANVAS_WIDTH; x += CELL_SIZE * 3) {
+        for (let y = CELL_SIZE; y < CANVAS_HEIGHT; y += CELL_SIZE * 3) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      // 2. Draw Claimed Territories
+      // 2. Draw Claimed Territories with Crisp Outlines
       for (let y = 0; y < GRID_ROWS; y++) {
         for (let x = 0; x < GRID_COLS; x++) {
           const ownerId = grid[y * GRID_COLS + x];
@@ -812,56 +805,75 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         }
       }
 
-      // 3. Draw Player & Bot Trails with Glow
+      // 3. Draw Player & Bot Trails with Hard Shadows and Solid Strokes
       for (const p of players) {
         if (!p.alive || p.trail.length === 0) continue;
 
-        ctx.shadowColor = p.glowColor;
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = p.color;
-
+        // Draw hard offset drop shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
         for (const pt of p.trail) {
-          ctx.fillRect(pt.x * CELL_SIZE + 1, pt.y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+          ctx.fillRect(pt.x * CELL_SIZE + 2, pt.y * CELL_SIZE + 2, CELL_SIZE, CELL_SIZE);
         }
-        ctx.shadowBlur = 0;
+
+        // Draw solid trail fill
+        ctx.fillStyle = p.color;
+        for (const pt of p.trail) {
+          ctx.fillRect(pt.x * CELL_SIZE, pt.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
+
+        // Stroke border on trails
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.2;
+        for (const pt of p.trail) {
+          ctx.strokeRect(pt.x * CELL_SIZE, pt.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
       }
 
-      // 4. Draw Heads / Ships
+      // 4. Draw Heads / Ships in Neo-Brutalist Swatch Style
       for (const p of players) {
         if (!p.alive) continue;
 
         const hx = p.x * CELL_SIZE;
         const hy = p.y * CELL_SIZE;
 
-        ctx.shadowColor = p.glowColor;
-        ctx.shadowBlur = 10;
-        ctx.fillStyle = '#ffffff';
+        // Hard drop shadow
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(hx + 2, hy + 2, CELL_SIZE, CELL_SIZE);
+
+        // Core head swatch
+        ctx.fillStyle = p.color;
         ctx.fillRect(hx, hy, CELL_SIZE, CELL_SIZE);
 
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(hx - 1, hy - 1, CELL_SIZE + 2, CELL_SIZE + 2);
-        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(hx, hy, CELL_SIZE, CELL_SIZE);
+
+        // Center eye/node
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(hx + 2, hy + 2, CELL_SIZE - 4, CELL_SIZE - 4);
 
         // Draw Player Crown if #1 Leader
         if (leaderboard.length > 0 && leaderboard[0].name === p.name) {
-          ctx.fillStyle = '#ffd700';
+          ctx.fillStyle = '#F7CB46';
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
           ctx.beginPath();
-          ctx.moveTo(hx + CELL_SIZE / 2, hy - 5);
-          ctx.lineTo(hx + CELL_SIZE + 2, hy - 1);
-          ctx.lineTo(hx - 2, hy - 1);
+          ctx.moveTo(hx + CELL_SIZE / 2, hy - 6);
+          ctx.lineTo(hx + CELL_SIZE + 3, hy - 1);
+          ctx.lineTo(hx - 3, hy - 1);
           ctx.closePath();
           ctx.fill();
+          ctx.stroke();
         }
       }
 
-      // 5. Draw Particles
+      // 5. Draw Particles with Crisp Solid Borders
       const particles = particlesRef.current;
       for (let i = particles.length - 1; i >= 0; i--) {
         const pt = particles[i];
         pt.x += pt.vx;
         pt.y += pt.vy;
-        pt.alpha -= 0.03;
+        pt.alpha -= 0.035;
 
         if (pt.alpha <= 0) {
           particles.splice(i, 1);
@@ -873,6 +885,9 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
         ctx.globalAlpha = 1;
       }
 
@@ -895,28 +910,28 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
   }, [isDead, score, highScore, onGameOver]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-[380px] mx-auto select-none">
-      {/* Top Game HUD Strip - Ultra Slim */}
-      <div className="flex items-center justify-between w-full px-3 py-2 mb-2 bg-white rounded-xl border-3 border-black text-xs shadow-neo-sm">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 text-black font-black bg-portal-cyan px-2 py-0.5 rounded-md border border-black shadow-neo-xs">
-            <Shield className="w-3 h-3 stroke-[2.5]" />
+    <div className="flex flex-col items-center justify-center w-full max-w-[380px] mx-auto select-none font-sans">
+      {/* Top Game HUD Strip */}
+      <div className="flex items-center justify-between w-full px-3 py-2 mb-2 bg-white rounded-2xl border-3 border-black text-xs shadow-neo-sm">
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 text-black font-black bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px]">
+            <Shield className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>{territoryPercent}%</span>
           </div>
-          <div className="flex items-center gap-1 text-black font-black bg-portal-pink px-2 py-0.5 rounded-md border border-black shadow-neo-xs">
-            <Skull className="w-3 h-3 stroke-[2.5]" />
+          <div className="flex items-center gap-1 text-black font-black bg-portal-pink px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px]">
+            <Skull className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>{kills} Kills</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 text-black font-black bg-portal-yellow px-2 py-0.5 rounded-md border border-black shadow-neo-xs">
-            <Trophy className="w-3 h-3 fill-black stroke-[2.5]" />
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 text-black font-black bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px]">
+            <Trophy className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
             <span>{score} pts</span>
           </div>
           <button
             onClick={() => setSoundEnabled(s => !s)}
-            className="p-1.5 bg-slate-100 hover:bg-portal-yellow text-black border border-black rounded-lg transition-all shadow-neo-xs active:translate-x-0.5 active:translate-y-0.5"
+            className="p-1.5 bg-white hover:bg-portal-yellow text-black border-2 border-black rounded-lg transition-all shadow-neo-xs hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
             title={soundEnabled ? 'Mute SFX' : 'Enable SFX'}
           >
             {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
@@ -924,8 +939,14 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         </div>
       </div>
 
-      {/* Main Canvas & Overlay Viewport (9:16 Aspect Ratio) */}
-      <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-4 border-black shadow-neo bg-black flex items-center justify-center">
+      {/* Main Canvas & Overlay Viewport (9:16 Aspect Ratio) with Figma Corner Handles */}
+      <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-4 border-black shadow-neo-lg bg-[#FAF8F5] flex items-center justify-center">
+        {/* Figma Corner Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -937,14 +958,14 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
 
         {/* Live In-Game Leaderboard Mini-Widget */}
         {isPlaying && leaderboard.length > 0 && (
-          <div className="absolute top-2 right-2 bg-white/95 border-2 border-black px-2.5 py-1.5 rounded-xl text-[10px] flex flex-col gap-0.5 shadow-neo-sm pointer-events-none text-black">
+          <div className="absolute top-2 right-2 bg-white border-2 border-black px-2.5 py-1.5 rounded-xl text-[10px] flex flex-col gap-0.5 shadow-neo-sm pointer-events-none text-black z-10">
             <div className="text-[9px] font-black tracking-wider text-black uppercase flex items-center gap-1 border-b-2 border-black pb-0.5 mb-0.5">
-              <Crown className="w-2.5 h-2.5 fill-portal-yellow text-black stroke-[2.5]" /> Leaderboard
+              <Crown className="w-2.5 h-2.5 fill-portal-yellow text-black stroke-[2.5]" /> Arena Ranks
             </div>
             {leaderboard.slice(0, 4).map((entry, idx) => (
               <div key={idx} className="flex items-center justify-between gap-3 font-mono font-black">
-                <span className={`flex items-center gap-1 ${entry.isPlayer ? 'text-black bg-portal-cyan px-1 rounded' : 'text-slate-700'}`}>
-                  <span className="w-2 h-2 rounded-full border border-black" style={{ backgroundColor: entry.color }} />
+                <span className={`flex items-center gap-1 ${entry.isPlayer ? 'text-black bg-portal-cyan px-1 rounded border border-black' : 'text-slate-700'}`}>
+                  <span className="w-2 h-2 rounded-sm border border-black" style={{ backgroundColor: entry.color }} />
                   {entry.name}
                 </span>
                 <span className="font-black text-black">{entry.percent}%</span>
@@ -955,67 +976,91 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
 
         {/* Kill Feed Alert Toast */}
         {killFeed && (
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-portal-pink border-2 border-black text-black text-[11px] font-black px-3 py-1 rounded-full shadow-neo-sm animate-bounce pointer-events-none">
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-portal-pink border-2 border-black text-black text-[11px] font-black px-3 py-1 rounded-full shadow-neo-sm animate-bounce pointer-events-none z-10">
             {killFeed}
           </div>
         )}
 
         {/* Start / Pre-Game Screen */}
         {!isPlaying && !isDead && (
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center animate-fadeIn text-black">
-            <div className="w-16 h-16 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center mb-3 shadow-neo">
-              <Zap className="w-8 h-8 text-black fill-black stroke-[2.5]" />
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center animate-fadeIn text-black z-10">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 shadow-neo-xl max-w-[300px] flex flex-col items-center space-y-3">
+              {/* Figma Corner Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+              <span className="inline-block px-3 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider shadow-neo-xs rotate-[-2deg]">
+                • [ CONQUEST READY ] •
+              </span>
+
+              <div className="w-16 h-16 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center shadow-neo">
+                <Zap className="w-8 h-8 text-black fill-black stroke-[2.5]" />
+              </div>
+              <h2 className="text-xl font-black text-black tracking-tight uppercase">NEON PAPER.IO</h2>
+              <p className="text-xs text-slate-700 font-bold max-w-[240px]">
+                Encircle zones to conquer land and slice enemy tails before they breach yours!
+              </p>
+              <div className="flex gap-2 text-[10px] text-black font-black bg-[#FAF8F5] px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-xs">
+                <span>⌨️ <b>WASD / Arrows</b></span>
+                <span>•</span>
+                <span>🕹️ <b>D-Pad</b></span>
+              </div>
+              <button
+                onClick={initGame}
+                className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-1.5"
+              >
+                <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                <span>START CONQUEST</span>
+              </button>
             </div>
-            <h2 className="text-2xl font-black text-black tracking-tight uppercase mb-1">NEON PAPER.IO</h2>
-            <p className="text-xs text-slate-700 font-bold max-w-[280px] mb-4">
-              Conquer cyber territory! Encircle zones to claim grid land and slice enemy trails.
-            </p>
-            <div className="flex gap-2 text-[11px] text-black font-black mb-5 bg-slate-100 px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-xs">
-              <span>⌨️ <b>WASD / Arrows</b></span>
-              <span>•</span>
-              <span>🕹️ <b>Virtual Joystick</b></span>
-            </div>
-            <button
-              onClick={initGame}
-              className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-portal-cyan text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-            >
-              <Play className="w-4 h-4 fill-black stroke-[2.5]" />
-              <span>START CONQUEST</span>
-            </button>
           </div>
         )}
 
         {/* Game Over Screen */}
         {isDead && (
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fadeIn text-black">
-            <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mb-2 shadow-neo">
-              <Skull className="w-7 h-7 text-black stroke-[2.5]" />
-            </div>
-            <h3 className="text-xl font-black text-black uppercase mb-0.5">TERRITORY LOST</h3>
-            <p className="text-xs text-slate-700 font-black mb-3">{deathReason}</p>
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fadeIn text-black z-10">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 shadow-neo-xl max-w-[300px] flex flex-col items-center space-y-3">
+              {/* Figma Corner Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
 
-            <div className="grid grid-cols-2 gap-2 w-full max-w-[240px] mb-4">
-              <div className="bg-slate-50 border-2 border-black p-2 rounded-xl text-center shadow-neo-xs">
-                <span className="text-[10px] text-slate-700 font-black block uppercase">MAP CONQUERED</span>
-                <span className="text-base font-black text-black">{territoryPercent}%</span>
+              <span className="inline-block px-3 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider shadow-neo-xs rotate-[2deg]">
+                • [ ELIMINATED ] •
+              </span>
+
+              <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center shadow-neo">
+                <Skull className="w-7 h-7 text-black stroke-[2.5]" />
               </div>
-              <div className="bg-slate-50 border-2 border-black p-2 rounded-xl text-center shadow-neo-xs">
-                <span className="text-[10px] text-slate-700 font-black block uppercase">TOTAL KILLS</span>
-                <span className="text-base font-black text-black">{kills}</span>
+              <h3 className="text-xl font-black text-black uppercase">TERRITORY LOST</h3>
+              <p className="text-xs text-slate-700 font-black max-w-[240px]">{deathReason}</p>
+
+              <div className="grid grid-cols-2 gap-2 w-full max-w-[240px]">
+                <div className="bg-[#FAF8F5] border-2 border-black p-2 rounded-xl text-center shadow-neo-xs">
+                  <span className="text-[10px] text-slate-700 font-black block uppercase">CONQUERED</span>
+                  <span className="text-base font-black text-black font-mono">{territoryPercent}%</span>
+                </div>
+                <div className="bg-[#FAF8F5] border-2 border-black p-2 rounded-xl text-center shadow-neo-xs">
+                  <span className="text-[10px] text-slate-700 font-black block uppercase">TOTAL KILLS</span>
+                  <span className="text-base font-black text-black font-mono">{kills}</span>
+                </div>
               </div>
-            </div>
 
-            <div className="text-xs font-black text-black mb-4 bg-portal-yellow px-3 py-1 rounded-lg border-2 border-black shadow-neo-xs">
-              FINAL SCORE: <span className="text-sm font-mono">{score} PTS</span>
-            </div>
+              <div className="text-xs font-black text-black w-full bg-portal-yellow py-1.5 px-3 rounded-xl border-2 border-black shadow-neo-xs font-mono">
+                FINAL SCORE: <span className="text-sm font-black">{score} PTS</span>
+              </div>
 
-            <button
-              onClick={initGame}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-portal-green text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-            >
-              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
-              <span>REPLAY ARENA</span>
-            </button>
+              <button
+                onClick={initGame}
+                className="w-full py-3 px-4 rounded-xl bg-portal-green hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-1.5"
+              >
+                <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+                <span>REPLAY ARENA</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

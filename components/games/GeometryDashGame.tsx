@@ -31,6 +31,7 @@ interface TrailNode {
   y: number;
   alpha: number;
   size: number;
+  rotation: number;
 }
 
 interface Obstacle {
@@ -56,7 +57,6 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
 
   // Audio Context ref
   const audioCtxRef = useRef<AudioContext | null>(null);
-  const beatTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Core Game State Refs
   const cameraXRef = useRef(0);
@@ -128,7 +128,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(180, now);
         osc.frequency.linearRampToValueAtTime(30, now + 0.35);
-        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.setValueAtTime(0.35, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
         osc.start(now);
         osc.stop(now + 0.35);
@@ -146,7 +146,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         osc.type = 'sine';
         osc.frequency.setValueAtTime(120, now);
         osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.setValueAtTime(0.1, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
         osc.start(now);
         osc.stop(now + 0.08);
@@ -264,7 +264,8 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
           p.vy = -10.5;
           p.isGrounded = false;
           playSfx('orb');
-          // Emit orb ring particles
+          // Emit orb ring particles in Neo Brutalist palette
+          const orbColors = ['#FE90E8', '#F7CB46', '#C0F7FE'];
           for (let i = 0; i < 12; i++) {
             const angle = (i / 12) * Math.PI * 2;
             particlesRef.current.push({
@@ -272,7 +273,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
               y: obs.y + obs.height / 2,
               vx: Math.cos(angle) * 4,
               vy: Math.sin(angle) * 4,
-              color: '#FFD700',
+              color: orbColors[i % orbColors.length],
               size: 4,
               alpha: 1,
             });
@@ -288,16 +289,17 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
       p.isGrounded = false;
       playSfx('jump');
 
-      // Add ground dust particles
+      // Add ground dust particles in Neo Brutalist colors
+      const dustColors = ['#F7CB46', '#FE90E8', '#C0F7FE'];
       for (let i = 0; i < 6; i++) {
         particlesRef.current.push({
           x: p.worldX + Math.random() * p.size,
           y: p.y + p.size,
           vx: (Math.random() - 0.5) * 3 - speedRef.current * 0.3,
           vy: -Math.random() * 2,
-          color: '#00F0FF',
+          color: dustColors[Math.floor(Math.random() * dustColors.length)],
           size: Math.random() * 3 + 2,
-          alpha: 0.8,
+          alpha: 1,
         });
       }
     }
@@ -309,8 +311,9 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
     playSfx('crash');
 
     const p = playerRef.current;
-    // Explode into square fragments
-    for (let i = 0; i < 35; i++) {
+    // Explode into square fragments with black borders
+    const fragColors = ['#FE90E8', '#F7CB46', '#C0F7FE', '#99E885'];
+    for (let i = 0; i < 30; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = Math.random() * 8 + 3;
       particlesRef.current.push({
@@ -318,7 +321,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         y: p.y + p.size / 2,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        color: i % 3 === 0 ? '#00F0FF' : i % 3 === 1 ? '#FFD700' : '#FF0055',
+        color: fragColors[i % fragColors.length],
         size: Math.random() * 6 + 3,
         alpha: 1,
         rotation: Math.random() * Math.PI,
@@ -414,7 +417,6 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
 
         // Platform & Obstacle Collisions
         let onAnyPlatform = false;
-        let highestLandY = GROUND_Y;
 
         for (const obs of obstaclesRef.current) {
           // Optimization: skip far obstacles
@@ -434,7 +436,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
                   y: obs.y + 10,
                   vx: (Math.random() - 0.5) * 4,
                   vy: (Math.random() - 0.5) * 4,
-                  color: '#FFD700',
+                  color: '#F7CB46',
                   size: 3,
                   alpha: 1,
                 });
@@ -461,7 +463,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
                   y: obs.y,
                   vx: (Math.random() - 0.5) * 4,
                   vy: -Math.random() * 5 - 2,
-                  color: '#FF00FF',
+                  color: '#FE90E8',
                   size: 3,
                   alpha: 1,
                 });
@@ -493,7 +495,6 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
               p.vy >= 0
             ) {
               onAnyPlatform = true;
-              highestLandY = obsBox.top;
               p.y = obsBox.top - p.size;
               p.vy = 0;
               p.isGrounded = true;
@@ -511,7 +512,6 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
 
           // SPIKE LETHAL COLLISION
           if (obs.type === 'spike' || obs.type === 'double_spike' || obs.type === 'triple_spike') {
-            // Triangle hitbox approximation
             const padH = 6;
             const padV = 5;
             if (
@@ -552,10 +552,11 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
           trailRef.current.push({
             x: p.worldX,
             y: p.y,
-            alpha: 0.6,
+            alpha: 0.7,
             size: p.size,
+            rotation: p.rotation,
           });
-          if (trailRef.current.length > 12) trailRef.current.shift();
+          if (trailRef.current.length > 8) trailRef.current.shift();
         }
 
         // Rhythmic background beat
@@ -576,77 +577,68 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         if (pt.alpha <= 0) particlesRef.current.splice(i, 1);
       }
 
-      // 2. DRAW RENDERING
-      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      // ==========================================
+      // 2. NEO-BRUTALIST CANVAS 2D RENDERING
+      // ==========================================
       const camX = cameraXRef.current;
 
-      // Dynamic Gradient Background based on level progress
-      const hueShift = Math.floor((p.worldX / TOTAL_LEVEL_LENGTH) * 160);
-      const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
-      bgGrad.addColorStop(0, `hsl(${220 + hueShift}, 60%, 8%)`);
-      bgGrad.addColorStop(1, `hsl(${260 + hueShift}, 70%, 14%)`);
-      ctx.fillStyle = bgGrad;
+      // 1. Warm Ground Canvas
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Cyber Grid lines (Parallax)
-      ctx.strokeStyle = `hsla(${200 + hueShift}, 80%, 60%, 0.12)`;
-      ctx.lineWidth = 1;
-      const gridOffset = (camX * 0.4) % 40;
-      for (let x = -gridOffset; x < CANVAS_WIDTH; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, GROUND_Y);
-        ctx.stroke();
-      }
-      for (let y = 0; y < GROUND_Y; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
-        ctx.stroke();
+      // 2. Neo-Brutalist Dot Grid Texture
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      for (let x = 12; x < CANVAS_WIDTH; x += 24) {
+        for (let y = 12; y < GROUND_Y; y += 24) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      // Ground Floor
-      const groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, CANVAS_HEIGHT);
-      groundGrad.addColorStop(0, '#0E0922');
-      groundGrad.addColorStop(1, '#05030A');
-      ctx.fillStyle = groundGrad;
+      // 3. Ground Floor (Neo Butter + Black Stripes)
+      ctx.fillStyle = '#FFDC8B';
       ctx.fillRect(0, GROUND_Y, CANVAS_WIDTH, CANVAS_HEIGHT - GROUND_Y);
 
-      // Neon Top Border of Ground
-      ctx.strokeStyle = '#00F0FF';
-      ctx.lineWidth = 2.5;
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      ctx.moveTo(0, GROUND_Y);
-      ctx.lineTo(CANVAS_WIDTH, GROUND_Y);
-      ctx.stroke();
-      ctx.shadowBlur = 0;
+      // Black Divider
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, GROUND_Y - 2, CANVAS_WIDTH, 4);
 
-      // Ground Hazard Stripes (Moving)
-      const stripeOffset = (camX * 1.0) % 30;
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
-      ctx.lineWidth = 3;
-      for (let x = -stripeOffset - 30; x < CANVAS_WIDTH + 30; x += 30) {
+      // Moving Diagonal Hatch Pattern on Ground
+      const stripeOffset = (camX * 1.0) % 24;
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      for (let x = -stripeOffset - 24; x < CANVAS_WIDTH + 24; x += 24) {
         ctx.beginPath();
-        ctx.moveTo(x, GROUND_Y);
-        ctx.lineTo(x + 20, CANVAS_HEIGHT);
+        ctx.moveTo(x, GROUND_Y + 2);
+        ctx.lineTo(x - 16, CANVAS_HEIGHT);
         ctx.stroke();
       }
 
-      // DRAW OBSTACLES
+      // 4. DRAW OBSTACLES (Solid Swatches + 2.5px Black Borders + Offset Shadows)
       obstaclesRef.current.forEach(obs => {
         const screenX = obs.x - camX;
         if (screenX < -100 || screenX > CANVAS_WIDTH + 100) return;
 
-        // 1. SPIKES
+        // 1. SPIKES (Neo Pink triangles)
         if (obs.type === 'spike' || obs.type === 'double_spike' || obs.type === 'triple_spike') {
           const spikeCount = obs.type === 'spike' ? 1 : obs.type === 'double_spike' ? 2 : 3;
           const singleW = obs.width / spikeCount;
 
           for (let s = 0; s < spikeCount; s++) {
             const spX = screenX + s * singleW;
-            ctx.fillStyle = 'rgba(255, 0, 85, 0.25)';
+
+            // Offset Drop Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.moveTo(spX + 3, obs.y + obs.height + 2);
+            ctx.lineTo(spX + singleW / 2 + 3, obs.y + 2);
+            ctx.lineTo(spX + singleW + 3, obs.y + obs.height + 2);
+            ctx.closePath();
+            ctx.fill();
+
+            // Spike Body
+            ctx.fillStyle = '#FE90E8';
             ctx.beginPath();
             ctx.moveTo(spX, obs.y + obs.height);
             ctx.lineTo(spX + singleW / 2, obs.y);
@@ -654,144 +646,156 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
             ctx.closePath();
             ctx.fill();
 
-            // Neon glowing outline
-            ctx.strokeStyle = '#FF0055';
-            ctx.lineWidth = 2;
-            ctx.shadowColor = '#FF0055';
-            ctx.shadowBlur = 8;
+            // 2.5px Black Stroke
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = '#000000';
             ctx.stroke();
-            ctx.shadowBlur = 0;
-
-            // Inner core
-            ctx.fillStyle = '#FFFFFF';
-            ctx.beginPath();
-            ctx.moveTo(spX + singleW / 2, obs.y + 4);
-            ctx.lineTo(spX + singleW / 2 - 2, obs.y + 12);
-            ctx.lineTo(spX + singleW / 2 + 2, obs.y + 12);
-            ctx.closePath();
-            ctx.fill();
           }
         }
 
-        // 2. SOLID BLOCKS
+        // 2. SOLID BLOCKS (Neo Ice Cyan Swatches)
         if (obs.type === 'block' || obs.type === 'tall_block') {
-          ctx.fillStyle = '#1A1438';
+          // Hard Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(screenX + 3, obs.y + 3, obs.width, obs.height);
+
+          // Block Fill
+          ctx.fillStyle = '#C0F7FE';
           ctx.fillRect(screenX, obs.y, obs.width, obs.height);
-
-          // Neon Border
-          ctx.strokeStyle = '#9D00FF';
-          ctx.lineWidth = 2;
-          ctx.shadowColor = '#9D00FF';
-          ctx.shadowBlur = 6;
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#000000';
           ctx.strokeRect(screenX, obs.y, obs.width, obs.height);
-          ctx.shadowBlur = 0;
 
-          // Inner cross pattern
-          ctx.strokeStyle = 'rgba(157, 0, 255, 0.3)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(screenX + 4, obs.y + 4);
-          ctx.lineTo(screenX + obs.width - 4, obs.y + obs.height - 4);
-          ctx.moveTo(screenX + obs.width - 4, obs.y + 4);
-          ctx.lineTo(screenX + 4, obs.y + obs.height - 4);
-          ctx.stroke();
+          // Inner Neo Grid Pattern
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(screenX + 4, obs.y + 4, 4, 4);
+          ctx.fillRect(screenX + obs.width - 8, obs.y + 4, 4, 4);
+          ctx.fillRect(screenX + 4, obs.y + obs.height - 8, 4, 4);
+          ctx.fillRect(screenX + obs.width - 8, obs.y + obs.height - 8, 4, 4);
         }
 
-        // 3. JUMP PADS (Neon Pink launch pads)
+        // 3. JUMP PADS (Neo Golden Launch Pads)
         if (obs.type === 'pad') {
-          ctx.fillStyle = '#FF00FF';
-          ctx.shadowColor = '#FF00FF';
-          ctx.shadowBlur = 12;
-          ctx.beginPath();
-          ctx.ellipse(screenX + obs.width / 2, obs.y + obs.height / 2, obs.width / 2, obs.height / 2, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          // Hard Shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(screenX + 2, obs.y + 2, obs.width, obs.height);
 
-          // Glowing upward arrow
-          ctx.fillStyle = '#FFFFFF';
+          // Pad Fill
+          ctx.fillStyle = '#F7CB46';
+          ctx.fillRect(screenX, obs.y, obs.width, obs.height);
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(screenX, obs.y, obs.width, obs.height);
+
+          // Arrow Up
+          ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.moveTo(screenX + obs.width / 2, obs.y - 2);
-          ctx.lineTo(screenX + obs.width / 2 - 6, obs.y + 6);
-          ctx.lineTo(screenX + obs.width / 2 + 6, obs.y + 6);
+          ctx.moveTo(screenX + obs.width / 2, obs.y + 1);
+          ctx.lineTo(screenX + obs.width / 2 - 5, obs.y + obs.height - 2);
+          ctx.lineTo(screenX + obs.width / 2 + 5, obs.y + obs.height - 2);
           ctx.closePath();
           ctx.fill();
         }
 
-        // 4. JUMP ORBS (Yellow Gravity Rings)
+        // 4. JUMP ORBS (Neo Pink / Yellow Rings)
         if (obs.type === 'orb') {
-          const oscScale = Math.sin(Date.now() / 150) * 2;
-          ctx.strokeStyle = '#FFD700';
-          ctx.lineWidth = 3;
-          ctx.shadowColor = '#FFD700';
-          ctx.shadowBlur = 14;
+          // Outer Ring Shadow
+          ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.arc(screenX + obs.width / 2, obs.y + obs.height / 2, obs.width / 2 + oscScale, 0, Math.PI * 2);
+          ctx.arc(screenX + obs.width / 2 + 2, obs.y + obs.height / 2 + 2, obs.width / 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Outer Ring Fill
+          ctx.fillStyle = '#F7CB46';
+          ctx.beginPath();
+          ctx.arc(screenX + obs.width / 2, obs.y + obs.height / 2, obs.width / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#000000';
           ctx.stroke();
 
-          ctx.fillStyle = 'rgba(255, 215, 0, 0.35)';
+          // Center Core
+          ctx.fillStyle = '#FE90E8';
           ctx.beginPath();
           ctx.arc(screenX + obs.width / 2, obs.y + obs.height / 2, obs.width / 4, 0, Math.PI * 2);
           ctx.fill();
-          ctx.shadowBlur = 0;
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#000000';
+          ctx.stroke();
         }
 
         // 5. SECRET GOLD COIN
         if (obs.type === 'coin' && !obs.collected) {
           const coinBounce = Math.sin(Date.now() / 200) * 3;
-          ctx.fillStyle = '#FFD700';
-          ctx.shadowColor = '#FFD700';
-          ctx.shadowBlur = 10;
+          const cy = obs.y + obs.height / 2 + coinBounce;
+          const cx = screenX + obs.width / 2;
+
+          // Shadow
+          ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.arc(screenX + obs.width / 2, obs.y + obs.height / 2 + coinBounce, obs.width / 2, 0, Math.PI * 2);
+          ctx.arc(cx + 2, cy + 2, obs.width / 2, 0, Math.PI * 2);
           ctx.fill();
 
+          // Coin
+          ctx.fillStyle = '#F7CB46';
+          ctx.beginPath();
+          ctx.arc(cx, cy, obs.width / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#000000';
+          ctx.stroke();
+
+          // Star
           ctx.fillStyle = '#000000';
           ctx.font = 'bold 11px sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText('$', screenX + obs.width / 2, obs.y + obs.height / 2 + coinBounce);
-          ctx.shadowBlur = 0;
+          ctx.fillText('★', cx, cy);
         }
       });
 
-      // DRAW PLAYER TRAIL
+      // 5. DRAW PLAYER TRAIL (Pastel Ghost Blocks)
       trailRef.current.forEach(tn => {
         const sx = tn.x - camX;
         ctx.save();
-        ctx.fillStyle = `rgba(0, 240, 255, ${tn.alpha * 0.4})`;
-        ctx.fillRect(sx, tn.y, tn.size, tn.size);
+        ctx.translate(sx + tn.size / 2, tn.y + tn.size / 2);
+        ctx.rotate(tn.rotation);
+        ctx.fillStyle = `rgba(254, 144, 232, ${tn.alpha * 0.4})`;
+        ctx.fillRect(-tn.size / 2, -tn.size / 2, tn.size, tn.size);
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = `rgba(0, 0, 0, ${tn.alpha * 0.5})`;
+        ctx.strokeRect(-tn.size / 2, -tn.size / 2, tn.size, tn.size);
         ctx.restore();
       });
 
-      // DRAW PLAYER CUBE
+      // 6. DRAW PLAYER CUBE (Neo-Brutalist Yellow Cube + Black Face)
       if (!isDead) {
         const screenPx = p.worldX - camX;
         ctx.save();
         ctx.translate(screenPx + p.size / 2, p.y + p.size / 2);
         ctx.rotate(p.rotation);
 
-        // Outer Neon Cube Body
-        ctx.fillStyle = '#00F0FF';
-        ctx.shadowColor = '#00F0FF';
-        ctx.shadowBlur = 14;
+        // Hard Drop Shadow
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(-p.size / 2 + 3, -p.size / 2 + 3, p.size, p.size);
+
+        // Yellow Cube Body
+        ctx.fillStyle = '#F7CB46';
         ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.shadowBlur = 0;
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#000000';
+        ctx.strokeRect(-p.size / 2, -p.size / 2, p.size, p.size);
 
-        // Inner Dark Border
-        ctx.fillStyle = '#0B0819';
-        ctx.fillRect(-p.size / 2 + 3, -p.size / 2 + 3, p.size - 6, p.size - 6);
-
-        // Core Glowing Eyes / Face
-        ctx.fillStyle = '#FFD700';
-        ctx.fillRect(-6, -6, 4, 6);
-        ctx.fillRect(2, -6, 4, 6);
-        ctx.fillStyle = '#00F0FF';
-        ctx.fillRect(-4, 3, 8, 3);
+        // Pixel Face (Eyes & Mouth)
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(-8, -6, 5, 6);
+        ctx.fillRect(3, -6, 5, 6);
+        ctx.fillRect(-5, 4, 10, 3);
 
         ctx.restore();
       }
 
-      // DRAW PARTICLES
+      // 7. DRAW PARTICLES (Hard Outlined Shapes)
       particlesRef.current.forEach(pt => {
         const sx = pt.x - camX;
         ctx.save();
@@ -801,30 +805,34 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
           ctx.translate(sx, pt.y);
           ctx.rotate(pt.rotation);
           ctx.fillRect(-pt.size / 2, -pt.size / 2, pt.size, pt.size);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(-pt.size / 2, -pt.size / 2, pt.size, pt.size);
         } else {
           ctx.beginPath();
           ctx.arc(sx, pt.y, pt.size, 0, Math.PI * 2);
           ctx.fill();
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#000000';
+          ctx.stroke();
         }
         ctx.restore();
       });
 
-      // FINISH LINE BANNER
+      // 8. FINISH LINE BANNER
       const finishScreenX = TOTAL_LEVEL_LENGTH - camX;
       if (finishScreenX < CANVAS_WIDTH + 50 && finishScreenX > -50) {
-        ctx.strokeStyle = '#00FF66';
-        ctx.lineWidth = 4;
-        ctx.shadowColor = '#00FF66';
-        ctx.shadowBlur = 16;
-        ctx.beginPath();
-        ctx.moveTo(finishScreenX, 0);
-        ctx.lineTo(finishScreenX, GROUND_Y);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(finishScreenX + 3, 0, 8, GROUND_Y);
+        ctx.fillStyle = '#99E885'; // Neo Green
+        ctx.fillRect(finishScreenX, 0, 8, GROUND_Y);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.strokeRect(finishScreenX, 0, 8, GROUND_Y);
 
-        ctx.fillStyle = '#00FF66';
-        ctx.font = 'black 14px sans-serif';
-        ctx.fillText('FINISH', finishScreenX - 25, 40);
+        ctx.fillStyle = '#000000';
+        ctx.font = '900 13px sans-serif';
+        ctx.fillText('✦ FINISH ✦', finishScreenX - 35, 40);
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -836,43 +844,49 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* 1. HUD & STATS - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md text-xs font-bold text-slate-300">
-        <div className="flex items-center gap-2">
-          <span className="text-portal-cyan font-black flex items-center gap-1 text-[11px]">
-            <Flame className="w-3 h-3 text-portal-cyan animate-pulse" />
-            ATTEMPT {attempt}
-          </span>
-          <span className="text-amber-400 font-bold flex items-center gap-0.5 text-[11px]">
-            <Award className="w-3 h-3" />
-            {coinsCollected}/3
-          </span>
+      {/* 1. Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo-sm">
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 bg-portal-pink px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+            <Flame className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+            <span className="text-[10px] uppercase tracking-wider">Att</span>
+            <span className="text-xs font-black">{attempt}</span>
+          </div>
+
+          <div className="flex items-center gap-1 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+            <Award className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+            <span className="text-xs font-black">{coinsCollected}/3</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-slate-400 text-[10px]">
-            Best: <strong className="text-portal-gold">{highPercent}%</strong>
-          </span>
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs text-[11px] font-black text-black">
+            <span className="text-[10px] uppercase tracking-wider">Best</span>
+            <span className="text-xs font-black">{highPercent}%</span>
+          </div>
+
           <button
+            type="button"
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+            className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
+            title="Toggle Sound"
           >
-            {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
           </button>
         </div>
       </div>
 
-      {/* 2. PROGRESS BAR - Ultra Slim */}
-      <div className="w-full bg-portal-card rounded-full h-2 border border-portal-border/80 overflow-hidden mb-1.5 relative">
+      {/* 2. Neo-Brutalist Progress Bar */}
+      <div className="w-full bg-white rounded-lg h-3.5 border-2 border-black overflow-hidden mb-2 p-0.5 shadow-neo-xs">
         <div
-          className="h-full bg-gradient-to-r from-portal-cyan via-purple-500 to-emerald-400 transition-all duration-75"
+          className="h-full bg-portal-pink rounded-sm border-r-2 border-black transition-all duration-75"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
 
-      {/* 3. MAIN CANVAS CONTAINER (9:16 Portrait) */}
+      {/* 3. Main Screen Canvas (9:16 Aspect Ratio Frame) with Figma Handles */}
       <div
-        className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border overflow-hidden shadow-2xl cursor-pointer flex items-center justify-center"
+        className="relative w-full aspect-[9/16] bg-[#FAF8F5] rounded-2xl border-4 border-black overflow-hidden shadow-neo-lg cursor-pointer flex items-center justify-center"
         onMouseDown={(e) => {
           e.preventDefault();
           isHoldingJumpRef.current = true;
@@ -900,6 +914,12 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         }}
         onTouchEnd={() => { isHoldingJumpRef.current = false; }}
       >
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -909,84 +929,124 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
 
         {/* START OVERLAY */}
         {!isPlaying && !isDead && !isComplete && (
-          <div className="absolute inset-0 bg-portal-bg/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-4 animate-fadeIn">
-            <div className="w-14 h-14 rounded-2xl bg-portal-cyan/20 border-2 border-portal-cyan flex items-center justify-center shadow-glow-cyan">
-              <Zap className="w-8 h-8 text-portal-cyan fill-portal-cyan" />
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+              <div className="w-14 h-14 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                <Zap className="w-7 h-7 fill-black stroke-[2.5]" />
+              </div>
+
+              <div>
+                <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                  • [ RHYTHM RUNNER ] •
+                </div>
+                <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                  Geometry Dash
+                </h3>
+                <p className="text-[11px] font-bold text-slate-700 mt-1">
+                  Rhythm cube runner! Jump over spikes, launch off pads, and tap yellow gravity rings mid-air.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => initGame(true)}
+                className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+              >
+                <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                <span>START RUN</span>
+              </button>
             </div>
-            <div>
-              <h2 className="text-2xl font-black text-white tracking-tight">
-                GEOMETRY <span className="text-portal-cyan">DASH</span>
-              </h2>
-              <p className="text-xs text-slate-300 mt-1 max-w-xs leading-relaxed">
-                Rhythm cube runner! Jump over neon spikes, launch off jump pads, and tap yellow rings mid-air.
-              </p>
-            </div>
-            <button
-              onClick={() => initGame(true)}
-              className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-gradient-to-r from-portal-cyan to-blue-600 text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
-            >
-              <Play className="w-4 h-4 fill-black" /> START RUN
-            </button>
-            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-              Spacebar / Click / Touch to Jump
-            </p>
           </div>
         )}
 
         {/* DEATH OVERLAY */}
         {isDead && (
-          <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-3 animate-scaleIn">
-            <div className="text-rose-500 font-black text-3xl tracking-wider uppercase">
-              💥 CRASHED!
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+              <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                💥 CRASHED! 💥
+              </div>
+
+              <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Progress Reached</div>
+                <div className="text-3xl font-black text-black tracking-tight">{progressPercent}%</div>
+                <div className="text-[11px] font-bold text-slate-800">
+                  Score: {progressPercent * 50 + coinsCollected * 500} PTS
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAttempt(prev => prev + 1);
+                  initGame();
+                }}
+                className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4 stroke-[3]" />
+                <span>RETRY (ATTEMPT {attempt + 1})</span>
+              </button>
             </div>
-            <div className="text-base font-black text-slate-200">
-              Progress: <span className="text-portal-cyan text-lg">{progressPercent}%</span>
-            </div>
-            <p className="text-xs text-slate-400">
-              Score: <strong className="text-portal-gold">{progressPercent * 50 + coinsCollected * 500} PTS</strong>
-            </p>
-            <button
-              onClick={() => {
-                setAttempt(prev => prev + 1);
-                initGame();
-              }}
-              className="flex items-center gap-2 px-7 py-3 rounded-xl bg-portal-cyan text-black font-black text-xs shadow-glow-cyan active:scale-95 transition-all mt-2"
-            >
-              <RotateCcw className="w-4 h-4" /> RETRY (ATTEMPT {attempt + 1})
-            </button>
           </div>
         )}
 
         {/* VICTORY OVERLAY */}
         {isComplete && (
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 animate-scaleIn">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center shadow-[0_0_25px_rgba(52,211,153,0.5)]">
-              <Trophy className="w-8 h-8 text-emerald-400" />
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
+            <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+              {/* Figma Handles */}
+              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+              <div className="w-14 h-14 rounded-2xl bg-portal-green border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                <Trophy className="w-7 h-7 stroke-[2.5]" />
+              </div>
+
+              <div>
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-green border-2 border-black text-black text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                  🏆 100% LEVEL COMPLETE! 🏆
+                </div>
+                <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                  Perfect Run!
+                </h3>
+                <p className="text-[11px] font-bold text-slate-700 mt-1">
+                  Completed in attempt {attempt} • Coins Collected: {coinsCollected}/3
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAttempt(1);
+                  initGame(true);
+                }}
+                className="w-full py-3 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4 stroke-[3]" />
+                <span>PLAY AGAIN</span>
+              </button>
             </div>
-            <div>
-              <h2 className="text-2xl font-black text-emerald-400 tracking-tight">
-                100% LEVEL COMPLETE! 🏆
-              </h2>
-              <p className="text-xs text-slate-300 mt-1">
-                Attempt {attempt} • Coins Collected: {coinsCollected}/3
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setAttempt(1);
-                initGame(true);
-              }}
-              className="flex items-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-black text-xs shadow-glow-cyan active:scale-95 transition-all"
-            >
-              <RotateCcw className="w-4 h-4" /> PLAY AGAIN
-            </button>
           </div>
         )}
       </div>
 
       {/* Touch / Click hint */}
-      <div className="text-[11px] text-slate-500 text-center mt-2 font-semibold">
-        🕹️ Tap screen or press <kbd className="px-1.5 py-0.5 rounded bg-portal-card border border-portal-border text-portal-cyan font-mono">Space</kbd> to Jump
+      <div className="text-[10px] text-slate-700 font-black uppercase tracking-wider text-center mt-2">
+        🕹️ Tap screen or press <kbd className="px-1.5 py-0.5 rounded bg-white border-2 border-black text-black font-mono shadow-neo-xs">Space</kbd> to Jump
       </div>
     </div>
   );

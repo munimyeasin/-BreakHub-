@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Zap, Flame } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Zap, Flame, Trophy, Award } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import MobileGamepad from '@/components/ui/MobileGamepad';
 
@@ -87,7 +87,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
     }
     foodRef.current = newFood;
 
-    // 20% chance to spawn a glowing bonus orb
+    // 25% chance to spawn a bonus golden star
     if (Math.random() < 0.25) {
       bonusFoodRef.current = {
         x: Math.floor(Math.random() * MAX_CELLS_X),
@@ -115,7 +115,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
   };
 
   const startGame = () => {
-    snakeRef.current = [{ x: 16, y: 9 }, { x: 16, y: 10 }, { x: 16, y: 11 }];
+    snakeRef.current = [{ x: 9, y: 16 }, { x: 9, y: 17 }, { x: 9, y: 18 }];
     dirRef.current = { x: 0, y: -1 };
     nextDirRef.current = { x: 0, y: -1 };
     particlesRef.current = [];
@@ -199,7 +199,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         setIsDead(true);
         setIsPlaying(false);
         playSfx('die');
-        createExplosion(head.x, head.y, '#FF0055', 25);
+        createExplosion(head.x, head.y, '#FE90E8', 25);
 
         if (score > 1000) {
           confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
@@ -217,7 +217,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         setScore(newScore);
         setCombo(prev => Math.min(prev + 1, 5));
         if (newScore > highScore) setHighScore(newScore);
-        createExplosion(foodRef.current.x, foodRef.current.y, '#00F0FF', 14);
+        createExplosion(foodRef.current.x, foodRef.current.y, '#FE90E8', 14);
         playSfx('eat');
         spawnFood();
       }
@@ -227,7 +227,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         const newScore = score + added;
         setScore(newScore);
         if (newScore > highScore) setHighScore(newScore);
-        createExplosion(bonusFoodRef.current.x, bonusFoodRef.current.y, '#FFD700', 20);
+        createExplosion(bonusFoodRef.current.x, bonusFoodRef.current.y, '#F7CB46', 20);
         playSfx('bonus');
         bonusFoodRef.current = null;
       } else {
@@ -236,12 +236,12 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
 
       snakeRef.current = newSnake;
 
-      // Render Frame
-      ctx.fillStyle = '#0B0819';
+      // Render Frame: Warm ground with Neo-Brutalist clean aesthetic
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Grid background
-      ctx.strokeStyle = '#1A1438';
+      // Subtle Neo Dot Matrix / Grid
+      ctx.strokeStyle = '#E8E3DA';
       ctx.lineWidth = 1;
       for (let x = 0; x <= CANVAS_WIDTH; x += GRID_SIZE) {
         ctx.beginPath();
@@ -254,38 +254,55 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         ctx.stroke();
       }
 
-      // Draw Bonus Core (Gold Pulse)
+      // Draw Bonus Star Core (Golden Yellow with Black Outline)
       if (bonusFoodRef.current) {
-        ctx.fillStyle = '#FFD700';
-        ctx.shadowColor = '#FFD700';
-        ctx.shadowBlur = 18;
+        const bx = bonusFoodRef.current.x * GRID_SIZE + GRID_SIZE / 2;
+        const by = bonusFoodRef.current.y * GRID_SIZE + GRID_SIZE / 2;
+
+        ctx.save();
+        ctx.fillStyle = '#F7CB46';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+
         ctx.beginPath();
-        ctx.arc(
-          bonusFoodRef.current.x * GRID_SIZE + GRID_SIZE / 2,
-          bonusFoodRef.current.y * GRID_SIZE + GRID_SIZE / 2,
-          GRID_SIZE / 2.2, 0, Math.PI * 2
-        );
+        ctx.arc(bx, by, GRID_SIZE / 2.2, 0, Math.PI * 2);
         ctx.fill();
+        ctx.stroke();
+
+        // Star accent inside
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(bx, by, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       }
 
-      // Draw Food (Electric Cyan Glow)
-      ctx.fillStyle = '#00F0FF';
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = 15;
+      // Draw Regular Food (Neo Pink with Bold 2.5px Black Outline)
+      const fx = foodRef.current.x * GRID_SIZE + GRID_SIZE / 2;
+      const fy = foodRef.current.y * GRID_SIZE + GRID_SIZE / 2;
+      ctx.save();
+      ctx.fillStyle = '#FE90E8';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
-      ctx.arc(
-        foodRef.current.x * GRID_SIZE + GRID_SIZE / 2,
-        foodRef.current.y * GRID_SIZE + GRID_SIZE / 2,
-        GRID_SIZE / 2.6, 0, Math.PI * 2
-      );
+      ctx.arc(fx, fy, GRID_SIZE / 2.5, 0, Math.PI * 2);
       ctx.fill();
+      ctx.stroke();
 
-      // Draw Snake Body with Gradient Neon
+      // Highlight sheen dot
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(fx - 2, fy - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Draw Snake Body with Neo Cyan + Green Blocks and Bold Black Stroke
       snakeRef.current.forEach((segment, idx) => {
         const isHead = idx === 0;
-        ctx.fillStyle = isHead ? '#9D00FF' : '#5E00D9';
-        ctx.shadowColor = isHead ? '#00F0FF' : 'transparent';
-        ctx.shadowBlur = isHead ? 15 : 0;
+        ctx.save();
+        ctx.fillStyle = isHead ? '#C0F7FE' : (idx % 2 === 0 ? '#99E885' : '#FFDC8B');
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
 
         ctx.beginPath();
         ctx.roundRect(
@@ -296,21 +313,52 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
           isHead ? 6 : 4
         );
         ctx.fill();
+        ctx.stroke();
 
-        // Cyber head eyes
+        // Cute Comic Eyes on Snake Head
         if (isHead) {
-          ctx.fillStyle = '#00F0FF';
+          const eyeOffset = 3.5;
+          const eyeRadius = 2.5;
+          const pupilRadius = 1.2;
+
+          let eye1X = segment.x * GRID_SIZE + GRID_SIZE / 2;
+          let eye1Y = segment.y * GRID_SIZE + GRID_SIZE / 2;
+          let eye2X = segment.x * GRID_SIZE + GRID_SIZE / 2;
+          let eye2Y = segment.y * GRID_SIZE + GRID_SIZE / 2;
+
+          if (dirRef.current.x !== 0) {
+            eye1X += dirRef.current.x * 3;
+            eye2X += dirRef.current.x * 3;
+            eye1Y -= eyeOffset;
+            eye2Y += eyeOffset;
+          } else {
+            eye1Y += dirRef.current.y * 3;
+            eye2Y += dirRef.current.y * 3;
+            eye1X -= eyeOffset;
+            eye2X += eyeOffset;
+          }
+
+          // Eye Whites
+          ctx.fillStyle = '#FFFFFF';
           ctx.beginPath();
-          ctx.arc(
-            segment.x * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.x * 3,
-            segment.y * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.y * 3,
-            2.5, 0, Math.PI * 2
-          );
+          ctx.arc(eye1X, eye1Y, eyeRadius, 0, Math.PI * 2);
+          ctx.arc(eye2X, eye2Y, eyeRadius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Pupils
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.arc(eye1X + dirRef.current.x * 0.8, eye1Y + dirRef.current.y * 0.8, pupilRadius, 0, Math.PI * 2);
+          ctx.arc(eye2X + dirRef.current.x * 0.8, eye2Y + dirRef.current.y * 0.8, pupilRadius, 0, Math.PI * 2);
           ctx.fill();
         }
+        ctx.restore();
       });
 
-      // Render Active Particles
+      // Render Active Particles (Neo Brutalism confetti blocks/dots)
       particlesRef.current.forEach((p, idx) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -319,64 +367,79 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         if (p.alpha <= 0) {
           particlesRef.current.splice(idx, 1);
         } else {
+          ctx.save();
           ctx.fillStyle = p.color;
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
           ctx.globalAlpha = p.alpha;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
           ctx.fill();
-          ctx.globalAlpha = 1;
+          ctx.stroke();
+          ctx.restore();
         }
       });
-
-      ctx.shadowBlur = 0;
     }, 105);
 
     return () => clearInterval(interval);
   }, [isPlaying, isDead, score, highScore, combo, onGameOver, spawnFood, playSfx]);
 
   const handleDirectionChange = useCallback((dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
-    if (dir === 'UP' && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: -1 };
-    else if (dir === 'DOWN' && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: 1 };
-    else if (dir === 'LEFT' && dirRef.current.x === 0) nextDirRef.current = { x: -1, y: 0 };
-    else if (dir === 'RIGHT' && dirRef.current.x === 0) nextDirRef.current = { x: 1, y: 0 };
+    handleDirection(dir);
   }, []);
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-cyan">{score}</span>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
+        {/* Score Pill */}
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs">
+          <span className="text-[10px] text-black font-black uppercase tracking-wider">Score</span>
+          <span className="text-xs sm:text-sm font-black text-black">{score}</span>
         </div>
 
-        {combo > 1 && (
-          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-portal-neon/20 border border-portal-neon/40 text-purple-300 text-[9px] font-black animate-pulse">
-            <Flame className="w-2.5 h-2.5 text-portal-cyan" /> {combo}x
+        {/* Dynamic Combo Multiplier Badge */}
+        {combo > 1 ? (
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-portal-pink border-2 border-black text-black text-[10px] font-black uppercase shadow-neo-xs animate-pulse">
+            <Flame className="w-3 h-3 text-black fill-black" />
+            <span>{combo}X COMBO</span>
+          </div>
+        ) : (
+          <div className="hidden sm:flex items-center gap-1 text-[10px] font-black uppercase text-slate-500 tracking-wider">
+            <span>• RETRO 2D •</span>
           </div>
         )}
 
+        {/* High Score & Audio Controls */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] text-slate-400 font-extrabold uppercase">Best</span>
-            <span className="text-sm font-black text-portal-gold">{highScore}</span>
+          <div className="flex items-center gap-1 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs">
+            <Trophy className="w-3 h-3 text-black stroke-[2.5]" />
+            <span className="text-xs sm:text-sm font-black text-black">{highScore}</span>
           </div>
+
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+            className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
             title="Toggle Sound"
+            aria-label="Toggle Sound"
           >
-            {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
           </button>
         </div>
       </div>
 
-      {/* Canvas Screen (9:16 Vertical Ratio) */}
+      {/* Canvas Screen (9:16 Vertical Ratio) with Figma Handles */}
       <div
-        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-full aspect-[9/16] flex items-center justify-center"
+        className="relative rounded-2xl overflow-hidden border-4 border-black shadow-neo-lg bg-[#FAF8F5] touch-none w-full aspect-[9/16] flex items-center justify-center"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* Figma Selection Frame Transform Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -386,35 +449,68 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
 
         {/* Start / Death Screen Overlay */}
         {!isPlaying && (
-          <div className="absolute inset-0 bg-portal-bg/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center z-10 animate-fadeIn">
             {isDead ? (
-              <div className="space-y-3 w-full max-w-[280px]">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase tracking-wider">
-                  System Crashed
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {score}</h3>
-                <p className="text-xs text-slate-400">Score synced to global rankings</p>
+              /* Game Over Neo-Brutalist Card */
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 animate-scaleIn text-black">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                  ⚡ CRASHED! ⚡
+                </div>
+
+                <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Score</div>
+                  <div className="text-3xl font-black text-black tracking-tight">{score}</div>
+                </div>
+
+                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">
+                  Score synced to global leaderboard
+                </p>
+
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-portal-cyan to-blue-600 text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" /> PLAY AGAIN
+                  <RotateCcw className="w-4 h-4 stroke-[3]" />
+                  <span>PLAY AGAIN</span>
                 </button>
               </div>
             ) : (
-              <div className="space-y-4 max-w-[280px]">
-                <div className="w-14 h-14 rounded-2xl bg-portal-neon/20 border border-portal-neon/40 flex items-center justify-center mx-auto text-portal-neon shadow-glow-purple">
-                  <Sparkles className="w-7 h-7" />
+              /* Pre-Game Start Neo-Brutalist Card */
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 animate-scaleIn text-black">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                  <Sparkles className="w-7 h-7 stroke-[2.5]" />
                 </div>
+
                 <div>
-                  <h3 className="text-xl font-black text-white">Joystick or WASD</h3>
-                  <p className="text-xs text-slate-400 mt-1">Eat cyan cores & golden energy cells</p>
+                  <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                    • [ ARCADE RUN ] •
+                  </div>
+                  <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                    Neon Snake
+                  </h3>
+                  <p className="text-[11px] font-bold text-slate-700 mt-1">
+                    Eat Pink Apples & Golden Stars. Steer with WASD, Arrows or D-Pad!
+                  </p>
                 </div>
+
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3.5 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-4 h-4 fill-black" /> START RUN
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                  <span>START GAME</span>
                 </button>
               </div>
             )}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Layers } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Layers, Trophy } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import MobileGamepad from '@/components/ui/MobileGamepad';
 import { JoystickMoveEvent } from '@/components/ui/VirtualJoystick';
@@ -17,7 +17,7 @@ const BRICK_ROWS = 7;
 const BRICK_COLS = 6;
 const BRICK_HEIGHT = 16;
 const BRICK_PADDING = 6;
-const BRICK_OFFSET_TOP = 35;
+const BRICK_OFFSET_TOP = 40;
 const BRICK_OFFSET_LEFT = 14;
 
 interface Brick {
@@ -40,7 +40,7 @@ interface Particle {
   size: number;
 }
 
-const ROW_COLORS = ['#FF0055', '#FF00EA', '#9D00FF', '#00F0FF', '#00FF66', '#FFD700', '#FF5500'];
+const ROW_COLORS = ['#FE90E8', '#C0F7FE', '#99E885', '#F7CB46', '#FFDC8B', '#FE90E8', '#C0F7FE'];
 
 export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -58,13 +58,13 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
     x: CANVAS_WIDTH / 2 - 40,
     y: CANVAS_HEIGHT - 45,
     width: 80,
-    height: 12,
+    height: 14,
   });
 
   const ballRef = useRef({
     x: CANVAS_WIDTH / 2,
     y: CANVAS_HEIGHT - 65,
-    radius: 6,
+    radius: 7,
     vx: 3.2,
     vy: -4.0,
   });
@@ -143,7 +143,7 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
     ballRef.current = {
       x: CANVAS_WIDTH / 2,
       y: CANVAS_HEIGHT - 65,
-      radius: 6,
+      radius: 7,
       vx: (Math.random() > 0.5 ? 3.2 : -3.2),
       vy: -4.0,
     };
@@ -263,7 +263,7 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
             scoreRef.current += brick.points;
             setScore(scoreRef.current);
 
-            // Explosion
+            // Explosion Particles
             for (let k = 0; k < 12; k++) {
               particlesRef.current.push({
                 x: brick.x + brick.width / 2,
@@ -272,7 +272,7 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
                 vy: (Math.random() - 0.5) * 6,
                 alpha: 1,
                 color: brick.color,
-                size: Math.random() * 3 + 2
+                size: Math.random() * 4 + 2
               });
             }
           }
@@ -292,46 +292,66 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
         return;
       }
 
-      // RENDER
-      ctx.fillStyle = '#0B0819';
+      // RENDER - Bright Warm Ground
+      ctx.fillStyle = '#FAF8F5';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Grid Sky
-      ctx.strokeStyle = '#18123A';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < CANVAS_WIDTH; x += 30) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0); ctx.lineTo(x, CANVAS_HEIGHT);
-        ctx.stroke();
+      // Neo-Brutalist Dot Grid Texture
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      for (let x = 12; x < CANVAS_WIDTH; x += 24) {
+        for (let y = 12; y < CANVAS_HEIGHT; y += 24) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
-      // Draw Bricks
+      // Draw Bricks (Solid fill + Crisp Black Border + Offset Shadow)
       bricksRef.current.forEach(brick => {
         if (brick.status === 1) {
+          // Hard drop shadow
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(brick.x + 2, brick.y + 2, brick.width, brick.height);
+
+          // Brick fill
           ctx.fillStyle = brick.color;
-          ctx.shadowColor = brick.color;
-          ctx.shadowBlur = 10;
-          ctx.beginPath();
-          ctx.roundRect(brick.x, brick.y, brick.width, brick.height, 4);
-          ctx.fill();
+          ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+
+          // Brick border
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(brick.x, brick.y, brick.width, brick.height);
         }
       });
 
-      // Draw Paddle
-      ctx.fillStyle = '#00F0FF';
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = 15;
+      // Draw Paddle (Yellow Neo-Brutalist Swatch)
+      // Paddle shadow
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(pad.x + 3, pad.y + 3, pad.width, pad.height);
+
+      // Paddle fill
+      ctx.fillStyle = '#F7CB46';
+      ctx.fillRect(pad.x, pad.y, pad.width, pad.height);
+
+      // Paddle border
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = '#000000';
+      ctx.strokeRect(pad.x, pad.y, pad.width, pad.height);
+
+      // Draw Ball (Pink Puck with Black Outline)
+      ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.roundRect(pad.x, pad.y, pad.width, pad.height, 6);
+      ctx.arc(b.x + 2, b.y + 2, b.radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Draw Ball
-      ctx.fillStyle = '#FFD700';
-      ctx.shadowColor = '#FFD700';
-      ctx.shadowBlur = 14;
+      ctx.fillStyle = '#FE90E8';
       ctx.beginPath();
       ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
       ctx.fill();
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#000000';
+      ctx.stroke();
 
       // Draw Particles
       particlesRef.current.forEach((part, idx) => {
@@ -343,14 +363,14 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
         } else {
           ctx.fillStyle = part.color;
           ctx.globalAlpha = part.alpha;
-          ctx.beginPath();
-          ctx.arc(part.x, part.y, part.size, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(part.x, part.y, part.size, part.size);
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeRect(part.x, part.y, part.size, part.size);
           ctx.globalAlpha = 1;
         }
       });
 
-      ctx.shadowBlur = 0;
       animId = requestAnimationFrame(loop);
     };
 
@@ -360,27 +380,41 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5">
-          <Layers className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{score}</span>
+      {/* Top Neo-Brutalist HUD Strip */}
+      <div className="w-full flex items-center justify-between bg-white px-3 py-2 rounded-xl border-3 border-black mb-2.5 shadow-neo-sm">
+        <div className="flex items-center gap-1.5 bg-portal-yellow px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs">
+          <Trophy className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] text-black font-black uppercase tracking-wider">Score</span>
+          <span className="text-xs sm:text-sm font-black text-black">{score}</span>
         </div>
+
+        <div className="flex items-center gap-1.5 bg-portal-cyan px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-xs">
+          <Layers className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+          <span className="text-[10px] text-black font-black uppercase tracking-wider">Breaker</span>
+        </div>
+
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+          className="p-1.5 rounded-lg bg-white hover:bg-portal-yellow text-black border-2 border-black shadow-neo-xs transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none"
+          title="Toggle Sound"
+          aria-label="Toggle Sound"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-400" />}
         </button>
       </div>
 
-      {/* Screen Canvas (9:16 Aspect Ratio) */}
+      {/* Screen Canvas (9:16 Aspect Ratio) with Figma Handles */}
       <div
         onTouchMove={handleTouchMove}
         onMouseMove={handleMouseMove}
-        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-ew-resize w-full aspect-[9/16] flex items-center justify-center"
+        className="relative rounded-2xl overflow-hidden border-4 border-black shadow-neo-lg bg-[#FAF8F5] touch-none cursor-ew-resize w-full aspect-[9/16] flex items-center justify-center"
       >
+        {/* Figma Handles */}
+        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+        <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black shadow-neo-xs z-20 pointer-events-none" />
+
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -389,47 +423,90 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
         />
 
         {!isPlaying && (
-          <div className="absolute inset-0 bg-portal-bg/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-20 animate-fadeIn">
             {isWon ? (
-              <div className="space-y-3">
-                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-black uppercase">
-                  Matrix Cleared!
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {score}</h3>
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-green border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                  🎉 MATRIX CLEARED!
+                </div>
+
+                <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Score</div>
+                  <div className="text-3xl font-black text-black tracking-tight">{score}</div>
+                </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" /> PLAY AGAIN
+                  <RotateCcw className="w-4 h-4 stroke-[3]" />
+                  <span>PLAY AGAIN</span>
                 </button>
               </div>
             ) : isDead ? (
-              <div className="space-y-3">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-                  Ball Dropped
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {score}</h3>
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-3.5 text-center text-black animate-scaleIn">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="inline-block px-3 py-1 rounded-md bg-portal-pink border-2 border-black text-black text-[11px] font-black uppercase tracking-wider shadow-neo-xs">
+                  ⚡ BALL DROPPED ⚡
+                </div>
+
+                <div className="bg-portal-yellow border-3 border-black rounded-xl p-3 shadow-neo-sm space-y-0.5">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-slate-700">Final Score</div>
+                  <div className="text-3xl font-black text-black tracking-tight">{score}</div>
+                </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-portal-cyan hover:bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" /> RETRY LEVEL
+                  <RotateCcw className="w-4 h-4 stroke-[3]" />
+                  <span>RETRY LEVEL</span>
                 </button>
               </div>
             ) : (
-              <div className="space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-portal-cyan/20 border border-portal-cyan/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Layers className="w-7 h-7" />
+              <div className="relative bg-white border-4 border-black rounded-2xl p-5 sm:p-6 shadow-neo-xl w-full max-w-[290px] space-y-4 text-center z-10 animate-scaleIn text-black">
+                {/* Figma Handles */}
+                <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+                <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border-2 border-black pointer-events-none" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-cyan border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                  <Layers className="w-7 h-7 stroke-[2.5]" />
                 </div>
+
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Breaker</h3>
-                  <p className="text-xs text-slate-400 mt-1">Joystick, drag, or arrow keys to bounce the energy orb.</p>
+                  <div className="inline-block px-2.5 py-0.5 rounded-md bg-portal-yellow border-2 border-black text-black text-[10px] font-black uppercase tracking-wider mb-1.5 shadow-neo-xs">
+                    • [ ARCADE BREAKER ] •
+                  </div>
+                  <h3 className="text-xl font-black text-black tracking-tight uppercase">
+                    Cyber Breaker
+                  </h3>
+                  <p className="text-[11px] font-bold text-slate-700 mt-1">
+                    Slide paddle or use touch joystick to shatter all neon bricks!
+                  </p>
                 </div>
+
                 <button
+                  type="button"
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="w-full py-3.5 px-4 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-4 h-4 fill-black" /> START BREAKER
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" />
+                  <span>START BREAKER</span>
                 </button>
               </div>
             )}
