@@ -75,8 +75,8 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-minesweeper.svg",
       "description": "Procedural Neo-Brutalist Cyber Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
-      "play_count": 0,
-      "rating": 5.0,
+      "play_count": 12,
+      "rating": 5,
       "rating_count": 38,
       "status": "active",
       "featured": true
@@ -7726,6 +7726,83 @@
       "user_id": "usr_ctvl8ln",
       "score": 2500,
       "created_at": "2026-09-13T11:08:30.306Z"
+    },
+    {
+      "id": "sc_q6jkhe5hv",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1665,
+      "created_at": "2026-09-14T11:13:30.697Z"
+    },
+    {
+      "id": "sc_s6i1no02d",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1845,
+      "created_at": "2026-09-14T11:13:39.144Z"
+    },
+    {
+      "id": "sc_2gcx8fqfp",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 585,
+      "created_at": "2026-09-14T11:13:44.029Z"
+    },
+    {
+      "id": "sc_vl87rhxzb",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1665,
+      "created_at": "2026-09-14T11:14:01.746Z"
+    },
+    {
+      "id": "sc_p280ggru9",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 2205,
+      "created_at": "2026-09-14T11:15:01.664Z"
+    },
+    {
+      "id": "sc_3sk1nym3o",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 2025,
+      "created_at": "2026-09-14T11:16:46.156Z"
+    },
+    {
+      "id": "sc_ffmwaih7t",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 2295,
+      "created_at": "2026-09-14T11:19:50.779Z"
+    },
+    {
+      "id": "sc_zk9qor0gz",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 2115,
+      "created_at": "2026-09-14T11:20:38.793Z"
+    },
+    {
+      "id": "sc_e7sphzl54",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1170,
+      "created_at": "2026-09-14T11:21:10.432Z"
+    },
+    {
+      "id": "sc_1y5z2urkk",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 900,
+      "created_at": "2026-09-14T11:24:30.066Z"
+    },
+    {
+      "id": "sc_gyyxvw3zw",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 315,
+      "created_at": "2026-09-14T11:24:40.508Z"
     }
   ],
   "ratings": []

@@ -1281,37 +1281,38 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top Combat HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        <div className="flex items-center gap-1.5">
-          <Rocket className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className="text-[10px] text-slate-400 font-black uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{displayScore}</span>
+      {/* Top Combat HUD - Neo Brutalism */}
+      <div className="w-full flex items-center justify-between bg-portal-card px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo">
+        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
+          <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
+          <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
+          <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-black uppercase">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-lg bg-portal-purple text-white border-2 border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
             Wave {wave}
           </span>
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 transition-all"
+            className="p-1.5 rounded-lg bg-portal-surface hover:bg-portal-cyan text-white hover:text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+            title={soundEnabled ? "Mute audio" : "Enable audio"}
           >
-            {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
           </button>
         </div>
       </div>
 
       {/* Active Powerup Banner */}
       {activePowerup && (
-        <div className="w-full mb-1.5 px-2 py-0.5 rounded-lg bg-cyan-500/10 border border-cyan-500/40 flex items-center justify-center gap-1 text-[10px] font-black text-portal-cyan animate-pulse">
-          <Zap className="w-3 h-3 text-portal-cyan" />
+        <div className="w-full mb-2 px-3 py-1 rounded-xl bg-portal-yellow text-black border-3 border-black shadow-neo flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider animate-pulse">
+          <Zap className="w-4 h-4 fill-black stroke-[2.5]" />
           <span>POWERUP ACTIVE: {activePowerup}</span>
         </div>
       )}
 
       {/* Main Game Screen Canvas (9:16 Vertical Aspect Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -1327,31 +1328,37 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         {/* Start / Game Over Overlay */}
         {!isPlaying && (
           <div
-            className={`absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 text-center transition-all ${
+            className={`absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-5 text-center transition-all ${
               isDead
-                ? 'bg-gradient-to-b from-rose-950/25 via-black/45 to-black/70 backdrop-blur-[1px]'
-                : 'bg-black/35 backdrop-blur-[1px]'
+                ? 'bg-black/75 backdrop-blur-[2px]'
+                : 'bg-black/60 backdrop-blur-[2px]'
             }`}
           >
             {isDead ? (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.25)] animate-in fade-in zoom-in duration-200">
-                <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center mx-auto text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.3)]">
-                  <AlertTriangle className="w-6 h-6 text-rose-400 animate-pulse" />
+              <div className="relative space-y-3.5 w-full max-w-[320px] bg-portal-card p-5 rounded-2xl border-3 border-black shadow-neo-lg animate-in fade-in zoom-in duration-200">
+                {/* Figma Corner Nodes */}
+                <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-white shadow-neo">
+                  <AlertTriangle className="w-7 h-7 stroke-[2.5] animate-pulse" />
                 </div>
                 <div>
-                  <span className="px-3 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-black uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-lg bg-portal-pink text-white border-2 border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm inline-block">
                     Ship Destroyed
                   </span>
-                  <h3 className="text-2xl font-black text-white mt-1">Score: {displayScore}</h3>
-                  <p className="text-xs text-slate-400">Reached Wave {wave}</p>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mt-1.5">Score: {displayScore}</h3>
+                  <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Reached Wave {wave}</p>
                 </div>
 
                 {/* Ad Transmission Status Alert */}
                 {adNotice && (
-                  <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs font-bold animate-in fade-in slide-in-from-top-2 duration-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                    <div className="flex items-center justify-center gap-1.5 mb-1 text-portal-gold font-black">
-                      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 animate-pulse" />
-                      <span className="text-[11px] tracking-wide">AD NETWORK NOTICE</span>
+                  <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black text-portal-yellow text-xs font-bold shadow-neo-sm">
+                    <div className="flex items-center justify-center gap-1.5 mb-1 font-black">
+                      <AlertCircle className="w-4 h-4 text-portal-yellow shrink-0 stroke-[2.5]" />
+                      <span className="text-[11px] tracking-wide uppercase">AD NETWORK NOTICE</span>
                     </div>
                     <p className="text-[11px] text-slate-300 leading-snug">{adNotice}</p>
                   </div>
@@ -1361,57 +1368,63 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                 <button
                   onClick={handleWatchAdForRevive}
                   disabled={hasRevived}
-                  className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm transition-all group ${
+                  className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo transition-all ${
                     hasRevived
-                      ? 'bg-slate-800/60 border border-slate-700/60 text-slate-500 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/80 hover:border-amber-300 text-amber-300 hover:text-white shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:shadow-glow-gold active:scale-95'
+                      ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                      : 'bg-portal-yellow hover:bg-yellow-300 text-black hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
                   }`}
                   title={hasRevived ? 'Revive already used for this run' : 'Watch video transmission for emergency ship revive'}
                 >
-                  <Tv className={`w-4 h-4 ${hasRevived ? 'text-slate-500' : 'text-portal-gold group-hover:scale-110 animate-pulse transition-transform'}`} />
+                  <Tv className="w-4 h-4 stroke-[2.5]" />
                   <span>{hasRevived ? 'REVIVE ALREADY USED (1/RUN)' : 'WATCH AD TO REVIVE'}</span>
                 </button>
 
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan hover:bg-cyan-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <RotateCcw className="w-4 h-4" /> RESTART MISSION
+                  <RotateCcw className="w-4 h-4 stroke-[2.5]" /> RESTART MISSION
                 </button>
               </div>
             ) : (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 rounded-2xl border border-portal-cyan/40 shadow-2xl">
-                <div className="w-12 h-12 rounded-2xl bg-portal-cyan/20 border border-portal-cyan/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Rocket className="w-6 h-6" />
+              <div className="relative space-y-3.5 w-full max-w-[320px] bg-portal-card p-5 rounded-2xl border-3 border-black shadow-neo-lg animate-in fade-in zoom-in duration-200">
+                {/* Figma Corner Nodes */}
+                <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-cyan border-3 border-black flex items-center justify-center mx-auto text-black shadow-neo">
+                  <Rocket className="w-7 h-7 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white">Neon Starfighter</h3>
-                  <p className="text-xs text-slate-300 mt-0.5">
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Neon Starfighter</h3>
+                  <p className="text-xs font-bold text-portal-yellow uppercase tracking-wider mt-0.5">
                     Touch & Drag or A/D Keys to Steer
                   </p>
                 </div>
 
-                {/* Tactical Intel */}
-                <div className="bg-portal-surface/90 p-2.5 rounded-xl border border-portal-border text-[10px] text-slate-300 space-y-1 text-left">
-                  <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-                    <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                {/* Tactical Intel Box */}
+                <div className="bg-portal-surface p-3 rounded-xl border-2 border-black shadow-neo-sm text-[11px] text-slate-200 space-y-1.5 text-left font-bold">
+                  <div className="flex items-center gap-2 text-portal-yellow">
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                     <span>Meteors: Indestructible! Deflects lasers.</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-purple-400 font-bold">
-                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                  <div className="flex items-center gap-2 text-portal-purple">
+                    <Sparkles className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                     <span>Black Holes: Gravitational pull vortex!</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                    <Shield className="w-3.5 h-3.5 shrink-0" />
+                  <div className="flex items-center gap-2 text-portal-cyan">
+                    <Shield className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                     <span>Powerups: 3X Spread, Shields, EMP Nukes.</span>
                   </div>
                 </div>
 
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-5 py-2.5 rounded-xl bg-portal-cyan text-black font-black text-xs sm:text-sm shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan hover:bg-cyan-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <Play className="w-4 h-4 fill-black" /> LAUNCH MISSION
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" /> LAUNCH MISSION
                 </button>
               </div>
             )}
@@ -1420,9 +1433,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       </div>
 
       {/* Control Tips Strip */}
-      <p className="text-[10px] text-slate-500 font-bold mt-2 text-center">
-        Controls: Touch & Drag across screen • A/D or Left/Right Keys
-      </p>
+      <div className="mt-2 text-center">
+        <span className="text-[10px] font-black text-slate-300 uppercase tracking-wide bg-portal-card px-3 py-1 rounded-lg border-2 border-black shadow-neo-sm inline-block">
+          Controls: Touch & Drag across screen • A/D or Left/Right Keys
+        </span>
+      </div>
     </div>
   );
 }

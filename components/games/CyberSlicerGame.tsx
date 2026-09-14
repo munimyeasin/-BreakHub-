@@ -918,22 +918,22 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
-        {/* Score */}
-        <div className="flex items-center gap-1.5">
-          <Swords className="w-3.5 h-3.5 text-portal-cyan" />
-          <span className="text-[10px] text-slate-400 font-black uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{displayScore}</span>
+      {/* Top HUD - Neo Brutalism */}
+      <div className="w-full flex items-center justify-between bg-portal-card px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo">
+        {/* Score Pill */}
+        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
+          <Swords className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
+          <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
+          <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
         </div>
 
         {/* Lives / Strikes */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
           {[1, 2, 3].map((heart) => (
             <Heart
               key={heart}
-              className={`w-3.5 h-3.5 transition-all ${
-                heart <= lives ? 'text-rose-500 fill-rose-500' : 'text-slate-600'
+              className={`w-4 h-4 stroke-[2.5] transition-all ${
+                heart <= lives ? 'text-portal-pink fill-portal-pink' : 'text-slate-600'
               }`}
             />
           ))}
@@ -942,14 +942,15 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         {/* Sound Toggle */}
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 transition-all"
+          className="p-1.5 rounded-lg bg-portal-surface hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          title={soundEnabled ? "Mute audio" : "Enable audio"}
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
         </button>
       </div>
 
       {/* Main Slicing Dojo Canvas (9:16 Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-[#070514] touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -966,45 +967,62 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           <div
             className={`absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-5 text-center transition-all ${
               isDead
-                ? 'bg-gradient-to-b from-rose-950/30 via-black/50 to-black/75 backdrop-blur-[1px]'
-                : 'bg-black/35 backdrop-blur-[1px]'
+                ? 'bg-black/75 backdrop-blur-[2px]'
+                : 'bg-black/60 backdrop-blur-[2px]'
             }`}
           >
             {isDead ? (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-rose-500/40 shadow-[0_0_30px_rgba(244,63,94,0.25)] animate-in fade-in zoom-in duration-200">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-                  Dojo Run Ended
-                </span>
-                <h3 className="text-2xl font-black text-white">Score: {displayScore}</h3>
-                <p className="text-xs text-slate-400">Master the Plasma Katana</p>
+              <div className="relative space-y-3.5 w-full max-w-[320px] bg-portal-card p-5 rounded-2xl border-3 border-black shadow-neo-lg animate-in fade-in zoom-in duration-200">
+                {/* Figma Corner Nodes */}
+                <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-white shadow-neo">
+                  <Swords className="w-7 h-7 stroke-[2.5]" />
+                </div>
+                <div>
+                  <span className="px-3 py-1 rounded-lg bg-portal-pink text-white border-2 border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm inline-block">
+                    Dojo Run Ended
+                  </span>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mt-1.5">Score: {displayScore}</h3>
+                  <p className="text-xs font-bold text-portal-yellow uppercase tracking-wider mt-0.5">Master the Plasma Katana</p>
+                </div>
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan hover:bg-cyan-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <RotateCcw className="w-4 h-4" /> RETRY BLADE RUN
+                  <RotateCcw className="w-4 h-4 stroke-[2.5]" /> RETRY BLADE RUN
                 </button>
               </div>
             ) : (
-              <div className="space-y-3 w-full max-w-xs bg-portal-bg/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.25)] animate-in fade-in zoom-in duration-200">
-                <div className="w-13 h-13 rounded-2xl bg-portal-cyan/20 border border-portal-cyan/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Swords className="w-6 h-6" />
+              <div className="relative space-y-3.5 w-full max-w-[320px] bg-portal-card p-5 rounded-2xl border-3 border-black shadow-neo-lg animate-in fade-in zoom-in duration-200">
+                {/* Figma Corner Nodes */}
+                <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+                <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-black rounded-sm shadow-neo-sm" />
+
+                <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black flex items-center justify-center mx-auto text-white shadow-neo">
+                  <Swords className="w-7 h-7 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Slicer</h3>
-                  <p className="text-xs text-slate-300 mt-0.5 font-medium">Neon Katana Blade Rush</p>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Cyber Slicer</h3>
+                  <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Neon Katana Blade Rush</p>
                 </div>
 
                 {/* Dojo Rules */}
-                <div className="bg-portal-surface/95 p-2.5 rounded-xl border border-portal-border text-[11px] text-slate-300 space-y-1.5 text-left">
-                  <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                <div className="bg-portal-surface p-3 rounded-xl border-2 border-black shadow-neo-sm text-[11px] text-slate-200 space-y-1.5 text-left font-bold">
+                  <div className="flex items-center gap-2 text-portal-cyan">
+                    <Sparkles className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                     <span>Swipe / Drag to slash flying cyber fruits!</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-                    <Flame className="w-3.5 h-3.5 shrink-0" />
+                  <div className="flex items-center gap-2 text-portal-yellow">
+                    <Flame className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
                     <span>Multi-Slice: 3+ fruits in 1 swipe for Combos!</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-rose-400 font-bold">
+                  <div className="flex items-center gap-2 text-portal-pink">
                     <span className="shrink-0 text-xs">💣</span>
                     <span>AVOID BOMBS: Slicing a bomb is instant death!</span>
                   </div>
@@ -1012,9 +1030,9 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-5 py-2.5 rounded-xl bg-gradient-to-r from-portal-cyan via-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-black text-sm uppercase tracking-wider shadow-glow-cyan hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-pink hover:bg-pink-400 text-white font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <Play className="w-4 h-4 fill-black" /> ENTER DOJO
+                  <Play className="w-4 h-4 fill-white stroke-[2.5]" /> ENTER DOJO
                 </button>
               </div>
             )}
@@ -1022,9 +1040,12 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         )}
       </div>
 
-      <p className="text-[10px] text-slate-500 font-bold mt-1.5 text-center">
-        Controls: Swipe or drag to wield your plasma blade
-      </p>
+      {/* Control Tips Strip */}
+      <div className="mt-2 text-center">
+        <span className="text-[10px] font-black text-slate-300 uppercase tracking-wide bg-portal-card px-3 py-1 rounded-lg border-2 border-black shadow-neo-sm inline-block">
+          Controls: Swipe or drag to wield your plasma blade
+        </span>
+      </div>
     </div>
   );
 }
