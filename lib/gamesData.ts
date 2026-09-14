@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_sweeper_16',
+    slug: 'cyber-minesweeper',
+    title: 'Cyber Minesweeper',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/cyber-minesweeper.svg',
+    description: 'Procedural Neo-Brutalist Cyber Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 38,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_maze_15',
     slug: 'cyber-maze',
     title: 'Cyber Maze Escape',

@@ -16,6 +16,7 @@ import CyberSlicerGame from '@/components/games/CyberSlicerGame';
 import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
 import CyberDriftGame from '@/components/games/CyberDriftGame';
 import CyberMazeGame from '@/components/games/CyberMazeGame';
+import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -264,6 +265,8 @@ export default function GameModal({
                 <StarRating
                   gameId={game.id}
                   gameTitle={game.title}
+                  gameCategory={game.category}
+                  thumbnailUrl={game.thumbnail_url}
                   rating={game.rating || 4.9}
                   ratingCount={game.rating_count || 0}
                   userRating={userRating}
@@ -333,6 +336,10 @@ export default function GameModal({
 
           {(game.id === 'g_maze_15' || game.slug === 'cyber-maze') && (
             <CyberMazeGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_sweeper_16' || game.slug === 'cyber-minesweeper') && (
+            <CyberMinesweeperGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
         </div>
       </div>

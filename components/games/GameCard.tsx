@@ -175,6 +175,8 @@ export default function GameCard({
                 <StarRating
                   gameId={game.id}
                   gameTitle={game.title}
+                  gameCategory={game.category}
+                  thumbnailUrl={game.thumbnail_url}
                   rating={game.rating || 4.9}
                   ratingCount={game.rating_count || 0}
                   userRating={userRating}
