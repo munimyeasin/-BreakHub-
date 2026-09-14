@@ -718,7 +718,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
       bladeTrailRef.current = bladeTrailRef.current.filter((pt) => now - pt.time < 120);
 
       // ==========================================
-      // CANVAS 2D RENDER PIPELINE
+      // NEO-BRUTALISM CANVAS 2D RENDER PIPELINE
       // ==========================================
       ctx.save();
 
@@ -732,11 +732,11 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
       }
 
       // Deep Cyber Dojo Background
-      ctx.fillStyle = '#070514';
+      ctx.fillStyle = '#080417';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Subtle Dojo Grid Lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
+      // Neo-Brutalism Dojo Grid Lines
+      ctx.strokeStyle = '#180e2e';
       ctx.lineWidth = 1;
       for (let x = 0; x < CANVAS_WIDTH; x += 40) {
         ctx.beginPath();
@@ -751,7 +751,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         ctx.stroke();
       }
 
-      // 1. Render Splash Particles
+      // 1. Render Splash Particles (Comic Confetti Shards with Black Outlines)
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
         p.x += p.vx * timeScale;
@@ -762,16 +762,19 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         if (p.life >= p.maxLife) {
           particlesRef.current.splice(i, 1);
         } else {
+          ctx.save();
           ctx.fillStyle = p.color;
           ctx.globalAlpha = Math.max(0, p.alpha);
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(p.x | 0, p.y | 0, p.radius * 2, p.radius * 2);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(p.x | 0, p.y | 0, p.radius * 2, p.radius * 2);
+          ctx.restore();
         }
       }
       ctx.globalAlpha = 1;
 
-      // 2. Render Fruits & Cyber Bombs
+      // 2. Render Fruits & Cyber Bombs (Neo-Brutalism Tactile Spheres & Badges)
       fruitsRef.current.forEach((fruit) => {
         if (fruit.sliced) {
           // Draw Halves
@@ -780,32 +783,68 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
             ctx.save();
             ctx.translate(fruit.half1.x, fruit.half1.y);
             ctx.rotate(fruit.half1.rot);
+
+            // Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(2, 2, fruit.radius, 0, Math.PI);
+            ctx.closePath();
+            ctx.fill();
+
+            // Body
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Inner Pulp
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius * 0.7, 0, Math.PI);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
             ctx.restore();
 
             // Half 2
             ctx.save();
             ctx.translate(fruit.half2.x, fruit.half2.y);
             ctx.rotate(fruit.half2.rot);
+
+            // Shadow
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(2, 2, fruit.radius, Math.PI, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+
+            // Body
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, Math.PI, Math.PI * 2);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Inner Pulp
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius * 0.7, Math.PI, Math.PI * 2);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
             ctx.restore();
           }
         } else {
@@ -815,75 +854,101 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
           ctx.rotate(fruit.rotation);
 
           if (fruit.kind === 'bomb') {
-            // Cyber Spiked Bomb
-            ctx.fillStyle = '#1A1424';
-            ctx.strokeStyle = '#FF0055';
-            ctx.lineWidth = 2.5;
+            // Cyber Spiked Bomb (Hard Drop Shadow + 3px Solid Black Stroke)
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(3, 3, fruit.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#220A1E';
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3;
             ctx.stroke();
 
-            // Blinking Fuse Core
-            ctx.fillStyle = Math.sin(timestamp * 0.02) > 0 ? '#FFE600' : '#FF0055';
+            // Fuse with Solid Outline
+            ctx.fillStyle = Math.sin(timestamp * 0.02) > 0 ? '#F7CB46' : '#FE90E8';
             ctx.beginPath();
-            ctx.arc(0, -fruit.radius - 3, 3.5, 0, Math.PI * 2);
+            ctx.arc(0, -fruit.radius - 3, 4, 0, Math.PI * 2);
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
 
-            // Danger 'X'
-            ctx.fillStyle = '#FF0055';
-            ctx.font = 'bold 12px sans-serif';
+            // Danger Bomb Icon
+            ctx.fillStyle = '#FE90E8';
+            ctx.font = '900 13px system-ui, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('💣', 0, 0);
           } else {
-            // Neon Fruit Orb
+            // Neo-Brutalism Fruit Orb with Hard Shadow & Solid 2.5px Outline
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(2.5, 2.5, fruit.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Fruit Shell
             ctx.fillStyle = fruit.color;
             ctx.beginPath();
             ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
 
-            // Core highlight
+            // Core highlight / Pulp
             ctx.fillStyle = fruit.innerColor;
             ctx.beginPath();
-            ctx.arc(-fruit.radius * 0.3, -fruit.radius * 0.3, fruit.radius * 0.35, 0, Math.PI * 2);
+            ctx.arc(-fruit.radius * 0.28, -fruit.radius * 0.28, fruit.radius * 0.35, 0, Math.PI * 2);
             ctx.fill();
-
-            // Outer Neon Rim
-            ctx.strokeStyle = fruit.innerColor;
+            ctx.strokeStyle = '#000000';
             ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(0, 0, fruit.radius, 0, Math.PI * 2);
             ctx.stroke();
+
+            // White Specular Spot
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(-fruit.radius * 0.4, -fruit.radius * 0.4, fruit.radius * 0.12, 0, Math.PI * 2);
+            ctx.fill();
           }
 
           ctx.restore();
         }
       });
 
-      // 3. Render Neon Plasma Katana Blade Trail
+      // 3. Render High-Contrast Katana Blade Trail with Black Outlines
       const trail = bladeTrailRef.current;
       if (trail.length >= 2) {
-        ctx.strokeStyle = '#00F0FF';
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
+        // Shadow Line
         for (let i = 1; i < trail.length; i++) {
           const p1 = trail[i - 1];
           const p2 = trail[i];
           const progress = i / trail.length;
 
-          // Outer Glow Line
-          ctx.strokeStyle = `rgba(0, 240, 255, ${progress * 0.9})`;
-          ctx.lineWidth = progress * 6;
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = progress * 7;
+          ctx.beginPath();
+          ctx.moveTo(p1.x + 2, p1.y + 2);
+          ctx.lineTo(p2.x + 2, p2.y + 2);
+          ctx.stroke();
+
+          // Neo Cyan Blade
+          ctx.strokeStyle = `rgba(0, 240, 255, ${progress * 0.95})`;
+          ctx.lineWidth = progress * 5;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
 
-          // Bright White Core Blade
+          // White Core Razor Edge
           ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-          ctx.lineWidth = progress * 2.5;
+          ctx.lineWidth = progress * 2;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
@@ -891,7 +956,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         }
       }
 
-      // 4. Floating Score / Combo Texts
+      // 4. Floating Score / Combo Texts (Comic Badges with Black Stroke)
       for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
         const ft = floatingTextsRef.current[i];
         ft.y += ft.vy * timeScale;
@@ -899,11 +964,21 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         if (ft.alpha <= 0) {
           floatingTextsRef.current.splice(i, 1);
         } else {
-          ctx.fillStyle = ft.color;
+          ctx.save();
           ctx.globalAlpha = Math.max(0, ft.alpha);
-          ctx.font = 'black 13px sans-serif';
+          ctx.font = '900 13px system-ui, -apple-system, sans-serif';
           ctx.textAlign = 'center';
+
+          // Black Outline
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 4;
+          ctx.lineJoin = 'miter';
+          ctx.strokeText(ft.text, ft.x, ft.y);
+
+          // Pop Fill
+          ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
         }
       }
       ctx.globalAlpha = 1;

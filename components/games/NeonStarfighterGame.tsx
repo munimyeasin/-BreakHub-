@@ -540,22 +540,41 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       const timeScale = dt * 60;
 
       // In-Game Background Clear
-      ctx.fillStyle = '#060411';
+      ctx.fillStyle = '#080417';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Cosmic Nebula Atmosphere (Crimson & Cyber Purple on Death, Cyan & Purple on Launch)
+      // Subtle Background Grid Lines
+      ctx.save();
+      ctx.strokeStyle = '#180e2e';
+      ctx.lineWidth = 1;
+      const gridSize = 40;
+      for (let x = 0; x < CANVAS_WIDTH; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.stroke();
+      }
+      for (let y = 0; y < CANVAS_HEIGHT; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Cosmic Atmosphere (Neo Pink on Death, Neo Cyan on Launch)
       const radGrad = ctx.createRadialGradient(
         CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, 10,
         CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, CANVAS_WIDTH * 0.75
       );
       if (isDead) {
-        radGrad.addColorStop(0, 'rgba(244, 63, 94, 0.18)');
+        radGrad.addColorStop(0, 'rgba(254, 144, 232, 0.22)');
         radGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.08)');
-        radGrad.addColorStop(1, 'rgba(6, 4, 17, 0)');
+        radGrad.addColorStop(1, 'rgba(8, 4, 23, 0)');
       } else {
-        radGrad.addColorStop(0, 'rgba(0, 240, 255, 0.14)');
-        radGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.06)');
-        radGrad.addColorStop(1, 'rgba(6, 4, 17, 0)');
+        radGrad.addColorStop(0, 'rgba(0, 240, 255, 0.16)');
+        radGrad.addColorStop(0.5, 'rgba(254, 144, 232, 0.08)');
+        radGrad.addColorStop(1, 'rgba(8, 4, 23, 0)');
       }
       ctx.fillStyle = radGrad;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -1045,7 +1064,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
 
       // ==========================================
-      // ZERO-OVERHEAD FAST CANVAS RENDERER
+      // NEO-BRUTALISM CANVAS 2D RENDER ENGINE
       // ==========================================
 
       ctx.save();
@@ -1059,11 +1078,30 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         if (screenShakeRef.current < 0.5) screenShakeRef.current = 0;
       }
 
-      // Background Clear
-      ctx.fillStyle = '#060411';
+      // Background Clear (Deep Indigo Ground)
+      ctx.fillStyle = '#080417';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Starfield (Direct Integer Drawing)
+      // Subtle Background Matrix / Grid Lines
+      ctx.save();
+      ctx.strokeStyle = '#180e2e';
+      ctx.lineWidth = 1;
+      const gridSize = 40;
+      for (let x = 0; x < CANVAS_WIDTH; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.stroke();
+      }
+      for (let y = 0; y < CANVAS_HEIGHT; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Starfield (Direct Pixel Drawing with Pop Colors)
       const stars = starsRef.current;
       for (let s = 0; s < stars.length; s++) {
         const star = stars[s];
@@ -1076,59 +1114,65 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * 1.5);
       }
 
-      // 1. Black Holes (Zero-Allocation High-FPS Render)
+      // 1. Black Holes (Neo-Brutalist Cosmic Singularity)
       blackHolesRef.current.forEach((bh) => {
-        // Gravitational Vortex Rings (Lightweight GPU alpha strokes)
-        ctx.strokeStyle = 'rgba(157, 0, 255, 0.22)';
-        ctx.lineWidth = 14;
+        // Gravitational Warning Hazard Ring (Dashed Neo Pink)
+        ctx.save();
+        ctx.strokeStyle = 'rgba(254, 144, 232, 0.25)';
+        ctx.lineWidth = 5;
+        ctx.setLineDash([8, 6]);
         ctx.beginPath();
-        ctx.arc(bh.x, bh.y, (bh.pullRadius * 0.7) | 0, 0, Math.PI * 2);
+        ctx.arc(bh.x, bh.y, (bh.pullRadius * 0.75) | 0, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
 
-        ctx.strokeStyle = 'rgba(255, 0, 234, 0.12)';
-        ctx.lineWidth = 8;
-        ctx.beginPath();
-        ctx.arc(bh.x, bh.y, (bh.pullRadius * 0.4) | 0, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Dual Swirling Accretion Disk Rings
+        // Dual Swirling Accretion Disk Rings with Solid Neo Borders
         ctx.save();
         ctx.translate(bh.x, bh.y);
         ctx.rotate(bh.angle);
-        ctx.strokeStyle = '#FF00EA';
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#FE90E8';
+        ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, 0, bh.radius + 5, 0, Math.PI * 1.6);
+        ctx.arc(0, 0, bh.radius + 6, 0, Math.PI * 1.5);
         ctx.stroke();
 
-        ctx.rotate(-bh.angle * 2.2);
+        ctx.rotate(-bh.angle * 2.5);
         ctx.strokeStyle = '#00F0FF';
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
-        ctx.arc(0, 0, bh.radius + 9, 0, Math.PI * 1.2);
+        ctx.arc(0, 0, bh.radius + 11, 0, Math.PI * 1.2);
         ctx.stroke();
         ctx.restore();
 
-        // Event Horizon (Singularity Core)
+        // Event Horizon (Singularity Core with Solid Neo-Brutalist Border)
         ctx.fillStyle = '#000000';
         ctx.beginPath();
         ctx.arc(bh.x, bh.y, bh.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#9D00FF';
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#FE90E8';
+        ctx.lineWidth = 3.5;
         ctx.stroke();
       });
 
-      // 2. Meteors
+      // 2. Meteors (Faceted Neo-Brutalist Space Asteroids with Hard Shadows & Black Outlines)
       meteorsRef.current.forEach((m) => {
         ctx.save();
         ctx.translate(m.x, m.y);
         ctx.rotate(m.rotation);
 
-        ctx.fillStyle = '#261C33';
-        ctx.strokeStyle = '#FF6600';
-        ctx.lineWidth = 2;
+        // Hard Drop Shadow
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        m.points.forEach((pt, idx) => {
+          if (idx === 0) ctx.moveTo(pt.x + 3, pt.y + 3);
+          else ctx.lineTo(pt.x + 3, pt.y + 3);
+        });
+        ctx.closePath();
+        ctx.fill();
 
+        // Asteroid Body (Deep Purple Asteroid)
+        ctx.fillStyle = '#381E54';
         ctx.beginPath();
         m.points.forEach((pt, idx) => {
           if (idx === 0) ctx.moveTo(pt.x, pt.y);
@@ -1136,29 +1180,71 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         });
         ctx.closePath();
         ctx.fill();
+
+        // Solid Black 2.5px Border
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
         ctx.stroke();
+
+        // Comic Crater Details
+        ctx.fillStyle = '#220F38';
+        ctx.beginPath();
+        ctx.arc(m.radius * 0.2, m.radius * 0.2, m.radius * 0.28, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // White Highlight Spot
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(-m.radius * 0.35, -m.radius * 0.35, m.radius * 0.15, 0, Math.PI * 2);
+        ctx.fill();
+
         ctx.restore();
       });
 
-      // 3. Powerups
+      // 3. Powerups (Neo-Brutalist Tactile Swatch Boxes with Figma Node Accents)
       powerupsRef.current.forEach((pow) => {
-        const pulseSize = pow.radius + Math.sin(pow.pulse) * 1.8;
+        const pulseSize = pow.radius + Math.sin(pow.pulse) * 1.5;
         const color =
           pow.type === 'spread'
-            ? '#39FF14'
+            ? '#99E885'
             : pow.type === 'shield'
-            ? '#00F0FF'
+            ? '#C0F7FE'
             : pow.type === 'nuke'
-            ? '#FF00EA'
-            : '#FFE600';
+            ? '#FE90E8'
+            : '#F7CB46';
 
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(pow.x, pow.y, pulseSize, 0, Math.PI * 2);
-        ctx.fill();
+        const size = pulseSize * 1.7;
+        const x = pow.x - size / 2;
+        const y = pow.y - size / 2;
 
+        ctx.save();
+        // 1. Hard Offset Drop Shadow (Neo-Brutalism)
         ctx.fillStyle = '#000000';
-        ctx.font = 'bold 10px sans-serif';
+        ctx.fillRect(x + 3, y + 3, size, size);
+
+        // 2. Main Swatch Box Fill
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, size, size);
+
+        // 3. Solid Black Border
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(x, y, size, size);
+
+        // 4. White Corner Accent Node
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(x - 1, y - 1, 3, 3);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x - 1, y - 1, 3, 3);
+
+        // 5. Crisp Text Label
+        ctx.fillStyle = '#000000';
+        ctx.font = '900 10px system-ui, -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         const label =
@@ -1169,20 +1255,51 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             : pow.type === 'nuke'
             ? 'EMP'
             : '⚡';
-        ctx.fillText(label, pow.x, pow.y);
+        ctx.fillText(label, pow.x, pow.y + 0.5);
+        ctx.restore();
       });
 
-      // 4. Bullets (Fast Batch)
+      // 4. Bullets (High-Impact Chunky Cartoon Plasma Lasers)
       bulletsRef.current.forEach((b) => {
+        ctx.save();
+        // Hard Offset Drop Shadow
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(b.x + 1.5, b.y + 1.5, 4, 14);
+
+        // Laser Fill
         ctx.fillStyle = b.color;
-        ctx.fillRect(b.x | 0, b.y | 0, 3.5, 12);
+        ctx.fillRect(b.x, b.y, 4, 14);
+
+        // Laser Black Outline
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(b.x, b.y, 4, 14);
+
+        // White Core Energy Line
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(b.x + 1, b.y + 2, 2, 8);
+        ctx.restore();
       });
 
-      // 5. Enemies
+      // 5. Enemies (Arcade Neo-Brutalist Invaders with Solid Outlines, Eyes & Health Bars)
       enemiesRef.current.forEach((enemy) => {
-        ctx.fillStyle = enemy.color;
+        ctx.save();
 
         if (enemy.type === 'heavy') {
+          // Hard Drop Shadow
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.moveTo(enemy.x + enemy.width / 2 + 3, enemy.y + enemy.height + 3);
+          ctx.lineTo(enemy.x + 3, enemy.y + 3);
+          ctx.lineTo(enemy.x + 9, enemy.y + 6);
+          ctx.lineTo(enemy.x + enemy.width / 2 + 3, enemy.y + 13);
+          ctx.lineTo(enemy.x + enemy.width - 3, enemy.y + 6);
+          ctx.lineTo(enemy.x + enemy.width + 3, enemy.y + 3);
+          ctx.closePath();
+          ctx.fill();
+
+          // Main Heavy Hull Fill
+          ctx.fillStyle = enemy.color;
           ctx.beginPath();
           ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
           ctx.lineTo(enemy.x, enemy.y);
@@ -1193,26 +1310,147 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           ctx.closePath();
           ctx.fill();
 
+          // Solid Black 2.5px Stroke
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+
+          // Dual Angry Eyes
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(enemy.x + 8, enemy.y + 12, 6, 6);
+          ctx.fillRect(enemy.x + enemy.width - 14, enemy.y + 12, 6, 6);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(enemy.x + 8, enemy.y + 12, 6, 6);
+          ctx.strokeRect(enemy.x + enemy.width - 14, enemy.y + 12, 6, 6);
+          // Pupils
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(enemy.x + 10, enemy.y + 14, 3, 3);
+          ctx.fillRect(enemy.x + enemy.width - 12, enemy.y + 14, 3, 3);
+
+          // Neo-Brutalist HP Segmented Bar
           if (enemy.hp < enemy.maxHp) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.fillRect(enemy.x, enemy.y - 5, enemy.width, 2.5);
-            ctx.fillStyle = '#39FF14';
-            ctx.fillRect(enemy.x, enemy.y - 5, (enemy.hp / enemy.maxHp) * enemy.width, 2.5);
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(enemy.x + 2, enemy.y - 7, enemy.width, 5);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(enemy.x, enemy.y - 9, enemy.width, 5);
+            ctx.fillStyle = '#99E885';
+            ctx.fillRect(enemy.x, enemy.y - 9, (enemy.hp / enemy.maxHp) * enemy.width, 5);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(enemy.x, enemy.y - 9, enemy.width, 5);
           }
-        } else {
+        } else if (enemy.type === 'scout') {
+          // Hard Drop Shadow
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.moveTo(enemy.x + enemy.width / 2 + 2, enemy.y + enemy.height + 2);
+          ctx.lineTo(enemy.x + 2, enemy.y + 2);
+          ctx.lineTo(enemy.x + enemy.width / 2 + 2, enemy.y + 6);
+          ctx.lineTo(enemy.x + enemy.width + 2, enemy.y + 2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Main Hull
+          ctx.fillStyle = enemy.color;
           ctx.beginPath();
           ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
           ctx.lineTo(enemy.x, enemy.y);
+          ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + 4);
           ctx.lineTo(enemy.x + enemy.width, enemy.y);
           ctx.closePath();
           ctx.fill();
+
+          // Solid Black Border
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+
+          // Cute Eyes
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(enemy.x + 5, enemy.y + 6, 5, 5);
+          ctx.fillRect(enemy.x + enemy.width - 10, enemy.y + 6, 5, 5);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(enemy.x + 5, enemy.y + 6, 5, 5);
+          ctx.strokeRect(enemy.x + enemy.width - 10, enemy.y + 6, 5, 5);
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(enemy.x + 7, enemy.y + 8, 2, 2);
+          ctx.fillRect(enemy.x + enemy.width - 8, enemy.y + 8, 2, 2);
+        } else {
+          // Drone Invader: Diamond Saucer
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.moveTo(enemy.x + enemy.width / 2 + 2, enemy.y + enemy.height + 2);
+          ctx.lineTo(enemy.x + 2, enemy.y + enemy.height / 2 + 2);
+          ctx.lineTo(enemy.x + enemy.width / 2 + 2, enemy.y + 2);
+          ctx.lineTo(enemy.x + enemy.width + 2, enemy.y + enemy.height / 2 + 2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Body
+          ctx.fillStyle = enemy.color;
+          ctx.beginPath();
+          ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
+          ctx.lineTo(enemy.x, enemy.y + enemy.height / 2);
+          ctx.lineTo(enemy.x + enemy.width / 2, enemy.y);
+          ctx.lineTo(enemy.x + enemy.width, enemy.y + enemy.height / 2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Solid Black Border
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+
+          // Single Cyclops Eye
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2 + 0.5, 2, 0, Math.PI * 2);
+          ctx.fill();
         }
+
+        ctx.restore();
       });
 
-      // 6. Player Starfighter
-      const shipColor = p.hyperTimer > 0 ? '#FFE600' : p.tripleShotTimer > 0 ? '#39FF14' : '#00F0FF';
-      ctx.fillStyle = shipColor;
+      // 6. Player Starfighter (Tactile Neo-Brutalist Interceptor with Figma Corner Accents & Bold Outlines)
+      const shipColor = p.hyperTimer > 0 ? '#F7CB46' : p.tripleShotTimer > 0 ? '#99E885' : '#00F0FF';
+      ctx.save();
 
+      // Exhaust Cartoon Flame Blocks
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(p.x + p.width / 2 - 4 + 1.5, p.y + p.height - 2 + 1.5, 8, 8);
+      ctx.fillStyle = '#FE90E8';
+      ctx.fillRect(p.x + p.width / 2 - 4, p.y + p.height - 2, 8, 8);
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(p.x + p.width / 2 - 4, p.y + p.height - 2, 8, 8);
+
+      ctx.fillStyle = '#FFE600';
+      ctx.fillRect(p.x + p.width / 2 - 2, p.y + p.height, 4, 4);
+
+      // Starfighter Hard Drop Shadow
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.moveTo(p.x + p.width / 2 + 3, p.y + 3);
+      ctx.lineTo(p.x + 3, p.y + p.height + 3);
+      ctx.lineTo(p.x + p.width / 2 + 3, p.y + p.height - 8 + 3);
+      ctx.lineTo(p.x + p.width + 3, p.y + p.height + 3);
+      ctx.closePath();
+      ctx.fill();
+
+      // Main Hull Fill
+      ctx.fillStyle = shipColor;
       ctx.beginPath();
       ctx.moveTo(p.x + p.width / 2, p.y);
       ctx.lineTo(p.x, p.y + p.height);
@@ -1221,22 +1459,75 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       ctx.closePath();
       ctx.fill();
 
-      // Wing Core Cockpit
-      ctx.fillStyle = '#FFFFFF';
+      // Solid 3px Black Hull Outline
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // Wing Racing Stripes (Neo Pink)
+      ctx.fillStyle = '#FE90E8';
       ctx.beginPath();
-      ctx.arc(p.x + p.width / 2, p.y + p.height / 2 - 2, 4, 0, Math.PI * 2);
+      ctx.moveTo(p.x + 6, p.y + p.height - 4);
+      ctx.lineTo(p.x + 12, p.y + p.height - 10);
+      ctx.lineTo(p.x + 15, p.y + p.height - 7);
+      ctx.lineTo(p.x + 9, p.y + p.height - 1);
+      ctx.closePath();
       ctx.fill();
 
-      // Shield Ring
+      ctx.beginPath();
+      ctx.moveTo(p.x + p.width - 6, p.y + p.height - 4);
+      ctx.lineTo(p.x + p.width - 12, p.y + p.height - 10);
+      ctx.lineTo(p.x + p.width - 15, p.y + p.height - 7);
+      ctx.lineTo(p.x + p.width - 9, p.y + p.height - 1);
+      ctx.closePath();
+      ctx.fill();
+
+      // Cockpit Canopy (White Domed Capsule with Solid Outline)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(p.x + p.width / 2, p.y + p.height / 2 - 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Cockpit Pupil / Pilot HUD Dot
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.arc(p.x + p.width / 2, p.y + p.height / 2 - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Energy Shield (Segmented Neo Bubble with Hard Shadow)
       if (p.hasShield) {
-        ctx.strokeStyle = '#00F0FF';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 4.5;
         ctx.beginPath();
-        ctx.arc(p.x + p.width / 2, p.y + p.height / 2, p.width * 0.85, 0, Math.PI * 2);
+        ctx.arc(p.x + p.width / 2 + 2, p.y + p.height / 2 + 2, p.width * 0.82, 0, Math.PI * 2);
         ctx.stroke();
+
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(p.x + p.width / 2, p.y + p.height / 2, p.width * 0.82, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 4 Floating Energy Nodes on Shield
+        const shieldNodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+        shieldNodes.forEach((ang) => {
+          const nx = p.x + p.width / 2 + Math.cos(ang + timestamp * 0.003) * (p.width * 0.82);
+          const ny = p.y + p.height / 2 + Math.sin(ang + timestamp * 0.003) * (p.width * 0.82);
+          ctx.fillStyle = '#FE90E8';
+          ctx.fillRect(nx - 3, ny - 3, 6, 6);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(nx - 3, ny - 3, 6, 6);
+        });
       }
 
-      // 7. Render Particles
+      ctx.restore();
+
+      // 7. Render Particles (Comic Confetti Shards with Black Outlines)
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const part = particlesRef.current[i];
         part.x += part.vx * timeScale;
@@ -1247,9 +1538,41 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         if (part.life >= part.maxLife) {
           particlesRef.current.splice(i, 1);
         } else {
-          ctx.fillStyle = part.color;
+          ctx.save();
           ctx.globalAlpha = Math.max(0, part.alpha);
-          ctx.fillRect(part.x | 0, part.y | 0, part.size, part.size);
+          ctx.fillStyle = part.color;
+          ctx.fillRect(part.x | 0, part.y | 0, part.size * 1.6, part.size * 1.6);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(part.x | 0, part.y | 0, part.size * 1.6, part.size * 1.6);
+          ctx.restore();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      // 8. Floating Texts (Comic Neo-Brutalist Badges with Solid Black Stroke)
+      for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
+        const ft = floatingTextsRef.current[i];
+        ft.y += ft.vy * timeScale;
+        ft.alpha -= 0.025 * timeScale;
+        if (ft.alpha <= 0) {
+          floatingTextsRef.current.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, ft.alpha);
+          ctx.font = '900 13px system-ui, -apple-system, sans-serif';
+          ctx.textAlign = 'center';
+
+          // Black Outline
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 4;
+          ctx.lineJoin = 'miter';
+          ctx.strokeText(ft.text, ft.x, ft.y);
+
+          // Pop Fill
+          ctx.fillStyle = ft.color;
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
         }
       }
       ctx.globalAlpha = 1;
