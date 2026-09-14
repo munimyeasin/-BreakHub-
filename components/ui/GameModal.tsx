@@ -171,6 +171,7 @@ export default function GameModal({
   };
 
   const avatarUrl = getAvatarUrl(username);
+  const isExpandedGame = game.id === 'g_sweeper_16' || game.slug === 'cyber-minesweeper';
 
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0 bg-black' : 'p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn'}`}>
@@ -179,7 +180,7 @@ export default function GameModal({
         className={`relative bg-portal-surface overflow-hidden flex flex-col transition-all duration-300 ${
           isFullscreen
             ? 'w-screen h-screen max-w-none max-h-none rounded-none border-none'
-            : 'w-full max-w-[460px] border-4 border-black rounded-2xl sm:rounded-3xl max-h-[96vh] shadow-neo-lg'
+            : `w-full ${isExpandedGame ? 'max-w-[460px] md:max-w-[620px] lg:max-w-[660px]' : 'max-w-[460px]'} border-4 border-black rounded-2xl sm:rounded-3xl max-h-[96vh] shadow-neo-lg`
         }`}
       >
         {/* Top Decorative Color Accent Bar (Hidden when in Fullscreen) */}

@@ -246,6 +246,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
   const [touchMode, setTouchMode] = useState<'dig' | 'flag'>('dig'); // Mobile toggle
   const [seedCounter, setSeedCounter] = useState<number>(1);
   const [scoreEarned, setScoreEarned] = useState<number>(0);
+  const [hoveredCell, setHoveredCell] = useState<{ r: number; c: number } | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const onGameOverRef = useRef(onGameOver);
@@ -321,13 +322,50 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
     setGrid(newGrid);
   }, []);
 
-  // Initialize on mount or sector switch
+  // Desktop Keyboard Shortcuts (R: Reset, 1-4: Sectors, M: Mute, Space: Flag/Chord)
   useEffect(() => {
-    initializeBoard(sector);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.repeat
+      ) {
+        return;
+      }
+
+      if (e.key === 'r' || e.key === 'R') {
+        setSeedCounter((prev) => prev + 1);
+        initializeBoard(sector);
+      } else if (e.key === '1') {
+        setSector('cadet');
+        setSeedCounter((prev) => prev + 1);
+      } else if (e.key === '2') {
+        setSector('hacker');
+        setSeedCounter((prev) => prev + 1);
+      } else if (e.key === '3') {
+        setSector('overlord');
+        setSeedCounter((prev) => prev + 1);
+      } else if (e.key === '4') {
+        setSector('blitz');
+        setSeedCounter((prev) => prev + 1);
+      } else if (e.key === 'm' || e.key === 'M') {
+        setSoundEnabled((prev) => !prev);
+      } else if (e.key === ' ' && hoveredCell) {
+        e.preventDefault();
+        const cell = grid[hoveredCell.r]?.[hoveredCell.c];
+        if (cell) {
+          if (cell.isRevealed) {
+            handleChord(hoveredCell.r, hoveredCell.c);
+          } else {
+            handleToggleFlag(hoveredCell.r, hoveredCell.c);
+          }
+        }
+      }
     };
-  }, [sector, initializeBoard, seedCounter]);
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sector, initializeBoard, hoveredCell, grid]);
 
   // Active Timer Loop
   useEffect(() => {
@@ -668,8 +706,20 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
   const currentSectorConfig = SECTOR_CONFIGS[sector];
   const remainingMines = Math.max(0, totalMines - flagsPlaced);
 
+  // Check if a cell is an unrevealed neighbor of the hovered open numbered cell (PC desktop visual cue)
+  const isNeighborHovered = (r: number, c: number) => {
+    if (!hoveredCell) return false;
+    const hCell = grid[hoveredCell.r]?.[hoveredCell.c];
+    if (!hCell || !hCell.isRevealed || hCell.neighborMines === 0) return false;
+    return (
+      Math.abs(r - hoveredCell.r) <= 1 &&
+      Math.abs(c - hoveredCell.c) <= 1 &&
+      !(r === hoveredCell.r && c === hoveredCell.c)
+    );
+  };
+
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[420px]">
+    <div className="flex flex-col items-center select-none w-full max-w-[420px] md:max-w-[560px] lg:max-w-[620px]">
       {/* Top Neo-Brutalist HUD Strip */}
       <div className="w-full flex items-center justify-between bg-portal-surface px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-3 border-black mb-2 shadow-neo-sm">
         {/* Remaining Mines */}
@@ -690,7 +740,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
             initializeBoard(sector);
           }}
           className="px-2.5 py-1 rounded-lg bg-portal-yellow hover:bg-portal-cyan text-black border-2 border-black shadow-neo-sm font-black text-xs uppercase flex items-center gap-1 hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-          title="Restart with New Random Seed"
+          title="Restart with New Random Seed [Hotkey: R]"
         >
           {isVictory ? (
             <span className="flex items-center gap-1 text-[11px]">
@@ -723,7 +773,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
           onClick={() => setSoundEnabled(!soundEnabled)}
           className="p-1 sm:p-1.5 rounded-lg bg-portal-card text-white hover:bg-portal-yellow hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
           aria-label="Toggle sound"
-          title={soundEnabled ? 'Mute Audio' : 'Enable Audio'}
+          title={soundEnabled ? 'Mute Audio [Hotkey: M]' : 'Enable Audio [Hotkey: M]'}
         >
           {soundEnabled ? (
             <Volume2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
@@ -737,7 +787,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
       <div className="w-full flex items-center justify-between gap-1.5 mb-2">
         {/* Sector Difficulty Selector */}
         <div className="flex items-center gap-1 overflow-x-auto py-0.5 scrollbar-none flex-1">
-          {(['cadet', 'hacker', 'overlord', 'blitz'] as DifficultySector[]).map((secKey) => {
+          {(['cadet', 'hacker', 'overlord', 'blitz'] as DifficultySector[]).map((secKey, idx) => {
             const conf = SECTOR_CONFIGS[secKey];
             const isSelected = sector === secKey;
             return (
@@ -752,6 +802,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                     ? `${conf.badgeBg} ${conf.badgeText} shadow-neo-sm translate-x-0.5 translate-y-0.5`
                     : 'bg-portal-card text-slate-300 hover:text-white shadow-neo-sm hover:border-portal-cyan'
                 }`}
+                title={`Select ${conf.name} [Hotkey: ${idx + 1}]`}
               >
                 {secKey === 'blitz' ? '🎲 BLITZ' : conf.shortName.split(' ')[0]}
               </button>
@@ -759,7 +810,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
           })}
         </div>
 
-        {/* Mobile Dig / Flag Mode Switcher */}
+        {/* Mobile Dig / Flag Mode Switcher (Visible on mobile/tablets) */}
         <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => setTouchMode('dig')}
@@ -806,6 +857,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
               const isCellFlagged = cell.isFlagged;
               const isCellMine = cell.isMine;
               const isExplodedMine = cell.exploded;
+              const isNeighbor = isNeighborHovered(rIdx, cIdx);
 
               let cellBg = 'bg-portal-card hover:bg-portal-surface text-slate-300';
               let cellBorder = 'border-2 border-black shadow-neo-sm';
@@ -824,6 +876,9 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
               } else if (isCellFlagged) {
                 cellBg = 'bg-portal-yellow text-black';
                 cellBorder = 'border-2 border-black shadow-neo-sm';
+              } else if (isNeighbor) {
+                // Subtle desktop neighbor highlight for unrevealed cells
+                cellBg = 'bg-slate-700/80 text-white ring-2 ring-portal-cyan/80';
               }
 
               return (
@@ -832,21 +887,44 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                   type="button"
                   onClick={() => handleCellClick(rIdx, cIdx)}
                   onContextMenu={(e) => handleToggleFlag(rIdx, cIdx, e)}
+                  onMouseDown={(e) => {
+                    if (e.button === 1) {
+                      e.preventDefault();
+                      handleChord(rIdx, cIdx);
+                    }
+                  }}
+                  onAuxClick={(e) => {
+                    if (e.button === 1) {
+                      e.preventDefault();
+                      handleChord(rIdx, cIdx);
+                    }
+                  }}
+                  onMouseEnter={() => setHoveredCell({ r: rIdx, c: cIdx })}
+                  onMouseLeave={() => setHoveredCell(null)}
                   onTouchStart={() => handleTouchStart(rIdx, cIdx)}
                   onTouchEnd={handleTouchEnd}
                   disabled={isGameOver || isVictory}
-                  className={`aspect-square w-7 sm:w-8 max-w-full rounded-lg flex items-center justify-center font-black text-xs sm:text-sm transition-all duration-75 ${cellBg} ${cellBorder} ${
+                  className={`aspect-square w-7 sm:w-8 md:w-9 lg:w-10 max-w-full rounded-lg flex items-center justify-center font-black text-xs sm:text-sm md:text-base transition-all duration-75 ${cellBg} ${cellBorder} ${
                     !isCellRevealed
                       ? 'hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none cursor-pointer'
+                      : cell.neighborMines > 0
+                      ? 'hover:brightness-125 cursor-pointer'
                       : 'cursor-default'
                   }`}
+                  title={
+                    isCellRevealed && cell.neighborMines > 0
+                      ? `Hint: ${cell.neighborMines} adjacent mines (Click/Chord to clear)`
+                      : !isCellRevealed
+                      ? `Cell [${rIdx + 1}, ${cIdx + 1}] - Left Click to Dig, Right Click to Flag`
+                      : undefined
+                  }
                 >
                   {isCellRevealed ? (
                     isCellMine ? (
                       isExplodedMine ? (
-                        <span className="text-sm">💥</span>
+                        <span className="text-sm md:text-base">💥</span>
                       ) : (
-                        <Bomb className="w-3.5 h-3.5 text-portal-pink fill-portal-pink" />
+                        <Bomb className="w-3.5 h-3.5 md:w-4 md:h-4 text-portal-pink fill-portal-pink" />
                       )
                     ) : cell.neighborMines > 0 ? (
                       <span className={`font-black ${getNumberColor(cell.neighborMines)}`}>
@@ -854,7 +932,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                       </span>
                     ) : null
                   ) : isCellFlagged ? (
-                    <Flag className="w-3.5 h-3.5 fill-black text-black stroke-[3]" />
+                    <Flag className="w-3.5 h-3.5 md:w-4 md:h-4 fill-black text-black stroke-[3]" />
                   ) : null}
                 </button>
               );
@@ -909,13 +987,23 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
         )}
       </div>
 
-      {/* Helper Neo Strip */}
+      {/* Mobile/General Helper Strip */}
       <div className="w-full mt-2 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-400 bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
         <span className="flex items-center gap-1">
           <ShieldAlert className="w-3 h-3 text-portal-cyan" /> 100% Safe First Click
         </span>
         <span className="text-portal-yellow flex items-center gap-1">
           <Zap className="w-3 h-3" /> Chord Clears
+        </span>
+      </div>
+
+      {/* Desktop-Only Ergonomics & Keyboard Shortcuts Legend (Hidden on Mobile) */}
+      <div className="hidden md:flex w-full mt-1.5 items-center justify-between text-[9px] font-black uppercase tracking-wider text-slate-400 bg-portal-surface px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
+        <span className="flex items-center gap-1 text-portal-cyan">
+          ⌨️ [L-CLICK] DIG • [R-CLICK / SPACE] FLAG • [M-CLICK / CHORD] CLEAR
+        </span>
+        <span className="text-portal-yellow flex items-center gap-1">
+          [R] RESET • [1-4] SECTORS • [M] AUDIO
         </span>
       </div>
     </div>
