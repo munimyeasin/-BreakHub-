@@ -15,7 +15,7 @@ interface UsernamePromptModalProps {
 }
 
 const RANDOM_TAGS = [
-  'NeonPhantom', 'CyberPulse', 'QuantumRider', 'VortexHunter',
+  'NeonPhantom', 'ArcadePulse', 'QuantumRider', 'VortexHunter',
   'ZeroByte', 'ShadowBlade', 'PixelNova', 'AuraStriker',
   'HyperSpectre', 'BinaryGhost', 'TurboGlitch', 'MatrixRunner'
 ];

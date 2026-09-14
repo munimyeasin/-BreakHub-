@@ -154,7 +154,7 @@ export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGam
             </div>
             <div>
               <h3 className="text-xl font-black text-white">Chroma Reflex</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Memorize the glowing cyber sequence and repeat it!</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Memorize the glowing arcade sequence and repeat it!</p>
             </div>
             <button
               onClick={startGame}

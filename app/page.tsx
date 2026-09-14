@@ -468,7 +468,7 @@ export default function ArcadePortalDashboard() {
         </div>
       </header>
 
-      {/* Real-time Cyber Activity Marquee Ticker */}
+      {/* Real-time Arcade Activity Marquee Ticker */}
       <ActivityTicker />
 
       {/* 2. DUAL-PANE LAYOUT: LEFT SLIDE BAR + MAIN PORTAL ARENA */}
@@ -514,7 +514,7 @@ export default function ArcadePortalDashboard() {
             />
           ) : (
             <>
-              {/* SPOTLIGHT HERO BANNER (Top featured: Cyber Slicer & Neon Starfighter) */}
+              {/* SPOTLIGHT HERO BANNER (Top featured: Retro Slicer & Neon Starfighter) */}
               {activeTab === 'all' && selectedCategory === 'ALL' && !searchQuery && (
                 <SpotlightBanner
                   games={games}

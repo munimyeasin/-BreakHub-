@@ -63,7 +63,7 @@ interface FloatingText {
 const FRUIT_CONFIGS: Record<Exclude<FruitKind, 'bomb'>, { color: string; innerColor: string; radius: number; points: number; name: string }> = {
   watermelon: { color: '#00FF66', innerColor: '#FF0055', radius: 24, points: 20, name: 'Neon Melon' },
   orange: { color: '#FF7700', innerColor: '#FFAA00', radius: 20, points: 15, name: 'Plasma Orange' },
-  apple: { color: '#00F0FF', innerColor: '#E0FFFF', radius: 19, points: 15, name: 'Cyber Apple' },
+  apple: { color: '#00F0FF', innerColor: '#E0FFFF', radius: 19, points: 15, name: 'Arcade Apple' },
   banana: { color: '#FFE600', innerColor: '#FFFBE6', radius: 18, points: 25, name: 'Quantum Banana' },
   strawberry: { color: '#FF00EA', innerColor: '#FFAAF5', radius: 16, points: 30, name: 'Hyper Berry' },
 };
@@ -1083,7 +1083,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
                   <Swords className="w-7 h-7 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Cyber Slicer</h3>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Retro Slicer</h3>
                   <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Neon Katana Blade Rush</p>
                 </div>
 
@@ -1091,7 +1091,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
                 <div className="bg-portal-surface p-3 rounded-xl border-2 border-black shadow-neo-sm text-[11px] text-slate-200 space-y-1.5 text-left font-bold">
                   <div className="flex items-center gap-2 text-portal-cyan">
                     <Sparkles className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Swipe / Drag to slash flying cyber fruits!</span>
+                    <span>Swipe / Drag to slash flying retro fruits!</span>
                   </div>
                   <div className="flex items-center gap-2 text-portal-yellow">
                     <Flame className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />

@@ -1,4 +1,4 @@
-# ⚡ StressBuster — Cyber Neo-Brutalist HTML5 Mini-Game Portal & Competitive Leaderboards
+# ⚡ StressBuster — Retro Neo-Brutalist HTML5 Mini-Game Portal & Competitive Leaderboards
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-FFE600?style=for-the-badge&logoColor=black)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-00F0FF?style=for-the-badge&logo=vercel&logoColor=black)](https://stress-buster-delta.vercel.app/)
 
-A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next.js App Router, TypeScript, and a bespoke **Dark Cyber Neo-Brutalism** design language. Featuring 15+ custom-engineered 2D Canvas and interactive mini-games, real-time procedural Web Audio sound synthesis, global and per-game competitive leaderboards, user rating systems, and instant zero-cache browser favicon synchronization.
+A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next.js App Router, TypeScript, and a bespoke **Dark Retro Neo-Brutalism** design language. Featuring 15+ custom-engineered 2D Canvas and interactive mini-games, real-time procedural Web Audio sound synthesis, global and per-game competitive leaderboards, user rating systems, and instant zero-cache browser favicon synchronization.
 
 ---
 
@@ -14,20 +14,20 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 | Game | Category | Engine / Mechanics | Status |
 | :--- | :---: | :--- | :---: |
-| **Cyber Minesweeper** | `PUZZLE` | Procedural quantum minefield, guaranteed safe first click, chord clearing, dynamic difficulty sectors | 🟢 Active |
-| **Cyber Maze Escape** | `PUZZLE` | 10-level labyrinth infiltration, 60s countdown, laser security gates, keycards & teleporters | 🟢 Active |
-| **Cyber Drift 2077** | `ARCADE` | High-speed 2D infinite drift racer, counter-steered physics, apex beacons, nitro boost & 10x combos | 🟢 Active |
-| **Cyber Slicer** | `ACTION` | High-FPS touch/mouse blade slicing, fruit physics, multi-slice combo multiplier, plasma bombs | 🟢 Active |
+| **Retro Minesweeper** | `PUZZLE` | Procedural quantum minefield, guaranteed safe first click, chord clearing, dynamic difficulty sectors | 🟢 Active |
+| **Retro Maze Escape** | `PUZZLE` | 10-level labyrinth infiltration, 60s countdown, laser security gates, keycards & teleporters | 🟢 Active |
+| **Retro Drift 2077** | `ARCADE` | High-speed 2D infinite drift racer, counter-steered physics, apex beacons, nitro boost & 10x combos | 🟢 Active |
+| **Retro Slicer** | `ACTION` | High-FPS touch/mouse blade slicing, fruit physics, multi-slice combo multiplier, plasma bombs | 🟢 Active |
 | **Neon Starfighter** | `ARCADE` | Retro-arcade vertical shmup, plasma laser cannons, singularity black holes, drone boss swarms | 🟢 Active |
-| **Quantum XO** | `STRATEGY` | Tactical 3x3 cyber showdown vs. adaptive minimax Overthinker AI engine | 🟢 Active |
-| **Quantum 2048** | `PUZZLE` | Cyberpunk sliding grid merger, smooth keyboard/swipe gestures, high-voltage energy core | 🟢 Active |
+| **Quantum XO** | `STRATEGY` | Tactical 3x3 showdown vs. adaptive minimax Overthinker AI engine | 🟢 Active |
+| **Retro 2048** | `PUZZLE` | Retro sliding grid merger, smooth keyboard/swipe gestures, high-voltage energy core | 🟢 Active |
 | **Memory Matrix** | `PUZZLE` | Fast-paced neural memory card matching grid with multiplier streaks and countdown bonuses | 🟢 Active |
 | **Hyper Tapper** | `ACTION` | Precision reaction-time clicker testing ultra-high APM reflex speeds | 🟢 Active |
 | **Neon Snake 2077** | `ARCADE` | 60FPS 2D Canvas engine with touch swipe gestures, virtual D-pad, combo multipliers & particle trails | 🟡 Coming Soon |
 | **Multidimension XO** | `STRATEGY` | Ultimate 9-field nested Ultimate Tic-Tac-Toe macro-grid strategy engine | 🟡 Coming Soon |
-| **Cyber Dash Runner** | `ACTION` | Endless side-scroller runner with laser fences, double jump thrusters, and energy coins | 🔵 In Engine |
-| **Geometry Dash Cyber** | `ACTION` | Rhythm cube runner with gravity pads, neon spikes, and secret collectable coins | 🔵 In Engine |
-| **Cyber Breaker** | `ARCADE` | Hyper-responsive neon paddle brick breaker with multiball physics & particle bursts | 🔵 In Engine |
+| **Retro Dash Runner** | `ACTION` | Endless side-scroller runner with laser fences, double jump thrusters, and energy coins | 🔵 In Engine |
+| **Geometry Dash Retro** | `ACTION` | Rhythm cube runner with gravity pads, neon spikes, and secret collectable coins | 🔵 In Engine |
+| **Retro Breaker** | `ARCADE` | Hyper-responsive neon paddle brick breaker with multiball physics & particle bursts | 🔵 In Engine |
 | **Chroma Reflex** | `STRATEGY` | 4-quadrant chromatic sequence audio reflex test with pitch-synthesized tones | 🔵 In Engine |
 | **Neon Paper.io** | `STRATEGY` | Real-time territory capture grid, trail-slicing mechanics, and AI bots | 🔵 In Engine |
 
@@ -35,8 +35,8 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 ## ✨ Key Features & Architecture
 
-### 1. 🎨 Bespoke Cyber Neo-Brutalism Aesthetics
-- **Color Tokens**: Pitch Dark Ground (`#0B0819`), Electric Cyber Yellow (`#FFE600`), High-Voltage Cyan (`#00F0FF`), Hot Neo Pink (`#FF4081`), and Acid Lime (`#A3E635`).
+### 1. 🎨 Bespoke Retro Neo-Brutalism Aesthetics
+- **Color Tokens**: Pitch Dark Ground (`#0B0819`), Electric Yellow (`#FFE600`), High-Voltage Cyan (`#00F0FF`), Hot Neo Pink (`#FF4081`), and Acid Lime (`#A3E635`).
 - **Signature Styling**: Hard 0-blur 3D drop shadows (`#000000`), bold 3px–4px black borders, diagonal hazard accent stripes, and crisp monospace telemetry readouts.
 - **Micro-Interactions**: Hover elevation shifts (`translate(-3px, -3px)`), tactile active button depressions, and dynamic particle systems.
 

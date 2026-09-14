@@ -277,7 +277,7 @@ export default function Cyber2048Game({ gameId, onGameOver }: Cyber2048GameProps
             </div>
             <div>
               <h3 className="text-xl font-black text-white">Quantum 2048</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Slide or flick with joystick to merge cyber tiles to 2048.</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Slide or flick with joystick to merge retro energy tiles to 2048.</p>
             </div>
             <button
               onClick={startGame}

@@ -66,7 +66,7 @@ const projectHighlights = [
   {
     icon: ShieldCheck,
     title: 'Modern Tech Stack',
-    desc: 'Powered by Next.js, React, TypeScript, and Tailwind CSS for robust typing, performance, and cyber aesthetics.',
+    desc: 'Powered by Next.js, React, TypeScript, and Tailwind CSS for robust typing, performance, and retro-arcade aesthetics.',
     color: 'text-white',
     badgeBg: 'bg-portal-purple text-white',
   },

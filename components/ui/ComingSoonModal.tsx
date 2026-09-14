@@ -82,7 +82,7 @@ export default function ComingSoonModal({
           <X className="w-4 h-4 stroke-[2.5]" />
         </button>
 
-        {/* Header with Visual Cyber Badge */}
+        {/* Header with Visual Arcade Badge */}
         <div className="text-center space-y-2.5 pt-1">
           <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-card border-3 border-black p-1 shadow-neo-sm flex items-center justify-center">
             <img

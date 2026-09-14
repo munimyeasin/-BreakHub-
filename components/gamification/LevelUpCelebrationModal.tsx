@@ -71,7 +71,7 @@ export default function LevelUpCelebrationModal({
         {/* Top Decorative Color Bar */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
 
-        {/* Floating Cyber Badge Icon */}
+        {/* Floating Arcade Badge Icon */}
         <div className="relative mb-4 mt-2">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center shadow-neo">
             <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-black fill-black stroke-[2.5]" />

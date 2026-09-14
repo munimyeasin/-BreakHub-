@@ -422,7 +422,7 @@ export default function CyberBreakerGame({ gameId, onGameOver }: CyberBreakerGam
                   <Layers className="w-7 h-7" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Breaker</h3>
+                  <h3 className="text-xl font-black text-white">Retro Breaker</h3>
                   <p className="text-xs text-slate-400 mt-1">Joystick, drag, or arrow keys to bounce the energy orb.</p>
                 </div>
                 <button

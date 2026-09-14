@@ -36,7 +36,7 @@ interface SectorConfig {
 
 const SECTOR_CONFIGS: Record<DifficultySector, SectorConfig> = {
   cadet: {
-    name: 'Sector 01: Cyber Cadet',
+    name: 'Sector 01: Arcade Cadet',
     shortName: 'Cadet (8x8)',
     rows: 8,
     cols: 8,

@@ -477,7 +477,7 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
                   <Zap className="w-7 h-7" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Dash Runner</h3>
+                  <h3 className="text-xl font-black text-white">Retro Dash Runner</h3>
                   <p className="text-xs text-slate-400 mt-1">Tap screen or Space to jump (Double jump available!).</p>
                 </div>
                 <button

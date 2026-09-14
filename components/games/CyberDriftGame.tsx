@@ -1002,7 +1002,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
 
   const handleWatchAdForRevive = () => {
     if (hasRevived) return;
-    setAdNotice('Connecting to Cyber Ad Network...');
+    setAdNotice('Connecting to Arcade Ad Network...');
 
     if (adTimeoutRef.current) clearTimeout(adTimeoutRef.current);
     adTimeoutRef.current = setTimeout(() => {
@@ -2180,10 +2180,10 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
             {/* Header Title */}
             <div>
               <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-portal-cyan border border-cyan-500/40 text-[9px] font-black uppercase tracking-widest">
-                CYBER DRIFT CHAMPIONSHIP
+                RETRO DRIFT CHAMPIONSHIP
               </span>
               <h2 className="text-xl font-black text-white mt-0.5 tracking-wider">
-                CYBER <span className="text-portal-cyan">DRIFT</span> <span className="text-portal-pink">2077</span>
+                RETRO <span className="text-portal-cyan">DRIFT</span> <span className="text-portal-pink">2077</span>
               </h2>
             </div>
 
@@ -2198,7 +2198,7 @@ export default function CyberDriftGame({ gameId, onGameOver }: CyberDriftGamePro
                 }`}
               >
                 <Trophy className="w-3 h-3 text-portal-gold" />
-                <span>CYBER RING (3 LAPS)</span>
+                <span>RETRO RING (3 LAPS)</span>
               </button>
               <button
                 onClick={() => setTrackMode('infinite')}

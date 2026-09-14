@@ -217,7 +217,7 @@ export const TROPHIES: Trophy[] = [
   },
   {
     id: 'cyber_elite',
-    title: 'Cyber Elite',
+    title: 'Arcade Elite',
     description: 'Reach Player Level 5',
     rarity: 'GOLD',
     xpReward: 250,
@@ -237,7 +237,7 @@ export const TROPHIES: Trophy[] = [
   // Platinum
   {
     id: 'cyber_legend',
-    title: 'Cyberpunk Legend',
+    title: 'Arcade Legend',
     description: 'Reach Player Level 10 on Stress Buster',
     rarity: 'PLATINUM',
     xpReward: 500,
@@ -293,7 +293,7 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
   {
     id: 'q_action_1',
     title: 'Action Seeker',
-    description: 'Play 1 Action game (Neon Starfighter or Cyber Slicer)',
+    description: 'Play 1 Action game (Neon Starfighter or Retro Slicer)',
     type: 'PLAY_CATEGORY',
     category: 'Action',
     target: 1,
@@ -326,7 +326,7 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
   {
     id: 'q_puzzle_1',
     title: 'Neural Matrix',
-    description: 'Play a Puzzle or Reflex game (Quantum 2048, Memory Matrix, Quantum XO)',
+    description: 'Play a Puzzle or Reflex game (Retro 2048, Memory Matrix, Quantum XO)',
     type: 'PLAY_CATEGORY',
     category: 'Puzzle',
     target: 1,
@@ -337,7 +337,7 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
   {
     id: 'q_slicer_1',
     title: 'Blade Protocol',
-    description: 'Play 1 session of Cyber Slicer',
+    description: 'Play 1 session of Retro Slicer',
     type: 'PLAY_SPECIFIC_GAME',
     gameId: 'cyber-slicer',
     target: 1,
@@ -399,15 +399,15 @@ const LEVEL_TITLES = [
   'Grid Infiltrator',   // Lvl 3
   'Plasma Striker',     // Lvl 4
   'Arcade Prodigy',     // Lvl 5
-  'Cyber Phantom',      // Lvl 6
+  'Retro Phantom',      // Lvl 6
   'Matrix Specialist',  // Lvl 7
   'Quantum Overclock',  // Lvl 8
   'Apex Netlord',       // Lvl 9
-  'Cyberpunk Legend',   // Lvl 10
+  'Arcade Legend',      // Lvl 10
   'Nexus Architect',    // Lvl 11-14
   'Dimensional Hacker', // Lvl 15-19
   'Omni Master',        // Lvl 20-29
-  'Cybernetic Deity',   // Lvl 30+
+  'Arcade Deity',       // Lvl 30+
 ];
 
 export function getLevelForXp(xp: number): number {

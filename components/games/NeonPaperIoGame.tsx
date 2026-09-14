@@ -690,7 +690,7 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
           } else {
             // Check self-collision on trail
             if (p.trail.some(t => t.x === nx && t.y === ny)) {
-              eliminatePlayer(p, null, grid, 'You crossed your own active cyber trail!');
+              eliminatePlayer(p, null, grid, 'You crossed your own active neon trail!');
               continue;
             }
             p.trail.push({ x: nx, y: ny });
@@ -968,7 +968,7 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
             </div>
             <h2 className="text-2xl font-black text-white tracking-wider mb-1">NEON PAPER.IO</h2>
             <p className="text-xs text-slate-400 max-w-[280px] mb-4">
-              Conquer cyber territory! Encircle zones to claim grid land and slice enemy trails.
+              Conquer arcade territory! Encircle zones to claim grid land and slice enemy trails.
             </p>
             <div className="flex gap-2 text-[11px] text-slate-300 mb-5 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
               <span>⌨️ <b>WASD / Arrows</b></span>

@@ -6,7 +6,7 @@ const NEO_SVG_DATA_URI = `data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3
 
 export const metadata: Metadata = {
   title: 'Stress Buster | Mini-Game Portal',
-  description: 'Cyberpunk dark-themed HTML5 mobile mini-game portal and competitive global leaderboards.',
+  description: 'Retro arcade neo-brutalist HTML5 mobile mini-game portal and competitive global leaderboards.',
   icons: {
     icon: [
       { url: NEO_SVG_DATA_URI, type: 'image/svg+xml' },

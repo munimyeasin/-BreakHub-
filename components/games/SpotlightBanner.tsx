@@ -46,7 +46,7 @@ export default function SpotlightBanner({
   const currentGame = featuredGames[activeIndex] || featuredGames[0];
   const isFavorite = favorites.includes(currentGame.id);
   const isComingSoon = currentGame.status === 'coming_soon';
-  const tags = HIGHLIGHT_TAGS[currentGame.slug] || ['Cyber Arcade', 'Web Audio Engine', 'Instant Play'];
+  const tags = HIGHLIGHT_TAGS[currentGame.slug] || ['Retro Arcade', 'Web Audio Engine', 'Instant Play'];
 
   const getGameIcon = (slug: string) => {
     if (slug === 'cyber-drift') return <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-portal-cyan" />;
