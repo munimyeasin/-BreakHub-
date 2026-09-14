@@ -129,16 +129,18 @@ npm run start
 │   │   ├── leaderboard/     # High score ranking queries
 │   │   ├── scores/          # Score validation & submission
 │   │   └── user/            # Player profile & stats
-│   ├── globals.css          # Cyberpunk & Neo-Brutalism theme tokens
+│   ├── globals.css          # Retro Arcade & Neo-Brutalism theme tokens
 │   ├── layout.tsx           # Root layout with FaviconManager & metadata
 │   └── page.tsx             # Main portal homepage & modal coordinator
 ├── components/
-│   ├── games/               # 15+ standalone HTML5 canvas & reactive games
+│   ├── about/               # Team credits, platform capabilities & mission UI
+│   ├── games/               # 16 custom HTML5 Canvas & reactive games
 │   ├── ui/                  # UI components (Header, Spotlight, RatingModal, FaviconManager)
 │   └── leaderboard/         # Leaderboard modal, Podium, & rank tables
 ├── lib/
 │   ├── audio.ts             # Web Audio procedural sound synthesizer
 │   ├── db.ts                # Database driver & atomic JSON persistence
+│   ├── gamification.ts      # Leveling curves, XP rewards, and daily quests
 │   ├── gamesData.ts         # Canonical game registry & metadata
 │   └── types.ts             # TypeScript definitions & API contracts
 ├── public/
@@ -151,8 +153,23 @@ npm run start
 
 ---
 
+## 👥 About the Project & Team
+
+**Stress Buster** was conceptualized, designed, and engineered as an advanced collaborative internship project. The initiative was built to demonstrate full-stack software architecture, responsive 2D canvas physics, procedural Web Audio generation, and high-performance Neo-Brutalism web design.
+
+### 🌟 Project Team & Roles
+
+| Engineer | Primary Role | Key Focus Areas |
+| :--- | :--- | :--- |
+| **Munim Yeasin** | **Full-Stack & System Architect** | Next.js App Router architecture, procedural Web Audio synthesizer, database persistence, multi-format favicon suite & deployment pipeline. |
+| **Tahida** | **UI/UX & Frontend Engineer** | Dark Retro Neo-Brutalism visual design system, mobile fluid grids, modal dialogs, and typography tokens. |
+| **Marzia** | **Game Logic & QA Engineer** | Canvas collision mathematics, scoring algorithms, edge-case debugging, and cross-browser testing. |
+| **Rahul** | **Systems & Gameplay Developer** | Game loop optimization (60–144 FPS), touch/joystick virtual gamepads, particle physics, and leaderboard integration. |
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-Developed with ❤️ by **[Munim Yeasin](https://stress-buster-delta.vercel.app/portfolio.html)**.
+Developed with ❤️ by **[Munim Yeasin](https://stress-buster-delta.vercel.app/portfolio.html)** & the Stress Buster Engineering Team.

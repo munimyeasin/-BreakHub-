@@ -44,7 +44,7 @@ const teamMembers: TeamMember[] = [
 const projectHighlights = [
   {
     icon: Gamepad2,
-    title: '12 Custom Mini-Games',
+    title: '16 Custom Mini-Games',
     desc: 'From fast-paced space shooters, katana slicing, and rhythm games to territorial io conquests and deep strategic puzzles, all running smoothly on HTML5 Canvas.',
     color: 'text-black',
     badgeBg: 'bg-portal-cyan text-black',
@@ -73,7 +73,7 @@ const projectHighlights = [
 ];
 
 const techStack = [
-  { name: 'Next.js 15', category: 'Framework' },
+  { name: 'Next.js 16', category: 'Framework' },
   { name: 'React 18', category: 'Frontend Library' },
   { name: 'TypeScript', category: 'Type Safety' },
   { name: 'Tailwind CSS', category: 'Styling & Design' },
@@ -110,7 +110,7 @@ export default function AboutSection({
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-bold leading-relaxed">
-            Welcome to <strong className="text-white font-black">Stress Buster</strong>, an interactive web gaming platform collaboratively designed and developed as an internship project. The hub features 12 custom HTML5 Canvas games, high-contrast Neo-Brutalist aesthetics, responsive physics, and live competitive leaderboards.
+            Welcome to <strong className="text-white font-black">Stress Buster</strong>, an interactive web gaming platform collaboratively designed and developed as an internship project. The hub features 16 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, and live competitive leaderboards.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
