@@ -35,6 +35,7 @@ import CyberDriftGame from '@/components/games/CyberDriftGame';
 import CyberMazeGame from '@/components/games/CyberMazeGame';
 import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
 import BlackHoleGame from '@/components/games/BlackHoleGame';
+import BattleshipGame from '@/components/games/BattleshipGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -58,6 +59,19 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // 0. Retro Battleship
+  g_battleship_18: {
+    genreTag: 'STRATEGY // NAVAL GRID COMBAT',
+    objective: 'Deploy 5 heavy warships on 10x10 ocean coordinates. Locate and sink the enemy fleet with precision artillery and recon sonar scans.',
+    scoring: 'Calculated from hit accuracy %, salvo efficiency (<100 shots), fleet survival, and AI difficulty multipliers (up to 2.4x on Admiral).',
+    proTip: 'Rotate ship orientation with [R]. Use 3x3 Sonar Recon scans on high-density probability zones to confirm enemy presence without wasting shots.',
+    controls: [
+      { keys: ['Left Click', 'Touch'], label: 'FIRE SALVO / PLACE', desc: 'Target radar cell or place fleet ship' },
+      { keys: ['R'], label: 'ROTATE VESSEL', desc: 'Toggle Horizontal ↔ Vertical placement' },
+      { keys: ['S'], label: 'SONAR RECON', desc: 'Activate 3x3 radar recon ping' },
+      { keys: ['M'], label: 'MODE SWITCH', desc: 'Toggle AI vs 2P Pass & Play' }
+    ]
+  },
   // 1. Retro Black Hole
   g_blackhole_17: {
     genreTag: 'STRATEGY // SINGULARITY DUEL',
@@ -672,6 +686,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full flex flex-col items-center justify-center">
+              {(game.id === 'g_battleship_18' || game.slug === 'retro-battleship' || game.slug === 'battleship') && (
+                <BattleshipGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_blackhole_17' || game.slug === 'black-hole') && (
                 <BlackHoleGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

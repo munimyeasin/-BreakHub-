@@ -69,13 +69,26 @@
   ],
   "games": [
     {
+      "id": "g_battleship_18",
+      "slug": "retro-battleship",
+      "title": "Retro Battleship",
+      "category": "STRATEGY",
+      "thumbnail_url": "/thumbnails/retro-battleship.svg",
+      "description": "Classic 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
+      "play_count": 0,
+      "rating": 5,
+      "rating_count": 56,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_blackhole_17",
       "slug": "black-hole",
       "title": "Retro Black Hole",
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/black-hole.svg",
       "description": "David Gale’s Retro Black Hole tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
-      "play_count": 3,
+      "play_count": 5,
       "rating": 5,
       "rating_count": 48,
       "status": "active",
@@ -88,7 +101,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-minesweeper.svg",
       "description": "Procedural Neo-Brutalist Retro Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
-      "play_count": 13,
+      "play_count": 20,
       "rating": 5,
       "rating_count": 38,
       "status": "active",
@@ -114,7 +127,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/cyber-drift.svg",
       "description": "High-speed 2D infinite retro drift racer! Execute counter-steered slides, clip apex beacons, trigger nitro boost, and chain 10X drift combos.",
-      "play_count": 5,
+      "play_count": 6,
       "rating": 4.9,
       "rating_count": 24,
       "status": "active",
@@ -153,7 +166,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/quantum-xo.svg",
       "description": "Futuristic 3x3 tactical showdown against Overthinker Final Boss.",
-      "play_count": 0,
+      "play_count": 1,
       "rating": 4.8,
       "rating_count": 16,
       "status": "active"
@@ -165,7 +178,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/quantum-2048.svg",
       "description": "Retro-arcade sliding block merger. Combine identical energy nodes to forge the 2048 core.",
-      "play_count": 1,
+      "play_count": 3,
       "rating": 4.9,
       "rating_count": 15,
       "status": "active"
@@ -7837,6 +7850,48 @@
       "user_id": "usr_ctvl8ln",
       "score": 11160,
       "created_at": "2026-09-15T07:50:37.151Z"
+    },
+    {
+      "id": "sc_5q9m1o0pg",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1665,
+      "created_at": "2026-09-15T07:52:57.016Z"
+    },
+    {
+      "id": "sc_pcwq0iou1",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 2115,
+      "created_at": "2026-09-15T07:53:42.942Z"
+    },
+    {
+      "id": "sc_k352ulqe9",
+      "game_id": "g_blackhole_17",
+      "user_id": "usr_ctvl8ln",
+      "score": 4940,
+      "created_at": "2026-09-15T08:23:42.041Z"
+    },
+    {
+      "id": "sc_ukejgwo16",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1620,
+      "created_at": "2026-09-15T08:28:06.327Z"
+    },
+    {
+      "id": "sc_bwte0k7ts",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1980,
+      "created_at": "2026-09-15T08:28:23.911Z"
+    },
+    {
+      "id": "sc_5slhfv32q",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_ctvl8ln",
+      "score": 1665,
+      "created_at": "2026-09-15T08:28:38.397Z"
     }
   ],
   "ratings": []
