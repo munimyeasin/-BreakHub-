@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_blackhole_17',
+    slug: 'black-hole',
+    title: 'Retro Black Hole',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/black-hole.svg',
+    description: 'David Gale’s Retro Black Hole tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 48,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_sweeper_16',
     slug: 'cyber-minesweeper',
     title: 'Retro Minesweeper',

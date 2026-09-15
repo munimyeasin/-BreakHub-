@@ -17,6 +17,7 @@ import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
 import CyberDriftGame from '@/components/games/CyberDriftGame';
 import CyberMazeGame from '@/components/games/CyberMazeGame';
 import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
+import BlackHoleGame from '@/components/games/BlackHoleGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -341,6 +342,10 @@ export default function GameModal({
 
           {(game.id === 'g_sweeper_16' || game.slug === 'cyber-minesweeper') && (
             <CyberMinesweeperGame gameId={game.id} onGameOver={handleScoreSubmit} />
+          )}
+
+          {(game.id === 'g_blackhole_17' || game.slug === 'black-hole') && (
+            <BlackHoleGame gameId={game.id} onGameOver={handleScoreSubmit} />
           )}
         </div>
       </div>

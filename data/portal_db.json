@@ -69,6 +69,19 @@
   ],
   "games": [
     {
+      "id": "g_blackhole_17",
+      "slug": "black-hole",
+      "title": "Retro Black Hole",
+      "category": "STRATEGY",
+      "thumbnail_url": "/thumbnails/black-hole.svg",
+      "description": "David Gale’s Retro Black Hole tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
+      "play_count": 2,
+      "rating": 5,
+      "rating_count": 48,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_sweeper_16",
       "slug": "cyber-minesweeper",
       "title": "Retro Minesweeper",
@@ -7803,6 +7816,13 @@
       "user_id": "usr_ctvl8ln",
       "score": 315,
       "created_at": "2026-09-14T11:24:40.508Z"
+    },
+    {
+      "id": "sc_2py3wd9k7",
+      "game_id": "g_blackhole_17",
+      "user_id": "usr_ctvl8ln",
+      "score": 5660,
+      "created_at": "2026-09-15T07:25:48.463Z"
     }
   ],
   "ratings": []

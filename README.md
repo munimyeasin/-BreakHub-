@@ -14,6 +14,7 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 | Game | Category | Engine / Mechanics | Status |
 | :--- | :---: | :--- | :---: |
+| **Retro Black Hole** | `STRATEGY` | David Gale’s 21-node triangular singularity board, 2-Leg match & AI engine (Cadet, Quantum, Master) | 🟢 Active |
 | **Retro Minesweeper** | `PUZZLE` | Procedural quantum minefield, guaranteed safe first click, chord clearing, dynamic difficulty sectors | 🟢 Active |
 | **Retro Maze Escape** | `PUZZLE` | 10-level labyrinth infiltration, 60s countdown, laser security gates, keycards & teleporters | 🟢 Active |
 | **Retro Drift 2077** | `ARCADE` | High-speed 2D infinite drift racer, counter-steered physics, apex beacons, nitro boost & 10x combos | 🟢 Active |
