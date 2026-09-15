@@ -1333,6 +1333,16 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   const p1TotalShots = Object.keys(p1Shots).length;
   const p1Accuracy = p1TotalShots > 0 ? Math.round((p1TotalHits / p1TotalShots) * 100) : 0;
 
+  // Viewport Perspective Mapping (In AI mode, viewer is ALWAYS Player 1)
+  const viewerPlayer: 'P1' | 'P2' = mode === 'ai' ? 'P1' : turn;
+  const friendlyShips = viewerPlayer === 'P1' ? p1Ships : p2Ships;
+  const incomingHostileShots = viewerPlayer === 'P1' ? p2Shots : p1Shots;
+  const enemyTargetShips = viewerPlayer === 'P1' ? p2Ships : p1Ships;
+  const activePlayerShots = viewerPlayer === 'P1' ? p1Shots : p2Shots;
+  const viewerSonarAvailable = viewerPlayer === 'P1' ? p1SonarAvailable : p2SonarAvailable;
+  const friendlyAliveCount = viewerPlayer === 'P1' ? p1AliveCount : p2AliveCount;
+  const enemyAliveCount = viewerPlayer === 'P1' ? p2AliveCount : p1AliveCount;
+
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans">
       {/* Neo-Brutalist HUD Header Bar */}
@@ -1431,18 +1441,18 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           {phase === 'battle' && (
             <button
               onClick={handleActivateSonar}
-              disabled={!(turn === 'P1' ? p1SonarAvailable : p2SonarAvailable) || isAiThinking}
+              disabled={!viewerSonarAvailable || isAiThinking}
               className={`px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black uppercase transition-all flex items-center gap-1.5 shadow-neo-sm ${
                 isSonarActive
                   ? 'bg-portal-yellow text-black animate-pulse shadow-neo-md'
-                  : (turn === 'P1' ? p1SonarAvailable : p2SonarAvailable)
+                  : viewerSonarAvailable
                   ? 'bg-portal-cyan/20 hover:bg-portal-cyan text-portal-cyan hover:text-black border-portal-cyan'
                   : 'bg-slate-800 text-slate-500 border-slate-700 opacity-50 cursor-not-allowed'
               }`}
               title="Activate 3x3 Tactical Sonar Recon Radar Scan"
             >
               <Radar className={`w-3.5 h-3.5 ${isSonarActive ? 'animate-spin' : ''}`} />
-              SONAR RECON [{(turn === 'P1' ? p1SonarAvailable : p2SonarAvailable) ? 'ONLINE' : 'EXPENDED'}]
+              SONAR RECON [{viewerSonarAvailable ? 'ONLINE' : 'EXPENDED'}]
             </button>
           )}
 
@@ -1739,10 +1749,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             {/* Fleet Status Counts */}
             <div className="hidden sm:flex items-center gap-3 text-xs font-black uppercase">
               <span className="text-portal-cyan flex items-center gap-1">
-                <Shield className="w-3.5 h-3.5" /> FRIENDLY: {p1AliveCount}/5 ACTIVE
+                <Shield className="w-3.5 h-3.5" /> FRIENDLY: {friendlyAliveCount}/5 ACTIVE
               </span>
               <span className="text-portal-pink flex items-center gap-1">
-                <Crosshair className="w-3.5 h-3.5" /> HOSTILE: {p2AliveCount}/5 ACTIVE
+                <Crosshair className="w-3.5 h-3.5" /> HOSTILE: {enemyAliveCount}/5 ACTIVE
               </span>
             </div>
           </div>
@@ -1761,7 +1771,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   HOSTILE TARGETING RADAR
                 </span>
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
-                  {p2AliveCount} VESSELS DETECTED
+                  {enemyAliveCount} VESSELS DETECTED
                 </span>
               </div>
 
@@ -1788,8 +1798,8 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       {/* 10 Target Cells */}
                       {COL_LABELS.map((_, c) => {
                         const shotKey = `${r},${c}`;
-                        const shotStatus = (turn === 'P1' ? p1Shots : p2Shots)[shotKey];
-                        const isSunkShipCell = (turn === 'P1' ? p2Ships : p1Ships)
+                        const shotStatus = activePlayerShots[shotKey];
+                        const isSunkShipCell = enemyTargetShips
                           .filter(s => s.sunk)
                           .some(s => s.positions.some(p => p.r === r && p.c === c));
 
@@ -1803,7 +1813,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                           <button
                             key={c}
                             onClick={() => handleFireSalvo(r, c)}
-                            disabled={Boolean(shotStatus) || isAiThinking}
+                            disabled={Boolean(shotStatus) || isAiThinking || (mode === 'ai' && turn !== 'P1')}
                             className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
                               isSunkShipCell
                                 ? 'bg-portal-pink/30 text-white border-portal-pink shadow-neo-sm'
@@ -1833,7 +1843,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
               {/* Enemy Fleet Manifest Status Drawer */}
               <div className="w-full mt-3 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                {(turn === 'P1' ? p2Ships : p1Ships).map(ship => (
+                {enemyTargetShips.map(ship => (
                   <div
                     key={ship.id}
                     className={`px-2 py-1 rounded-lg border text-[10px] font-black uppercase flex items-center gap-1.5 ${
@@ -1864,7 +1874,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   FRIENDLY OCEAN FLEET
                 </span>
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
-                  {p1AliveCount} VESSELS OPERATIONAL
+                  {friendlyAliveCount} VESSELS OPERATIONAL
                 </span>
               </div>
 
@@ -1890,12 +1900,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
                       {/* 10 Ocean Cells */}
                       {COL_LABELS.map((_, c) => {
-                        const currentShips = turn === 'P1' ? p1Ships : p2Ships;
-                        const enemyShots = turn === 'P1' ? p2Shots : p1Shots;
                         const shotKey = `${r},${c}`;
-                        const shotStatus = enemyShots[shotKey];
+                        const shotStatus = incomingHostileShots[shotKey];
 
-                        const occupyingShip = currentShips.find(s =>
+                        const occupyingShip = friendlyShips.find(s =>
                           s.positions.some(p => p.r === r && p.c === c)
                         );
 
@@ -1941,7 +1949,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
               {/* Friendly Fleet Manifest Status Drawer */}
               <div className="w-full mt-3 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                {(turn === 'P1' ? p1Ships : p2Ships).map(ship => (
+                {friendlyShips.map(ship => (
                   <div
                     key={ship.id}
                     className={`px-2 py-1 rounded-lg border text-[10px] font-black uppercase flex items-center gap-1.5 ${
