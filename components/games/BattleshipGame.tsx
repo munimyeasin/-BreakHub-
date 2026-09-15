@@ -3,27 +3,28 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   RotateCcw,
-  Sparkles,
   Volume2,
   VolumeX,
-  Trophy,
   Users,
   Bot,
   Zap,
   Shield,
-  Flame,
   Crosshair,
   Radar,
-  Radio,
   RefreshCw,
-  Compass,
   AlertTriangle,
   Award,
-  Eye,
   CheckCircle2,
-  Anchor,
   HelpCircle,
-  Play
+  Play,
+  Flame,
+  Target,
+  Navigation,
+  Compass,
+  Radio,
+  Eye,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -43,6 +44,7 @@ export interface ShipDefinition {
   size: number;
   color: string;
   accent: string;
+  role: string;
 }
 
 export interface PlacedShip extends ShipDefinition {
@@ -54,19 +56,417 @@ export interface PlacedShip extends ShipDefinition {
   sunk: boolean;
 }
 
-export type CellState = 'empty' | 'ship' | 'hit' | 'miss' | 'scanned';
-
 const GRID_SIZE = 10;
 const ROW_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 const COL_LABELS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 const FLEET_MANIFEST: ShipDefinition[] = [
-  { id: 'carrier', name: 'Quantum Carrier', code: 'CV-99', size: 5, color: '#FFE600', accent: 'bg-yellow-400 text-black' },
-  { id: 'battleship', name: 'Neo Dreadnought', code: 'BB-77', size: 4, color: '#00F0FF', accent: 'bg-cyan-400 text-black' },
-  { id: 'cruiser', name: 'Laser Cruiser', code: 'CG-42', size: 3, color: '#FF4081', accent: 'bg-pink-500 text-white' },
-  { id: 'submarine', name: 'Stealth Sub', code: 'SS-18', size: 3, color: '#A3E635', accent: 'bg-lime-400 text-black' },
-  { id: 'destroyer', name: 'Plasma Destroyer', code: 'DD-09', size: 2, color: '#C084FC', accent: 'bg-purple-400 text-black' }
+  { id: 'carrier', name: 'Quantum Carrier', code: 'CV-99', size: 5, color: '#FFE600', accent: 'bg-yellow-400 text-black', role: 'Fleet Flagship / Air Wing Command' },
+  { id: 'battleship', name: 'Neo Dreadnought', code: 'BB-77', size: 4, color: '#00F0FF', accent: 'bg-cyan-400 text-black', role: 'Heavy Armored Artillery Ship' },
+  { id: 'cruiser', name: 'Laser Cruiser', code: 'CG-42', size: 3, color: '#FF4081', accent: 'bg-pink-500 text-white', role: 'Guided Missile Escort Vessel' },
+  { id: 'submarine', name: 'Stealth Sub', code: 'SS-18', size: 3, color: '#A3E635', accent: 'bg-lime-400 text-black', role: 'Deep-Sea Hunter-Killer' },
+  { id: 'destroyer', name: 'Plasma Destroyer', code: 'DD-09', size: 2, color: '#C084FC', accent: 'bg-purple-400 text-black', role: 'Fast Coastal Assault Destroyer' }
 ];
+
+// =========================================================================
+// MILITARY VECTOR GRAPHICS & TACTICAL SILHOUETTES
+// =========================================================================
+
+/**
+ * Military Rank Insignia Component (Ensign, Commander, Admiral)
+ */
+function MilitaryRankBadge({ rank }: { rank: AiDifficulty }) {
+  if (rank === 'cadet') {
+    // O-1 Ensign: Gold Chevron
+    return (
+      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M4 14L12 7L20 14" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="stroke-portal-lime" />
+        <circle cx="12" cy="18" r="2" fill="#A3E635" />
+      </svg>
+    );
+  }
+  if (rank === 'commander') {
+    // O-5 Commander: Triple Chevron
+    return (
+      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M4 10L12 4L20 10" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="stroke-portal-yellow" />
+        <path d="M4 15L12 9L20 15" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="stroke-portal-yellow" />
+        <path d="M4 20L12 14L20 20" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="stroke-portal-yellow" />
+      </svg>
+    );
+  }
+  // Admiral: 4-Star Command Starburst
+  return (
+    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L14.5 8.5L21.5 9.5L16.5 14.5L18 21.5L12 18L6 21.5L7.5 14.5L2.5 9.5L9.5 8.5L12 2Z" fill="#FF4081" stroke="#000" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="2.5" fill="#FFE600" />
+    </svg>
+  );
+}
+
+/**
+ * Top-down Military Warship Hull Segment for Grid Cells
+ * Renders authentic naval ship sections: Bow (Prow), Mid Deck (Turrets/Island), Stern (Propulsion)
+ */
+function ShipHullSegment({
+  shipId,
+  segmentIndex,
+  totalSize,
+  orientation,
+  isDamaged,
+  isSunk,
+  color
+}: {
+  shipId: string;
+  segmentIndex: number;
+  totalSize: number;
+  orientation: Orientation;
+  isDamaged: boolean;
+  isSunk: boolean;
+  color: string;
+}) {
+  const isBow = segmentIndex === 0;
+  const isStern = segmentIndex === totalSize - 1;
+  const isMid = !isBow && !isStern;
+
+  // Rotation transform for vertical vs horizontal
+  const rotationDeg = orientation === 'V' ? 90 : 0;
+
+  return (
+    <div className="w-full h-full relative overflow-hidden flex items-center justify-center">
+      <svg
+        viewBox="0 0 40 40"
+        className="w-full h-full"
+        style={{ transform: `rotate(${rotationDeg}deg)` }}
+      >
+        <defs>
+          <linearGradient id={`hullGrad_${shipId}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color={isSunk ? '#331019' : isDamaged ? '#451a1a' : '#1e293b'} />
+            <stop offset="50%" stop-color={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0f172a'} />
+            <stop offset="100%" stop-color={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#020617'} />
+          </linearGradient>
+        </defs>
+
+        {/* 1. HULL PLATING BASE */}
+        {isBow && (
+          // Pointed / Streamlined Naval Bow
+          <path
+            d="M 4 20 Q 14 6 38 6 L 38 34 Q 14 34 4 20 Z"
+            fill={`url(#hullGrad_${shipId})`}
+            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
+            strokeWidth="2"
+          />
+        )}
+
+        {isMid && (
+          // Armored Midsection
+          <rect
+            x="0"
+            y="6"
+            width="40"
+            height="28"
+            fill={`url(#hullGrad_${shipId})`}
+            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
+            strokeWidth="2"
+          />
+        )}
+
+        {isStern && (
+          // Tapered Naval Stern with Rudder Fins
+          <path
+            d="M 2 6 L 28 6 Q 36 6 36 20 Q 36 34 28 34 L 2 34 Z"
+            fill={`url(#hullGrad_${shipId})`}
+            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
+            strokeWidth="2"
+          />
+        )}
+
+        {/* 2. SPECIFIC SHIP CLASS HARDWARE & TURRETS */}
+        {shipId === 'carrier' && (
+          // Flight Deck Runway & Arresting Wires
+          <g>
+            <line x1="2" y1="20" x2="38" y2="20" stroke={color} strokeWidth="2" strokeDasharray="4,4" opacity="0.9" />
+            {isMid && segmentIndex === 2 && (
+              // Island Superstructure Tower
+              <rect x="14" y="8" width="12" height="6" rx="1" fill={color} stroke="#000" strokeWidth="1" />
+            )}
+            {isStern && (
+              // Arresting cable bars
+              <g stroke="#ffffff" strokeWidth="1.5" opacity="0.7">
+                <line x1="10" y1="10" x2="10" y2="30" />
+                <line x1="18" y1="10" x2="18" y2="30" />
+              </g>
+            )}
+          </g>
+        )}
+
+        {shipId === 'battleship' && (
+          // Heavy Naval Gun Turrets
+          <g>
+            {isBow && (
+              // Forward Main Artillery Turret
+              <g transform="translate(24, 20)">
+                <circle cx="0" cy="0" r="6" fill={color} stroke="#000" strokeWidth="1.5" />
+                <line x1="0" y1="-2" x2="-14" y2="-2" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="0" y1="2" x2="-14" y2="2" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+              </g>
+            )}
+            {isMid && segmentIndex === 1 && (
+              // Bridge Tower & Fire Radar
+              <g transform="translate(20, 20)">
+                <rect x="-8" y="-7" width="16" height="14" rx="2" fill="#334155" stroke={color} strokeWidth="1.5" />
+                <circle cx="0" cy="0" r="3" fill={color} />
+              </g>
+            )}
+            {isMid && segmentIndex === 2 && (
+              // Secondary Dual Turret
+              <g transform="translate(18, 20)">
+                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
+                <line x1="0" y1="-1.5" x2="12" y2="-1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+                <line x1="0" y1="1.5" x2="12" y2="1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+              </g>
+            )}
+            {isStern && (
+              // Aft Dual Turret
+              <g transform="translate(14, 20)">
+                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
+                <line x1="0" y1="-1.5" x2="12" y2="-1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+                <line x1="0" y1="1.5" x2="12" y2="1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+              </g>
+            )}
+          </g>
+        )}
+
+        {shipId === 'cruiser' && (
+          // Guided Missile Silos & Phased Array
+          <g>
+            {isBow && (
+              // VLS Vertical Launch System Grid
+              <g transform="translate(18, 12)">
+                <rect x="0" y="0" width="12" height="16" fill="#0f172a" stroke={color} strokeWidth="1" />
+                <line x1="4" y1="0" x2="4" y2="16" stroke={color} strokeWidth="1" />
+                <line x1="8" y1="0" x2="8" y2="16" stroke={color} strokeWidth="1" />
+                <line x1="0" y1="8" x2="12" y2="8" stroke={color} strokeWidth="1" />
+              </g>
+            )}
+            {isMid && (
+              // Phased Array Pyramid Mast
+              <polygon points="12,20 28,12 28,28" fill={color} stroke="#000" strokeWidth="1.5" />
+            )}
+            {isStern && (
+              // Helipad Landing Circle
+              <g transform="translate(18, 20)">
+                <circle cx="0" cy="0" r="6" fill="none" stroke={color} strokeWidth="1.5" />
+                <text x="0" y="3.5" fill={color} fontSize="9" fontWeight="900" textAnchor="middle">H</text>
+              </g>
+            )}
+          </g>
+        )}
+
+        {shipId === 'submarine' && (
+          // Hydrodynamic Sonar Dome & Sail
+          <g>
+            {isBow && (
+              // Active Sonar Dome & Forward Torpedo Tubes
+              <g transform="translate(14, 20)">
+                <circle cx="0" cy="0" r="7" fill={color} stroke="#000" strokeWidth="1.5" />
+                <circle cx="-1" cy="-3" r="1.5" fill="#000" />
+                <circle cx="-1" cy="3" r="1.5" fill="#000" />
+              </g>
+            )}
+            {isMid && (
+              // Conning Tower Sail & Periscope
+              <g transform="translate(12, 14)">
+                <rect x="0" y="0" width="16" height="12" rx="3" fill={color} stroke="#000" strokeWidth="1.5" />
+                <line x1="6" y1="6" x2="12" y2="6" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+              </g>
+            )}
+            {isStern && (
+              // X-Plane Rudder Stabilizers
+              <g stroke={color} strokeWidth="2.5" strokeLinecap="round">
+                <line x1="16" y1="10" x2="30" y2="30" />
+                <line x1="16" y1="30" x2="30" y2="10" />
+              </g>
+            )}
+          </g>
+        )}
+
+        {shipId === 'destroyer' && (
+          // Fast Attack Prow Gun & Depth Launchers
+          <g>
+            {isBow && (
+              <g transform="translate(22, 20)">
+                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
+                <line x1="0" y1="0" x2="-14" y2="0" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+              </g>
+            )}
+            {isStern && (
+              // Dual Torpedo Launcher Tubes
+              <g transform="translate(14, 13)">
+                <rect x="0" y="0" width="12" height="5" rx="1" fill={color} stroke="#000" strokeWidth="1" />
+                <rect x="0" y="9" width="12" height="5" rx="1" fill={color} stroke="#000" strokeWidth="1" />
+              </g>
+            )}
+          </g>
+        )}
+
+        {/* 3. BALLISTIC IMPACT DAMAGE OVERLAY */}
+        {isDamaged && (
+          <g>
+            {/* Shrapnel puncture & thermal breach */}
+            <circle cx="20" cy="20" r="10" fill="#ff4081" fillOpacity="0.4" />
+            <circle cx="20" cy="20" r="6" fill="#ffe600" stroke="#ff4081" strokeWidth="2" />
+            <path d="M12 12 L28 28 M12 28 L28 12" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
+          </g>
+        )}
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * Tactical Ballistic Impact Blast Vector (Hit on Enemy Radar)
+ */
+function BallisticImpactBlast({ isSunk }: { isSunk: boolean }) {
+  return (
+    <svg viewBox="0 0 36 36" className="w-full h-full p-1 animate-scaleIn">
+      <defs>
+        <radialGradient id="blastCore" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="30%" stopColor="#ffe600" />
+          <stop offset="70%" stopColor="#ff4081" />
+          <stop offset="100%" stopColor="#7a0026" />
+        </radialGradient>
+      </defs>
+
+      {/* Outer blast shockwave */}
+      <circle cx="18" cy="18" r="15" fill="none" stroke="#ff4081" strokeWidth="2" strokeDasharray="4,2" opacity="0.8" />
+
+      {/* Thermal Core */}
+      <circle cx="18" cy="18" r={isSunk ? 10 : 8} fill="url(#blastCore)" />
+
+      {/* Crossed Ballistic Fracture Lines */}
+      <path
+        d="M 8 8 L 28 28 M 8 28 L 28 8"
+        stroke="#000000"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 8 8 L 28 28 M 8 28 L 28 8"
+        stroke="#ffffff"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+
+      {isSunk && (
+        <circle cx="18" cy="18" r="3" fill="#ffffff" />
+      )}
+    </svg>
+  );
+}
+
+/**
+ * Tactical Hydro-Acoustic Splash Marker (Miss Salvo)
+ */
+function WaterSplashMarker() {
+  return (
+    <svg viewBox="0 0 32 32" className="w-5 h-5 opacity-70">
+      {/* Concentric sonar depth ripples */}
+      <circle cx="16" cy="16" r="11" fill="none" stroke="#00f0ff" strokeWidth="1.5" strokeDasharray="3,3" opacity="0.4" />
+      <circle cx="16" cy="16" r="6" fill="none" stroke="#00f0ff" strokeWidth="2" opacity="0.7" />
+      <circle cx="16" cy="16" r="2.5" fill="#00f0ff" />
+    </svg>
+  );
+}
+
+/**
+ * Blueprint Technical Wireframe Card for Fleet Manifest
+ */
+function ShipBlueprintCard({
+  ship,
+  isPlaced,
+  isSelected,
+  onClick
+}: {
+  ship: ShipDefinition;
+  isPlaced: boolean;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full p-2.5 rounded-xl border-2 transition-all flex items-center justify-between text-left ${
+        isSelected
+          ? 'bg-portal-card border-portal-cyan shadow-neo-sm translate-x-1'
+          : isPlaced
+          ? 'bg-slate-950/70 border-black/80 opacity-90'
+          : 'bg-portal-card/40 border-black hover:border-slate-600'
+      }`}
+    >
+      <div className="min-w-0 flex-1 pr-2">
+        <div className="flex items-center gap-2 mb-1">
+          <span
+            className="w-2.5 h-2.5 rounded-sm shrink-0 border border-black"
+            style={{ backgroundColor: ship.color }}
+          />
+          <span className="font-black text-xs text-white uppercase truncate tracking-wider">
+            {ship.name}
+          </span>
+          <span className="text-[10px] font-mono font-bold text-slate-400 bg-black/60 px-1.5 py-0.5 rounded border border-slate-800">
+            {ship.code}
+          </span>
+        </div>
+
+        {/* 2D Hull Silhouettes Preview */}
+        <div className="flex items-center gap-1 my-1">
+          {Array(ship.size)
+            .fill(null)
+            .map((_, idx) => (
+              <div
+                key={idx}
+                className="w-6 h-5 rounded-sm border border-black overflow-hidden bg-slate-900"
+              >
+                <ShipHullSegment
+                  shipId={ship.id}
+                  segmentIndex={idx}
+                  totalSize={ship.size}
+                  orientation="H"
+                  isDamaged={false}
+                  isSunk={false}
+                  color={isPlaced ? ship.color : '#64748b'}
+                />
+              </div>
+            ))}
+          <span className="text-[10px] text-slate-400 font-mono ml-2 font-bold">
+            {ship.size} NODES
+          </span>
+        </div>
+
+        <p className="text-[10px] text-slate-400 truncate mt-0.5 font-mono">
+          {ship.role}
+        </p>
+      </div>
+
+      <div className="shrink-0">
+        {isPlaced ? (
+          <span className="flex items-center gap-1 text-[10px] font-black text-portal-lime bg-black/50 px-2 py-1 rounded-lg border border-portal-lime/50 shadow-neo-sm">
+            <CheckCircle2 className="w-3 h-3 stroke-[2.5]" /> DEPLOYED
+          </span>
+        ) : (
+          <span className="text-[10px] font-black text-portal-yellow bg-black/50 px-2 py-1 rounded-lg border border-portal-yellow/50 shadow-neo-sm">
+            AWAITING DOCK
+          </span>
+        )}
+      </div>
+    </button>
+  );
+}
+
+// =========================================================================
+// MAIN RETRO BATTLESHIP GAME COMPONENT
+// =========================================================================
 
 export default function BattleshipGame({ gameId, onGameOver }: BattleshipGameProps) {
   // Game Configuration
@@ -90,7 +490,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   const [p1Shots, setP1Shots] = useState<{ [key: string]: 'hit' | 'miss' }>({}); // Shots fired by P1 at P2
   const [p2Shots, setP2Shots] = useState<{ [key: string]: 'hit' | 'miss' }>({}); // Shots fired by P2 at P1
 
-  // Tactical Recon Scanner Ability (1 scan per match or earned)
+  // Tactical Recon Scanner Ability (1 scan per match)
   const [p1SonarAvailable, setP1SonarAvailable] = useState<boolean>(true);
   const [p2SonarAvailable, setP2SonarAvailable] = useState<boolean>(true);
   const [isSonarActive, setIsSonarActive] = useState<boolean>(false);
@@ -99,7 +499,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   // Combat Telemetry & Feedback
   const [turn, setTurn] = useState<'P1' | 'P2'>('P1');
   const [isAiThinking, setIsAiThinking] = useState<boolean>(false);
-  const [lastActionLog, setLastActionLog] = useState<string>('System Calibrated. Place your fleet on the tactical ocean grid.');
+  const [lastActionLog, setLastActionLog] = useState<string>('Tactical Combat System Ready. Assign coordinates to your 5 war vessels.');
   const [streakCount, setStreakCount] = useState<number>(0);
   const [winner, setWinner] = useState<'P1' | 'P2' | null>(null);
   const [matchStartTime, setMatchStartTime] = useState<number>(Date.now());
@@ -150,64 +550,66 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         osc.start(now);
         osc.stop(now + 0.05);
       } else if (type === 'sonar') {
+        // High-pitch tactical submarine ping with reverberation
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(1200, now);
-        osc.frequency.exponentialRampToValueAtTime(800, now + 0.35);
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.frequency.exponentialRampToValueAtTime(850, now + 0.35);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.45);
+        osc.stop(now + 0.5);
       } else if (type === 'launch') {
+        // Ballistic artillery shell launch whoosh
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(680, now + 0.12);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.18);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.15);
+        osc.stop(now + 0.18);
       } else if (type === 'hit') {
-        // Deep explosive blast with noise
+        // Heavy armor-piercing explosion impact
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sawtooth';
+        osc.type = 'square';
         osc.frequency.setValueAtTime(140, now);
-        osc.frequency.exponentialRampToValueAtTime(35, now + 0.25);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.28);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.3);
+        osc.stop(now + 0.28);
       } else if (type === 'miss') {
-        // Water splash plunge
+        // Ocean water splash plunge
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.18);
-        gain.gain.setValueAtTime(0.14, now);
+        osc.frequency.exponentialRampToValueAtTime(120, now + 0.18);
+        gain.gain.setValueAtTime(0.12, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.18);
       } else if (type === 'sunk') {
-        // Double warning klaxon
+        // Naval emergency alert klaxon
         [0, 0.18].forEach(delay => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'square';
           osc.frequency.setValueAtTime(740, now + delay);
           osc.frequency.setValueAtTime(520, now + delay + 0.08);
-          gain.gain.setValueAtTime(0.2, now + delay);
+          gain.gain.setValueAtTime(0.25, now + delay);
           gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.14);
           osc.connect(gain);
           gain.connect(ctx.destination);
@@ -237,7 +639,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           const noteTime = now + idx * 0.14;
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(freq, noteTime);
-          gain.gain.setValueAtTime(0.18, noteTime);
+          gain.gain.setValueAtTime(0.22, noteTime);
           gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.25);
           osc.connect(gain);
           gain.connect(ctx.destination);
@@ -332,7 +734,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         setP2Ships(randomized);
       }
     }
-    setLastActionLog('Fleet auto-deployed with tactical spread pattern.');
+    setLastActionLog('Tactical Auto-Deploy: Naval squadron deployed in optimal spread formation.');
   };
 
   // Clear current placement
@@ -346,178 +748,190 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       }
       setSelectedShipIndex(0);
     }
-    setLastActionLog('Placement cleared. Reassign naval grid positions.');
+    setLastActionLog('Dock Clear: Reassign oceanic coordinates to your fleet.');
   };
 
-  // Rotate placement orientation
+  // Rotate Ship orientation
   const handleRotate = () => {
     playSound('rotate');
     setPlacementOrientation(prev => (prev === 'H' ? 'V' : 'H'));
   };
 
-  // Place ship at coordinate
-  const handleCellPlacementClick = (r: number, c: number) => {
-    const currentShips = (mode === 'ai' || pvpSetupPlayer === 'P1') ? p1Ships : p2Ships;
-    const currentShipDef = FLEET_MANIFEST[selectedShipIndex];
-    if (!currentShipDef) return;
-
-    // If ship already placed, we can relocate it
-    const filteredShips = currentShips.filter(s => s.id !== currentShipDef.id);
-
-    if (isValidPlacement(r, c, currentShipDef.size, placementOrientation, filteredShips)) {
-      playSound('click');
-      const positions: { r: number; c: number }[] = [];
-      for (let i = 0; i < currentShipDef.size; i++) {
-        positions.push({
-          r: placementOrientation === 'H' ? r : r + i,
-          c: placementOrientation === 'H' ? c + i : c
-        });
-      }
-
-      const newPlacedShip: PlacedShip = {
-        ...currentShipDef,
-        row: r,
-        col: c,
-        orientation: placementOrientation,
-        positions,
-        hits: 0,
-        sunk: false
-      };
-
-      const updatedFleet = [...filteredShips, newPlacedShip];
-      if (mode === 'ai' || pvpSetupPlayer === 'P1') {
-        setP1Ships(updatedFleet);
-      } else {
-        setP2Ships(updatedFleet);
-      }
-
-      // Automatically select next unplaced ship
-      const nextUnplacedIndex = FLEET_MANIFEST.findIndex(
-        def => !updatedFleet.some(s => s.id === def.id)
-      );
-      if (nextUnplacedIndex !== -1) {
-        setSelectedShipIndex(nextUnplacedIndex);
-      }
-      setLastActionLog(`${currentShipDef.name} deployed at ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
-    } else {
-      playSound('miss');
-      setLastActionLog(`Invalid placement sector! Check boundary limits & fleet clearance.`);
-    }
-  };
-
-  // Keyboard shortcut listener for PC Controls (Rotate [R], Sonar [S], Mode [M], Auto-Deploy [A])
+  // Keyboard shortcut listener for tactical hotkeys [R], [S], [A], [M]
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is typing in an input
-      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+      // Avoid firing if user is inside an input
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
-      const k = e.key.toLowerCase();
-      if (k === 'r') {
-        if (phase === 'setup') {
-          handleRotate();
-        } else if (phase === 'gameover') {
-          handleStartNewMatch();
-        }
-      } else if (k === 's') {
-        if (phase === 'battle') {
-          handleActivateSonar();
-        }
-      } else if (k === 'm') {
-        if (phase === 'setup') {
-          playSound('click');
-          setMode(prev => (prev === 'ai' ? 'pvp' : 'ai'));
-        }
-      } else if (k === 'a') {
-        if (phase === 'setup') {
-          handleAutoDeploy();
-        }
+      const key = e.key.toLowerCase();
+      if (key === 'r') {
+        e.preventDefault();
+        handleRotate();
+      } else if (key === 'a' && phase === 'setup') {
+        e.preventDefault();
+        handleAutoDeploy();
+      } else if (key === 's' && phase === 'battle') {
+        e.preventDefault();
+        handleActivateSonar();
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [phase, isSonarActive, p1SonarAvailable, p2SonarAvailable, turn, isAiThinking, mode, pvpSetupPlayer, p1Ships, p2Ships]);
+  }, [phase, isSonarActive, p1SonarAvailable, p2SonarAvailable, turn]);
 
-  // Launch Combat Phase after setup
+  // Place or adjust a ship on grid click
+  const handleCellPlacementClick = (r: number, c: number) => {
+    if (phase !== 'setup') return;
+
+    const currentPlacedShips = (mode === 'ai' || pvpSetupPlayer === 'P1') ? p1Ships : p2Ships;
+    const targetShipDef = FLEET_MANIFEST[selectedShipIndex];
+
+    if (!targetShipDef) return;
+
+    // Check if clicked cell already contains a ship (to select/move it)
+    const existingAtCell = currentPlacedShips.find(s => s.positions.some(p => p.r === r && p.c === c));
+    if (existingAtCell && existingAtCell.id !== targetShipDef.id) {
+      const foundIndex = FLEET_MANIFEST.findIndex(m => m.id === existingAtCell.id);
+      if (foundIndex !== -1) {
+        playSound('click');
+        setSelectedShipIndex(foundIndex);
+        setPlacementOrientation(existingAtCell.orientation);
+        return;
+      }
+    }
+
+    // Validate placement
+    const canPlace = isValidPlacement(
+      r,
+      c,
+      targetShipDef.size,
+      placementOrientation,
+      currentPlacedShips,
+      targetShipDef.id
+    );
+
+    if (!canPlace) {
+      playSound('miss');
+      setLastActionLog(`COLLISION WARNING: Cannot place ${targetShipDef.name} at sector ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
+      return;
+    }
+
+    playSound('click');
+
+    const positions: { r: number; c: number }[] = [];
+    for (let i = 0; i < targetShipDef.size; i++) {
+      positions.push({
+        r: placementOrientation === 'H' ? r : r + i,
+        c: placementOrientation === 'H' ? c + i : c
+      });
+    }
+
+    const newPlacedShip: PlacedShip = {
+      ...targetShipDef,
+      row: r,
+      col: c,
+      orientation: placementOrientation,
+      positions,
+      hits: 0,
+      sunk: false
+    };
+
+    const updatedFleet = currentPlacedShips.filter(s => s.id !== targetShipDef.id).concat(newPlacedShip);
+
+    if (mode === 'ai' || pvpSetupPlayer === 'P1') {
+      setP1Ships(updatedFleet);
+    } else {
+      setP2Ships(updatedFleet);
+    }
+
+    setLastActionLog(`${targetShipDef.name} [${targetShipDef.code}] secured at sector ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
+
+    // Advance to next unplaced ship
+    const nextUnplacedIndex = FLEET_MANIFEST.findIndex(m => !updatedFleet.some(s => s.id === m.id));
+    if (nextUnplacedIndex !== -1) {
+      setSelectedShipIndex(nextUnplacedIndex);
+    }
+  };
+
+  // Launch Battle Phase once fleet is ready
   const handleCommenceBattle = () => {
     playSound('launch');
+
     if (mode === 'ai') {
-      // Generate AI Fleet
+      // Auto generate AI fleet
       const aiFleet = generateRandomFleet();
       setP2Ships(aiFleet);
-      setP1Shots({});
-      setP2Shots({});
-      setTurn('P1');
       setPhase('battle');
+      setTurn('P1');
       setMatchStartTime(Date.now());
-      setLastActionLog('All systems online. Firing solutions ready. Select enemy radar sector to fire!');
+      setLastActionLog('HOSTILE CONTACT CONFIRMED: Enemy warfleet in sector. Engage at will.');
     } else {
-      // 2P Pass & Play
+      // 2P Pass & Play mode
       if (pvpSetupPlayer === 'P1') {
         setPvpSetupPlayer('P2');
-        setLastActionLog('Player 1 fleet saved. Pass terminal to Player 2 for secret deployment.');
+        setSelectedShipIndex(0);
+        setLastActionLog('PLAYER 2 BRIEFING: Assign coordinates to Player 2 squadron.');
       } else {
-        setP1Shots({});
-        setP2Shots({});
+        setPhase('battle');
         setTurn('P1');
         setActivePlayer('P1');
-        setPhase('battle');
         setMatchStartTime(Date.now());
-        setLastActionLog('Combat engaged! Player 1, launch initial artillery salvo.');
+        setLastActionLog('PLAYER 1 ENGAGE: Tactical radar online. Fire when ready.');
       }
     }
   };
 
-  // Trigger Sonar Recon
+  // Activate Sonar Recon Ability
   const handleActivateSonar = () => {
     const isP1 = turn === 'P1';
     const isAvailable = isP1 ? p1SonarAvailable : p2SonarAvailable;
-    if (!isAvailable) return;
+
+    if (!isAvailable || isAiThinking || phase !== 'battle') {
+      playSound('miss');
+      return;
+    }
 
     playSound('sonar');
     setIsSonarActive(prev => !prev);
-    setLastActionLog(
-      !isSonarActive
-        ? 'Recon Sonar Activated! Click any 3x3 sector on radar to scan for enemy presence.'
-        : 'Sonar Recon Standby.'
-    );
+    if (!isSonarActive) {
+      setLastActionLog('TACTICAL SONAR ARMED: Select any 3x3 sector coordinate on the hostile radar.');
+    } else {
+      setLastActionLog('Sonar Recon disarmed. Returning to main artillery battery.');
+    }
   };
 
-  // AI Probability Density Heatmap Algorithm (Admiral Boss)
+  // =========================================================================
+  // PROBABILITY DENSITY MATRIX AI TARGETING ENGINE
+  // =========================================================================
   const calculateAiTargetProbability = (
     opponentShips: PlacedShip[],
     opponentShots: { [key: string]: 'hit' | 'miss' }
   ): { r: number; c: number } => {
-    // 1. Calculate remaining alive ship sizes
     const aliveShips = opponentShips.filter(s => !s.sunk);
     const aliveSizes = aliveShips.map(s => s.size);
 
-    // Probability grid
     const probGrid = Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0));
 
-    // For every remaining alive ship length, test every valid horizontal and vertical placement
     for (const size of aliveSizes) {
-      // Test Horizontal
+      // Test Horizontal fits
       for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c <= GRID_SIZE - size; c++) {
           let canFit = true;
           let hitCount = 0;
-
           for (let i = 0; i < size; i++) {
             const shot = opponentShots[`${r},${c + i}`];
             if (shot === 'miss') {
               canFit = false;
               break;
             } else if (shot === 'hit') {
-              // If this cell was hit but is already part of a sunk ship, check if we should avoid
               hitCount++;
             }
           }
-
           if (canFit) {
-            const weight = 1 + hitCount * 15; // Heavily boost cells aligned with known unsunk hits
+            const weight = 1 + hitCount * 15;
             for (let i = 0; i < size; i++) {
-              const key = `${r},${c + i}`;
-              if (!opponentShots[key]) {
+              if (!opponentShots[`${r},${c + i}`]) {
                 probGrid[r][c + i] += weight;
               }
             }
@@ -525,12 +939,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         }
       }
 
-      // Test Vertical
-      for (let r = 0; r <= GRID_SIZE - size; r++) {
-        for (let c = 0; c < GRID_SIZE; c++) {
+      // Test Vertical fits
+      for (let c = 0; c < GRID_SIZE; c++) {
+        for (let r = 0; r <= GRID_SIZE - size; r++) {
           let canFit = true;
           let hitCount = 0;
-
           for (let i = 0; i < size; i++) {
             const shot = opponentShots[`${r + i},${c}`];
             if (shot === 'miss') {
@@ -540,12 +953,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               hitCount++;
             }
           }
-
           if (canFit) {
             const weight = 1 + hitCount * 15;
             for (let i = 0; i < size; i++) {
-              const key = `${r + i},${c}`;
-              if (!opponentShots[key]) {
+              if (!opponentShots[`${r + i},${c}`]) {
                 probGrid[r + i][c] += weight;
               }
             }
@@ -554,25 +965,18 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       }
     }
 
-    // Parity Checkerboard hunting bonus for Commander/Admiral
-    for (let r = 0; r < GRID_SIZE; r++) {
-      for (let c = 0; c < GRID_SIZE; c++) {
-        if (!opponentShots[`${r},${c}`]) {
-          if ((r + c) % 2 === 0) {
-            probGrid[r][c] += 2;
-          }
-        }
-      }
-    }
-
-    // Find highest probability unshot cell
+    // Parity filtering (checkerboard parity based on smallest remaining ship)
+    const minShipSize = aliveSizes.length > 0 ? Math.min(...aliveSizes) : 2;
     let maxVal = -1;
     let candidates: { r: number; c: number }[] = [];
 
     for (let r = 0; r < GRID_SIZE; r++) {
       for (let c = 0; c < GRID_SIZE; c++) {
         if (!opponentShots[`${r},${c}`]) {
-          const val = probGrid[r][c];
+          let val = probGrid[r][c];
+          if ((r + c) % minShipSize === 0) {
+            val += 2;
+          }
           if (val > maxVal) {
             maxVal = val;
             candidates = [{ r, c }];
@@ -587,16 +991,16 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       return candidates[Math.floor(Math.random() * candidates.length)];
     }
 
-    // Fallback: pick any random unshot cell
-    const unshot: { r: number; c: number }[] = [];
+    // Fallback: search any unshot coordinate
     for (let r = 0; r < GRID_SIZE; r++) {
       for (let c = 0; c < GRID_SIZE; c++) {
         if (!opponentShots[`${r},${c}`]) {
-          unshot.push({ r, c });
+          return { r, c };
         }
       }
     }
-    return unshot[Math.floor(Math.random() * unshot.length)];
+
+    return { r: 0, c: 0 };
   };
 
   // AI Turn Execution
@@ -605,77 +1009,75 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     currentP2Shots: { [key: string]: 'hit' | 'miss' }
   ) => {
     setIsAiThinking(true);
-    setLastActionLog('AI Admiral calculating radar telemetry & firing solution...');
 
     setTimeout(() => {
-      let target: { r: number; c: number } | null = null;
+      let r = 0;
+      let c = 0;
 
-      if (difficulty === 'cadet') {
-        // Ensign: simple random targeting with basic neighbor follow-up
-        if (aiHuntQueueRef.current.length > 0) {
-          target = aiHuntQueueRef.current.shift()!;
-          while (target && currentP2Shots[`${target.r},${target.c}`]) {
-            target = aiHuntQueueRef.current.shift() || null;
-          }
-        }
-        if (!target) {
-          const unshot: { r: number; c: number }[] = [];
-          for (let r = 0; r < GRID_SIZE; r++) {
-            for (let c = 0; c < GRID_SIZE; c++) {
-              if (!currentP2Shots[`${r},${c}`]) {
-                unshot.push({ r, c });
-              }
-            }
-          }
-          if (unshot.length > 0) {
-            target = unshot[Math.floor(Math.random() * unshot.length)];
-          }
-        }
+      if (difficulty === 'admiral') {
+        const bestCoord = calculateAiTargetProbability(currentP1Ships, currentP2Shots);
+        r = bestCoord.r;
+        c = bestCoord.c;
       } else if (difficulty === 'commander') {
-        // Commander: Parity hunting & directional hunt
-        if (aiHuntQueueRef.current.length > 0) {
-          target = aiHuntQueueRef.current.shift()!;
-          while (target && currentP2Shots[`${target.r},${target.c}`]) {
-            target = aiHuntQueueRef.current.shift() || null;
+        // Hunt & Target algorithm with queue
+        let targetFound = false;
+        while (aiHuntQueueRef.current.length > 0) {
+          const next = aiHuntQueueRef.current.shift()!;
+          if (!currentP2Shots[`${next.r},${next.c}`]) {
+            r = next.r;
+            c = next.c;
+            targetFound = true;
+            break;
           }
         }
-        if (!target) {
+        if (!targetFound) {
           // Check checkerboard parity
-          const parityUnshot: { r: number; c: number }[] = [];
-          const allUnshot: { r: number; c: number }[] = [];
-          for (let r = 0; r < GRID_SIZE; r++) {
-            for (let c = 0; c < GRID_SIZE; c++) {
-              if (!currentP2Shots[`${r},${c}`]) {
-                allUnshot.push({ r, c });
-                if ((r + c) % 2 === 0) {
-                  parityUnshot.push({ r, c });
-                }
+          const available: { r: number; c: number }[] = [];
+          for (let row = 0; row < GRID_SIZE; row++) {
+            for (let col = 0; col < GRID_SIZE; col++) {
+              if (!currentP2Shots[`${row},${col}`] && (row + col) % 2 === 0) {
+                available.push({ r: row, c: col });
               }
             }
           }
-          const pool = parityUnshot.length > 0 ? parityUnshot : allUnshot;
-          target = pool[Math.floor(Math.random() * pool.length)];
+          if (available.length > 0) {
+            const picked = available[Math.floor(Math.random() * available.length)];
+            r = picked.r;
+            c = picked.c;
+          } else {
+            // Pick any
+            const anyAvailable: { r: number; c: number }[] = [];
+            for (let row = 0; row < GRID_SIZE; row++) {
+              for (let col = 0; col < GRID_SIZE; col++) {
+                if (!currentP2Shots[`${row},${col}`]) anyAvailable.push({ r: row, c: col });
+              }
+            }
+            const picked = anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
+            r = picked.r;
+            c = picked.c;
+          }
         }
       } else {
-        // Admiral: Full Probability Density Map
-        target = calculateAiTargetProbability(currentP1Ships, currentP2Shots);
+        // Ensign: Random targeting
+        const unshot: { r: number; c: number }[] = [];
+        for (let row = 0; row < GRID_SIZE; row++) {
+          for (let col = 0; col < GRID_SIZE; col++) {
+            if (!currentP2Shots[`${row},${col}`]) unshot.push({ r: row, c: col });
+          }
+        }
+        const picked = unshot[Math.floor(Math.random() * unshot.length)];
+        r = picked.r;
+        c = picked.c;
       }
 
-      if (!target) {
-        setIsAiThinking(false);
-        return;
-      }
-
-      const { r, c } = target;
+      // Execute AI Shot
       const key = `${r},${c}`;
-
-      // Check if hit P1 ship
       let isHit = false;
       let hitShip: PlacedShip | null = null;
 
       const updatedP1Ships = currentP1Ships.map(ship => {
-        const hitPos = ship.positions.find(p => p.r === r && p.c === c);
-        if (hitPos) {
+        const match = ship.positions.find(p => p.r === r && p.c === c);
+        if (match) {
           isHit = true;
           const newHits = ship.hits + 1;
           const sunk = newHits >= ship.size;
@@ -700,12 +1102,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
         if (hitShip && (hitShip as PlacedShip).sunk) {
           playSound('sunk');
-          setLastActionLog(`CRITICAL DAMAGE! AI Admiral sunk your ${(hitShip as PlacedShip).name}!`);
-          // Clear hunt queue since ship sunk
+          setLastActionLog(`CRITICAL DAMAGE: Hostile artillery sunk your ${(hitShip as PlacedShip).name}!`);
           aiHuntQueueRef.current = [];
         } else {
-          setLastActionLog(`WARNING! Enemy artillery struck your fleet at sector ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
-          // Add adjacent 4 neighbors to hunt queue
+          setLastActionLog(`WARNING: Hostile artillery struck your fleet at sector ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
           const neighbors = [
             { r: r - 1, c },
             { r: r + 1, c },
@@ -717,7 +1117,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           aiHuntQueueRef.current.push(...neighbors);
         }
 
-        // Check if all P1 ships are sunk (Defeat)
+        // Check Defeat
         const allSunk = updatedP1Ships.every(s => s.sunk);
         if (allSunk) {
           handleGameOver('P2');
@@ -725,7 +1125,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         }
       } else {
         playSound('miss');
-        setLastActionLog(`Enemy salvo splashed harmlessly into ocean sector ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
+        setLastActionLog(`Hostile salvo splashed into ocean waters at sector ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
       }
 
       setTurn('P1');
@@ -792,14 +1192,14 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
       if (sunkShipName) {
         playSound('sunk');
-        setLastActionLog(`DIRECT HIT & DESTROYED! Enemy ${sunkShipName} has been sunk!`);
+        setLastActionLog(`DIRECT HIT & DESTROYED: Hostile ${sunkShipName} has been sunk!`);
         confetti({
-          particleCount: 30,
-          spread: 45,
+          particleCount: 35,
+          spread: 50,
           origin: { y: 0.6 }
         });
       } else {
-        setLastActionLog(`DIRECT HIT! Heavy damage inflicted on enemy vessel at ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
+        setLastActionLog(`DIRECT HIT: Heavy armor damage inflicted on enemy hull at ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
       }
 
       // Check Victory Condition
@@ -811,7 +1211,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     } else {
       playSound('miss');
       setStreakCount(0);
-      setLastActionLog(`Salvo splashed into open waters at sector ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
+      setLastActionLog(`Salvo plunged into open ocean coordinates ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
     }
 
     // Turn Hand-off
@@ -823,7 +1223,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       const nextTurn = isP1 ? 'P2' : 'P1';
       setTurn(nextTurn);
       setActivePlayer(nextTurn);
-      setLastActionLog(`Salvo complete. Pass terminal to Player ${nextTurn === 'P1' ? '1' : '2'}.`);
+      setLastActionLog(`Salvo complete. Hand control terminal to Player ${nextTurn === 'P1' ? '1' : '2'}.`);
     }
   };
 
@@ -860,7 +1260,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     setScannedSector({ r: centerR, c: centerC, found: shipFound });
 
     if (shipFound) {
-      setLastActionLog(`SONAR CONTACT DETECTED! Enemy vessel located in 3x3 sector near ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}!`);
+      setLastActionLog(`SONAR CONTACT DETECTED: Hostile warship presence confirmed in 3x3 sector ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}!`);
     } else {
       setLastActionLog(`SONAR SCAN CLEAR: No enemy naval vessels in 3x3 sector ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}.`);
     }
@@ -895,12 +1295,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
       setFinalScore(calculatedScore);
       onGameOver(calculatedScore);
-      setLastActionLog(`MISSION ACCOMPLISHED! Enemy fleet destroyed in ${totalShots} shots with ${accuracy}% accuracy!`);
+      setLastActionLog(`MISSION ACCOMPLISHED: Hostile fleet neutralized in ${totalShots} salvos with ${accuracy}% precision.`);
     } else {
       playSound('defeat');
       setFinalScore(1200);
       onGameOver(1200);
-      setLastActionLog(`TACTICAL DEFEAT. Your naval fleet has been destroyed by the enemy Admiral.`);
+      setLastActionLog(`TACTICAL CASUALTY: Naval fleet destroyed by hostile artillery fire.`);
     }
   };
 
@@ -922,10 +1322,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     setActivePlayer('P1');
     setTurn('P1');
     setSelectedShipIndex(0);
-    setLastActionLog('New battle initialized. Deploy your fleet to battle stations.');
+    setLastActionLog('Tactical Combat System Ready. Assign coordinates to your 5 war vessels.');
   };
 
-  // Total Fleet Health Metrics
+  // Fleet Health Metrics
   const p1AliveCount = p1Ships.filter(s => !s.sunk).length;
   const p2AliveCount = p2Ships.filter(s => !s.sunk).length;
 
@@ -934,12 +1334,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   const p1Accuracy = p1TotalShots > 0 ? Math.round((p1TotalHits / p1TotalShots) * 100) : 0;
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4">
+    <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans">
       {/* Neo-Brutalist HUD Header Bar */}
       <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-2.5">
-        {/* Left: Mode & Difficulty Selector */}
+        {/* Left: Mode & Military Difficulty Selector */}
         <div className="flex items-center flex-wrap gap-2">
-          <div className="flex items-center bg-black/40 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
+          <div className="flex items-center bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
             <button
               onClick={() => {
                 if (phase === 'setup') {
@@ -954,7 +1354,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Bot className="w-3.5 h-3.5" /> VS AI
+              <Bot className="w-3.5 h-3.5 stroke-[2.5]" /> VS AI
             </button>
             <button
               onClick={() => {
@@ -970,26 +1370,27 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Users className="w-3.5 h-3.5" /> 2P PASS
+              <Users className="w-3.5 h-3.5 stroke-[2.5]" /> 2P PASS
             </button>
           </div>
 
-          {/* AI Difficulty Selector */}
+          {/* AI Difficulty Selector with Military Insignia */}
           {mode === 'ai' && (
-            <div className="flex items-center gap-1 bg-black/40 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
+            <div className="flex items-center gap-1 bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
               <button
                 onClick={() => {
                   playSound('click');
                   setDifficulty('cadet');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all ${
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all flex items-center gap-1 ${
                   difficulty === 'cadet'
                     ? 'bg-portal-lime text-black shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
+                title="Cadet / Ensign AI: Randomized target trajectory"
               >
-                ENSIGN
+                <MilitaryRankBadge rank="cadet" /> ENSIGN
               </button>
               <button
                 onClick={() => {
@@ -997,13 +1398,14 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   setDifficulty('commander');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all ${
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all flex items-center gap-1 ${
                   difficulty === 'commander'
                     ? 'bg-portal-yellow text-black shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
+                title="Commander AI: Checkerboard Parity & Hunt-Target Engine"
               >
-                COMMANDER
+                <MilitaryRankBadge rank="commander" /> COMMANDER
               </button>
               <button
                 onClick={() => {
@@ -1016,14 +1418,15 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     ? 'bg-portal-pink text-white shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
+                title="Admiral AI: Probability Density Heatmap AI"
               >
-                <Flame className="w-2.5 h-2.5 text-portal-yellow" /> ADMIRAL
+                <MilitaryRankBadge rank="admiral" /> ADMIRAL
               </button>
             </div>
           )}
         </div>
 
-        {/* Right: Quick Action Controls */}
+        {/* Right: Sonar Recon & System Controls */}
         <div className="flex items-center gap-2">
           {phase === 'battle' && (
             <button
@@ -1036,10 +1439,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   ? 'bg-portal-cyan/20 hover:bg-portal-cyan text-portal-cyan hover:text-black border-portal-cyan'
                   : 'bg-slate-800 text-slate-500 border-slate-700 opacity-50 cursor-not-allowed'
               }`}
-              title="Activate 3x3 Sonar Recon Radar Scan"
+              title="Activate 3x3 Tactical Sonar Recon Radar Scan"
             >
-              <Radar className="w-3.5 h-3.5" />
-              SONAR RECON [{(turn === 'P1' ? p1SonarAvailable : p2SonarAvailable) ? 'READY' : 'DEPLETED'}]
+              <Radar className={`w-3.5 h-3.5 ${isSonarActive ? 'animate-spin' : ''}`} />
+              SONAR RECON [{(turn === 'P1' ? p1SonarAvailable : p2SonarAvailable) ? 'ONLINE' : 'EXPENDED'}]
             </button>
           )}
 
@@ -1056,26 +1459,29 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             className="px-2.5 py-1.5 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black shadow-neo-sm text-xs font-black uppercase transition-all flex items-center gap-1"
             title="Reset Match"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> RESET
+            <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" /> RESET
           </button>
         </div>
       </div>
 
-      {/* Tactical Telemetry Ribbon */}
-      <div className="w-full bg-black/80 border-2 border-black rounded-xl px-3 py-1.5 mb-3 flex items-center justify-between text-xs font-mono shadow-neo-sm">
+      {/* Military Telemetry & Tactical Intelligence Ribbon */}
+      <div className="w-full bg-slate-950/90 border-2 border-black rounded-xl px-3 py-1.5 mb-3 flex items-center justify-between text-xs font-mono shadow-neo-sm">
         <div className="flex items-center gap-2 truncate">
-          <span className="w-2 h-2 rounded-full bg-portal-cyan animate-ping shrink-0" />
-          <span className="text-slate-300 truncate">
-            <strong className="text-portal-yellow uppercase tracking-wider">INTEL: </strong>
+          <span className="w-2.5 h-2.5 rounded-full bg-portal-cyan animate-pulse shrink-0 border border-black" />
+          <span className="text-slate-300 truncate text-[11px] sm:text-xs">
+            <strong className="text-portal-yellow uppercase tracking-wider font-sans font-black">INTEL BRIEFING: </strong>
             {lastActionLog}
           </span>
         </div>
         {phase === 'battle' && (
           <div className="hidden sm:flex items-center gap-3 shrink-0 text-[11px] font-black uppercase text-slate-300">
-            <span className="text-portal-cyan">ACCURACY: {p1Accuracy}%</span>
+            <span className="text-portal-cyan">PRECISION: {p1Accuracy}%</span>
             <span className="text-portal-yellow">SALVOS: {p1TotalShots}</span>
             {streakCount >= 2 && (
-              <span className="text-portal-pink animate-pulse">🔥 {streakCount}X STREAK</span>
+              <span className="text-portal-pink bg-portal-pink/20 border border-portal-pink px-1.5 py-0.5 rounded flex items-center gap-1 font-mono">
+                <Target className="w-3 h-3 stroke-[2.5]" />
+                BARRAGE x{streakCount}
+              </span>
             )}
           </div>
         )}
@@ -1089,13 +1495,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           {/* Header instructions */}
           <div className="w-full bg-gradient-to-r from-portal-surface via-portal-card to-portal-surface border-3 border-black rounded-2xl p-4 mb-4 shadow-neo-md text-center">
             <div className="flex items-center justify-center gap-2 mb-1">
-              <Anchor className="w-5 h-5 text-portal-yellow" />
+              <Crosshair className="w-5 h-5 text-portal-yellow stroke-[2.5]" />
               <h2 className="text-base sm:text-lg font-black uppercase tracking-wider text-white">
-                {mode === 'pvp' && pvpSetupPlayer === 'P2' ? 'PLAYER 2 FLEET DEPLOYMENT' : 'TACTICAL FLEET DEPLOYMENT'}
+                {mode === 'pvp' && pvpSetupPlayer === 'P2' ? 'PLAYER 2 FLEET DOCK ASSIGNMENT' : 'TACTICAL FLEET DEPLOYMENT'}
               </h2>
             </div>
             <p className="text-xs text-slate-300">
-              Assign strategic oceanic coordinates to your 5 vessels. Click to place, press <strong className="text-portal-yellow">[R]</strong> to rotate orientation.
+              Assign strategic oceanic coordinates to your 5 war vessels. Click to place, press <strong className="text-portal-yellow font-black">[R]</strong> to rotate hull orientation.
             </p>
           </div>
 
@@ -1104,10 +1510,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             <div className="lg:col-span-8 flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-5 shadow-neo-md">
               <div className="flex items-center justify-between w-full mb-3 px-1">
                 <span className="text-xs font-black uppercase text-portal-cyan flex items-center gap-1.5">
-                  <Crosshair className="w-4 h-4" /> SECTOR GRID: {ROW_LABELS[0]}1 - {ROW_LABELS[9]}10
+                  <Radar className="w-4 h-4 stroke-[2.5]" /> SECTOR GRID: {ROW_LABELS[0]}1 - {ROW_LABELS[9]}10
                 </span>
                 <span className="text-xs font-black uppercase text-portal-yellow">
-                  ORIENTATION: <strong className="underline">{placementOrientation === 'H' ? 'HORIZONTAL (→)' : 'VERTICAL (↓)'}</strong>
+                  HULL AXIS: <strong className="underline">{placementOrientation === 'H' ? 'HORIZONTAL (→)' : 'VERTICAL (↓)'}</strong>
                 </span>
               </div>
 
@@ -1160,29 +1566,39 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                           }
                         }
 
+                        // Determine hull segment index if occupied
+                        let segmentIndex = 0;
+                        if (occupyingShip) {
+                          const posIdx = occupyingShip.positions.findIndex(p => p.r === r && p.c === c);
+                          segmentIndex = posIdx !== -1 ? posIdx : 0;
+                        }
+
                         return (
                           <button
                             key={c}
                             onClick={() => handleCellPlacementClick(r, c)}
                             onMouseEnter={() => setHoverCoord({ r, c })}
                             onMouseLeave={() => setHoverCoord(null)}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative ${
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
                               isHoveredPreview
                                 ? isValidHover
                                   ? 'bg-portal-lime/40 border-portal-lime shadow-neo-sm scale-95'
                                   : 'bg-portal-pink/40 border-portal-pink shadow-neo-sm'
                                 : occupyingShip
-                                ? 'bg-slate-800 border-black shadow-neo-sm'
+                                ? 'bg-slate-900 border-black shadow-neo-sm'
                                 : 'bg-slate-900/80 border-slate-800 hover:border-portal-cyan/60 hover:bg-slate-800/80'
                             }`}
                           >
                             {occupyingShip && (
-                              <div
-                                className="w-full h-full rounded-md flex items-center justify-center text-[10px] font-black border border-black shadow-inner"
-                                style={{ backgroundColor: occupyingShip.color, color: '#000000' }}
-                              >
-                                {occupyingShip.name[0]}
-                              </div>
+                              <ShipHullSegment
+                                shipId={occupyingShip.id}
+                                segmentIndex={segmentIndex}
+                                totalSize={occupyingShip.size}
+                                orientation={occupyingShip.orientation}
+                                isDamaged={false}
+                                isSunk={false}
+                                color={occupyingShip.color}
+                              />
                             )}
                           </button>
                         );
@@ -1199,13 +1615,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     onClick={handleRotate}
                     className="px-3 py-2 rounded-xl bg-portal-yellow text-black border-2 border-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1.5"
                   >
-                    <RefreshCw className="w-3.5 h-3.5" /> ROTATE [R]
+                    <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" /> ROTATE [R]
                   </button>
                   <button
                     onClick={handleAutoDeploy}
                     className="px-3 py-2 rounded-xl bg-portal-cyan text-black border-2 border-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1.5"
                   >
-                    <Zap className="w-3.5 h-3.5" /> AUTO DEPLOY
+                    <Zap className="w-3.5 h-3.5 stroke-[2.5]" /> AUTO DEPLOY [A]
                   </button>
                   <button
                     onClick={handleResetPlacement}
@@ -1222,7 +1638,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     className="px-5 py-2.5 rounded-xl bg-portal-lime text-black border-3 border-black font-black text-xs sm:text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:shadow-none transition-all flex items-center gap-2 animate-bounce"
                   >
                     <Play className="w-4 h-4 fill-black" />
-                    {mode === 'pvp' && pvpSetupPlayer === 'P1' ? 'SAVE & PASS TO P2' : 'COMMENCE COMBAT'}
+                    {mode === 'pvp' && pvpSetupPlayer === 'P1' ? 'SAVE & PASS TO PLAYER 2' : 'COMMENCE COMBAT'}
                   </button>
                 )}
               </div>
@@ -1232,10 +1648,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             <div className="lg:col-span-4 flex flex-col bg-portal-surface border-3 border-black rounded-2xl p-4 shadow-neo-md divide-y-2 divide-black/40">
               <div className="pb-3">
                 <h3 className="font-black text-xs uppercase tracking-wider text-portal-yellow mb-1 flex items-center gap-1.5">
-                  <Shield className="w-4 h-4" /> NAVAL FLEET SQUADRON
+                  <Shield className="w-4 h-4 stroke-[2.5]" /> SQUADRON MANIFEST
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Select each vessel to customize its placement sector:
+                  Select each vessel to customize its dock coordinates:
                 </p>
               </div>
 
@@ -1246,63 +1662,16 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   const isSelected = selectedShipIndex === idx;
 
                   return (
-                    <button
+                    <ShipBlueprintCard
                       key={ship.id}
+                      ship={ship}
+                      isPlaced={isPlaced}
+                      isSelected={isSelected}
                       onClick={() => {
                         playSound('click');
                         setSelectedShipIndex(idx);
                       }}
-                      className={`w-full p-2.5 rounded-xl border-2 transition-all flex items-center justify-between text-left ${
-                        isSelected
-                          ? 'bg-portal-card border-portal-cyan shadow-neo-sm translate-x-1'
-                          : isPlaced
-                          ? 'bg-slate-900/60 border-black/80 opacity-90'
-                          : 'bg-portal-card/40 border-black hover:border-slate-600'
-                      }`}
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span
-                            className="w-2.5 h-2.5 rounded-sm shrink-0"
-                            style={{ backgroundColor: ship.color }}
-                          />
-                          <span className="font-black text-xs text-white uppercase truncate">
-                            {ship.name}
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-400">
-                            {ship.code}
-                          </span>
-                        </div>
-
-                        {/* Ship segment cells preview */}
-                        <div className="flex items-center gap-1">
-                          {Array(ship.size)
-                            .fill(null)
-                            .map((_, i) => (
-                              <div
-                                key={i}
-                                className="w-4 h-3 rounded-sm border border-black"
-                                style={{ backgroundColor: isPlaced ? ship.color : '#334155' }}
-                              />
-                            ))}
-                          <span className="text-[10px] text-slate-400 font-mono ml-1.5">
-                            {ship.size} NODES
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="ml-2 shrink-0">
-                        {isPlaced ? (
-                          <span className="flex items-center gap-1 text-[10px] font-black text-portal-lime bg-black/40 px-2 py-0.5 rounded border border-portal-lime/40">
-                            <CheckCircle2 className="w-3 h-3" /> READY
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-black text-portal-yellow bg-black/40 px-2 py-0.5 rounded border border-portal-yellow/40">
-                            PENDING
-                          </span>
-                        )}
-                      </div>
-                    </button>
+                    />
                   );
                 })}
               </div>
@@ -1311,7 +1680,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               <div className="pt-3 text-[11px] text-slate-400 flex items-start gap-2">
                 <HelpCircle className="w-4 h-4 text-portal-cyan shrink-0 mt-0.5" />
                 <span>
-                  <strong>TACTICAL ADVICE:</strong> Avoid grouping all ships in a single sector corner to reduce enemy cluster artillery damage.
+                  <strong>TACTICAL RULE:</strong> Disperse warships across different sector quadrants to avoid cluster artillery damage.
                 </span>
               </div>
             </div>
@@ -1332,14 +1701,18 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   turn === 'P1' ? 'bg-portal-cyan' : 'bg-portal-pink'
                 }`}
               />
-              <span className="font-black text-xs sm:text-sm uppercase tracking-wider text-white">
-                {turn === 'P1'
-                  ? mode === 'ai'
-                    ? '🎯 YOUR TURN — TARGET ENEMY RADAR'
-                    : '🎯 PLAYER 1 TURN — TARGET RADAR'
-                  : mode === 'ai'
-                  ? '⚡ ENEMY ADMIRAL FIRING SALVO...'
-                  : '🎯 PLAYER 2 TURN — TARGET RADAR'}
+              <span className="font-black text-xs sm:text-sm uppercase tracking-wider text-white flex items-center gap-2">
+                {turn === 'P1' ? (
+                  <>
+                    <Crosshair className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
+                    {mode === 'ai' ? 'YOUR SALVO // TARGET ENEMY RADAR' : 'PLAYER 1 SALVO // TARGET RADAR'}
+                  </>
+                ) : (
+                  <>
+                    <Radar className="w-4 h-4 text-portal-pink stroke-[2.5] animate-spin" />
+                    {mode === 'ai' ? 'HOSTILE ADMIRAL SALVO INCOMING...' : 'PLAYER 2 SALVO // TARGET RADAR'}
+                  </>
+                )}
               </span>
             </div>
 
@@ -1365,11 +1738,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
             {/* Fleet Status Counts */}
             <div className="hidden sm:flex items-center gap-3 text-xs font-black uppercase">
-              <span className="text-portal-cyan">
-                FRIENDLY: {p1AliveCount}/5 SHIPS
+              <span className="text-portal-cyan flex items-center gap-1">
+                <Shield className="w-3.5 h-3.5" /> FRIENDLY: {p1AliveCount}/5 ACTIVE
               </span>
-              <span className="text-portal-pink">
-                HOSTILE: {p2AliveCount}/5 SHIPS
+              <span className="text-portal-pink flex items-center gap-1">
+                <Crosshair className="w-3.5 h-3.5" /> HOSTILE: {p2AliveCount}/5 ACTIVE
               </span>
             </div>
           </div>
@@ -1384,11 +1757,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             >
               <div className="flex items-center justify-between w-full mb-2 px-1">
                 <span className="text-xs font-black uppercase text-portal-pink flex items-center gap-1.5">
-                  <Crosshair className="w-4 h-4 text-portal-pink" />
-                  ENEMY TARGETING RADAR
+                  <Crosshair className="w-4 h-4 text-portal-pink stroke-[2.5]" />
+                  HOSTILE TARGETING RADAR
                 </span>
-                <span className="text-[10px] font-mono text-slate-400 uppercase">
-                  {p2AliveCount} VESSELS ACTIVE
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
+                  {p2AliveCount} VESSELS DETECTED
                 </span>
               </div>
 
@@ -1431,13 +1804,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                             key={c}
                             onClick={() => handleFireSalvo(r, c)}
                             disabled={Boolean(shotStatus) || isAiThinking}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative ${
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
                               isSunkShipCell
-                                ? 'bg-portal-pink text-white border-black shadow-neo-sm'
+                                ? 'bg-portal-pink/30 text-white border-portal-pink shadow-neo-sm'
                                 : shotStatus === 'hit'
-                                ? 'bg-portal-yellow text-black border-black shadow-neo-sm animate-pulse'
+                                ? 'bg-portal-yellow/20 text-black border-portal-yellow shadow-neo-sm'
                                 : shotStatus === 'miss'
-                                ? 'bg-slate-800/90 text-slate-400 border-slate-700'
+                                ? 'bg-slate-900 text-slate-400 border-slate-800'
                                 : isSonarSector
                                 ? scannedSector.found
                                   ? 'bg-portal-cyan/30 border-portal-cyan'
@@ -1445,12 +1818,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                                 : 'bg-slate-900/90 border-slate-800 hover:border-portal-pink hover:bg-portal-pink/20 active:scale-95'
                             }`}
                           >
-                            {isSunkShipCell ? (
-                              <Flame className="w-3.5 h-3.5 text-black" />
-                            ) : shotStatus === 'hit' ? (
-                              <span className="text-xs font-black">✕</span>
+                            {shotStatus === 'hit' ? (
+                              <BallisticImpactBlast isSunk={isSunkShipCell} />
                             ) : shotStatus === 'miss' ? (
-                              <span className="w-2 h-2 rounded-full bg-slate-500" />
+                              <WaterSplashMarker />
                             ) : null}
                           </button>
                         );
@@ -1475,7 +1846,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       className="w-2 h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
-                    {ship.name.split(' ')[1] || ship.name} [{ship.hits}/{ship.size}]
+                    {ship.code} [{ship.hits}/{ship.size}]
                   </div>
                 ))}
               </div>
@@ -1489,10 +1860,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             >
               <div className="flex items-center justify-between w-full mb-2 px-1">
                 <span className="text-xs font-black uppercase text-portal-cyan flex items-center gap-1.5">
-                  <Shield className="w-4 h-4 text-portal-cyan" />
+                  <Shield className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
                   FRIENDLY OCEAN FLEET
                 </span>
-                <span className="text-[10px] font-mono text-slate-400 uppercase">
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
                   {p1AliveCount} VESSELS OPERATIONAL
                 </span>
               </div>
@@ -1528,33 +1899,38 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                           s.positions.some(p => p.r === r && p.c === c)
                         );
 
+                        let segmentIndex = 0;
+                        if (occupyingShip) {
+                          const posIdx = occupyingShip.positions.findIndex(p => p.r === r && p.c === c);
+                          segmentIndex = posIdx !== -1 ? posIdx : 0;
+                        }
+
                         return (
                           <div
                             key={c}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 flex items-center justify-center font-mono font-black text-xs relative ${
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
                               occupyingShip
                                 ? shotStatus === 'hit'
-                                  ? 'bg-portal-pink text-white border-black shadow-neo-sm animate-pulse'
-                                  : 'bg-slate-800 border-black shadow-neo-sm'
+                                  ? 'bg-portal-pink/30 border-portal-pink shadow-neo-sm animate-pulse'
+                                  : 'bg-slate-900 border-black shadow-neo-sm'
                                 : shotStatus === 'miss'
-                                ? 'bg-slate-800/90 text-slate-400 border-slate-700'
+                                ? 'bg-slate-900 text-slate-400 border-slate-800'
                                 : 'bg-slate-900/80 border-slate-800'
                             }`}
                           >
-                            {occupyingShip && (
-                              <div
-                                className="w-full h-full rounded-md flex items-center justify-center text-[10px] font-black border border-black"
-                                style={{
-                                  backgroundColor: shotStatus === 'hit' ? '#FF4081' : occupyingShip.color,
-                                  color: '#000000'
-                                }}
-                              >
-                                {shotStatus === 'hit' ? '🔥' : occupyingShip.name[0]}
-                              </div>
-                            )}
-                            {!occupyingShip && shotStatus === 'miss' && (
-                              <span className="w-2 h-2 rounded-full bg-slate-500" />
-                            )}
+                            {occupyingShip ? (
+                              <ShipHullSegment
+                                shipId={occupyingShip.id}
+                                segmentIndex={segmentIndex}
+                                totalSize={occupyingShip.size}
+                                orientation={occupyingShip.orientation}
+                                isDamaged={shotStatus === 'hit'}
+                                isSunk={occupyingShip.sunk}
+                                color={occupyingShip.color}
+                              />
+                            ) : shotStatus === 'miss' ? (
+                              <WaterSplashMarker />
+                            ) : null}
                           </div>
                         );
                       })}
@@ -1578,7 +1954,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       className="w-2 h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
-                    {ship.name.split(' ')[1] || ship.name} [{ship.hits}/{ship.size}]
+                    {ship.code} [{ship.hits}/{ship.size}]
                   </div>
                 ))}
               </div>
@@ -1588,32 +1964,33 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       )}
 
       {/* ========================================================================= */}
-      {/* PHASE 3: GAME OVER / VICTORY SUMMARY DIALOG */}
+      {/* PHASE 3: GAME OVER / MILITARY VICTORY SUMMARY REPORT */}
       {/* ========================================================================= */}
       {phase === 'gameover' && (
         <div className="w-full max-w-xl bg-portal-card border-4 border-black rounded-3xl p-5 sm:p-7 shadow-neo-lg text-center animate-scaleIn">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-2xl bg-portal-surface border-3 border-black flex items-center justify-center shadow-neo-md">
+          {/* Military Badge Crest */}
+          <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-portal-surface border-3 border-black flex items-center justify-center shadow-neo-md">
             {winner === 'P1' ? (
-              <Trophy className="w-8 h-8 text-portal-yellow animate-bounce" />
+              <Award className="w-9 h-9 text-portal-yellow stroke-[2.5]" />
             ) : (
-              <AlertTriangle className="w-8 h-8 text-portal-pink" />
+              <AlertTriangle className="w-9 h-9 text-portal-pink stroke-[2.5]" />
             )}
           </div>
 
           <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white mb-1">
             {winner === 'P1'
               ? mode === 'ai'
-                ? '🏆 NAVAL VICTORY!'
-                : '🏆 PLAYER 1 VICTORIOUS!'
+                ? 'TACTICAL NAVAL VICTORY'
+                : 'PLAYER 1 VICTORIOUS'
               : mode === 'ai'
-              ? '💀 FLEET DESTROYED'
-              : '🏆 PLAYER 2 VICTORIOUS!'}
+              ? 'FLEET CASUALTY REPORT'
+              : 'PLAYER 2 VICTORIOUS'}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-5">
             {winner === 'P1'
-              ? 'All hostile naval warships have been neutralized and sunk to the ocean floor.'
-              : 'Your naval fleet suffered catastrophic structural damage and succumbed to enemy fire.'}
+              ? 'Hostile naval fleet completely destroyed. Ocean sector secured under tactical command.'
+              : 'Naval squadron sustained critical hull breaches. Emergency fleet retreat ordered.'}
           </p>
 
           {/* Combat Statistics Grid */}
@@ -1623,7 +2000,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               <span className="text-base sm:text-lg font-black text-portal-yellow font-mono">{finalScore}</span>
             </div>
             <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-              <span className="text-[10px] font-black text-slate-400 uppercase block">ACCURACY</span>
+              <span className="text-[10px] font-black text-slate-400 uppercase block">PRECISION</span>
               <span className="text-base sm:text-lg font-black text-portal-cyan font-mono">{p1Accuracy}%</span>
             </div>
             <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
@@ -1640,7 +2017,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             onClick={handleStartNewMatch}
             className="w-full py-3.5 rounded-2xl bg-portal-yellow text-black border-3 border-black font-black text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-2"
           >
-            <RotateCcw className="w-4 h-4 stroke-[3]" /> REMATCH / DEPLOY NEW FLEET
+            <RotateCcw className="w-4 h-4 stroke-[3]" /> DEPLOY FRESH SQUADRON / REMATCH
           </button>
         </div>
       )}
