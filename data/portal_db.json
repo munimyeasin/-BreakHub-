@@ -75,7 +75,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/retro-battleship.svg",
       "description": "Classic 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "play_count": 8,
+      "play_count": 10,
       "rating": 5,
       "rating_count": 56,
       "status": "active",
@@ -7913,6 +7913,13 @@
       "user_id": "usr_ctvl8ln",
       "score": 25984,
       "created_at": "2026-09-15T11:21:24.756Z"
+    },
+    {
+      "id": "sc_sfk1b3nh7",
+      "game_id": "g_battleship_18",
+      "user_id": "usr_ctvl8ln",
+      "score": 1200,
+      "created_at": "2026-09-15T11:32:40.638Z"
     }
   ],
   "ratings": []

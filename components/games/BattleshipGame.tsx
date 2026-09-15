@@ -1351,9 +1351,9 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans">
       {/* Neo-Brutalist HUD Header Bar */}
-      <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-3 sm:p-4 mb-3 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-2.5">
+      <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2 min-[360px]:p-2.5 sm:p-4 mb-2.5 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2.5">
         {/* Left: Mode & Military Difficulty Selector */}
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex items-center flex-wrap gap-1.5 sm:gap-2">
           <div className="flex items-center bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
             <button
               onClick={() => {
@@ -1363,7 +1363,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 }
               }}
               disabled={phase !== 'setup'}
-              className={`px-2.5 py-1 rounded-lg font-black text-xs uppercase transition-all flex items-center gap-1.5 ${
+              className={`px-2 min-[360px]:px-2.5 py-1 rounded-lg font-black text-[11px] sm:text-xs uppercase transition-all flex items-center gap-1 sm:gap-1.5 ${
                 mode === 'ai'
                   ? 'bg-portal-cyan text-black shadow-neo-sm'
                   : 'text-slate-400 hover:text-white'
@@ -1379,7 +1379,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 }
               }}
               disabled={phase !== 'setup'}
-              className={`px-2.5 py-1 rounded-lg font-black text-xs uppercase transition-all flex items-center gap-1.5 ${
+              className={`px-2 min-[360px]:px-2.5 py-1 rounded-lg font-black text-[11px] sm:text-xs uppercase transition-all flex items-center gap-1 sm:gap-1.5 ${
                 mode === 'pvp'
                   ? 'bg-portal-pink text-white shadow-neo-sm'
                   : 'text-slate-400 hover:text-white'
@@ -1391,21 +1391,23 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
           {/* AI Difficulty Selector with Military Insignia */}
           {mode === 'ai' && (
-            <div className="flex items-center gap-1 bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
+            <div className="flex items-center gap-0.5 sm:gap-1 bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
               <button
                 onClick={() => {
                   playSound('click');
                   setDifficulty('cadet');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all flex items-center gap-1 ${
+                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
                   difficulty === 'cadet'
                     ? 'bg-portal-lime text-black shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Cadet / Ensign AI: Randomized target trajectory"
               >
-                <MilitaryRankBadge rank="cadet" /> ENSIGN
+                <MilitaryRankBadge rank="cadet" />
+                <span className="hidden min-[400px]:inline">ENSIGN</span>
+                <span className="min-[400px]:hidden">ENS</span>
               </button>
               <button
                 onClick={() => {
@@ -1413,14 +1415,16 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   setDifficulty('commander');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all flex items-center gap-1 ${
+                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
                   difficulty === 'commander'
                     ? 'bg-portal-yellow text-black shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Commander AI: Checkerboard Parity & Hunt-Target Engine"
               >
-                <MilitaryRankBadge rank="commander" /> COMMANDER
+                <MilitaryRankBadge rank="commander" />
+                <span className="hidden min-[400px]:inline">COMMANDER</span>
+                <span className="min-[400px]:hidden">CMD</span>
               </button>
               <button
                 onClick={() => {
@@ -1428,26 +1432,28 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   setDifficulty('admiral');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all flex items-center gap-1 ${
+                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
                   difficulty === 'admiral'
                     ? 'bg-portal-pink text-white shadow-neo-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Admiral AI: Probability Density Heatmap AI"
               >
-                <MilitaryRankBadge rank="admiral" /> ADMIRAL
+                <MilitaryRankBadge rank="admiral" />
+                <span className="hidden min-[400px]:inline">ADMIRAL</span>
+                <span className="min-[400px]:hidden">ADM</span>
               </button>
             </div>
           )}
         </div>
 
         {/* Right: Sonar Recon & System Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {phase === 'battle' && (
             <button
               onClick={handleActivateSonar}
               disabled={!viewerSonarAvailable || isAiThinking}
-              className={`px-3 py-1.5 rounded-xl border-2 border-black text-xs font-black uppercase transition-all flex items-center gap-1.5 shadow-neo-sm ${
+              className={`px-2 min-[360px]:px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border-2 border-black text-[10px] min-[360px]:text-xs font-black uppercase transition-all flex items-center gap-1 sm:gap-1.5 shadow-neo-sm ${
                 isSonarActive
                   ? 'bg-portal-yellow text-black animate-pulse shadow-neo-md'
                   : viewerSonarAvailable
@@ -1457,24 +1463,27 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               title="Activate 3x3 Tactical Sonar Recon Radar Scan"
             >
               <Radar className={`w-3.5 h-3.5 ${isSonarActive ? 'animate-spin' : ''}`} />
-              SONAR RECON [{viewerSonarAvailable ? 'ONLINE' : 'EXPENDED'}]
+              <span className="hidden min-[420px]:inline">SONAR RECON</span>
+              <span className="min-[420px]:hidden">SONAR</span>
+              <span className="text-[9px] min-[360px]:text-[10px]">[{viewerSonarAvailable ? 'ON' : 'OFF'}]</span>
             </button>
           )}
 
           <button
             onClick={() => setSoundEnabled(prev => !prev)}
-            className="p-1.5 sm:p-2 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:bg-portal-yellow hover:text-black transition-all"
+            className="p-1 min-[360px]:p-1.5 sm:p-2 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:bg-portal-yellow hover:text-black transition-all"
             title="Toggle Sound"
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />}
           </button>
 
           <button
             onClick={handleStartNewMatch}
-            className="px-2.5 py-1.5 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black shadow-neo-sm text-xs font-black uppercase transition-all flex items-center gap-1"
+            className="px-2 min-[360px]:px-2.5 py-1 sm:py-1.5 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black shadow-neo-sm text-[10px] min-[360px]:text-xs font-black uppercase transition-all flex items-center gap-1"
             title="Reset Match"
           >
-            <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" /> RESET
+            <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="hidden min-[360px]:inline">RESET</span>
           </button>
         </div>
       </div>
@@ -1522,33 +1531,33 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left/Main Placement Grid (10x10) */}
-            <div className="lg:col-span-8 flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-5 shadow-neo-md">
-              <div className="flex items-center justify-between w-full mb-3 px-1">
-                <span className="text-xs font-black uppercase text-portal-cyan flex items-center gap-1.5">
-                  <Radar className="w-4 h-4 stroke-[2.5]" /> SECTOR GRID: {ROW_LABELS[0]}1 - {ROW_LABELS[9]}10
+            <div className="lg:col-span-8 flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-2 min-[360px]:p-3 sm:p-5 shadow-neo-md w-full overflow-hidden">
+              <div className="flex items-center justify-between w-full mb-2.5 sm:mb-3 px-1 text-[11px] sm:text-xs">
+                <span className="font-black uppercase text-portal-cyan flex items-center gap-1 sm:gap-1.5 truncate">
+                  <Radar className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" /> SECTOR: {ROW_LABELS[0]}1-{ROW_LABELS[9]}10
                 </span>
-                <span className="text-xs font-black uppercase text-portal-yellow">
-                  HULL AXIS: <strong className="underline">{placementOrientation === 'H' ? 'HORIZONTAL (→)' : 'VERTICAL (↓)'}</strong>
+                <span className="font-black uppercase text-portal-yellow truncate">
+                  AXIS: <strong className="underline">{placementOrientation === 'H' ? 'HORIZ (→)' : 'VERT (↓)'}</strong>
                 </span>
               </div>
 
               {/* 10x10 Grid View */}
-              <div className="relative p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              <div className="relative p-1.5 min-[360px]:p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* Column Headers */}
-                <div className="flex ml-6 sm:ml-7 mb-1 gap-1">
+                <div className="flex ml-4 min-[360px]:ml-5 min-[380px]:ml-6 sm:ml-7 mb-1 gap-0.5 min-[380px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-7 h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[23px] h-4 min-[360px]:w-[26px] min-[360px]:h-5 min-[380px]:w-7 min-[380px]:h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                       {col}
                     </div>
                   ))}
                 </div>
 
                 {/* Grid Rows */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5 min-[380px]:gap-1">
                   {ROW_LABELS.map((rowLabel, r) => (
-                    <div key={rowLabel} className="flex items-center gap-1">
+                    <div key={rowLabel} className="flex items-center gap-0.5 min-[380px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-5 sm:w-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-4 min-[360px]:w-5 min-[380px]:w-6 sm:w-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                         {rowLabel}
                       </div>
 
@@ -1594,7 +1603,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                             onClick={() => handleCellPlacementClick(r, c)}
                             onMouseEnter={() => setHoverCoord({ r, c })}
                             onMouseLeave={() => setHoverCoord(null)}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
+                            className={`w-[23px] h-[23px] min-[360px]:w-[26px] min-[360px]:h-[26px] min-[380px]:w-7 min-[380px]:h-7 sm:w-8 sm:h-8 rounded-md min-[380px]:rounded-lg border sm:border-2 transition-all flex items-center justify-center font-mono font-black text-[10px] sm:text-xs relative overflow-hidden ${
                               isHoveredPreview
                                 ? isValidHover
                                   ? 'bg-portal-lime/40 border-portal-lime shadow-neo-sm scale-95'
@@ -1624,23 +1633,23 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               </div>
 
               {/* Placement Tools Controls */}
-              <div className="flex flex-wrap items-center justify-between w-full mt-4 gap-2">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-between w-full mt-3 sm:mt-4 gap-2">
+                <div className="flex items-center flex-wrap gap-1.5 sm:gap-2">
                   <button
                     onClick={handleRotate}
-                    className="px-3 py-2 rounded-xl bg-portal-yellow text-black border-2 border-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1.5"
+                    className="px-2.5 min-[360px]:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-yellow text-black border-2 border-black font-black text-[11px] sm:text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1 sm:gap-1.5"
                   >
-                    <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" /> ROTATE [R]
+                    <RefreshCw className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" /> ROTATE [R]
                   </button>
                   <button
                     onClick={handleAutoDeploy}
-                    className="px-3 py-2 rounded-xl bg-portal-cyan text-black border-2 border-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1.5"
+                    className="px-2.5 min-[360px]:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-cyan text-black border-2 border-black font-black text-[11px] sm:text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center gap-1 sm:gap-1.5"
                   >
-                    <Zap className="w-3.5 h-3.5 stroke-[2.5]" /> AUTO DEPLOY [A]
+                    <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" /> AUTO [A]
                   </button>
                   <button
                     onClick={handleResetPlacement}
-                    className="px-3 py-2 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black font-black text-xs uppercase shadow-neo-sm transition-all"
+                    className="px-2 min-[360px]:px-2.5 py-1.5 sm:py-2 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black font-black text-[11px] sm:text-xs uppercase shadow-neo-sm transition-all"
                   >
                     CLEAR
                   </button>
@@ -1650,7 +1659,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 {((mode === 'ai' || pvpSetupPlayer === 'P1') ? p1Ships : p2Ships).length === 5 && (
                   <button
                     onClick={handleCommenceBattle}
-                    className="px-5 py-2.5 rounded-xl bg-portal-lime text-black border-3 border-black font-black text-xs sm:text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:shadow-none transition-all flex items-center gap-2 animate-bounce"
+                    className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-portal-lime text-black border-3 border-black font-black text-xs sm:text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 animate-bounce"
                   >
                     <Play className="w-4 h-4 fill-black" />
                     {mode === 'pvp' && pvpSetupPlayer === 'P1' ? 'SAVE & PASS TO PLAYER 2' : 'COMMENCE COMBAT'}
@@ -1815,10 +1824,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           )}
 
           {/* Active Turn & Phase Status Banner */}
-          <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2.5 sm:p-3 mb-3 sm:mb-4 shadow-neo-md flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
+          <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 mb-2.5 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-2 min-[360px]:gap-2.5 truncate max-w-full">
               <div
-                className={`w-3.5 h-3.5 rounded-full border-2 border-black ${
+                className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 rounded-full border-2 border-black ${
                   phase === 'gameover'
                     ? 'bg-portal-yellow'
                     : turn === 'P1'
@@ -1826,40 +1835,40 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     : 'bg-portal-pink animate-ping'
                 }`}
               />
-              <span className="font-black text-xs sm:text-sm uppercase tracking-wider text-white flex items-center gap-2">
+              <span className="font-black text-[11px] min-[360px]:text-xs sm:text-sm uppercase tracking-wider text-white flex items-center gap-1.5 truncate">
                 {phase === 'gameover' ? (
                   <>
-                    <Eye className="w-4 h-4 text-portal-yellow stroke-[2.5]" />
-                    <span>BATTLEFIELD INSPECTOR // ALL HOSTILE VESSELS REVEALED</span>
+                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-yellow stroke-[2.5] shrink-0" />
+                    <span className="truncate">BATTLEFIELD INSPECTOR // ALL HOSTILE VESSELS REVEALED</span>
                   </>
                 ) : turn === 'P1' ? (
                   <>
-                    <Crosshair className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
-                    {mode === 'ai' ? 'YOUR SALVO // TARGET ENEMY RADAR' : 'PLAYER 1 SALVO // TARGET RADAR'}
+                    <Crosshair className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-cyan stroke-[2.5] shrink-0" />
+                    <span className="truncate">{mode === 'ai' ? 'YOUR SALVO // TARGET RADAR' : 'PLAYER 1 SALVO // TARGET RADAR'}</span>
                   </>
                 ) : (
                   <>
-                    <Radar className="w-4 h-4 text-portal-pink stroke-[2.5] animate-spin" />
-                    {mode === 'ai' ? 'HOSTILE ADMIRAL SALVO INCOMING...' : 'PLAYER 2 SALVO // TARGET RADAR'}
+                    <Radar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-pink stroke-[2.5] animate-spin shrink-0" />
+                    <span className="truncate">{mode === 'ai' ? 'HOSTILE SALVO INCOMING...' : 'PLAYER 2 SALVO // TARGET RADAR'}</span>
                   </>
                 )}
               </span>
             </div>
 
             {/* Mobile View Toggle Buttons */}
-            <div className="flex md:hidden items-center bg-black/40 border-2 border-black rounded-xl p-0.5">
+            <div className="flex md:hidden items-center bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm shrink-0">
               <button
                 onClick={() => setMobileTab('radar')}
-                className={`px-2 py-0.5 rounded-lg text-xs font-black uppercase ${
-                  mobileTab === 'radar' ? 'bg-portal-yellow text-black' : 'text-slate-400'
+                className={`px-2.5 py-1 rounded-lg text-[10px] min-[360px]:text-xs font-black uppercase transition-all ${
+                  mobileTab === 'radar' ? 'bg-portal-yellow text-black shadow-neo-sm' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 RADAR
               </button>
               <button
                 onClick={() => setMobileTab('fleet')}
-                className={`px-2 py-0.5 rounded-lg text-xs font-black uppercase ${
-                  mobileTab === 'fleet' ? 'bg-portal-cyan text-black' : 'text-slate-400'
+                className={`px-2.5 py-1 rounded-lg text-[10px] min-[360px]:text-xs font-black uppercase transition-all ${
+                  mobileTab === 'fleet' ? 'bg-portal-cyan text-black shadow-neo-sm' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 FLEET
@@ -1878,42 +1887,44 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           </div>
 
           {/* Dual Radar Viewport (Side by Side on Desktop, Tabbed on Mobile) */}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* 1. ENEMY TARGETING RADAR (Primary Attack View / Post-Match Fog of War Lifted View) */}
             <div
-              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md ${
+              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-2 min-[360px]:p-3 sm:p-4 shadow-neo-md w-full overflow-hidden ${
                 mobileTab === 'fleet' ? 'hidden md:flex' : 'flex'
               }`}
             >
-              <div className="flex items-center justify-between w-full mb-2 px-1">
-                <span className="text-xs font-black uppercase text-portal-pink flex items-center gap-1.5">
-                  <Crosshair className="w-4 h-4 text-portal-pink stroke-[2.5]" />
-                  {phase === 'gameover' ? 'HOSTILE SECTOR (FOG OF WAR LIFTED)' : 'HOSTILE TARGETING RADAR'}
+              <div className="flex items-center justify-between w-full mb-2 px-1 text-[11px] sm:text-xs">
+                <span className="font-black uppercase text-portal-pink flex items-center gap-1 sm:gap-1.5 truncate">
+                  <Crosshair className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-pink stroke-[2.5] shrink-0" />
+                  <span className="truncate">
+                    {phase === 'gameover' ? 'HOSTILE SECTOR (REVEALED)' : 'HOSTILE TARGETING RADAR'}
+                  </span>
                 </span>
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
+                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-slate-800 shrink-0">
                   {phase === 'gameover'
-                    ? `${5 - enemyAliveCount}/5 VESSELS SUNK`
-                    : `${enemyAliveCount} VESSELS DETECTED`}
+                    ? `${5 - enemyAliveCount}/5 SUNK`
+                    : `${enemyAliveCount} DETECTED`}
                 </span>
               </div>
 
               {/* 10x10 Enemy Targeting Radar Grid */}
-              <div className="relative p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              <div className="relative p-1.5 min-[360px]:p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* Column Headers */}
-                <div className="flex ml-6 sm:ml-7 mb-1 gap-1">
+                <div className="flex ml-4 min-[360px]:ml-5 min-[380px]:ml-6 sm:ml-7 mb-1 gap-0.5 min-[380px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-7 h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[23px] h-4 min-[360px]:w-[26px] min-[360px]:h-5 min-[380px]:w-7 min-[380px]:h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                       {col}
                     </div>
                   ))}
                 </div>
 
                 {/* Grid Rows */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5 min-[380px]:gap-1">
                   {ROW_LABELS.map((rowLabel, r) => (
-                    <div key={rowLabel} className="flex items-center gap-1">
+                    <div key={rowLabel} className="flex items-center gap-0.5 min-[380px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-5 sm:w-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-4 min-[360px]:w-5 min-[380px]:w-6 sm:w-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                         {rowLabel}
                       </div>
 
@@ -1946,7 +1957,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                             key={c}
                             onClick={() => handleFireSalvo(r, c)}
                             disabled={Boolean(shotStatus) || isAiThinking || (mode === 'ai' && turn !== 'P1') || isGameOver}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
+                            className={`w-[23px] h-[23px] min-[360px]:w-[26px] min-[360px]:h-[26px] min-[380px]:w-7 min-[380px]:h-7 sm:w-8 sm:h-8 rounded-md min-[380px]:rounded-lg border sm:border-2 transition-all flex items-center justify-center font-mono font-black text-[10px] sm:text-xs relative overflow-hidden ${
                               isSunkShipCell
                                 ? 'bg-portal-pink/30 text-white border-portal-pink shadow-neo-sm'
                                 : isRevealedIntactEnemyShip
@@ -1988,11 +1999,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               </div>
 
               {/* Enemy Fleet Manifest Status Drawer */}
-              <div className="w-full mt-3 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <div className="w-full mt-2.5 sm:mt-3 flex flex-wrap items-center justify-center gap-1 sm:gap-2">
                 {enemyTargetShips.map(ship => (
                   <div
                     key={ship.id}
-                    className={`px-2 py-1 rounded-lg border text-[10px] font-black uppercase flex items-center gap-1.5 ${
+                    className={`px-1.5 min-[360px]:px-2 py-0.5 min-[360px]:py-1 rounded-lg border text-[9px] min-[360px]:text-[10px] font-black uppercase flex items-center gap-1 sm:gap-1.5 ${
                       ship.sunk
                         ? 'bg-portal-pink/20 border-portal-pink text-portal-pink line-through opacity-70'
                         : phase === 'gameover'
@@ -2001,7 +2012,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     }`}
                   >
                     <span
-                      className="w-2 h-2 rounded-sm"
+                      className="w-1.5 h-1.5 min-[360px]:w-2 min-[360px]:h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
                     {ship.code} [{ship.hits}/{ship.size}] {phase === 'gameover' && !ship.sunk ? '✓ SURVIVED' : ''}
@@ -2012,37 +2023,39 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
             {/* 2. FRIENDLY OCEAN FLEET (Defense & Casualty View) */}
             <div
-              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md ${
+              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-2 min-[360px]:p-3 sm:p-4 shadow-neo-md w-full overflow-hidden ${
                 mobileTab === 'radar' ? 'hidden md:flex' : 'flex'
               }`}
             >
-              <div className="flex items-center justify-between w-full mb-2 px-1">
-                <span className="text-xs font-black uppercase text-portal-cyan flex items-center gap-1.5">
-                  <Shield className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
-                  {phase === 'gameover' ? 'FRIENDLY SQUADRON (CASUALTY REVIEW)' : 'FRIENDLY OCEAN FLEET'}
+              <div className="flex items-center justify-between w-full mb-2 px-1 text-[11px] sm:text-xs">
+                <span className="font-black uppercase text-portal-cyan flex items-center gap-1 sm:gap-1.5 truncate">
+                  <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-cyan stroke-[2.5] shrink-0" />
+                  <span className="truncate">
+                    {phase === 'gameover' ? 'FRIENDLY SQUADRON (CASUALTY REVIEW)' : 'FRIENDLY OCEAN FLEET'}
+                  </span>
                 </span>
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
-                  {friendlyAliveCount} VESSELS OPERATIONAL
+                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-slate-800 shrink-0">
+                  {friendlyAliveCount} OPERATIONAL
                 </span>
               </div>
 
               {/* 10x10 Friendly Ocean Grid */}
-              <div className="relative p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              <div className="relative p-1.5 min-[360px]:p-2 bg-slate-950 border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* Column Headers */}
-                <div className="flex ml-6 sm:ml-7 mb-1 gap-1">
+                <div className="flex ml-4 min-[360px]:ml-5 min-[380px]:ml-6 sm:ml-7 mb-1 gap-0.5 min-[380px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-7 h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[23px] h-4 min-[360px]:w-[26px] min-[360px]:h-5 min-[380px]:w-7 min-[380px]:h-5 sm:w-8 sm:h-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                       {col}
                     </div>
                   ))}
                 </div>
 
                 {/* Grid Rows */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5 min-[380px]:gap-1">
                   {ROW_LABELS.map((rowLabel, r) => (
-                    <div key={rowLabel} className="flex items-center gap-1">
+                    <div key={rowLabel} className="flex items-center gap-0.5 min-[380px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-5 sm:w-6 flex items-center justify-center text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-4 min-[360px]:w-5 min-[380px]:w-6 sm:w-6 flex items-center justify-center text-[9px] min-[360px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
                         {rowLabel}
                       </div>
 
@@ -2064,7 +2077,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                         return (
                           <div
                             key={c}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
+                            className={`w-[23px] h-[23px] min-[360px]:w-[26px] min-[360px]:h-[26px] min-[380px]:w-7 min-[380px]:h-7 sm:w-8 sm:h-8 rounded-md min-[380px]:rounded-lg border sm:border-2 flex items-center justify-center font-mono font-black text-[10px] sm:text-xs relative overflow-hidden ${
                               occupyingShip
                                 ? shotStatus === 'hit'
                                   ? 'bg-portal-pink/30 border-portal-pink shadow-neo-sm animate-pulse'
@@ -2096,18 +2109,18 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               </div>
 
               {/* Friendly Fleet Manifest Status Drawer */}
-              <div className="w-full mt-3 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <div className="w-full mt-2.5 sm:mt-3 flex flex-wrap items-center justify-center gap-1 sm:gap-2">
                 {friendlyShips.map(ship => (
                   <div
                     key={ship.id}
-                    className={`px-2 py-1 rounded-lg border text-[10px] font-black uppercase flex items-center gap-1.5 ${
+                    className={`px-1.5 min-[360px]:px-2 py-0.5 min-[360px]:py-1 rounded-lg border text-[9px] min-[360px]:text-[10px] font-black uppercase flex items-center gap-1 sm:gap-1.5 ${
                       ship.sunk
                         ? 'bg-portal-pink/20 border-portal-pink text-portal-pink line-through opacity-70'
                         : 'bg-black/50 border-black text-slate-300'
                     }`}
                   >
                     <span
-                      className="w-2 h-2 rounded-sm"
+                      className="w-1.5 h-1.5 min-[360px]:w-2 min-[360px]:h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
                     {ship.code} [{ship.hits}/{ship.size}] {phase === 'gameover' && !ship.sunk ? '✓ SURVIVED' : ''}
