@@ -1333,6 +1333,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   const p1TotalShots = Object.keys(p1Shots).length;
   const p1Accuracy = p1TotalShots > 0 ? Math.round((p1TotalHits / p1TotalShots) * 100) : 0;
 
+  const p2TotalHits = Object.values(p2Shots).filter(v => v === 'hit').length;
+  const p2TotalShots = Object.keys(p2Shots).length;
+  const p2Accuracy = p2TotalShots > 0 ? Math.round((p2TotalHits / p2TotalShots) * 100) : 0;
+  const formattedDuration = `${Math.floor(matchDurationSec / 60)}m ${matchDurationSec % 60}s`;
+
   // Viewport Perspective Mapping (In AI mode, viewer is ALWAYS Player 1)
   const viewerPlayer: 'P1' | 'P2' = mode === 'ai' ? 'P1' : turn;
   const friendlyShips = viewerPlayer === 'P1' ? p1Ships : p2Ships;
@@ -1699,20 +1704,135 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       )}
 
       {/* ========================================================================= */}
-      {/* PHASE 2: ACTIVE BATTLE RADAR COMBAT STAGE */}
+      {/* PHASE 2 & 3: ACTIVE COMBAT STAGE & POST-MATCH BATTLEFIELD INSPECTOR */}
       {/* ========================================================================= */}
-      {phase === 'battle' && (
-        <div className="w-full flex flex-col items-center">
-          {/* Active Turn Banner */}
+      {(phase === 'battle' || phase === 'gameover') && (
+        <div className="w-full flex flex-col items-center animate-fadeIn">
+          {/* POST-MATCH TACTICAL DEBRIEFING CARD (When phase === 'gameover') */}
+          {phase === 'gameover' && (
+            <div className="w-full bg-portal-card border-4 border-black rounded-3xl p-4 sm:p-6 mb-4 shadow-neo-lg text-center animate-scaleIn">
+              {/* Header Badge Crest & Title */}
+              <div className="flex flex-col items-center">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 mb-2 rounded-2xl bg-portal-surface border-3 border-black flex items-center justify-center shadow-neo-md">
+                  {winner === 'P1' ? (
+                    <Award className="w-8 h-8 sm:w-9 sm:h-9 text-portal-yellow stroke-[2.5]" />
+                  ) : (
+                    <AlertTriangle className="w-8 h-8 sm:w-9 sm:h-9 text-portal-pink stroke-[2.5]" />
+                  )}
+                </div>
+
+                <div className="inline-block px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider mb-1 bg-black/60 border border-slate-700">
+                  {winner === 'P1' ? (
+                    <span className="text-portal-lime flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> MISSION ACCOMPLISHED // SECTOR SECURED
+                    </span>
+                  ) : (
+                    <span className="text-portal-pink flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3" /> FLEET CASUALTY REPORT // MISSION FAILED
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white mb-2">
+                  {winner === 'P1'
+                    ? mode === 'ai'
+                      ? 'TACTICAL NAVAL VICTORY'
+                      : 'PLAYER 1 VICTORIOUS'
+                    : mode === 'ai'
+                    ? 'FLEET SQUADRON DESTROYED'
+                    : 'PLAYER 2 VICTORIOUS'}
+                </h2>
+
+                {/* Tactical Narrative Debrief Analysis */}
+                <div className="w-full max-w-2xl bg-portal-surface/90 border-2 border-black rounded-xl p-3 mb-4 text-left shadow-neo-sm">
+                  <div className="flex items-center gap-2 mb-1.5 border-b border-black/40 pb-1">
+                    <Radio className="w-3.5 h-3.5 text-portal-cyan animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-wider text-portal-cyan">
+                      TACTICAL COMBAT DEBRIEF // AFTER-ACTION REVIEW
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    {winner === 'P1' ? (
+                      <>
+                        Hostile naval squadron completely neutralized across{' '}
+                        <strong className="text-portal-lime font-black">{p1TotalShots} salvos</strong> with{' '}
+                        <strong className="text-portal-cyan font-black">{p1Accuracy}% targeting accuracy</strong>. All 5 enemy warships sunk in{' '}
+                        <strong className="text-portal-yellow font-black">{formattedDuration}</strong> while preserving{' '}
+                        <strong className="text-portal-lime font-black">{p1AliveCount} friendly vessel{p1AliveCount !== 1 ? 's' : ''}</strong>. Strategic ocean sector has been locked down under your command.
+                      </>
+                    ) : (
+                      <>
+                        Friendly squadron sustained catastrophic hull breaches after{' '}
+                        <strong className="text-portal-pink font-black">{p2TotalShots} incoming artillery strikes</strong> ({p2Accuracy}% hostile accuracy). All friendly warships were neutralized over{' '}
+                        <strong className="text-portal-yellow font-black">{formattedDuration}</strong>. Hostile battle-group preserved{' '}
+                        <strong className="text-portal-pink font-black">{p2AliveCount} hidden warship{p2AliveCount !== 1 ? 's' : ''}</strong>.
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {/* Combat Telemetry Statistics Grid */}
+                <div className="w-full max-w-2xl grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4">
+                  <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block">SCORE</span>
+                    <span className="text-base sm:text-lg font-black text-portal-yellow font-mono">{finalScore}</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block">PRECISION</span>
+                    <span className="text-base sm:text-lg font-black text-portal-cyan font-mono">{p1Accuracy}%</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block">SALVOS</span>
+                    <span className="text-base sm:text-lg font-black text-portal-lime font-mono">{p1TotalShots}</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block">SURVIVORS</span>
+                    <span className="text-base sm:text-lg font-black text-portal-pink font-mono">{p1AliveCount}/5</span>
+                  </div>
+                  <div className="col-span-2 sm:col-span-1 p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
+                    <span className="text-[10px] font-black text-slate-400 uppercase block">TIME</span>
+                    <span className="text-base sm:text-lg font-black text-portal-cyan font-mono">{formattedDuration}</span>
+                  </div>
+                </div>
+
+                {/* Rematch / Replay Button */}
+                <div className="w-full max-w-md">
+                  <button
+                    onClick={handleStartNewMatch}
+                    className="w-full py-3.5 rounded-2xl bg-portal-yellow text-black border-3 border-black font-black text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-2"
+                  >
+                    <RotateCcw className="w-4 h-4 stroke-[3]" /> DEPLOY FRESH SQUADRON / REMATCH
+                  </button>
+                </div>
+
+                {/* Battlefield Reconnaissance Notification */}
+                <div className="mt-3 text-xs text-portal-yellow font-black uppercase flex items-center gap-1.5 bg-portal-yellow/10 border border-portal-yellow/30 px-3 py-1.5 rounded-lg">
+                  <Eye className="w-4 h-4 text-portal-yellow shrink-0" />
+                  <span>BATTLEFIELD RECONNAISSANCE ACTIVE: Fog of War lifted on both radar grids below for tactical review.</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Active Turn & Phase Status Banner */}
           <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2.5 sm:p-3 mb-3 sm:mb-4 shadow-neo-md flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div
-                className={`w-3.5 h-3.5 rounded-full border-2 border-black animate-ping ${
-                  turn === 'P1' ? 'bg-portal-cyan' : 'bg-portal-pink'
+                className={`w-3.5 h-3.5 rounded-full border-2 border-black ${
+                  phase === 'gameover'
+                    ? 'bg-portal-yellow'
+                    : turn === 'P1'
+                    ? 'bg-portal-cyan animate-ping'
+                    : 'bg-portal-pink animate-ping'
                 }`}
               />
               <span className="font-black text-xs sm:text-sm uppercase tracking-wider text-white flex items-center gap-2">
-                {turn === 'P1' ? (
+                {phase === 'gameover' ? (
+                  <>
+                    <Eye className="w-4 h-4 text-portal-yellow stroke-[2.5]" />
+                    <span>BATTLEFIELD INSPECTOR // ALL HOSTILE VESSELS REVEALED</span>
+                  </>
+                ) : turn === 'P1' ? (
                   <>
                     <Crosshair className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
                     {mode === 'ai' ? 'YOUR SALVO // TARGET ENEMY RADAR' : 'PLAYER 1 SALVO // TARGET RADAR'}
@@ -1749,17 +1869,17 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             {/* Fleet Status Counts */}
             <div className="hidden sm:flex items-center gap-3 text-xs font-black uppercase">
               <span className="text-portal-cyan flex items-center gap-1">
-                <Shield className="w-3.5 h-3.5" /> FRIENDLY: {friendlyAliveCount}/5 ACTIVE
+                <Shield className="w-3.5 h-3.5" /> FRIENDLY: {friendlyAliveCount}/5 OPERATIONAL
               </span>
               <span className="text-portal-pink flex items-center gap-1">
-                <Crosshair className="w-3.5 h-3.5" /> HOSTILE: {enemyAliveCount}/5 ACTIVE
+                <Crosshair className="w-3.5 h-3.5" /> HOSTILE: {enemyAliveCount}/5 REMAINING
               </span>
             </div>
           </div>
 
           {/* Dual Radar Viewport (Side by Side on Desktop, Tabbed on Mobile) */}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* 1. ENEMY TARGETING RADAR (Primary Attack View) */}
+            {/* 1. ENEMY TARGETING RADAR (Primary Attack View / Post-Match Fog of War Lifted View) */}
             <div
               className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md ${
                 mobileTab === 'fleet' ? 'hidden md:flex' : 'flex'
@@ -1768,10 +1888,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               <div className="flex items-center justify-between w-full mb-2 px-1">
                 <span className="text-xs font-black uppercase text-portal-pink flex items-center gap-1.5">
                   <Crosshair className="w-4 h-4 text-portal-pink stroke-[2.5]" />
-                  HOSTILE TARGETING RADAR
+                  {phase === 'gameover' ? 'HOSTILE SECTOR (FOG OF WAR LIFTED)' : 'HOSTILE TARGETING RADAR'}
                 </span>
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
-                  {enemyAliveCount} VESSELS DETECTED
+                  {phase === 'gameover'
+                    ? `${5 - enemyAliveCount}/5 VESSELS SUNK`
+                    : `${enemyAliveCount} VESSELS DETECTED`}
                 </span>
               </div>
 
@@ -1799,9 +1921,19 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       {COL_LABELS.map((_, c) => {
                         const shotKey = `${r},${c}`;
                         const shotStatus = activePlayerShots[shotKey];
-                        const isSunkShipCell = enemyTargetShips
-                          .filter(s => s.sunk)
-                          .some(s => s.positions.some(p => p.r === r && p.c === c));
+                        const occupyingEnemyShip = enemyTargetShips.find(s =>
+                          s.positions.some(p => p.r === r && p.c === c)
+                        );
+
+                        let enemySegmentIndex = 0;
+                        if (occupyingEnemyShip) {
+                          const posIdx = occupyingEnemyShip.positions.findIndex(p => p.r === r && p.c === c);
+                          enemySegmentIndex = posIdx !== -1 ? posIdx : 0;
+                        }
+
+                        const isSunkShipCell = Boolean(occupyingEnemyShip && occupyingEnemyShip.sunk);
+                        const isGameOver = phase === 'gameover';
+                        const isRevealedIntactEnemyShip = isGameOver && occupyingEnemyShip && !occupyingEnemyShip.sunk && !shotStatus;
 
                         // Sonar highlight
                         const isSonarSector =
@@ -1813,10 +1945,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                           <button
                             key={c}
                             onClick={() => handleFireSalvo(r, c)}
-                            disabled={Boolean(shotStatus) || isAiThinking || (mode === 'ai' && turn !== 'P1')}
+                            disabled={Boolean(shotStatus) || isAiThinking || (mode === 'ai' && turn !== 'P1') || isGameOver}
                             className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 transition-all flex items-center justify-center font-mono font-black text-xs relative overflow-hidden ${
                               isSunkShipCell
                                 ? 'bg-portal-pink/30 text-white border-portal-pink shadow-neo-sm'
+                                : isRevealedIntactEnemyShip
+                                ? 'bg-slate-900 border-portal-yellow ring-1 ring-portal-yellow/60 shadow-neo-sm'
                                 : shotStatus === 'hit'
                                 ? 'bg-portal-yellow/20 text-black border-portal-yellow shadow-neo-sm'
                                 : shotStatus === 'miss'
@@ -1825,11 +1959,23 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                                 ? scannedSector.found
                                   ? 'bg-portal-cyan/30 border-portal-cyan'
                                   : 'bg-slate-900 border-slate-800 opacity-60'
+                                : isGameOver
+                                ? 'bg-slate-900/60 border-slate-800 cursor-default'
                                 : 'bg-slate-900/90 border-slate-800 hover:border-portal-pink hover:bg-portal-pink/20 active:scale-95'
                             }`}
                           >
-                            {shotStatus === 'hit' ? (
-                              <BallisticImpactBlast isSunk={isSunkShipCell} />
+                            {occupyingEnemyShip && (isSunkShipCell || isGameOver || shotStatus === 'hit') ? (
+                              <ShipHullSegment
+                                shipId={occupyingEnemyShip.id}
+                                segmentIndex={enemySegmentIndex}
+                                totalSize={occupyingEnemyShip.size}
+                                orientation={occupyingEnemyShip.orientation}
+                                isDamaged={shotStatus === 'hit' || occupyingEnemyShip.sunk}
+                                isSunk={occupyingEnemyShip.sunk}
+                                color={occupyingEnemyShip.color}
+                              />
+                            ) : shotStatus === 'hit' ? (
+                              <BallisticImpactBlast isSunk={false} />
                             ) : shotStatus === 'miss' ? (
                               <WaterSplashMarker />
                             ) : null}
@@ -1849,6 +1995,8 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     className={`px-2 py-1 rounded-lg border text-[10px] font-black uppercase flex items-center gap-1.5 ${
                       ship.sunk
                         ? 'bg-portal-pink/20 border-portal-pink text-portal-pink line-through opacity-70'
+                        : phase === 'gameover'
+                        ? 'bg-portal-lime/20 border-portal-lime text-portal-lime font-black'
                         : 'bg-black/50 border-black text-slate-300'
                     }`}
                   >
@@ -1856,13 +2004,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       className="w-2 h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
-                    {ship.code} [{ship.hits}/{ship.size}]
+                    {ship.code} [{ship.hits}/{ship.size}] {phase === 'gameover' && !ship.sunk ? '✓ SURVIVED' : ''}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* 2. FRIENDLY OCEAN FLEET (Defense & Damage View) */}
+            {/* 2. FRIENDLY OCEAN FLEET (Defense & Casualty View) */}
             <div
               className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md ${
                 mobileTab === 'radar' ? 'hidden md:flex' : 'flex'
@@ -1871,7 +2019,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               <div className="flex items-center justify-between w-full mb-2 px-1">
                 <span className="text-xs font-black uppercase text-portal-cyan flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-portal-cyan stroke-[2.5]" />
-                  FRIENDLY OCEAN FLEET
+                  {phase === 'gameover' ? 'FRIENDLY SQUADRON (CASUALTY REVIEW)' : 'FRIENDLY OCEAN FLEET'}
                 </span>
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-2 py-0.5 rounded border border-slate-800">
                   {friendlyAliveCount} VESSELS OPERATIONAL
@@ -1932,7 +2080,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                                 segmentIndex={segmentIndex}
                                 totalSize={occupyingShip.size}
                                 orientation={occupyingShip.orientation}
-                                isDamaged={shotStatus === 'hit'}
+                                isDamaged={shotStatus === 'hit' || occupyingShip.sunk}
                                 isSunk={occupyingShip.sunk}
                                 color={occupyingShip.color}
                               />
@@ -1962,71 +2110,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                       className="w-2 h-2 rounded-sm"
                       style={{ backgroundColor: ship.sunk ? '#FF4081' : ship.color }}
                     />
-                    {ship.code} [{ship.hits}/{ship.size}]
+                    {ship.code} [{ship.hits}/{ship.size}] {phase === 'gameover' && !ship.sunk ? '✓ SURVIVED' : ''}
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
-      {/* PHASE 3: GAME OVER / MILITARY VICTORY SUMMARY REPORT */}
-      {/* ========================================================================= */}
-      {phase === 'gameover' && (
-        <div className="w-full max-w-xl bg-portal-card border-4 border-black rounded-3xl p-5 sm:p-7 shadow-neo-lg text-center animate-scaleIn">
-          {/* Military Badge Crest */}
-          <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-portal-surface border-3 border-black flex items-center justify-center shadow-neo-md">
-            {winner === 'P1' ? (
-              <Award className="w-9 h-9 text-portal-yellow stroke-[2.5]" />
-            ) : (
-              <AlertTriangle className="w-9 h-9 text-portal-pink stroke-[2.5]" />
-            )}
-          </div>
-
-          <h2 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-white mb-1">
-            {winner === 'P1'
-              ? mode === 'ai'
-                ? 'TACTICAL NAVAL VICTORY'
-                : 'PLAYER 1 VICTORIOUS'
-              : mode === 'ai'
-              ? 'FLEET CASUALTY REPORT'
-              : 'PLAYER 2 VICTORIOUS'}
-          </h2>
-
-          <p className="text-xs sm:text-sm text-slate-300 mb-5">
-            {winner === 'P1'
-              ? 'Hostile naval fleet completely destroyed. Ocean sector secured under tactical command.'
-              : 'Naval squadron sustained critical hull breaches. Emergency fleet retreat ordered.'}
-          </p>
-
-          {/* Combat Statistics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
-            <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-              <span className="text-[10px] font-black text-slate-400 uppercase block">SCORE</span>
-              <span className="text-base sm:text-lg font-black text-portal-yellow font-mono">{finalScore}</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-              <span className="text-[10px] font-black text-slate-400 uppercase block">PRECISION</span>
-              <span className="text-base sm:text-lg font-black text-portal-cyan font-mono">{p1Accuracy}%</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-              <span className="text-[10px] font-black text-slate-400 uppercase block">SALVOS</span>
-              <span className="text-base sm:text-lg font-black text-portal-lime font-mono">{p1TotalShots}</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-              <span className="text-[10px] font-black text-slate-400 uppercase block">SURVIVORS</span>
-              <span className="text-base sm:text-lg font-black text-portal-pink font-mono">{p1AliveCount}/5</span>
-            </div>
-          </div>
-
-          <button
-            onClick={handleStartNewMatch}
-            className="w-full py-3.5 rounded-2xl bg-portal-yellow text-black border-3 border-black font-black text-sm uppercase shadow-neo-md hover:translate-x-1 hover:translate-y-1 active:translate-x-2 active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-2"
-          >
-            <RotateCcw className="w-4 h-4 stroke-[3]" /> DEPLOY FRESH SQUADRON / REMATCH
-          </button>
         </div>
       )}
     </div>
