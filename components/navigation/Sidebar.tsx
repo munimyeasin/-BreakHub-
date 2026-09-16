@@ -20,8 +20,12 @@ import {
   Compass,
   Target,
   Dices,
-  Award
+  Award,
+  Sun,
+  Moon,
+  Palette
 } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -72,6 +76,8 @@ export default function Sidebar({
   categoryCounts = {},
   totalGamesCount = 0
 }: SidebarProps) {
+  const { theme, setTheme, setIsThemeSelectorOpen } = useTheme();
+
   const handleTabClick = (tab: 'all' | 'favorites' | 'about') => {
     onSelectTab(tab);
     if (tab !== 'all') {
@@ -335,6 +341,67 @@ export default function Sidebar({
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* SECTION 3: THEME & DESIGN ENGINE */}
+          <div>
+            <div className="px-2 mb-2 flex items-center justify-between">
+              <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
+                <Palette className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
+                THEME & DESIGN
+              </span>
+              <span className="text-[9px] font-black uppercase text-portal-cyan">
+                Neo-Brutal
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {/* Dual Neo-Brutalist Theme Segmented Switch */}
+              <div className="grid grid-cols-2 gap-1.5 p-1 bg-portal-card border-2 border-black rounded-xl shadow-neo-sm">
+                <button
+                  onClick={() => setTheme('neo-dark')}
+                  className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-[11px] font-black uppercase transition-all ${
+                    theme === 'neo-dark'
+                      ? 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                  title="Dark Neo-Brutalist Arcade Theme"
+                >
+                  <Moon className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Dark</span>
+                </button>
+
+                <button
+                  onClick={() => setTheme('neo-light')}
+                  className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-[11px] font-black uppercase transition-all ${
+                    theme === 'neo-light'
+                      ? 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                  title="Light Neo-Brutalist Vintage Paper Theme"
+                >
+                  <Sun className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Light</span>
+                </button>
+              </div>
+
+              {/* Design Engine Modal Trigger */}
+              <button
+                onClick={() => {
+                  setIsThemeSelectorOpen(true);
+                  onClose();
+                }}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
+              >
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-portal-pink group-hover:text-black stroke-[2.5]" />
+                  <span className="text-[11px]">Design Engine Lab</span>
+                </div>
+                <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-portal-surface group-hover:bg-black group-hover:text-white text-portal-yellow border border-black">
+                  5 THEMES
+                </span>
+              </button>
             </div>
           </div>
         </div>

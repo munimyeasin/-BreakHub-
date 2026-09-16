@@ -533,13 +533,13 @@ export default function GameModal({
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0 bg-black' : 'p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-fadeIn'}`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${isFullscreen ? 'p-0 bg-black' : 'p-1 min-[360px]:p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-fadeIn'}`}>
       <div
         ref={modalRef}
         className={`relative bg-portal-surface overflow-hidden flex flex-col transition-all duration-300 ${
           isFullscreen
             ? 'w-screen h-screen max-w-none max-h-none rounded-none border-none'
-            : 'w-full max-w-[480px] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl border-4 border-black rounded-2xl sm:rounded-3xl max-h-[96vh] shadow-neo-lg'
+            : 'w-full max-w-[480px] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl border-3 sm:border-4 border-black rounded-2xl sm:rounded-3xl max-h-[98dvh] sm:max-h-[96dvh] shadow-neo-lg'
         }`}
       >
         {/* Top Decorative Neo-Brutalist Hazard Accent Line (Hidden when in Fullscreen) */}
@@ -680,12 +680,12 @@ export default function GameModal({
         {/* Dual-Pane Widescreen Body: Left Game Arena + Right Desktop Companion Deck */}
         <div className="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden bg-black">
           {/* Left / Center: Primary Game Arena Viewport */}
-          <div className="flex-1 min-w-0 flex flex-col items-center justify-center p-2 sm:p-4 overflow-y-auto bg-black/95 relative custom-scrollbar">
+          <div className="flex-1 min-w-0 flex flex-col items-center justify-start p-1.5 min-[360px]:p-2.5 sm:p-4 overflow-y-auto bg-black/95 relative custom-scrollbar">
             {/* Ambient Background Grid Pattern */}
             <div className="absolute inset-0 bg-[radial-gradient(#1e144a_1px,transparent_1px)] [background-size:24px_24px] opacity-30 pointer-events-none" />
 
             {/* Game Dynamic Component */}
-            <div className="relative z-10 w-full flex flex-col items-center justify-center">
+            <div className="relative z-10 w-full flex flex-col items-center justify-start">
               {(game.id === 'g_battleship_18' || game.slug === 'retro-battleship' || game.slug === 'battleship') && (
                 <BattleshipGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

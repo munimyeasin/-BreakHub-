@@ -2,29 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* Root Theme Tokens - Default Dark Neo-Brutalist */
+:root,
+html[data-theme="neo-dark"] {
+  --portal-bg: #0B0819;
+  --portal-surface: #130F26;
+  --portal-card: #1C1635;
+  --portal-border: #2A224D;
+  --portal-text: #FFFFFF;
+  --portal-text-muted: #94A3B8;
+  --portal-dot-color: rgba(255, 255, 255, 0.12);
+  --portal-grid-color: rgba(255, 255, 255, 0.05);
+  --portal-scrollbar-track: #0B0819;
+  --portal-scrollbar-thumb: #FFE600;
   --background: #0B0819;
-  --foreground: #f8fafc;
+  --foreground: #F8FAFC;
+  color-scheme: dark;
+}
+
+/* Light Neo-Brutalist Tokens */
+html[data-theme="neo-light"] {
+  --portal-bg: #FFFDF0;
+  --portal-surface: #FFFFFF;
+  --portal-card: #FFF8E7;
+  --portal-border: #000000;
+  --portal-text: #000000;
+  --portal-text-muted: #475569;
+  --portal-dot-color: rgba(0, 0, 0, 0.12);
+  --portal-grid-color: rgba(0, 0, 0, 0.06);
+  --portal-scrollbar-track: #FFFDF0;
+  --portal-scrollbar-thumb: #FFE600;
+  --background: #FFFDF0;
+  --foreground: #000000;
+  color-scheme: light;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--portal-text);
+  background: var(--portal-bg);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Neo-Brutalist Subtle Retro Dot Grid */
 .bg-neo-dots {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(var(--portal-dot-color) 1.5px, transparent 1.5px);
   background-size: 24px 24px;
 }
 
 .bg-neo-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, var(--portal-grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--portal-grid-color) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -35,18 +66,68 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0819;
+  background: var(--portal-scrollbar-track);
   border-left: 2px solid #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FFE600;
+  background: var(--portal-scrollbar-thumb);
   border: 2px solid #000;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #00F0FF;
+}
+
+/* Light Mode Typography & Contrast Rules */
+html[data-theme="neo-light"] {
+  /* Slate neutral text adjustments for crisp light readability */
+  .text-slate-100,
+  .text-slate-200 {
+    color: #000000 !important;
+  }
+
+  .text-slate-300,
+  .text-slate-400 {
+    color: #334155 !important;
+  }
+
+  .text-slate-500 {
+    color: #475569 !important;
+  }
+
+  /* Headings & prominent text elements inside portal containers */
+  .bg-portal-card h1,
+  .bg-portal-card h2,
+  .bg-portal-card h3,
+  .bg-portal-surface h1,
+  .bg-portal-surface h2,
+  .bg-portal-surface h3 {
+    color: #000000;
+  }
+
+  /* Card titles & descriptions */
+  .bg-portal-card .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]),
+  .bg-portal-surface .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]),
+  header .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]),
+  aside .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]),
+  main .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]) {
+    color: #000000;
+  }
+
+  /* Inputs and search bars */
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    color: #000000 !important;
+  }
+
+  input[type="text"]::placeholder,
+  textarea::placeholder {
+    color: #64748B !important;
+  }
 }
 
 /* Animations */

@@ -15,10 +15,12 @@ const config: Config = {
       },
       colors: {
         portal: {
-          bg: '#0B0819',          // Deep dark violet ground
-          surface: '#130F26',     // Card / container surface
-          card: '#1C1635',        // Sub-panel / elevated layer
-          border: '#2A224D',      // Border accent
+          bg: 'var(--portal-bg)',
+          surface: 'var(--portal-surface)',
+          card: 'var(--portal-card)',
+          border: 'var(--portal-border)',
+          text: 'var(--portal-text)',
+          'text-muted': 'var(--portal-text-muted)',
           cyan: '#00F0FF',        // Electric Cyan
           yellow: '#FFE600',      // Electric Cyber Yellow
           pink: '#FF4081',        // Hot Neo Pink

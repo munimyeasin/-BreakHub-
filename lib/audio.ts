@@ -258,6 +258,34 @@ class GamificationAudioEngine {
       osc.stop(now + 0.25);
     } catch {}
   }
+
+  /**
+   * Crisp tactile click sound for UI toggles and theme switches
+   */
+  public playClickSound() {
+    if (this.isMuted) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.exponentialRampToValueAtTime(850, now + 0.04);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.045);
+    } catch {}
+  }
 }
 
 export const audio = new GamificationAudioEngine();

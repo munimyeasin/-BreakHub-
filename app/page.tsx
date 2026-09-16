@@ -4,18 +4,16 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Trophy,
   Gamepad2,
-  Heart,
   Search,
-  Sparkles,
   Zap,
   User,
   Edit3,
   Users,
-  Menu,
   SlidersHorizontal,
   X,
-  Target,
-  Dices
+  Sun,
+  Moon,
+  Palette
 } from 'lucide-react';
 import GameGrid from '@/components/games/GameGrid';
 import SpotlightBanner from '@/components/games/SpotlightBanner';
@@ -23,6 +21,7 @@ import GameModal from '@/components/ui/GameModal';
 import LeaderboardModal from '@/components/leaderboard/LeaderboardModal';
 import UsernamePromptModal from '@/components/ui/UsernamePromptModal';
 import ComingSoonModal from '@/components/ui/ComingSoonModal';
+import ThemeSelectorModal from '@/components/ui/ThemeSelectorModal';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar from '@/components/navigation/Sidebar';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
@@ -31,12 +30,14 @@ import TrophyRoomModal from '@/components/gamification/TrophyRoomModal';
 import LevelUpCelebrationModal from '@/components/gamification/LevelUpCelebrationModal';
 import GameRouletteModal from '@/components/gamification/GameRouletteModal';
 import ActivityTicker from '@/components/gamification/ActivityTicker';
+import { useTheme } from '@/context/ThemeContext';
 import { gamification, GamificationState, LevelInfo } from '@/lib/gamification';
 import { Game } from '@/lib/types';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 import { getAvatarUrl } from '@/lib/avatar';
 
 export default function ArcadePortalDashboard() {
+  const { toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
   const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'about'>('all');
@@ -402,8 +403,45 @@ export default function ArcadePortalDashboard() {
               </button>
             </div>
 
-            {/* Gamification Player XP Badge & Gamer Tag */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* Theme Toggle & Gamification Player XP Badge & Gamer Tag */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Theme Quick Toggle & Engine Trigger */}
+              <div className="flex items-center gap-1">
+                {/* Instant Dark/Light Switch */}
+                <button
+                  onClick={toggleTheme}
+                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
+                    isDark
+                      ? 'bg-portal-yellow text-black hover:bg-portal-cyan'
+                      : 'bg-portal-card text-white hover:bg-portal-yellow hover:text-black'
+                  }`}
+                  title={isDark ? 'Switch to Light Neo-Brutalist Theme' : 'Switch to Dark Neo-Brutalist Theme'}
+                  aria-label="Toggle Theme"
+                >
+                  {isDark ? (
+                    <>
+                      <Sun className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <span className="hidden sm:inline">Light</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
+                      <span className="hidden sm:inline">Dark</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Theme Selector Modal Trigger */}
+                <button
+                  onClick={() => setIsThemeSelectorOpen(true)}
+                  className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-purple text-slate-200 hover:text-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  title="Design Engine & Theme Lab"
+                  aria-label="Open Theme Engine"
+                >
+                  <Palette className="w-3.5 h-3.5 stroke-[2.5]" />
+                </button>
+              </div>
+
               <PlayerXpBadge
                 onOpenQuests={() => setIsQuestsModalOpen(true)}
                 onOpenTrophies={() => setIsTrophiesModalOpen(true)}
@@ -718,6 +756,12 @@ export default function ArcadePortalDashboard() {
         onClose={() => setIsRouletteModalOpen(false)}
         games={games}
         onSelectGame={handleSelectGameFromRoulette}
+      />
+
+      {/* 13. DESIGN ENGINE & THEME LAB MODAL */}
+      <ThemeSelectorModal
+        isOpen={isThemeSelectorOpen}
+        onClose={() => setIsThemeSelectorOpen(false)}
       />
     </div>
   );
