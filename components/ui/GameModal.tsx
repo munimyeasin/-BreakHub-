@@ -36,6 +36,7 @@ import CyberMazeGame from '@/components/games/CyberMazeGame';
 import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
 import BlackHoleGame from '@/components/games/BlackHoleGame';
 import BattleshipGame from '@/components/games/BattleshipGame';
+import CandyCrushGame from '@/components/games/CandyCrushGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -59,6 +60,20 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // -1. Retro Candy Crush
+  g_candy_19: {
+    genreTag: 'PUZZLE // MATCH-3 ARCADE',
+    objective: 'Match 3+ candies to clear goals, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Quest levels, 25-move Blitz, or 60s Timed Rush.',
+    scoring: 'Standard match (60pts), Match-4 Striped (120pts), Match-5 Color Bomb (250pts), cascades multiplier (x1 to x5), plus Sugar Crush end-game special conversions.',
+    proTip: 'Swap two specials together for explosive fusion combos! Swap Color Bomb + Striped Candy to convert all matching candies on the board into detonating laser beams.',
+    controls: [
+      { keys: ['Left Click', 'Drag', 'Touch'], label: 'SWAP CANDIES', desc: 'Select or drag candy to adjacent cell' },
+      { keys: ['1'], label: 'HAMMER BOOSTER', desc: 'Smash single candy / jelly' },
+      { keys: ['2'], label: 'COLOR BOMB BOOSTER', desc: 'Spawn Rainbow Disco Bomb' },
+      { keys: ['3'], label: 'WRAPPED BOMB BOOSTER', desc: 'Spawn 3x3 explosive candy' },
+      { keys: ['R'], label: 'RETRY / RESTART', desc: 'Restart current level or run' }
+    ]
+  },
   // 0. Retro Battleship
   g_battleship_18: {
     genreTag: 'STRATEGY // NAVAL GRID COMBAT',
@@ -686,6 +701,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full flex flex-col items-center justify-start">
+              {(game.id === 'g_candy_19' || game.slug === 'retro-candy-crush' || game.slug === 'candy-crush') && (
+                <CandyCrushGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_battleship_18' || game.slug === 'retro-battleship' || game.slug === 'battleship') && (
                 <BattleshipGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

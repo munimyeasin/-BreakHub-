@@ -155,19 +155,23 @@ html[data-theme="neo-light"] {
   .bg-portal-card h1,
   .bg-portal-card h2,
   .bg-portal-card h3,
+  .bg-portal-card h4,
   .bg-portal-surface h1,
   .bg-portal-surface h2,
-  .bg-portal-surface h3 {
-    color: #000000;
+  .bg-portal-surface h3,
+  .bg-portal-surface h4,
+  header h1, header h2, header h3,
+  main h1, main h2, main h3 {
+    color: #000000 !important;
   }
 
-  /* Card titles & descriptions */
-  .bg-portal-card .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
-  .bg-portal-surface .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
-  header .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
-  aside .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
-  main .text-white:not([class*="bg-portal-"]):not([class*="bg-black"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]) {
-    color: #000000;
+  /* Card titles & descriptions: override text-white on light surfaces while preserving badge text */
+  .bg-portal-card .text-white:not([class*="bg-portal-pink"]):not([class*="bg-portal-purple"]):not([class*="bg-black"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-zinc-800"]):not([class*="bg-zinc-900"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
+  .bg-portal-surface .text-white:not([class*="bg-portal-pink"]):not([class*="bg-portal-purple"]):not([class*="bg-black"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-zinc-800"]):not([class*="bg-zinc-900"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
+  header .text-white:not([class*="bg-portal-pink"]):not([class*="bg-portal-purple"]):not([class*="bg-black"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-zinc-800"]):not([class*="bg-zinc-900"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
+  aside .text-white:not([class*="bg-portal-pink"]):not([class*="bg-portal-purple"]):not([class*="bg-black"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-zinc-800"]):not([class*="bg-zinc-900"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]),
+  main .text-white:not([class*="bg-portal-pink"]):not([class*="bg-portal-purple"]):not([class*="bg-black"]):not([class*="bg-slate-800"]):not([class*="bg-slate-900"]):not([class*="bg-zinc-800"]):not([class*="bg-zinc-900"]):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-purple-"]):not([class*="bg-gradient-"]) {
+    color: #000000 !important;
   }
 
   /* Inputs and search bars */

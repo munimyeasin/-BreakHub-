@@ -9,6 +9,7 @@ import {
   getDailyQuestsForDate,
   getTodayDateString,
   DailyQuestDefinition,
+  getDefaultState,
 } from '@/lib/gamification';
 import { audio } from '@/lib/audio';
 
@@ -25,10 +26,11 @@ export default function DailyQuestsModal({
   onPlayGame,
   onOpenTrophies,
 }: DailyQuestsModalProps) {
-  const [state, setState] = useState<GamificationState>(() => gamification.getState());
+  const [state, setState] = useState<GamificationState>(() => getDefaultState());
   const [timeLeft, setTimeLeft] = useState<string>('');
 
   useEffect(() => {
+    setState(gamification.getState());
     const handleSync = (e: CustomEvent<GamificationState>) => {
       setState(e.detail || gamification.getState());
     };

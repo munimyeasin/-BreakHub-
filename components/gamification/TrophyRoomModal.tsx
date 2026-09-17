@@ -9,6 +9,7 @@ import {
   Trophy as TrophyType,
   TrophyRarity,
   getLevelInfo,
+  getDefaultState,
 } from '@/lib/gamification';
 
 interface TrophyRoomModalProps {
@@ -59,10 +60,11 @@ export default function TrophyRoomModal({
   onClose,
   onOpenQuests,
 }: TrophyRoomModalProps) {
-  const [state, setState] = useState<GamificationState>(() => gamification.getState());
+  const [state, setState] = useState<GamificationState>(() => getDefaultState());
   const [selectedRarity, setSelectedRarity] = useState<string>('ALL');
 
   useEffect(() => {
+    setState(gamification.getState());
     const handleSync = (e: CustomEvent<GamificationState>) => {
       setState(e.detail || gamification.getState());
     };

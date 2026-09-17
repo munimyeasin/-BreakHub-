@@ -492,7 +492,7 @@ export function getDailyQuestsForDate(dateStr: string): DailyQuestDefinition[] {
 // -------------------------------------------------------------
 const STORAGE_KEY = 'stressbuster_gamification_v1';
 
-function getDefaultState(): GamificationState {
+export function getDefaultState(): GamificationState {
   const today = getTodayDateString();
   const dailyDefinitions = getDailyQuestsForDate(today);
 

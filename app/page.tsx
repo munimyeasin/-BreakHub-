@@ -24,7 +24,7 @@ import ComingSoonModal from '@/components/ui/ComingSoonModal';
 import ThemeSelectorModal from '@/components/ui/ThemeSelectorModal';
 import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
-import Sidebar from '@/components/navigation/Sidebar';
+import Sidebar, { PortalTab } from '@/components/navigation/Sidebar';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
 import DailyQuestsModal from '@/components/gamification/DailyQuestsModal';
 import TrophyRoomModal from '@/components/gamification/TrophyRoomModal';
@@ -41,7 +41,7 @@ export default function ArcadePortalDashboard() {
   const { toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
   const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'about'>('all');
+  const [activeTab, setActiveTab] = useState<PortalTab>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [hypedGames, setHypedGames] = useState<string[]>([]);
@@ -545,8 +545,10 @@ export default function ArcadePortalDashboard() {
 
         {/* MAIN CONTENT ARENA */}
         <main className="flex-1 w-full min-w-0 px-2.5 sm:px-6 py-2.5 sm:py-3 pb-24 overflow-x-hidden">
-          {activeTab === 'about' ? (
+          {(activeTab === 'about-project' || activeTab === 'about-devs') ? (
             <AboutSection
+              initialView={activeTab === 'about-devs' ? 'devs' : 'project'}
+              onViewChange={(view) => setActiveTab(view === 'devs' ? 'about-devs' : 'about-project')}
               onExploreGames={() => {
                 setActiveTab('all');
                 setSelectedCategory('ALL');
@@ -629,27 +631,39 @@ export default function ArcadePortalDashboard() {
                 }}
               />
 
-              {/* FOOTER TEAM STRIP */}
+              {/* FOOTER PROJECT STRIP */}
               <footer className="mt-14 p-5 sm:p-6 bg-portal-surface border-3 border-black rounded-2xl shadow-neo flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-portal-yellow font-black uppercase tracking-wider">
                     <Gamepad2 className="w-4 h-4 text-portal-cyan stroke-[2.5] shrink-0" />
-                    <span>Stress Buster Project • Developed by:</span>
+                    <span>Stress Buster Arcade Portal</span>
                   </div>
                   <div className="text-slate-200 font-bold">
-                    <strong className="text-white">Tahida</strong>, <strong className="text-white">Marzia</strong>, <strong className="text-white">Rahul</strong>, & <strong className="text-portal-cyan">Munim Yeasin</strong>
+                    Internship Web Gaming Platform • 16 Custom HTML5 Games
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    setActiveTab('about');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5 self-start sm:self-center"
-                >
-                  <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Team & Project Details →</span>
-                </button>
+                <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">
+                  <button
+                    onClick={() => {
+                      setActiveTab('about-project');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5"
+                  >
+                    <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>About Project</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveTab('about-devs');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5"
+                  >
+                    <Users className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>About Devs →</span>
+                  </button>
+                </div>
               </footer>
             </>
           )}

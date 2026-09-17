@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="neo-brutalist">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel Sort Studio — Multi-Theme Glitch Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       THEME SYSTEM STYLES
+       ========================================================================== */
+
+    /* 1. NEO-BRUTALISM LIGHT (Default) */
+    html[data-theme="neo-brutalist"] {
+      --bg-main: #fef08a; /* Warm pastel yellow */
+      --bg-pattern: radial-gradient(#000000 1.5px, transparent 1.5px);
+      --bg-pattern-size: 24px 24px;
+      --card-bg: #ffffff;
+      --card-border: 3.5px solid #000000;
+      --card-shadow: 6px 6px 0px #000000;
+      --card-shadow-sm: 3px 3px 0px #000000;
+      --card-radius: 16px;
+      --text-main: #000000;
+      --text-muted: #374151;
+      --accent-primary: #ff5e7e; /* Hot Pink */
+      --accent-secondary: #00e5ff; /* Cyan */
+      --accent-tertiary: #a3e635; /* Lime */
+      --btn-primary-bg: #ff5e7e;
+      --btn-primary-text: #000000;
+      --btn-secondary-bg: #00e5ff;
+      --btn-secondary-text: #000000;
+      --badge-bg: #fde047;
+      --badge-text: #000000;
+      --badge-border: 2px solid #000000;
+      --font-heading: 'Syne', sans-serif;
+      --canvas-border: 4px solid #000000;
+      --canvas-shadow: 8px 8px 0px #000000;
+      --input-bg: #f9fafb;
+      --input-border: 2.5px solid #000000;
+      --thumb-color: #000000;
+    }
+
+    /* 2. CYBERPUNK DARK NEON */
+    html[data-theme="cyberpunk"] {
+      --bg-main: #030712;
+      --bg-pattern: linear-gradient(rgba(139, 92, 246, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.07) 1px, transparent 1px);
+      --bg-pattern-size: 32px 32px;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --card-border: 1px solid rgba(168, 85, 247, 0.4);
+      --card-shadow: 0 0 25px -5px rgba(217, 70, 239, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      --card-shadow-sm: 0 4px 15px -3px rgba(168, 85, 247, 0.2);
+      --card-radius: 18px;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-primary: #ec4899;
+      --accent-secondary: #06b6d4;
+      --accent-tertiary: #a855f7;
+      --btn-primary-bg: linear-gradient(135deg, #ec4899, #8b5cf6);
+      --btn-primary-text: #ffffff;
+      --btn-secondary-bg: #1e293b;
+      --btn-secondary-text: #38bdf8;
+      --badge-bg: rgba(236, 72, 153, 0.15);
+      --badge-text: #f472b6;
+      --badge-border: 1px solid rgba(236, 72, 153, 0.4);
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --canvas-border: 1px solid rgba(147, 51, 234, 0.5);
+      --canvas-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+      --input-bg: #0b0f19;
+      --input-border: 1px solid #334155;
+      --thumb-color: #ec4899;
+    }
+
+    /* 3. RETRO 90s OS (Windows 95 Classic) */
+    html[data-theme="retro-90s"] {
+      --bg-main: #008080; /* Classic Teal */
+      --bg-pattern: none;
+      --bg-pattern-size: auto;
+      --card-bg: #c0c0c0;
+      --card-border: 3px outset #ffffff;
+      --card-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+      --card-shadow-sm: 2px 2px 0px #000;
+      --card-radius: 0px;
+      --text-main: #000000;
+      --text-muted: #222222;
+      --accent-primary: #000080; /* Win95 Navy */
+      --accent-secondary: #808080;
+      --accent-tertiary: #008000;
+      --btn-primary-bg: #c0c0c0;
+      --btn-primary-text: #000000;
+      --btn-secondary-bg: #d4d0c8;
+      --btn-secondary-text: #000000;
+      --badge-bg: #000080;
+      --badge-text: #ffffff;
+      --badge-border: 1px solid #000000;
+      --font-heading: 'Fira Code', monospace;
+      --canvas-border: 3px inset #808080;
+      --canvas-shadow: inset 2px 2px 4px #000;
+      --input-bg: #ffffff;
+      --input-border: 2px inset #808080;
+      --thumb-color: #000080;
+    }
+
+    /* 4. SWISS MINIMALIST (Clean Architectural Light) */
+    html[data-theme="swiss-minimal"] {
+      --bg-main: #f4f4f5;
+      --bg-pattern: linear-gradient(#e4e4e7 1px, transparent 1px), linear-gradient(90deg, #e4e4e7 1px, transparent 1px);
+      --bg-pattern-size: 20px 20px;
+      --card-bg: #ffffff;
+      --card-border: 1px solid #e4e4e7;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+      --card-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.03);
+      --card-radius: 12px;
+      --text-main: #09090b;
+      --text-muted: #71717a;
+      --accent-primary: #18181b;
+      --accent-secondary: #f43f5e;
+      --accent-tertiary: #2563eb;
+      --btn-primary-bg: #18181b;
+      --btn-primary-text: #ffffff;
+      --btn-secondary-bg: #f4f4f5;
+      --btn-secondary-text: #18181b;
+      --badge-bg: #f4f4f5;
+      --badge-text: #18181b;
+      --badge-border: 1px solid #d4d4d8;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --canvas-border: 1px solid #e4e4e7;
+      --canvas-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+      --input-bg: #fafafa;
+      --input-border: 1px solid #d4d4d8;
+      --thumb-color: #18181b;
+    }
+
+    /* 5. Y2K ACID HYPERPOP */
+    html[data-theme="y2k-acid"] {
+      --bg-main: #140024;
+      --bg-pattern: radial-gradient(#d946ef 1px, transparent 1px);
+      --bg-pattern-size: 18px 18px;
+      --card-bg: #220538;
+      --card-border: 2.5px solid #a3e635;
+      --card-shadow: 6px 6px 0px #f43f5e;
+      --card-shadow-sm: 3px 3px 0px #06b6d4;
+      --card-radius: 24px;
+      --text-main: #ffffff;
+      --text-muted: #e2e8f0;
+      --accent-primary: #a3e635; /* Acid Green */
+      --accent-secondary: #f43f5e; /* Hot Pink */
+      --accent-tertiary: #38bdf8;
+      --btn-primary-bg: #a3e635;
+      --btn-primary-text: #000000;
+      --btn-secondary-bg: #f43f5e;
+      --btn-secondary-text: #ffffff;
+      --badge-bg: #a3e635;
+      --badge-text: #000000;
+      --badge-border: 2px solid #000000;
+      --font-heading: 'Syne', sans-serif;
+      --canvas-border: 3px solid #38bdf8;
+      --canvas-shadow: 8px 8px 0px #a3e635;
+      --input-bg: #150224;
+      --input-border: 2px solid #a3e635;
+      --thumb-color: #a3e635;
+    }
+
+    /* Dynamic Applied Styles */
+    body {
+      background-color: var(--bg-main);
+      background-image: var(--bg-pattern);
+      background-size: var(--bg-pattern-size);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    h1, h2, h3, .theme-heading {
+      font-family: var(--font-heading);
+    }
+
+    .theme-card {
+      background-color: var(--card-bg);
+      border: var(--card-border);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--card-radius);
+      transition: all 0.25s ease;
+    }
+
+    .theme-canvas {
+      border: var(--canvas-border);
+      box-shadow: var(--canvas-shadow);
+      border-radius: calc(var(--card-radius) - 4px);
+    }
+
+    .theme-btn-primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border: var(--card-border);
+      box-shadow: var(--card-shadow-sm);
+      border-radius: var(--card-radius);
+      font-weight: 700;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .theme-btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .theme-btn-secondary {
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      border: var(--card-border);
+      box-shadow: var(--card-shadow-sm);
+      border-radius: var(--card-radius);
+      font-weight: 600;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .theme-btn-secondary:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .theme-badge {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border: var(--badge-border);
+      border-radius: calc(var(--card-radius) / 2);
+    }
+
+    .theme-input {
+      background-color: var(--input-bg);
+      border: var(--input-border);
+      border-radius: calc(var(--card-radius) / 2);
+      color: var(--text-main);
+    }
+
+    input[type=range] {
+      accent-color: var(--thumb-color);
+    }
+
+    /* Win95 Button 3D bevel effect */
+    html[data-theme="retro-90s"] .theme-btn-primary,
+    html[data-theme="retro-90s"] .theme-btn-secondary,
+    html[data-theme="retro-90s"] .theme-theme-btn {
+      border: 2px outset #ffffff !important;
+      box-shadow: 1px 1px 0px #000 !important;
+    }
+    html[data-theme="retro-90s"] .theme-btn-primary:active,
+    html[data-theme="retro-90s"] .theme-btn-secondary:active {
+      border: 2px inset #ffffff !important;
+      transform: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-3 md:p-6 lg:p-8 selection:bg-black selection:text-yellow-300">
+
+  <!-- Main App Shell -->
+  <div class="max-w-7xl w-full flex flex-col gap-5">
+
+    <!-- Top Navigation Bar & Multi-UI Switcher -->
+    <header class="theme-card p-4 md:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="theme-badge px-3 py-0.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-current animate-pulse"></span>
+            GLITCH CORE v3.5
+          </span>
+          <span class="text-xs font-mono opacity-60">Pixel Sorting Sandbox</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-none">
+          PIXEL SORT STUDIO
+        </h1>
+        <p class="text-xs md:text-sm opacity-80 mt-1">
+          Explore algorithmic scanline sorting across 5 distinct visual UI paradigms.
+        </p>
+      </div>
+
+      <!-- UI Design System Switcher Pill -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full lg:w-auto">
+        <span class="text-xs font-extrabold uppercase tracking-wider opacity-75 whitespace-nowrap">
+          UI Theme:
+        </span>
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-1.5 w-full sm:w-auto bg-black/10 p-1.5 rounded-xl border border-current/20">
+          <button class="theme-switch-btn px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 bg-white text-black border border-black shadow-[2px_2px_0px_#000]" data-theme-target="neo-brutalist">
+            🟡 Neo-Brutalist
+          </button>
+          <button class="theme-switch-btn px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 opacity-75 hover:opacity-100" data-theme-target="cyberpunk">
+            🔮 Cyberpunk
+          </button>
+          <button class="theme-switch-btn px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 opacity-75 hover:opacity-100" data-theme-target="retro-90s">
+            🪟 Windows 95
+          </button>
+          <button class="theme-switch-btn px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 opacity-75 hover:opacity-100" data-theme-target="swiss-minimal">
+            ❄️ Swiss Light
+          </button>
+          <button class="theme-switch-btn px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 opacity-75 hover:opacity-100" data-theme-target="y2k-acid">
+            ⚡ Y2K Acid
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+      <!-- LEFT: Canvas Viewport & Gallery (7 Cols) -->
+      <div class="lg:col-span-7 flex flex-col gap-4">
+
+        <!-- Canvas Container -->
+        <div class="theme-card p-4 md:p-5 flex flex-col items-center justify-center min-h-[460px] relative overflow-hidden">
+
+          <!-- Metadata Badges -->
+          <div class="w-full flex justify-between items-center mb-3 text-xs font-mono">
+            <div class="flex items-center gap-2">
+              <span id="canvasDimBadge" class="theme-badge px-2.5 py-1 font-bold">
+                720 × 480 px
+              </span>
+              <span id="perfBadge" class="theme-badge px-2.5 py-1 font-bold">
+                0.0 ms
+              </span>
+            </div>
+
+            <!-- Top Action Buttons -->
+            <div class="flex items-center gap-2">
+              <label class="theme-btn-secondary px-3 py-1.5 text-xs cursor-pointer flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Upload Image
+                <input type="file" id="imageInput" accept="image/*" class="hidden" />
+              </label>
+
+              <button id="exportPngBtn" class="theme-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                Export
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Stage -->
+          <div class="relative max-w-full flex justify-center items-center">
+            <canvas id="glitchCanvas" class="theme-canvas max-w-full h-auto cursor-crosshair"></canvas>
+          </div>
+
+          <!-- Live Tip -->
+          <div class="mt-3 flex items-center justify-between w-full text-[11px] opacity-70 font-mono">
+            <span>💡 Tip: Click & drag on canvas to paint glitch live</span>
+            <button id="resetOriginalBtn" class="underline hover:opacity-100 font-bold">
+              ↺ View Clean Original
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset Templates Selector -->
+        <div class="theme-card p-4 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-black uppercase tracking-wider">Generative Artwork Presets</span>
+            <span class="text-[10px] opacity-60 font-mono">Select any base</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button class="preset-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold flex flex-col items-center gap-1" data-preset="cyberpunk">
+              <span>🔮 Neon Drift</span>
+              <span class="text-[9px] opacity-60 font-normal">Cyberpunk Gradient</span>
+            </button>
+            <button class="preset-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold flex flex-col items-center gap-1" data-preset="synthwave">
+              <span>🌅 Sunset Grid</span>
+              <span class="text-[9px] opacity-60 font-normal">Retro Horizon</span>
+            </button>
+            <button class="preset-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold flex flex-col items-center gap-1" data-preset="typography">
+              <span>🔤 Brutal Type</span>
+              <span class="text-[9px] opacity-60 font-normal">High-Contrast Text</span>
+            </button>
+            <button class="preset-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold flex flex-col items-center gap-1" data-preset="abstract">
+              <span>🌈 Acid Prism</span>
+              <span class="text-[9px] opacity-60 font-normal">Color Block Bands</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Granular Sort Controls (5 Cols) -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+
+        <div class="theme-card p-5 flex flex-col gap-4">
+          <div class="flex justify-between items-center border-b pb-2 border-current/10">
+            <h2 class="text-sm font-black uppercase tracking-wider">Sort Engine Parameters</h2>
+            <span class="theme-badge px-2 py-0.5 text-[10px] font-mono font-bold">REAL-TIME</span>
+          </div>
+
+          <!-- Axis Direction Mode -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-extrabold uppercase tracking-wide opacity-80">Sorting Axis</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button id="dirVertBtn" class="axis-btn theme-btn-primary py-2 px-2 text-xs text-center font-bold" data-dir="vertical">
+                ↓ Vertical
+              </button>
+              <button id="dirHorizBtn" class="axis-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold" data-dir="horizontal">
+                → Horizontal
+              </button>
+              <button id="dirDiagBtn" class="axis-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold" data-dir="diagonal">
+                ↘ Diagonal
+              </button>
+            </div>
+          </div>
+
+          <!-- Metric Select -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-extrabold uppercase tracking-wide opacity-80">Sort Key / Channel</label>
+            <select id="metricSelector" class="theme-input w-full p-2 text-xs font-bold outline-none cursor-pointer">
+              <option value="brightness">Brightness (Luma: 0.299R + 0.587G + 0.114B)</option>
+              <option value="hue">Hue Angle (0° – 360° Color Wheel)</option>
+              <option value="saturation">Color Saturation Depth</option>
+              <option value="red">Red Channel Value</option>
+              <option value="green">Green Channel Value</option>
+              <option value="blue">Blue Channel Value</option>
+              <option value="darkness">Inverted Darkness</option>
+            </select>
+          </div>
+
+          <!-- Threshold Cutoffs -->
+          <div class="space-y-3 pt-2 border-t border-current/10">
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Minimum Threshold:</span>
+                <span id="minValNum" class="font-mono">55</span>
+              </div>
+              <input id="minRange" type="range" min="0" max="255" value="55" class="w-full h-2 cursor-pointer" />
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Maximum Threshold:</span>
+                <span id="maxValNum" class="font-mono">215</span>
+              </div>
+              <input id="maxRange" type="range" min="0" max="255" value="215" class="w-full h-2 cursor-pointer" />
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Streak Length Limit:</span>
+                <span id="streakValNum" class="font-mono">Infinite</span>
+              </div>
+              <input id="streakRange" type="range" min="0" max="400" value="0" class="w-full h-2 cursor-pointer" />
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Random Jitter / Noise:</span>
+                <span id="jitterValNum" class="font-mono">0%</span>
+              </div>
+              <input id="jitterRange" type="range" min="0" max="50" value="0" class="w-full h-2 cursor-pointer" />
+            </div>
+          </div>
+
+          <!-- Modifiers & Glitch Wave Engine -->
+          <div class="space-y-2 pt-2 border-t border-current/10">
+            <button id="toggleReverseBtn" class="theme-btn-secondary w-full py-2 px-3 text-xs font-bold flex justify-between items-center">
+              <span>Sort Direction Order:</span>
+              <span id="sortOrderText" class="font-mono">ASCENDING ▲</span>
+            </button>
+
+            <button id="glitchWaveToggleBtn" class="theme-btn-primary w-full py-2.5 px-3 text-xs font-bold flex justify-center items-center gap-2">
+              <span id="waveDot" class="w-2.5 h-2.5 rounded-full bg-current animate-pulse"></span>
+              <span id="waveBtnText">▶ Run Continuous Glitch Wave</span>
+            </button>
+
+            <button id="audioReactiveBtn" class="theme-btn-secondary w-full py-2 px-3 text-xs font-bold flex justify-center items-center gap-2 opacity-90 hover:opacity-100">
+              <span>🎙️ Sound-Reactive Mode (Mic)</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Core JavaScript Engine -->
+  <script>
+    // State Store
+    const state = {
+      theme: 'neo-brutalist',
+      direction: 'vertical',
+      metric: 'brightness',
+      minThreshold: 55,
+      maxThreshold: 215,
+      maxStreak: 0,
+      jitter: 0,
+      reverse: false,
+      isWaveAnimated: false,
+      waveStep: 0,
+      isAudioReactive: false,
+      cleanImageData: null,
+      audioCtx: null,
+      analyser: null,
+    };
+
+    // DOM Elements
+    const htmlEl = document.documentElement;
+    const canvas = document.getElementById('glitchCanvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const minRange = document.getElementById('minRange');
+    const maxRange = document.getElementById('maxRange');
+    const streakRange = document.getElementById('streakRange');
+    const jitterRange = document.getElementById('jitterRange');
+    const minValNum = document.getElementById('minValNum');
+    const maxValNum = document.getElementById('maxValNum');
+    const streakValNum = document.getElementById('streakValNum');
+    const jitterValNum = document.getElementById('jitterValNum');
+    const metricSelector = document.getElementById('metricSelector');
+    const toggleReverseBtn = document.getElementById('toggleReverseBtn');
+    const sortOrderText = document.getElementById('sortOrderText');
+    const glitchWaveToggleBtn = document.getElementById('glitchWaveToggleBtn');
+    const waveBtnText = document.getElementById('waveBtnText');
+    const waveDot = document.getElementById('waveDot');
+    const audioReactiveBtn = document.getElementById('audioReactiveBtn');
+    const imageInput = document.getElementById('imageInput');
+    const exportPngBtn = document.getElementById('exportPngBtn');
+    const resetOriginalBtn = document.getElementById('resetOriginalBtn');
+    const canvasDimBadge = document.getElementById('canvasDimBadge');
+    const perfBadge = document.getElementById('perfBadge');
+
+    // Theme Switcher Logic
+    const themeButtons = document.querySelectorAll('.theme-switch-btn');
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTheme = btn.dataset.themeTarget;
+        setAppTheme(targetTheme);
+      });
+    });
+
+    function setAppTheme(themeName) {
+      state.theme = themeName;
+      htmlEl.setAttribute('data-theme', themeName);
+
+      // Update switcher active states
+      themeButtons.forEach(btn => {
+        const isActive = btn.dataset.themeTarget === themeName;
+        if (isActive) {
+          btn.classList.remove('opacity-75');
+          btn.classList.add('bg-white', 'text-black', 'border', 'border-black', 'shadow-[2px_2px_0px_#000]');
+        } else {
+          btn.classList.add('opacity-75');
+          btn.classList.remove('bg-white', 'text-black', 'border', 'border-black', 'shadow-[2px_2px_0px_#000]');
+        }
+      });
+    }
+
+    // Direction Mode Buttons
+    const dirButtons = {
+      vertical: document.getElementById('dirVertBtn'),
+      horizontal: document.getElementById('dirHorizBtn'),
+      diagonal: document.getElementById('dirDiagBtn'),
+    };
+
+    Object.keys(dirButtons).forEach(dir => {
+      dirButtons[dir].addEventListener('click', () => {
+        state.direction = dir;
+        updateDirectionButtons();
+        executePixelSort();
+      });
+    });
+
+    function updateDirectionButtons() {
+      Object.keys(dirButtons).forEach(dir => {
+        if (dir === state.direction) {
+          dirButtons[dir].className = 'axis-btn theme-btn-primary py-2 px-2 text-xs text-center font-bold';
+        } else {
+          dirButtons[dir].className = 'axis-btn theme-btn-secondary py-2 px-2 text-xs text-center font-bold';
+        }
+      });
+    }
+
+    // Metric Calculator
+    function calculateMetric(r, g, b, metric) {
+      switch (metric) {
+        case 'brightness':
+          return 0.299 * r + 0.587 * g + 0.114 * b;
+        case 'darkness':
+          return 255 - (0.299 * r + 0.587 * g + 0.114 * b);
+        case 'red':
+          return r;
+        case 'green':
+          return g;
+        case 'blue':
+          return b;
+        case 'hue': {
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const d = max - min;
+          if (d === 0) return 0;
+          let h = 0;
+          if (max === r) h = ((g - b) / d) % 6;
+          else if (max === g) h = (b - r) / d + 2;
+          else h = (r - g) / d + 4;
+          return (h * 60 + 360) % 360;
+        }
+        case 'saturation': {
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          if (max === 0) return 0;
+          return ((max - min) / max) * 255;
+        }
+        default:
+          return 0.299 * r + 0.587 * g + 0.114 * b;
+      }
+    }
+
+    // Core High-Performance Pixel Sort Routine
+    function executePixelSort() {
+      if (!state.cleanImageData) return;
+
+      const t0 = performance.now();
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Fresh copy from pristine source
+      const workData = new ImageData(
+        new Uint8ClampedArray(state.cleanImageData.data),
+        width,
+        height
+      );
+      const data = workData.data;
+
+      const direction = state.direction;
+      const metric = state.metric;
+      const minT = state.minThreshold;
+      const maxT = state.maxThreshold;
+      const reverse = state.reverse;
+      const maxStreak = state.maxStreak;
+      const jitterChance = state.jitter / 100;
+
+      if (direction === 'diagonal') {
+        // Diagonal Scanlines (x + y lines)
+        const totalDiags = width + height - 1;
+        for (let d = 0; d < totalDiags; d++) {
+          const startX = Math.min(d, width - 1);
+          const startY = Math.max(0, d - (width - 1));
+          const len = Math.min(startX + 1, height - startY);
+
+          let segStart = -1;
+          for (let i = 0; i <= len; i++) {
+            let inBounds = i < len;
+            let meets = false;
+            let idx = 0;
+
+            if (inBounds) {
+              const x = startX - i;
+              const y = startY + i;
+              idx = (y * width + x) * 4;
+              const r = data[idx];
+              const g = data[idx + 1];
+              const b = data[idx + 2];
+              const val = calculateMetric(r, g, b, metric);
+              meets = val >= minT && val <= maxT;
+            }
+
+            if (jitterChance > 0 && Math.random() < jitterChance) {
+              meets = false;
+            }
+
+            const streakExceeded = maxStreak > 0 && segStart !== -1 && (i - segStart) >= maxStreak;
+
+            if (meets && segStart === -1) {
+              segStart = i;
+            } else if ((!meets || !inBounds || streakExceeded) && segStart !== -1) {
+              const segEnd = i;
+              const segLen = segEnd - segStart;
+              if (segLen > 1) {
+                const seg = [];
+                for (let k = segStart; k < segEnd; k++) {
+                  const x = startX - k;
+                  const y = startY + k;
+                  const pIdx = (y * width + x) * 4;
+                  seg.push({
+                    r: data[pIdx],
+                    g: data[pIdx + 1],
+                    b: data[pIdx + 2],
+                    a: data[pIdx + 3],
+                    val: calculateMetric(data[pIdx], data[pIdx + 1], data[pIdx + 2], metric),
+                  });
+                }
+                seg.sort((p1, p2) => reverse ? p2.val - p1.val : p1.val - p2.val);
+                for (let k = segStart; k < segEnd; k++) {
+                  const x = startX - k;
+                  const y = startY + k;
+                  const pIdx = (y * width + x) * 4;
+                  const p = seg[k - segStart];
+                  data[pIdx] = p.r;
+                  data[pIdx + 1] = p.g;
+                  data[pIdx + 2] = p.b;
+                  data[pIdx + 3] = p.a;
+                }
+              }
+              segStart = meets ? i : -1;
+            }
+          }
+        }
+      } else {
+        // Vertical or Horizontal scanlines
+        const isHoriz = direction === 'horizontal';
+        const outerLen = isHoriz ? height : width;
+        const innerLen = isHoriz ? width : height;
+
+        for (let outer = 0; outer < outerLen; outer++) {
+          let segStart = -1;
+
+          for (let inner = 0; inner <= innerLen; inner++) {
+            let inBounds = inner < innerLen;
+            let meets = false;
+            let idx = 0;
+
+            if (inBounds) {
+              const x = isHoriz ? inner : outer;
+              const y = isHoriz ? outer : inner;
+              idx = (y * width + x) * 4;
+              const r = data[idx];
+              const g = data[idx + 1];
+              const b = data[idx + 2];
+              const val = calculateMetric(r, g, b, metric);
+              meets = val >= minT && val <= maxT;
+            }
+
+            if (jitterChance > 0 && Math.random() < jitterChance) {
+              meets = false;
+            }
+
+            const streakExceeded = maxStreak > 0 && segStart !== -1 && (inner - segStart) >= maxStreak;
+
+            if (meets && segStart === -1) {
+              segStart = inner;
+            } else if ((!meets || !inBounds || streakExceeded) && segStart !== -1) {
+              const segEnd = inner;
+              const segLen = segEnd - segStart;
+
+              if (segLen > 1) {
+                const seg = [];
+                for (let k = segStart; k < segEnd; k++) {
+                  const x = isHoriz ? k : outer;
+                  const y = isHoriz ? outer : k;
+                  const pIdx = (y * width + x) * 4;
+                  seg.push({
+                    r: data[pIdx],
+                    g: data[pIdx + 1],
+                    b: data[pIdx + 2],
+                    a: data[pIdx + 3],
+                    val: calculateMetric(data[pIdx], data[pIdx + 1], data[pIdx + 2], metric),
+                  });
+                }
+
+                seg.sort((p1, p2) => reverse ? p2.val - p1.val : p1.val - p2.val);
+
+                for (let k = segStart; k < segEnd; k++) {
+                  const x = isHoriz ? k : outer;
+                  const y = isHoriz ? outer : k;
+                  const pIdx = (y * width + x) * 4;
+                  const p = seg[k - segStart];
+                  data[pIdx] = p.r;
+                  data[pIdx + 1] = p.g;
+                  data[pIdx + 2] = p.b;
+                  data[pIdx + 3] = p.a;
+                }
+              }
+
+              segStart = meets ? inner : -1;
+            }
+          }
+        }
+      }
+
+      ctx.putImageData(workData, 0, 0);
+      const t1 = performance.now();
+      perfBadge.innerText = `${(t1 - t0).toFixed(1)} ms`;
+    }
+
+    // Presets Generator Engine
+    function loadPreset(type) {
+      canvas.width = 720;
+      canvas.height = 480;
+      canvasDimBadge.innerText = `${canvas.width} × ${canvas.height} px`;
+
+      if (type === 'cyberpunk') {
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        grad.addColorStop(0, '#090d16');
+        grad.addColorStop(0.3, '#ec4899');
+        grad.addColorStop(0.7, '#6366f1');
+        grad.addColorStop(1, '#06b6d4');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Core Glowing Badge
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(360, 240, 95, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '900 38px "Syne", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('NEO//DRIFT', 360, 252);
+
+        state.minThreshold = 60;
+        state.maxThreshold = 225;
+        state.direction = 'vertical';
+      } else if (type === 'synthwave') {
+        ctx.fillStyle = '#050711';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Glowing Sunset Orb
+        const sunGrad = ctx.createLinearGradient(0, 100, 0, 340);
+        sunGrad.addColorStop(0, '#facc15');
+        sunGrad.addColorStop(0.5, '#f43f5e');
+        sunGrad.addColorStop(1, '#a855f7');
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(360, 220, 130, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Scanline Grid floor
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        for (let y = 310; y < 480; y += 22) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        state.minThreshold = 85;
+        state.maxThreshold = 240;
+        state.direction = 'vertical';
+      } else if (type === 'typography') {
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#000000';
+        ctx.font = '900 90px "Syne", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('BRUTAL', 360, 190);
+
+        ctx.fillStyle = '#ff5e7e';
+        ctx.fillText('SORTING', 360, 280);
+
+        ctx.fillStyle = '#00e5ff';
+        ctx.font = '700 24px monospace';
+        ctx.fillText('// PIXEL DISPERSION MATRIX', 360, 340);
+
+        state.minThreshold = 30;
+        state.maxThreshold = 180;
+        state.direction = 'horizontal';
+      } else if (type === 'abstract') {
+        ctx.fillStyle = '#180026';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const colors = ['#f43f5e', '#ec4899', '#8b5cf6', '#3b82f6', '#a3e635', '#f59e0b'];
+        for (let i = 0; i < colors.length; i++) {
+          ctx.fillStyle = colors[i];
+          ctx.fillRect(60 + i * 45, 60 + i * 25, 600 - i * 90, 360 - i * 50);
+        }
+
+        state.minThreshold = 70;
+        state.maxThreshold = 230;
+        state.direction = 'diagonal';
+      }
+
+      state.cleanImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      syncUIControls();
+      updateDirectionButtons();
+      executePixelSort();
+    }
+
+    function syncUIControls() {
+      minRange.value = state.minThreshold;
+      maxRange.value = state.maxThreshold;
+      streakRange.value = state.maxStreak;
+      jitterRange.value = state.jitter;
+      minValNum.innerText = state.minThreshold;
+      maxValNum.innerText = state.maxThreshold;
+      streakValNum.innerText = state.maxStreak === 0 ? 'Infinite' : `${state.maxStreak}px`;
+      jitterValNum.innerText = `${state.jitter}%`;
+      metricSelector.value = state.metric;
+      sortOrderText.innerText = state.reverse ? 'DESCENDING ▼' : 'ASCENDING ▲';
+    }
+
+    // Event Controls
+    minRange.addEventListener('input', (e) => {
+      state.minThreshold = Number(e.target.value);
+      minValNum.innerText = state.minThreshold;
+      executePixelSort();
+    });
+
+    maxRange.addEventListener('input', (e) => {
+      state.maxThreshold = Number(e.target.value);
+      maxValNum.innerText = state.maxThreshold;
+      executePixelSort();
+    });
+
+    streakRange.addEventListener('input', (e) => {
+      state.maxStreak = Number(e.target.value);
+      streakValNum.innerText = state.maxStreak === 0 ? 'Infinite' : `${state.maxStreak}px`;
+      executePixelSort();
+    });
+
+    jitterRange.addEventListener('input', (e) => {
+      state.jitter = Number(e.target.value);
+      jitterValNum.innerText = `${state.jitter}%`;
+      executePixelSort();
+    });
+
+    metricSelector.addEventListener('change', (e) => {
+      state.metric = e.target.value;
+      executePixelSort();
+    });
+
+    toggleReverseBtn.addEventListener('click', () => {
+      state.reverse = !state.reverse;
+      sortOrderText.innerText = state.reverse ? 'DESCENDING ▼' : 'ASCENDING ▲';
+      executePixelSort();
+    });
+
+    // Preset buttons click
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        loadPreset(btn.dataset.preset);
+      });
+    });
+
+    // Reset clean
+    resetOriginalBtn.addEventListener('click', () => {
+      if (state.cleanImageData) {
+        ctx.putImageData(state.cleanImageData, 0, 0);
+      }
+    });
+
+    // Image Upload
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        const maxW = 860;
+        const maxH = 600;
+        let w = img.width;
+        let h = img.height;
+
+        if (w > maxW || h > maxH) {
+          const ratio = Math.min(maxW / w, maxH / h);
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        canvasDimBadge.innerText = `${w} × ${h} px`;
+        ctx.drawImage(img, 0, 0, w, h);
+        state.cleanImageData = ctx.getImageData(0, 0, w, h);
+        executePixelSort();
+      };
+    });
+
+    // Drag and drop onto canvas
+    window.addEventListener('dragover', (e) => e.preventDefault());
+    window.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer?.files?.[0];
+      if (file && file.type.startsWith('image/')) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+          canvas.width = Math.min(860, img.width);
+          canvas.height = Math.round((canvas.width / img.width) * img.height);
+          canvasDimBadge.innerText = `${canvas.width} × ${canvas.height} px`;
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          state.cleanImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          executePixelSort();
+        };
+      }
+    });
+
+    // Export PNG
+    exportPngBtn.addEventListener('click', () => {
+      const a = document.createElement('a');
+      a.download = `pixel-sort-${state.theme}-${Date.now()}.png`;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    });
+
+    // Animated Glitch Wave Loop
+    let animFrame = null;
+    glitchWaveToggleBtn.addEventListener('click', () => {
+      state.isWaveAnimated = !state.isWaveAnimated;
+
+      if (state.isWaveAnimated) {
+        waveBtnText.innerText = '⏹ Stop Glitch Wave';
+        waveDot.classList.add('animate-ping');
+
+        function loop() {
+          if (!state.isWaveAnimated) return;
+          state.waveStep += 0.04;
+          const wave = Math.sin(state.waveStep);
+          state.minThreshold = Math.floor(45 + wave * 35);
+          state.maxThreshold = Math.floor(195 + Math.cos(state.waveStep * 0.75) * 45);
+          minRange.value = state.minThreshold;
+          maxRange.value = state.maxThreshold;
+          minValNum.innerText = state.minThreshold;
+          maxValNum.innerText = state.maxThreshold;
+          executePixelSort();
+          animFrame = requestAnimationFrame(loop);
+        }
+        animFrame = requestAnimationFrame(loop);
+      } else {
+        cancelAnimationFrame(animFrame);
+        waveBtnText.innerText = '▶ Run Continuous Glitch Wave';
+        waveDot.classList.remove('animate-ping');
+      }
+    });
+
+    // Audio Reactive Engine (Microphone Input)
+    audioReactiveBtn.addEventListener('click', async () => {
+      if (state.isAudioReactive) {
+        state.isAudioReactive = false;
+        audioReactiveBtn.innerText = '🎙️ Sound-Reactive Mode (Mic)';
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        state.analyser = state.audioCtx.createAnalyser();
+        state.analyser.fftSize = 64;
+
+        const source = state.audioCtx.createMediaStreamSource(stream);
+        source.connect(state.analyser);
+
+        state.isAudioReactive = true;
+        audioReactiveBtn.innerText = '🔊 Audio Active: Listening...';
+
+        const dataArr = new Uint8Array(state.analyser.frequencyBinCount);
+
+        function audioLoop() {
+          if (!state.isAudioReactive) return;
+          state.analyser.getByteFrequencyData(dataArr);
+          const avgVolume = dataArr.reduce((a, b) => a + b, 0) / dataArr.length;
+
+          state.minThreshold = Math.floor(30 + (avgVolume / 255) * 120);
+          state.maxThreshold = Math.floor(150 + (avgVolume / 255) * 100);
+          minRange.value = state.minThreshold;
+          maxRange.value = state.maxThreshold;
+          minValNum.innerText = state.minThreshold;
+          maxValNum.innerText = state.maxThreshold;
+          executePixelSort();
+
+          requestAnimationFrame(audioLoop);
+        }
+        audioLoop();
+      } catch (err) {
+        alert('Could not access microphone: ' + err.message);
+      }
+    });
+
+    // Interactive Paint / Brush on Canvas
+    let isDrawing = false;
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    window.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+
+      state.minThreshold = Math.floor(Math.min(255, Math.max(0, (x / canvas.width) * 255)));
+      state.maxThreshold = Math.floor(Math.min(255, Math.max(0, (y / canvas.height) * 255)));
+      minRange.value = state.minThreshold;
+      maxRange.value = state.maxThreshold;
+      minValNum.innerText = state.minThreshold;
+      maxValNum.innerText = state.maxThreshold;
+      executePixelSort();
+    });
+
+    // Initialize with Neo-Brutalist Default
+    setAppTheme('neo-brutalist');
+    loadPreset('typography');
+  </script>
+</body>
+</html>

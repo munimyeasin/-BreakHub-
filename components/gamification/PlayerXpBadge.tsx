@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Flame, Zap, Volume2, VolumeX, Sparkles, Trophy, Target } from 'lucide-react';
-import { gamification, GamificationState, getLevelInfo } from '@/lib/gamification';
+import { gamification, GamificationState, getLevelInfo, getDefaultState } from '@/lib/gamification';
 import { audio } from '@/lib/audio';
 
 interface PlayerXpBadgeProps {
@@ -16,11 +16,15 @@ export default function PlayerXpBadge({
   onOpenTrophies,
   onOpenRoulette,
 }: PlayerXpBadgeProps) {
-  const [state, setState] = useState<GamificationState>(() => gamification.getState());
-  const [isMuted, setIsMuted] = useState<boolean>(() => audio.getMuted());
+  const [state, setState] = useState<GamificationState>(() => getDefaultState());
+  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    // Sync state and audio settings from client storage on mount
+    setState(gamification.getState());
+    setIsMuted(audio.getMuted());
+
     const handleSync = (e: CustomEvent<GamificationState>) => {
       setState(e.detail || gamification.getState());
     };

@@ -23,15 +23,18 @@ import {
   Award,
   Sun,
   Moon,
-  Palette
+  Palette,
+  Info
 } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
+
+export type PortalTab = 'all' | 'favorites' | 'about-project' | 'about-devs';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  activeTab: 'all' | 'favorites' | 'about';
-  onSelectTab: (tab: 'all' | 'favorites' | 'about') => void;
+  activeTab: PortalTab;
+  onSelectTab: (tab: PortalTab) => void;
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
   favoritesCount: number;
@@ -78,7 +81,7 @@ export default function Sidebar({
 }: SidebarProps) {
   const { theme, setTheme, setIsThemeSelectorOpen } = useTheme();
 
-  const handleTabClick = (tab: 'all' | 'favorites' | 'about') => {
+  const handleTabClick = (tab: PortalTab) => {
     onSelectTab(tab);
     if (tab !== 'all') {
       onSelectCategory('ALL');
@@ -202,20 +205,38 @@ export default function Sidebar({
                 <ChevronRight className="w-3.5 h-3.5 stroke-[2.5] group-hover:translate-x-0.5 transition-transform" />
               </button>
 
-              {/* About Team Tab */}
+              {/* About Project Tab */}
               <button
-                onClick={() => handleTabClick('about')}
+                onClick={() => handleTabClick('about-project')}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
-                  activeTab === 'about'
-                    ? 'bg-portal-purple text-white shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                  activeTab === 'about-project'
+                    ? 'bg-portal-cyan text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
                     : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <Users className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'about' ? 'text-white' : 'text-portal-purple'}`} />
-                  <span>About Team</span>
+                  <Info className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'about-project' ? 'text-black' : 'text-portal-cyan'}`} />
+                  <span>About Project</span>
                 </div>
-                <span className="text-[9px] font-black text-white bg-portal-purple px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
+                <span className="text-[9px] font-black text-black bg-portal-cyan px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
+                  16 Games
+                </span>
+              </button>
+
+              {/* About Devs / Spotlight Tab */}
+              <button
+                onClick={() => handleTabClick('about-devs')}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
+                  activeTab === 'about-devs'
+                    ? 'bg-portal-yellow text-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5'
+                    : 'bg-portal-card text-slate-200 hover:bg-portal-surface hover:text-white shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Users className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'about-devs' ? 'text-black' : 'text-portal-yellow'}`} />
+                  <span>About Devs</span>
+                </div>
+                <span className="text-[9px] font-black text-white bg-portal-pink px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
                   4 Devs
                 </span>
               </button>

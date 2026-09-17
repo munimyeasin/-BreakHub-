@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_candy_19',
+    slug: 'retro-candy-crush',
+    title: 'Retro Candy Crush',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/retro-candy-crush.svg',
+    description: 'Classic Match-3 Puzzle Arcade! Align 3+ neon candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 64,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_battleship_18',
     slug: 'retro-battleship',
     title: 'Retro Battleship',
