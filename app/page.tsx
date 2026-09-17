@@ -22,6 +22,7 @@ import LeaderboardModal from '@/components/leaderboard/LeaderboardModal';
 import UsernamePromptModal from '@/components/ui/UsernamePromptModal';
 import ComingSoonModal from '@/components/ui/ComingSoonModal';
 import ThemeSelectorModal from '@/components/ui/ThemeSelectorModal';
+import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar from '@/components/navigation/Sidebar';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
@@ -405,8 +406,8 @@ export default function ArcadePortalDashboard() {
 
             {/* Theme Toggle & Gamification Player XP Badge & Gamer Tag */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* Theme Quick Toggle & Engine Trigger */}
-              <div className="flex items-center gap-1">
+              {/* Theme Quick Toggle & Engine Trigger with Onboarding Discovery Hint */}
+              <div className="relative flex items-center gap-1">
                 {/* Instant Dark/Light Switch */}
                 <button
                   onClick={toggleTheme}
@@ -440,6 +441,9 @@ export default function ArcadePortalDashboard() {
                 >
                   <Palette className="w-3.5 h-3.5 stroke-[2.5]" />
                 </button>
+
+                {/* First-Time Visitor Theme Discovery Indicator */}
+                <ThemeOnboardingHint onOpenThemeSelector={() => setIsThemeSelectorOpen(true)} />
               </div>
 
               <PlayerXpBadge
