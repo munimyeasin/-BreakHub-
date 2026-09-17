@@ -22,6 +22,22 @@ import {
 import { getAvatarUrl } from '@/lib/avatar';
 import { audio } from '@/lib/audio';
 
+const InstagramIcon = ({ className = 'w-3.5 h-3.5' }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
 export interface DeveloperProfile {
   id: string;
   name: string;
@@ -42,6 +58,8 @@ export interface DeveloperProfile {
     value: string;
   }[];
   portfolioUrl?: string;
+  instagramUrl?: string;
+  instagramHandle?: string;
 }
 
 export const DEVELOPERS: DeveloperProfile[] = [
@@ -71,6 +89,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
       { label: 'Status', value: 'Lead Dev' },
     ],
     portfolioUrl: '/portfolio.html',
+    instagramUrl: 'https://instagram.com/munimyeasin',
+    instagramHandle: '@munimyeasin',
   },
   {
     id: 'tahida',
@@ -545,7 +565,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
 
                         {/* Interactive Buttons on Top Card */}
                         {isTop && (
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             {dev.portfolioUrl && (
                               <a
                                 href={dev.portfolioUrl}
@@ -555,6 +575,18 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                               >
                                 <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
                                 <span>Portfolio</span>
+                              </a>
+                            )}
+                            {dev.instagramUrl && (
+                              <a
+                                href={dev.instagramUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
+                                title={`Instagram: ${dev.instagramHandle || '@munimyeasin'}`}
+                              >
+                                <InstagramIcon className="w-3.5 h-3.5" />
+                                <span>{dev.instagramHandle || 'Instagram'}</span>
                               </a>
                             )}
                             {onExploreGames && (
