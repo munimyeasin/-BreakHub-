@@ -15,7 +15,7 @@
   - **7s Auto-Rotation & Timer**: Smooth auto-cycling across the stack with pause on hover/touch.
   - **Interactive Quick Switcher**: Top tab selector for 1-click developer switching with active neon highlight indicators.
   - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with card cycle animations.
-  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, dedicated portfolio links (`/portfolio.html`), and direct Instagram social links (`https://instagram.com/munimyeasin` / `@munimyeasin`).
+  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, dedicated portfolio links (`/portfolio.html`), and direct Instagram social links (`https://instagram.com/__yeasin__0` / `@__yeasin__0`).
 - **Munim Yeasin**: Full-Stack & System Architect — Procedural zero-asset Web Audio synthesis, gamification economy (Quests/XP/Trophies), Next.js API routes, and database persistence.
 - **Tahida**: UI/UX & Frontend Engineer — Neo-Brutalist design system, responsive mobile layout, dark/light theme engine, micro-interactions & badge systems.
 - **Marzia**: Game Logic & QA Engineer — Deterministic game rules, mathematical puzzle state machines, minimax AI, and collision QA verification.
@@ -62,7 +62,7 @@
 - **Universal Native Fullscreen API**: Native browser fullscreen integration across all games with dynamic viewport fitting, vendor prefix support (`webkit`, `moz`, `ms`), and `'F'` keyboard shortcut.
 - **Public Tunnel Ingress**: `allowedDevOrigins` configured in `next.config.mjs` for Cloudflare, LocalTunnel, Ngrok, and Pinggy tunnels.
 - **Project Backup**: Complete byte-level duplicate backup preserved at `C:\Users\munim\Desktop\___InterShip___Project__Backup` containing all legacy/hidden games and full asset catalog.
-- **Personal Portfolio Web Application**: `public/portfolio.html` — Interactive developer portfolio for Munim Yeasin featuring real-time Newtonian canvas physics particle engine with gravity vortex/supernova triggers, developer CLI terminal with executable commands (including `insta`, `whoami`, `architecture`, `supernova`), zero-asset Web Audio synthesizer, filterable engineering project matrix, theme switching, live performance metrics, and complete social profile integrations (Instagram `@munimyeasin`, GitHub, Email). Accessible at `/portfolio.html`.
+- **Personal Portfolio Web Application**: `public/portfolio.html` — Interactive developer portfolio for Munim Yeasin featuring real-time Newtonian canvas physics particle engine with gravity vortex/supernova triggers, developer CLI terminal with executable commands (including `insta`, `whoami`, `architecture`, `supernova`), zero-asset Web Audio synthesizer, filterable engineering project matrix, theme switching, live performance metrics, and complete social profile integrations (Instagram `@__yeasin__0`, GitHub, Email). Accessible at `/portfolio.html`.
 
 ---
 

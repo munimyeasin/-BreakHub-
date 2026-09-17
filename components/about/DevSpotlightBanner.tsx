@@ -89,8 +89,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
       { label: 'Status', value: 'Lead Dev' },
     ],
     portfolioUrl: '/portfolio.html',
-    instagramUrl: 'https://instagram.com/munimyeasin',
-    instagramHandle: '@munimyeasin',
+    instagramUrl: 'https://instagram.com/__yeasin__0',
+    instagramHandle: '@__yeasin__0',
   },
   {
     id: 'tahida',
@@ -583,7 +583,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
-                                title={`Instagram: ${dev.instagramHandle || '@munimyeasin'}`}
+                                title={`Instagram: ${dev.instagramHandle || '@__yeasin__0'}`}
                               >
                                 <InstagramIcon className="w-3.5 h-3.5" />
                                 <span>{dev.instagramHandle || 'Instagram'}</span>
