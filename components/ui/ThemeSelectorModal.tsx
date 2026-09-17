@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X, Palette, Check, Sun, Moon, Zap, Gamepad2, Sparkles, Lock, ArrowRight } from 'lucide-react';
+import { X, Palette, Check, Sun, Moon, Zap, Gamepad2, Sparkles, Coffee, Lock, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { ThemeDefinition, ThemeId } from '@/lib/theme';
 
@@ -27,6 +27,8 @@ export default function ThemeSelectorModal({ isOpen, onClose }: ThemeSelectorMod
         return <Gamepad2 className="w-4 h-4 stroke-[2.5]" />;
       case 'Sparkles':
         return <Sparkles className="w-4 h-4 stroke-[2.5]" />;
+      case 'Coffee':
+        return <Coffee className="w-4 h-4 stroke-[2.5]" />;
       default:
         return <Palette className="w-4 h-4 stroke-[2.5]" />;
     }

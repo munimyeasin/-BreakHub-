@@ -37,6 +37,40 @@ html[data-theme="neo-light"] {
   color-scheme: light;
 }
 
+/* Cozy Amber Dusk Tokens (Dark Theme from Stress Buster) */
+html[data-theme="cozy-dark"] {
+  --portal-bg: #0D0B0F;
+  --portal-surface: #171318;
+  --portal-card: #211A20;
+  --portal-border: rgba(245, 210, 166, 0.2);
+  --portal-text: #F5E9D7;
+  --portal-text-muted: #8E8074;
+  --portal-dot-color: rgba(236, 168, 92, 0.15);
+  --portal-grid-color: rgba(236, 168, 92, 0.06);
+  --portal-scrollbar-track: #0D0B0F;
+  --portal-scrollbar-thumb: #ECA85C;
+  --background: #0D0B0F;
+  --foreground: #F5E9D7;
+  color-scheme: dark;
+}
+
+/* Cozy Amber Dawn Tokens (Light Theme from Stress Buster) */
+html[data-theme="cozy-light"] {
+  --portal-bg: #F6EEE4;
+  --portal-surface: #FFFAF4;
+  --portal-card: #F1E6D9;
+  --portal-border: rgba(83, 58, 38, 0.2);
+  --portal-text: #35281F;
+  --portal-text-muted: #8E7D6D;
+  --portal-dot-color: rgba(200, 121, 50, 0.14);
+  --portal-grid-color: rgba(200, 121, 50, 0.06);
+  --portal-scrollbar-track: #F6EEE4;
+  --portal-scrollbar-thumb: #C87932;
+  --background: #F6EEE4;
+  --foreground: #35281F;
+  color-scheme: light;
+}
+
 body {
   color: var(--portal-text);
   background: var(--portal-bg);
@@ -81,7 +115,8 @@ body {
 }
 
 /* Light Mode Typography & Contrast Rules */
-html[data-theme="neo-light"] {
+html[data-theme="neo-light"],
+html[data-theme="cozy-light"] {
   /* Slate neutral text adjustments for crisp light readability */
   .text-slate-100,
   .text-slate-200 {
@@ -242,6 +277,32 @@ html[data-theme="neo-dark"] .game-thumbnail-img {
 }
 html[data-theme="neo-dark"] .game-thumbnail-overlay {
   background: linear-gradient(to top, rgba(11, 8, 25, 0.92) 0%, rgba(11, 8, 25, 0.2) 50%, transparent 100%);
+}
+
+/* Cozy Amber Dusk: Warm velvet espresso framing, golden amber saturation & sepia warmth */
+html[data-theme="cozy-dark"] .game-thumbnail-container {
+  background-color: #171318;
+  border-color: rgba(245, 210, 166, 0.35);
+  box-shadow: 2px 2px 0px rgba(236, 168, 92, 0.35);
+}
+html[data-theme="cozy-dark"] .game-thumbnail-img {
+  filter: contrast(1.06) saturate(1.18) sepia(0.12) brightness(1.02);
+}
+html[data-theme="cozy-dark"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(23, 19, 24, 0.95) 0%, rgba(236, 168, 92, 0.12) 50%, transparent 100%);
+}
+
+/* Cozy Amber Dawn: Sunlit warm parchment framing, rich cinnamon warmth */
+html[data-theme="cozy-light"] .game-thumbnail-container {
+  background-color: #F1E6D9;
+  border-color: rgba(83, 58, 38, 0.35);
+  box-shadow: 2px 2px 0px rgba(200, 121, 50, 0.35);
+}
+html[data-theme="cozy-light"] .game-thumbnail-img {
+  filter: contrast(1.06) saturate(1.15) sepia(0.16) brightness(1.03);
+}
+html[data-theme="cozy-light"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(53, 40, 31, 0.8) 0%, rgba(200, 121, 50, 0.1) 50%, transparent 100%);
 }
 
 /* Cyberpunk Neon 2077: high-voltage saturation, radioactive greens, electric cyan edge */

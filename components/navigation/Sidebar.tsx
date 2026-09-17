@@ -76,7 +76,7 @@ export default function Sidebar({
   categoryCounts = {},
   totalGamesCount = 0
 }: SidebarProps) {
-  const { theme, setTheme, setIsThemeSelectorOpen } = useTheme();
+  const { theme, setTheme, themeDef, availableThemes, setIsThemeSelectorOpen } = useTheme();
 
   const handleTabClick = (tab: 'all' | 'favorites' | 'about') => {
     onSelectTab(tab);
@@ -351,8 +351,8 @@ export default function Sidebar({
                 <Palette className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
                 THEME & DESIGN
               </span>
-              <span className="text-[9px] font-black uppercase text-portal-cyan">
-                Neo-Brutal
+              <span className="text-[9px] font-black uppercase text-portal-cyan truncate max-w-[100px]">
+                {themeDef?.label || 'Theme'}
               </span>
             </div>
 
@@ -362,11 +362,11 @@ export default function Sidebar({
                 <button
                   onClick={() => setTheme('neo-dark')}
                   className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-[11px] font-black uppercase transition-all ${
-                    theme === 'neo-dark'
+                    theme === 'neo-dark' || theme === 'cozy-dark'
                       ? 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm'
                       : 'text-slate-300 hover:text-white'
                   }`}
-                  title="Dark Neo-Brutalist Arcade Theme"
+                  title="Dark Theme"
                 >
                   <Moon className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Dark</span>
@@ -375,11 +375,11 @@ export default function Sidebar({
                 <button
                   onClick={() => setTheme('neo-light')}
                   className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-[11px] font-black uppercase transition-all ${
-                    theme === 'neo-light'
+                    theme === 'neo-light' || theme === 'cozy-light'
                       ? 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm'
                       : 'text-slate-300 hover:text-white'
                   }`}
-                  title="Light Neo-Brutalist Vintage Paper Theme"
+                  title="Light Theme"
                 >
                   <Sun className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Light</span>
@@ -399,7 +399,7 @@ export default function Sidebar({
                   <span className="text-[11px]">Design Engine Lab</span>
                 </div>
                 <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-portal-surface group-hover:bg-black group-hover:text-white text-portal-yellow border border-black">
-                  5 THEMES
+                  {availableThemes?.length || 7} THEMES
                 </span>
               </button>
             </div>

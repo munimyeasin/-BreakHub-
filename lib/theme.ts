@@ -1,6 +1,8 @@
 export type ThemeId =
   | 'neo-dark'
   | 'neo-light'
+  | 'cozy-dark'
+  | 'cozy-light'
   | 'cyberpunk-neon'
   | 'gameboy-retro'
   | 'vaporwave-80s';
@@ -14,7 +16,7 @@ export interface ThemeDefinition {
   badge?: string;
   isDark: boolean;
   status: 'active' | 'upcoming';
-  icon: 'Moon' | 'Sun' | 'Zap' | 'Gamepad2' | 'Sparkles';
+  icon: 'Moon' | 'Sun' | 'Zap' | 'Gamepad2' | 'Sparkles' | 'Coffee';
   previewColors: {
     bg: string;
     surface: string;
@@ -63,6 +65,46 @@ export const THEMES_REGISTRY: ThemeDefinition[] = [
       accentSecondary: '#FF4081',
       border: '#000000',
       text: '#000000',
+    },
+  },
+  {
+    id: 'cozy-dark',
+    name: 'Cozy Amber Dusk',
+    label: 'Cozy Dark',
+    tagline: 'Warm Espresso & Velvet Amber Glow',
+    description: 'Velvet espresso ground with warm amber gold highlights, soft lavender tones, twinkling ambient stars, and tranquil midnight café atmosphere.',
+    badge: 'NEW',
+    isDark: true,
+    status: 'active',
+    icon: 'Coffee',
+    previewColors: {
+      bg: '#0D0B0F',
+      surface: '#171318',
+      card: '#211A20',
+      accent: '#ECA85C',
+      accentSecondary: '#8670A6',
+      border: '#F5D2A6',
+      text: '#F5E9D7',
+    },
+  },
+  {
+    id: 'cozy-light',
+    name: 'Cozy Amber Dawn',
+    label: 'Cozy Light',
+    tagline: 'Sunlit Parchment & Cinnamon Amber',
+    description: 'Sunlit parchment canvas with rich cinnamon amber accents, warm cream surfaces, soft shadows, and morning café aesthetics.',
+    badge: 'NEW',
+    isDark: false,
+    status: 'active',
+    icon: 'Sun',
+    previewColors: {
+      bg: '#F6EEE4',
+      surface: '#FFFAF4',
+      card: '#F1E6D9',
+      accent: '#C87932',
+      accentSecondary: '#80669B',
+      border: '#533A26',
+      text: '#35281F',
     },
   },
   {
