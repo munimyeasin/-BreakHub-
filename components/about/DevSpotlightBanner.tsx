@@ -329,18 +329,17 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       </div>
 
       {/* ========================================================= */}
-      {/* 3D STACKED CARD DECK CONTAINER                            */}
+      {/* 3D STACKED CARD DECK CONTAINER (IMMERSIVE PEEKING DECK)    */}
       {/* ========================================================= */}
-      <div className="relative w-full pb-10 sm:pb-12 pt-2">
-        <div className="relative w-full min-h-[510px] xs:min-h-[490px] sm:min-h-[460px] md:min-h-[430px] lg:min-h-[410px]">
+      <div className="relative w-full pt-8 sm:pt-10 pb-12 sm:pb-16 px-1 sm:px-2">
+        <div className="relative w-full min-h-[530px] xs:min-h-[510px] sm:min-h-[480px] md:min-h-[450px] lg:min-h-[420px]">
           {DEVELOPERS.map((dev, idx) => {
             // Compute relative index in stack (0 = Top Card, 1 = 1st Behind, 2 = 2nd Behind, 3 = 3rd Behind)
             const relIndex = (idx - activeIndex + DEVELOPERS.length) % DEVELOPERS.length;
             const isTop = relIndex === 0;
             const avatarUrl = getAvatarUrl(dev.avatarSeed);
 
-            // Stack transformations & styles based on relIndex
-            // Desktop offsets
+            // Stack transformations & styles for immersive physical card peeking
             let transformClass = '';
             let zIndexStyle = 30;
             let opacityStyle = 1;
@@ -349,22 +348,28 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
             if (relIndex === 0) {
               zIndexStyle = 30;
               opacityStyle = 1;
-              transformClass = 'translate-y-0 scale-100 rotate-0 shadow-neo-lg';
+              transformClass = 'translate-x-0 translate-y-0 scale-100 rotate-0 shadow-neo-lg';
             } else if (relIndex === 1) {
               zIndexStyle = 20;
-              opacityStyle = 0.94;
-              transformClass = 'translate-y-3 sm:translate-y-4 scale-[0.97] rotate-[1.2deg] shadow-neo hover:rotate-0 hover:scale-[0.98]';
-              cursorClass = 'cursor-pointer';
+              opacityStyle = 0.96;
+              // Peeks out to the right and slightly down with a clockwise tilt
+              transformClass =
+                'translate-x-2 sm:translate-x-3.5 translate-y-3 sm:translate-y-4 scale-[0.98] rotate-[2deg] sm:rotate-[2.5deg] shadow-neo hover:translate-y-1 hover:translate-x-3 hover:scale-[0.99] hover:rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
+              cursorClass = 'cursor-pointer group';
             } else if (relIndex === 2) {
               zIndexStyle = 10;
-              opacityStyle = 0.82;
-              transformClass = 'translate-y-6 sm:translate-y-8 scale-[0.94] -rotate-[1.2deg] shadow-neo-sm hover:rotate-0 hover:scale-[0.95]';
-              cursorClass = 'cursor-pointer';
+              opacityStyle = 0.88;
+              // Peeks out to the left and further down with a counter-clockwise tilt
+              transformClass =
+                '-translate-x-2 sm:-translate-x-3.5 translate-y-6 sm:translate-y-8 scale-[0.95] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-neo hover:translate-y-3 hover:-translate-x-3 hover:scale-[0.97] hover:-rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
+              cursorClass = 'cursor-pointer group';
             } else {
               zIndexStyle = 5;
-              opacityStyle = 0.68;
-              transformClass = 'translate-y-9 sm:translate-y-12 scale-[0.91] rotate-[0.8deg] shadow-neo-sm hover:rotate-0 hover:scale-[0.92]';
-              cursorClass = 'cursor-pointer';
+              opacityStyle = 0.78;
+              // Peeks behind with slight vertical offset and subtle tilt
+              transformClass =
+                'translate-x-0 translate-y-9 sm:translate-y-12 scale-[0.92] rotate-[0.8deg] sm:rotate-[1.2deg] shadow-neo-sm hover:translate-y-6 hover:scale-[0.94] hover:opacity-100 hover:shadow-neo';
+              cursorClass = 'cursor-pointer group';
             }
 
             return (
@@ -381,22 +386,67 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                 }}
                 className={`absolute inset-x-0 top-0 transition-all duration-300 ease-out select-none ${transformClass} ${cursorClass}`}
               >
+                {/* ========================================================= */}
+                {/* PROTRUDING PHYSICAL INDEX TAB (PEEKING ABOVE CARD)        */}
+                {/* ========================================================= */}
+                {!isTop && (
+                  <div
+                    className={`absolute -top-7 sm:-top-8 z-40 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-t-xl sm:rounded-t-2xl bg-portal-card border-3 border-black border-b-0 shadow-neo-sm transition-all duration-200 group-hover:-translate-y-1.5 group-hover:shadow-neo ${
+                      relIndex === 1
+                        ? 'right-3 sm:right-8'
+                        : relIndex === 2
+                        ? 'left-3 sm:left-8'
+                        : 'left-1/2 -translate-x-1/2'
+                    }`}
+                    style={{
+                      borderTopColor: dev.dotColor,
+                      borderTopWidth: '4px',
+                    }}
+                  >
+                    <div className="relative w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-black shrink-0">
+                      <img src={avatarUrl} alt={dev.name} className="w-full h-full object-cover bg-slate-900" />
+                    </div>
+                    <span
+                      className="w-2 h-2 rounded-full border border-black shrink-0"
+                      style={{ backgroundColor: dev.dotColor }}
+                    />
+                    <span className="text-[10px] sm:text-xs font-black uppercase text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
+                      {dev.name}
+                    </span>
+                    <span
+                      className={`text-[8px] sm:text-[9px] font-black uppercase px-1.5 py-0.2 rounded border border-black shadow-neo-sm hidden xs:inline-block ${dev.badgeBg} ${dev.badgeText}`}
+                    >
+                      {dev.badge.split('&')[0].trim()}
+                    </span>
+                    <span className="hidden sm:inline-flex items-center gap-0.5 text-[9px] font-black text-portal-yellow uppercase tracking-wider pl-0.5">
+                      <Eye className="w-2.5 h-2.5 stroke-[2.5]" />
+                      <span>Draw</span>
+                    </span>
+                  </div>
+                )}
+
                 {/* Physical Card Container */}
-                <div className={`relative rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-4 sm:p-5 md:p-6 overflow-hidden ${
-                  isTop ? 'ring-2 ring-portal-yellow/30' : 'hover:border-portal-yellow'
-                }`}>
+                <div
+                  className={`relative rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-4 sm:p-5 md:p-6 overflow-hidden transition-all duration-300 ${
+                    isTop
+                      ? 'ring-2 ring-portal-yellow/40 shadow-neo-lg'
+                      : 'hover:border-portal-yellow group-hover:ring-2 group-hover:ring-portal-yellow/30'
+                  }`}
+                >
                   {/* Card Top Accent Strip */}
                   <div
-                    className="absolute top-0 left-0 right-0 h-1.5 border-b-2 border-black"
+                    className="absolute top-0 left-0 right-0 h-2 border-b-2 border-black"
                     style={{ backgroundColor: dev.dotColor }}
                   />
 
-                  {/* Header Tab on Background Cards to preview whose card is behind */}
+                  {/* Top-Right Quick Promotion Indicator on Background Cards */}
                   {!isTop && (
-                    <div className="absolute top-3 right-3 sm:right-4 flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg bg-portal-surface border-2 border-black shadow-neo-sm text-[10px] font-black uppercase text-slate-900 dark:text-white">
+                    <div className="absolute top-3 right-3 sm:right-4 flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg bg-portal-surface border-2 border-black shadow-neo-sm text-[10px] font-black uppercase text-slate-900 dark:text-white group-hover:bg-portal-yellow group-hover:text-black transition-colors">
                       <span className="w-2 h-2 rounded-full border border-black" style={{ backgroundColor: dev.dotColor }} />
                       <span>{dev.name}</span>
-                      <span className="text-portal-yellow hidden sm:inline-block">· Click to bring to top</span>
+                      <span className="hidden sm:inline-block font-bold text-slate-600 dark:text-slate-300 group-hover:text-black">
+                        · Click to Draw to Top
+                      </span>
                     </div>
                   )}
 

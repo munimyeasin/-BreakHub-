@@ -10,8 +10,8 @@
 ## 👥 Equal Co-Creators & Developer Spotlight
 - **Developer 3D Stacked Card Deck**: `components/about/DevSpotlightBanner.tsx` interactive 3D physical card deck embedded in `components/about/AboutSection.tsx`:
   - **Top Card Priority**: Munim Yeasin (Full-Stack & System Architect) is positioned as the primary top card on initial load, followed by Tahida, Marzia, and Rahul in the stack.
-  - **Physical Stack Aesthetics**: Dynamic z-index layering (`z-30`, `z-20`, `z-10`, `z-5`), cascading vertical/scale offsets (`translate-y-0 scale-100`, `translate-y-4 scale-[0.97] rotate-[1.2deg]`, `translate-y-8 scale-[0.94] -rotate-[1.2deg]`), 3px–4px black borders, and hard Neo-Brutalist drop shadows (`shadow-neo-lg`).
-  - **Direct Card Peeking & Shuffle**: Peeking header indicators on background cards allow 1-click promotion of any stacked card to the top, plus a dedicated "Shuffle Stack" CTA.
+  - **Physical Stack Aesthetics & Immersion**: Dynamic z-index layering (`z-30`, `z-20`, `z-10`, `z-5`), splayed lateral and rotational offsets (`translate-x-0 translate-y-0 rotate-0`, `translate-x-3.5 translate-y-4 rotate-[2.5deg]`, `-translate-x-3.5 translate-y-8 -rotate-[2.5deg]`, `translate-y-12 rotate-[1.2deg]`), 3px–4px black borders, and hard Neo-Brutalist drop shadows (`shadow-neo-lg`).
+  - **Protruding Physical Index Tabs & Direct Peeking**: Staggered protruding index tabs along the top of background cards (`-top-7 sm:-top-8`) display mini-avatars, developer names, domain badges, and interactive "Draw" cues so background cards visibly peek out above and around the active card for maximum physical immersion. Includes hover spring animations and a dedicated "Shuffle Stack" CTA.
   - **7s Auto-Rotation & Timer**: Smooth auto-cycling across the stack with pause on hover/touch.
   - **Interactive Quick Switcher**: Top tab selector for 1-click developer switching with active neon highlight indicators.
   - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with card cycle animations.
