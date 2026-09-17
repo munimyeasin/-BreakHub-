@@ -15,7 +15,7 @@
   - **7s Auto-Rotation & Timer**: Smooth auto-cycling across the stack with pause on hover/touch.
   - **Interactive Quick Switcher**: Top tab selector for 1-click developer switching with active neon highlight indicators.
   - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with card cycle animations.
-  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, and dedicated portfolio links (`/portfolio.html`).
+  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, dedicated portfolio links (`/portfolio.html`), and direct Instagram social links (`https://instagram.com/munimyeasin` / `@munimyeasin`).
 - **Munim Yeasin**: Full-Stack & System Architect — Procedural zero-asset Web Audio synthesis, gamification economy (Quests/XP/Trophies), Next.js API routes, and database persistence.
 - **Tahida**: UI/UX & Frontend Engineer — Neo-Brutalist design system, responsive mobile layout, dark/light theme engine, micro-interactions & badge systems.
 - **Marzia**: Game Logic & QA Engineer — Deterministic game rules, mathematical puzzle state machines, minimax AI, and collision QA verification.
