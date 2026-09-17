@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Trophy,
   Gamepad2,
@@ -66,37 +66,242 @@ export default function ArcadePortalDashboard() {
   const [levelUpInfo, setLevelUpInfo] = useState<LevelInfo | null>(null);
   const [gameState, setGameState] = useState<GamificationState>(() => gamification.getState());
 
-  // Listen to gamification state changes and level-ups
-  useEffect(() => {
-    const handleSync = (e: CustomEvent<GamificationState>) => {
-      setGameState(e.detail || gamification.getState());
-    };
+  const isHydratedRef = useRef(false);
 
-    const handleLevelUp = (e: CustomEvent<LevelInfo>) => {
-      if (e.detail) {
-        setLevelUpInfo(e.detail);
+  // 1. Initial State Hydration from URL Search Parameters & Session Storage
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const params = new URLSearchParams(window.location.search);
+      let savedRoute: any = null;
+      try {
+        const raw = sessionStorage.getItem('stressbuster_active_route');
+        if (raw) savedRoute = JSON.parse(raw);
+      } catch {}
+
+      // Tab resolution
+      const tabParam = (params.get('tab') as PortalTab) || savedRoute?.tab;
+      if (tabParam && ['all', 'favorites', 'about-project', 'about-devs'].includes(tabParam)) {
+        setActiveTab(tabParam);
       }
-    };
 
-    window.addEventListener('stressbuster_gamification_sync' as any, handleSync);
-    window.addEventListener('stressbuster_levelup' as any, handleLevelUp);
-    return () => {
-      window.removeEventListener('stressbuster_gamification_sync' as any, handleSync);
-      window.removeEventListener('stressbuster_levelup' as any, handleLevelUp);
-    };
-  }, []);
+      // Category / Genre resolution
+      const genreParam = params.get('genre') || params.get('category') || savedRoute?.selectedCategory;
+      if (genreParam && typeof genreParam === 'string') {
+        setSelectedCategory(genreParam.toUpperCase());
+      }
 
-  // 1. Fetch live games catalog
+      // Search query resolution
+      const qParam = params.get('q') || params.get('search') || savedRoute?.searchQuery;
+      if (qParam && typeof qParam === 'string') {
+        setSearchQuery(qParam);
+      }
+
+      // Active / Coming Soon Game resolution
+      const gameParam =
+        params.get('game') ||
+        params.get('play') ||
+        savedRoute?.activeGameSlug ||
+        savedRoute?.comingSoonSlug;
+
+      if (gameParam && typeof gameParam === 'string') {
+        const targetGame = INITIAL_GAMES.find(
+          g => g.slug.toLowerCase() === gameParam.toLowerCase() || g.id.toLowerCase() === gameParam.toLowerCase()
+        );
+        if (targetGame) {
+          if (targetGame.status === 'coming_soon') {
+            setComingSoonGame(targetGame);
+          } else if (targetGame.status === 'active') {
+            const savedTag =
+              localStorage.getItem('stressbuster_player_tag') || localStorage.getItem('nexus_player_tag');
+            if (savedTag && savedTag.trim().length >= 2) {
+              setActiveGame(targetGame);
+            } else {
+              setPendingGameToPlay(targetGame);
+              setIsUsernameModalOpen(true);
+            }
+          }
+        }
+      }
+
+      // Modal state resolution
+      const modalParam = params.get('modal') || savedRoute?.modal;
+      const lbParam = params.get('gameId') || params.get('leaderboard') || savedRoute?.leaderboardGameId;
+      if (modalParam === 'leaderboard' || (lbParam && modalParam !== 'null')) {
+        setIsLeaderboardOpen(true);
+        if (lbParam) setLeaderboardGameId(lbParam);
+      } else if (modalParam === 'quests') {
+        setIsQuestsModalOpen(true);
+      } else if (modalParam === 'trophies') {
+        setIsTrophiesModalOpen(true);
+      } else if (modalParam === 'roulette') {
+        setIsRouletteModalOpen(true);
+      } else if (modalParam === 'themes') {
+        setIsThemeSelectorOpen(true);
+      } else if (modalParam === 'username') {
+        setIsUsernameModalOpen(true);
+      }
+    } catch (e) {
+      console.error('Failed to hydrate URL / session state', e);
+    } finally {
+      isHydratedRef.current = true;
+    }
+  }, [setIsThemeSelectorOpen]);
+
+  // 2. Synchronize active state with Browser URL and Session Storage
   useEffect(() => {
-    fetch('/api/games')
-      .then(res => res.json())
-      .then(data => {
-        if (data.games) setGames(data.games);
-      })
-      .catch(err => console.error('Failed to load games', err));
-  }, []);
+    if (!isHydratedRef.current || typeof window === 'undefined') return;
 
-  // 2. Load LocalStorage player data, favorites, hyped games & user ratings
+    try {
+      const params = new URLSearchParams();
+
+      // Tab
+      if (activeTab !== 'all') {
+        params.set('tab', activeTab);
+      }
+
+      // Genre / Category
+      if (selectedCategory !== 'ALL') {
+        params.set('genre', selectedCategory);
+      }
+
+      // Search Query
+      if (searchQuery.trim()) {
+        params.set('q', searchQuery.trim());
+      }
+
+      // Active / Coming Soon Game
+      if (activeGame) {
+        params.set('game', activeGame.slug || activeGame.id);
+      } else if (comingSoonGame) {
+        params.set('game', comingSoonGame.slug || comingSoonGame.id);
+      }
+
+      // Modals
+      if (isLeaderboardOpen) {
+        params.set('modal', 'leaderboard');
+        if (leaderboardGameId && leaderboardGameId !== 'global') {
+          params.set('gameId', leaderboardGameId);
+        }
+      } else if (isQuestsModalOpen) {
+        params.set('modal', 'quests');
+      } else if (isTrophiesModalOpen) {
+        params.set('modal', 'trophies');
+      } else if (isRouletteModalOpen) {
+        params.set('modal', 'roulette');
+      } else if (isThemeSelectorOpen) {
+        params.set('modal', 'themes');
+      } else if (isUsernameModalOpen) {
+        params.set('modal', 'username');
+      }
+
+      const queryString = params.toString();
+      const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+
+      if (window.location.pathname + window.location.search !== newUrl) {
+        window.history.replaceState(null, '', newUrl);
+      }
+
+      // Persist snapshot in sessionStorage
+      sessionStorage.setItem(
+        'stressbuster_active_route',
+        JSON.stringify({
+          tab: activeTab,
+          selectedCategory,
+          searchQuery,
+          activeGameSlug: activeGame ? activeGame.slug || activeGame.id : null,
+          comingSoonSlug: comingSoonGame ? comingSoonGame.slug || comingSoonGame.id : null,
+          modal: isLeaderboardOpen
+            ? 'leaderboard'
+            : isQuestsModalOpen
+            ? 'quests'
+            : isTrophiesModalOpen
+            ? 'trophies'
+            : isRouletteModalOpen
+            ? 'roulette'
+            : isThemeSelectorOpen
+            ? 'themes'
+            : isUsernameModalOpen
+            ? 'username'
+            : null,
+          leaderboardGameId: isLeaderboardOpen ? leaderboardGameId : null,
+        })
+      );
+    } catch {}
+  }, [
+    activeTab,
+    selectedCategory,
+    searchQuery,
+    activeGame,
+    comingSoonGame,
+    isLeaderboardOpen,
+    leaderboardGameId,
+    isQuestsModalOpen,
+    isTrophiesModalOpen,
+    isRouletteModalOpen,
+    isThemeSelectorOpen,
+    isUsernameModalOpen,
+  ]);
+
+  // 3. Browser History Back / Forward Navigation Listener
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window === 'undefined') return;
+      const params = new URLSearchParams(window.location.search);
+
+      const tabParam = params.get('tab') as PortalTab | null;
+      if (tabParam && ['all', 'favorites', 'about-project', 'about-devs'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      } else {
+        setActiveTab('all');
+      }
+
+      const genreParam = params.get('genre') || params.get('category');
+      if (genreParam) {
+        setSelectedCategory(genreParam.toUpperCase());
+      } else {
+        setSelectedCategory('ALL');
+      }
+
+      const qParam = params.get('q') || params.get('search');
+      setSearchQuery(qParam || '');
+
+      const gameParam = params.get('game') || params.get('play');
+      if (gameParam) {
+        const found = INITIAL_GAMES.find(
+          g => g.slug.toLowerCase() === gameParam.toLowerCase() || g.id.toLowerCase() === gameParam.toLowerCase()
+        );
+        if (found) {
+          if (found.status === 'coming_soon') {
+            setComingSoonGame(found);
+            setActiveGame(null);
+          } else if (found.status === 'active') {
+            setActiveGame(found);
+            setComingSoonGame(null);
+          }
+        }
+      } else {
+        setActiveGame(null);
+        setComingSoonGame(null);
+      }
+
+      const modalParam = params.get('modal');
+      const lbParam = params.get('gameId') || params.get('leaderboard');
+      setIsLeaderboardOpen(modalParam === 'leaderboard' || !!lbParam);
+      if (lbParam) setLeaderboardGameId(lbParam);
+      setIsQuestsModalOpen(modalParam === 'quests');
+      setIsTrophiesModalOpen(modalParam === 'trophies');
+      setIsRouletteModalOpen(modalParam === 'roulette');
+      setIsThemeSelectorOpen(modalParam === 'themes');
+      setIsUsernameModalOpen(modalParam === 'username');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [setIsThemeSelectorOpen]);
+
+  // Load LocalStorage player data, favorites, hyped games & user ratings
   useEffect(() => {
     try {
       const savedFavorites = localStorage.getItem('stressbuster_favorites') || localStorage.getItem('nexus_favorites');

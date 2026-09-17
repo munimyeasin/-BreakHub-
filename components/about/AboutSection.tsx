@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users,
   Gamepad2,
@@ -139,6 +139,12 @@ export default function AboutSection({
   onViewChange,
 }: AboutSectionProps) {
   const [currentView, setCurrentView] = useState<'project' | 'devs'>(initialView);
+
+  useEffect(() => {
+    if (initialView) {
+      setCurrentView(initialView);
+    }
+  }, [initialView]);
 
   const handleSwitchView = (view: 'project' | 'devs') => {
     setCurrentView(view);
