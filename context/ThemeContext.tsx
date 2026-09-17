@@ -79,19 +79,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [applyThemeToDOM]);
 
   const toggleTheme = useCallback(() => {
-    let nextTheme: ThemeId;
-    if (theme === 'cozy-dark') {
-      nextTheme = 'cozy-light';
-    } else if (theme === 'cozy-light') {
-      nextTheme = 'cozy-dark';
-    } else if (theme === 'neo-dark') {
-      nextTheme = 'neo-light';
-    } else if (theme === 'neo-light') {
-      nextTheme = 'neo-dark';
-    } else {
-      const def = getTheme(theme);
-      nextTheme = def.isDark ? 'neo-light' : 'neo-dark';
-    }
+    const nextTheme: ThemeId = theme === 'neo-dark' ? 'neo-light' : 'neo-dark';
     setTheme(nextTheme);
   }, [theme, setTheme]);
 

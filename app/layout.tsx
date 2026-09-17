@@ -42,7 +42,7 @@ export default function RootLayout({
         var key = '${THEME_STORAGE_KEY}';
         var saved = localStorage.getItem(key) || '${DEFAULT_THEME}';
         document.documentElement.setAttribute('data-theme', saved);
-        if (saved === 'neo-light' || saved === 'cozy-light') {
+        if (saved === 'neo-light') {
           document.documentElement.classList.add('light');
           document.documentElement.classList.remove('dark');
         } else {
