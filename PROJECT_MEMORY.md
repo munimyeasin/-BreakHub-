@@ -8,15 +8,18 @@
 ---
 
 ## 👥 Equal Co-Creators & Developer Spotlight
-- **Developer Spotlight Showcase**: `components/about/DevSpotlightBanner.tsx` interactive showcase panel embedded in `components/about/AboutSection.tsx` featuring full feature parity with the Game Spotlight Banner:
-  - **7s Auto-Rotation & Timer**: Smooth auto-rotation across all 4 developers with pause on hover/touch.
+- **Developer 3D Stacked Card Deck**: `components/about/DevSpotlightBanner.tsx` interactive 3D physical card deck embedded in `components/about/AboutSection.tsx`:
+  - **Top Card Priority**: Munim Yeasin (Full-Stack & System Architect) is positioned as the primary top card on initial load, followed by Tahida, Marzia, and Rahul in the stack.
+  - **Physical Stack Aesthetics**: Dynamic z-index layering (`z-30`, `z-20`, `z-10`, `z-5`), cascading vertical/scale offsets (`translate-y-0 scale-100`, `translate-y-4 scale-[0.97] rotate-[1.2deg]`, `translate-y-8 scale-[0.94] -rotate-[1.2deg]`), 3px–4px black borders, and hard Neo-Brutalist drop shadows (`shadow-neo-lg`).
+  - **Direct Card Peeking & Shuffle**: Peeking header indicators on background cards allow 1-click promotion of any stacked card to the top, plus a dedicated "Shuffle Stack" CTA.
+  - **7s Auto-Rotation & Timer**: Smooth auto-cycling across the stack with pause on hover/touch.
   - **Interactive Quick Switcher**: Top tab selector for 1-click developer switching with active neon highlight indicators.
-  - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with directional slide transitions (`animate-dev-spotlight-next`, `animate-dev-spotlight-prev`).
-  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, and mini metric pills.
+  - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with card cycle animations.
+  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, and dedicated portfolio links (`/portfolio.html`).
+- **Munim Yeasin**: Full-Stack & System Architect — Procedural zero-asset Web Audio synthesis, gamification economy (Quests/XP/Trophies), Next.js API routes, and database persistence.
 - **Tahida**: UI/UX & Frontend Engineer — Neo-Brutalist design system, responsive mobile layout, dark/light theme engine, micro-interactions & badge systems.
 - **Marzia**: Game Logic & QA Engineer — Deterministic game rules, mathematical puzzle state machines, minimax AI, and collision QA verification.
 - **Rahul**: Systems & Gameplay Developer — High-performance 60 FPS HTML5 Canvas rendering loops, particle physics systems, and mobile virtual touch controls.
-- **Munim Yeasin**: Full-Stack & System Architect — Procedural zero-asset Web Audio synthesis, gamification economy (Quests/XP/Trophies), Next.js API routes, and database persistence.
 
 ---
 

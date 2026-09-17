@@ -96,6 +96,13 @@ const techStack = [
 
 const engineeringDomains = [
   {
+    title: 'Full-Stack & Web Audio Systems',
+    lead: 'Munim Yeasin',
+    desc: 'Zero-asset procedural oscillator audio engine, REST API persistence, score migration, and gamification economy.',
+    color: 'border-portal-yellow text-portal-yellow',
+    badgeBg: 'bg-portal-yellow text-black',
+  },
+  {
     title: 'UI/UX & Design Architecture',
     lead: 'Tahida',
     desc: 'High-contrast Neo-Brutalist design tokens, 4x3 responsive mobile game grids, slide bar navigation, and multi-theme engine.',
@@ -115,13 +122,6 @@ const engineeringDomains = [
     desc: 'High-performance 60 FPS requestAnimationFrame rendering, vector normal rebounds, parallax starfields, and mobile touch gamepads.',
     color: 'border-portal-lime text-portal-lime',
     badgeBg: 'bg-portal-lime text-black',
-  },
-  {
-    title: 'Full-Stack & Web Audio Systems',
-    lead: 'Munim Yeasin',
-    desc: 'Zero-asset procedural oscillator audio engine, REST API persistence, score migration, and gamification economy.',
-    color: 'border-portal-yellow text-portal-yellow',
-    badgeBg: 'bg-portal-yellow text-black',
   },
 ];
 
@@ -279,7 +279,7 @@ export default function AboutSection({
               <span className="font-black text-sm tracking-wider uppercase">Stress Buster Engineering Team</span>
             </div>
             <p className="text-xs text-slate-700 dark:text-slate-300 font-bold max-w-xl mx-auto leading-relaxed">
-              Tahida, Marzia, Rahul, and Munim Yeasin • Equal Co-Creators
+              Munim Yeasin, Tahida, Marzia, and Rahul • Equal Co-Creators
             </p>
           </footer>
         </div>

@@ -16,6 +16,8 @@ import {
   Zap,
   CheckCircle2,
   ExternalLink,
+  Shuffle,
+  Eye,
 } from 'lucide-react';
 import { getAvatarUrl } from '@/lib/avatar';
 import { audio } from '@/lib/audio';
@@ -27,6 +29,8 @@ export interface DeveloperProfile {
   badge: string;
   badgeBg: string;
   badgeText: string;
+  accentBg: string;
+  dotColor: string;
   avatarSeed: string;
   accentColor: string;
   bio: string;
@@ -37,9 +41,37 @@ export interface DeveloperProfile {
     label: string;
     value: string;
   }[];
+  portfolioUrl?: string;
 }
 
 export const DEVELOPERS: DeveloperProfile[] = [
+  {
+    id: 'munim',
+    name: 'Munim Yeasin',
+    role: 'Full-Stack & System Architect',
+    badge: 'SYSTEM ARCHITECT & LEAD',
+    badgeBg: 'bg-portal-yellow',
+    badgeText: 'text-black',
+    accentBg: 'from-portal-yellow/20 via-portal-surface to-portal-card',
+    dotColor: '#fbbf24',
+    avatarSeed: 'MunimArchitect',
+    accentColor: 'text-portal-yellow',
+    bio: 'Architected the zero-asset procedural Web Audio synthesizer, full-stack Next.js API endpoints, database persistence, and gamification economy.',
+    focus: 'Full-Stack Architecture, Web Audio & Gamification Suite',
+    keyContributions: [
+      'Zero-Asset Web Audio API Procedural Synthesizer',
+      'Daily Quests, Play Streaks & Trophy Vault System',
+      'Next.js 16 Server API Endpoints & Score Persistence',
+      'Leaderboard Engine & Personal Best Tracking',
+    ],
+    techStack: ['Next.js 16', 'React 19', 'Web Audio API', 'TypeScript', 'JSON Store'],
+    stats: [
+      { label: 'Role', value: 'Architecture' },
+      { label: 'Focus', value: 'Full-Stack' },
+      { label: 'Status', value: 'Lead Dev' },
+    ],
+    portfolioUrl: '/portfolio.html',
+  },
   {
     id: 'tahida',
     name: 'Tahida',
@@ -47,6 +79,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
     badge: 'DESIGN & FRONTEND LEAD',
     badgeBg: 'bg-portal-pink',
     badgeText: 'text-white',
+    accentBg: 'from-portal-pink/20 via-portal-surface to-portal-card',
+    dotColor: '#ec4899',
     avatarSeed: 'TahidaCyber',
     accentColor: 'text-portal-pink',
     bio: 'Crafted the bold high-contrast Neo-Brutalist design system, responsive mobile layouts, and theme engine across the entire Stress Buster platform.',
@@ -71,6 +105,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
     badge: 'LOGIC & QA SPECIALIST',
     badgeBg: 'bg-portal-cyan',
     badgeText: 'text-black',
+    accentBg: 'from-portal-cyan/20 via-portal-surface to-portal-card',
+    dotColor: '#06b6d4',
     avatarSeed: 'MarziaNeon',
     accentColor: 'text-portal-cyan',
     bio: 'Engineered deterministic game rules, mathematical puzzle state machines, minimax AI logic, and comprehensive collision quality assurance.',
@@ -95,6 +131,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
     badge: 'CANVAS & GAMEPLAY DEV',
     badgeBg: 'bg-portal-lime',
     badgeText: 'text-black',
+    accentBg: 'from-portal-lime/20 via-portal-surface to-portal-card',
+    dotColor: '#a3e635',
     avatarSeed: 'RahulMatrix',
     accentColor: 'text-portal-lime',
     bio: 'Optimized high-performance 60 FPS HTML5 Canvas rendering loops, particle physics systems, and smooth mobile touch gamepad controls.',
@@ -112,30 +150,6 @@ export const DEVELOPERS: DeveloperProfile[] = [
       { label: 'Status', value: 'Active Dev' },
     ],
   },
-  {
-    id: 'munim',
-    name: 'Munim Yeasin',
-    role: 'Full-Stack & System Architect',
-    badge: 'SYSTEM ARCHITECT',
-    badgeBg: 'bg-portal-yellow',
-    badgeText: 'text-black',
-    avatarSeed: 'MunimArchitect',
-    accentColor: 'text-portal-yellow',
-    bio: 'Architected the zero-asset procedural Web Audio synthesizer, full-stack Next.js API endpoints, database persistence, and gamification economy.',
-    focus: 'Full-Stack Architecture, Web Audio & Gamification Suite',
-    keyContributions: [
-      'Zero-Asset Web Audio API Procedural Synthesizer',
-      'Daily Quests, Play Streaks & Trophy Vault System',
-      'Next.js 16 Server API Endpoints & Score Persistence',
-      'Leaderboard Engine & Personal Best Tracking',
-    ],
-    techStack: ['Next.js 16', 'React 19', 'Web Audio API', 'TypeScript', 'JSON Store'],
-    stats: [
-      { label: 'Role', value: 'Architecture' },
-      { label: 'Focus', value: 'Full-Stack' },
-      { label: 'Status', value: 'Active Dev' },
-    ],
-  },
 ];
 
 interface DevSpotlightBannerProps {
@@ -145,8 +159,6 @@ interface DevSpotlightBannerProps {
 export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBannerProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [animDirection, setAnimDirection] = useState<'next' | 'prev'>('next');
-  const [transitionKey, setTransitionKey] = useState(0);
   const bannerRef = useRef<HTMLDivElement>(null);
 
   // Mobile Touch Swipe gesture recognition state
@@ -156,26 +168,23 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
   const touchDeltaY = useRef<number>(0);
   const isSwiping = useRef<boolean>(false);
 
-  const currentDev = DEVELOPERS[activeIndex] || DEVELOPERS[0];
-  const avatarUrl = getAvatarUrl(currentDev.avatarSeed);
-
   const handleNext = () => {
-    setAnimDirection('next');
     setActiveIndex(prev => (prev + 1) % DEVELOPERS.length);
-    setTransitionKey(k => k + 1);
+    try {
+      audio.playClickSound();
+    } catch {}
   };
 
   const handlePrev = () => {
-    setAnimDirection('prev');
     setActiveIndex(prev => (prev - 1 + DEVELOPERS.length) % DEVELOPERS.length);
-    setTransitionKey(k => k + 1);
+    try {
+      audio.playClickSound();
+    } catch {}
   };
 
   const handleSelect = (idx: number) => {
     if (idx === activeIndex) return;
-    setAnimDirection(idx > activeIndex ? 'next' : 'prev');
     setActiveIndex(idx);
-    setTransitionKey(k => k + 1);
     try {
       audio.playClickSound();
     } catch {}
@@ -211,10 +220,8 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       if (absX > 35 && absX > absY * 0.7) {
         if (dX < 0) {
           handleNext();
-          try { audio.playClickSound(); } catch {}
         } else {
           handlePrev();
-          try { audio.playClickSound(); } catch {}
         }
       }
     }
@@ -232,9 +239,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
   useEffect(() => {
     if (DEVELOPERS.length <= 1 || isPaused) return;
     const timer = setInterval(() => {
-      setAnimDirection('next');
       setActiveIndex(prev => (prev + 1) % DEVELOPERS.length);
-      setTransitionKey(k => k + 1);
     }, 7000);
     return () => clearInterval(timer);
   }, [isPaused]);
@@ -253,58 +258,27 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       {/* Top Tri-Color Accent Line */}
       <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
 
-      {/* Animation Styles */}
-      <style jsx>{`
-        @keyframes devSpotlightSlideNext {
-          0% {
-            opacity: 0;
-            transform: translateX(18px) scale(0.99);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-          }
-        }
-        @keyframes devSpotlightSlidePrev {
-          0% {
-            opacity: 0;
-            transform: translateX(-18px) scale(0.99);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-          }
-        }
-        .animate-dev-spotlight-next {
-          animation: devSpotlightSlideNext 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .animate-dev-spotlight-prev {
-          animation: devSpotlightSlidePrev 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-      `}</style>
-
       {/* Top Header: Section Tag + Developer Quick Switcher */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b-3 border-black">
+      <div className="relative z-40 flex flex-wrap items-center justify-between gap-2 mb-6 pb-3 border-b-3 border-black">
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-portal-cyan text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
-            <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>DEVELOPER SPOTLIGHT</span>
+            <Layers className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>DEVELOPER CARD STACK</span>
           </span>
-          <span className="hidden xs:inline-block px-2 py-0.5 rounded-lg bg-portal-card border-2 border-black text-[10px] font-black uppercase text-slate-700 dark:text-slate-300">
-            {activeIndex + 1} of {DEVELOPERS.length}
+          <span className="hidden xs:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-portal-card border-2 border-black text-[10px] font-black uppercase text-slate-700 dark:text-slate-300 shadow-neo-sm">
+            <span>Card</span>
+            <span className="text-portal-yellow font-black">{activeIndex + 1}</span>
+            <span>of {DEVELOPERS.length}</span>
           </span>
         </div>
 
         {/* Developer Tabs & Nav Chevrons */}
         <div className="flex items-center gap-1">
           <button
-            onClick={() => {
-              handlePrev();
-              try { audio.playClickSound(); } catch {}
-            }}
+            onClick={handlePrev}
             className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-700 dark:text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
-            title="Previous Developer"
-            aria-label="Previous Developer"
+            title="Previous Card"
+            aria-label="Previous Card"
           >
             <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
@@ -319,13 +293,14 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                   onClick={() => handleSelect(idx)}
                   className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs font-black transition-all border uppercase shrink-0 ${
                     isActive
-                      ? 'bg-portal-yellow text-black border-black shadow-neo-sm font-black'
+                      ? 'bg-portal-yellow text-black border-black shadow-neo-sm font-black scale-105'
                       : 'border-transparent text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-portal-surface'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full border border-black" style={{
-                    backgroundColor: dev.id === 'tahida' ? '#ec4899' : dev.id === 'marzia' ? '#06b6d4' : dev.id === 'rahul' ? '#a3e635' : '#fbbf24'
-                  }} />
+                  <span
+                    className="w-2 h-2 rounded-full border border-black"
+                    style={{ backgroundColor: dev.dotColor }}
+                  />
                   <span>{dev.name}</span>
                 </button>
               );
@@ -333,197 +308,223 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
           </div>
 
           <button
-            onClick={() => {
-              handleNext();
-              try { audio.playClickSound(); } catch {}
-            }}
+            onClick={handleNext}
             className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-700 dark:text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
-            title="Next Developer"
-            aria-label="Next Developer"
+            title="Next Card"
+            aria-label="Next Card"
           >
             <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
+          </button>
+
+          {/* Shuffle / Next Card Shortcut */}
+          <button
+            onClick={handleNext}
+            className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all ml-1"
+            title="Cycle to next stacked card"
+          >
+            <Shuffle className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Shuffle</span>
           </button>
         </div>
       </div>
 
       {/* ========================================================= */}
-      {/* MOBILE VIEW (< md): Touch Card Showcase                   */}
+      {/* 3D STACKED CARD DECK CONTAINER                            */}
       {/* ========================================================= */}
-      <div
-        key={`mobile-${currentDev.id}-${transitionKey}`}
-        className={`md:hidden relative z-10 space-y-3.5 ${
-          animDirection === 'next' ? 'animate-dev-spotlight-next' : 'animate-dev-spotlight-prev'
-        }`}
-      >
-        {/* Avatar & Header Card */}
-        <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-portal-card border-3 border-black shadow-neo-sm">
-          <div className="relative w-16 h-16 shrink-0 rounded-2xl bg-portal-surface border-3 border-black p-1 shadow-neo-sm overflow-hidden">
-            <img
-              src={avatarUrl}
-              alt={currentDev.name}
-              className="w-full h-full object-cover rounded-xl bg-slate-900"
-            />
-          </div>
-          <div className="min-w-0 flex-1">
-            <span className={`inline-block px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider border border-black shadow-neo-sm mb-1 ${currentDev.badgeBg} ${currentDev.badgeText}`}>
-              {currentDev.badge}
-            </span>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase truncate">
-              {currentDev.name}
-            </h3>
-            <p className="text-xs text-slate-700 dark:text-slate-300 font-bold leading-tight truncate">
-              {currentDev.role}
-            </p>
-          </div>
-        </div>
+      <div className="relative w-full pb-10 sm:pb-12 pt-2">
+        <div className="relative w-full min-h-[510px] xs:min-h-[490px] sm:min-h-[460px] md:min-h-[430px] lg:min-h-[410px]">
+          {DEVELOPERS.map((dev, idx) => {
+            // Compute relative index in stack (0 = Top Card, 1 = 1st Behind, 2 = 2nd Behind, 3 = 3rd Behind)
+            const relIndex = (idx - activeIndex + DEVELOPERS.length) % DEVELOPERS.length;
+            const isTop = relIndex === 0;
+            const avatarUrl = getAvatarUrl(dev.avatarSeed);
 
-        {/* Bio Quote */}
-        <div className="p-3 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm text-xs text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
-          <span className="text-portal-yellow font-black">“</span>
-          {currentDev.bio}
-          <span className="text-portal-yellow font-black">”</span>
-        </div>
+            // Stack transformations & styles based on relIndex
+            // Desktop offsets
+            let transformClass = '';
+            let zIndexStyle = 30;
+            let opacityStyle = 1;
+            let cursorClass = 'cursor-default';
 
-        {/* Key Contributions */}
-        <div className="space-y-1.5">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-            Key Engineering Modules
-          </span>
-          <div className="space-y-1">
-            {currentDev.keyContributions.map((contrib, i) => (
+            if (relIndex === 0) {
+              zIndexStyle = 30;
+              opacityStyle = 1;
+              transformClass = 'translate-y-0 scale-100 rotate-0 shadow-neo-lg';
+            } else if (relIndex === 1) {
+              zIndexStyle = 20;
+              opacityStyle = 0.94;
+              transformClass = 'translate-y-3 sm:translate-y-4 scale-[0.97] rotate-[1.2deg] shadow-neo hover:rotate-0 hover:scale-[0.98]';
+              cursorClass = 'cursor-pointer';
+            } else if (relIndex === 2) {
+              zIndexStyle = 10;
+              opacityStyle = 0.82;
+              transformClass = 'translate-y-6 sm:translate-y-8 scale-[0.94] -rotate-[1.2deg] shadow-neo-sm hover:rotate-0 hover:scale-[0.95]';
+              cursorClass = 'cursor-pointer';
+            } else {
+              zIndexStyle = 5;
+              opacityStyle = 0.68;
+              transformClass = 'translate-y-9 sm:translate-y-12 scale-[0.91] rotate-[0.8deg] shadow-neo-sm hover:rotate-0 hover:scale-[0.92]';
+              cursorClass = 'cursor-pointer';
+            }
+
+            return (
               <div
-                key={i}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-xs text-slate-900 dark:text-white font-bold"
+                key={dev.id}
+                onClick={() => {
+                  if (!isTop) {
+                    handleSelect(idx);
+                  }
+                }}
+                style={{
+                  zIndex: zIndexStyle,
+                  opacity: opacityStyle,
+                }}
+                className={`absolute inset-x-0 top-0 transition-all duration-300 ease-out select-none ${transformClass} ${cursorClass}`}
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-portal-lime stroke-[2.5] shrink-0" />
-                <span className="truncate">{contrib}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+                {/* Physical Card Container */}
+                <div className={`relative rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-4 sm:p-5 md:p-6 overflow-hidden ${
+                  isTop ? 'ring-2 ring-portal-yellow/30' : 'hover:border-portal-yellow'
+                }`}>
+                  {/* Card Top Accent Strip */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1.5 border-b-2 border-black"
+                    style={{ backgroundColor: dev.dotColor }}
+                  />
 
-        {/* Tech Stack Chips */}
-        <div className="space-y-1.5 pt-1">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-            Core Toolkit
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {currentDev.techStack.map((tech) => (
-              <span
-                key={tech}
-                className="px-2 py-0.5 rounded-md bg-portal-surface border border-black text-[10px] font-black text-portal-cyan uppercase shadow-neo-sm"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+                  {/* Header Tab on Background Cards to preview whose card is behind */}
+                  {!isTop && (
+                    <div className="absolute top-3 right-3 sm:right-4 flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg bg-portal-surface border-2 border-black shadow-neo-sm text-[10px] font-black uppercase text-slate-900 dark:text-white">
+                      <span className="w-2 h-2 rounded-full border border-black" style={{ backgroundColor: dev.dotColor }} />
+                      <span>{dev.name}</span>
+                      <span className="text-portal-yellow hidden sm:inline-block">· Click to bring to top</span>
+                    </div>
+                  )}
 
-      {/* ========================================================= */}
-      {/* DESKTOP VIEW (≥ md): Dual-Pane Showcase Command Deck       */}
-      {/* ========================================================= */}
-      <div
-        key={`desktop-${currentDev.id}-${transitionKey}`}
-        className={`hidden md:grid relative z-10 grid-cols-12 gap-5 lg:gap-6 items-center ${
-          animDirection === 'next' ? 'animate-dev-spotlight-next' : 'animate-dev-spotlight-prev'
-        }`}
-      >
-        {/* Left Column (4 cols): Profile Visual & Key Stats */}
-        <div className="col-span-4 flex flex-col items-center justify-center p-5 rounded-2xl bg-portal-card border-3 border-black shadow-neo-lg text-center space-y-3.5">
-          {/* Avatar Visual */}
-          <div className="relative w-28 h-28 lg:w-32 lg:h-32 rounded-3xl bg-portal-surface border-4 border-black p-1.5 shadow-neo overflow-hidden">
-            <img
-              src={avatarUrl}
-              alt={currentDev.name}
-              className="w-full h-full object-cover rounded-2xl bg-slate-900"
-            />
-            <div className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-portal-lime border-2 border-black shadow-neo-sm" title="Active Core Engineer" />
-          </div>
+                  {/* ========================================================= */}
+                  {/* CARD CONTENT: RESPONSIVE DESKTOP & MOBILE DOSSIER        */}
+                  {/* ========================================================= */}
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6 items-center pt-1">
+                    {/* Left Column (4 cols on desktop): Avatar & Profile Deck */}
+                    <div className="md:col-span-4 flex flex-col items-center justify-center p-3.5 sm:p-4 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm text-center space-y-2.5 sm:space-y-3">
+                      {/* Avatar Visual */}
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-1 shadow-neo overflow-hidden">
+                        <img
+                          src={avatarUrl}
+                          alt={dev.name}
+                          className="w-full h-full object-cover rounded-xl sm:rounded-2xl bg-slate-900"
+                        />
+                        <div
+                          className="absolute bottom-1.5 right-1.5 w-3.5 h-3.5 rounded-full border-2 border-black shadow-neo-sm"
+                          style={{ backgroundColor: dev.dotColor }}
+                          title="Active Core Engineer"
+                        />
+                      </div>
 
-          <div>
-            <span className={`inline-block px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm mb-1.5 ${currentDev.badgeBg} ${currentDev.badgeText}`}>
-              {currentDev.badge}
-            </span>
-            <h2 className="text-xl lg:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
-              {currentDev.name}
-            </h2>
-            <p className="text-xs text-slate-700 dark:text-slate-300 font-bold leading-tight mt-0.5">
-              {currentDev.role}
-            </p>
-          </div>
+                      <div>
+                        <span className={`inline-block px-2 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm mb-1 ${dev.badgeBg} ${dev.badgeText}`}>
+                          {dev.badge}
+                        </span>
+                        <h2 className="text-base sm:text-lg lg:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[220px]">
+                          {dev.name}
+                        </h2>
+                        <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-bold leading-tight mt-0.5">
+                          {dev.role}
+                        </p>
+                      </div>
 
-          {/* Mini Stat Pills */}
-          <div className="grid grid-cols-3 gap-1.5 w-full pt-1 border-t-2 border-black">
-            {currentDev.stats.map((stat, i) => (
-              <div key={i} className="p-1.5 rounded-lg bg-portal-surface border border-black text-center">
-                <span className="text-[8px] font-black uppercase text-slate-600 dark:text-slate-400 block">{stat.label}</span>
-                <span className="text-[10px] font-black text-portal-yellow truncate block">{stat.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+                      {/* Mini Stat Pills */}
+                      <div className="grid grid-cols-3 gap-1 w-full pt-1 border-t-2 border-black">
+                        {dev.stats.map((stat, i) => (
+                          <div key={i} className="p-1 rounded-lg bg-portal-card border border-black text-center">
+                            <span className="text-[7px] sm:text-[8px] font-black uppercase text-slate-600 dark:text-slate-400 block">{stat.label}</span>
+                            <span className="text-[9px] sm:text-[10px] font-black text-portal-yellow truncate block">{stat.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-        {/* Right Column (8 cols): Bio, Key Contributions & Tech Stack */}
-        <div className="col-span-8 flex flex-col justify-center space-y-4">
-          {/* Focus & Bio Strip */}
-          <div className="p-4 rounded-2xl bg-portal-card border-3 border-black shadow-neo-sm space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider bg-portal-purple text-white px-2 py-0.5 rounded border border-black shadow-neo-sm">
-                PRIMARY DOMAIN
-              </span>
-              <span className="text-xs font-black text-slate-900 dark:text-white">{currentDev.focus}</span>
-            </div>
-            <p className="text-xs lg:text-sm text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
-              <span className="text-portal-yellow font-black">“</span>
-              {currentDev.bio}
-              <span className="text-portal-yellow font-black">”</span>
-            </p>
-          </div>
+                    {/* Right Column (8 cols on desktop): Bio, Key Contributions & Tech Stack */}
+                    <div className="md:col-span-8 flex flex-col justify-center space-y-3 sm:space-y-3.5">
+                      {/* Focus & Bio Strip */}
+                      <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-portal-surface border-2 sm:border-3 border-black shadow-neo-sm space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-portal-purple text-white px-2 py-0.5 rounded border border-black shadow-neo-sm">
+                            PRIMARY DOMAIN
+                          </span>
+                          <span className="text-[11px] sm:text-xs font-black text-slate-900 dark:text-white truncate">{dev.focus}</span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
+                          <span className="text-portal-yellow font-black text-sm">“</span>
+                          {dev.bio}
+                          <span className="text-portal-yellow font-black text-sm">”</span>
+                        </p>
+                      </div>
 
-          {/* Key Contributions 2x2 Grid */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <Code2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-              <span>Core Modules & Systems Engineered</span>
-            </span>
-            <div className="grid grid-cols-2 gap-2">
-              {currentDev.keyContributions.map((contrib, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-xs text-slate-900 dark:text-white font-bold"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-portal-lime stroke-[2.5] shrink-0" />
-                  <span className="truncate">{contrib}</span>
+                      {/* Key Contributions 2x2 Grid */}
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                          <Code2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
+                          <span>Core Modules & Systems Engineered</span>
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                          {dev.keyContributions.map((contrib, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-[11px] sm:text-xs text-slate-900 dark:text-white font-bold"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5 text-portal-lime stroke-[2.5] shrink-0" />
+                              <span className="truncate">{contrib}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Core Tech Toolkit & Action CTAs */}
+                      <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
+                          <span className="text-[9px] sm:text-[10px] font-black uppercase text-slate-600 dark:text-slate-400 mr-1">Toolkit:</span>
+                          {dev.techStack.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg bg-portal-surface border border-black text-[9px] sm:text-[10px] font-black text-portal-cyan uppercase shadow-neo-sm"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Interactive Buttons on Top Card */}
+                        {isTop && (
+                          <div className="flex items-center gap-2">
+                            {dev.portfolioUrl && (
+                              <a
+                                href={dev.portfolioUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-portal-cyan text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+                                <span>Portfolio</span>
+                              </a>
+                            )}
+                            {onExploreGames && (
+                              <button
+                                onClick={onExploreGames}
+                                className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
+                              >
+                                <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                                <span>Play Games</span>
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Core Tech Toolkit */}
-          <div className="flex items-center justify-between gap-3 pt-1">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] font-black uppercase text-slate-600 dark:text-slate-400 mr-1">Toolkit:</span>
-              {currentDev.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2.5 py-1 rounded-lg bg-portal-surface border-2 border-black text-[10px] font-black text-portal-cyan uppercase shadow-neo-sm"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            {onExploreGames && (
-              <button
-                onClick={onExploreGames}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
-              >
-                <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Play Games</span>
-              </button>
-            )}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
