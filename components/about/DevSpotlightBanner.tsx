@@ -179,7 +179,9 @@ interface DevSpotlightBannerProps {
 export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBannerProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [cardHeight, setCardHeight] = useState<number>(0);
   const bannerRef = useRef<HTMLDivElement>(null);
+  const topCardRef = useRef<HTMLDivElement | null>(null);
 
   // Mobile Touch Swipe gesture recognition state
   const touchStartX = useRef<number | null>(null);
@@ -187,6 +189,39 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
   const touchDeltaX = useRef<number>(0);
   const touchDeltaY = useRef<number>(0);
   const isSwiping = useRef<boolean>(false);
+
+  // Dynamic Height Tracker for Active Card
+  useEffect(() => {
+    const updateCardHeight = () => {
+      if (topCardRef.current) {
+        const height = topCardRef.current.offsetHeight;
+        if (height > 0) {
+          setCardHeight(height);
+        }
+      }
+    };
+
+    // Immediate calculation
+    updateCardHeight();
+
+    // Use ResizeObserver to dynamically update height when window resizes or content reflows
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && topCardRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        updateCardHeight();
+      });
+      resizeObserver.observe(topCardRef.current);
+    }
+
+    window.addEventListener('resize', updateCardHeight);
+    const timeout = setTimeout(updateCardHeight, 150);
+
+    return () => {
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', updateCardHeight);
+      clearTimeout(timeout);
+    };
+  }, [activeIndex]);
 
   const handleNext = () => {
     setActiveIndex(prev => (prev + 1) % DEVELOPERS.length);
@@ -351,8 +386,11 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       {/* ========================================================= */}
       {/* 3D STACKED CARD DECK CONTAINER (IMMERSIVE PEEKING DECK)    */}
       {/* ========================================================= */}
-      <div className="relative w-full pt-10 sm:pt-12 pb-24 sm:pb-28 md:pb-32 lg:pb-36 px-2 sm:px-6 md:px-10">
-        <div className="relative w-full min-h-[660px] xs:min-h-[620px] sm:min-h-[580px] md:min-h-[520px] lg:min-h-[480px]">
+      <div className="relative w-full pt-8 sm:pt-11 pb-4 sm:pb-8 px-1 xs:px-2 sm:px-6 md:px-8">
+        <div
+          className="relative w-full transition-[min-height] duration-300 ease-out"
+          style={{ minHeight: cardHeight > 0 ? `${cardHeight + 28}px` : '420px' }}
+        >
           {DEVELOPERS.map((dev, idx) => {
             // Compute relative index in stack (0 = Top Card, 1 = 1st Behind, 2 = 2nd Behind, 3 = 3rd Behind)
             const relIndex = (idx - activeIndex + DEVELOPERS.length) % DEVELOPERS.length;
@@ -374,21 +412,21 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
               opacityStyle = 0.96;
               // Distinct right fan peek with subtle downward offset & clockwise tilt
               transformClass =
-                'translate-x-3.5 sm:translate-x-6 md:translate-x-8 translate-y-4 sm:translate-y-5 scale-[0.985] rotate-[2.8deg] sm:rotate-[3.2deg] shadow-neo hover:translate-y-2 hover:translate-x-5 sm:hover:translate-x-9 hover:scale-[0.995] hover:rotate-[1.5deg] hover:opacity-100 hover:shadow-neo-lg';
+                'translate-x-2 xs:translate-x-3 sm:translate-x-6 md:translate-x-8 translate-y-2 sm:translate-y-4 scale-[0.985] rotate-[1.8deg] sm:rotate-[2.8deg] shadow-neo hover:translate-y-1 hover:translate-x-3 sm:hover:translate-x-7 hover:scale-[0.995] hover:rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
               cursorClass = 'cursor-pointer group';
             } else if (relIndex === 2) {
               zIndexStyle = 10;
               opacityStyle = 0.90;
               // Distinct left fan peek with downward offset & counter-clockwise tilt
               transformClass =
-                '-translate-x-3.5 sm:-translate-x-6 md:-translate-x-8 translate-y-8 sm:translate-y-10 scale-[0.965] -rotate-[2.8deg] sm:-rotate-[3.2deg] shadow-neo hover:translate-y-4 hover:-translate-x-5 sm:hover:-translate-x-9 hover:scale-[0.98] hover:-rotate-[1.5deg] hover:opacity-100 hover:shadow-neo-lg';
+                '-translate-x-2 xs:-translate-x-3 sm:-translate-x-6 md:-translate-x-8 translate-y-4 sm:translate-y-8 scale-[0.97] -rotate-[1.8deg] sm:-rotate-[2.8deg] shadow-neo hover:translate-y-2 hover:-translate-x-3 sm:hover:-translate-x-7 hover:scale-[0.98] hover:-rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
               cursorClass = 'cursor-pointer group';
             } else {
               zIndexStyle = 5;
               opacityStyle = 0.82;
               // Center depth peek with cascading vertical drop & subtle tilt
               transformClass =
-                'translate-x-0 translate-y-12 sm:translate-y-16 scale-[0.94] rotate-[0.8deg] sm:rotate-[1.2deg] shadow-neo-sm hover:translate-y-8 hover:scale-[0.96] hover:opacity-100 hover:shadow-neo';
+                'translate-x-0 translate-y-6 sm:translate-y-12 scale-[0.95] rotate-[0.6deg] sm:rotate-[0.8deg] shadow-neo-sm hover:translate-y-3 hover:scale-[0.965] hover:opacity-100 hover:shadow-neo';
               cursorClass = 'cursor-pointer group';
             }
 
@@ -411,34 +449,34 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                 {/* ========================================================= */}
                 {!isTop && (
                   <div
-                    className={`absolute z-40 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-t-xl sm:rounded-t-2xl bg-portal-card border-3 border-black border-b-0 shadow-neo-sm transition-all duration-200 group-hover:-translate-y-2 group-hover:shadow-neo ${
+                    className={`absolute z-40 flex items-center gap-1 sm:gap-1.5 px-2 xs:px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-t-lg sm:rounded-t-xl bg-portal-card border-2 sm:border-3 border-black border-b-0 shadow-neo-sm transition-all duration-200 group-hover:-translate-y-1.5 group-hover:shadow-neo ${
                       relIndex === 1
-                        ? '-top-8 sm:-top-9 right-3 xs:right-6 sm:right-10 md:right-14'
+                        ? '-top-7 sm:-top-8.5 right-2 xs:right-4 sm:right-8 md:right-12'
                         : relIndex === 2
-                        ? '-top-8 sm:-top-9 left-3 xs:left-6 sm:left-10 md:left-14'
-                        : '-top-9 sm:-top-10 left-1/2 -translate-x-1/2'
+                        ? '-top-7 sm:-top-8.5 left-2 xs:left-4 sm:left-8 md:left-12'
+                        : '-top-8 sm:-top-9 left-1/2 -translate-x-1/2'
                     }`}
                     style={{
                       borderTopColor: dev.dotColor,
                       borderTopWidth: '4px',
                     }}
                   >
-                    <div className="relative w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-black shrink-0">
+                    <div className="relative w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 rounded-full overflow-hidden border border-black shrink-0">
                       <img src={avatarUrl} alt={dev.name} className="w-full h-full object-cover bg-slate-900" />
                     </div>
                     <span
-                      className="w-2 h-2 rounded-full border border-black shrink-0"
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full border border-black shrink-0"
                       style={{ backgroundColor: dev.dotColor }}
                     />
-                    <span className="text-[10px] sm:text-xs font-black uppercase text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
+                    <span className="text-[9px] sm:text-xs font-black uppercase text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
                       {dev.name}
                     </span>
                     <span
-                      className={`text-[8px] sm:text-[9px] font-black uppercase px-1.5 py-0.2 rounded border border-black shadow-neo-sm hidden xs:inline-block ${dev.badgeBg} ${dev.badgeText}`}
+                      className={`text-[7px] sm:text-[9px] font-black uppercase px-1 py-0.2 rounded border border-black shadow-neo-sm hidden xs:inline-block ${dev.badgeBg} ${dev.badgeText}`}
                     >
                       {dev.badge.split('&')[0].trim()}
                     </span>
-                    <span className="hidden sm:inline-flex items-center gap-0.5 text-[9px] font-black text-portal-yellow uppercase tracking-wider pl-0.5">
+                    <span className="hidden sm:inline-flex items-center gap-0.5 text-[8px] sm:text-[9px] font-black text-portal-yellow uppercase tracking-wider pl-0.5">
                       <Eye className="w-2.5 h-2.5 stroke-[2.5]" />
                       <span>Draw</span>
                     </span>
@@ -447,7 +485,8 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
 
                 {/* Physical Card Container */}
                 <div
-                  className={`relative rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-4 sm:p-5 md:p-6 overflow-hidden transition-all duration-300 ${
+                  ref={isTop ? topCardRef : undefined}
+                  className={`relative rounded-xl xs:rounded-2xl sm:rounded-3xl bg-portal-card border-2 sm:border-3 md:border-4 border-black p-3 xs:p-3.5 sm:p-4 md:p-5 lg:p-6 overflow-hidden transition-all duration-300 ${
                     isTop
                       ? 'ring-2 ring-portal-yellow/40 shadow-neo-lg'
                       : 'hover:border-portal-yellow group-hover:ring-2 group-hover:ring-portal-yellow/30'
@@ -455,17 +494,17 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                 >
                   {/* Card Top Accent Strip */}
                   <div
-                    className="absolute top-0 left-0 right-0 h-2 border-b-2 border-black"
+                    className="absolute top-0 left-0 right-0 h-1.5 sm:h-2 border-b-2 border-black"
                     style={{ backgroundColor: dev.dotColor }}
                   />
 
                   {/* Top-Right Quick Promotion Indicator on Background Cards */}
                   {!isTop && (
-                    <div className="absolute top-3 right-3 sm:right-4 flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg bg-portal-surface border-2 border-black shadow-neo-sm text-[10px] font-black uppercase text-slate-900 dark:text-white group-hover:bg-portal-yellow group-hover:text-black transition-colors">
-                      <span className="w-2 h-2 rounded-full border border-black" style={{ backgroundColor: dev.dotColor }} />
+                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-4 flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg bg-portal-surface border border-black sm:border-2 shadow-neo-sm text-[9px] sm:text-[10px] font-black uppercase text-slate-900 dark:text-white group-hover:bg-portal-yellow group-hover:text-black transition-colors">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full border border-black" style={{ backgroundColor: dev.dotColor }} />
                       <span>{dev.name}</span>
                       <span className="hidden sm:inline-block font-bold text-slate-600 dark:text-slate-300 group-hover:text-black">
-                        · Click to Draw to Top
+                        · Draw
                       </span>
                     </div>
                   )}
@@ -473,76 +512,78 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                   {/* ========================================================= */}
                   {/* CARD CONTENT: RESPONSIVE DESKTOP & MOBILE DOSSIER        */}
                   {/* ========================================================= */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6 items-center pt-1">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-2.5 xs:gap-3 sm:gap-4 lg:gap-5 items-center pt-0.5">
                     {/* Left Column (4 cols on desktop): Avatar & Profile Deck */}
-                    <div className="md:col-span-4 flex flex-col items-center justify-center p-3.5 sm:p-4 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm text-center space-y-2.5 sm:space-y-3">
-                      {/* Avatar Visual */}
-                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-2xl sm:rounded-3xl bg-portal-card border-3 sm:border-4 border-black p-1 shadow-neo overflow-hidden">
-                        <img
-                          src={avatarUrl}
-                          alt={dev.name}
-                          className="w-full h-full object-cover rounded-xl sm:rounded-2xl bg-slate-900"
-                        />
-                        <div
-                          className="absolute bottom-1.5 right-1.5 w-3.5 h-3.5 rounded-full border-2 border-black shadow-neo-sm"
-                          style={{ backgroundColor: dev.dotColor }}
-                          title="Active Core Engineer"
-                        />
-                      </div>
+                    <div className="md:col-span-4 flex flex-row md:flex-col items-center justify-between md:justify-center p-2.5 xs:p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl bg-portal-surface border-2 sm:border-3 border-black shadow-neo-sm text-left md:text-center gap-2.5 xs:gap-3 md:gap-0 md:space-y-2.5">
+                      {/* Avatar Visual & Identity Header */}
+                      <div className="flex items-center md:flex-col gap-2.5 xs:gap-3 md:gap-0 md:space-y-2 shrink-0">
+                        <div className="relative w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl sm:rounded-2xl md:rounded-3xl bg-portal-card border-2 sm:border-3 md:border-4 border-black p-0.5 sm:p-1 shadow-neo overflow-hidden shrink-0">
+                          <img
+                            src={avatarUrl}
+                            alt={dev.name}
+                            className="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl bg-slate-900"
+                          />
+                          <div
+                            className="absolute bottom-1 right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-1.5 sm:border-2 border-black shadow-neo-sm"
+                            style={{ backgroundColor: dev.dotColor }}
+                            title="Active Core Engineer"
+                          />
+                        </div>
 
-                      <div>
-                        <span className={`inline-block px-2 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg text-[8px] sm:text-[9px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm mb-1 ${dev.badgeBg} ${dev.badgeText}`}>
-                          {dev.badge}
-                        </span>
-                        <h2 className="text-base sm:text-lg lg:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[220px]">
-                          {dev.name}
-                        </h2>
-                        <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-bold leading-tight mt-0.5">
-                          {dev.role}
-                        </p>
+                        <div className="text-left md:text-center">
+                          <span className={`inline-block px-1.5 xs:px-2 py-0.5 rounded text-[8px] xs:text-[9px] font-black uppercase tracking-wider border border-black shadow-neo-sm mb-0.5 ${dev.badgeBg} ${dev.badgeText}`}>
+                            {dev.badge}
+                          </span>
+                          <h2 className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[150px] xs:max-w-[180px] sm:max-w-none">
+                            {dev.name}
+                          </h2>
+                          <p className="text-[9px] xs:text-[10px] sm:text-xs text-slate-700 dark:text-slate-300 font-bold leading-tight">
+                            {dev.role}
+                          </p>
+                        </div>
                       </div>
 
                       {/* Mini Stat Pills */}
-                      <div className="grid grid-cols-3 gap-1 w-full pt-1 border-t-2 border-black">
+                      <div className="hidden xs:grid grid-cols-3 gap-1 md:w-full md:pt-1.5 md:border-t-2 md:border-black shrink-0">
                         {dev.stats.map((stat, i) => (
-                          <div key={i} className="p-1 rounded-lg bg-portal-card border border-black text-center">
-                            <span className="text-[7px] sm:text-[8px] font-black uppercase text-slate-600 dark:text-slate-400 block">{stat.label}</span>
-                            <span className="text-[9px] sm:text-[10px] font-black text-portal-yellow truncate block">{stat.value}</span>
+                          <div key={i} className="p-0.5 sm:p-1 rounded-md sm:rounded-lg bg-portal-card border border-black text-center min-w-[48px]">
+                            <span className="text-[6px] xs:text-[7px] sm:text-[8px] font-black uppercase text-slate-600 dark:text-slate-400 block">{stat.label}</span>
+                            <span className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-portal-yellow truncate block">{stat.value}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Right Column (8 cols on desktop): Bio, Key Contributions & Tech Stack */}
-                    <div className="md:col-span-8 flex flex-col justify-center space-y-3 sm:space-y-3.5">
+                    <div className="md:col-span-8 flex flex-col justify-center space-y-2 xs:space-y-2.5 sm:space-y-3">
                       {/* Focus & Bio Strip */}
-                      <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-portal-surface border-2 sm:border-3 border-black shadow-neo-sm space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-portal-purple text-white px-2 py-0.5 rounded border border-black shadow-neo-sm">
+                      <div className="p-2 xs:p-2.5 sm:p-3 rounded-lg xs:rounded-xl sm:rounded-2xl bg-portal-surface border-2 border-black shadow-neo-sm space-y-1">
+                        <div className="flex items-center gap-1.5 xs:gap-2">
+                          <span className="text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-portal-purple text-white px-1.5 py-0.2 rounded border border-black shadow-neo-sm shrink-0">
                             PRIMARY DOMAIN
                           </span>
-                          <span className="text-[11px] sm:text-xs font-black text-slate-900 dark:text-white truncate">{dev.focus}</span>
+                          <span className="text-[10px] xs:text-[11px] sm:text-xs font-black text-slate-900 dark:text-white truncate">{dev.focus}</span>
                         </div>
-                        <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
-                          <span className="text-portal-yellow font-black text-sm">“</span>
+                        <p className="text-[11px] xs:text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-bold leading-snug sm:leading-relaxed">
+                          <span className="text-portal-yellow font-black">“</span>
                           {dev.bio}
-                          <span className="text-portal-yellow font-black text-sm">”</span>
+                          <span className="text-portal-yellow font-black">”</span>
                         </p>
                       </div>
 
                       {/* Key Contributions 2x2 Grid */}
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                          <Code2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-                          <span>Core Modules & Systems Engineered</span>
+                      <div className="space-y-1">
+                        <span className="text-[9px] xs:text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                          <Code2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-portal-cyan stroke-[2.5]" />
+                          <span>Core Modules & Systems</span>
                         </span>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                        <div className="grid grid-cols-2 gap-1 xs:gap-1.5 sm:gap-2">
                           {dev.keyContributions.map((contrib, i) => (
                             <div
                               key={i}
-                              className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-[11px] sm:text-xs text-slate-900 dark:text-white font-bold"
+                              className="flex items-center gap-1 xs:gap-1.5 p-1 xs:p-1.5 sm:p-2 rounded-md xs:rounded-lg sm:rounded-xl bg-portal-surface border border-black sm:border-2 shadow-neo-sm text-[9px] xs:text-[10px] sm:text-xs text-slate-900 dark:text-white font-bold"
                             >
-                              <CheckCircle2 className="w-3.5 h-3.5 text-portal-lime stroke-[2.5] shrink-0" />
+                              <CheckCircle2 className="w-2.5 h-2.5 xs:w-3 xs:h-3 text-portal-lime stroke-[2.5] shrink-0" />
                               <span className="truncate">{contrib}</span>
                             </div>
                           ))}
@@ -550,13 +591,13 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                       </div>
 
                       {/* Core Tech Toolkit & Action CTAs */}
-                      <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
-                        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
-                          <span className="text-[9px] sm:text-[10px] font-black uppercase text-slate-600 dark:text-slate-400 mr-1">Toolkit:</span>
+                      <div className="flex flex-wrap items-center justify-between gap-1.5 xs:gap-2 pt-0.5">
+                        <div className="flex items-center gap-1 flex-wrap">
+                          <span className="text-[8px] xs:text-[9px] font-black uppercase text-slate-600 dark:text-slate-400 mr-0.5">Toolkit:</span>
                           {dev.techStack.map((tech) => (
                             <span
                               key={tech}
-                              className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg bg-portal-surface border border-black text-[9px] sm:text-[10px] font-black text-portal-cyan uppercase shadow-neo-sm"
+                              className="px-1.5 xs:px-2 py-0.5 rounded bg-portal-surface border border-black text-[8px] xs:text-[9px] font-black text-portal-cyan uppercase shadow-neo-sm"
                             >
                               {tech}
                             </span>
@@ -565,15 +606,15 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
 
                         {/* Interactive Buttons on Top Card */}
                         {isTop && (
-                          <div className="flex items-center gap-2 flex-wrap">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             {dev.portfolioUrl && (
                               <a
                                 href={dev.portfolioUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-portal-cyan text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
+                                className="flex items-center gap-1 px-2.5 py-1 xs:px-3 xs:py-1.5 rounded-lg xs:rounded-xl bg-portal-cyan text-black font-black text-[10px] xs:text-[11px] uppercase tracking-wider border border-black sm:border-2 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
                               >
-                                <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+                                <ExternalLink className="w-3 h-3 stroke-[2.5]" />
                                 <span>Portfolio</span>
                               </a>
                             )}
@@ -582,19 +623,19 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                                 href={dev.instagramUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
+                                className="flex items-center gap-1 px-2.5 py-1 xs:px-3 xs:py-1.5 rounded-lg xs:rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black text-[10px] xs:text-[11px] uppercase tracking-wider border border-black sm:border-2 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all shrink-0"
                                 title={`Instagram: ${dev.instagramHandle || '@__yeasin__0'}`}
                               >
-                                <InstagramIcon className="w-3.5 h-3.5" />
+                                <InstagramIcon className="w-3 h-3" />
                                 <span>{dev.instagramHandle || 'Instagram'}</span>
                               </a>
                             )}
                             {onExploreGames && (
                               <button
                                 onClick={onExploreGames}
-                                className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
+                                className="flex items-center gap-1 px-2.5 py-1 xs:px-3 xs:py-1.5 rounded-lg xs:rounded-xl bg-portal-yellow text-black font-black text-[10px] xs:text-[11px] uppercase tracking-wider border border-black sm:border-2 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
                               >
-                                <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                                <Gamepad2 className="w-3 h-3 stroke-[2.5]" />
                                 <span>Play Games</span>
                               </button>
                             )}
