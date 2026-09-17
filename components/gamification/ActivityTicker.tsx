@@ -47,7 +47,7 @@ const DEFAULT_ACTIVITIES: ActivityItem[] = [
     icon: <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />,
     user: 'Nazmul',
     action: 'set new high score in',
-    highlight: 'Retro Slicer (3,450 pts)',
+    highlight: 'Cyber Katana Slicer (3,450 pts)',
     tag: 'RECORD',
     color: 'border-yellow-500/40 text-yellow-300',
   },

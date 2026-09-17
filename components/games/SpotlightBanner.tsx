@@ -46,7 +46,6 @@ export default function SpotlightBanner({
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
         g.slug === 'black-hole' ||
-        g.slug === 'cyber-drift' ||
         g.slug === 'cyber-slicer' ||
         g.slug === 'neon-starfighter' ||
         g.slug === 'multidimension-xo')
@@ -76,7 +75,6 @@ export default function SpotlightBanner({
     if (slug === 'retro-candy-crush') return <Sparkles className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'retro-battleship') return <Shield className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
-    if (slug === 'cyber-drift') return <Flame className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;
     if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'multidimension-xo') return <Grid3X3 className="w-3.5 h-3.5 text-portal-yellow" />;

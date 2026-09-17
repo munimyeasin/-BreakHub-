@@ -14,23 +14,24 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 | Game | Category | Engine / Mechanics | Status |
 | :--- | :---: | :--- | :---: |
-| **Retro Black Hole** | `STRATEGY` | David Gale’s 21-node triangular singularity board, 2-Leg match & AI engine (Cadet, Quantum, Master) | 🟢 Active |
-| **Retro Minesweeper** | `PUZZLE` | Procedural quantum minefield, guaranteed safe first click, chord clearing, dynamic difficulty sectors | 🟢 Active |
-| **Retro Maze Escape** | `PUZZLE` | 10-level labyrinth infiltration, 60s countdown, laser security gates, keycards & teleporters | 🟢 Active |
-| **Retro Drift 2077** | `ARCADE` | High-speed 2D infinite drift racer, counter-steered physics, apex beacons, nitro boost & 10x combos | 🟢 Active |
-| **Retro Slicer** | `ACTION` | High-FPS touch/mouse blade slicing, fruit physics, multi-slice combo multiplier, plasma bombs | 🟢 Active |
-| **Neon Starfighter** | `ARCADE` | Retro-arcade vertical shmup, plasma laser cannons, singularity black holes, drone boss swarms | 🟢 Active |
+| **Neon Candy Blast** | `PUZZLE` | Cyber Match-3 Arcade, Striped Lasers, Wrapped & Disco Color Bombs, 15 Campaign Quests | 🟢 Active |
+| **Naval Grid Strike** | `STRATEGY` | Tactical 2D Naval Grid Combat, Sonar Recon, Artillery Salvos, AI & 2P Pass & Play | 🟢 Active |
+| **Singularity Horizon** | `STRATEGY` | David Gale’s 21-node triangular singularity board, collapsing event horizon, 3 AI tiers | 🟢 Active |
+| **Quantum Minefield** | `PUZZLE` | Procedural quantum minefield, guaranteed safe first click, chord clearing, dynamic difficulty sectors | 🟢 Active |
+| **Cyber Labyrinth Escape** | `PUZZLE` | 10-level labyrinth infiltration, 60s countdown, laser security gates, keycards & teleporters | 🟢 Active |
+| **Cyber Katana Slicer** | `ACTION` | High-FPS touch/mouse katana slicing, target physics, multi-slice combo multipliers, plasma bombs | 🟢 Active |
+| **Neon Starfighter** | `ARCADE` | High-speed vertical shmup, plasma laser cannons, singularity black holes, drone boss swarms | 🟢 Active |
 | **Quantum XO** | `STRATEGY` | Tactical 3x3 showdown vs. adaptive minimax Overthinker AI engine | 🟢 Active |
-| **Retro 2048** | `PUZZLE` | Retro sliding grid merger, smooth keyboard/swipe gestures, high-voltage energy core | 🟢 Active |
+| **Quantum 2048** | `PUZZLE` | Cyber sliding grid merger, smooth keyboard/swipe gestures, high-voltage energy core | 🟢 Active |
 | **Memory Matrix** | `PUZZLE` | Fast-paced neural memory card matching grid with multiplier streaks and countdown bonuses | 🟢 Active |
 | **Hyper Tapper** | `ACTION` | Precision reaction-time clicker testing ultra-high APM reflex speeds | 🟢 Active |
 | **Neon Snake 2077** | `ARCADE` | 60FPS 2D Canvas engine with touch swipe gestures, virtual D-pad, combo multipliers & particle trails | 🟡 Coming Soon |
 | **Multidimension XO** | `STRATEGY` | Ultimate 9-field nested Ultimate Tic-Tac-Toe macro-grid strategy engine | 🟡 Coming Soon |
-| **Retro Dash Runner** | `ACTION` | Endless side-scroller runner with laser fences, double jump thrusters, and energy coins | 🔵 In Engine |
-| **Geometry Dash Retro** | `ACTION` | Rhythm cube runner with gravity pads, neon spikes, and secret collectable coins | 🔵 In Engine |
-| **Retro Breaker** | `ARCADE` | Hyper-responsive neon paddle brick breaker with multiball physics & particle bursts | 🔵 In Engine |
+| **Cyber Dash 2077** | `ACTION` | Endless side-scroller runner with laser fences, double jump thrusters, and energy coins | 🔵 In Engine |
+| **Neon Pulse Dash** | `ACTION` | Rhythm cube runner with gravity pads, neon spikes, and secret collectable coins | 🔵 In Engine |
+| **Cyber Brick Breaker** | `ARCADE` | Hyper-responsive neon paddle brick breaker with energy balls & particle bursts | 🔵 In Engine |
 | **Chroma Reflex** | `STRATEGY` | 4-quadrant chromatic sequence audio reflex test with pitch-synthesized tones | 🔵 In Engine |
-| **Neon Paper.io** | `STRATEGY` | Real-time territory capture grid, trail-slicing mechanics, and AI bots | 🔵 In Engine |
+| **Neon Paper Grid** | `STRATEGY` | Real-time territory capture grid, trail-slicing mechanics, and AI bots | 🔵 In Engine |
 
 ---
 

@@ -54,7 +54,7 @@ export const DEVELOPERS: DeveloperProfile[] = [
     keyContributions: [
       'Neo-Brutalist Theme System & Dark/Light Mode',
       'Mobile 4x3 Adaptive Game Grid & Sidebar Drawer',
-      'Retro Candy Crush UI & Match-3 Animations',
+      'Neon Candy Blast UI & Match-3 Animations',
       'Accessibility, Micro-Interactions & Badge Systems',
     ],
     techStack: ['React 19', 'Next.js 16', 'Tailwind CSS', 'TypeScript', 'Lucide Icons'],
@@ -76,9 +76,9 @@ export const DEVELOPERS: DeveloperProfile[] = [
     bio: 'Engineered deterministic game rules, mathematical puzzle state machines, minimax AI logic, and comprehensive collision quality assurance.',
     focus: 'Game Rule Engines, Deterministic Logic & QA Verification',
     keyContributions: [
-      'Retro Battleship Fleet AI & Grid Calculations',
+      'Naval Grid Strike Fleet AI & Grid Calculations',
       'Multidimension XO Minimax Algorithm & Win Logic',
-      'Cyber Slicer Katana Hitbox & Slice Math',
+      'Cyber Katana Slicer Hitbox & Slice Math',
       'Deterministic Game Balancing & QA Playtesting',
     ],
     techStack: ['TypeScript', 'Canvas 2D API', 'State Machines', 'Game Math', 'QA Testing'],
@@ -101,8 +101,8 @@ export const DEVELOPERS: DeveloperProfile[] = [
     focus: 'Canvas 2D Engine, Particle Physics & Touch Controls',
     keyContributions: [
       'Neon Starfighter Nebula Stars & Shmup Engine',
-      'Cyber Drift Parallax Particle Simulation',
-      'Retro Black Hole Gravity & Singularity Pull',
+      '60 FPS Canvas Physics & Particle Simulation Engine',
+      'Singularity Horizon Gravity & Singularity Pull',
       'Responsive Mobile Virtual Touch Gamepad HUD',
     ],
     techStack: ['HTML5 Canvas', 'Vector Math', 'Particle Systems', 'Touch Gestures', 'TypeScript'],

@@ -31,7 +31,6 @@ import ChromaReflexGame from '@/components/games/ChromaReflexGame';
 import GeometryDashGame from '@/components/games/GeometryDashGame';
 import CyberSlicerGame from '@/components/games/CyberSlicerGame';
 import NeonPaperIoGame from '@/components/games/NeonPaperIoGame';
-import CyberDriftGame from '@/components/games/CyberDriftGame';
 import CyberMazeGame from '@/components/games/CyberMazeGame';
 import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
 import BlackHoleGame from '@/components/games/BlackHoleGame';
@@ -60,7 +59,7 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
-  // -1. Retro Candy Crush
+  // -1. Neon Candy Blast
   g_candy_19: {
     genreTag: 'PUZZLE // MATCH-3 ARCADE',
     objective: 'Match 3+ candies to clear goals, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Quest levels, 25-move Blitz, or 60s Timed Rush.',
@@ -74,7 +73,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RETRY / RESTART', desc: 'Restart current level or run' }
     ]
   },
-  // 0. Retro Battleship
+  // 0. Naval Grid Strike
   g_battleship_18: {
     genreTag: 'STRATEGY // NAVAL GRID COMBAT',
     objective: 'Deploy 5 heavy warships on 10x10 ocean coordinates. Locate and sink the enemy fleet with precision artillery and recon sonar scans.',
@@ -87,7 +86,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['M'], label: 'MODE SWITCH', desc: 'Toggle AI vs 2P Pass & Play' }
     ]
   },
-  // 1. Retro Black Hole
+  // 1. Singularity Horizon
   g_blackhole_17: {
     genreTag: 'STRATEGY // SINGULARITY DUEL',
     objective: 'Sequence numbers 1 to 10 onto 21 triangular nodes. The 21st remaining node collapses into the Singularity Black Hole.',
@@ -99,7 +98,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'NEW MATCH', desc: 'Reset board & start fresh leg' }
     ]
   },
-  // 2. Retro Minesweeper
+  // 2. Quantum Minefield
   g_sweeper_16: {
     genreTag: 'PUZZLE // QUANTUM SWEEPER',
     objective: 'Disarm randomized quantum minefields. First click is 100% guaranteed safe.',
@@ -113,7 +112,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RESET SEED', desc: 'Generate fresh minefield' }
     ]
   },
-  // 3. Retro Maze Escape
+  // 3. Cyber Labyrinth Escape
   g_maze_15: {
     genreTag: 'PUZZLE // LABYRINTH INFILTRATION',
     objective: 'Navigate high-density 10-level labyrinths before the 60-second timer hits zero.',
@@ -126,28 +125,14 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RETRY RUN', desc: 'Restart current infiltration level' }
     ]
   },
-  // 4. Retro Drift 2077
-  g_drift_14: {
-    genreTag: 'ARCADE // HIGH-SPEED DRIFT',
-    objective: 'Counter-steer into high-speed apex corners, chain infinite drift angles, and collect nitro cores.',
-    scoring: 'Drift distance x angle velocity x apex beacon multiplier. Chain up to 10x drift combos.',
-    proTip: 'Tap the handbrake [Space] while turning to throw the rear out, then counter-steer with [A]/[D] to sustain the slide.',
-    controls: [
-      { keys: ['A', 'D', '←', '→'], label: 'STEER', desc: 'Counter-steer vehicle trajectory' },
-      { keys: ['W', '↑'], label: 'THROTTLE', desc: 'Accelerate forward' },
-      { keys: ['S', '↓'], label: 'BRAKE', desc: 'Brake / reverse' },
-      { keys: ['Space'], label: 'HANDBRAKE', desc: 'Initiate sharp power slide' },
-      { keys: ['Shift'], label: 'NITRO', desc: 'Discharge boost capacitor' }
-    ]
-  },
-  // 5. Retro Slicer
+  // 4. Cyber Katana Slicer
   g_slicer_11: {
     genreTag: 'ACTION // KATANA SLICER',
-    objective: 'Slice flying retro fruits out of mid-air with high-FPS mouse sweeps. Avoid red plasma bombs.',
-    scoring: 'Multi-slice combos (3+ fruits in 1 stroke) trigger 2x-5x scoring multipliers and frenzy time.',
-    proTip: 'Wait for fruits to cluster at their peak trajectory before slashing in a single clean diagonal swipe.',
+    objective: 'Slice flying cyber targets out of mid-air with high-FPS mouse sweeps. Avoid red plasma bombs.',
+    scoring: 'Multi-slice combos (3+ targets in 1 stroke) trigger 2x-5x scoring multipliers and frenzy time.',
+    proTip: 'Wait for targets to cluster at their peak trajectory before slashing in a single clean diagonal swipe.',
     controls: [
-      { keys: ['Left Click', 'Mouse Drag'], label: 'KATANA SLASH', desc: 'Sweep blade across fruits' },
+      { keys: ['Left Click', 'Mouse Drag'], label: 'KATANA SLASH', desc: 'Sweep blade across targets' },
       { keys: ['R'], label: 'RESTART', desc: 'Begin fresh slicing trial' }
     ]
   },
@@ -234,7 +219,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RESTART', desc: 'Begin fresh macro tournament' }
     ]
   },
-  // 13. Retro Dash Runner
+  // 13. Cyber Dash 2077
   g_action_06: {
     genreTag: 'ACTION // ENDLESS RUNNER',
     objective: 'Sprint through procedural neon corridors, double-jumping over laser fences and sliding under gates.',
@@ -246,7 +231,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RESTART', desc: 'Start fresh dash run' }
     ]
   },
-  // 14. Geometry Dash Retro
+  // 14. Neon Pulse Dash
   g_geometry_10: {
     genreTag: 'ACTION // RHYTHM RUNNER',
     objective: 'Precision rhythm platformer synced to electronic synthesizers. Jump spikes and launch off pads.',
@@ -257,7 +242,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RETRY', desc: 'Instant respawn at checkpoint' }
     ]
   },
-  // 15. Retro Breaker
+  // 15. Cyber Brick Breaker
   g_breaker_08: {
     genreTag: 'ARCADE // BRICK BREAKER',
     objective: 'Demolish neon brick formations using paddle rebounds, multiball splits, and laser cannons.',
@@ -282,7 +267,7 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['R'], label: 'RESET', desc: 'Start new trial' }
     ]
   },
-  // 17. Neon Paper.io
+  // 17. Neon Paper Grid
   g_paper_12: {
     genreTag: 'STRATEGY // TERRITORY CONQUEST',
     objective: 'Expand your neon territory by drawing loops back to base. Slice opponent trails to eliminate them.',
@@ -719,10 +704,6 @@ export default function GameModal({
 
               {(game.id === 'g_maze_15' || game.slug === 'cyber-maze') && (
                 <CyberMazeGame gameId={game.id} onGameOver={handleScoreSubmit} />
-              )}
-
-              {(game.id === 'g_drift_14' || game.slug === 'cyber-drift') && (
-                <CyberDriftGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_slicer_11' || game.slug === 'cyber-slicer') && (

@@ -1083,7 +1083,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
                   <Swords className="w-7 h-7 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Retro Slicer</h3>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Cyber Katana Slicer</h3>
                   <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Neon Katana Blade Rush</p>
                 </div>
 
@@ -1091,11 +1091,11 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
                 <div className="bg-portal-surface p-3 rounded-xl border-2 border-black shadow-neo-sm text-[11px] text-slate-200 space-y-1.5 text-left font-bold">
                   <div className="flex items-center gap-2 text-portal-cyan">
                     <Sparkles className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Swipe / Drag to slash flying retro fruits!</span>
+                    <span>Swipe / Drag to slash flying cyber targets!</span>
                   </div>
                   <div className="flex items-center gap-2 text-portal-yellow">
                     <Flame className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Multi-Slice: 3+ fruits in 1 swipe for Combos!</span>
+                    <span>Multi-Slice: 3+ targets in 1 swipe for Combos!</span>
                   </div>
                   <div className="flex items-center gap-2 text-portal-pink">
                     <span className="shrink-0 text-xs">💣</span>
