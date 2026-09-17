@@ -349,11 +349,14 @@ export default function SpotlightBanner({
           </div>
         </div>
 
-        {/* Title */}
-        <div>
+        {/* Title & Gameplay Details */}
+        <div className="space-y-1.5">
           <h1 className="text-lg xs:text-xl font-black tracking-tight text-white uppercase truncate">
             {currentGame.title}
           </h1>
+          <p className="text-slate-300 text-xs font-medium line-clamp-2 leading-relaxed">
+            {currentGame.description}
+          </p>
         </div>
 
         {/* Action Buttons */}
@@ -471,11 +474,16 @@ export default function SpotlightBanner({
             </span>
           </div>
 
-          {/* Title */}
-          <div>
+          {/* Title & Gameplay Details */}
+          <div className="space-y-2.5">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white uppercase leading-tight">
               {currentGame.title}
             </h1>
+            <div className="p-3.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm">
+              <p className="text-slate-300 text-xs lg:text-sm font-medium leading-relaxed">
+                {currentGame.description}
+              </p>
+            </div>
           </div>
 
           {/* Primary Action Button Strip */}

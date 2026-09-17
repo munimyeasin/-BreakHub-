@@ -25,7 +25,7 @@
 - **Styling**: Tailwind CSS + Custom Neon Theme Palettes + Lucide Icons
 - **Responsive Dual-Pane & Left Slide Bar Navigation**: `components/navigation/Sidebar.tsx` relocates all top-level navigation tabs ("All Games", "Favorites", "Hall of Fame", "About Team") and genre filters into an interactive left sidebar (sticky on desktop, sliding drawer with backdrop on mobile/touch screens). Includes active category badge counters, filter status pill indicators, and quick reset actions in `app/page.tsx`.
 - **Spotlight Showcase Hero Banner**: `components/games/SpotlightBanner.tsx` prominently highlights top featured games (**Neon Candy Blast**, **Naval Grid Strike**, **Singularity Horizon**, **Quantum Minefield**, **Cyber Labyrinth Escape**, **Cyber Katana Slicer**, **Neon Starfighter**, and **Multidimension XO**). Streamlined for high-impact visual presentation and fast game launches:
-    - **Clean Visual Presentation**: Displays vibrant game artwork, high-contrast title, genre badges, dynamic play counter, and community ratings with zero text clutter.
+    - **Clean Visual & Informative Presentation**: Displays vibrant game artwork, high-contrast title, gameplay description panel, genre badges, dynamic play counter, and community ratings.
     - **Fast Action Deck**: Immediate "PLAY NOW" primary CTA button, "LEADERBOARD" rankings shortcut, and quick favorite toggle.
     - **Interactive Game Selector**: Quick-access top pill switcher for all featured titles with active highlight states.
     - **Responsive Dual Layout**: Full desktop view (`≥ md`) and touch-swipe enabled card on mobile (`< md`) with smooth directional slide animations (`animate-spotlight-next`, `animate-spotlight-prev`), 7s auto-rotation timer, and pause-on-hover/touch.
