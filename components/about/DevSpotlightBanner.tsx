@@ -331,15 +331,15 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       {/* ========================================================= */}
       {/* 3D STACKED CARD DECK CONTAINER (IMMERSIVE PEEKING DECK)    */}
       {/* ========================================================= */}
-      <div className="relative w-full pt-8 sm:pt-10 pb-12 sm:pb-16 px-1 sm:px-2">
-        <div className="relative w-full min-h-[530px] xs:min-h-[510px] sm:min-h-[480px] md:min-h-[450px] lg:min-h-[420px]">
+      <div className="relative w-full pt-10 sm:pt-12 pb-16 sm:pb-20 px-2 sm:px-6 md:px-10">
+        <div className="relative w-full min-h-[540px] xs:min-h-[520px] sm:min-h-[490px] md:min-h-[460px] lg:min-h-[430px]">
           {DEVELOPERS.map((dev, idx) => {
             // Compute relative index in stack (0 = Top Card, 1 = 1st Behind, 2 = 2nd Behind, 3 = 3rd Behind)
             const relIndex = (idx - activeIndex + DEVELOPERS.length) % DEVELOPERS.length;
             const isTop = relIndex === 0;
             const avatarUrl = getAvatarUrl(dev.avatarSeed);
 
-            // Stack transformations & styles for immersive physical card peeking
+            // Stack transformations & styles for balanced, prominent card peeking
             let transformClass = '';
             let zIndexStyle = 30;
             let opacityStyle = 1;
@@ -352,23 +352,23 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
             } else if (relIndex === 1) {
               zIndexStyle = 20;
               opacityStyle = 0.96;
-              // Peeks out to the right and slightly down with a clockwise tilt
+              // Distinct right fan peek with subtle downward offset & clockwise tilt
               transformClass =
-                'translate-x-2 sm:translate-x-3.5 translate-y-3 sm:translate-y-4 scale-[0.98] rotate-[2deg] sm:rotate-[2.5deg] shadow-neo hover:translate-y-1 hover:translate-x-3 hover:scale-[0.99] hover:rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
+                'translate-x-3.5 sm:translate-x-6 md:translate-x-8 translate-y-4 sm:translate-y-5 scale-[0.985] rotate-[2.8deg] sm:rotate-[3.2deg] shadow-neo hover:translate-y-2 hover:translate-x-5 sm:hover:translate-x-9 hover:scale-[0.995] hover:rotate-[1.5deg] hover:opacity-100 hover:shadow-neo-lg';
               cursorClass = 'cursor-pointer group';
             } else if (relIndex === 2) {
               zIndexStyle = 10;
-              opacityStyle = 0.88;
-              // Peeks out to the left and further down with a counter-clockwise tilt
+              opacityStyle = 0.90;
+              // Distinct left fan peek with downward offset & counter-clockwise tilt
               transformClass =
-                '-translate-x-2 sm:-translate-x-3.5 translate-y-6 sm:translate-y-8 scale-[0.95] -rotate-[2deg] sm:-rotate-[2.5deg] shadow-neo hover:translate-y-3 hover:-translate-x-3 hover:scale-[0.97] hover:-rotate-[1deg] hover:opacity-100 hover:shadow-neo-lg';
+                '-translate-x-3.5 sm:-translate-x-6 md:-translate-x-8 translate-y-8 sm:translate-y-10 scale-[0.965] -rotate-[2.8deg] sm:-rotate-[3.2deg] shadow-neo hover:translate-y-4 hover:-translate-x-5 sm:hover:-translate-x-9 hover:scale-[0.98] hover:-rotate-[1.5deg] hover:opacity-100 hover:shadow-neo-lg';
               cursorClass = 'cursor-pointer group';
             } else {
               zIndexStyle = 5;
-              opacityStyle = 0.78;
-              // Peeks behind with slight vertical offset and subtle tilt
+              opacityStyle = 0.82;
+              // Center depth peek with cascading vertical drop & subtle tilt
               transformClass =
-                'translate-x-0 translate-y-9 sm:translate-y-12 scale-[0.92] rotate-[0.8deg] sm:rotate-[1.2deg] shadow-neo-sm hover:translate-y-6 hover:scale-[0.94] hover:opacity-100 hover:shadow-neo';
+                'translate-x-0 translate-y-12 sm:translate-y-16 scale-[0.94] rotate-[0.8deg] sm:rotate-[1.2deg] shadow-neo-sm hover:translate-y-8 hover:scale-[0.96] hover:opacity-100 hover:shadow-neo';
               cursorClass = 'cursor-pointer group';
             }
 
@@ -391,12 +391,12 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                 {/* ========================================================= */}
                 {!isTop && (
                   <div
-                    className={`absolute -top-7 sm:-top-8 z-40 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-t-xl sm:rounded-t-2xl bg-portal-card border-3 border-black border-b-0 shadow-neo-sm transition-all duration-200 group-hover:-translate-y-1.5 group-hover:shadow-neo ${
+                    className={`absolute z-40 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-t-xl sm:rounded-t-2xl bg-portal-card border-3 border-black border-b-0 shadow-neo-sm transition-all duration-200 group-hover:-translate-y-2 group-hover:shadow-neo ${
                       relIndex === 1
-                        ? 'right-3 sm:right-8'
+                        ? '-top-8 sm:-top-9 right-3 xs:right-6 sm:right-10 md:right-14'
                         : relIndex === 2
-                        ? 'left-3 sm:left-8'
-                        : 'left-1/2 -translate-x-1/2'
+                        ? '-top-8 sm:-top-9 left-3 xs:left-6 sm:left-10 md:left-14'
+                        : '-top-9 sm:-top-10 left-1/2 -translate-x-1/2'
                     }`}
                     style={{
                       borderTopColor: dev.dotColor,
