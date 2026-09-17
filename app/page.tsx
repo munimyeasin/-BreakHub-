@@ -66,7 +66,7 @@ export default function ArcadePortalDashboard() {
   const [levelUpInfo, setLevelUpInfo] = useState<LevelInfo | null>(null);
   const [gameState, setGameState] = useState<GamificationState>(() => gamification.getState());
 
-  const isHydratedRef = useRef(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // 1. Initial State Hydration from URL Search Parameters & Session Storage
   useEffect(() => {
@@ -145,13 +145,13 @@ export default function ArcadePortalDashboard() {
     } catch (e) {
       console.error('Failed to hydrate URL / session state', e);
     } finally {
-      isHydratedRef.current = true;
+      setIsHydrated(true);
     }
   }, [setIsThemeSelectorOpen]);
 
   // 2. Synchronize active state with Browser URL and Session Storage
   useEffect(() => {
-    if (!isHydratedRef.current || typeof window === 'undefined') return;
+    if (!isHydrated || typeof window === 'undefined') return;
 
     try {
       const params = new URLSearchParams();
@@ -230,6 +230,7 @@ export default function ArcadePortalDashboard() {
       );
     } catch {}
   }, [
+    isHydrated,
     activeTab,
     selectedCategory,
     searchQuery,
