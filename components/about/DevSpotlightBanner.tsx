@@ -331,8 +331,8 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
       {/* ========================================================= */}
       {/* 3D STACKED CARD DECK CONTAINER (IMMERSIVE PEEKING DECK)    */}
       {/* ========================================================= */}
-      <div className="relative w-full pt-10 sm:pt-12 pb-16 sm:pb-20 px-2 sm:px-6 md:px-10">
-        <div className="relative w-full min-h-[540px] xs:min-h-[520px] sm:min-h-[490px] md:min-h-[460px] lg:min-h-[430px]">
+      <div className="relative w-full pt-10 sm:pt-12 pb-24 sm:pb-28 md:pb-32 lg:pb-36 px-2 sm:px-6 md:px-10">
+        <div className="relative w-full min-h-[660px] xs:min-h-[620px] sm:min-h-[580px] md:min-h-[520px] lg:min-h-[480px]">
           {DEVELOPERS.map((dev, idx) => {
             // Compute relative index in stack (0 = Top Card, 1 = 1st Behind, 2 = 2nd Behind, 3 = 3rd Behind)
             const relIndex = (idx - activeIndex + DEVELOPERS.length) % DEVELOPERS.length;
