@@ -279,14 +279,14 @@ export default function SpotlightBanner({
         {/* Cinematic Artwork with Center Play Overlay */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="game-thumbnail-container relative group w-full h-[220px] xs:h-[240px] rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo cursor-pointer select-none"
+          className="game-thumbnail-container relative group w-full h-[220px] xs:h-[240px] rounded-2xl overflow-hidden border-3 border-black shadow-neo cursor-pointer select-none"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
             className="game-thumbnail-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="game-thumbnail-overlay absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+          <div className="game-thumbnail-overlay absolute inset-0 transition-opacity pointer-events-none" />
 
           {/* Left/Right Tap Arrows for Mobile */}
           {featuredGames.length > 1 && (
@@ -415,14 +415,14 @@ export default function SpotlightBanner({
         <div className="col-span-5">
           <div
             onClick={() => onPlayGame(currentGame)}
-            className="game-thumbnail-container relative group aspect-[16/10] lg:aspect-[4/3] w-full rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo-lg cursor-pointer"
+            className="game-thumbnail-container relative group aspect-[16/10] lg:aspect-[4/3] w-full rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg cursor-pointer"
           >
             <img
               src={currentGame.thumbnail_url}
               alt={currentGame.title}
               className="game-thumbnail-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="game-thumbnail-overlay absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+            <div className="game-thumbnail-overlay absolute inset-0 transition-opacity pointer-events-none" />
 
             {/* Hover Play Overlay */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">

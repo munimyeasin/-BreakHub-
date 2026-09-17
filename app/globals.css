@@ -217,23 +217,33 @@ html[data-theme="neo-light"] {
 
 /* Theme-Adaptive Game Thumbnail Styling & Filters */
 .game-thumbnail-container {
+  background-color: var(--portal-card);
+  border-color: #000000;
   transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .game-thumbnail-img {
+  filter: contrast(1.05) saturate(1.1) brightness(1.0);
   transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(11, 8, 25, 0.75) 0%, rgba(11, 8, 25, 0.1) 40%, transparent 100%);
+  transition: opacity 0.25s ease, background 0.25s ease;
 }
 
 /* Light Neo-Brutalism: crisp contrast, bright vibrancy, warm cream framing */
 html[data-theme="neo-light"] .game-thumbnail-container {
   background-color: #FFF8E7;
   border-color: #000000;
+  box-shadow: 2px 2px 0px #000000;
 }
 html[data-theme="neo-light"] .game-thumbnail-img {
-  filter: contrast(1.08) saturate(1.16) brightness(1.02);
+  filter: contrast(1.08) saturate(1.22) brightness(1.04);
 }
 html[data-theme="neo-light"] .game-thumbnail-overlay {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.03) 30%, transparent 70%);
+  opacity: 0.35;
 }
 
 /* Dark Neo-Brutalism: high electric contrast on deep midnight grounds */

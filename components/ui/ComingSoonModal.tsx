@@ -84,11 +84,11 @@ export default function ComingSoonModal({
 
         {/* Header with Visual Arcade Badge */}
         <div className="text-center space-y-2.5 pt-1">
-          <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-card border-3 border-black p-1 shadow-neo-sm flex items-center justify-center">
+          <div className="game-thumbnail-container relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-card border-3 border-black p-1 shadow-neo-sm flex items-center justify-center">
             <img
               src={game.thumbnail_url}
               alt={game.title}
-              className="w-full h-full rounded-xl object-cover bg-slate-900 filter brightness-90"
+              className="game-thumbnail-img w-full h-full rounded-xl object-cover"
             />
             <div className="absolute -bottom-2.5 -right-2.5 p-1.5 bg-portal-yellow rounded-lg border-2 border-black text-black shadow-neo-sm">
               <Clock className="w-4 h-4 stroke-[2.5]" />

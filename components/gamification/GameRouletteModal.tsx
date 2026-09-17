@@ -106,12 +106,12 @@ export default function GameRouletteModal({
         {displayGame && (
           <div className="w-full my-4 p-3.5 rounded-2xl bg-portal-card border-3 border-black shadow-neo relative overflow-hidden flex flex-col items-center">
             {/* Thumbnail Container */}
-            <div className="relative w-full h-36 rounded-xl overflow-hidden border-2 border-black mb-3 bg-black">
+            <div className="game-thumbnail-container relative w-full h-36 rounded-xl overflow-hidden border-2 border-black mb-3">
               <Image
                 src={displayGame.thumbnail_url}
                 alt={displayGame.title}
                 fill
-                className="object-cover"
+                className="game-thumbnail-img object-cover"
               />
               <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
                 {displayGame.category}
