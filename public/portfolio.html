@@ -1,41 +1,49 @@
-<title>Munim Yeasin — Systems & Full-Stack Architect</title>
-<link rel="icon" type="image/svg+xml" href="/icon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.344.0/umd/lucide.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Munim Yeasin — Systems & Full-Stack Architect. Real-time game engines, Next.js platforms, Web Audio synthesizers, and scalable edge architectures.">
+  <meta name="theme-color" content="#070a12">
+  <title>Munim Yeasin — Systems & Full-Stack Architect</title>
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.344.0/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
 
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-          display: ['Plus Jakarta Sans', 'sans-serif'],
-          mono: ['JetBrains Mono', 'monospace'],
-        },
-        colors: {
-          brand: {
-            cyan: 'var(--color-accent)',
-            violet: 'var(--color-violet)',
-            gold: 'var(--color-gold)',
-            emerald: 'var(--color-emerald)'
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              cyan: 'var(--color-accent)',
+              violet: 'var(--color-violet)',
+              gold: 'var(--color-gold)',
+              emerald: 'var(--color-emerald)'
+            }
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 25px rgba(0, 240, 255, 0.25)',
+            'glow-violet': '0 0 25px rgba(139, 92, 246, 0.25)',
+            'glow-gold': '0 0 25px rgba(245, 158, 11, 0.25)'
           }
-        },
-        boxShadow: {
-          'glow-cyan': '0 0 25px rgba(0, 240, 255, 0.25)',
-          'glow-violet': '0 0 25px rgba(139, 92, 246, 0.25)',
-          'glow-gold': '0 0 25px rgba(245, 158, 11, 0.25)'
         }
       }
     }
-  }
-</script>
+  </script>
 
-<style>
+  <style>
   :root {
     --bg-ground: #070a12;
     --bg-surface: #0e1424;
@@ -161,6 +169,8 @@
     animation: pulseSlow 4s ease-in-out infinite;
   }
 </style>
+</head>
+<body class="bg-[var(--bg-ground)] text-[var(--text-primary)] antialiased overflow-x-hidden">
 
 <div class="relative min-h-screen bg-cyber-grid selection:bg-cyan-500/30 selection:text-cyan-200">
   <!-- Interactive Canvas Background -->
@@ -1123,6 +1133,17 @@
   physCanvas.addEventListener('mousedown', () => { mouse.isDown = true; playTone(300, 'sawtooth', 0.1); });
   window.addEventListener('mouseup', () => { mouse.isDown = false; });
 
+  physCanvas.addEventListener('touchstart', (e) => {
+    initAudio();
+    const rect = physCanvas.getBoundingClientRect();
+    if (e.touches[0]) {
+      mouse.x = e.touches[0].clientX - rect.left;
+      mouse.y = e.touches[0].clientY - rect.top;
+      mouse.isDown = true;
+      playTone(300, 'sawtooth', 0.1);
+    }
+  }, { passive: true });
+
   physCanvas.addEventListener('touchmove', (e) => {
     const rect = physCanvas.getBoundingClientRect();
     if (e.touches[0]) {
@@ -1133,6 +1154,7 @@
   }, { passive: true });
 
   physCanvas.addEventListener('touchend', () => { mouse.isDown = false; });
+  physCanvas.addEventListener('touchcancel', () => { mouse.isDown = false; });
 
   function triggerSupernova() {
     playTone(650, 'sawtooth', 0.3);
@@ -1338,4 +1360,13 @@
     terminalScreen.innerHTML = '';
     playTone(400, 'sine', 0.08);
   }
+
+  // Mobile Audio Unlock on Initial User Interaction
+  ['touchstart', 'touchend', 'mousedown', 'keydown'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      initAudio();
+    }, { once: true, passive: true });
+  });
 </script>
+</body>
+</html>
