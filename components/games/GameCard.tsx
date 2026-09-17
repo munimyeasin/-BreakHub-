@@ -66,16 +66,16 @@ export default function GameCard({
       className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-200 select-none"
     >
       {/* Thumbnail Container */}
-      <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-black mb-2 border-2 border-black shadow-neo-sm">
+      <div className="game-thumbnail-container relative aspect-square w-full rounded-xl overflow-hidden bg-black mb-2 border-2 border-black shadow-neo-sm">
         <img
           src={game.thumbnail_url}
           alt={game.title}
-          className={`w-full h-full object-cover transition-transform duration-300 ${
+          className={`game-thumbnail-img w-full h-full object-cover transition-transform duration-300 ${
             isComingSoon ? 'filter brightness-90 group-hover:scale-105' : 'group-hover:scale-110'
           }`}
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
+        <div className="game-thumbnail-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
 
         {/* Coming Soon Top Ribbon */}
         {isComingSoon && (

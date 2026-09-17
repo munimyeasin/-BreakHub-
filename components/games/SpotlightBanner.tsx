@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Trophy, Heart, Star, Sparkles, Zap, Shield, Swords, Rocket, Grid3X3, Flame, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Trophy, Heart, Star, Sparkles, Zap, Shield, Swords, Rocket, Grid3X3, Flame, ChevronLeft, ChevronRight, Hand } from 'lucide-react';
 import { Game } from '@/lib/types';
 import { formatPlayCount } from '@/components/games/GameCard';
+import { audio } from '@/lib/audio';
 
 interface SpotlightBannerProps {
   games: Game[];
@@ -40,6 +41,13 @@ export default function SpotlightBanner({
   const [transitionKey, setTransitionKey] = useState(0);
   const bannerRef = useRef<HTMLDivElement>(null);
 
+  // Mobile Touch Swipe gesture recognition state
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchDeltaX = useRef<number>(0);
+  const touchDeltaY = useRef<number>(0);
+  const isSwiping = useRef<boolean>(false);
+
   // Safety check
   if (featuredGames.length === 0) return null;
 
@@ -73,6 +81,61 @@ export default function SpotlightBanner({
     setAnimDirection(idx > activeIndex ? 'next' : 'prev');
     setActiveIndex(idx);
     setTransitionKey(k => k + 1);
+    try {
+      audio.playClickSound();
+    } catch {}
+  };
+
+  // Mobile Touch Handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true);
+    if (e.touches.length === 1) {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+      touchDeltaX.current = 0;
+      touchDeltaY.current = 0;
+      isSwiping.current = true;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isSwiping.current || touchStartX.current === null || touchStartY.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    touchDeltaX.current = currentX - touchStartX.current;
+    touchDeltaY.current = currentY - touchStartY.current;
+  };
+
+  const handleTouchEnd = () => {
+    if (isSwiping.current && touchStartX.current !== null) {
+      const dX = touchDeltaX.current;
+      const dY = touchDeltaY.current;
+      const absX = Math.abs(dX);
+      const absY = Math.abs(dY);
+
+      // Horizontal swipe threshold: at least 35px horizontal travel, predominantly horizontal
+      if (absX > 35 && absX > absY * 0.7) {
+        if (dX < 0) {
+          // Swiped Left -> go to Next game
+          handleNext();
+          try { audio.playClickSound(); } catch {}
+        } else {
+          // Swiped Right -> go to Prev game
+          handlePrev();
+          try { audio.playClickSound(); } catch {}
+        }
+      }
+    }
+
+    // Reset touch tracker
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
+    touchDeltaY.current = 0;
+    isSwiping.current = false;
+
+    // Resume auto-rotation after interaction
+    setTimeout(() => setIsPaused(false), 4000);
   };
 
   // Auto-cycling rotation timer (6.5s) with pause on hover/interaction
@@ -91,27 +154,42 @@ export default function SpotlightBanner({
       ref={bannerRef}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setTimeout(() => setIsPaused(false), 3000)}
-      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
+      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden touch-pan-y"
     >
       {/* Top Tri-Color Accent Line */}
       <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
 
-      {/* Dynamic Keyframes for Smooth Spotlight Animation */}
+      {/* Dynamic Keyframes for Directional Spotlight Slide Animation */}
       <style jsx>{`
-        @keyframes spotlightFadeScale {
+        @keyframes spotlightSlideNext {
           0% {
             opacity: 0;
-            transform: scale(0.98) translateY(4px);
+            transform: translateX(32px) scale(0.98);
           }
           100% {
             opacity: 1;
-            transform: scale(1) translateY(0);
+            transform: translateX(0) scale(1);
           }
         }
-        .animate-spotlight {
-          animation: spotlightFadeScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        @keyframes spotlightSlidePrev {
+          0% {
+            opacity: 0;
+            transform: translateX(-32px) scale(0.98);
+          }
+          100% {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+          }
+        }
+        .animate-spotlight-next {
+          animation: spotlightSlideNext 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-spotlight-prev {
+          animation: spotlightSlidePrev 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
 
@@ -132,15 +210,18 @@ export default function SpotlightBanner({
           <div className="flex items-center gap-1">
             {/* Prev Arrow */}
             <button
-              onClick={handlePrev}
+              onClick={() => {
+                handlePrev();
+                try { audio.playClickSound(); } catch {}
+              }}
               className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
-              title="Previous Game"
+              title="Previous Game (or swipe right)"
             >
               <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
 
-            {/* Game Tabs */}
-            <div className="flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm">
+            {/* Game Tabs (hidden on smallest screens, visible on xs+) */}
+            <div className="hidden xs:flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm">
               {featuredGames.map((game, idx) => {
                 const isActive = idx === activeIndex;
                 return (
@@ -162,9 +243,12 @@ export default function SpotlightBanner({
 
             {/* Next Arrow */}
             <button
-              onClick={handleNext}
+              onClick={() => {
+                handleNext();
+                try { audio.playClickSound(); } catch {}
+              }}
               className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1"
-              title="Next Game"
+              title="Next Game (or swipe left)"
             >
               <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
@@ -172,22 +256,57 @@ export default function SpotlightBanner({
         )}
       </div>
 
-      {/* MOBILE VIEW (< md): Taller Cinematic Showcase Card */}
-      <div key={`mobile-${currentGame.id}-${transitionKey}`} className="md:hidden relative z-10 space-y-3 animate-spotlight">
+      {/* MOBILE VIEW (< md): Taller Cinematic Showcase Card with Touch Swipe */}
+      <div
+        key={`mobile-${currentGame.id}-${transitionKey}`}
+        className={`md:hidden relative z-10 space-y-3 ${
+          animDirection === 'next' ? 'animate-spotlight-next' : 'animate-spotlight-prev'
+        }`}
+      >
         {/* Cinematic Artwork with Center Play Overlay & Corner Badges */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="relative group w-full h-[245px] xs:h-[275px] rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo cursor-pointer"
+          className="game-thumbnail-container relative group w-full h-[245px] xs:h-[275px] rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo cursor-pointer select-none"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="game-thumbnail-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+          <div className="game-thumbnail-overlay absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+
+          {/* Left/Right Edge Tap Arrows for Quick Touch Navigation */}
+          {featuredGames.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrev();
+                  try { audio.playClickSound(); } catch {}
+                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-portal-yellow text-white hover:text-black border border-black flex items-center justify-center backdrop-blur-sm z-20 active:scale-95 transition-all opacity-80 hover:opacity-100"
+                aria-label="Previous featured game"
+              >
+                <ChevronLeft className="w-4 h-4 stroke-[3]" />
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNext();
+                  try { audio.playClickSound(); } catch {}
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-portal-yellow text-white hover:text-black border border-black flex items-center justify-center backdrop-blur-sm z-20 active:scale-95 transition-all opacity-80 hover:opacity-100"
+                aria-label="Next featured game"
+              >
+                <ChevronRight className="w-4 h-4 stroke-[3]" />
+              </button>
+            </>
+          )}
 
           {/* Center Play Button Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border-3 border-black shadow-neo transform group-hover:scale-110 group-active:translate-x-1 group-active:translate-y-1 transition-all ${
               isComingSoon
                 ? 'bg-portal-yellow text-black'
@@ -202,7 +321,7 @@ export default function SpotlightBanner({
           </div>
 
           {/* Top In-Artwork Badges */}
-          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none z-10">
             <span className="px-2.5 py-0.5 rounded-md bg-portal-cyan text-black text-[9px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
@@ -218,7 +337,7 @@ export default function SpotlightBanner({
           </div>
 
           {/* Bottom In-Artwork Badges */}
-          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white pointer-events-none z-10">
             <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-lime border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
               <Zap className="w-3 h-3 text-black stroke-[2.5]" /> {isComingSoon ? (currentGame.slug === 'multidimension-xo' ? '9 NESTED BOARDS' : currentGame.slug === 'cyber-drift' ? 'DRIFT PHYSICS' : 'COMMUNITY HYPE') : '60-144 FPS'}
             </span>
@@ -227,6 +346,40 @@ export default function SpotlightBanner({
             </span>
           </div>
         </div>
+
+        {/* Mobile Slide Navigation Dots & Touch Swipe Affordance */}
+        {featuredGames.length > 1 && (
+          <div className="flex items-center justify-between px-1 pt-0.5">
+            {/* Swipe gesture hint */}
+            <div className="flex items-center gap-1 text-[9px] font-black uppercase text-slate-400 select-none">
+              <span className="animate-pulse">👈</span>
+              <span>Swipe to browse</span>
+              <span className="animate-pulse">👉</span>
+            </div>
+
+            {/* Pagination Indicators / Pills */}
+            <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-full border-2 border-black shadow-neo-sm">
+              {featuredGames.map((game, idx) => {
+                const isActive = idx === activeIndex;
+                return (
+                  <button
+                    key={game.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelect(idx);
+                    }}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      isActive
+                        ? 'w-5 bg-portal-cyan border border-black shadow-neo-sm'
+                        : 'w-2 bg-slate-600 hover:bg-slate-400'
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}: ${game.title}`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Title & Description Row */}
         <div className="flex flex-col gap-1.5 pt-0.5">
@@ -307,18 +460,23 @@ export default function SpotlightBanner({
       </div>
 
       {/* DESKTOP VIEW (≥ md): Full Rich Dual-Pane Showcase Grid */}
-      <div key={`desktop-${currentGame.id}-${transitionKey}`} className="hidden md:grid relative z-10 grid-cols-12 gap-6 items-center animate-spotlight">
+      <div
+        key={`desktop-${currentGame.id}-${transitionKey}`}
+        className={`hidden md:grid relative z-10 grid-cols-12 gap-6 items-center ${
+          animDirection === 'next' ? 'animate-spotlight-next' : 'animate-spotlight-prev'
+        }`}
+      >
         {/* Left: Big Preview Artwork */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="col-span-4 relative group aspect-square w-full rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo-lg cursor-pointer"
+          className="game-thumbnail-container col-span-4 relative group aspect-square w-full rounded-2xl overflow-hidden bg-black border-3 border-black shadow-neo-lg cursor-pointer"
         >
           <img
             src={currentGame.thumbnail_url}
             alt={currentGame.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="game-thumbnail-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+          <div className="game-thumbnail-overlay absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
           {/* Hover Play/Hype Overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">

@@ -210,3 +210,76 @@ html[data-theme="neo-light"] {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Theme-Adaptive Game Thumbnail Styling & Filters */
+.game-thumbnail-container {
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.game-thumbnail-img {
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Light Neo-Brutalism: crisp contrast, bright vibrancy, warm cream framing */
+html[data-theme="neo-light"] .game-thumbnail-container {
+  background-color: #FFF8E7;
+  border-color: #000000;
+}
+html[data-theme="neo-light"] .game-thumbnail-img {
+  filter: contrast(1.08) saturate(1.16) brightness(1.02);
+}
+html[data-theme="neo-light"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+}
+
+/* Dark Neo-Brutalism: high electric contrast on deep midnight grounds */
+html[data-theme="neo-dark"] .game-thumbnail-container {
+  background-color: #0B0819;
+  border-color: #000000;
+}
+html[data-theme="neo-dark"] .game-thumbnail-img {
+  filter: contrast(1.05) saturate(1.1) brightness(1.0);
+}
+html[data-theme="neo-dark"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(11, 8, 25, 0.92) 0%, rgba(11, 8, 25, 0.2) 50%, transparent 100%);
+}
+
+/* Cyberpunk Neon 2077: high-voltage saturation, radioactive greens, electric cyan edge */
+html[data-theme="cyberpunk-neon"] .game-thumbnail-container {
+  background-color: #050814;
+  border-color: #00F0FF;
+  box-shadow: 3px 3px 0px #FF0055;
+}
+html[data-theme="cyberpunk-neon"] .game-thumbnail-img {
+  filter: contrast(1.2) saturate(1.35) brightness(1.06) hue-rotate(6deg);
+}
+html[data-theme="cyberpunk-neon"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(5, 8, 20, 0.95) 0%, rgba(0, 240, 255, 0.1) 60%, transparent 100%);
+}
+
+/* 8-Bit GameBoy Classic: authentic DMG olive-green tint and matrix pixel crunch */
+html[data-theme="gameboy-retro"] .game-thumbnail-container {
+  background-color: #8B956D;
+  border-color: #0F380F;
+  box-shadow: 3px 3px 0px #0F380F;
+}
+html[data-theme="gameboy-retro"] .game-thumbnail-img {
+  filter: grayscale(0.55) sepia(0.85) hue-rotate(42deg) saturate(2.2) contrast(1.22);
+}
+html[data-theme="gameboy-retro"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(15, 56, 15, 0.92) 0%, rgba(139, 149, 109, 0.15) 50%, transparent 100%);
+}
+
+/* Vaporwave Sunset: dreamlike pastel magenta & cyan synthwave hue shifting */
+html[data-theme="vaporwave-80s"] .game-thumbnail-container {
+  background-color: #1A0B2E;
+  border-color: #05FFA1;
+  box-shadow: 3px 3px 0px #FF71CE;
+}
+html[data-theme="vaporwave-80s"] .game-thumbnail-img {
+  filter: contrast(1.12) saturate(1.3) hue-rotate(295deg);
+}
+html[data-theme="vaporwave-80s"] .game-thumbnail-overlay {
+  background: linear-gradient(to top, rgba(26, 11, 46, 0.95) 0%, rgba(255, 113, 206, 0.15) 60%, transparent 100%);
+}
+
