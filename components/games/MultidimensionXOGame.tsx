@@ -3,25 +3,17 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import {
   RotateCcw,
-  Cpu,
   Users,
-  Sparkles,
   Volume2,
   VolumeX,
-  Zap,
-  Flame,
-  Swords,
   Trophy,
-  Shield,
   Bot,
   Grid3X3,
   HelpCircle,
   Undo2,
   Lightbulb,
   Radio,
-  CheckCircle2,
   Layers,
-  Crosshair,
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -127,14 +119,47 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
   const [streak, setStreak] = useState<number>(0);
   const [showRulesModal, setShowRulesModal] = useState<boolean>(false);
 
+  // Master Synchronized Refs to eliminate stale React closures across async AI moves & timeouts
+  const macroBoardRef = useRef<CellValue[][]>(macroBoard);
+  const sectorWinnersRef = useRef<SectorStatus[]>(sectorWinners);
+  const activeSectorRef = useRef<number | null>(activeSector);
+  const currentTurnRef = useRef<'X' | 'O'>(currentTurn);
+  const globalWinnerRef = useRef<'X' | 'O' | 'TIE' | null>(null);
+  const isAiThinkingRef = useRef<boolean>(false);
+  const modeRef = useRef<GameMode>(mode);
+  const difficultyRef = useRef<AiDifficulty>(difficulty);
+  const aiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  // Keep configuration refs synchronized
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
+
+  useEffect(() => {
+    difficultyRef.current = difficulty;
+  }, [difficulty]);
+
+  // Cleanup pending timers on unmount
+  useEffect(() => {
+    return () => {
+      if (aiTimeoutRef.current) {
+        clearTimeout(aiTimeoutRef.current);
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        try {
+          audioCtxRef.current.close();
+        } catch {}
+      }
+    };
+  }, []);
 
   // Procedural Web Audio Sound Engine
   const playSound = useCallback(
     (type: 'move_x' | 'move_o' | 'sector_win' | 'warp_freedom' | 'global_win' | 'global_lose' | 'tie' | 'click' | 'hint') => {
       if (!soundEnabled || typeof window === 'undefined') return;
       try {
-        if (!audioCtxRef.current) {
+        if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
           audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
         const ctx = audioCtxRef.current;
@@ -276,17 +301,22 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       // Determine candidate sectors
       let candidateSectors: number[] = [];
       if (targetSector !== null && winners[targetSector] === null) {
-        candidateSectors = [targetSector];
-      } else {
-        // Quantum Warp: Play in ANY non-completed sector
+        const hasEmpty = board[targetSector]?.some(cell => cell === null);
+        if (hasEmpty) {
+          candidateSectors = [targetSector];
+        }
+      }
+
+      // If targetSector is null, or target sector is closed/full, allow any sector with open cells
+      if (candidateSectors.length === 0) {
         candidateSectors = winners
-          .map((w, idx) => (w === null ? idx : null))
+          .map((w, idx) => (w === null && board[idx]?.some(cell => cell === null) ? idx : null))
           .filter((idx): idx is number => idx !== null);
       }
 
       for (const s of candidateSectors) {
         for (let c = 0; c < 9; c++) {
-          if (!board[s][c]) {
+          if (board[s] && !board[s][c]) {
             valid.push({ sector: s, cell: c });
           }
         }
@@ -297,17 +327,25 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
     []
   );
 
-  // Helper to evaluate macro board completion and fallback winner
+  // Helper to evaluate macro board completion and winner
   const evaluateGlobalGame = useCallback(
-    (winners: SectorStatus[]) => {
+    (winners: SectorStatus[], board: CellValue[][]) => {
+      // 1. Check for 3-in-a-row macro sectors
       const macroRes = check3x3Winner(winners);
       if (macroRes.winner && macroRes.winner !== 'TIE') {
         return macroRes;
       }
 
-      // If all 9 sectors are concluded or board has no more valid moves
+      // 2. Check if all 9 sectors are concluded
       const allConcluded = winners.every(w => w !== null);
-      if (allConcluded) {
+
+      // 3. Or check if no valid moves exist anywhere across all 81 cells
+      const totalOpenCells = board.reduce((acc, sector, sIdx) => {
+        if (winners[sIdx] !== null) return acc;
+        return acc + sector.filter(c => c === null).length;
+      }, 0);
+
+      if (allConcluded || totalOpenCells === 0) {
         const xCount = winners.filter(w => w === 'X').length;
         const oCount = winners.filter(w => w === 'O').length;
         if (xCount > oCount) return { winner: 'X' as const, line: null };
@@ -333,7 +371,6 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
       // 1. Cadet AI (Casual / Novice): 65% random, 35% basic local capture
       if (aiDiff === 'cadet') {
-        // Look for immediate local win in any target sector
         for (const m of validMoves) {
           const testLocal = [...board[m.sector]];
           testLocal[m.cell] = 'O';
@@ -341,7 +378,6 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
             return m;
           }
         }
-        // Random pick
         return validMoves[Math.floor(Math.random() * validMoves.length)];
       }
 
@@ -397,9 +433,8 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
           if (m.cell === 4) score += 40;
           if ([0, 2, 6, 8].includes(m.cell)) score += 25;
 
-          // Check where this sends opponent
           if (winners[m.cell] !== null) {
-            score -= 30; // Gives opponent free choice!
+            score -= 30; // Gives opponent free choice
           }
           return { move: m, score };
         });
@@ -448,7 +483,6 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
         // 3. Conquering local sector rewards
         if (nextLocalWin.winner === 'O') {
           moveScore += 1200;
-          // Extra bonus for winning Center macro sector (4) or corners
           if (m.sector === 4) moveScore += 800;
           else if ([0, 2, 6, 8].includes(m.sector)) moveScore += 400;
         }
@@ -460,25 +494,27 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
         // 5. Tactical Sector Routing Penalty / Reward
         const targetNextSector = m.cell;
-        if (nextWinners[targetNextSector] !== null) {
+        if (nextWinners[targetNextSector] !== null || (board[targetNextSector] && board[targetNextSector].every(c => c !== null))) {
           // Sending opponent to already won/tied sector gives them QUANTUM WARP (Free Choice)
           moveScore -= 700;
         } else {
           // Check opponent's best response in targetNextSector
           const oppSectorBoard = board[targetNextSector];
-          let oppCanWinTarget = false;
-          for (let oppC = 0; oppC < 9; oppC++) {
-            if (!oppSectorBoard[oppC]) {
-              const testOppLocal = [...oppSectorBoard];
-              testOppLocal[oppC] = 'X';
-              if (check3x3Winner(testOppLocal).winner === 'X') {
-                oppCanWinTarget = true;
-                break;
+          if (oppSectorBoard) {
+            let oppCanWinTarget = false;
+            for (let oppC = 0; oppC < 9; oppC++) {
+              if (!oppSectorBoard[oppC]) {
+                const testOppLocal = [...oppSectorBoard];
+                testOppLocal[oppC] = 'X';
+                if (check3x3Winner(testOppLocal).winner === 'X') {
+                  oppCanWinTarget = true;
+                  break;
+                }
               }
             }
-          }
-          if (oppCanWinTarget) {
-            moveScore -= 1400; // Do not send opponent into their own winning sector!
+            if (oppCanWinTarget) {
+              moveScore -= 1400; // Do not send opponent into their own winning sector!
+            }
           }
         }
 
@@ -495,7 +531,7 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
           }
         }
 
-        // Add slight random jitter for variety between equal top moves
+        // Slight random jitter for non-deterministic variety
         moveScore += Math.random() * 20;
 
         if (moveScore > bestScore) {
@@ -509,9 +545,13 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
     [getValidMoves]
   );
 
-  // Execute a verified move
+  // Synchronized Move Executor that updates both React state and master refs
   const executeMove = useCallback(
     (sectorIdx: number, cellIdx: number, player: 'X' | 'O') => {
+      const currentBoard = macroBoardRef.current;
+      const currentWinners = sectorWinnersRef.current;
+      const currentActive = activeSectorRef.current;
+
       // 1. Record History for Undo
       setMoveHistory(prev => [
         ...prev,
@@ -519,19 +559,22 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
           sector: sectorIdx,
           cell: cellIdx,
           player,
-          prevActiveSector: activeSector,
-          prevSectorWinners: [...sectorWinners],
-          prevBoard: macroBoard.map(s => [...s])
+          prevActiveSector: currentActive,
+          prevSectorWinners: [...currentWinners],
+          prevBoard: currentBoard.map(s => [...s])
         }
       ]);
 
-      // 2. Update Board
-      const nextBoard = macroBoard.map((s, idx) => {
-        if (idx !== sectorIdx) return s;
+      // 2. Compute Next Board
+      const nextBoard = currentBoard.map((s, idx) => {
+        if (idx !== sectorIdx) return [...s];
         const newLocal = [...s];
         newLocal[cellIdx] = player;
         return newLocal;
       });
+
+      // Update ref and state
+      macroBoardRef.current = nextBoard;
       setMacroBoard(nextBoard);
 
       setLastMove({ sector: sectorIdx, cell: cellIdx, player });
@@ -540,15 +583,14 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       // Play Sound
       playSound(player === 'X' ? 'move_x' : 'move_o');
 
-      // 3. Check if local sector is won/tied
+      // 3. Check if local sector was conquered or tied
       const localResult = check3x3Winner(nextBoard[sectorIdx]);
-      const nextWinners = [...sectorWinners];
-      let newlyConquered = false;
+      const nextWinners = [...currentWinners];
 
-      if (localResult.winner && sectorWinners[sectorIdx] === null) {
+      if (localResult.winner && currentWinners[sectorIdx] === null) {
         nextWinners[sectorIdx] = localResult.winner;
+        sectorWinnersRef.current = nextWinners;
         setSectorWinners(nextWinners);
-        newlyConquered = true;
 
         if (localResult.line) {
           setWinningMicroLines(prev => ({
@@ -563,13 +605,14 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       }
 
       // 4. Check Global Macro Game Victory
-      const globalRes = evaluateGlobalGame(nextWinners);
+      const globalRes = evaluateGlobalGame(nextWinners, nextBoard);
       if (globalRes && globalRes.winner) {
+        globalWinnerRef.current = globalRes.winner;
         setGlobalWinner(globalRes.winner);
         if (globalRes.line) setWinningMacroLine(globalRes.line);
 
         if (globalRes.winner === 'X') {
-          const diffMultiplier = difficulty === 'overthinker' ? 3 : difficulty === 'tactician' ? 2 : 1;
+          const diffMultiplier = difficultyRef.current === 'overthinker' ? 3 : difficultyRef.current === 'tactician' ? 2 : 1;
           const streakBonus = streak * 250;
           const addedScore = (1000 + p1Wins * 400) * diffMultiplier + streakBonus;
           const newScore = score + addedScore;
@@ -586,7 +629,7 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
         } else if (globalRes.winner === 'O') {
           setP2Wins(prev => prev + 1);
           setStreak(0);
-          if (mode === 'ai') {
+          if (modeRef.current === 'ai') {
             playSound('global_lose');
           } else {
             playSound('global_win');
@@ -610,87 +653,123 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
       // 5. Determine Next Active Sector Routing
       const targetNextSector = cellIdx;
-      if (nextWinners[targetNextSector] !== null) {
-        // The targeted sector is already won or tied -> Quantum Warp Freedom!
-        setActiveSector(null);
+      const isTargetClosed =
+        nextWinners[targetNextSector] !== null ||
+        (nextBoard[targetNextSector] && nextBoard[targetNextSector].every(c => c !== null));
+
+      let nextActive: number | null = null;
+      if (isTargetClosed) {
+        // Targeted sector is conquered or full -> Quantum Warp Freedom!
+        nextActive = null;
         playSound('warp_freedom');
       } else {
-        setActiveSector(targetNextSector);
+        nextActive = targetNextSector;
       }
 
+      activeSectorRef.current = nextActive;
+      setActiveSector(nextActive);
+
       // 6. Switch Turn
-      const nextPlayer = player === 'X' ? 'O' : 'X';
+      const nextPlayer: 'X' | 'O' = player === 'X' ? 'O' : 'X';
+      currentTurnRef.current = nextPlayer;
       setCurrentTurn(nextPlayer);
 
-      // If AI mode and next player is 'O', schedule AI turn
-      if (mode === 'ai' && nextPlayer === 'O') {
+      // 7. Schedule AI Turn safely using updated master refs
+      if (modeRef.current === 'ai' && nextPlayer === 'O') {
         setIsAiThinking(true);
-        const delay = Math.floor(Math.random() * 200) + 380; // Realistic think time
+        isAiThinkingRef.current = true;
+        const delay = Math.floor(Math.random() * 180) + 320; // 320ms - 500ms realistic compute pacing
 
-        setTimeout(() => {
-          const aiTargetSector = nextWinners[targetNextSector] !== null ? null : targetNextSector;
-          const aiMove = computeAiMove(nextBoard, nextWinners, aiTargetSector, difficulty);
+        if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
+
+        aiTimeoutRef.current = setTimeout(() => {
+          // Guard against stale triggers if round ended during thinking delay
+          if (globalWinnerRef.current !== null || currentTurnRef.current !== 'O') {
+            setIsAiThinking(false);
+            isAiThinkingRef.current = false;
+            return;
+          }
+
+          const boardState = macroBoardRef.current;
+          const winnersState = sectorWinnersRef.current;
+          const activeState = activeSectorRef.current;
+          const currentDiff = difficultyRef.current;
+
+          const aiMove = computeAiMove(boardState, winnersState, activeState, currentDiff);
+
+          setIsAiThinking(false);
+          isAiThinkingRef.current = false;
 
           if (aiMove) {
             executeMove(aiMove.sector, aiMove.cell, 'O');
           }
-          setIsAiThinking(false);
         }, delay);
       }
     },
     [
-      activeSector,
-      sectorWinners,
-      macroBoard,
-      difficulty,
-      streak,
-      p1Wins,
-      score,
-      mode,
-      onGameOver,
       playSound,
       evaluateGlobalGame,
-      computeAiMove
+      computeAiMove,
+      onGameOver,
+      streak,
+      p1Wins,
+      score
     ]
   );
 
   // Handle User Cell Click
   const handleCellClick = (sectorIdx: number, cellIdx: number) => {
-    if (globalWinner || isAiThinking) return;
+    if (globalWinnerRef.current !== null || isAiThinkingRef.current) return;
+
+    const board = macroBoardRef.current;
+    const winners = sectorWinnersRef.current;
+    const targetSector = activeSectorRef.current;
+    const activePlayer = currentTurnRef.current;
 
     // Check if cell is occupied
-    if (macroBoard[sectorIdx][cellIdx] !== null) return;
+    if (board[sectorIdx][cellIdx] !== null) return;
 
-    // Check if sector is already won/tied
-    if (sectorWinners[sectorIdx] !== null) return;
+    // Check if sector is already conquered or tied
+    if (winners[sectorIdx] !== null) return;
 
     // Check if clicked sector is allowed
-    if (activeSector !== null && activeSector !== sectorIdx) {
-      // Invalid sector clicked - provide tactile feedback
+    if (targetSector !== null && targetSector !== sectorIdx) {
       playSound('click');
       return;
     }
 
-    if (mode === 'pvp') {
-      executeMove(sectorIdx, cellIdx, currentTurn);
+    if (modeRef.current === 'pvp') {
+      executeMove(sectorIdx, cellIdx, activePlayer);
     } else {
       // AI Mode: Only Player ('X') can click
-      if (currentTurn !== 'X') return;
+      if (activePlayer !== 'X') return;
       executeMove(sectorIdx, cellIdx, 'X');
     }
   };
 
   // Undo Last Move
   const handleUndo = () => {
-    if (moveHistory.length === 0 || globalWinner || isAiThinking) return;
+    if (moveHistory.length === 0 || globalWinnerRef.current !== null || isAiThinkingRef.current) return;
+
+    if (aiTimeoutRef.current) {
+      clearTimeout(aiTimeoutRef.current);
+      setIsAiThinking(false);
+      isAiThinkingRef.current = false;
+    }
+
     playSound('click');
 
     // In AI mode, undo 2 steps (AI's move + Player's move)
-    const stepsToUndo = mode === 'ai' && moveHistory.length >= 2 ? 2 : 1;
+    const stepsToUndo = modeRef.current === 'ai' && moveHistory.length >= 2 ? 2 : 1;
     const targetHistory = moveHistory.slice(0, moveHistory.length - stepsToUndo);
     const lastRecord = targetHistory[targetHistory.length - 1];
 
     if (lastRecord) {
+      macroBoardRef.current = lastRecord.prevBoard;
+      sectorWinnersRef.current = lastRecord.prevSectorWinners;
+      activeSectorRef.current = lastRecord.prevActiveSector;
+      currentTurnRef.current = lastRecord.player === 'X' ? 'O' : 'X';
+
       setMacroBoard(lastRecord.prevBoard);
       setSectorWinners(lastRecord.prevSectorWinners);
       setActiveSector(lastRecord.prevActiveSector);
@@ -698,12 +777,21 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       setLastMove({ sector: lastRecord.sector, cell: lastRecord.cell, player: lastRecord.player });
     } else {
       // Reset to round start
-      setMacroBoard(Array.from({ length: 9 }, () => Array(9).fill(null)));
-      setSectorWinners(Array(9).fill(null));
+      const emptyBoard = Array.from({ length: 9 }, () => Array(9).fill(null));
+      const emptyWinners: SectorStatus[] = Array(9).fill(null);
+
+      macroBoardRef.current = emptyBoard;
+      sectorWinnersRef.current = emptyWinners;
+      activeSectorRef.current = null;
+      currentTurnRef.current = startingPlayer;
+
+      setMacroBoard(emptyBoard);
+      setSectorWinners(emptyWinners);
       setActiveSector(null);
       setCurrentTurn(startingPlayer);
       setLastMove(null);
     }
+
     setMoveHistory(targetHistory);
     setSuggestedHint(null);
     setWinningMacroLine(null);
@@ -712,8 +800,13 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
   // Tactical Hint Generator
   const handleHint = () => {
-    if (globalWinner || isAiThinking) return;
-    const hint = computeAiMove(macroBoard, sectorWinners, activeSector, 'overthinker');
+    if (globalWinnerRef.current !== null || isAiThinkingRef.current) return;
+    const hint = computeAiMove(
+      macroBoardRef.current,
+      sectorWinnersRef.current,
+      activeSectorRef.current,
+      'overthinker'
+    );
     if (hint) {
       setSuggestedHint(hint);
       playSound('hint');
@@ -722,12 +815,25 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
   // Start Next Round with Alternating First Move
   const handleNextRound = () => {
+    if (aiTimeoutRef.current) {
+      clearTimeout(aiTimeoutRef.current);
+    }
     playSound('click');
+
     const nextRound = roundNumber + 1;
     const nextStarter: 'X' | 'O' = startingPlayer === 'X' ? 'O' : 'X';
+    const emptyBoard = Array.from({ length: 9 }, () => Array(9).fill(null));
+    const emptyWinners: SectorStatus[] = Array(9).fill(null);
 
-    setMacroBoard(Array.from({ length: 9 }, () => Array(9).fill(null)));
-    setSectorWinners(Array(9).fill(null));
+    macroBoardRef.current = emptyBoard;
+    sectorWinnersRef.current = emptyWinners;
+    activeSectorRef.current = null;
+    globalWinnerRef.current = null;
+    currentTurnRef.current = nextStarter;
+    isAiThinkingRef.current = false;
+
+    setMacroBoard(emptyBoard);
+    setSectorWinners(emptyWinners);
     setActiveSector(null);
     setGlobalWinner(null);
     setWinningMacroLine(null);
@@ -741,23 +847,40 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
     setIsAiThinking(false);
 
     // If AI starts first in new round
-    if (mode === 'ai' && nextStarter === 'O') {
+    if (modeRef.current === 'ai' && nextStarter === 'O') {
       setIsAiThinking(true);
-      setTimeout(() => {
+      isAiThinkingRef.current = true;
+
+      aiTimeoutRef.current = setTimeout(() => {
         const openingSectors = [4, 0, 2, 6, 8];
         const s = openingSectors[Math.floor(Math.random() * openingSectors.length)];
         const c = 4; // Start center
-        executeMove(s, c, 'O');
         setIsAiThinking(false);
-      }, 500);
+        isAiThinkingRef.current = false;
+        executeMove(s, c, 'O');
+      }, 450);
     }
   };
 
   // Hard Reset Entire Tournament
   const resetEntireTournament = () => {
+    if (aiTimeoutRef.current) {
+      clearTimeout(aiTimeoutRef.current);
+    }
     playSound('click');
-    setMacroBoard(Array.from({ length: 9 }, () => Array(9).fill(null)));
-    setSectorWinners(Array(9).fill(null));
+
+    const emptyBoard = Array.from({ length: 9 }, () => Array(9).fill(null));
+    const emptyWinners: SectorStatus[] = Array(9).fill(null);
+
+    macroBoardRef.current = emptyBoard;
+    sectorWinnersRef.current = emptyWinners;
+    activeSectorRef.current = null;
+    globalWinnerRef.current = null;
+    currentTurnRef.current = 'X';
+    isAiThinkingRef.current = false;
+
+    setMacroBoard(emptyBoard);
+    setSectorWinners(emptyWinners);
     setActiveSector(null);
     setGlobalWinner(null);
     setWinningMacroLine(null);
@@ -952,21 +1075,21 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       <div
         className={`w-full max-w-[430px] px-3 py-1.5 mb-2 rounded-xl border-2 border-black flex items-center justify-between text-xs font-black uppercase tracking-wide transition-all ${
           activeSector === null
-            ? 'bg-gradient-to-r from-portal-yellow/30 via-portal-pink/30 to-portal-cyan/30 text-portal-yellow shadow-neo-sm animate-pulse'
-            : 'bg-portal-card text-slate-200 shadow-neo-sm'
+            ? 'bg-portal-yellow text-black shadow-neo-sm animate-pulse'
+            : 'bg-portal-card text-portal-yellow border-portal-yellow/80 shadow-neo-sm'
         }`}
       >
         <div className="flex items-center gap-1.5">
-          <Radio className={`w-3.5 h-3.5 ${activeSector === null ? 'text-portal-yellow animate-spin' : 'text-portal-cyan'}`} />
+          <Radio className={`w-3.5 h-3.5 ${activeSector === null ? 'text-black animate-spin' : 'text-portal-yellow animate-pulse'}`} />
           <span>
             {activeSector === null
               ? '⚡ QUANTUM WARP: PLAY IN ANY OPEN SECTOR!'
-              : `TARGET: SECTOR ${activeSector + 1} [${SECTOR_NAMES[activeSector]}]`}
+              : `ACTIVE TARGET: SECTOR ${activeSector + 1} [${SECTOR_NAMES[activeSector]}]`}
           </span>
         </div>
 
         {/* Mini 3x3 Radar Grid Icon */}
-        <div className="grid grid-cols-3 gap-0.5 p-0.5 bg-black/60 rounded border border-black">
+        <div className="grid grid-cols-3 gap-0.5 p-0.5 bg-black/80 rounded border border-black">
           {Array.from({ length: 9 }).map((_, idx) => {
             const isTarget = activeSector === null || activeSector === idx;
             const winner = sectorWinners[idx];
@@ -982,7 +1105,7 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
                     ? 'bg-slate-500'
                     : isTarget
                     ? 'bg-portal-yellow animate-pulse'
-                    : 'bg-slate-800'
+                    : 'bg-slate-700'
                 }`}
               />
             );
@@ -991,9 +1114,9 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
       </div>
 
       {/* 4. THE 9x9 NESTED MACRO GRID BOARD */}
-      <div className="relative w-full max-w-[430px] aspect-square p-2 bg-portal-bg/95 border-4 border-black rounded-2xl shadow-neo-lg flex items-center justify-center">
+      <div className="relative w-full max-w-[430px] aspect-square p-2 bg-portal-bg border-4 border-black rounded-2xl shadow-neo-lg flex items-center justify-center">
         {/* Outer 3x3 Macro Grid */}
-        <div className="w-full h-full grid grid-cols-3 gap-2 bg-black p-1.5 rounded-xl">
+        <div className="w-full h-full grid grid-cols-3 gap-2 bg-black/90 p-1.5 rounded-xl border-2 border-black">
           {Array.from({ length: 9 }).map((_, sectorIdx) => {
             const isSectorActive =
               globalWinner === null &&
@@ -1005,40 +1128,48 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
             return (
               <div
                 key={sectorIdx}
-                className={`relative rounded-lg p-1 transition-all flex flex-col items-center justify-center border-2 border-black ${
+                className={`relative rounded-xl p-1.5 transition-all duration-200 flex flex-col items-center justify-center border-2 ${
                   winner === 'X'
-                    ? 'bg-portal-cyan/15 border-portal-cyan'
+                    ? 'bg-portal-cyan/15 border-portal-cyan shadow-[0_0_12px_rgba(0,240,255,0.25)]'
                     : winner === 'O'
-                    ? 'bg-portal-pink/15 border-portal-pink'
+                    ? 'bg-portal-pink/15 border-portal-pink shadow-[0_0_12px_rgba(255,0,128,0.25)]'
                     : winner === 'TIE'
-                    ? 'bg-slate-800/60 border-slate-600'
+                    ? 'bg-slate-800/80 border-slate-600'
                     : isSectorActive
-                    ? 'bg-portal-card ring-2 ring-portal-yellow ring-offset-1 ring-offset-black animate-pulse'
-                    : 'bg-portal-bg/90 opacity-40'
-                } ${isPartOfMacroWin ? 'ring-4 ring-portal-yellow scale-[1.02] z-10' : ''}`}
+                    ? 'bg-portal-card border-portal-yellow ring-4 ring-portal-yellow/70 shadow-[0_0_18px_rgba(255,222,89,0.4)] scale-[1.02] z-10'
+                    : 'bg-portal-card/90 border-black/80 shadow-neo-sm'
+                } ${isPartOfMacroWin ? 'ring-4 ring-portal-yellow scale-[1.04] z-20 animate-pulse' : ''}`}
               >
+                {/* Active Sector Highlighting Badge */}
+                {isSectorActive && winner === null && (
+                  <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-portal-yellow text-black font-black text-[7px] sm:text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-black shadow-neo-sm z-30 pointer-events-none flex items-center gap-1 whitespace-nowrap">
+                    <span className="w-1.5 h-1.5 rounded-full bg-black animate-ping" />
+                    <span>PLAY HERE</span>
+                  </div>
+                )}
+
                 {/* Micro 3x3 Grid inside Sector */}
                 <div className="w-full h-full grid grid-cols-3 gap-1">
                   {macroBoard[sectorIdx].map((cellVal, cellIdx) => {
                     const isLast = lastMove?.sector === sectorIdx && lastMove?.cell === cellIdx;
                     const isHint = suggestedHint?.sector === sectorIdx && suggestedHint?.cell === cellIdx;
-                    const isPlayable = isSectorActive && cellVal === null;
+                    const isPlayable = isSectorActive && cellVal === null && !isAiThinking && globalWinner === null;
 
                     return (
                       <button
                         key={cellIdx}
                         onClick={() => handleCellClick(sectorIdx, cellIdx)}
-                        disabled={!isPlayable || isAiThinking || globalWinner !== null}
+                        disabled={!isPlayable}
                         className={`relative rounded-md flex items-center justify-center font-black text-xs sm:text-sm md:text-base transition-all border border-black ${
                           cellVal === 'X'
-                            ? 'bg-portal-cyan text-black font-black shadow-neo-sm'
+                            ? 'bg-portal-cyan text-black font-black shadow-neo-sm ring-1 ring-black'
                             : cellVal === 'O'
-                            ? 'bg-portal-pink text-black font-black shadow-neo-sm'
+                            ? 'bg-portal-pink text-black font-black shadow-neo-sm ring-1 ring-black'
                             : isHint
-                            ? 'bg-portal-yellow/50 text-black animate-bounce ring-2 ring-portal-yellow'
+                            ? 'bg-portal-yellow text-black animate-bounce ring-2 ring-portal-yellow shadow-neo-sm'
                             : isPlayable
-                            ? 'bg-portal-bg hover:bg-portal-yellow/30 hover:scale-105 active:scale-95 cursor-pointer shadow-neo-sm'
-                            : 'bg-portal-bg/40 cursor-not-allowed opacity-30'
+                            ? 'bg-portal-bg hover:bg-portal-yellow hover:text-black hover:scale-105 active:scale-95 cursor-pointer shadow-neo-sm ring-1 ring-portal-yellow/40'
+                            : 'bg-portal-bg text-slate-500 cursor-not-allowed border-black/40'
                         } ${isLast ? 'ring-2 ring-portal-yellow ring-offset-1 ring-offset-black' : ''}`}
                       >
                         {cellVal}
@@ -1196,29 +1327,14 @@ export default function MultidimensionXOGame({ gameId, onGameOver }: Multidimens
 
               <div className="p-2 bg-portal-bg rounded-lg border border-black">
                 <strong className="text-portal-yellow font-black block mb-0.5">2. QUANTUM WARP FREEDOM</strong>
-                If your move sends the opponent to a sector that is already conquered or tied, they gain **QUANTUM WARP** and can place their mark in ANY open sector on the board!
+                If your move sends the opponent to a sector that is already conquered or full, they gain <strong>QUANTUM WARP</strong> and can place their mark in ANY open sector on the board!
               </div>
 
               <div className="p-2 bg-portal-bg rounded-lg border border-black">
-                <strong className="text-portal-pink font-black block mb-0.5">3. MACRO VICTORY CONDITION</strong>
-                Winning 3 cells in a row captures that sector with a giant mark. Align 3 captured macro sectors in a row (horizontal, vertical, or diagonal) to win the match!
-              </div>
-
-              <div className="p-2 bg-portal-bg rounded-lg border border-black">
-                <strong className="text-portal-lime font-black block mb-0.5">4. PRO-TIP STRATEGY</strong>
-                Never make a move that sends your opponent into a sector where they can immediately win 3-in-a-row or gain free warp freedom.
+                <strong className="text-portal-pink font-black block mb-0.5">3. MACRO CONQUEST VICTORY</strong>
+                Conquer 3 local sectors in a row (horizontally, vertically, or diagonally) on the macro board to win the entire multidimensional match!
               </div>
             </div>
-
-            <button
-              onClick={() => {
-                playSound('click');
-                setShowRulesModal(false);
-              }}
-              className="w-full mt-4 py-2 bg-portal-yellow text-black font-black text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
-            >
-              ACKNOWLEDGED // BACK TO DUEL
-            </button>
           </div>
         </div>
       )}
