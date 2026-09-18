@@ -47,8 +47,8 @@ const projectHighlights = [
     icon: ShieldCheck,
     title: 'Modern Tech Stack',
     desc: 'Powered by Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS for robust typing, performance, and retro-arcade aesthetics.',
-    color: 'text-white',
-    badgeBg: 'bg-portal-purple text-white',
+    color: 'text-black',
+    badgeBg: 'bg-portal-purple text-black',
   },
 ];
 
@@ -107,7 +107,7 @@ const engineeringDomains = [
     lead: 'Tahida',
     desc: 'High-contrast Neo-Brutalist design tokens, 4x3 responsive mobile game grids, slide bar navigation, and multi-theme engine.',
     color: 'border-portal-pink text-portal-pink',
-    badgeBg: 'bg-portal-pink text-white',
+    badgeBg: 'bg-portal-pink text-black',
   },
   {
     title: 'Game Logic & Deterministic QA',
@@ -187,7 +187,7 @@ export default function AboutSection({
             >
               <Users className="w-4 h-4 stroke-[2.5]" />
               <span>About Developers</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-portal-pink text-white border border-black shadow-neo-sm font-black hidden sm:inline-block">
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-portal-pink text-black border border-black shadow-neo-sm font-black hidden sm:inline-block">
                 SPOTLIGHT
               </span>
             </button>
@@ -216,7 +216,7 @@ export default function AboutSection({
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-pink via-portal-cyan to-portal-yellow border-b-2 border-black" />
 
             <div className="relative z-10 max-w-3xl space-y-3 pt-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-portal-purple border-2 border-black text-white text-xs font-black tracking-wider uppercase shadow-neo-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-portal-purple border-2 border-black text-black text-xs font-black tracking-wider uppercase shadow-neo-sm">
                 <Users className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>ENGINEERING TEAM & CO-CREATORS</span>
               </div>
@@ -301,7 +301,7 @@ export default function AboutSection({
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
 
             <div className="relative z-10 max-w-3xl space-y-4 pt-1">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-portal-pink border-2 border-black text-white text-xs font-black tracking-wider uppercase shadow-neo-sm">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-portal-pink border-2 border-black text-black text-xs font-black tracking-wider uppercase shadow-neo-sm">
                 <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>INTERNSHIP PROJECT PLATFORM</span>
               </div>

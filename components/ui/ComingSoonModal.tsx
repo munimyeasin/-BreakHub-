@@ -96,7 +96,7 @@ export default function ComingSoonModal({
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-portal-pink border-2 border-black text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-neo-sm">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-portal-pink border-2 border-black text-black text-[10px] sm:text-[11px] font-black uppercase tracking-wider mb-1.5 shadow-neo-sm">
               <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Coming Soon • In Development</span>
             </div>

@@ -113,7 +113,7 @@ export default function GameRouletteModal({
                 fill
                 className="game-thumbnail-img object-cover"
               />
-              <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
+              <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-black border-2 border-black shadow-neo-sm">
                 {displayGame.category}
               </span>
             </div>

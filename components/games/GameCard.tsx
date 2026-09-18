@@ -19,9 +19,9 @@ interface GameCardProps {
 
 const CATEGORY_THEMES: Record<string, { bg: string; text: string }> = {
   ARCADE: { bg: 'bg-portal-cyan', text: 'text-black' },
-  PUZZLE: { bg: 'bg-portal-purple', text: 'text-white' },
+  PUZZLE: { bg: 'bg-portal-purple', text: 'text-black' },
   STRATEGY: { bg: 'bg-portal-lime', text: 'text-black' },
-  ACTION: { bg: 'bg-portal-pink', text: 'text-white' },
+  ACTION: { bg: 'bg-portal-pink', text: 'text-black' },
   CARD: { bg: 'bg-portal-yellow', text: 'text-black' },
 };
 

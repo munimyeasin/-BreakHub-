@@ -108,7 +108,7 @@ export default function DailyQuestsModal({
         {/* Modal Top Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b-3 border-black bg-portal-surface shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-portal-purple border-2 border-black flex items-center justify-center text-white shadow-neo-sm shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-portal-purple border-2 border-black flex items-center justify-center text-black shadow-neo-sm shrink-0">
               <Target className="w-5 h-5 stroke-[2.5]" />
             </div>
             <div>
@@ -116,7 +116,7 @@ export default function DailyQuestsModal({
                 <h3 className="font-black text-base sm:text-lg text-white tracking-tight uppercase">
                   DAILY QUESTS
                 </h3>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-black border-2 border-black shadow-neo-sm">
                   {completedCount}/3 DONE
                 </span>
               </div>
@@ -200,7 +200,7 @@ export default function DailyQuestsModal({
                               ? 'bg-portal-lime text-black'
                               : questDef.tier === 'medium'
                               ? 'bg-portal-cyan text-black'
-                              : 'bg-portal-purple text-white'
+                              : 'bg-portal-purple text-black'
                           }`}>
                             {questDef.tier}
                           </span>
@@ -274,7 +274,7 @@ export default function DailyQuestsModal({
                     <h4 className="text-xs sm:text-sm font-black text-portal-yellow uppercase">
                       DAILY MASTER 3/3 CHEST
                     </h4>
-                    <span className="px-1.5 py-0.5 rounded bg-portal-pink text-white text-[8px] font-black uppercase border border-black shadow-neo-sm">
+                    <span className="px-1.5 py-0.5 rounded bg-portal-pink text-black text-[8px] font-black uppercase border border-black shadow-neo-sm">
                       BONUS
                     </span>
                   </div>

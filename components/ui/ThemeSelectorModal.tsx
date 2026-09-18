@@ -187,7 +187,7 @@ export default function ThemeSelectorModal({ isOpen, onClose }: ThemeSelectorMod
               <Palette className="w-3.5 h-3.5 stroke-[2.5]" />
               Theme Lab (Future UI Designs)
             </span>
-            <span className="text-[10px] font-black uppercase bg-portal-pink text-white px-2 py-0.5 rounded-md border border-black shadow-neo-sm">
+            <span className="text-[10px] font-black uppercase bg-portal-pink text-black px-2 py-0.5 rounded-md border border-black shadow-neo-sm">
               In Roadmap
             </span>
           </div>

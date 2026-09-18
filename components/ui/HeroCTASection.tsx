@@ -23,8 +23,8 @@ export default function HeroCTASection({
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
         {/* Left text column */}
         <div className="space-y-4 text-center lg:text-left max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-portal-pink text-white font-black text-xs uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_#000000]">
-            <Flame className="w-4 h-4 text-portal-yellow" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-portal-pink text-black font-black text-xs uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_#000000]">
+            <Flame className="w-4 h-4 text-black fill-black" />
             <span>INSTANT STRESS RELIEF • ZERO LAG</span>
           </div>
 

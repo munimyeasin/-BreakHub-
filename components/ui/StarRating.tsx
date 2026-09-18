@@ -38,7 +38,7 @@ const RATING_QUALITIES: Record<number, RatingQuality> = {
     label: 'Fair Game',
     description: 'Decent arcade loop with potential.',
     badgeBg: 'bg-portal-purple',
-    badgeText: 'text-white',
+    badgeText: 'text-black',
     icon: '🕹️'
   },
   3: {
@@ -52,7 +52,7 @@ const RATING_QUALITIES: Record<number, RatingQuality> = {
     label: 'Great Experience!',
     description: 'Super addictive, smooth controls and great audio!',
     badgeBg: 'bg-portal-orange',
-    badgeText: 'text-white',
+    badgeText: 'text-black',
     icon: '🔥'
   },
   5: {

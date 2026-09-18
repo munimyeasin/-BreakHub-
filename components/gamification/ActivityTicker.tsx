@@ -133,8 +133,8 @@ export default function ActivityTicker() {
       className="relative w-full overflow-hidden bg-portal-surface border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm"
     >
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-white tracking-wider shadow-neo-sm">
-          <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-black tracking-wider shadow-neo-sm">
+          <span className="w-2 h-2 rounded-full bg-black animate-ping" />
           <Radio className="w-3 h-3 stroke-[2.5]" />
           <span className="hidden xs:inline">LIVE FEED</span>
         </div>

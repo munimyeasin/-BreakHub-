@@ -120,7 +120,7 @@ export default function PlayerXpBadge({
       >
         <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
         {completedUnclaimedQuests > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-portal-pink text-[9px] font-black text-white border border-black shadow-neo-sm animate-bounce">
+          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-portal-pink text-[9px] font-black text-black border border-black shadow-neo-sm animate-bounce">
             {completedUnclaimedQuests}
           </span>
         )}

@@ -53,7 +53,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                 <h2 className="text-base sm:text-lg font-black text-white tracking-tight truncate uppercase">
                   HALL OF FAME
                 </h2>
-                <span className="px-2 py-0.5 text-[10px] font-black uppercase rounded-md bg-portal-pink text-white border-2 border-black shadow-neo-sm shrink-0">
+                <span className="px-2 py-0.5 text-[10px] font-black uppercase rounded-md bg-portal-pink text-black border-2 border-black shadow-neo-sm shrink-0">
                   LIVE
                 </span>
               </div>
@@ -147,13 +147,13 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                 {/* 3rd Place (Bronze) */}
                 {top3[2] ? (
                   <div className="w-full min-w-0 flex flex-col items-center bg-portal-card border-3 border-black rounded-xl sm:rounded-2xl p-2 sm:p-3 relative order-3 shadow-neo">
-                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-700 text-white font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-400 text-black font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
                       3
                     </div>
                     <img src={top3[2].avatar_url} alt={`${top3[2].username}'s player avatar`} className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-black my-1.5 sm:my-2 bg-slate-800 shrink-0" />
                     <p className="font-black text-[10px] sm:text-xs text-white truncate w-full text-center px-0.5 uppercase">{top3[2].username}</p>
                     <p className="font-black text-[10px] sm:text-xs text-amber-400 mt-0.5 truncate w-full text-center">{top3[2].score.toLocaleString()}</p>
-                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] bg-amber-700 text-white font-black uppercase mt-1 rounded border border-black tracking-wider shadow-neo-sm">BRONZE</span>
+                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] bg-amber-400 text-black font-black uppercase mt-1 rounded border border-black tracking-wider shadow-neo-sm">BRONZE</span>
                   </div>
                 ) : <div className="order-3" />}
               </div>

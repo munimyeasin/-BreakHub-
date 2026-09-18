@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
         <div className="bg-portal-card border-4 border-black p-6 sm:p-8 shadow-[6px_6px_0px_#000000] mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-portal-pink/10 rounded-full blur-2xl pointer-events-none" />
           <div className="relative z-10">
-            <div className="inline-block px-3 py-1 bg-portal-pink text-white font-black text-xs uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_#000000] mb-3">
+            <div className="inline-block px-3 py-1 bg-portal-pink text-black font-black text-xs uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_#000000] mb-3">
               Data Protection & Privacy
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mb-3">
@@ -164,7 +164,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 4: Cookies & Analytics */}
           <section className="bg-portal-card border-3 border-black p-6 shadow-[4px_4px_0px_#000000]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-portal-pink text-white font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
+              <div className="w-10 h-10 bg-portal-pink text-black font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
                 <Cookie className="w-5 h-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-wide">
@@ -184,7 +184,7 @@ export default function PrivacyPolicyPage() {
           {/* Section 5: Anti-Cheat & Security */}
           <section className="bg-portal-card border-3 border-black p-6 shadow-[4px_4px_0px_#000000]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-portal-purple text-white font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
+              <div className="w-10 h-10 bg-portal-purple text-black font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
                 <UserCheck className="w-5 h-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-wide">

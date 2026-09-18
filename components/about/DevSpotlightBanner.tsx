@@ -98,7 +98,7 @@ export const DEVELOPERS: DeveloperProfile[] = [
     role: 'UI/UX & Frontend Engineer',
     badge: 'DESIGN & FRONTEND LEAD',
     badgeBg: 'bg-portal-pink',
-    badgeText: 'text-white',
+    badgeText: 'text-black',
     accentBg: 'from-portal-pink/20 via-portal-surface to-portal-card',
     dotColor: '#ec4899',
     avatarSeed: 'TahidaCyber',
@@ -559,7 +559,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                       {/* Focus & Bio Strip */}
                       <div className="p-2 xs:p-2.5 sm:p-3 rounded-lg xs:rounded-xl sm:rounded-2xl bg-portal-surface border-2 border-black shadow-neo-sm space-y-1">
                         <div className="flex items-center gap-1.5 xs:gap-2">
-                          <span className="text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-portal-purple text-white px-1.5 py-0.2 rounded border border-black shadow-neo-sm shrink-0">
+                          <span className="text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-portal-purple text-black px-1.5 py-0.2 rounded border border-black shadow-neo-sm shrink-0">
                             PRIMARY DOMAIN
                           </span>
                           <span className="text-[10px] xs:text-[11px] sm:text-xs font-black text-slate-900 dark:text-white truncate">{dev.focus}</span>

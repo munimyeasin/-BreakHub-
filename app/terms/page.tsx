@@ -14,7 +14,7 @@ export default function TermsOfServicePage() {
   const lastUpdated = 'September 18, 2026';
 
   return (
-    <div className="min-h-screen bg-portal-bg text-slate-100 bg-neo-grid selection:bg-portal-pink selection:text-white py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-portal-bg text-slate-100 bg-neo-grid selection:bg-portal-pink selection:text-black py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation Bar */}
         <div className="mb-8 flex items-center justify-between">
@@ -80,7 +80,7 @@ export default function TermsOfServicePage() {
           {/* Section 2: Fair Play & Anti-Cheat */}
           <section className="bg-portal-card border-3 border-black p-6 shadow-[4px_4px_0px_#000000]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-portal-pink text-white font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
+              <div className="w-10 h-10 bg-portal-pink text-black font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
                 <ShieldAlert className="w-5 h-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-wide">
@@ -160,7 +160,7 @@ export default function TermsOfServicePage() {
           {/* Section 5: Disclaimer & Liability */}
           <section className="bg-portal-card border-3 border-black p-6 shadow-[4px_4px_0px_#000000]">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-portal-purple text-white font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
+              <div className="w-10 h-10 bg-portal-purple text-black font-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000000]">
                 <Scale className="w-5 h-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-wide">

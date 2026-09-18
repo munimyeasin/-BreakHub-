@@ -19,7 +19,7 @@ export default function NotFound() {
         </div>
 
         {/* 404 Glitch Badge */}
-        <div className="inline-block px-4 py-1.5 bg-portal-pink text-white font-mono text-xs sm:text-sm font-black uppercase tracking-widest border-2 border-black shadow-[3px_3px_0px_#000000] mb-4">
+        <div className="inline-block px-4 py-1.5 bg-portal-pink text-black font-mono text-xs sm:text-sm font-black uppercase tracking-widest border-2 border-black shadow-[3px_3px_0px_#000000] mb-4">
           STAGE NOT FOUND
         </div>
 

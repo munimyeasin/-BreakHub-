@@ -76,7 +76,7 @@ export default function LevelUpCelebrationModal({
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-portal-yellow border-3 border-black flex items-center justify-center shadow-neo">
             <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-black fill-black stroke-[2.5]" />
           </div>
-          <span className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-lg bg-portal-pink text-white font-black text-xs border-2 border-black shadow-neo-sm uppercase">
+          <span className="absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-lg bg-portal-pink text-black font-black text-xs border-2 border-black shadow-neo-sm uppercase">
             LVL {levelInfo.level}
           </span>
         </div>

@@ -27,7 +27,7 @@ const RARITY_COLORS: Record<TrophyRarity, {
 }> = {
   BRONZE: {
     border: 'border-2 border-black',
-    badge: 'bg-amber-700 text-white border border-black shadow-neo-sm',
+    badge: 'bg-amber-400 text-black border border-black shadow-neo-sm',
     text: 'text-amber-400',
     bg: 'bg-portal-card',
     glow: 'none',
@@ -105,7 +105,7 @@ export default function TrophyRoomModal({
                 <h3 className="font-black text-base sm:text-lg text-white tracking-tight uppercase">
                   HOLOGRAPHIC TROPHY VAULT
                 </h3>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-white border-2 border-black shadow-neo-sm">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-portal-pink text-black border-2 border-black shadow-neo-sm">
                   {unlockedCount}/{totalTrophies} UNLOCKED
                 </span>
               </div>
