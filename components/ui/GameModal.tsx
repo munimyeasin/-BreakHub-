@@ -37,6 +37,7 @@ import BlackHoleGame from '@/components/games/BlackHoleGame';
 import BattleshipGame from '@/components/games/BattleshipGame';
 import CandyCrushGame from '@/components/games/CandyCrushGame';
 import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
+import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -60,6 +61,23 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // -2. Tetra Matrix Polyomino Arcade
+  g_tetris_20: {
+    genreTag: 'PUZZLE // POLYOMINO ARCADE',
+    objective: 'Rotate and place falling polyomino matrix blocks. Clear full horizontal rows to prevent stack overflow. Chain 4-line Tetra Matrix clears for massive bonus multipliers.',
+    scoring: 'Single (100x lvl), Double (300x lvl), Triple (500x lvl), Tetra Matrix 4-Line (800x lvl), Soft Drop (+1/cell), Hard Drop (+2/cell), Back-to-Back (1.5x), Combos (50x streak x lvl).',
+    proTip: 'Use the Ghost Piece wireframe projection for precision alignment. Press [C] / [Shift] to hold high-value I-pieces for critical 4-line Tetra Matrix clears.',
+    controls: [
+      { keys: ['← / →', 'A / D'], label: 'MOVE HORIZONTAL', desc: 'Shift active piece left or right' },
+      { keys: ['↑', 'W', 'X'], label: 'ROTATE CW', desc: 'Rotate tetromino 90° clockwise (SRS kicks)' },
+      { keys: ['Z', 'Ctrl'], label: 'ROTATE CCW', desc: 'Rotate tetromino 90° counter-clockwise' },
+      { keys: ['↓', 'S'], label: 'SOFT DROP', desc: 'Accelerate fall speed (+1 score/cell)' },
+      { keys: ['Space'], label: 'HARD DROP', desc: 'Instant slam lock + screen shake (+2 score/cell)' },
+      { keys: ['C', 'Shift'], label: 'HOLD PIECE', desc: 'Buffer current piece in Hold vault' },
+      { keys: ['P', 'Esc'], label: 'PAUSE', desc: 'Pause / Resume matrix simulation' },
+      { keys: ['R'], label: 'RESTART', desc: 'Reset matrix & restart new run' }
+    ]
+  },
   // -1. Neon Candy Blast
   g_candy_19: {
     genreTag: 'PUZZLE // MATCH-3 ARCADE',
@@ -719,6 +737,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_tetris_20' || game.slug === 'tetra-matrix' || game.slug === 'tetris') && (
+                <TetraMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_candy_19' || game.slug === 'retro-candy-crush' || game.slug === 'candy-crush') && (
                 <CandyCrushGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

@@ -17,6 +17,7 @@ const MAX_REQUESTS_PER_WINDOW = 20;
 
 // Maximum realistic score limits per game to protect leaderboard integrity
 const MAX_SCORE_LIMITS: Record<string, number> = {
+  g_tetris_20: 500_000,
   g_candy_19: 500_000,
   g_battleship_18: 20_000,
   g_blackhole_17: 50_000,

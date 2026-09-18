@@ -2,6 +2,58 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_shooter_07',
+    slug: 'neon-starfighter',
+    title: 'Neon Starfighter',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/neon-starfighter.svg',
+    description: 'Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.',
+    play_count: 0,
+    rating: 4.9,
+    rating_count: 28,
+    status: 'active',
+    featured: true
+  },
+  {
+    id: 'g_slicer_11',
+    slug: 'cyber-slicer',
+    title: 'Cyber Katana Slicer',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-slicer.svg',
+    description: 'Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.',
+    play_count: 0,
+    rating: 4.9,
+    rating_count: 36,
+    status: 'active',
+    featured: true
+  },
+  {
+    id: 'g_multi_xo_13',
+    slug: 'multidimension-xo',
+    title: 'Multidimension XO',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/multidimension-xo.svg',
+    description: 'Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.',
+    play_count: 0,
+    rating: 4.9,
+    rating_count: 24,
+    status: 'active',
+    featured: true
+  },
+  {
+    id: 'g_tetris_20',
+    slug: 'tetra-matrix',
+    title: 'Tetra Matrix',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/tetra-matrix.svg',
+    description: 'Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 45,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_candy_19',
     slug: 'retro-candy-crush',
     title: 'Neon Candy Blast',
@@ -67,32 +119,6 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
-    id: 'g_slicer_11',
-    slug: 'cyber-slicer',
-    title: 'Cyber Katana Slicer',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-slicer.svg',
-    description: 'Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.',
-    play_count: 0,
-    rating: 4.9,
-    rating_count: 36,
-    status: 'active',
-    featured: true
-  },
-  {
-    id: 'g_shooter_07',
-    slug: 'neon-starfighter',
-    title: 'Neon Starfighter',
-    category: 'ARCADE',
-    thumbnail_url: '/thumbnails/neon-starfighter.svg',
-    description: 'Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.',
-    play_count: 0,
-    rating: 4.9,
-    rating_count: 28,
-    status: 'active',
-    featured: true
-  },
-  {
     id: 'g_ttt_03',
     slug: 'quantum-xo',
     title: 'Quantum XO',
@@ -150,18 +176,6 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     hype_count: 0,
     status: 'coming_soon'
-  },
-  {
-    id: 'g_multi_xo_13',
-    slug: 'multidimension-xo',
-    title: 'Multidimension XO',
-    category: 'STRATEGY',
-    thumbnail_url: '/thumbnails/multidimension-xo.svg',
-    description: 'Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.',
-    play_count: 0,
-    rating: 4.9,
-    rating_count: 24,
-    status: 'active'
   },
   {
     id: 'g_action_06',

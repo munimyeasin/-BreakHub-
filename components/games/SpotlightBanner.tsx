@@ -12,6 +12,7 @@ import {
   Swords,
   Rocket,
   Grid3X3,
+  Boxes,
   Flame,
   ChevronLeft,
   ChevronRight,
@@ -38,17 +39,17 @@ export default function SpotlightBanner({
   onPlayGame,
   onViewLeaderboard,
 }: SpotlightBannerProps) {
-  // Get all featured games
+  // Get all featured games (excludes multidimension-xo from spotlight hero carousel per layout rules)
   const featuredGames = games.filter(
     g =>
       g.status !== 'hidden' &&
-      (g.featured ||
+      g.slug !== 'multidimension-xo' &&
+      (g.slug === 'neon-starfighter' ||
+        g.slug === 'cyber-slicer' ||
+        g.slug === 'tetra-matrix' ||
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
-        g.slug === 'black-hole' ||
-        g.slug === 'cyber-slicer' ||
-        g.slug === 'neon-starfighter' ||
-        g.slug === 'multidimension-xo')
+        g.slug === 'black-hole')
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -72,12 +73,12 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
+    if (slug === 'tetra-matrix') return <Boxes className="w-3.5 h-3.5 text-portal-yellow" />;
+    if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
+    if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;
     if (slug === 'retro-candy-crush') return <Sparkles className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'retro-battleship') return <Shield className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
-    if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;
-    if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
-    if (slug === 'multidimension-xo') return <Grid3X3 className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'cyber-minesweeper') return <Target className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'cyber-maze') return <Layers className="w-3.5 h-3.5 text-portal-lime" />;
     return <Gamepad2 className="w-3.5 h-3.5 text-portal-cyan" />;
