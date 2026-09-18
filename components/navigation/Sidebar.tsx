@@ -438,7 +438,7 @@ export default function Sidebar({
               {avatarUrl ? (
                 <img
                   src={avatarUrl}
-                  alt={playerTag}
+                  alt={`${playerTag || 'Player'}'s profile avatar`}
                   className="w-7 h-7 rounded-full bg-slate-800 border-2 border-black shrink-0 object-cover shadow-neo-sm"
                 />
               ) : (

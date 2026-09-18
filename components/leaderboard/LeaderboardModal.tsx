@@ -122,7 +122,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-slate-300 text-black font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
                       2
                     </div>
-                    <img src={top3[1].avatar_url} alt="" className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-black my-1.5 sm:my-2 bg-slate-800 shrink-0" />
+                    <img src={top3[1].avatar_url} alt={`${top3[1].username}'s player avatar`} className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-black my-1.5 sm:my-2 bg-slate-800 shrink-0" />
                     <p className="font-black text-[10px] sm:text-xs text-white truncate w-full text-center px-0.5 uppercase">{top3[1].username}</p>
                     <p className="font-black text-[10px] sm:text-xs text-slate-200 mt-0.5 truncate w-full text-center">{top3[1].score.toLocaleString()}</p>
                     <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] bg-slate-300 text-black font-black uppercase mt-1 rounded border border-black tracking-wider shadow-neo-sm">SILVER</span>
@@ -135,7 +135,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                     <div className="w-8 h-8 rounded-lg bg-portal-yellow border-2 border-black text-black flex items-center justify-center -top-4 sm:-top-5 absolute shadow-neo-sm">
                       <Crown className="w-5 h-5 fill-black stroke-[2.5]" />
                     </div>
-                    <img src={top3[0].avatar_url} alt="" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-black my-1.5 sm:my-2 bg-amber-950/40 shrink-0" />
+                    <img src={top3[0].avatar_url} alt={`${top3[0].username}'s champion avatar`} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-3 border-black my-1.5 sm:my-2 bg-amber-950/40 shrink-0" />
                     <p className="font-black text-[11px] sm:text-sm text-portal-yellow truncate w-full text-center px-0.5 uppercase">{top3[0].username}</p>
                     <p className="font-black text-xs sm:text-sm text-white mt-0.5 truncate w-full text-center">
                       {top3[0].score.toLocaleString()} <span className="text-[10px] text-portal-yellow font-black">PTS</span>
@@ -150,7 +150,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-700 text-white font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
                       3
                     </div>
-                    <img src={top3[2].avatar_url} alt="" className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-black my-1.5 sm:my-2 bg-slate-800 shrink-0" />
+                    <img src={top3[2].avatar_url} alt={`${top3[2].username}'s player avatar`} className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-black my-1.5 sm:my-2 bg-slate-800 shrink-0" />
                     <p className="font-black text-[10px] sm:text-xs text-white truncate w-full text-center px-0.5 uppercase">{top3[2].username}</p>
                     <p className="font-black text-[10px] sm:text-xs text-amber-400 mt-0.5 truncate w-full text-center">{top3[2].score.toLocaleString()}</p>
                     <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] bg-amber-700 text-white font-black uppercase mt-1 rounded border border-black tracking-wider shadow-neo-sm">BRONZE</span>
@@ -173,7 +173,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                         <span className="w-6 sm:w-7 h-6 sm:h-7 rounded-md bg-portal-surface border border-black flex items-center justify-center font-black text-xs text-slate-200 shrink-0 shadow-neo-sm">
                           #{entry.rank}
                         </span>
-                        <img src={entry.avatar_url} alt="" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-black bg-slate-800 shrink-0" />
+                        <img src={entry.avatar_url} alt={`${entry.username}'s player avatar`} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-black bg-slate-800 shrink-0" />
                         <div className="min-w-0 flex-1">
                           <span className="font-black text-xs text-white block truncate uppercase">{entry.username}</span>
                           {entry.games_played && (

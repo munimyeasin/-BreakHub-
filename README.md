@@ -49,7 +49,7 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 ### 3. 🔊 Synthesized Web Audio API Engine (`lib/audio.ts`)
 - Zero external audio asset dependencies — all sound effects are generated procedurally via the browser's native **Web Audio API** oscillators and gain nodes.
-- Custom synthesizer profiles for laser beams, fruit slice impacts, explosion thuds, drift tire squeals, chord-clearing chimes, combo fanfare, and victory jingles.
+- Custom synthesizer profiles for laser beams, fruit slice impacts, explosion thuds, match-3 candy blasts, chord-clearing chimes, combo fanfare, and victory jingles.
 
 ### 4. 🏆 Competitive Leaderboard & Rating Engine
 - **Global & Game Leaderboards**: Top 10 rankings per game and cumulative global championship leaderboards.

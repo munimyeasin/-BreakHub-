@@ -1,10 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="candyBg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Background Gradients -->
+    <linearGradient id="candyBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#18042b" />
       <stop offset="50%" stop-color="#2d084e" />
       <stop offset="100%" stop-color="#0e021a" />
+    </linearGradient>
+    <linearGradient id="candyBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="100%" stop-color="#FCE7F3" />
     </linearGradient>
 
     <!-- Candy Gradients -->
@@ -32,13 +37,6 @@
       <stop offset="0%" stop-color="#fb923c" />
       <stop offset="100%" stop-color="#c2410c" />
     </linearGradient>
-    <radialGradient id="discoGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="25%" stop-color="#00f0ff" />
-      <stop offset="50%" stop-color="#ffe600" />
-      <stop offset="75%" stop-color="#ff4081" />
-      <stop offset="100%" stop-color="#1e1b4b" />
-    </radialGradient>
 
     <!-- Glow & Shadow Filters -->
     <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -50,16 +48,41 @@
     <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ffe600" flood-opacity="0.8" />
     </filter>
-    <filter id="brutalShadow">
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
   </defs>
 
+  <style>
+    .theme-bg { fill: url(#candyBgDark); }
+    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
+    .theme-board-bg { fill: #1f093d; stroke: #FFE600; }
+    .theme-slot-bg { fill: #120424; stroke: #3b156b; }
+    .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+    .theme-badge-text { fill: #000000; }
+    .theme-tag-rect { fill: #FF007F; stroke: #000000; }
+    .theme-tag-text { fill: #FFFFFF; }
+
+    @media (prefers-color-scheme: light) {
+      .theme-bg { fill: url(#candyBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-board-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-slot-bg { fill: #F1F5F9; stroke: #E2E8F0; }
+      .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+      .theme-badge-text { fill: #000000; }
+      .theme-tag-rect { fill: #FF007F; stroke: #000000; }
+      .theme-tag-text { fill: #FFFFFF; }
+    }
+  </style>
+
   <!-- Background Base -->
-  <rect width="400" height="400" fill="url(#candyBg)" />
+  <rect width="400" height="400" class="theme-bg" />
 
   <!-- Cyber Grid Pattern Overlay -->
-  <g stroke="#ffffff" stroke-width="1" opacity="0.06">
+  <g class="theme-grid-line" stroke-width="1.5">
     <line x1="0" y1="50" x2="400" y2="50" />
     <line x1="0" y1="100" x2="400" y2="100" />
     <line x1="0" y1="150" x2="400" y2="150" />
@@ -77,11 +100,12 @@
   </g>
 
   <!-- 3D Neo-Brutalist Game Board Platform -->
-  <rect x="42" y="46" width="316" height="316" rx="28" fill="#000000" />
-  <rect x="38" y="40" width="316" height="316" rx="28" fill="#1f093d" stroke="#ffe600" stroke-width="4" />
+  <g filter="url(#brutalShadow)">
+    <rect x="42" y="44" width="316" height="300" rx="24" class="theme-board-bg" stroke-width="4" />
+  </g>
 
   <!-- Grid Tile Slots (4x4 Showcase Mini Grid) -->
-  <g fill="#120424" stroke="#3b156b" stroke-width="2">
+  <g class="theme-slot-bg" stroke-width="2">
     <!-- Row 0 -->
     <rect x="56" y="58" width="62" height="62" rx="14" />
     <rect x="126" y="58" width="62" height="62" rx="14" />
@@ -105,151 +129,126 @@
   </g>
 
   <!-- Laser Beam Blast Effect behind match -->
-  <line x1="38" y1="159" x2="354" y2="159" stroke="#00f0ff" stroke-width="8" opacity="0.6" filter="url(#neonGlow)" />
-  <line x1="38" y1="159" x2="354" y2="159" stroke="#ffffff" stroke-width="3" />
+  <line x1="38" y1="159" x2="354" y2="159" stroke="#00F0FF" stroke-width="8" opacity="0.6" filter="url(#neonGlow)" />
+  <line x1="38" y1="159" x2="354" y2="159" stroke="#FFFFFF" stroke-width="3" />
 
-  <!-- Candy 1: Ruby Heart / Strawberry Chew (Top Left: 56, 58) -->
+  <!-- Candy 1: Ruby Heart (Top Left: 56, 58) -->
   <g transform="translate(61, 63)">
-    <!-- Shadow -->
     <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="#000000" transform="translate(2, 3)" />
-    <!-- Body -->
-    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <!-- Specular Highlight -->
-    <ellipse cx="16" cy="14" rx="4" ry="2" fill="#ffffff" opacity="0.8" />
+    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#000000" stroke-width="2.5" />
+    <ellipse cx="16" cy="14" rx="4" ry="2" fill="#FFFFFF" opacity="0.8" />
   </g>
 
   <!-- Candy 2: Electric Lemon Lozenge (Top Mid-Left: 126, 58) -->
   <g transform="translate(131, 63)">
-    <!-- Shadow -->
     <polygon points="26,6 48,26 26,46 4,26" fill="#000000" transform="translate(2, 3)" />
-    <!-- Body -->
-    <polygon points="26,6 48,26 26,46 4,26" fill="url(#lemonGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <!-- Center Dot -->
-    <circle cx="26" cy="26" r="6" fill="#ffffff" opacity="0.8" />
+    <polygon points="26,6 48,26 26,46 4,26" fill="url(#lemonGrad)" stroke="#000000" stroke-width="2.5" />
+    <circle cx="26" cy="26" r="6" fill="#FFFFFF" opacity="0.8" />
   </g>
 
-  <!-- Candy 3: Striped Cyan Diamond (Top Mid-Right: 196, 58) - Horizontal Laser Striped -->
+  <!-- Candy 3: Striped Cyan Diamond (Top Mid-Right: 196, 58) -->
   <g transform="translate(201, 63)">
     <rect x="6" y="6" width="40" height="40" rx="10" fill="#000000" transform="translate(2, 3)" />
-    <rect x="6" y="6" width="40" height="40" rx="10" fill="url(#cyanGrad)" stroke="#ffffff" stroke-width="2.5" filter="url(#neonGlow)" />
-    <!-- Horizontal White Laser Stripes -->
-    <line x1="8" y1="16" x2="44" y2="16" stroke="#ffffff" stroke-width="2.5" />
-    <line x1="8" y1="26" x2="44" y2="26" stroke="#ffffff" stroke-width="2.5" />
-    <line x1="8" y1="36" x2="44" y2="36" stroke="#ffffff" stroke-width="2.5" />
+    <rect x="6" y="6" width="40" height="40" rx="10" fill="url(#cyanGrad)" stroke="#000000" stroke-width="2.5" filter="url(#neonGlow)" />
+    <line x1="8" y1="16" x2="44" y2="16" stroke="#FFFFFF" stroke-width="2.5" />
+    <line x1="8" y1="26" x2="44" y2="26" stroke="#FFFFFF" stroke-width="2.5" />
+    <line x1="8" y1="36" x2="44" y2="36" stroke="#FFFFFF" stroke-width="2.5" />
   </g>
 
   <!-- Candy 4: Acid Lime Jell (Top Right: 266, 58) -->
   <g transform="translate(271, 63)">
     <circle cx="26" cy="26" r="21" fill="#000000" transform="translate(2, 3)" />
-    <circle cx="26" cy="26" r="21" fill="url(#limeGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <path d="M 16,18 Q 26,12 36,18" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8" />
+    <circle cx="26" cy="26" r="21" fill="url(#limeGrad)" stroke="#000000" stroke-width="2.5" />
+    <path d="M 16,18 Q 26,12 36,18" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8" />
   </g>
 
-  <!-- Row 1 Showcase: Big Exploding Wrapped Candy & Color Bomb -->
-  <!-- Candy 5: Purple Gumdrop (56, 128) -->
+  <!-- Row 1: Purple Gumdrop, Super Color Bomb, Wrapped Candy Bomb, Orange Lozenge -->
   <g transform="translate(61, 133)">
     <circle cx="26" cy="26" r="21" fill="#000000" transform="translate(2, 3)" />
-    <circle cx="26" cy="26" r="21" fill="url(#purpleGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <circle cx="20" cy="18" r="4" fill="#ffffff" opacity="0.8" />
+    <circle cx="26" cy="26" r="21" fill="url(#purpleGrad)" stroke="#000000" stroke-width="2.5" />
+    <circle cx="20" cy="18" r="4" fill="#FFFFFF" opacity="0.8" />
   </g>
 
-  <!-- Candy 6 & 7: Giant Super Combo Central (126..258, 128..260) -->
   <!-- Super Color Bomb / Disco Orb (126, 128) -->
   <g transform="translate(131, 133)">
-    <!-- Shadow -->
     <circle cx="26" cy="26" r="23" fill="#000000" transform="translate(3, 4)" />
-    <!-- Outer Chocolate Shell -->
-    <circle cx="26" cy="26" r="23" fill="#2d1200" stroke="#ffe600" stroke-width="3" filter="url(#goldGlow)" />
-    <!-- Multi-color Rainbow Sprinkles on Orb -->
-    <circle cx="16" cy="16" r="4" fill="#00f0ff" />
-    <circle cx="36" cy="16" r="4" fill="#ff4081" />
-    <circle cx="26" cy="26" r="5" fill="#ffe600" />
-    <circle cx="15" cy="34" r="4" fill="#a3e635" />
-    <circle cx="35" cy="34" r="4" fill="#c084fc" />
-    <!-- Core Sparkle -->
-    <polygon points="26,17 28,24 35,26 28,28 26,35 24,28 17,26 24,24" fill="#ffffff" />
+    <circle cx="26" cy="26" r="23" fill="#2D1200" stroke="#FFE600" stroke-width="3" filter="url(#goldGlow)" />
+    <circle cx="16" cy="16" r="4" fill="#00F0FF" />
+    <circle cx="36" cy="16" r="4" fill="#FF4081" />
+    <circle cx="26" cy="26" r="5" fill="#FFE600" />
+    <circle cx="15" cy="34" r="4" fill="#A3E635" />
+    <circle cx="35" cy="34" r="4" fill="#C084FC" />
+    <polygon points="26,17 28,24 35,26 28,28 26,35 24,28 17,26 24,24" fill="#FFFFFF" />
   </g>
 
-  <!-- Candy 7: Wrapped Candy Bomb (196, 128) -->
+  <!-- Wrapped Candy Bomb (196, 128) -->
   <g transform="translate(201, 133)">
-    <!-- Wrapper Wings -->
-    <polygon points="0,26 8,14 8,38" fill="#ff4081" stroke="#000" stroke-width="2" />
-    <polygon points="52,26 44,14 44,38" fill="#ff4081" stroke="#000" stroke-width="2" />
-    <!-- Shadow -->
+    <polygon points="0,26 8,14 8,38" fill="#FF4081" stroke="#000000" stroke-width="2" />
+    <polygon points="52,26 44,14 44,38" fill="#FF4081" stroke="#000000" stroke-width="2" />
     <rect x="8" y="8" width="36" height="36" rx="8" fill="#000000" transform="translate(2, 3)" />
-    <!-- Square Core Body -->
-    <rect x="8" y="8" width="36" height="36" rx="8" fill="url(#rubyGrad)" stroke="#ffffff" stroke-width="3" filter="url(#pinkGlow)" />
-    <!-- Wrapping Ribbon Cross -->
-    <line x1="8" y1="26" x2="44" y2="26" stroke="#ffe600" stroke-width="4" />
-    <line x1="26" y1="8" x2="26" y2="44" stroke="#ffe600" stroke-width="4" />
-    <circle cx="26" cy="26" r="5" fill="#ffffff" />
+    <rect x="8" y="8" width="36" height="36" rx="8" fill="url(#rubyGrad)" stroke="#000000" stroke-width="3" filter="url(#pinkGlow)" />
+    <line x1="8" y1="26" x2="44" y2="26" stroke="#FFE600" stroke-width="4" />
+    <line x1="26" y1="8" x2="26" y2="44" stroke="#FFE600" stroke-width="4" />
+    <circle cx="26" cy="26" r="5" fill="#FFFFFF" />
   </g>
 
-  <!-- Candy 8: Tangerine Lozenge (266, 128) -->
+  <!-- Tangerine Lozenge (266, 128) -->
   <g transform="translate(271, 133)">
     <polygon points="26,6 48,26 26,46 4,26" fill="#000000" transform="translate(2, 3)" />
-    <polygon points="26,6 48,26 26,46 4,26" fill="url(#orangeGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <circle cx="26" cy="26" r="5" fill="#ffffff" opacity="0.8" />
+    <polygon points="26,6 48,26 26,46 4,26" fill="url(#orangeGrad)" stroke="#000000" stroke-width="2.5" />
+    <circle cx="26" cy="26" r="5" fill="#FFFFFF" opacity="0.8" />
   </g>
 
-  <!-- Row 2 & 3 Candies -->
-  <!-- Cyan Bubble (56, 198) -->
+  <!-- Row 2 Candies -->
   <g transform="translate(61, 203)">
     <circle cx="26" cy="26" r="21" fill="#000000" transform="translate(2, 3)" />
-    <circle cx="26" cy="26" r="21" fill="url(#cyanGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <circle cx="18" cy="18" r="4" fill="#ffffff" opacity="0.8" />
+    <circle cx="26" cy="26" r="21" fill="url(#cyanGrad)" stroke="#000000" stroke-width="2.5" />
+    <circle cx="18" cy="18" r="4" fill="#FFFFFF" opacity="0.8" />
   </g>
-  <!-- Ruby Heart (126, 198) -->
   <g transform="translate(131, 203)">
-    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
-  <!-- Lime Swirl (196, 198) -->
   <g transform="translate(201, 203)">
-    <circle cx="26" cy="26" r="21" fill="url(#limeGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <circle cx="26" cy="26" r="21" fill="url(#limeGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
-  <!-- Purple Striped (266, 198) - Vertical Striped -->
   <g transform="translate(271, 203)">
-    <rect x="6" y="6" width="40" height="40" rx="10" fill="url(#purpleGrad)" stroke="#ffffff" stroke-width="2.5" />
-    <line x1="16" y1="8" x2="16" y2="44" stroke="#ffffff" stroke-width="2.5" />
-    <line x1="26" y1="8" x2="26" y2="44" stroke="#ffffff" stroke-width="2.5" />
-    <line x1="36" y1="8" x2="36" y2="44" stroke="#ffffff" stroke-width="2.5" />
+    <rect x="6" y="6" width="40" height="40" rx="10" fill="url(#purpleGrad)" stroke="#000000" stroke-width="2.5" />
+    <line x1="16" y1="8" x2="16" y2="44" stroke="#FFFFFF" stroke-width="2.5" />
+    <line x1="26" y1="8" x2="26" y2="44" stroke="#FFFFFF" stroke-width="2.5" />
+    <line x1="36" y1="8" x2="36" y2="44" stroke="#FFFFFF" stroke-width="2.5" />
   </g>
 
   <!-- Row 3 Candies -->
-  <!-- Lemon (56, 268) -->
   <g transform="translate(61, 273)">
-    <polygon points="26,6 48,26 26,46 4,26" fill="url(#lemonGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <polygon points="26,6 48,26 26,46 4,26" fill="url(#lemonGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
-  <!-- Cyan (126, 268) -->
   <g transform="translate(131, 273)">
-    <circle cx="26" cy="26" r="21" fill="url(#cyanGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <circle cx="26" cy="26" r="21" fill="url(#cyanGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
-  <!-- Orange (196, 268) -->
   <g transform="translate(201, 273)">
-    <polygon points="26,6 48,26 26,46 4,26" fill="url(#orangeGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <polygon points="26,6 48,26 26,46 4,26" fill="url(#orangeGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
-  <!-- Ruby Heart (266, 268) -->
   <g transform="translate(271, 273)">
-    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#ffffff" stroke-width="2.5" />
+    <path d="M 26,14 C 26,7 18,3 13,8 C 8,13 8,20 13,26 L 26,42 L 39,26 C 44,20 44,13 39,8 C 34,3 26,7 26,14 Z" fill="url(#rubyGrad)" stroke="#000000" stroke-width="2.5" />
   </g>
 
   <!-- Sparkles & Stars -->
-  <g fill="#ffe600">
-    <polygon points="48,32 50,38 56,40 50,42 48,48 46,42 40,40 46,38" />
-    <polygon points="352,48 354,54 360,56 354,58 352,64 350,58 344,56 350,54" />
-    <polygon points="340,320 342,326 348,328 342,330 340,336 338,330 332,328 338,326" />
-    <polygon points="60,330 62,336 68,338 62,340 60,346 58,340 52,338 58,336" />
+  <g fill="#FFE600">
+    <polygon points="48,26 50,32 56,34 50,36 48,42 46,36 40,34 46,32" />
+    <polygon points="352,40 354,46 360,48 354,50 352,56 350,50 344,48 350,46" />
+    <polygon points="340,314 342,320 348,322 342,324 340,330 338,324 332,322 338,320" />
+    <polygon points="60,324 62,330 68,332 62,334 60,340 58,334 52,332 58,330" />
   </g>
 
-  <!-- Bottom Neo-Brutalist Badge: "CANDY CRUSH" -->
-  <g transform="translate(60, 336)">
-    <!-- Shadow -->
-    <rect x="4" y="4" width="280" height="42" rx="12" fill="#000000" />
-    <!-- Badge Box -->
-    <rect x="0" y="0" width="280" height="42" rx="12" fill="#ffe600" stroke="#000000" stroke-width="3.5" />
-    <!-- Badge Text -->
-    <text x="140" y="28" font-family="'Arial Black', Impact, sans-serif" font-size="20" font-weight="900" fill="#000000" text-anchor="middle" letter-spacing="2">
-      ⚡ CANDY CRUSH ⚡
-    </text>
+  <!-- Top Tag Pill: MATCH-3 ARCADE -->
+  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
+    <rect x="-70" y="-10" width="140" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
+    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">MATCH-3 ARCADE</text>
+  </g>
+
+  <!-- Bottom Title Badge Pill: NEON CANDY BLAST -->
+  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
+    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
+    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">NEON CANDY BLAST</text>
   </g>
 </svg>

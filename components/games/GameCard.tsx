@@ -69,7 +69,7 @@ export default function GameCard({
       <div className="game-thumbnail-container relative aspect-square w-full rounded-xl overflow-hidden mb-2 border-2 border-black shadow-neo-sm">
         <img
           src={game.thumbnail_url}
-          alt={game.title}
+          alt={`${game.title} - ${game.category} retro arcade mini-game thumbnail`}
           className={`game-thumbnail-img w-full h-full object-cover transition-transform duration-300 ${
             isComingSoon ? 'filter brightness-95 group-hover:scale-105' : 'group-hover:scale-110'
           }`}

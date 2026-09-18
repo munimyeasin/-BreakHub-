@@ -116,9 +116,9 @@ export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGam
   };
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
         <div className="flex items-center gap-1.5">
           <Activity className="w-3.5 h-3.5 text-portal-cyan" />
           <span className="text-[10px] text-slate-400 font-extrabold uppercase">Round</span>
@@ -137,7 +137,7 @@ export default function ChromaReflexGame({ gameId, onGameOver }: ChromaReflexGam
       </div>
 
       {/* Screen / Pad Matrix (9:16 Standard Aspect Ratio Frame) */}
-      <div className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border p-4 shadow-2xl flex flex-col items-center justify-between overflow-hidden">
+      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border p-4 shadow-2xl flex flex-col items-center justify-between overflow-hidden shrink-0">
         {/* Status prompt */}
         <div className="w-full text-center py-1">
           {isPlaying && (

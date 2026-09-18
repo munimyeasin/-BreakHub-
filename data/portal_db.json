@@ -69,13 +69,26 @@
   ],
   "games": [
     {
+      "id": "g_word_20",
+      "slug": "word-nexus",
+      "title": "Word Nexus 2077",
+      "category": "PUZZLE",
+      "thumbnail_url": "/thumbnails/word-nexus.svg",
+      "description": "Neural Word Association Link Battle! Bridge origin and target concepts through semantic synaptic chains, race against Cortex-AI neural solvers, or compete in 2-Player Pass & Play.",
+      "play_count": 8,
+      "rating": 5,
+      "rating_count": 58,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_candy_19",
       "slug": "retro-candy-crush",
       "title": "Neon Candy Blast",
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/retro-candy-crush.svg",
       "description": "Cyber Match-3 Puzzle Arcade! Align 3+ neon candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
-      "play_count": 2,
+      "play_count": 3,
       "rating": 5,
       "rating_count": 64,
       "status": "active",
@@ -88,7 +101,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/retro-battleship.svg",
       "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "play_count": 13,
+      "play_count": 15,
       "rating": 5,
       "rating_count": 56,
       "status": "active",
@@ -101,7 +114,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/black-hole.svg",
       "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
-      "play_count": 5,
+      "play_count": 6,
       "rating": 5,
       "rating_count": 48,
       "status": "active",
@@ -127,7 +140,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-maze.svg",
       "description": "10-Level Neural Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.",
-      "play_count": 0,
+      "play_count": 1,
       "rating": 5,
       "rating_count": 42,
       "status": "active",
@@ -140,7 +153,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 0,
+      "play_count": 2,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -153,7 +166,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 2,
+      "play_count": 8,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -7934,6 +7947,48 @@
       "user_id": "usr_ctvl8ln",
       "score": 22608,
       "created_at": "2026-09-16T10:23:42.243Z"
+    },
+    {
+      "id": "sc_u37r4i9mn",
+      "game_id": "g_word_20",
+      "user_id": "usr_ctvl8ln",
+      "score": 3675,
+      "created_at": "2026-09-17T23:16:43.355Z"
+    },
+    {
+      "id": "sc_311gb3leg",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 3000,
+      "created_at": "2026-09-18T10:38:09.325Z"
+    },
+    {
+      "id": "sc_38bpss0br",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 2200,
+      "created_at": "2026-09-18T10:38:40.469Z"
+    },
+    {
+      "id": "sc_u2768yw0x",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 15,
+      "created_at": "2026-09-18T10:38:56.143Z"
+    },
+    {
+      "id": "sc_49tt0zsx1",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1500,
+      "created_at": "2026-09-18T11:01:21.791Z"
+    },
+    {
+      "id": "sc_34auiz5cu",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 400,
+      "created_at": "2026-09-18T11:02:04.055Z"
     }
   ],
   "ratings": []

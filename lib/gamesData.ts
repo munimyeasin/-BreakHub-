@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_word_20',
+    slug: 'word-nexus',
+    title: 'Word Nexus 2077',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/word-nexus.svg',
+    description: 'Neural Word Association Link Battle! Bridge origin and target concepts through semantic synaptic chains, race against Cortex-AI neural solvers, or compete in 2-Player Pass & Play.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 58,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_candy_19',
     slug: 'retro-candy-crush',
     title: 'Neon Candy Blast',

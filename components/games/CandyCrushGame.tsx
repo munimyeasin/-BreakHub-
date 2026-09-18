@@ -1379,30 +1379,30 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
   const currentLevelCfg = gameMode === 'campaign' ? CAMPAIGN_LEVELS[selectedLevelIndex] : undefined;
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[420px] mx-auto text-slate-100 font-mono">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center text-slate-100 font-mono">
       {/* Top Header HUD - Ultra Slim Single Line */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-portal-neon" />
-          <span className="text-[11px] text-slate-400 font-extrabold uppercase">
+          <Sparkles className="w-3.5 h-3.5 text-portal-neon" />
+          <span className="text-[10px] text-slate-400 font-extrabold uppercase">
             {gameMode === 'campaign' ? `LVL ${selectedLevelIndex + 1}` : (gameMode === 'arcade' ? 'BLITZ' : 'RUSH')}
           </span>
           <span className="text-sm font-black text-portal-neon">{score.toLocaleString()}</span>
         </div>
 
         {/* Moves / Time Left */}
-        <div className="flex items-center gap-1.5 bg-black/40 px-2.5 py-0.5 rounded-lg border border-portal-border/60">
+        <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-portal-border/60">
           {gameMode === 'timer' ? (
             <>
-              <Clock className="w-3.5 h-3.5 text-portal-cyan" />
-              <span className={`text-xs font-black ${timeLeft <= 10 ? 'text-rose-400 animate-pulse' : 'text-portal-cyan'}`}>
+              <Clock className="w-3 h-3 text-portal-cyan" />
+              <span className={`text-[11px] font-black ${timeLeft <= 10 ? 'text-rose-400 animate-pulse' : 'text-portal-cyan'}`}>
                 {timeLeft}s
               </span>
             </>
           ) : (
             <>
-              <Zap className="w-3.5 h-3.5 text-portal-gold" />
-              <span className={`text-xs font-black ${movesLeft <= 5 ? 'text-rose-400 animate-bounce' : 'text-portal-gold'}`}>
+              <Zap className="w-3 h-3 text-portal-gold" />
+              <span className={`text-[11px] font-black ${movesLeft <= 5 ? 'text-rose-400 animate-bounce' : 'text-portal-gold'}`}>
                 {movesLeft} MOVES
               </span>
             </>
@@ -1413,12 +1413,12 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
           onClick={() => setSoundEnabled(!soundEnabled)}
           className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 active:scale-95 transition-all"
         >
-          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-portal-cyan" /> : <VolumeX className="w-3.5 h-3.5" />}
+          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
         </button>
       </div>
 
-      {/* Main 9:16 Portrait Canvas Frame */}
-      <div className="relative w-full aspect-[9/16] bg-[#0c0418] rounded-2xl border-2 border-portal-border p-2.5 shadow-2xl flex flex-col items-center justify-between overflow-hidden">
+      {/* Main 9:16 Portrait Canvas Frame - Viewport Scaled */}
+      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-[#0c0418] rounded-2xl border-2 border-portal-border p-2.5 shadow-2xl flex flex-col items-center justify-between overflow-hidden shrink-0">
         {/* Particle Canvas Overlay */}
         <canvas
           ref={canvasRef}

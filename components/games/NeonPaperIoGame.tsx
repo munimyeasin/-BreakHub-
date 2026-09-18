@@ -895,9 +895,9 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
   }, [isDead, score, highScore, onGameOver]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-[380px] mx-auto select-none">
+    <div className="flex flex-col items-center justify-center w-full max-w-full h-full flex-1 mx-auto select-none">
       {/* Top Game HUD Strip - Ultra Slim */}
-      <div className="flex items-center justify-between w-full px-3 py-1.5 mb-1.5 bg-portal-card/90 rounded-xl border border-portal-border text-xs shadow-md">
+      <div className="flex items-center justify-between w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] px-3 py-1.5 mb-1.5 bg-portal-card/90 rounded-xl border border-portal-border text-xs shadow-md shrink-0">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 text-portal-cyan font-black">
             <Shield className="w-3 h-3" />
@@ -924,8 +924,8 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         </div>
       </div>
 
-      {/* Main Canvas & Overlay Viewport (9:16 Aspect Ratio) */}
-      <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-2 border-portal-border shadow-neon-cyan/20 shadow-2xl bg-black flex items-center justify-center">
+      {/* Main Canvas & Overlay Viewport (9:16 Aspect Ratio with Viewport Height Scaling) */}
+      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-neon-cyan/20 shadow-2xl bg-black flex items-center justify-center w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] shrink-0">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}

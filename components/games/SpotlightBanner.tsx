@@ -18,6 +18,7 @@ import {
   Gamepad2,
   Target,
   Layers,
+  Link2,
 } from 'lucide-react';
 import { Game } from '@/lib/types';
 import { formatPlayCount } from '@/components/games/GameCard';
@@ -43,6 +44,7 @@ export default function SpotlightBanner({
     g =>
       g.status !== 'hidden' &&
       (g.featured ||
+        g.slug === 'word-nexus' ||
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
         g.slug === 'black-hole' ||
@@ -72,6 +74,7 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
+    if (slug === 'word-nexus') return <Link2 className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'retro-candy-crush') return <Sparkles className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'retro-battleship') return <Shield className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
@@ -283,7 +286,7 @@ export default function SpotlightBanner({
         >
           <img
             src={currentGame.thumbnail_url}
-            alt={currentGame.title}
+            alt={`${currentGame.title} - Retro arcade mini-game artwork preview`}
             className="game-thumbnail-img w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           <div className="game-thumbnail-overlay absolute inset-0 transition-opacity pointer-events-none" />

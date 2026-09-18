@@ -835,9 +835,9 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
   }, [isPlaying, isDead, isComplete]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* 1. HUD & STATS - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md text-xs font-bold text-slate-300">
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md text-xs font-bold text-slate-300 shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-portal-cyan font-black flex items-center gap-1 text-[11px]">
             <Flame className="w-3 h-3 text-portal-cyan animate-pulse" />
@@ -863,16 +863,16 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
       </div>
 
       {/* 2. PROGRESS BAR - Ultra Slim */}
-      <div className="w-full bg-portal-card rounded-full h-2 border border-portal-border/80 overflow-hidden mb-1.5 relative">
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] bg-portal-card rounded-full h-1.5 border border-portal-border/80 overflow-hidden mb-1.5 relative shrink-0">
         <div
           className="h-full bg-gradient-to-r from-portal-cyan via-purple-500 to-emerald-400 transition-all duration-75"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
 
-      {/* 3. MAIN CANVAS CONTAINER (9:16 Portrait) */}
+      {/* 3. MAIN CANVAS CONTAINER (9:16 Aspect Ratio with Viewport Height Scaling) */}
       <div
-        className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border overflow-hidden shadow-2xl cursor-pointer flex items-center justify-center"
+        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg cursor-pointer w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
         onMouseDown={(e) => {
           e.preventDefault();
           isHoldingJumpRef.current = true;

@@ -1,40 +1,65 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="sliceBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#040b19" />
+    <linearGradient id="sliceBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#040B19" />
       <stop offset="50%" stop-color="#140224" />
       <stop offset="100%" stop-color="#260017" />
     </linearGradient>
+    <linearGradient id="sliceBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="100%" stop-color="#FFE4E6" />
+    </linearGradient>
     <filter id="bladeGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00f0ff" flood-opacity="0.95" />
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00F0FF" flood-opacity="0.95" />
     </filter>
-    <filter id="melonGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00ff66" flood-opacity="0.85" />
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
-    <filter id="orangeGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ffaa00" flood-opacity="0.85" />
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#sliceBg)" />
+  <style>
+    .theme-bg { fill: url(#sliceBgDark); }
+    .theme-grid-line { stroke: #FF007F; stroke-opacity: 0.15; }
+    .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-badge-text { fill: #000000; }
+    .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+    .theme-tag-text { fill: #000000; }
 
-  <!-- Background Subtle Dojo Grid -->
-  <g stroke="#ff007f" stroke-width="1" opacity="0.1">
-    <circle cx="200" cy="200" r="160" fill="none" />
-    <circle cx="200" cy="200" r="110" fill="none" />
-    <circle cx="200" cy="200" r="60" fill="none" />
+    @media (prefers-color-scheme: light) {
+      .theme-bg { fill: url(#sliceBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-badge-text { fill: #000000; }
+      .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+      .theme-tag-text { fill: #000000; }
+    }
+  </style>
+
+  <!-- Background Base Canvas -->
+  <rect width="400" height="400" class="theme-bg" />
+
+  <!-- Subtle Dojo Grid -->
+  <g class="theme-grid-line" stroke-width="1.5">
+    <circle cx="200" cy="190" r="140" fill="none" stroke-dasharray="8,6" />
+    <circle cx="200" cy="190" r="95" fill="none" />
+    <circle cx="200" cy="190" r="50" fill="none" />
+    <line x1="50" y1="190" x2="350" y2="190" stroke-dasharray="4,4" />
+    <line x1="200" y1="40" x2="200" y2="340" stroke-dasharray="4,4" />
   </g>
 
   <!-- Juicy Splash Splatter Particles -->
-  <g fill="#ff0055" opacity="0.75">
+  <g fill="#FF007F" opacity="0.8">
     <circle cx="160" cy="110" r="6" />
     <circle cx="140" cy="130" r="4.5" />
     <circle cx="250" cy="210" r="5" />
     <circle cx="270" cy="180" r="7" />
     <circle cx="290" cy="230" r="4" />
   </g>
-  <g fill="#00ff66" opacity="0.75">
+  <g fill="#A3E635" opacity="0.8">
     <circle cx="110" cy="190" r="5" />
     <circle cx="130" cy="240" r="4" />
     <circle cx="210" cy="280" r="6" />
@@ -42,73 +67,61 @@
 
   <!-- Sliced Watermelon Halves splitting apart in mid-air -->
   <!-- Top Half (Floating Up-Left) -->
-  <g filter="url(#melonGlow)" transform="translate(145, 145) rotate(-35)">
-    <!-- Green Rind -->
-    <path d="M -45,0 A 45 45 0 0 1 45,0 Z" fill="#00ff66" stroke="#ffffff" stroke-width="3.5" />
-    <!-- White Inner Rind -->
-    <path d="M -38,0 A 38 38 0 0 1 38,0 Z" fill="#ffffff" />
-    <!-- Juicy Pink Flesh -->
-    <path d="M -33,0 A 33 33 0 0 1 33,0 Z" fill="#ff0055" />
-    <!-- Watermelon Seeds -->
-    <circle cx="-16" cy="-12" r="2.5" fill="#000" />
-    <circle cx="0" cy="-20" r="2.5" fill="#000" />
-    <circle cx="16" cy="-12" r="2.5" fill="#000" />
+  <g transform="translate(145, 140) rotate(-35)" filter="url(#brutalShadowSm)">
+    <path d="M -45,0 A 45 45 0 0 1 45,0 Z" fill="#A3E635" stroke="#000000" stroke-width="3" />
+    <path d="M -38,0 A 38 38 0 0 1 38,0 Z" fill="#FFFFFF" />
+    <path d="M -33,0 A 33 33 0 0 1 33,0 Z" fill="#FF007F" />
+    <circle cx="-16" cy="-12" r="2.5" fill="#000000" />
+    <circle cx="0" cy="-20" r="2.5" fill="#000000" />
+    <circle cx="16" cy="-12" r="2.5" fill="#000000" />
   </g>
 
   <!-- Bottom Half (Falling Down-Right) -->
-  <g filter="url(#melonGlow)" transform="translate(215, 235) rotate(-35)">
-    <!-- Green Rind -->
-    <path d="M -45,0 A 45 45 0 0 0 45,0 Z" fill="#00ff66" stroke="#ffffff" stroke-width="3.5" />
-    <!-- White Inner Rind -->
-    <path d="M -38,0 A 38 38 0 0 0 38,0 Z" fill="#ffffff" />
-    <!-- Juicy Pink Flesh -->
-    <path d="M -33,0 A 33 33 0 0 0 33,0 Z" fill="#ff0055" />
-    <!-- Seeds -->
-    <circle cx="-16" cy="12" r="2.5" fill="#000" />
-    <circle cx="0" cy="20" r="2.5" fill="#000" />
-    <circle cx="16" cy="12" r="2.5" fill="#000" />
+  <g transform="translate(215, 230) rotate(-35)" filter="url(#brutalShadowSm)">
+    <path d="M -45,0 A 45 45 0 0 0 45,0 Z" fill="#A3E635" stroke="#000000" stroke-width="3" />
+    <path d="M -38,0 A 38 38 0 0 0 38,0 Z" fill="#FFFFFF" />
+    <path d="M -33,0 A 33 33 0 0 0 33,0 Z" fill="#FF007F" />
+    <circle cx="-16" cy="12" r="2.5" fill="#000000" />
+    <circle cx="0" cy="20" r="2.5" fill="#000000" />
+    <circle cx="16" cy="12" r="2.5" fill="#000000" />
   </g>
 
   <!-- Flying Plasma Orange in Corner -->
-  <g filter="url(#orangeGlow)" transform="translate(80, 270)">
-    <circle cx="0" cy="0" r="28" fill="#ff7700" stroke="#ffffff" stroke-width="3.5" />
-    <circle cx="-8" cy="-8" r="8" fill="#ffaa00" />
-    <circle cx="0" cy="0" r="20" fill="none" stroke="#ffe600" stroke-width="2" stroke-dasharray="6,4" />
-    <!-- Cute cartoon shine -->
-    <ellipse cx="-8" cy="-12" rx="6" ry="3" fill="#ffffff" opacity="0.6" transform="rotate(-30 -8 -12)" />
+  <g transform="translate(80, 260)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="26" fill="#FB923C" stroke="#000000" stroke-width="3" />
+    <circle cx="-7" cy="-7" r="7" fill="#FFE600" />
+    <circle cx="0" cy="0" r="18" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="5,4" />
+    <ellipse cx="-7" cy="-11" rx="5" ry="2.5" fill="#FFFFFF" opacity="0.8" transform="rotate(-30 -7 -11)" />
   </g>
 
   <!-- Flying Cyber Apple (Top Right) -->
-  <g transform="translate(320, 100)">
-    <circle cx="0" cy="0" r="26" fill="#00f0ff" stroke="#ffffff" stroke-width="3.5" />
-    <path d="M 0,-26 Q 10,-35 15,-28 Q 8,-20 0,-26" fill="#00ff66" stroke="#fff" stroke-width="1.5" />
-    <ellipse cx="-7" cy="-8" rx="5" ry="3" fill="#ffffff" opacity="0.7" transform="rotate(-30 -7 -8)" />
+  <g transform="translate(320, 95)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="24" fill="#00F0FF" stroke="#000000" stroke-width="3" />
+    <path d="M 0,-24 Q 10,-32 14,-26 Q 7,-18 0,-24" fill="#A3E635" stroke="#000000" stroke-width="2" />
+    <ellipse cx="-6" cy="-7" rx="5" ry="2.5" fill="#FFFFFF" opacity="0.8" transform="rotate(-30 -6 -7)" />
   </g>
 
-  <!-- Giant Glowing Katana Blade Swipe Arc! (Across the diagonal) -->
+  <!-- Giant Glowing Katana Blade Swipe Arc! -->
   <g filter="url(#bladeGlow)">
-    <!-- Outer Cyan Blade Trail Arc -->
-    <path d="M 40,360 Q 180,200 360,40" stroke="#00f0ff" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.8" />
-    <!-- Core Bright White Blade Arc -->
-    <path d="M 40,360 Q 180,200 360,40" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" />
-
-    <!-- Katana Hilt at bottom left -->
-    <g transform="translate(45, 355) rotate(-45)">
-      <rect x="-6" y="0" width="12" height="40" rx="4" fill="#1b122e" stroke="#00f0ff" stroke-width="2" />
-      <ellipse cx="0" cy="0" rx="14" ry="5" fill="#ffe600" stroke="#fff" stroke-width="2" />
-      <!-- Diamond hilt wrap -->
-      <polygon points="0,8 4,14 0,20 -4,14" fill="#00f0ff" />
-      <polygon points="0,20 4,26 0,32 -4,26" fill="#00f0ff" />
-    </g>
+    <path d="M 40,360 Q 180,190 360,40" stroke="#00F0FF" stroke-width="14" stroke-linecap="round" fill="none" opacity="0.85" />
+    <path d="M 40,360 Q 180,190 360,40" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" fill="none" />
   </g>
 
-  <!-- Action "SLASH!" Comic Banner -->
-  <g transform="translate(300, 270)">
-    <polygon points="0,-18 35,-25 50,0 75,5 45,25 25,18 0,30 10,5" fill="#ffe600" stroke="#000" stroke-width="2" />
-    <text x="32" y="8" font-family="'Arial Black', sans-serif" font-size="13" fill="#000" font-weight="900" text-anchor="middle">SLICE!</text>
+  <!-- Action "SLICE!" Comic Starburst -->
+  <g transform="translate(300, 260)" filter="url(#brutalShadowSm)">
+    <polygon points="0,-18 35,-25 50,0 75,5 45,25 25,18 0,30 10,5" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <text x="32" y="7" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" fill="#000000" font-weight="900" text-anchor="middle">SLICE!</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="130" height="30" rx="10" fill="#00f0ff" opacity="0.2" stroke="#00f0ff" stroke-width="1.5" />
-  <text x="90" y="365" fill="#00f0ff" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">CYBER SLICER</text>
+  <!-- Top Tag Pill: REFLEX BLADE ACTION -->
+  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
+    <rect x="-80" y="-10" width="160" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
+    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">REFLEX BLADE ACTION</text>
+  </g>
+
+  <!-- Bottom Title Badge Pill: CYBER KATANA SLICER -->
+  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
+    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
+    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">CYBER KATANA SLICER</text>
+  </g>
 </svg>

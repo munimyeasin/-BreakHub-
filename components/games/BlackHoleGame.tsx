@@ -582,9 +582,9 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
   };
 
   return (
-    <div className="w-full max-w-[580px] mx-auto flex flex-col items-center select-none animate-fadeIn">
-      {/* Neo-Brutalist Top Control & Mode Toolbar */}
-      <div className="w-full flex items-center justify-between gap-1.5 mb-2 bg-portal-card border-3 border-black p-2 rounded-2xl shadow-neo">
+    <div className="w-full max-w-full h-full flex-1 flex flex-col items-center justify-center select-none animate-fadeIn">
+      {/* Neo-Brutalist Top Control & Mode Toolbar - Ultra Slim */}
+      <div className="w-full max-w-[min(100%,calc(min(68vh,540px)*1.08))] flex items-center justify-between gap-1 mb-1.5 bg-portal-card border-2 border-black px-2.5 py-1 rounded-xl shadow-md shrink-0">
         {/* Mode Selector */}
         <div className="flex items-center gap-1">
           <button
@@ -593,13 +593,13 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
               setMode('ai');
               handleResetMatch();
             }}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black uppercase border-2 border-black transition-all ${
+            className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase border border-black transition-all ${
               mode === 'ai'
-                ? 'bg-portal-cyan text-black shadow-neo-sm'
+                ? 'bg-portal-cyan text-black shadow-sm'
                 : 'bg-portal-surface text-slate-300 hover:text-white'
             }`}
           >
-            <Bot className="w-3.5 h-3.5 stroke-[2.5]" />
+            <Bot className="w-3 h-3 stroke-[2.5]" />
             <span>VS AI</span>
           </button>
 
@@ -609,13 +609,13 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
               setMode('pvp');
               handleResetMatch();
             }}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black uppercase border-2 border-black transition-all ${
+            className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase border border-black transition-all ${
               mode === 'pvp'
-                ? 'bg-portal-pink text-white shadow-neo-sm'
+                ? 'bg-portal-pink text-white shadow-sm'
                 : 'bg-portal-surface text-slate-300 hover:text-white'
             }`}
           >
-            <Users className="w-3.5 h-3.5 stroke-[2.5]" />
+            <Users className="w-3 h-3 stroke-[2.5]" />
             <span>2P Duel</span>
           </button>
         </div>
@@ -630,11 +630,11 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
                 setAiDifficulty(e.target.value as AiDifficulty);
                 handleResetMatch();
               }}
-              className="bg-portal-surface text-portal-yellow border-2 border-black rounded-xl px-2 py-1 text-[11px] font-black uppercase shadow-neo-sm focus:outline-none cursor-pointer"
+              className="bg-portal-surface text-portal-yellow border border-black rounded-lg px-1.5 py-0.5 text-[10px] font-black uppercase shadow-sm focus:outline-none cursor-pointer"
             >
-              <option value="easy">Cadet AI</option>
-              <option value="medium">Quantum AI</option>
-              <option value="master">Master Boss</option>
+              <option value="easy">Cadet</option>
+              <option value="medium">Quantum</option>
+              <option value="master">Master</option>
             </select>
           )}
 
@@ -644,69 +644,69 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
               setMatchFormat(prev => prev === 'tournament' ? 'blitz' : 'tournament');
               handleResetMatch();
             }}
-            className="px-2 py-1 bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-200 border-2 border-black rounded-xl text-[11px] font-black uppercase shadow-neo-sm transition-all"
+            className="px-1.5 py-0.5 bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-200 border border-black rounded-lg text-[10px] font-black uppercase shadow-sm transition-all"
             title="Toggle Format: 2-Leg Match vs 1-Leg Blitz"
           >
-            {matchFormat === 'tournament' ? '2-Leg Cup' : '1-Leg Blitz'}
+            {matchFormat === 'tournament' ? '2-Leg' : 'Blitz'}
           </button>
 
           <button
             onClick={() => setShowRulesModal(true)}
-            className="p-1.5 bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-300 border-2 border-black rounded-xl shadow-neo-sm transition-all"
+            className="p-1 bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-300 border border-black rounded-lg shadow-sm transition-all"
             title="How to Play"
           >
-            <HelpCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+            <HelpCircle className="w-3 h-3 stroke-[2.5]" />
           </button>
 
           <button
             onClick={() => setSoundEnabled(prev => !prev)}
-            className="p-1.5 bg-portal-surface hover:bg-portal-cyan hover:text-black text-slate-300 border-2 border-black rounded-xl shadow-neo-sm transition-all"
+            className="p-1 bg-portal-surface hover:bg-portal-cyan hover:text-black text-slate-300 border border-black rounded-lg shadow-sm transition-all"
             title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
           >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
+            {soundEnabled ? <Volume2 className="w-3 h-3 stroke-[2.5]" /> : <VolumeX className="w-3 h-3 stroke-[2.5]" />}
           </button>
 
           <button
             onClick={handleResetMatch}
-            className="p-1.5 bg-portal-surface hover:bg-portal-pink hover:text-black text-slate-300 border-2 border-black rounded-xl shadow-neo-sm transition-all"
+            className="p-1 bg-portal-surface hover:bg-portal-pink hover:text-black text-slate-300 border border-black rounded-lg shadow-sm transition-all"
             title="Restart Match"
           >
-            <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+            <RotateCcw className="w-3 h-3 stroke-[2.5]" />
           </button>
         </div>
       </div>
 
       {/* Players Header & Turn Status Banner */}
-      <div className="w-full grid grid-cols-3 items-center gap-2 mb-2">
+      <div className="w-full max-w-[min(100%,calc(min(68vh,540px)*1.08))] grid grid-cols-3 items-center gap-1.5 mb-1.5 shrink-0">
         {/* Player 1 Card (Cyan) */}
         <div
-          className={`flex items-center gap-2 p-2 rounded-2xl border-3 border-black transition-all ${
+          className={`flex items-center gap-1.5 p-1.5 rounded-xl border-2 border-black transition-all ${
             currentPlayer === 'P1' && !isMatchOver && !showLegTransition
-              ? 'bg-portal-cyan text-black shadow-neo translate-y-[-2px]'
-              : 'bg-portal-card text-white shadow-neo-sm'
+              ? 'bg-portal-cyan text-black shadow-sm'
+              : 'bg-portal-card text-white shadow-sm'
           }`}
         >
-          <div className="w-8 h-8 rounded-xl bg-black text-portal-cyan flex items-center justify-center font-black text-sm border-2 border-black shrink-0">
+          <div className="w-6 h-6 rounded-lg bg-black text-portal-cyan flex items-center justify-center font-black text-xs border border-black shrink-0">
             {p1NextNumber <= 10 ? p1NextNumber : '✓'}
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-xs font-black uppercase truncate">P1 (Cyan)</span>
+              <span className="text-[11px] font-black uppercase truncate">P1</span>
             </div>
-            <div className="text-[10px] font-black opacity-80 uppercase">
+            <div className="text-[9px] font-black opacity-80 uppercase">
               {matchFormat === 'tournament'
-                ? `L1: ${leg1Scores ? leg1Scores.p1 : '-'} | L2: ${leg2Scores ? leg2Scores.p1 : '-'}`
+                ? `L1:${leg1Scores ? leg1Scores.p1 : '-'} L2:${leg2Scores ? leg2Scores.p1 : '-'}`
                 : `Score: ${leg1Scores ? leg1Scores.p1 : '-'}`}
             </div>
           </div>
         </div>
 
         {/* Center Turn / Status Capsule */}
-        <div className="flex flex-col items-center justify-center bg-portal-surface border-3 border-black py-1.5 px-2 rounded-2xl shadow-neo text-center">
-          <span className="text-[9px] font-black uppercase tracking-wider text-portal-yellow">
+        <div className="flex flex-col items-center justify-center bg-portal-surface border-2 border-black py-1 px-1.5 rounded-xl shadow-sm text-center">
+          <span className="text-[8px] font-black uppercase tracking-wider text-portal-yellow">
             {matchFormat === 'tournament' ? `LEG ${currentLeg}/2` : 'QUICK BLITZ'}
           </span>
-          <div className="text-xs font-black text-white uppercase flex items-center gap-1">
+          <div className="text-[11px] font-black text-white uppercase flex items-center gap-1">
             {isAiThinking ? (
               <span className="text-portal-pink animate-pulse">AI Thinking...</span>
             ) : isMatchOver ? (
@@ -719,39 +719,39 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
               </span>
             )}
           </div>
-          <span className="text-[9px] font-bold text-slate-300 uppercase">
+          <span className="text-[8px] font-bold text-slate-300 uppercase">
             Place [{currentNumber}]
           </span>
         </div>
 
         {/* Player 2 / AI Card (Pink) */}
         <div
-          className={`flex items-center justify-end gap-2 p-2 rounded-2xl border-3 border-black transition-all ${
+          className={`flex items-center justify-end gap-1.5 p-1.5 rounded-xl border-2 border-black transition-all ${
             currentPlayer === 'P2' && !isMatchOver && !showLegTransition
-              ? 'bg-portal-pink text-white shadow-neo translate-y-[-2px]'
-              : 'bg-portal-card text-white shadow-neo-sm'
+              ? 'bg-portal-pink text-white shadow-sm'
+              : 'bg-portal-card text-white shadow-sm'
           }`}
         >
           <div className="text-right min-w-0">
             <div className="flex items-center justify-end gap-1">
-              <span className="text-xs font-black uppercase truncate">
-                {mode === 'ai' ? (aiDifficulty === 'master' ? 'Master AI' : 'Cosmic AI') : 'P2 (Pink)'}
+              <span className="text-[11px] font-black uppercase truncate">
+                {mode === 'ai' ? (aiDifficulty === 'master' ? 'Master AI' : 'AI') : 'P2'}
               </span>
             </div>
-            <div className="text-[10px] font-black opacity-80 uppercase">
+            <div className="text-[9px] font-black opacity-80 uppercase">
               {matchFormat === 'tournament'
-                ? `L1: ${leg1Scores ? leg1Scores.p2 : '-'} | L2: ${leg2Scores ? leg2Scores.p2 : '-'}`
+                ? `L1:${leg1Scores ? leg1Scores.p2 : '-'} L2:${leg2Scores ? leg2Scores.p2 : '-'}`
                 : `Score: ${leg1Scores ? leg1Scores.p2 : '-'}`}
             </div>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-black text-portal-pink flex items-center justify-center font-black text-sm border-2 border-black shrink-0">
+          <div className="w-6 h-6 rounded-lg bg-black text-portal-pink flex items-center justify-center font-black text-xs border border-black shrink-0">
             {p2NextNumber <= 10 ? p2NextNumber : '✓'}
           </div>
         </div>
       </div>
 
       {/* The 21-Node Interactive Triangular Arena */}
-      <div className="relative w-full aspect-[1/0.92] max-h-[460px] bg-portal-surface border-4 border-black rounded-3xl p-3 shadow-neo-lg overflow-hidden flex items-center justify-center">
+      <div className="relative w-auto h-[min(64vh,480px)] max-w-full aspect-[1/0.92] bg-portal-surface border-2 border-portal-border rounded-2xl p-2.5 shadow-2xl overflow-hidden flex items-center justify-center shrink-0">
         {/* Background Atmospheric Radial Grid Glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#1e1442_0%,#090518_85%)] pointer-events-none" />
 
@@ -759,7 +759,7 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
           <defs>
             <filter id="lineGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#a3e635" flood-opacity="0.5" />
+              <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#a3e635" floodOpacity="0.5" />
             </filter>
           </defs>
 

@@ -90,7 +90,7 @@ export default function UsernamePromptModal({
           <div className="relative mx-auto w-20 h-20 rounded-2xl bg-portal-card border-3 border-black p-1 shadow-neo">
             <img
               src={avatarUrl}
-              alt="Player Avatar"
+              alt="Player arcade avatar preview"
               className="w-full h-full rounded-xl object-cover bg-slate-900"
             />
             <div className="absolute -bottom-2 -right-2 p-1.5 bg-portal-yellow rounded-lg border-2 border-black text-black shadow-neo-sm">

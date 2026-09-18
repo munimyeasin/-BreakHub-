@@ -85,10 +85,49 @@
 11. **Hyper Tapper** (`g_tap_04` / `hyper-tapper`): Active game. Precision reaction-time clicker testing ultra-high APM speeds.
 12. **Multidimension XO** (`g_multi_xo_13` / `multidimension-xo`): Coming soon. Ultimate 9-field nested Tic-Tac-Toe with 9 nested 3x3 boards and macro-node capture mechanics.
 13. **Neon Snake 2077** (`g_snake_01` / `neon-snake`): Coming soon. Cyberpunk canvas snake with hyper-speed combos and interactive community hype registration.
+14. **Word Nexus 2077** (`g_word_nexus_20` / `word-nexus`): Active game. Word association connection link duel mini-game inspired by viral Instagram Reels (*"First to Connect the Words Wins! 🔗"*). Features Solo Rush 60s Blitz, Cortex-AI challenger with 3 neural difficulty tiers, 2-Player Pass & Play mode, procedural Web Audio SFX (`lib/audio.ts`), and PC companion command deck keybindings in `GameModal.tsx`.
+15. **Cyber Dash 2077** (`g_action_06` / `cyber-dash`): Coming soon. Endless obstacle-dodging cyber platformer.
+16. **Neon Pulse Dash** (`g_geometry_10` / `geometry-dash`): Coming soon. Rhythm cube platformer with neon hazards.
+17. **Cyber Brick Breaker** (`g_breaker_08` / `cyber-breaker`): Coming soon. Neon paddle brick breaker with energy balls.
+18. **Chroma Reflex** (`g_reflex_09` / `chroma-reflex`): Coming soon. 4-quadrant chromatic memory sequence & audio tone reflex test.
+19. **Neon Paper Grid** (`g_paper_12` / `paper-io`): Coming soon. Real-time cyber territory capture and trail slicing grid.
 
 ---
 
-## 📌 Reminders
-- [x] **GitHub Backup & Remote Push**: Codebase successfully backed up and pushed to `https://github.com/munim08/-StressBuster-.git` (`main` branch).
-- [x] **Workspace Restoration**: Restored all 13 games, assets, and database records with full StressBuster branding.
-- [x] **Memory Management**: Keep memory actively updated across all sessions and reboots while pruning obsolete facts.
+## 📌 Reminders & Session Handover Tracker
+
+### ✅ 1. Completed Tasks
+- [x] **Vercel Analytics & Speed Insights Integration**: `@vercel/analytics` and `@vercel/speed-insights` in `app/layout.tsx` + `next.config.mjs` tree-shaking optimization + `next/dynamic` code splitting for modals.
+- [x] **URL Route & Modal State Persistence**: Query params (`?tab=`, `?subtab=`, `?game=`) and `sessionStorage` synchronization preserving active views on page reloads.
+- [x] **Developer Showcase 3D Physical Card Stack**: Interactive 3D deck in `DevSpotlightBanner.tsx` with Munim Yeasin on top, `ResizeObserver` dynamic height tracking, peeking index tabs, compact zero-scroll mobile card layout, and Instagram link `@__yeasin__0`.
+- [x] **Game Catalog Renaming & Removal of "Retro" Prefix**: Replaced overused `"Retro"` titles across all registries, database files, modals, and spotlights with unique Neo-Brutalist identities (`Neon Candy Blast`, `Naval Grid Strike`, `Singularity Horizon`, `Quantum Minefield`, `Cyber Labyrinth Escape`, `Cyber Katana Slicer`, `Cyber Dash 2077`, `Neon Pulse Dash`, `Cyber Brick Breaker`, `Chroma Reflex`, `Neon Paper Grid`).
+- [x] **Complete Purge of Cyber Drift 2077**: Deleted `components/games/CyberDriftGame.tsx`, deleted `public/thumbnails/cyber-drift.svg`, and removed `g_drift_14` from all codebase files.
+- [x] **Full Suite of 19 Theme-Adaptive Light/Dark Neo-Brutalist Vector Thumbnails**: All 19 game SVG thumbnails in `public/thumbnails/` updated with `@media (prefers-color-scheme: light)` CSS, high-contrast borders (`stroke="#000000"`), brutalist drop shadows (`stdDeviation="0"`), and distinctive title badges.
+- [x] **Instagram Reel Word Association Mini-Game ("Word Nexus 2077")**: Complete implementation in `components/games/WordNexusGame.tsx` featuring Solo Rush, Cortex-AI, 2-Player Pass & Play, procedural Web Audio API SFX, PC companion deck in `GameModal.tsx`, and adaptive thumbnail `word-nexus.svg`.
+- [x] **20-Point Production-Readiness Deployment Overhaul**:
+  1. `/privacy` Policy Page with Neo-Brutalist layout & cookie disclosure.
+  2. `/terms` of Service Page with liability, fair play, and user-generated score terms.
+  3. Client secret sanitization verified (zero exposed private credentials).
+  4. Strict HTTP Security Headers & HSTS configured in `next.config.mjs`.
+  5. `CookieConsentBanner.tsx` with granular preferences and localStorage state.
+  6. Meta titles, descriptions, OpenGraph, and Twitter tags in `app/layout.tsx`.
+  7. Dynamic 1200x630 OpenGraph / Twitter social card in `app/opengraph-image.tsx`.
+  8. PWA Web App Manifest (`app/manifest.ts`) & favicons.
+  9. XML Sitemap (`app/sitemap.ts`) & Crawler Directives (`app/robots.ts`).
+  10. 100% descriptive image and avatar `alt` text coverage across all components.
+  11. Modern WebP/AVIF image compression & responsive sizing in `next.config.mjs`.
+  12. Next.js bundle splitting, tree-shaking, and font sub-setting optimizations.
+  13. High-contrast Neo-Brutalist color contrast verification for Light and Dark modes.
+  14. Complete mobile touch responsiveness (≥44px touch targets & safe area padding).
+  15. Retro-Arcade 404 page in `app/not-found.tsx` with interactive reboot routing.
+  16. Broken link audit and comprehensive Retro-Arcade `Footer.tsx` navigation.
+  17. Client & server gamer tag validation, search input sanitization, and modal feedback.
+  18. Server-side anti-bot protection: IP rate limiting, honeypot traps, and score sanity bounds checking in `app/api/scores/route.ts`.
+  19. Vercel Analytics & Speed Insights telemetry setup with consent-aware tracking in `lib/analytics.ts`.
+  20. `HeroCTASection.tsx` high-converting Call-To-Action banner with roulette and game jump triggers.
+
+---
+
+### ⏳ 2. In-Progress & Remaining Tasks
+- [ ] **Git Push & Live Vercel Deployment**: Push all committed changes to GitHub `main` to trigger Vercel CI/CD auto-deploy.
+- [ ] **User Greeting Trigger**: Whenever user opens Claude and says "hi", list all reminders and pending tasks immediately.

@@ -425,9 +425,9 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
   }, [isPlaying, isDead, onGameOver, playSfx]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] text-slate-400 font-extrabold uppercase">Dist</span>
           <span className="text-sm font-black text-portal-cyan">{Math.floor(distance / 10)}m</span>
@@ -444,10 +444,10 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
         </button>
       </div>
 
-      {/* Screen Canvas (9:16 Aspect Ratio Frame) */}
+      {/* Screen Canvas (9:16 Aspect Ratio with Viewport Height Scaling) */}
       <div
         onClick={() => { if (isPlaying && !isDead) jump(); }}
-        className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-pointer flex items-center justify-center"
+        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-pointer w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
       >
         <canvas
           ref={canvasRef}

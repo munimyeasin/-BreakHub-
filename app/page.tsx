@@ -15,22 +15,25 @@ import {
   Moon,
   Palette
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
 import SpotlightBanner from '@/components/games/SpotlightBanner';
-import GameModal from '@/components/ui/GameModal';
-import LeaderboardModal from '@/components/leaderboard/LeaderboardModal';
-import UsernamePromptModal from '@/components/ui/UsernamePromptModal';
-import ComingSoonModal from '@/components/ui/ComingSoonModal';
-import ThemeSelectorModal from '@/components/ui/ThemeSelectorModal';
 import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar, { PortalTab } from '@/components/navigation/Sidebar';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
-import DailyQuestsModal from '@/components/gamification/DailyQuestsModal';
-import TrophyRoomModal from '@/components/gamification/TrophyRoomModal';
-import LevelUpCelebrationModal from '@/components/gamification/LevelUpCelebrationModal';
-import GameRouletteModal from '@/components/gamification/GameRouletteModal';
 import ActivityTicker from '@/components/gamification/ActivityTicker';
+
+// High-Performance Dynamic Chunk Loading for Modals (Zero Initial Bundle Overhead)
+const GameModal = dynamic(() => import('@/components/ui/GameModal'), { ssr: false });
+const LeaderboardModal = dynamic(() => import('@/components/leaderboard/LeaderboardModal'), { ssr: false });
+const UsernamePromptModal = dynamic(() => import('@/components/ui/UsernamePromptModal'), { ssr: false });
+const ComingSoonModal = dynamic(() => import('@/components/ui/ComingSoonModal'), { ssr: false });
+const ThemeSelectorModal = dynamic(() => import('@/components/ui/ThemeSelectorModal'), { ssr: false });
+const DailyQuestsModal = dynamic(() => import('@/components/gamification/DailyQuestsModal'), { ssr: false });
+const TrophyRoomModal = dynamic(() => import('@/components/gamification/TrophyRoomModal'), { ssr: false });
+const LevelUpCelebrationModal = dynamic(() => import('@/components/gamification/LevelUpCelebrationModal'), { ssr: false });
+const GameRouletteModal = dynamic(() => import('@/components/gamification/GameRouletteModal'), { ssr: false });
 import { useTheme } from '@/context/ThemeContext';
 import { gamification, GamificationState, LevelInfo } from '@/lib/gamification';
 import { Game } from '@/lib/types';
@@ -352,6 +355,14 @@ export default function ArcadePortalDashboard() {
     handleLaunchGame(selectedGame);
   };
 
+  const handleQuickPlay = () => {
+    const activeGames = games.filter(g => g.status === 'active');
+    if (activeGames.length > 0) {
+      const randomGame = activeGames[Math.floor(Math.random() * activeGames.length)];
+      handleLaunchGame(randomGame);
+    }
+  };
+
   const unclaimedQuestsCount = useMemo(() => {
     return (gameState.dailyQuests?.progress || []).filter(p => p.completed && !p.claimed).length;
   }, [gameState]);
@@ -663,7 +674,7 @@ export default function ArcadePortalDashboard() {
                   className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title="Change Player Handle"
                 >
-                  {avatarUrl && <img src={avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black shadow-neo-sm shrink-0" />}
+                  {avatarUrl && <img src={avatarUrl} alt={`${playerTag}'s player avatar`} className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black shadow-neo-sm shrink-0" />}
                   <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
                   <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
                 </button>

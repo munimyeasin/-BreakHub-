@@ -1,84 +1,129 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="memBg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Background Gradients -->
+    <linearGradient id="memBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#050819" />
-      <stop offset="60%" stop-color="#0d1b3e" />
-      <stop offset="100%" stop-color="#14062e" />
+      <stop offset="50%" stop-color="#0D1B3E" />
+      <stop offset="100%" stop-color="#14062E" />
     </linearGradient>
-    <filter id="cardGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f0ff" flood-opacity="0.8" />
+    <linearGradient id="memBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
-    <filter id="goldGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#ffe600" flood-opacity="0.85" />
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#memBg)" />
+  <style>
+    .theme-bg { fill: url(#memBgDark); }
+    .theme-grid-line { stroke: #00F0FF; stroke-opacity: 0.2; }
+    .theme-card-bg { fill: #0D1B3E; stroke: #000000; }
+    .theme-card-back { fill: #14062E; stroke: #000000; }
+    .theme-brain-dome { fill: #1B254B; stroke: #000000; }
+    .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-badge-text { fill: #000000; }
+    .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+    .theme-tag-text { fill: #000000; }
+
+    @media (prefers-color-scheme: light) {
+      .theme-bg { fill: url(#memBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-card-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-card-back { fill: #F1F5F9; stroke: #000000; }
+      .theme-brain-dome { fill: #FFFFFF; stroke: #000000; }
+      .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-badge-text { fill: #000000; }
+      .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+      .theme-tag-text { fill: #000000; }
+    }
+  </style>
+
+  <!-- Background Base Canvas -->
+  <rect width="400" height="400" class="theme-bg" />
 
   <!-- Background Cyber Circuit Matrix Lines -->
-  <g stroke="#00f0ff" stroke-width="1.5" opacity="0.15">
-    <path d="M 50,50 L 120,50 L 160,90 L 280,90 L 320,50 L 350,50" fill="none" />
-    <path d="M 50,350 L 100,350 L 150,300 L 250,300 L 300,350 L 350,350" fill="none" />
-    <circle cx="160" cy="90" r="4" fill="#00f0ff" />
-    <circle cx="280" cy="90" r="4" fill="#00f0ff" />
+  <g class="theme-grid-line" stroke-width="2" fill="none">
+    <path d="M 40,60 L 120,60 L 160,95 L 240,95 L 280,60 L 360,60" />
+    <path d="M 40,340 L 100,340 L 150,290 L 250,290 L 300,340 L 360,340" />
+    <circle cx="160" cy="95" r="4" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <circle cx="240" cy="95" r="4" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <circle cx="150" cy="290" r="4" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
+    <circle cx="250" cy="290" r="4" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
   </g>
 
-  <!-- Cute Robot Brain Mascot in Center Top -->
-  <g transform="translate(200, 75)" filter="url(#goldGlow)">
-    <!-- Lightbulb idea on top -->
-    <path d="M -8,-25 Q 0,-35 8,-25 Q 12,-15 4,-12 L -4,-12 Q -12,-15 -8,-25" fill="#ffe600" stroke="#fff" stroke-width="2" />
+  <!-- Robot Brain Mascot in Center Top -->
+  <g transform="translate(200, 85)" filter="url(#brutalShadowSm)">
+    <!-- Lightbulb Idea on top -->
+    <path d="M -8,-25 Q 0,-36 8,-25 Q 12,-15 4,-12 L -4,-12 Q -12,-15 -8,-25" fill="#FFE600" stroke="#000000" stroke-width="2" />
+    <line x1="-4" y1="-12" x2="4" y2="-12" stroke="#000000" stroke-width="2" />
     <!-- Robot Brain Glass Dome -->
-    <ellipse cx="0" cy="0" rx="35" ry="26" fill="#1b254b" stroke="#00f0ff" stroke-width="3" />
+    <ellipse cx="0" cy="0" rx="36" ry="26" class="theme-brain-dome" stroke-width="3" />
     <!-- Pink Brain Curves -->
-    <path d="M -22,3 Q -15,-12 -2,0 Q 12,-12 22,3" stroke="#ff007f" stroke-width="4" fill="none" stroke-linecap="round" />
-    <!-- Cute Robot Blinking Eyes -->
-    <ellipse cx="-12" cy="5" rx="5" ry="6" fill="#00ffff" />
-    <ellipse cx="12" cy="5" rx="5" ry="6" fill="#00ffff" />
-    <circle cx="-10" cy="3" r="2" fill="#ffffff" />
-    <circle cx="14" cy="3" r="2" fill="#ffffff" />
+    <path d="M -22,3 Q -15,-12 -2,0 Q 12,-12 22,3" stroke="#FF007F" stroke-width="4" fill="none" stroke-linecap="round" />
+    <!-- Eyes -->
+    <ellipse cx="-12" cy="5" rx="5" ry="6" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <ellipse cx="12" cy="5" rx="5" ry="6" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <circle cx="-10" cy="3" r="1.5" fill="#FFFFFF" />
+    <circle cx="14" cy="3" r="1.5" fill="#FFFFFF" />
   </g>
 
-  <!-- Memory Cards Matrix in 3D Dynamic Spread -->
+  <!-- Memory Cards Matrix with 3D Dynamic Spread -->
   <!-- Card 1: Flipped with Star (Left) -->
-  <g filter="url(#cardGlow)" transform="translate(70, 150) rotate(-10)">
-    <rect width="80" height="110" rx="16" fill="#0d1b3e" stroke="#00f0ff" stroke-width="3.5" />
-    <circle cx="40" cy="55" r="26" fill="#00f0ff" opacity="0.2" />
+  <g filter="url(#brutalShadow)" transform="translate(65, 145) rotate(-10)">
+    <rect width="84" height="114" rx="16" class="theme-card-bg" stroke-width="3.5" />
+    <circle cx="42" cy="57" r="26" fill="#00F0FF" opacity="0.25" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,3" />
     <!-- Golden Star Symbol -->
-    <polygon points="40,32 46,47 62,47 49,57 54,72 40,62 26,72 31,57 18,47 34,47" fill="#ffe600" stroke="#fff" stroke-width="2" />
-    <text x="40" y="98" font-family="'Arial Black', sans-serif" font-size="10" fill="#00f0ff" font-weight="900" text-anchor="middle">MATCH!</text>
+    <polygon points="42,32 48,47 64,47 51,57 56,72 42,62 28,72 33,57 20,47 36,47" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <rect x="14" y="86" width="56" height="16" rx="5" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <text x="42" y="98" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="0.5">MATCH!</text>
   </g>
 
   <!-- Card 2: Flipped with Star (Matched Pair! - Right) -->
-  <g filter="url(#cardGlow)" transform="translate(250, 140) rotate(12)">
-    <rect width="80" height="110" rx="16" fill="#0d1b3e" stroke="#00f0ff" stroke-width="3.5" />
-    <circle cx="40" cy="55" r="26" fill="#00f0ff" opacity="0.2" />
+  <g filter="url(#brutalShadow)" transform="translate(250, 135) rotate(12)">
+    <rect width="84" height="114" rx="16" class="theme-card-bg" stroke-width="3.5" />
+    <circle cx="42" cy="57" r="26" fill="#00F0FF" opacity="0.25" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,3" />
     <!-- Golden Star Symbol -->
-    <polygon points="40,32 46,47 62,47 49,57 54,72 40,62 26,72 31,57 18,47 34,47" fill="#ffe600" stroke="#fff" stroke-width="2" />
-    <text x="40" y="98" font-family="'Arial Black', sans-serif" font-size="10" fill="#00f0ff" font-weight="900" text-anchor="middle">MATCH!</text>
+    <polygon points="42,32 48,47 64,47 51,57 56,72 42,62 28,72 33,57 20,47 36,47" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <rect x="14" y="86" width="56" height="16" rx="5" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <text x="42" y="98" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="0.5">MATCH!</text>
   </g>
 
   <!-- Card 3: Center Mid-Flip Card (Perspective Thin Card) -->
-  <g transform="translate(170, 160) scale(0.65, 1)">
-    <rect width="80" height="110" rx="16" fill="#ff007f" stroke="#ffffff" stroke-width="4" />
+  <g filter="url(#brutalShadow)" transform="translate(170, 155) scale(0.68, 1)">
+    <rect width="84" height="114" rx="16" fill="#FF007F" stroke="#000000" stroke-width="4" />
     <!-- Lightning bolt inside -->
-    <polygon points="42,28 28,58 38,58 34,82 54,48 44,48" fill="#ffe600" stroke="#000" stroke-width="2" />
+    <polygon points="44,28 30,58 40,58 36,84 56,50 46,50" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
   </g>
 
-  <!-- Card 4 & 5: Facedown Cyber Back pattern -->
-  <g transform="translate(100, 270) rotate(5)">
-    <rect width="65" height="85" rx="12" fill="#14062e" stroke="#a855f7" stroke-width="3" />
-    <rect x="10" y="10" width="45" height="65" rx="8" fill="none" stroke="#a855f7" stroke-dasharray="4,4" stroke-width="2" />
-    <text x="32.5" y="48" font-family="'Arial Black', sans-serif" font-size="20" fill="#a855f7" font-weight="900" text-anchor="middle">?</text>
+  <!-- Card 4 & 5: Facedown Cyber Pattern -->
+  <g filter="url(#brutalShadowSm)" transform="translate(95, 265) rotate(6)">
+    <rect width="70" height="90" rx="14" class="theme-card-back" stroke-width="3" />
+    <rect x="10" y="10" width="50" height="70" rx="8" fill="none" stroke="#C084FC" stroke-dasharray="4,4" stroke-width="2" />
+    <text x="35" y="52" font-family="'Impact', 'Arial Black', sans-serif" font-size="24" fill="#C084FC" font-weight="900" text-anchor="middle">?</text>
   </g>
 
-  <g transform="translate(230, 260) rotate(-6)">
-    <rect width="65" height="85" rx="12" fill="#14062e" stroke="#a855f7" stroke-width="3" />
-    <rect x="10" y="10" width="45" height="65" rx="8" fill="none" stroke="#a855f7" stroke-dasharray="4,4" stroke-width="2" />
-    <text x="32.5" y="48" font-family="'Arial Black', sans-serif" font-size="20" fill="#a855f7" font-weight="900" text-anchor="middle">?</text>
+  <g filter="url(#brutalShadowSm)" transform="translate(235, 255) rotate(-6)">
+    <rect width="70" height="90" rx="14" class="theme-card-back" stroke-width="3" />
+    <rect x="10" y="10" width="50" height="70" rx="8" fill="none" stroke="#C084FC" stroke-dasharray="4,4" stroke-width="2" />
+    <text x="35" y="52" font-family="'Impact', 'Arial Black', sans-serif" font-size="24" fill="#C084FC" font-weight="900" text-anchor="middle">?</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="145" height="30" rx="10" fill="#00f0ff" opacity="0.2" stroke="#00f0ff" stroke-width="1.5" />
-  <text x="97" y="365" fill="#00f0ff" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">MEMORY MATRIX</text>
+  <!-- Top Tag Pill: NEURAL SEQUENCE MATCH -->
+  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-10" width="170" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
+    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">NEURAL SEQUENCE MATCH</text>
+  </g>
+
+  <!-- Bottom Title Badge Pill: MEMORY MATRIX -->
+  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
+    <rect x="-95" y="-15" width="190" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
+    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">MEMORY MATRIX</text>
+  </g>
 </svg>

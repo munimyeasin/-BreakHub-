@@ -766,128 +766,116 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
   };
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px] xs:max-w-[420px] md:max-w-[480px] lg:max-w-[520px]">
-      {/* Top Neo-Brutalist HUD Strip */}
-      <div className="w-full flex items-center justify-between bg-portal-surface px-2.5 sm:px-3 py-1.5 rounded-xl border-3 border-black mb-1.5 shadow-neo-sm">
-        {/* Remaining Mines */}
-        <div
-          className="flex items-center gap-1.5 bg-portal-card px-2 sm:px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black"
-          title="Mines Remaining"
-        >
-          <Bomb className="w-3.5 h-3.5 text-portal-pink fill-portal-pink stroke-[2.5]" />
-          <span className={`text-xs font-black ${remainingMines === 0 ? 'text-portal-lime' : 'text-portal-pink'}`}>
-            {String(remainingMines).padStart(2, '0')}
-          </span>
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center font-sans">
+      {/* Top Streamlined HUD Strip */}
+      <div className="w-full max-w-[min(100%,calc(min(72vh,580px)))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
+        {/* Left: Sector Selector & Mines count */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
+            {(['cadet', 'hacker', 'overlord', 'blitz'] as DifficultySector[]).map((secKey, idx) => {
+              const conf = SECTOR_CONFIGS[secKey];
+              const isSelected = sector === secKey;
+              return (
+                <button
+                  key={secKey}
+                  onClick={() => setSector(secKey)}
+                  className={`px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase transition-all ${
+                    isSelected
+                      ? `${conf.badgeBg} ${conf.badgeText} shadow-sm scale-105`
+                      : 'bg-portal-card/80 text-slate-400 hover:text-white border border-portal-border/60'
+                  }`}
+                  title={`Select ${conf.name} [Hotkey: ${idx + 1}]`}
+                >
+                  {secKey === 'blitz' ? 'BLITZ' : conf.shortName.split(' ')[0]}
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            className="flex items-center gap-1 bg-portal-card/90 px-2 py-0.5 rounded-lg border border-portal-border text-[10px] font-black"
+            title="Mines Remaining"
+          >
+            <Bomb className="w-3 h-3 text-portal-pink fill-portal-pink" />
+            <span className={`text-[11px] font-black ${remainingMines === 0 ? 'text-portal-lime' : 'text-portal-pink'}`}>
+              {String(remainingMines).padStart(2, '0')}
+            </span>
+          </div>
         </div>
 
-        {/* Status / Face Reset Button */}
+        {/* Center: Reset / Status Face */}
         <button
           onClick={() => initializeBoard(sector)}
-          className="px-2.5 py-1 rounded-lg bg-portal-yellow hover:bg-portal-cyan text-black border-2 border-black shadow-neo-sm font-black text-xs uppercase flex items-center gap-1 hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+          className="px-2 py-0.5 rounded-lg bg-portal-yellow hover:bg-portal-cyan text-black border border-black shadow-sm font-black text-[11px] uppercase flex items-center gap-1 active:scale-95 transition-all"
           title="Restart with New Random Seed [Hotkey: R]"
         >
           {isVictory ? (
-            <span className="flex items-center gap-1 text-[11px]">
-              <span>😎</span> WON
-            </span>
+            <span>😎 WON</span>
           ) : isGameOver ? (
-            <span className="flex items-center gap-1 text-[11px]">
-              <span>💥</span> RETRY
-            </span>
+            <span>💥 RETRY</span>
           ) : (
-            <span className="flex items-center gap-1 text-[11px]">
-              <span>🕹️</span> RESET
-            </span>
+            <span>🕹️ RESET</span>
           )}
         </button>
 
-        {/* Stopwatch Timer */}
-        <div
-          className="flex items-center gap-1.5 bg-portal-card px-2 sm:px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black"
-          title="Time Elapsed"
-        >
-          <Timer className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          <span className="text-xs font-black text-white">
-            {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}
-          </span>
-        </div>
-
-        {/* Audio Toggle */}
-        <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 sm:p-1.5 rounded-lg bg-portal-card text-white hover:bg-portal-yellow hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
-          aria-label="Toggle sound"
-          title={soundEnabled ? 'Mute Audio [Hotkey: M]' : 'Enable Audio [Hotkey: M]'}
-        >
-          {soundEnabled ? (
-            <Volume2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          ) : (
-            <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />
-          )}
-        </button>
-      </div>
-
-      {/* Sector Selection Bar & Mobile Mode Switcher */}
-      <div className="w-full flex items-center justify-between gap-1.5 mb-1.5">
-        {/* Sector Difficulty Selector */}
-        <div className="flex items-center gap-1 overflow-x-auto py-0.5 scrollbar-none flex-1">
-          {(['cadet', 'hacker', 'overlord', 'blitz'] as DifficultySector[]).map((secKey, idx) => {
-            const conf = SECTOR_CONFIGS[secKey];
-            const isSelected = sector === secKey;
-            return (
-              <button
-                key={secKey}
-                onClick={() => setSector(secKey)}
-                className={`px-2 py-1 rounded-lg border-2 border-black text-[9px] sm:text-[10px] font-black uppercase tracking-wider shrink-0 transition-all ${
-                  isSelected
-                    ? `${conf.badgeBg} ${conf.badgeText} shadow-neo-sm translate-x-0.5 translate-y-0.5`
-                    : 'bg-portal-card text-slate-300 hover:text-white shadow-neo-sm hover:border-portal-cyan'
-                }`}
-                title={`Select ${conf.name} [Hotkey: ${idx + 1}]`}
-              >
-                {secKey === 'blitz' ? '🎲 BLITZ' : conf.shortName.split(' ')[0]}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Mobile Dig / Flag Mode Switcher (Touch helper) */}
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            onClick={() => setTouchMode('dig')}
-            className={`px-2.5 py-1 rounded-lg border-2 border-black text-[10px] font-black uppercase flex items-center gap-1 transition-all ${
-              touchMode === 'dig'
-                ? 'bg-portal-cyan text-black shadow-neo-sm translate-x-0.5 translate-y-0.5'
-                : 'bg-portal-card text-slate-400 hover:text-white shadow-neo-sm'
-            }`}
-            title="Dig Mode (Reveal Cell)"
+        {/* Right: Timer, Dig/Flag toggle, Audio */}
+        <div className="flex items-center gap-1.5">
+          <div
+            className="flex items-center gap-1 bg-portal-card/90 px-2 py-0.5 rounded-lg border border-portal-border text-[10px] font-mono font-black text-portal-cyan"
+            title="Time Elapsed"
           >
-            <span>⛏️</span> <span className="hidden xs:inline">DIG</span>
-          </button>
+            <Timer className="w-3 h-3" />
+            <span>
+              {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}
+            </span>
+          </div>
+
+          {/* Touch Mode switch for mobile */}
+          <div className="flex sm:hidden items-center gap-0.5">
+            <button
+              onClick={() => setTouchMode('dig')}
+              className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${
+                touchMode === 'dig' ? 'bg-portal-cyan text-black' : 'bg-portal-card text-slate-400'
+              }`}
+            >
+              ⛏️
+            </button>
+            <button
+              onClick={() => setTouchMode('flag')}
+              className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${
+                touchMode === 'flag' ? 'bg-portal-pink text-white' : 'bg-portal-card text-slate-400'
+              }`}
+            >
+              🚩
+            </button>
+          </div>
+
           <button
-            onClick={() => setTouchMode('flag')}
-            className={`px-2.5 py-1 rounded-lg border-2 border-black text-[10px] font-black uppercase flex items-center gap-1 transition-all ${
-              touchMode === 'flag'
-                ? 'bg-portal-pink text-white shadow-neo-sm translate-x-0.5 translate-y-0.5'
-                : 'bg-portal-card text-slate-400 hover:text-white shadow-neo-sm'
-            }`}
-            title="Flag Mode (Mark Mine)"
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+            aria-label="Toggle sound"
+            title={soundEnabled ? 'Mute Audio [Hotkey: M]' : 'Enable Audio [Hotkey: M]'}
           >
-            <span>🚩</span> <span className="hidden xs:inline">FLAG</span>
+            {soundEnabled ? (
+              <Volume2 className="w-3 h-3 text-portal-cyan" />
+            ) : (
+              <VolumeX className="w-3 h-3" />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Main Minefield Frame */}
-      <div className="relative w-full bg-portal-bg bg-neo-dots rounded-2xl border-4 border-black p-2 sm:p-2.5 shadow-neo-lg flex flex-col items-center justify-center overflow-hidden">
+      {/* Main Minefield Frame - Viewport Scaled */}
+      <div className="relative w-auto h-[min(70vh,560px)] max-w-full aspect-square bg-portal-bg/90 rounded-2xl border-2 border-portal-border p-2 shadow-2xl flex flex-col items-center justify-center overflow-hidden shrink-0">
         {/* Subtle Decorative Grid Pattern */}
-        <div className="absolute inset-0 bg-neo-grid opacity-25 pointer-events-none" />
+        <div className="absolute inset-0 bg-neo-grid opacity-20 pointer-events-none" />
 
         {/* Minesweeper Grid Board - Pure Fluid CSS Grid */}
         <div
-          className="relative z-10 grid gap-1 sm:gap-1.5 p-1 sm:p-1.5 bg-portal-surface border-3 border-black rounded-xl shadow-neo-sm select-none touch-manipulation w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[400px] md:max-w-[440px] lg:max-w-[460px]"
+          className="relative z-10 grid gap-1 sm:gap-1.5 p-1 bg-portal-surface/90 border border-portal-border rounded-xl shadow-inner select-none touch-manipulation w-full h-full"
           style={{
-            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`
           }}
           onContextMenu={(e) => e.preventDefault()}
         >
@@ -900,22 +888,22 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
               const isNeighbor = isNeighborHovered(rIdx, cIdx);
 
               let cellBg = 'bg-portal-card text-slate-300';
-              let cellBorder = 'border-2 border-black shadow-neo-sm';
+              let cellBorder = 'border border-portal-border/60';
 
               if (isCellRevealed) {
                 if (isExplodedMine) {
                   cellBg = 'bg-portal-pink text-white animate-pulse';
-                  cellBorder = 'border-2 border-black shadow-none';
+                  cellBorder = 'border border-rose-500 shadow-none';
                 } else if (isCellMine) {
                   cellBg = 'bg-red-950 text-portal-pink';
-                  cellBorder = 'border-2 border-black shadow-none';
+                  cellBorder = 'border border-red-800 shadow-none';
                 } else {
-                  cellBg = 'bg-black/90 text-white';
-                  cellBorder = 'border border-slate-800 shadow-none';
+                  cellBg = 'bg-black/80 text-white';
+                  cellBorder = 'border border-white/5 shadow-none';
                 }
               } else if (isCellFlagged) {
                 cellBg = 'bg-portal-yellow text-black';
-                cellBorder = 'border-2 border-black shadow-neo-sm';
+                cellBorder = 'border border-portal-yellow/80 shadow-sm';
               } else if (isNeighbor) {
                 // Smooth desktop neighbor highlight without layout shifts
                 cellBg = 'bg-slate-700/80 text-white ring-2 ring-portal-cyan/80';
@@ -957,9 +945,9 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                   onTouchStart={() => handleTouchStart(rIdx, cIdx)}
                   onTouchEnd={handleTouchEnd}
                   disabled={isGameOver || isVictory}
-                  className={`w-full aspect-square rounded-md sm:rounded-lg flex items-center justify-center font-black text-xs sm:text-sm md:text-base select-none transition-colors duration-75 ${cellBg} ${cellBorder} ${
+                  className={`w-full h-full rounded-md flex items-center justify-center font-black text-xs sm:text-sm md:text-base select-none transition-colors duration-75 ${cellBg} ${cellBorder} ${
                     !isCellRevealed
-                      ? 'hover:bg-slate-700/70 hover:border-portal-cyan active:scale-95 active:brightness-90 cursor-pointer'
+                      ? 'hover:bg-slate-700/70 hover:border-portal-cyan active:scale-95 cursor-pointer'
                       : cell.neighborMines > 0
                       ? 'hover:brightness-125 cursor-pointer'
                       : 'cursor-default'
@@ -977,7 +965,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                       isExplodedMine ? (
                         <span className="text-xs sm:text-sm md:text-base">💥</span>
                       ) : (
-                        <Bomb className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-portal-pink fill-portal-pink" />
+                        <Bomb className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-pink fill-portal-pink" />
                       )
                     ) : cell.neighborMines > 0 ? (
                       <span className={`font-black ${getNumberColor(cell.neighborMines)}`}>
@@ -985,7 +973,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                       </span>
                     ) : null
                   ) : isCellFlagged ? (
-                    <Flag className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 fill-black text-black stroke-[3]" />
+                    <Flag className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black text-black stroke-[2.5]" />
                   ) : null}
                 </button>
               );
@@ -995,15 +983,15 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
 
         {/* Win / Loss Overlay Banner */}
         {(isVictory || isGameOver) && (
-          <div className="absolute inset-0 z-20 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center animate-fadeIn">
-            <div className="w-14 h-14 rounded-2xl border-3 border-black flex items-center justify-center shadow-neo mb-2.5">
+          <div className="absolute inset-0 z-20 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center animate-fadeIn">
+            <div className="w-12 h-12 rounded-2xl border border-white/20 flex items-center justify-center shadow-xl mb-2">
               {isVictory ? (
-                <div className="w-full h-full bg-portal-lime flex items-center justify-center text-black">
-                  <Sparkles className="w-7 h-7 stroke-[2.5]" />
+                <div className="w-full h-full bg-portal-lime flex items-center justify-center text-black rounded-2xl">
+                  <Sparkles className="w-6 h-6 stroke-[2.5]" />
                 </div>
               ) : (
-                <div className="w-full h-full bg-portal-pink flex items-center justify-center text-white">
-                  <AlertTriangle className="w-7 h-7 stroke-[2.5]" />
+                <div className="w-full h-full bg-portal-pink flex items-center justify-center text-white rounded-2xl">
+                  <AlertTriangle className="w-6 h-6 stroke-[2.5]" />
                 </div>
               )}
             </div>
@@ -1018,7 +1006,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
                 : 'Tripped a high-voltage plasma charge. Better luck next breach!'}
             </p>
 
-            <div className="my-2.5 px-3.5 py-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex items-center gap-2">
+            <div className="my-2 px-3 py-1 rounded-xl bg-portal-surface border border-portal-border flex items-center gap-2">
               <Trophy className="w-4 h-4 text-portal-yellow fill-portal-yellow" />
               <span className="text-sm font-black text-portal-yellow">+{scoreEarned} PTS</span>
               <span className="text-[10px] text-slate-400 font-bold uppercase">
@@ -1028,7 +1016,7 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
 
             <button
               onClick={() => initializeBoard(sector)}
-              className="flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase tracking-wider shadow-glow-yellow hover:scale-105 active:scale-95 transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5 stroke-[3]" />
               <span>BREACH AGAIN</span>
@@ -1037,23 +1025,13 @@ export default function CyberMinesweeperGame({ onGameOver }: CyberMinesweeperGam
         )}
       </div>
 
-      {/* Mobile/General Helper Strip */}
-      <div className="w-full mt-1.5 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-400 bg-portal-card px-3 py-1 rounded-xl border-2 border-black shadow-neo-sm">
-        <span className="flex items-center gap-1">
-          <ShieldAlert className="w-3 h-3 text-portal-cyan" /> 100% Safe First Click
-        </span>
-        <span className="text-portal-yellow flex items-center gap-1">
-          <Zap className="w-3 h-3" /> Chord Clears
-        </span>
-      </div>
-
-      {/* Desktop-Only Ergonomics & Keyboard Shortcuts Legend (Hidden on Mobile) */}
-      <div className="hidden md:flex w-full mt-1.5 items-center justify-between text-[9px] font-black uppercase tracking-wider text-slate-400 bg-portal-surface px-3 py-1 rounded-xl border-2 border-black shadow-neo-sm">
+      {/* Desktop Helper Strip */}
+      <div className="hidden md:flex w-full max-w-[min(100%,calc(min(72vh,580px)))] mt-1.5 items-center justify-between text-[9px] font-bold text-slate-400 bg-portal-card/60 px-3 py-1 rounded-xl border border-portal-border/60 shrink-0">
         <span className="flex items-center gap-1 text-portal-cyan">
           ⌨️ [L-CLICK] DIG • [R-CLICK / SPACE] FLAG • [M-CLICK / CHORD] CLEAR
         </span>
         <span className="text-portal-yellow flex items-center gap-1">
-          [R] RESET • [1-4] SECTORS • [M] AUDIO
+          [R] RESET • [1-4] SECTOR • [M] MUTE
         </span>
       </div>
     </div>

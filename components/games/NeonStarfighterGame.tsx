@@ -1603,22 +1603,22 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   }, [isPlaying, isDead]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
-      {/* Top Combat HUD - Neo Brutalism */}
-      <div className="w-full flex items-center justify-between bg-portal-card px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo">
-        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
+      {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
+        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
           <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-portal-purple text-white border-2 border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
+          <span className="px-2 py-0.5 rounded-lg bg-portal-purple text-white border border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
             Wave {wave}
           </span>
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1.5 rounded-lg bg-portal-surface hover:bg-portal-cyan text-white hover:text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+            className="p-1 rounded-lg bg-portal-surface hover:bg-portal-cyan text-white hover:text-black border border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
             title={soundEnabled ? "Mute audio" : "Enable audio"}
           >
             {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
@@ -1628,14 +1628,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       {/* Active Powerup Banner */}
       {activePowerup && (
-        <div className="w-full mb-2 px-3 py-1 rounded-xl bg-portal-yellow text-black border-3 border-black shadow-neo flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider animate-pulse">
-          <Zap className="w-4 h-4 fill-black stroke-[2.5]" />
-          <span>POWERUP ACTIVE: {activePowerup}</span>
+        <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
+          <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
+          <span>POWERUP: {activePowerup}</span>
         </div>
       )}
 
-      {/* Main Game Screen Canvas (9:16 Vertical Aspect Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
+      {/* Main Game Screen Canvas (9:16 Vertical Aspect Ratio with Viewport Height Scaling) */}
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}

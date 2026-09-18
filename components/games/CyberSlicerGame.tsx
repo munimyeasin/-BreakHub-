@@ -992,22 +992,22 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
   }, [isPlaying, isDead, playSfx]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* Top HUD - Neo Brutalism */}
-      <div className="w-full flex items-center justify-between bg-portal-card px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo">
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
         {/* Score Pill */}
-        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
+        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Swords className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
           <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
         </div>
 
         {/* Lives / Strikes */}
-        <div className="flex items-center gap-1.5 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm">
+        <div className="flex items-center gap-1.5 bg-portal-surface px-2 py-0.5 rounded-lg border border-black shadow-neo-sm">
           {[1, 2, 3].map((heart) => (
             <Heart
               key={heart}
-              className={`w-4 h-4 stroke-[2.5] transition-all ${
+              className={`w-3.5 h-3.5 stroke-[2.5] transition-all ${
                 heart <= lives ? 'text-portal-pink fill-portal-pink' : 'text-slate-600'
               }`}
             />
@@ -1017,15 +1017,15 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         {/* Sound Toggle */}
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1.5 rounded-lg bg-portal-surface hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          className="p-1 rounded-lg bg-portal-surface hover:bg-portal-pink text-white hover:text-black border border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
           title={soundEnabled ? "Mute audio" : "Enable audio"}
         >
           {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
         </button>
       </div>
 
-      {/* Main Slicing Dojo Canvas (9:16 Ratio) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-[#070514] touch-none cursor-crosshair w-full aspect-[9/16] flex items-center justify-center">
+      {/* Main Slicing Dojo Canvas (9:16 Ratio with Viewport Height Scaling) */}
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-[#070514] touch-none cursor-crosshair w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}

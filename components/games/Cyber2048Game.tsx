@@ -235,9 +235,9 @@ export default function Cyber2048Game({ gameId, onGameOver }: Cyber2048GameProps
   };
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* HUD - Ultra Slim */}
-      <div className="w-full flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md">
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
         <div className="flex items-center gap-1.5">
           <Grid3X3 className="w-3.5 h-3.5 text-portal-cyan" />
           <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
@@ -259,13 +259,13 @@ export default function Cyber2048Game({ gameId, onGameOver }: Cyber2048GameProps
       <div
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative w-full aspect-[9/16] bg-portal-bg rounded-2xl border-2 border-portal-border p-4 shadow-2xl flex flex-col items-center justify-between touch-none overflow-hidden"
+        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-default w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex flex-col items-center justify-between p-4 shrink-0"
       >
         {/* Status prompt */}
         <div className="w-full text-center py-1">
           {isPlaying && (
             <span className="text-[11px] font-black tracking-wider uppercase text-portal-cyan bg-portal-surface/80 border border-portal-border px-3 py-1 rounded-full">
-              Swipe or use controls to merge
+              Swipe or use keys to merge
             </span>
           )}
         </div>
@@ -277,7 +277,7 @@ export default function Cyber2048Game({ gameId, onGameOver }: Cyber2048GameProps
             </div>
             <div>
               <h3 className="text-xl font-black text-white">Quantum 2048</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Slide or flick with joystick to merge retro energy tiles to 2048.</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-[220px]">Slide or flick with keys/controls to merge retro energy tiles to 2048.</p>
             </div>
             <button
               onClick={startGame}

@@ -1,141 +1,147 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="mazeBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#04010f" />
+    <!-- Background Gradients -->
+    <linearGradient id="mazeBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#04010F" />
       <stop offset="50%" stop-color="#090422" />
       <stop offset="100%" stop-color="#150638" />
     </linearGradient>
-
-    <!-- Wall Glow Filter -->
-    <filter id="wallGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-
-    <!-- Intense Neon Filter -->
-    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur1" />
-      <feGaussianBlur stdDeviation="14" result="blur2" />
-      <feMerge>
-        <feMergeNode in="blur2" />
-        <feMergeNode in="blur1" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
+    <linearGradient id="mazeBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </linearGradient>
 
     <!-- Core Gradient -->
     <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="50%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0055ff" />
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0055FF" />
     </radialGradient>
 
     <!-- Portal Vortex Gradient -->
     <radialGradient id="portalGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="35%" stop-color="#00ff88" />
-      <stop offset="75%" stop-color="#00f0ff" />
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="35%" stop-color="#00FF88" />
+      <stop offset="75%" stop-color="#00F0FF" />
       <stop offset="100%" stop-color="#110033" stop-opacity="0" />
     </radialGradient>
+
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
   </defs>
 
+  <style>
+    .theme-bg { fill: url(#mazeBgDark); }
+    .theme-grid-line { stroke: #00F0FF; stroke-opacity: 0.15; }
+    .theme-wall { fill: #0E072B; stroke: #00F0FF; }
+    .theme-wall-border { stroke: #7000FF; }
+    .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+    .theme-badge-text { fill: #000000; }
+    .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-tag-text { fill: #000000; }
+
+    @media (prefers-color-scheme: light) {
+      .theme-bg { fill: url(#mazeBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-wall { fill: #FFFFFF; stroke: #000000; }
+      .theme-wall-border { stroke: #000000; }
+      .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+      .theme-badge-text { fill: #000000; }
+      .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-tag-text { fill: #000000; }
+    }
+  </style>
+
   <!-- Deep Background -->
-  <rect width="400" height="400" rx="32" fill="url(#mazeBg)" />
+  <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Ambient Perspective Floor Grid -->
-  <g opacity="0.12" stroke="#00f0ff" stroke-width="1">
-    <line x1="20" y1="20" x2="380" y2="20" />
-    <line x1="20" y1="60" x2="380" y2="60" />
-    <line x1="20" y1="100" x2="380" y2="100" />
-    <line x1="20" y1="140" x2="380" y2="140" />
-    <line x1="20" y1="180" x2="380" y2="180" />
-    <line x1="20" y1="220" x2="380" y2="220" />
-    <line x1="20" y1="260" x2="380" y2="260" />
-    <line x1="20" y1="300" x2="380" y2="300" />
-    <line x1="20" y1="340" x2="380" y2="340" />
-    <line x1="20" y1="380" x2="380" y2="380" />
-
-    <line x1="20" y1="20" x2="20" y2="380" />
-    <line x1="60" y1="20" x2="60" y2="380" />
-    <line x1="100" y1="20" x2="100" y2="380" />
-    <line x1="140" y1="20" x2="140" y2="380" />
-    <line x1="180" y1="20" x2="180" y2="380" />
-    <line x1="220" y1="20" x2="220" y2="380" />
-    <line x1="260" y1="20" x2="260" y2="380" />
-    <line x1="300" y1="20" x2="300" y2="380" />
-    <line x1="340" y1="20" x2="340" y2="380" />
-    <line x1="380" y1="20" x2="380" y2="380" />
+  <!-- Ambient Floor Grid -->
+  <g class="theme-grid-line" stroke-width="1.5">
+    <line x1="40" y1="80" x2="360" y2="80" />
+    <line x1="40" y1="140" x2="360" y2="140" />
+    <line x1="40" y1="200" x2="360" y2="200" />
+    <line x1="40" y1="260" x2="360" y2="260" />
+    <line x1="40" y1="320" x2="360" y2="320" />
+    <line x1="80" y1="40" x2="80" y2="360" />
+    <line x1="140" y1="40" x2="140" y2="360" />
+    <line x1="200" y1="40" x2="200" y2="360" />
+    <line x1="260" y1="40" x2="260" y2="360" />
+    <line x1="320" y1="40" x2="320" y2="360" />
   </g>
 
-  <!-- Labyrinth Wall Layout with Glowing Borders -->
-  <g fill="#0e072b" stroke="#00f0ff" stroke-width="2.5" filter="url(#wallGlow)">
-    <!-- Outer Border -->
-    <rect x="30" y="30" width="340" height="340" rx="16" fill="none" stroke="#7000ff" stroke-width="4" />
+  <!-- Labyrinth Wall Layout -->
+  <g class="theme-wall" stroke-width="2.5">
+    <!-- Outer Border Frame -->
+    <rect x="36" y="44" width="328" height="300" rx="16" fill="none" class="theme-wall-border" stroke-width="4" />
 
     <!-- Labyrinth Wall Blocks -->
-    <rect x="70" y="70" width="80" height="30" rx="4" />
-    <rect x="190" y="70" width="140" height="30" rx="4" />
-    <rect x="70" y="140" width="40" height="110" rx="4" />
-    <rect x="150" y="140" width="100" height="35" rx="4" />
-    <rect x="290" y="140" width="40" height="150" rx="4" />
-    <rect x="150" y="215" width="40" height="95" rx="4" />
-    <rect x="230" y="215" width="60" height="35" rx="4" />
-    <rect x="70" y="290" width="120" height="35" rx="4" />
-    <rect x="230" y="290" width="60" height="35" rx="4" />
+    <rect x="70" y="70" width="80" height="30" rx="6" />
+    <rect x="190" y="70" width="140" height="30" rx="6" />
+    <rect x="70" y="135" width="40" height="110" rx="6" />
+    <rect x="150" y="135" width="100" height="35" rx="6" />
+    <rect x="290" y="135" width="40" height="145" rx="6" />
+    <rect x="150" y="205" width="40" height="95" rx="6" />
+    <rect x="225" y="205" width="65" height="35" rx="6" />
+    <rect x="70" y="275" width="120" height="35" rx="6" />
+    <rect x="225" y="275" width="65" height="35" rx="6" />
   </g>
 
   <!-- Security Laser Barrier (Pink Gate) -->
-  <g stroke="#ff00ea" stroke-width="3" filter="url(#neonGlow)">
-    <line x1="150" y1="100" x2="190" y2="100" stroke-dasharray="6,4" />
-    <line x1="190" y1="250" x2="230" y2="250" stroke-dasharray="6,4" />
+  <g stroke="#FF007F" stroke-width="3.5" stroke-dasharray="6,4">
+    <line x1="150" y1="95" x2="190" y2="95" />
+    <line x1="190" y1="240" x2="225" y2="240" />
   </g>
 
   <!-- Data Cores (Cyan Glowing Diamonds) -->
-  <g fill="#00f0ff" filter="url(#neonGlow)">
-    <!-- Core 1 -->
-    <polygon points="125,50 135,60 125,70 115,60" />
-    <!-- Core 2 -->
-    <polygon points="50,195 60,205 50,215 40,205" />
-    <!-- Core 3 -->
-    <polygon points="210,190 220,200 210,210 200,200" />
-    <!-- Core 4 -->
-    <polygon points="210,345 220,355 210,365 200,355" />
+  <g fill="#00F0FF" stroke="#000000" stroke-width="1.5">
+    <polygon points="125,50 133,58 125,66 117,58" />
+    <polygon points="50,195 58,203 50,211 42,203" />
+    <polygon points="210,185 218,193 210,201 202,193" />
+    <polygon points="210,325 218,333 210,341 202,333" />
   </g>
 
   <!-- Keycard (Gold Master Key) -->
-  <g filter="url(#neonGlow)" transform="translate(125, 175) scale(0.9)">
-    <circle cx="0" cy="0" r="10" fill="#ffd700" />
-    <rect x="-3" y="5" width="6" height="20" rx="2" fill="#ffd700" />
-    <rect x="2" y="15" width="8" height="4" rx="1" fill="#ffd700" />
-    <rect x="2" y="21" width="6" height="4" rx="1" fill="#ffd700" />
+  <g transform="translate(125, 175) scale(0.9)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="10" fill="#FFE600" stroke="#000000" stroke-width="2" />
+    <rect x="-3" y="5" width="6" height="20" rx="2" fill="#FFE600" stroke="#000000" stroke-width="2" />
+    <rect x="2" y="15" width="8" height="4" rx="1" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
+    <rect x="2" y="21" width="6" height="4" rx="1" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
   </g>
 
   <!-- Exit Vortex Portal -->
-  <g filter="url(#neonGlow)" transform="translate(330, 330)">
-    <circle cx="0" cy="0" r="28" fill="url(#portalGrad)" />
-    <circle cx="0" cy="0" r="22" fill="none" stroke="#00ff88" stroke-width="2" stroke-dasharray="8,4" />
-    <circle cx="0" cy="0" r="12" fill="#ffffff" />
+  <g transform="translate(325, 315)">
+    <circle cx="0" cy="0" r="24" fill="url(#portalGrad)" />
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#00FF88" stroke-width="2.5" stroke-dasharray="6,4" />
+    <circle cx="0" cy="0" r="10" fill="#00F0FF" stroke="#000000" stroke-width="2" />
   </g>
 
   <!-- Player Runner Node with Particle Trail -->
-  <!-- Trail -->
   <g opacity="0.6">
-    <circle cx="50" cy="65" r="4" fill="#00f0ff" />
-    <circle cx="50" cy="85" r="7" fill="#00f0ff" />
-    <circle cx="50" cy="105" r="10" fill="#00f0ff" />
+    <circle cx="50" cy="70" r="4" fill="#00F0FF" />
+    <circle cx="50" cy="90" r="7" fill="#00F0FF" />
+    <circle cx="50" cy="110" r="10" fill="#00F0FF" />
   </g>
   <!-- Player Body -->
-  <g filter="url(#neonGlow)" transform="translate(50, 130)">
-    <circle cx="0" cy="0" r="15" fill="url(#coreGrad)" />
-    <circle cx="0" cy="0" r="7" fill="#ffffff" />
-    <!-- Arrow pointer -->
-    <polygon points="0,9 -5,2 5,2" fill="#060312" />
+  <g transform="translate(50, 130)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="14" fill="url(#coreGrad)" stroke="#000000" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="6" fill="#FFFFFF" />
+    <polygon points="0,8 -4,2 4,2" fill="#000000" />
   </g>
 
-  <!-- Title Badge Overlay at bottom -->
-  <rect x="40" y="340" width="130" height="26" rx="6" fill="#060318" stroke="#00f0ff" stroke-width="1.5" />
-  <text x="105" y="357" fill="#00f0ff" font-family="system-ui, sans-serif" font-weight="900" font-size="11" letter-spacing="2" text-anchor="middle">
-    CYBER MAZE
-  </text>
+  <!-- Top Tag Pill: NEURAL MAZE INFILTRATION -->
+  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-10" width="170" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
+    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1">NEURAL MAZE INFILTRATION</text>
+  </g>
+
+  <!-- Bottom Title Badge Pill: CYBER LABYRINTH ESCAPE -->
+  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
+    <rect x="-115" y="-15" width="230" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
+    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1.2">CYBER LABYRINTH ESCAPE</text>
+  </g>
 </svg>

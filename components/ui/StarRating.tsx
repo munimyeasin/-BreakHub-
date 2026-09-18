@@ -338,7 +338,7 @@ export default function StarRating({
                   {thumbnailUrl && (
                     <img
                       src={thumbnailUrl}
-                      alt={gameTitle || 'Game'}
+                      alt={`${gameTitle || 'Game'} mini-game thumbnail`}
                       className="w-10 h-10 rounded-xl object-cover border-2 border-black shadow-neo-sm shrink-0"
                     />
                   )}

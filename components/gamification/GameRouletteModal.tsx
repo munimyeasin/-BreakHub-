@@ -109,7 +109,7 @@ export default function GameRouletteModal({
             <div className="game-thumbnail-container relative w-full h-36 rounded-xl overflow-hidden border-2 border-black mb-3">
               <Image
                 src={displayGame.thumbnail_url}
-                alt={displayGame.title}
+                alt={`${displayGame.title} - ${displayGame.category} arcade game artwork preview`}
                 fill
                 className="game-thumbnail-img object-cover"
               />

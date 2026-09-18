@@ -469,71 +469,40 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
   };
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[460px] text-white">
-      {/* 1. NEO-BRUTALIST TOP TELEMETRY & CONTROLS DECK */}
-      <div className="w-full bg-portal-surface border-4 border-black rounded-2xl p-3 shadow-neo-md mb-3 space-y-2.5">
-        {/* Row 1: Mode Switcher & Audio Controls */}
-        <div className="flex items-center justify-between gap-2">
-          {/* 2-Mode Segmented Switch */}
-          <div className="flex items-center bg-black p-1 rounded-xl border-2 border-black">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center text-white">
+      {/* 1. STREAMLINED TOP HUD STRIP */}
+      <div className="w-full max-w-[min(100%,calc(min(72vh,580px)))] bg-portal-surface/90 border border-portal-border rounded-xl px-3 py-1.5 shadow-md mb-1.5 flex items-center justify-between shrink-0">
+        {/* Left: Mode Switcher & Difficulty */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center bg-black/60 p-0.5 rounded-lg border border-portal-border/60">
             <button
               type="button"
               onClick={() => handleSwitchMode('ai')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black uppercase transition-all ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase transition-all ${
                 mode === 'ai'
-                  ? 'bg-portal-yellow text-black shadow-neo-sm'
+                  ? 'bg-portal-yellow text-black shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>VS AI Boss</span>
+              <Cpu className="w-3 h-3" />
+              <span>VS AI</span>
             </button>
             <button
               type="button"
               onClick={() => handleSwitchMode('pvp')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black uppercase transition-all ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase transition-all ${
                 mode === 'pvp'
-                  ? 'bg-portal-cyan text-black shadow-neo-sm'
+                  ? 'bg-portal-cyan text-black shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>2P Local</span>
+              <Users className="w-3 h-3" />
+              <span>2P</span>
             </button>
           </div>
 
-          {/* Audio & Reset Controls */}
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setSoundEnabled(prev => !prev)}
-              className="p-2 rounded-xl bg-portal-card hover:bg-portal-yellow hover:text-black text-slate-300 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-              title={soundEnabled ? 'Mute SFX' : 'Unmute SFX'}
-            >
-              {soundEnabled ? (
-                <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" />
-              ) : (
-                <VolumeX className="w-3.5 h-3.5 stroke-[2.5] text-slate-500" />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={resetEntireMatch}
-              className="p-2 rounded-xl bg-portal-card hover:bg-portal-pink hover:text-black text-slate-300 border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-              title="Reset Full Tournament"
-            >
-              <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
-            </button>
-          </div>
-        </div>
-
-        {/* Row 2: AI Difficulty Selector (Only in VS AI Mode) */}
-        {mode === 'ai' && (
-          <div className="flex items-center justify-between pt-1 border-t-2 border-black/40">
-            <span className="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1">
-              <Bot className="w-3 h-3 text-portal-yellow" /> AI DIFFICULTY:
-            </span>
-            <div className="flex items-center gap-1">
+          {mode === 'ai' && (
+            <div className="hidden sm:flex items-center gap-0.5">
               {(['cadet', 'tactician', 'overthinker'] as AiDifficulty[]).map(diff => (
                 <button
                   key={diff}
@@ -542,97 +511,101 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
                     playSound('click');
                     setDifficulty(diff);
                   }}
-                  className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase border-2 border-black transition-all ${
+                  className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase transition-all ${
                     difficulty === diff
                       ? diff === 'overthinker'
-                        ? 'bg-portal-pink text-black shadow-neo-sm scale-105'
+                        ? 'bg-portal-pink text-black'
                         : diff === 'tactician'
-                        ? 'bg-portal-cyan text-black shadow-neo-sm scale-105'
-                        : 'bg-portal-lime text-black shadow-neo-sm scale-105'
+                        ? 'bg-portal-cyan text-black'
+                        : 'bg-portal-lime text-black'
                       : 'bg-portal-card text-slate-400 hover:text-white'
                   }`}
                 >
-                  {diff}
+                  {diff.slice(0, 3)}
                 </button>
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* Row 3: Live Scoreboards with Neo-Brutalist Badges */}
-        <div className="grid grid-cols-3 gap-2 pt-1 border-t-2 border-black/40">
-          <div className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm flex flex-col items-center">
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-portal-cyan border border-black inline-block" />
-              <span className="text-[10px] font-black uppercase text-portal-cyan">
-                {mode === 'ai' ? 'PLAYER (X)' : 'P1 (X)'}
-              </span>
-            </div>
-            <span className="text-base font-black text-white font-mono mt-0.5">{p1Wins}</span>
-          </div>
+        {/* Center: Live Score Tracker */}
+        <div className="flex items-center gap-2 bg-portal-card/90 px-2.5 py-0.5 rounded-lg border border-portal-border text-[11px] font-black">
+          <span className="text-portal-cyan flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-portal-cyan" />
+            {p1Wins}
+          </span>
+          <span className="text-slate-500 font-normal">:</span>
+          <span className="text-portal-pink flex items-center gap-1">
+            {p2Wins}
+            <span className="w-2 h-2 rounded-full bg-portal-pink" />
+          </span>
+        </div>
 
-          <div className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm flex flex-col items-center">
-            <span className="text-[10px] font-black uppercase text-slate-400">TIES</span>
-            <span className="text-base font-black text-slate-300 font-mono mt-0.5">{ties}</span>
-          </div>
-
-          <div className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm flex flex-col items-center">
-            <div className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-portal-pink border border-black inline-block" />
-              <span className="text-[10px] font-black uppercase text-portal-pink">
-                {mode === 'ai' ? 'AI BOSS (O)' : 'P2 (O)'}
-              </span>
-            </div>
-            <span className="text-base font-black text-white font-mono mt-0.5">{p2Wins}</span>
-          </div>
+        {/* Right: Audio & Reset */}
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setSoundEnabled(prev => !prev)}
+            className="p-1 rounded-lg bg-portal-card hover:bg-portal-yellow hover:text-black text-slate-300 border border-portal-border/60 transition-all"
+            title={soundEnabled ? 'Mute SFX' : 'Unmute SFX'}
+          >
+            {soundEnabled ? (
+              <Volume2 className="w-3 h-3 text-portal-cyan" />
+            ) : (
+              <VolumeX className="w-3 h-3 text-slate-500" />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={resetEntireMatch}
+            className="p-1 rounded-lg bg-portal-card hover:bg-portal-pink hover:text-black text-slate-300 border border-portal-border/60 transition-all"
+            title="Reset Full Tournament"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
         </div>
       </div>
 
-      {/* 2. NEO-BRUTALIST 3X3 GAME ARENA */}
-      <div className="relative w-full bg-portal-surface border-4 border-black rounded-3xl p-4 sm:p-5 shadow-neo-lg flex flex-col items-center justify-between overflow-hidden">
+      {/* 2. 3X3 GAME ARENA - Scaled to Viewport */}
+      <div className="relative w-auto h-[min(70vh,560px)] max-w-full aspect-square bg-portal-surface/90 border-2 border-portal-border rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col items-center justify-between overflow-hidden shrink-0">
         {/* Top Turn & Alternating Indicator Banner */}
-        <div className="w-full flex items-center justify-between mb-3 px-1">
-          <div className="flex items-center gap-1.5">
-            <span className="px-2 py-0.5 rounded-lg bg-portal-card border-2 border-black text-[10px] font-black uppercase text-portal-yellow shadow-neo-sm">
-              ROUND {roundNumber}
-            </span>
-            <span className="text-[10px] font-black uppercase text-slate-400 hidden xs:inline">
-              1ST MOVE: <strong className="text-portal-cyan">{startingPlayer}</strong> (ALT)
-            </span>
-          </div>
+        <div className="w-full flex items-center justify-between mb-2 px-1">
+          <span className="px-2 py-0.5 rounded-lg bg-portal-card border border-portal-border text-[10px] font-black uppercase text-portal-yellow">
+            ROUND {roundNumber}
+          </span>
 
           {/* Active Turn Badge */}
           {!winner ? (
             <div
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl border-2 border-black text-[11px] font-black uppercase shadow-neo-sm transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all ${
                 currentTurn === 'X'
                   ? 'bg-portal-cyan text-black'
                   : 'bg-portal-pink text-black'
               }`}
             >
-              <Zap className="w-3 h-3 fill-current stroke-[2.5]" />
+              <Zap className="w-3 h-3 fill-current" />
               <span>
                 {mode === 'pvp'
                   ? currentTurn === 'X'
-                    ? 'Player 1 (X) Turn'
-                    : 'Player 2 (O) Turn'
+                    ? 'P1 (X) Turn'
+                    : 'P2 (O) Turn'
                   : isAiThinking
-                  ? 'AI Calculating...'
+                  ? 'AI Thinking...'
                   : currentTurn === 'X'
                   ? 'Your Turn (X)'
                   : 'AI Turn (O)'}
               </span>
             </div>
           ) : (
-            <div className="px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black text-[11px] font-black uppercase shadow-neo-sm flex items-center gap-1">
-              <Trophy className="w-3 h-3 stroke-[2.5]" />
-              <span>ROUND OVER</span>
+            <div className="px-2.5 py-0.5 rounded-lg bg-portal-yellow text-black text-[10px] font-black uppercase flex items-center gap-1">
+              <Trophy className="w-3 h-3" />
+              <span>OVER</span>
             </div>
           )}
         </div>
 
-        {/* 3x3 Chunky Neo-Brutalist Grid */}
-        <div className="w-full aspect-square max-w-[340px] grid grid-cols-3 gap-3 p-3 bg-black rounded-2xl border-4 border-black shadow-inner my-2">
+        {/* 3x3 Chunky Grid */}
+        <div className="w-full flex-1 aspect-square max-h-[380px] grid grid-cols-3 gap-2.5 sm:gap-3 p-2.5 bg-black/80 rounded-2xl border-2 border-portal-border shadow-inner my-auto">
           {board.map((cell, idx) => {
             const isWinningCell = winningLine?.includes(idx);
 
@@ -642,16 +615,16 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
                 type="button"
                 onClick={() => handleCellClick(idx)}
                 disabled={!!cell || !!winner || (mode === 'ai' && (currentTurn !== 'X' || isAiThinking))}
-                className={`relative rounded-2xl flex items-center justify-center font-black text-5xl sm:text-6xl transition-all border-3 border-black select-none ${
+                className={`relative rounded-xl flex items-center justify-center font-black text-4xl sm:text-5xl md:text-6xl transition-all border-2 border-black select-none ${
                   cell === 'X'
                     ? isWinningCell
-                      ? 'bg-portal-yellow text-black shadow-[4px_4px_0px_#000000] scale-105 ring-4 ring-portal-cyan z-10 animate-bounce'
-                      : 'bg-portal-cyan text-black shadow-neo-md hover:scale-100'
+                      ? 'bg-portal-yellow text-black ring-4 ring-portal-cyan z-10 animate-bounce'
+                      : 'bg-portal-cyan text-black shadow-md'
                     : cell === 'O'
                     ? isWinningCell
-                      ? 'bg-portal-yellow text-black shadow-[4px_4px_0px_#000000] scale-105 ring-4 ring-portal-pink z-10 animate-bounce'
-                      : 'bg-portal-pink text-black shadow-neo-md hover:scale-100'
-                    : 'bg-portal-card hover:bg-portal-surface text-slate-600 hover:border-portal-cyan hover:shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5'
+                      ? 'bg-portal-yellow text-black ring-4 ring-portal-pink z-10 animate-bounce'
+                      : 'bg-portal-pink text-black shadow-md'
+                    : 'bg-portal-card hover:bg-portal-surface/80 text-slate-600 hover:border-portal-cyan active:scale-95'
                 }`}
               >
                 {cell && (
@@ -670,18 +643,15 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
         </div>
 
         {/* Bottom Alternating Notification Strip */}
-        <div className="w-full text-center mt-2 px-2 py-1 bg-portal-card border-2 border-black rounded-xl shadow-neo-sm">
-          <p className="text-[10px] font-black uppercase text-slate-300 tracking-wider">
+        <div className="w-full text-center mt-2 px-2 py-0.5 bg-portal-card/60 border border-portal-border/60 rounded-lg">
+          <p className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">
             {mode === 'pvp' ? (
               <span>
-                Alternating First Move: Round {roundNumber} started by{' '}
-                <strong className="text-portal-cyan">{startingPlayer}</strong> ➔ Next:{' '}
-                <strong className="text-portal-pink">{startingPlayer === 'X' ? 'O' : 'X'}</strong>
+                Round {roundNumber} starter: <strong className="text-portal-cyan">{startingPlayer}</strong>
               </span>
             ) : (
               <span>
-                {startingPlayer === 'X' ? '⚡ You had the 1st move' : '🤖 AI had the 1st move'} ➔
-                Next round 1st move:{' '}
+                {startingPlayer === 'X' ? '⚡ You started' : '🤖 AI started'} • Next starter:{' '}
                 <strong className="text-portal-yellow">
                   {startingPlayer === 'X' ? 'AI (O)' : 'YOU (X)'}
                 </strong>
@@ -690,52 +660,37 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
           </p>
         </div>
 
-        {/* 3. NEO-BRUTALIST ROUND OUTCOME OVERLAY */}
+        {/* 3. ROUND OUTCOME OVERLAY */}
         {winner && (
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 space-y-4 animate-scaleIn z-20 border-4 border-black">
-            {/* Top Hazard Stripe */}
-            <div className="w-full h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-y-2 border-black" />
-
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 space-y-3 animate-scaleIn z-20 border-2 border-portal-border">
             <div className="text-center space-y-2 max-w-sm">
-              <div className="text-2xl sm:text-3xl font-black uppercase tracking-wide">
+              <div className="text-xl sm:text-2xl font-black uppercase tracking-wide">
                 {winner === 'X' ? (
-                  <div className="p-3 rounded-2xl bg-portal-cyan text-black border-4 border-black shadow-neo-lg flex items-center justify-center gap-2">
-                    <Sparkles className="w-6 h-6 stroke-[3]" />
+                  <div className="p-2.5 rounded-xl bg-portal-cyan text-black border-2 border-black shadow-lg flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5 stroke-[2.5]" />
                     <span>{mode === 'pvp' ? 'Player 1 (X) Wins!' : 'Victory! You Win!'}</span>
                   </div>
                 ) : winner === 'O' ? (
-                  <div className="p-3 rounded-2xl bg-portal-pink text-black border-4 border-black shadow-neo-lg flex items-center justify-center gap-2">
-                    <Swords className="w-6 h-6 stroke-[3]" />
-                    <span>{mode === 'pvp' ? 'Player 2 (O) Wins!' : 'AI Boss Outsmarted You!'}</span>
+                  <div className="p-2.5 rounded-xl bg-portal-pink text-black border-2 border-black shadow-lg flex items-center justify-center gap-2">
+                    <Swords className="w-5 h-5 stroke-[2.5]" />
+                    <span>{mode === 'pvp' ? 'Player 2 (O) Wins!' : 'AI Boss Wins!'}</span>
                   </div>
                 ) : (
-                  <div className="p-3 rounded-2xl bg-portal-surface text-portal-yellow border-4 border-black shadow-neo-lg flex items-center justify-center gap-2">
-                    <span>🤝 Quantum Stalemate Draw!</span>
+                  <div className="p-2.5 rounded-xl bg-portal-surface text-portal-yellow border-2 border-black shadow-lg flex items-center justify-center gap-2">
+                    <span>🤝 Quantum Draw!</span>
                   </div>
                 )}
               </div>
 
-              <div className="p-2.5 rounded-xl bg-portal-card border-2 border-black text-xs space-y-1">
-                <p className="font-black text-white">
+              <div className="p-2 rounded-xl bg-portal-card border border-portal-border text-xs space-y-0.5">
+                <p className="font-bold text-white">
                   {mode === 'pvp'
-                    ? `Tournament Score: P1 [${p1Wins}] — P2 [${p2Wins}]`
+                    ? `Match Score: P1 [${p1Wins}] — P2 [${p2Wins}]`
                     : winner === 'X'
-                    ? `+${500 + p1Wins * 200} High Score Points Added!`
+                    ? `+${500 + p1Wins * 200} Points Added!`
                     : winner === 'TIE'
                     ? '+150 Draw Bonus Points Added!'
-                    : 'No points awarded. Take revenge next round!'}
-                </p>
-                <p className="text-[11px] font-black uppercase text-portal-yellow">
-                  Round {roundNumber + 1} Opening Move goes to:{' '}
-                  <span className="text-portal-cyan underline">
-                    {startingPlayer === 'X'
-                      ? mode === 'ai'
-                        ? 'AI (O)'
-                        : 'Player 2 (O)'
-                      : mode === 'ai'
-                      ? 'You (X)'
-                      : 'Player 1 (X)'}
-                  </span>
+                    : 'No points. Take revenge next round!'}
                 </p>
               </div>
             </div>
@@ -744,9 +699,9 @@ export default function QuantumXOGame({ gameId, onGameOver }: QuantumXOGameProps
             <button
               type="button"
               onClick={handleStartNextRound}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-sm uppercase border-4 border-black shadow-neo-md hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-portal-yellow hover:bg-portal-cyan text-black font-black text-xs uppercase shadow-glow-yellow active:scale-95 transition-all"
             >
-              <RotateCcw className="w-4 h-4 stroke-[3]" />
+              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
               <span>
                 Start Round {roundNumber + 1} ({startingPlayer === 'X' ? 'O Starts' : 'X Starts'})
               </span>

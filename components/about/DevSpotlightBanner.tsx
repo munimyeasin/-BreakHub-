@@ -462,7 +462,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                     }}
                   >
                     <div className="relative w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 rounded-full overflow-hidden border border-black shrink-0">
-                      <img src={avatarUrl} alt={dev.name} className="w-full h-full object-cover bg-slate-900" />
+                      <img src={avatarUrl} alt={`${dev.name} - ${dev.role} avatar`} className="w-full h-full object-cover bg-slate-900" />
                     </div>
                     <span
                       className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full border border-black shrink-0"
@@ -520,7 +520,7 @@ export default function DevSpotlightBanner({ onExploreGames }: DevSpotlightBanne
                         <div className="relative w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl sm:rounded-2xl md:rounded-3xl bg-portal-card border-2 sm:border-3 md:border-4 border-black p-0.5 sm:p-1 shadow-neo overflow-hidden shrink-0">
                           <img
                             src={avatarUrl}
-                            alt={dev.name}
+                            alt={`${dev.name} - ${dev.role} developer profile portrait`}
                             className="w-full h-full object-cover rounded-lg sm:rounded-xl md:rounded-2xl bg-slate-900"
                           />
                           <div

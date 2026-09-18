@@ -1,63 +1,112 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <linearGradient id="chromaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Background Gradients -->
+    <linearGradient id="chromaBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#070014" />
-      <stop offset="60%" stop-color="#14062e" />
+      <stop offset="60%" stop-color="#14062E" />
       <stop offset="100%" stop-color="#021526" />
     </linearGradient>
-    <filter id="simonGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00f0ff" flood-opacity="0.9" />
+    <linearGradient id="chromaBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="100%" stop-color="#FDF4FF" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="400" height="400" fill="url(#chromaBg)" />
+  <style>
+    .theme-bg { fill: url(#chromaBgDark); }
+    .theme-grid-line { stroke: #C084FC; stroke-opacity: 0.15; }
+    .theme-housing { fill: #0F0926; stroke: #000000; }
+    .theme-center-btn { fill: #FFE600; stroke: #000000; }
+    .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+    .theme-badge-text { fill: #000000; }
+    .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-tag-text { fill: #000000; }
+
+    @media (prefers-color-scheme: light) {
+      .theme-bg { fill: url(#chromaBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-housing { fill: #FFFFFF; stroke: #000000; }
+      .theme-center-btn { fill: #FFE600; stroke: #000000; }
+      .theme-badge-rect { fill: #FFE600; stroke: #000000; }
+      .theme-badge-text { fill: #000000; }
+      .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-tag-text { fill: #000000; }
+    }
+  </style>
+
+  <!-- Background Base Canvas -->
+  <rect width="400" height="400" class="theme-bg" />
+
+  <!-- Geometric Soundwave Pulse Rings -->
+  <g class="theme-grid-line" stroke-width="2" fill="none">
+    <circle cx="200" cy="190" r="165" stroke-dasharray="8,6" />
+    <circle cx="200" cy="190" r="185" stroke-dasharray="4,6" />
+  </g>
 
   <!-- Simon Reflex 4-Quadrant Ring Body -->
-  <g transform="translate(200, 190)">
+  <g transform="translate(200, 190)" filter="url(#brutalShadow)">
     <!-- Base Circular Outer Housing -->
-    <circle cx="0" cy="0" r="145" fill="#0f0926" stroke="#25174f" stroke-width="6" />
+    <circle cx="0" cy="0" r="140" class="theme-housing" stroke-width="4.5" />
 
     <!-- 1. Top-Left: Glowing Cyan Quadrant -->
-    <path d="M -15,-130 A 130 130 0 0 0 -130,-15 L -55,-10 A 55 55 0 0 1 -10,-55 Z" fill="#00f0ff" stroke="#ffffff" stroke-width="4" filter="url(#simonGlow)" />
+    <path d="M -12,-125 A 125 125 0 0 0 -125,-12 L -55,-10 A 55 55 0 0 1 -10,-55 Z" fill="#00F0FF" stroke="#000000" stroke-width="3.5" />
     <!-- Cute Face on Cyan quadrant -->
-    <circle cx="-65" cy="-65" r="5" fill="#000" />
-    <circle cx="-50" cy="-65" r="5" fill="#000" />
-    <path d="M -62,-55 Q -57,-50 -52,-55" stroke="#000" stroke-width="2.5" fill="none" />
+    <circle cx="-62" cy="-62" r="5" fill="#000000" />
+    <circle cx="-47" cy="-62" r="5" fill="#000000" />
+    <path d="M -59,-52 Q -54,-47 -49,-52" stroke="#000000" stroke-width="2.5" fill="none" />
 
     <!-- 2. Top-Right: Glowing Pink Quadrant -->
-    <path d="M 15,-130 A 130 130 0 0 1 130,-15 L 55,-10 A 55 55 0 0 0 10,-55 Z" fill="#ff007f" stroke="#ffffff" stroke-width="4" />
-    <circle cx="50" cy="-65" r="5" fill="#fff" />
-    <circle cx="65" cy="-65" r="5" fill="#fff" />
-    <path d="M 52,-55 Q 57,-50 62,-55" stroke="#fff" stroke-width="2.5" fill="none" />
+    <path d="M 12,-125 A 125 125 0 0 1 125,-12 L 55,-10 A 55 55 0 0 0 10,-55 Z" fill="#FF007F" stroke="#000000" stroke-width="3.5" />
+    <circle cx="47" cy="-62" r="5" fill="#000000" />
+    <circle cx="62" cy="-62" r="5" fill="#000000" />
+    <path d="M 50,-52 Q 55,-47 60,-52" stroke="#000000" stroke-width="2.5" fill="none" />
 
     <!-- 3. Bottom-Left: Glowing Yellow Quadrant -->
-    <path d="M -15,130 A 130 130 0 0 1 -130,15 L -55,10 A 55 55 0 0 0 -10,55 Z" fill="#ffe600" stroke="#ffffff" stroke-width="4" />
-    <circle cx="-65" cy="65" r="5" fill="#000" />
-    <circle cx="-50" cy="65" r="5" fill="#000" />
-    <path d="M -62,75 Q -57,80 -52,75" stroke="#000" stroke-width="2.5" fill="none" />
+    <path d="M -12,125 A 125 125 0 0 1 -125,12 L -55,10 A 55 55 0 0 0 -10,55 Z" fill="#FFE600" stroke="#000000" stroke-width="3.5" />
+    <circle cx="-62" cy="62" r="5" fill="#000000" />
+    <circle cx="-47" cy="62" r="5" fill="#000000" />
+    <path d="M -59,72 Q -54,77 -49,72" stroke="#000000" stroke-width="2.5" fill="none" />
 
     <!-- 4. Bottom-Right: Glowing Lime Green Quadrant -->
-    <path d="M 15,130 A 130 130 0 0 0 130,15 L 55,10 A 55 55 0 0 1 10,55 Z" fill="#00ff66" stroke="#ffffff" stroke-width="4" />
-    <circle cx="50" cy="65" r="5" fill="#000" />
-    <circle cx="65" cy="65" r="5" fill="#000" />
-    <path d="M 52,75 Q 57,80 62,75" stroke="#000" stroke-width="2.5" fill="none" />
+    <path d="M 12,125 A 125 125 0 0 0 125,12 L 55,10 A 55 55 0 0 1 10,55 Z" fill="#00FF88" stroke="#000000" stroke-width="3.5" />
+    <circle cx="47" cy="62" r="5" fill="#000000" />
+    <circle cx="62" cy="62" r="5" fill="#000000" />
+    <path d="M 50,72 Q 55,77 60,72" stroke="#000000" stroke-width="2.5" fill="none" />
 
-    <!-- Center Cyber Core Button -->
-    <circle cx="0" cy="0" r="42" fill="#070014" stroke="#ffffff" stroke-width="4" />
-    <text x="0" y="-4" font-family="'Arial Black', sans-serif" font-size="12" fill="#00f0ff" font-weight="900" text-anchor="middle">REFLEX</text>
-    <text x="0" y="14" font-family="'Arial Black', sans-serif" font-size="14" fill="#ffe600" font-weight="900" text-anchor="middle">TEST</text>
+    <!-- Center Core Button -->
+    <circle cx="0" cy="0" r="42" class="theme-center-btn" stroke-width="3.5" />
+    <text x="0" y="-3" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="0.5">REFLEX</text>
+    <text x="0" y="15" font-family="'Impact', 'Arial Black', sans-serif" font-size="14" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="1">AUDIO 🎵</text>
   </g>
 
-  <!-- Musical Note Tone Burst (Cartoon Audio Reflex) -->
-  <g transform="translate(60, 60)">
-    <text x="0" y="0" font-size="28" fill="#00f0ff">🎵</text>
+  <!-- Musical Tone Notes Floating with Neo-Brutalist Badges -->
+  <g transform="translate(60, 60)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2" />
+    <text x="0" y="6" font-size="16" text-anchor="middle">🎵</text>
   </g>
-  <g transform="translate(320, 60)">
-    <text x="0" y="0" font-size="28" fill="#ff007f">🎶</text>
+  <g transform="translate(340, 60)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2" />
+    <text x="0" y="6" font-size="16" text-anchor="middle">🎶</text>
   </g>
 
-  <!-- Title Badge -->
-  <rect x="25" y="345" width="145" height="30" rx="10" fill="#00ff66" opacity="0.2" stroke="#00ff66" stroke-width="1.5" />
-  <text x="97" y="365" fill="#00ff66" font-family="'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1">CHROMA REFLEX</text>
+  <!-- Top Tag Pill: CHROMATIC SEQUENCE REFLEX -->
+  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
+    <rect x="-95" y="-10" width="190" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
+    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1">CHROMATIC SEQUENCE REFLEX</text>
+  </g>
+
+  <!-- Bottom Title Badge Pill: CHROMA REFLEX -->
+  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
+    <rect x="-95" y="-15" width="190" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
+    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">CHROMA REFLEX</text>
+  </g>
 </svg>

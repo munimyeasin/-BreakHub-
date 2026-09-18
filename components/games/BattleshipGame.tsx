@@ -174,9 +174,9 @@ function ShipHullSegment({
       >
         <defs>
           <linearGradient id={`hullGrad_${shipId}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color={isSunk ? '#331019' : isDamaged ? '#451a1a' : '#1e293b'} />
-            <stop offset="50%" stop-color={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0f172a'} />
-            <stop offset="100%" stop-color={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#020617'} />
+            <stop offset="0%" stopColor={isSunk ? '#331019' : isDamaged ? '#451a1a' : '#1e293b'} />
+            <stop offset="50%" stopColor={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0f172a'} />
+            <stop offset="100%" stopColor={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#020617'} />
           </linearGradient>
         </defs>
 
@@ -1549,11 +1549,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         </div>
       )}
 
-      {/* Neo-Brutalist HUD Header Bar */}
-      <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2 min-[360px]:p-2.5 sm:p-4 mb-2.5 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2.5">
+      {/* Neo-Brutalist HUD Header Bar - Ultra Slim */}
+      <div className="w-full bg-portal-card border-2 border-black rounded-xl px-2.5 py-1.5 mb-1.5 shadow-md flex flex-wrap items-center justify-between gap-1.5">
         {/* Left: Mode & Military Difficulty Selector */}
-        <div className="flex items-center flex-wrap gap-1.5 sm:gap-2">
-          <div className="flex items-center bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
+        <div className="flex items-center flex-wrap gap-1.5">
+          <div className="flex items-center bg-black/50 border border-black rounded-lg p-0.5 shadow-sm">
             <button
               onClick={() => {
                 if (phase === 'setup') {
@@ -1562,13 +1562,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 }
               }}
               disabled={phase !== 'setup'}
-              className={`px-2 min-[360px]:px-2.5 py-1 rounded-lg font-black text-[11px] sm:text-xs uppercase transition-all flex items-center gap-1 sm:gap-1.5 ${
+              className={`px-2 py-0.5 rounded-md font-black text-[10px] sm:text-xs uppercase transition-all flex items-center gap-1 ${
                 mode === 'ai'
-                  ? 'bg-portal-cyan text-black shadow-neo-sm'
+                  ? 'bg-portal-cyan text-black shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Bot className="w-3.5 h-3.5 stroke-[2.5]" /> VS AI
+              <Bot className="w-3 h-3 stroke-[2.5]" /> VS AI
             </button>
             <button
               onClick={() => {
@@ -1578,28 +1578,28 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 }
               }}
               disabled={phase !== 'setup'}
-              className={`px-2 min-[360px]:px-2.5 py-1 rounded-lg font-black text-[11px] sm:text-xs uppercase transition-all flex items-center gap-1 sm:gap-1.5 ${
+              className={`px-2 py-0.5 rounded-md font-black text-[10px] sm:text-xs uppercase transition-all flex items-center gap-1 ${
                 mode === 'pvp'
-                  ? 'bg-portal-pink text-white shadow-neo-sm'
+                  ? 'bg-portal-pink text-white shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Users className="w-3.5 h-3.5 stroke-[2.5]" /> 2P PASS
+              <Users className="w-3 h-3 stroke-[2.5]" /> 2P PASS
             </button>
           </div>
 
           {/* AI Difficulty Selector with Military Insignia */}
           {mode === 'ai' && (
-            <div className="flex items-center gap-0.5 sm:gap-1 bg-black/50 border-2 border-black rounded-xl p-0.5 shadow-neo-sm">
+            <div className="flex items-center gap-0.5 bg-black/50 border border-black rounded-lg p-0.5 shadow-sm">
               <button
                 onClick={() => {
                   playSound('click');
                   setDifficulty('cadet');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
+                className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase transition-all flex items-center gap-0.5 ${
                   difficulty === 'cadet'
-                    ? 'bg-portal-lime text-black shadow-neo-sm'
+                    ? 'bg-portal-lime text-black shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Cadet / Ensign AI: Randomized target trajectory"
@@ -1614,9 +1614,9 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   setDifficulty('commander');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
+                className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase transition-all flex items-center gap-0.5 ${
                   difficulty === 'commander'
-                    ? 'bg-portal-yellow text-black shadow-neo-sm'
+                    ? 'bg-portal-yellow text-black shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Commander AI: Checkerboard Parity & Hunt-Target Engine"
@@ -1631,9 +1631,9 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   setDifficulty('admiral');
                 }}
                 disabled={phase !== 'setup'}
-                className={`px-1.5 sm:px-2 py-0.5 rounded-lg text-[9px] min-[360px]:text-[10px] font-black uppercase transition-all flex items-center gap-0.5 sm:gap-1 ${
+                className={`px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase transition-all flex items-center gap-0.5 ${
                   difficulty === 'admiral'
-                    ? 'bg-portal-pink text-white shadow-neo-sm'
+                    ? 'bg-portal-pink text-white shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
                 title="Admiral AI: Probability Density Heatmap AI"
@@ -1647,14 +1647,14 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         </div>
 
         {/* Right: Sonar Recon & System Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1.5">
           {phase === 'battle' && (
             <button
               onClick={handleActivateSonar}
               disabled={!viewerSonarAvailable || isAiThinking}
-              className={`px-2 min-[360px]:px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border-2 border-black text-[10px] min-[360px]:text-xs font-black uppercase transition-all flex items-center gap-1 sm:gap-1.5 shadow-neo-sm ${
+              className={`px-2 py-1 rounded-lg border border-black text-[10px] font-black uppercase transition-all flex items-center gap-1 shadow-sm ${
                 isSonarActive
-                  ? 'bg-portal-yellow text-black animate-pulse shadow-neo-md'
+                  ? 'bg-portal-yellow text-black animate-pulse shadow-md'
                   : viewerSonarAvailable
                   ? 'bg-portal-cyan/20 hover:bg-portal-cyan text-portal-cyan hover:text-black border-portal-cyan'
                   : 'bg-slate-800 text-slate-500 border-slate-700 opacity-50 cursor-not-allowed'
@@ -1662,33 +1662,32 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               title="Activate 3x3 Tactical Sonar Recon Radar Scan"
             >
               <Radar className={`w-3.5 h-3.5 ${isSonarActive ? 'animate-spin' : ''}`} />
-              <span className="hidden min-[420px]:inline">SONAR RECON</span>
-              <span className="min-[420px]:hidden">SONAR</span>
-              <span className="text-[9px] min-[360px]:text-[10px]">[{viewerSonarAvailable ? 'ON' : 'OFF'}]</span>
+              <span className="hidden min-[420px]:inline">SONAR</span>
+              <span className="text-[9px]">[{viewerSonarAvailable ? 'ON' : 'OFF'}]</span>
             </button>
           )}
 
           <button
             onClick={() => setSoundEnabled(prev => !prev)}
-            className="p-1 min-[360px]:p-1.5 sm:p-2 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:bg-portal-yellow hover:text-black transition-all"
+            className="p-1 rounded-lg bg-portal-surface border border-black shadow-sm hover:bg-portal-yellow hover:text-black transition-all"
             title="Toggle Sound"
           >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-slate-500" />}
           </button>
 
           <button
             onClick={handleStartNewMatch}
-            className="px-2 min-[360px]:px-2.5 py-1 sm:py-1.5 rounded-xl bg-portal-surface hover:bg-portal-pink hover:text-white border-2 border-black shadow-neo-sm text-[10px] min-[360px]:text-xs font-black uppercase transition-all flex items-center gap-1"
+            className="px-2 py-1 rounded-lg bg-portal-surface hover:bg-portal-pink hover:text-white border border-black shadow-sm text-[10px] font-black uppercase transition-all flex items-center gap-1"
             title="Reset Match"
           >
-            <RotateCcw className="w-3.5 h-3.5 stroke-[2.5]" />
+            <RotateCcw className="w-3 h-3 stroke-[2.5]" />
             <span className="hidden min-[360px]:inline">RESET</span>
           </button>
         </div>
       </div>
 
-      {/* Military Telemetry & Tactical Intelligence Ribbon */}
-      <div className="w-full bg-slate-950/90 border-2 border-black rounded-xl px-3 py-1.5 mb-3 flex items-center justify-between text-xs font-mono shadow-neo-sm">
+      {/* Military Telemetry & Tactical Intelligence Ribbon - Ultra Slim */}
+      <div className="w-full bg-slate-950/90 border border-black rounded-xl px-2.5 py-1 mb-2 flex items-center justify-between text-xs font-mono shadow-sm">
         <div className="flex items-center gap-2 truncate">
           <span className="w-2.5 h-2.5 rounded-full bg-portal-cyan animate-pulse shrink-0 border border-black" />
           <span className="text-slate-300 truncate text-[11px] sm:text-xs">

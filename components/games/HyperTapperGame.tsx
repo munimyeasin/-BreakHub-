@@ -128,11 +128,11 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
   const cps = isPlaying && timeLeft < TOTAL_GAME_TIME ? (taps / Math.max(1, TOTAL_GAME_TIME - timeLeft)).toFixed(1) : '0.0';
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[380px]">
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* Top HUD - Ultra Slim Neo-Brutalist Strip */}
-      <div className="w-full flex items-center justify-between bg-portal-surface px-3 py-2 rounded-xl border-3 border-black mb-2 shadow-neo-sm">
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
         {/* Timer */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
+        <div className="flex items-center gap-1.5 bg-portal-card px-2 py-0.5 rounded-lg border border-portal-border/60 text-[11px] font-black">
           <Timer className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className={`text-xs font-black ${timeLeft <= 4 ? 'text-portal-pink animate-pulse' : 'text-white'}`}>
             {timeLeft}s
@@ -140,14 +140,14 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
         </div>
 
         {/* Taps count & CPS */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
+        <div className="flex items-center gap-1.5 bg-portal-card px-2 py-0.5 rounded-lg border border-portal-border/60 text-[11px] font-black">
           <Flame className="w-3.5 h-3.5 text-portal-pink fill-portal-pink" />
           <span className="text-xs font-black text-portal-cyan">{taps} Taps</span>
           {isPlaying && <span className="text-[10px] text-slate-300">({cps})</span>}
         </div>
 
         {/* Live Score */}
-        <div className="flex items-center gap-1.5 bg-portal-card px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm text-[11px] font-black">
+        <div className="flex items-center gap-1.5 bg-portal-card px-2 py-0.5 rounded-lg border border-portal-border/60 text-[11px] font-black">
           <Trophy className="w-3.5 h-3.5 text-portal-yellow fill-portal-yellow" />
           <span className="text-xs font-black text-portal-yellow">{taps * 120}</span>
         </div>
@@ -155,7 +155,7 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
         {/* Audio Toggle */}
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1.5 rounded-lg bg-portal-card text-white hover:bg-portal-yellow hover:text-black border-2 border-black shadow-neo-sm font-black transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+          className="p-1 rounded-lg bg-portal-card text-white hover:bg-portal-yellow hover:text-black border border-portal-border/60 font-black transition-all"
           aria-label="Toggle sound"
         >
           {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
@@ -163,7 +163,7 @@ export default function HyperTapperGame({ onGameOver }: HyperTapperGameProps) {
       </div>
 
       {/* Main Core Viewport (9:16 Aspect Ratio Frame) */}
-      <div className="relative w-full aspect-[9/16] bg-portal-bg bg-neo-dots rounded-2xl border-4 border-black p-4 shadow-neo-lg flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-portal-bg bg-neo-dots rounded-2xl border-2 border-portal-border p-4 shadow-2xl flex flex-col items-center justify-center overflow-hidden shrink-0">
         {/* Subtle Decorative Grid Lines */}
         <div className="absolute inset-0 bg-neo-grid opacity-30 pointer-events-none" />
 

@@ -1334,128 +1334,81 @@ export default function CyberMazeGame({ gameId, onGameOver }: CyberMazeGameProps
   }, [currentLevelIdx, speedBoostActive]);
 
   return (
-    <div className="relative w-full max-w-[380px] flex flex-col items-center select-none font-sans">
-      {/* TOP RUNNING COUNTDOWN TIMER BANNER */}
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center font-sans">
+      {/* TOP SLIM HUD */}
       <div
-        className={`w-full mb-1.5 p-2 rounded-2xl border transition-all duration-300 shadow-xl flex flex-col gap-1.5 ${
+        className={`w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] mb-1 px-3 py-1.5 rounded-xl border transition-all duration-300 shadow-md flex items-center justify-between shrink-0 ${
           timeLeft <= 10
-            ? 'bg-rose-950/40 border-rose-500/80 shadow-[0_0_20px_rgba(244,63,94,0.35)] animate-pulse'
+            ? 'bg-rose-950/60 border-rose-500/80 shadow-[0_0_15px_rgba(244,63,94,0.35)] animate-pulse'
             : timeLeft <= 20
-            ? 'bg-amber-950/30 border-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
-            : 'bg-portal-surface/95 border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.15)]'
+            ? 'bg-amber-950/40 border-amber-500/60'
+            : 'bg-portal-surface/90 border-portal-border'
         }`}
       >
-        {/* Top Timer Bar Controls & Readout */}
-        <div className="flex items-center justify-between">
-          {/* Left: Sector Level & Score */}
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => setIsLevelSelectOpen(true)}
-              className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-card border border-portal-cyan/40 text-portal-cyan text-[11px] font-black hover:bg-portal-cyan/15 active:scale-95 transition-all shadow-sm"
-              title="Select Sector Level"
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>LVL {currentLevelIdx + 1}</span>
-            </button>
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-card/80 border border-portal-border/60 text-[11px] font-bold text-slate-300">
-              <Trophy className="w-3.5 h-3.5 text-portal-gold" />
-              <span>{totalScore}</span>
-            </div>
-          </div>
-
-          {/* Center: Running Countdown Display */}
-          <div className="flex items-center gap-1.5">
-            <div
-              className={`flex items-center gap-1.5 px-3 py-0.5 rounded-xl font-mono font-black text-sm tracking-wider transition-all shadow-md ${
-                timeLeft <= 10
-                  ? 'bg-rose-500/30 text-rose-300 border border-rose-400'
-                  : timeLeft <= 20
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-400/60'
-                  : 'bg-cyan-500/20 text-portal-cyan border border-cyan-400/50'
-              }`}
-            >
-              <Timer className={`w-3.5 h-3.5 ${timeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-portal-cyan'}`} />
-              <span>{formattedTimeStr}</span>
-            </div>
-          </div>
-
-          {/* Right: Sound Toggle */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setSoundEnabled(prev => !prev)}
-              className="p-1 rounded-lg bg-portal-card border border-portal-border text-slate-300 hover:text-white transition-colors"
-              title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
-            >
-              {soundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-rose-400" />}
-            </button>
+        {/* Left: Sector Level & Score */}
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setIsLevelSelectOpen(true)}
+            className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-card border border-portal-cyan/40 text-portal-cyan text-[10px] font-black hover:bg-portal-cyan/15 active:scale-95 transition-all shadow-sm"
+            title="Select Sector Level"
+          >
+            <Layers className="w-3 h-3" />
+            <span>LVL {currentLevelIdx + 1}</span>
+          </button>
+          <div className="flex items-center gap-1 text-[11px] font-bold text-slate-300">
+            <Trophy className="w-3 h-3 text-portal-gold" />
+            <span className="font-black text-portal-gold">{totalScore}</span>
           </div>
         </div>
 
-        {/* Running Depletion Progress Bar */}
-        <div className="w-full flex flex-col gap-0.5">
-          <div className="w-full h-2 rounded-full bg-black/60 border border-portal-border/60 overflow-hidden p-[1px] relative">
-            <div
-              className={`h-full rounded-full transition-all duration-1000 ease-linear relative ${
-                timeLeft <= 10
-                  ? 'bg-gradient-to-r from-rose-600 via-rose-500 to-red-400 shadow-[0_0_12px_rgba(244,63,94,0.9)]'
-                  : timeLeft <= 20
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_10px_rgba(245,158,11,0.8)]'
-                  : 'bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 shadow-[0_0_10px_rgba(0,240,255,0.8)]'
-              }`}
-              style={{ width: `${timeProgress}%` }}
-            >
-              {/* Leading edge neon spark runner */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_6px_#ffffff] -mr-1" />
-            </div>
-          </div>
+        {/* Center: Running Countdown Display */}
+        <div
+          className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg font-mono font-black text-xs transition-all ${
+            timeLeft <= 10
+              ? 'bg-rose-500/30 text-rose-300 border border-rose-400'
+              : timeLeft <= 20
+              ? 'bg-amber-500/20 text-amber-300 border border-amber-400/60'
+              : 'bg-cyan-500/20 text-portal-cyan border border-cyan-400/50'
+          }`}
+        >
+          <Timer className={`w-3 h-3 ${timeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-portal-cyan'}`} />
+          <span>{formattedTimeStr}</span>
+        </div>
 
-          <div className="flex items-center justify-between text-[9px] font-mono tracking-wider px-0.5">
-            <span className="text-slate-400 uppercase">
-              {timeLeft <= 10 ? '🚨 TIME CRITICAL' : timeLeft <= 20 ? '⚠️ TIME WARNING' : '⏱️ TIME REMAINING'}
-            </span>
-            <span
-              className={`font-black ${
-                timeLeft <= 10 ? 'text-rose-400 animate-pulse' : timeLeft <= 20 ? 'text-amber-300' : 'text-portal-cyan'
-              }`}
-            >
-              {timeLeft}s / {timeLimit}s ({Math.round(timeProgress)}%)
-            </span>
+        {/* Right: Keys & Sound */}
+        <div className="flex items-center gap-1.5">
+          {/* Keycards Inventory Mini */}
+          <div className="flex items-center gap-0.5 text-[9px]">
+            {keysHeld.cyan && <span className="w-2 h-2 rounded-full bg-portal-cyan shadow-[0_0_4px_#00f0ff]" title="Cyan Key" />}
+            {keysHeld.pink && <span className="w-2 h-2 rounded-full bg-portal-pink shadow-[0_0_4px_#ff00ea]" title="Pink Key" />}
+            {keysHeld.gold && <span className="w-2 h-2 rounded-full bg-portal-gold shadow-[0_0_4px_#ffd700]" title="Gold Key" />}
           </div>
+          <button
+            onClick={() => setSoundEnabled(prev => !prev)}
+            className="p-1 rounded-lg bg-portal-card border border-portal-border text-slate-300 hover:text-white transition-colors"
+            title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
+          >
+            {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3 text-rose-400" />}
+          </button>
         </div>
       </div>
 
-      {/* Level Info & Keys Strip */}
-      <div className="w-full flex items-center justify-between px-3 py-1 mb-1.5 rounded-lg bg-portal-card/60 border border-portal-border/50 text-[10px]">
-        <div className="flex items-center gap-1.5 text-slate-300">
-          <span className="font-extrabold text-portal-cyan uppercase tracking-wider">{currentLevel.name}</span>
-          <span className="text-slate-500">•</span>
-          <span className="text-slate-400">
-            Cores: <strong className="text-white">{coresCollectedInLevel}/{totalCoresInLevel}</strong>
-          </span>
-        </div>
-
-        {/* Keycards Inventory */}
-        <div className="flex items-center gap-1">
-          {keysHeld.cyan && (
-            <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-portal-cyan font-black border border-cyan-500/40">
-              🔑 CYAN
-            </span>
-          )}
-          {keysHeld.pink && (
-            <span className="px-1.5 py-0.5 rounded bg-fuchsia-500/20 text-portal-pink font-black border border-fuchsia-500/40">
-              🔑 PINK
-            </span>
-          )}
-          {keysHeld.gold && (
-            <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-portal-gold font-black border border-amber-500/40">
-              🔑 GOLD
-            </span>
-          )}
-        </div>
+      {/* Slim Progress Line */}
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] h-1 rounded-full bg-black/60 border border-portal-border/60 overflow-hidden mb-1.5 shrink-0">
+        <div
+          className={`h-full rounded-full transition-all duration-1000 ease-linear ${
+            timeLeft <= 10
+              ? 'bg-gradient-to-r from-rose-600 to-red-400 shadow-[0_0_8px_rgba(244,63,94,0.9)]'
+              : timeLeft <= 20
+              ? 'bg-gradient-to-r from-amber-500 to-orange-400'
+              : 'bg-gradient-to-r from-cyan-500 to-emerald-400'
+          }`}
+          style={{ width: `${timeProgress}%` }}
+        />
       </div>
 
       {/* Main Game Viewport - Standard 9:16 Portrait Canvas */}
-      <div className="relative w-full aspect-[9/16] bg-[#060312] rounded-2xl overflow-hidden border border-portal-border/80 shadow-2xl flex items-center justify-center">
+      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-[#060312] w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
         {/* Top-Pinned In-Game Timer Overlay during Active Play */}
         {isPlaying && (
           <div className="absolute top-2 left-2 right-2 z-10 flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/70 backdrop-blur-md border border-portal-border/60 text-[10px] pointer-events-none animate-fadeIn">
@@ -1628,7 +1581,7 @@ export default function CyberMazeGame({ gameId, onGameOver }: CyberMazeGameProps
       </div>
 
       {/* On-Screen Mobile Virtual D-Pad */}
-      <div className="w-full mt-2 grid grid-cols-3 gap-1.5 max-w-[260px] p-2 bg-portal-card/60 rounded-2xl border border-portal-border/60">
+      <div className="w-full mt-2 grid grid-cols-3 gap-1.5 max-w-[260px] p-2 bg-portal-card/60 rounded-2xl border border-portal-border/60 sm:hidden">
         <div />
         <button
           onClick={() => movePlayer(-1, 0)}
