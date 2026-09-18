@@ -418,11 +418,13 @@ export default function GameModal({
         return next;
       });
 
-      // Global hotkeys
+      // Global hotkeys (Use Alt modifier to avoid intercepting game controls like 'C' for Hold or 'F')
       if (!e.repeat) {
-        if (e.key === 'f' || e.key === 'F') {
+        if ((e.altKey && (e.key === 'f' || e.key === 'F')) || e.key === 'F11') {
+          e.preventDefault();
           toggleFullscreen();
-        } else if (e.key === 'c' || e.key === 'C') {
+        } else if (e.altKey && (e.key === 'c' || e.key === 'C')) {
+          e.preventDefault();
           setShowCompanionDeck(prev => !prev);
         } else if (e.key === 'Escape' && !isFullscreen) {
           onClose();

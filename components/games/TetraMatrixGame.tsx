@@ -947,73 +947,147 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     return () => clearInterval(interval);
   }, [isPlaying, isPaused, isGameOver, level, isValidPosition, lockPiece]);
 
-  // Keyboard Event Listeners
+  // Auto-start on mount so game is immediately playable with keyboard or touch
+  useEffect(() => {
+    startNewGame();
+  }, [startNewGame]);
+
+  // Comprehensive Keyboard Event Listeners (Dual Key & Code mapping for full PC compatibility)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent default scrolling on game control keys
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+      // Don't intercept if user is typing in a form input
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target as HTMLElement)?.isContentEditable
+      ) {
+        return;
+      }
+
+      const key = e.key;
+      const code = e.code;
+
+      // Prevent default page scroll on navigation and game action keys
+      const isGameControlKey =
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Spacebar'].includes(key) ||
+        [
+          'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space',
+          'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyX', 'KeyZ', 'KeyC', 'KeyH', 'KeyP', 'KeyR', 'KeyK', 'KeyJ',
+          'Numpad8', 'Numpad2', 'Numpad4', 'Numpad6', 'Numpad5', 'Numpad0', 'Numpad3', 'Numpad7'
+        ].includes(code);
+
+      if (isGameControlKey) {
         e.preventDefault();
       }
 
-      if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+      // 1. Restart / Quick Start trigger (R, or Enter/Space when Game Over)
+      if (
+        key === 'r' || key === 'R' || code === 'KeyR' ||
+        (isGameOverRef.current && (key === 'Enter' || code === 'Enter' || code === 'NumpadEnter' || key === ' ' || code === 'Space'))
+      ) {
+        startNewGame();
+        return;
+      }
+
+      // 2. Pause / Resume trigger (P or Escape)
+      if (key === 'p' || key === 'P' || code === 'KeyP' || key === 'Escape') {
         if (isPlayingRef.current && !isGameOverRef.current) {
           setIsPaused(prev => !prev);
         }
         return;
       }
 
-      if (e.key === 'r' || e.key === 'R') {
-        startNewGame();
+      // 3. Start Game if on splash screen and any action key is pressed
+      if (!isPlayingRef.current) {
+        if (
+          key === ' ' || key === 'Enter' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowDown' || key === 'ArrowUp' ||
+          code === 'Space' || code === 'Enter' || code === 'KeyW' || code === 'KeyA' || code === 'KeyS' || code === 'KeyD'
+        ) {
+          startNewGame();
+        }
         return;
       }
 
-      if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
+      // 4. If paused, pressing Space, Enter, or P resumes
+      if (isPausedRef.current) {
+        if (
+          key === ' ' || key === 'Enter' || key === 'p' || key === 'P' ||
+          code === 'Space' || code === 'Enter' || code === 'KeyP'
+        ) {
+          setIsPaused(false);
+        }
+        return;
+      }
 
-      switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          moveHorizontal(-1);
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          moveHorizontal(1);
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          softDrop();
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-        case 'x':
-        case 'X':
-        case 'k':
-        case 'K':
-          rotatePiece(1);
-          break;
-        case 'z':
-        case 'Z':
-        case 'j':
-        case 'J':
-          rotatePiece(-1);
-          break;
-        case ' ':
+      // 5. If Game Over, ignore further movement
+      if (isGameOverRef.current) return;
+
+      // 6. Left Movement (ArrowLeft, A, Numpad 4)
+      if (
+        key === 'ArrowLeft' || key === 'a' || key === 'A' ||
+        code === 'ArrowLeft' || code === 'KeyA' || code === 'Numpad4'
+      ) {
+        moveHorizontal(-1);
+        return;
+      }
+
+      // 7. Right Movement (ArrowRight, D, Numpad 6)
+      if (
+        key === 'ArrowRight' || key === 'd' || key === 'D' ||
+        code === 'ArrowRight' || code === 'KeyD' || code === 'Numpad6'
+      ) {
+        moveHorizontal(1);
+        return;
+      }
+
+      // 8. Soft Drop (ArrowDown, S, Numpad 2)
+      if (
+        key === 'ArrowDown' || key === 's' || key === 'S' ||
+        code === 'ArrowDown' || code === 'KeyS' || code === 'Numpad2'
+      ) {
+        softDrop();
+        return;
+      }
+
+      // 9. Rotate Clockwise (ArrowUp, W, X, K, Numpad 8, Numpad 5)
+      if (
+        key === 'ArrowUp' || key === 'w' || key === 'W' || key === 'x' || key === 'X' || key === 'k' || key === 'K' ||
+        code === 'ArrowUp' || code === 'KeyW' || code === 'KeyX' || code === 'KeyK' || code === 'Numpad8' || code === 'Numpad5'
+      ) {
+        rotatePiece(1);
+        return;
+      }
+
+      // 10. Rotate Counter-Clockwise (Z, J, Left Control, Numpad 3, Numpad 7)
+      if (
+        key === 'z' || key === 'Z' || key === 'j' || key === 'J' || key === 'Control' ||
+        code === 'KeyZ' || code === 'KeyJ' || code === 'ControlLeft' || code === 'ControlRight' || code === 'Numpad3' || code === 'Numpad7'
+      ) {
+        rotatePiece(-1);
+        return;
+      }
+
+      // 11. Hard Drop Slam (Space, Numpad 0) - Disallow repeat spam
+      if (key === ' ' || key === 'Spacebar' || code === 'Space' || code === 'Numpad0') {
+        if (!e.repeat) {
           hardDrop();
-          break;
-        case 'c':
-        case 'C':
-        case 'Shift':
-        case 'h':
-        case 'H':
+        }
+        return;
+      }
+
+      // 12. Hold Piece Vault (C, Shift, H) - Disallow repeat spam
+      if (
+        key === 'c' || key === 'C' || key === 'Shift' || key === 'h' || key === 'H' ||
+        code === 'KeyC' || code === 'ShiftLeft' || code === 'ShiftRight' || code === 'KeyH'
+      ) {
+        if (!e.repeat) {
           holdCurrentPiece();
-          break;
+        }
+        return;
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown, { passive: false });
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [moveHorizontal, rotatePiece, softDrop, hardDrop, holdCurrentPiece, startNewGame]);
 
@@ -1022,7 +1096,10 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const currentShape = currentPiece ? TETROMINOES[currentPiece.type].shapes[currentPiece.rotation] : null;
 
   return (
-    <div className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none ${screenShake ? 'animate-bounce' : ''}`}>
+    <div
+      tabIndex={0}
+      className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none outline-none ${screenShake ? 'animate-bounce' : ''}`}
+    >
       {/* Top Header Strip */}
       <div className="w-full flex items-center justify-between gap-2 p-2 sm:p-3 mb-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm">
         <div className="flex items-center gap-2">
