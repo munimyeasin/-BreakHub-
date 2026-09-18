@@ -18,7 +18,6 @@ import {
   Gamepad2,
   Target,
   Layers,
-  Link2,
 } from 'lucide-react';
 import { Game } from '@/lib/types';
 import { formatPlayCount } from '@/components/games/GameCard';
@@ -44,7 +43,6 @@ export default function SpotlightBanner({
     g =>
       g.status !== 'hidden' &&
       (g.featured ||
-        g.slug === 'word-nexus' ||
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
         g.slug === 'black-hole' ||
@@ -74,7 +72,6 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
-    if (slug === 'word-nexus') return <Link2 className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'retro-candy-crush') return <Sparkles className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'retro-battleship') return <Shield className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
@@ -336,7 +333,7 @@ export default function SpotlightBanner({
 
           {/* Top In-Artwork Badges */}
           <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
-            <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-white text-[9px] font-black uppercase border border-black shadow-neo-sm">
+            <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-black text-[9px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
             <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-yellow border border-black px-2 py-0.5 rounded-md shadow-neo-sm uppercase">
@@ -395,12 +392,12 @@ export default function SpotlightBanner({
             onClick={(e) => onToggleFavorite(currentGame.id, e)}
             className={`p-2.5 rounded-xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
               isFavorite
-                ? 'bg-portal-pink text-white'
+                ? 'bg-portal-pink text-black'
                 : 'bg-portal-card text-slate-300 hover:text-white'
             }`}
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
-            <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
+            <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-black text-black' : ''}`} />
           </button>
         </div>
       </div>
@@ -442,7 +439,7 @@ export default function SpotlightBanner({
 
             {/* Top In-Preview Badges */}
             <div className="absolute top-3 left-3 right-3 flex items-center justify-between text-xs text-white z-10 pointer-events-none">
-              <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-white text-[10px] font-black uppercase border border-black shadow-neo-sm">
+              <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-black text-[10px] font-black uppercase border border-black shadow-neo-sm">
                 {currentGame.category}
               </span>
               <span className="flex items-center gap-1 text-black text-[10px] font-black bg-portal-yellow border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
@@ -463,7 +460,7 @@ export default function SpotlightBanner({
         <div className="col-span-7 flex flex-col justify-center space-y-4">
           {/* Header Row: Category Badge + Rating + Play Count */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-purple text-white border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
+            <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-purple border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
               <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" /> {currentGame.category}
             </span>
             <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-yellow border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
@@ -522,12 +519,12 @@ export default function SpotlightBanner({
               onClick={(e) => onToggleFavorite(currentGame.id, e)}
               className={`p-3.5 rounded-2xl border-3 border-black transition-all shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
                 isFavorite
-                  ? 'bg-portal-pink text-white'
+                  ? 'bg-portal-pink text-black'
                   : 'bg-portal-card text-slate-300 hover:text-white'
               }`}
               title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              <Heart className={`w-5 h-5 stroke-[2.5] ${isFavorite ? 'fill-white text-white' : ''}`} />
+              <Heart className={`w-5 h-5 stroke-[2.5] ${isFavorite ? 'fill-black text-black' : ''}`} />
             </button>
           </div>
         </div>

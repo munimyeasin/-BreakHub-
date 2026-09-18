@@ -536,7 +536,7 @@ export default function ArcadePortalDashboard() {
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
                 className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
-                  isSidebarOpen ? 'bg-portal-pink text-white' : 'bg-portal-yellow text-black'
+                  isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
                 }`}
                 title="Open Genres, Navigation & Filters"
                 aria-label="Toggle navigation slide bar"
@@ -579,7 +579,7 @@ export default function ArcadePortalDashboard() {
                     <span className="font-black text-sm sm:text-base tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
                       STRESS<span className="text-portal-cyan">BUSTER</span>
                     </span>
-                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-white border border-black shadow-neo-sm">
+                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-black border border-black shadow-neo-sm">
                       PORTAL
                     </span>
                   </div>
@@ -652,7 +652,7 @@ export default function ArcadePortalDashboard() {
                 {/* Theme Selector Modal Trigger */}
                 <button
                   onClick={() => setIsThemeSelectorOpen(true)}
-                  className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-purple text-slate-200 hover:text-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-purple text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title="Design Engine & Theme Lab"
                   aria-label="Open Theme Engine"
                 >
@@ -821,7 +821,7 @@ export default function ArcadePortalDashboard() {
                       setSearchQuery('');
                       setActiveTab('all');
                     }}
-                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-white text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-black text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   >
                     Reset Filters
                   </button>

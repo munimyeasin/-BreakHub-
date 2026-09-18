@@ -2,19 +2,6 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
-    id: 'g_word_20',
-    slug: 'word-nexus',
-    title: 'Word Nexus 2077',
-    category: 'PUZZLE',
-    thumbnail_url: '/thumbnails/word-nexus.svg',
-    description: 'Neural Word Association Link Battle! Bridge origin and target concepts through semantic synaptic chains, race against Cortex-AI neural solvers, or compete in 2-Player Pass & Play.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 58,
-    status: 'active',
-    featured: true
-  },
-  {
     id: 'g_candy_19',
     slug: 'retro-candy-crush',
     title: 'Neon Candy Blast',
@@ -172,8 +159,9 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/multidimension-xo.svg',
     description: 'Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.',
     play_count: 0,
-    hype_count: 0,
-    status: 'coming_soon'
+    rating: 4.9,
+    rating_count: 24,
+    status: 'active'
   },
   {
     id: 'g_action_06',

@@ -17,24 +17,24 @@ const MAX_REQUESTS_PER_WINDOW = 20;
 
 // Maximum realistic score limits per game to protect leaderboard integrity
 const MAX_SCORE_LIMITS: Record<string, number> = {
-  g_word_20: 50_000,
   g_candy_19: 500_000,
   g_battleship_18: 20_000,
   g_blackhole_17: 50_000,
   g_sweeper_16: 100_000,
-  g_paper_15: 200_000,
-  g_matrix_14: 100_000,
-  g_tapper_13: 50_000,
-  g_dash_12: 150_000,
+  g_maze_15: 100_000,
+  g_multi_xo_13: 50_000,
+  g_paper_12: 200_000,
   g_slicer_11: 150_000,
-  g_reflex_10: 100_000,
-  g_breaker_9: 250_000,
-  g_maze_8: 100_000,
-  g_2048_7: 500_000,
-  g_xo_6: 50_000,
-  g_starfighter_5: 250_000,
-  g_snake_4: 150_000,
-  g_geo_1: 200_000,
+  g_geometry_10: 200_000,
+  g_reflex_09: 100_000,
+  g_breaker_08: 250_000,
+  g_shooter_07: 250_000,
+  g_action_06: 150_000,
+  g_card_05: 500_000,
+  g_tap_04: 50_000,
+  g_ttt_03: 50_000,
+  g_flip_02: 100_000,
+  g_snake_01: 150_000,
 };
 
 function sanitizeUsername(input: string): string {

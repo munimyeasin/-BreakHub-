@@ -38,7 +38,6 @@ export const metadata: Metadata = {
     'minesweeper',
     'candy crush',
     'battleship',
-    'word nexus',
     'paper io',
     'mobile arcade',
     'global leaderboard',

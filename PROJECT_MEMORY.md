@@ -83,14 +83,13 @@
 9. **Quantum 2048** (`g_card_05` / `quantum-2048`): Active game. Cyberpunk sliding block merger in 9:16 vertical ratio.
 10. **Memory Matrix** (`g_flip_02` / `memory-matrix`): Active game. Neural memory card matching grid with multiplier streaks.
 11. **Hyper Tapper** (`g_tap_04` / `hyper-tapper`): Active game. Precision reaction-time clicker testing ultra-high APM speeds.
-12. **Multidimension XO** (`g_multi_xo_13` / `multidimension-xo`): Coming soon. Ultimate 9-field nested Tic-Tac-Toe with 9 nested 3x3 boards and macro-node capture mechanics.
+12. **Multidimension XO** (`g_multi_xo_13` / `multidimension-xo`): Active game. Ultimate 9-field nested Tic-Tac-Toe with 9 nested 3x3 boards, macro-node sector conquest, Quantum Warp wildcard routing, 3-tier Cortex AI (Cadet, Tactician, Overthinker Boss), 2P Pass & Play local mode, tactical synaptic hint generator, undo, and procedural Web Audio SFX.
 13. **Neon Snake 2077** (`g_snake_01` / `neon-snake`): Coming soon. Cyberpunk canvas snake with hyper-speed combos and interactive community hype registration.
-14. **Word Nexus 2077** (`g_word_nexus_20` / `word-nexus`): Active game. Word association connection link duel mini-game inspired by viral Instagram Reels (*"First to Connect the Words Wins! 🔗"*). Features Solo Rush 60s Blitz, Cortex-AI challenger with 3 neural difficulty tiers, 2-Player Pass & Play mode, procedural Web Audio SFX (`lib/audio.ts`), and PC companion command deck keybindings in `GameModal.tsx`.
-15. **Cyber Dash 2077** (`g_action_06` / `cyber-dash`): Coming soon. Endless obstacle-dodging cyber platformer.
-16. **Neon Pulse Dash** (`g_geometry_10` / `geometry-dash`): Coming soon. Rhythm cube platformer with neon hazards.
-17. **Cyber Brick Breaker** (`g_breaker_08` / `cyber-breaker`): Coming soon. Neon paddle brick breaker with energy balls.
-18. **Chroma Reflex** (`g_reflex_09` / `chroma-reflex`): Coming soon. 4-quadrant chromatic memory sequence & audio tone reflex test.
-19. **Neon Paper Grid** (`g_paper_12` / `paper-io`): Coming soon. Real-time cyber territory capture and trail slicing grid.
+14. **Cyber Dash 2077** (`g_action_06` / `cyber-dash`): Coming soon. Endless obstacle-dodging cyber platformer.
+15. **Neon Pulse Dash** (`g_geometry_10` / `geometry-dash`): Coming soon. Rhythm cube platformer with neon hazards.
+16. **Cyber Brick Breaker** (`g_breaker_08` / `cyber-breaker`): Coming soon. Neon paddle brick breaker with energy balls.
+17. **Chroma Reflex** (`g_reflex_09` / `chroma-reflex`): Coming soon. 4-quadrant chromatic memory sequence & audio tone reflex test.
+18. **Neon Paper Grid** (`g_paper_12` / `paper-io`): Coming soon. Real-time cyber territory capture and trail slicing grid.
 
 ---
 
@@ -103,7 +102,8 @@
 - [x] **Game Catalog Renaming & Removal of "Retro" Prefix**: Replaced overused `"Retro"` titles across all registries, database files, modals, and spotlights with unique Neo-Brutalist identities (`Neon Candy Blast`, `Naval Grid Strike`, `Singularity Horizon`, `Quantum Minefield`, `Cyber Labyrinth Escape`, `Cyber Katana Slicer`, `Cyber Dash 2077`, `Neon Pulse Dash`, `Cyber Brick Breaker`, `Chroma Reflex`, `Neon Paper Grid`).
 - [x] **Complete Purge of Cyber Drift 2077**: Deleted `components/games/CyberDriftGame.tsx`, deleted `public/thumbnails/cyber-drift.svg`, and removed `g_drift_14` from all codebase files.
 - [x] **Full Suite of 19 Theme-Adaptive Light/Dark Neo-Brutalist Vector Thumbnails**: All 19 game SVG thumbnails in `public/thumbnails/` updated with `@media (prefers-color-scheme: light)` CSS, high-contrast borders (`stroke="#000000"`), brutalist drop shadows (`stdDeviation="0"`), and distinctive title badges.
-- [x] **Instagram Reel Word Association Mini-Game ("Word Nexus 2077")**: Complete implementation in `components/games/WordNexusGame.tsx` featuring Solo Rush, Cortex-AI, 2-Player Pass & Play, procedural Web Audio API SFX, PC companion deck in `GameModal.tsx`, and adaptive thumbnail `word-nexus.svg`.
+- [x] **Complete Purge & Deletion of Word Nexus 2077**: Deleted `components/games/WordNexusGame.tsx`, deleted `public/thumbnails/word-nexus.svg`, and removed all `g_word_20` catalog, database, modal, and route references across the codebase.
+- [x] **Multidimension XO Full Implementation**: Built complete nested 9x9 Ultimate Tic-Tac-Toe (`components/games/MultidimensionXOGame.tsx`) with macro-node conquest, Quantum Warp wildcard routing, 3-tier AI (Cadet, Tactician, Overthinker Boss), 2P Pass & Play, synaptic hint generator, undo, responsive radar HUD, and zero-asset Web Audio SFX; activated `g_multi_xo_13` across catalog and scoring routes.
 - [x] **20-Point Production-Readiness Deployment Overhaul**:
   1. `/privacy` Policy Page with Neo-Brutalist layout & cookie disclosure.
   2. `/terms` of Service Page with liability, fair play, and user-generated score terms.

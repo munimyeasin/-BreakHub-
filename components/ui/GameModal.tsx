@@ -36,7 +36,7 @@ import CyberMinesweeperGame from '@/components/games/CyberMinesweeperGame';
 import BlackHoleGame from '@/components/games/BlackHoleGame';
 import BattleshipGame from '@/components/games/BattleshipGame';
 import CandyCrushGame from '@/components/games/CandyCrushGame';
-import WordNexusGame from '@/components/games/WordNexusGame';
+import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -60,20 +60,6 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
-  // -2. Word Nexus 2077
-  g_word_20: {
-    genreTag: 'PUZZLE // SEMANTIC WORD NEXUS',
-    objective: 'Bridge origin and target concepts through synaptic word association chains. Play Solo Rush, race against Cortex-AI, or duel in 2-Player Pass & Play.',
-    scoring: 'Base completion points + remaining seconds x 25 + low-step synaptic path bonus + flawless streak multiplier.',
-    proTip: 'Think in categories, compound words, and everyday associations. E.g. FIRE -> TRUCK -> WATER connects Fire to Water in 2 steps!',
-    controls: [
-      { keys: ['Keyboard', 'Type'], label: 'TYPE WORD', desc: 'Enter semantic bridging word' },
-      { keys: ['Enter'], label: 'SUBMIT LINK', desc: 'Validate and append node to chain' },
-      { keys: ['H'], label: 'HINT BEACON', desc: 'Reveal next associative synapse step' },
-      { keys: ['Backspace'], label: 'UNDO STEP', desc: 'Revert last placed chain node' },
-      { keys: ['R'], label: 'RESET / RESTART', desc: 'Restart round or pick new pair' }
-    ]
-  },
   // -1. Neon Candy Blast
   g_candy_19: {
     genreTag: 'PUZZLE // MATCH-3 ARCADE',
@@ -226,12 +212,14 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
   // 12. Multidimension XO
   g_multi_xo_13: {
     genreTag: 'STRATEGY // NESTED MACRO GRID',
-    objective: 'Nested 9x9 Tic-Tac-Toe. The square you pick dictates which sub-grid your opponent is sent to.',
-    scoring: 'Sub-grid wins + macro-grid alignment + tactical denial bonus.',
-    proTip: 'Anticipate your opponent’s placement: never send them to a sub-grid where they have a free winning move.',
+    objective: 'Nested 9x9 Ultimate Tic-Tac-Toe! Win local 3x3 grids to capture giant macro sectors and align 3 in a row to defeat Cortex AI.',
+    scoring: 'Macro sector wins (1,000pts base) + difficulty multiplier (up to 3x on Boss) + streak bonuses + Quantum Warp clearances.',
+    proTip: 'Control the center square in micro grids to force your opponent into Quantum Center (Sector 5) while preventing them from triggering Quantum Warp freedom.',
     controls: [
-      { keys: ['Left Click'], label: 'PLACE SYMBOL', desc: 'Mark node in active sub-grid' },
-      { keys: ['R'], label: 'RESTART', desc: 'Begin fresh macro tournament' }
+      { keys: ['Left Click', 'Touch'], label: 'DEPLOY MARK', desc: 'Place X/O in active routed sector' },
+      { keys: ['H'], label: 'SYNAPTIC HINT', desc: 'Calculate optimal tactical response' },
+      { keys: ['U'], label: 'TACTICAL UNDO', desc: 'Step back previous move' },
+      { keys: ['M'], label: 'MODE SWITCH', desc: 'Toggle Solo AI ↔ 2P Pass & Play' }
     ]
   },
   // 13. Cyber Dash 2077
@@ -731,10 +719,6 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
-              {(game.id === 'g_word_20' || game.slug === 'word-nexus') && (
-                <WordNexusGame gameId={game.id} onGameOver={handleScoreSubmit} />
-              )}
-
               {(game.id === 'g_candy_19' || game.slug === 'retro-candy-crush' || game.slug === 'candy-crush') && (
                 <CandyCrushGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
@@ -784,7 +768,7 @@ export default function GameModal({
               )}
 
               {(game.id === 'g_multi_xo_13' || game.slug === 'multidimension-xo') && (
-                <QuantumXOGame gameId={game.id} onGameOver={handleScoreSubmit} />
+                <MultidimensionXOGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_action_06' || game.slug === 'cyber-dash') && (
