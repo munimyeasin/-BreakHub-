@@ -1,68 +1,113 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
     <!-- Background Gradients -->
-    <linearGradient id="spaceBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050114" />
-      <stop offset="50%" stop-color="#0E0826" />
-      <stop offset="100%" stop-color="#180033" />
+    <linearGradient id="starfighterBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#030014" />
+      <stop offset="50%" stop-color="#0a0526" />
+      <stop offset="100%" stop-color="#021b2b" />
     </linearGradient>
-    <linearGradient id="spaceBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="starfighterBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
-      <stop offset="100%" stop-color="#FFECC8" />
+      <stop offset="50%" stop-color="#F0F9FF" />
+      <stop offset="100%" stop-color="#E0F2FE" />
     </linearGradient>
 
-    <!-- Spaceship & Laser Gradients -->
-    <linearGradient id="shipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F0FF" />
-      <stop offset="60%" stop-color="#0088FF" />
-      <stop offset="100%" stop-color="#7700FF" />
+    <!-- 3D Starfighter Hull Palettes -->
+    <!-- Cyan Jet Armor Face & Sides -->
+    <linearGradient id="fighterCyanFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0284C7" />
     </linearGradient>
-    <linearGradient id="laserGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="fighterCyanSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0369A1" />
+      <stop offset="100%" stop-color="#0C4A6E" />
+    </linearGradient>
+
+    <!-- Jet Wing Trim & Spoilers (Neon Yellow) -->
+    <linearGradient id="fighterYellowFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF570" />
+      <stop offset="100%" stop-color="#FFDE59" />
+    </linearGradient>
+    <linearGradient id="fighterYellowSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D49B00" />
+      <stop offset="100%" stop-color="#78350F" />
+    </linearGradient>
+
+    <!-- Cockpit Canopy (Glowing Neon Magenta) -->
+    <linearGradient id="canopyFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF70D9" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+    <linearGradient id="canopySide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BE185D" />
+      <stop offset="100%" stop-color="#831843" />
+    </linearGradient>
+
+    <!-- Plasma Laser Blast -->
+    <linearGradient id="laserCyan" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0" />
+      <stop offset="40%" stop-color="#00F0FF" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#FFFFFF" />
+    </linearGradient>
+
+    <!-- Thruster Fire Gradient -->
+    <linearGradient id="thrusterFire" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="40%" stop-color="#00FFCC" />
-      <stop offset="100%" stop-color="#0088FF" />
+      <stop offset="25%" stop-color="#00F0FF" />
+      <stop offset="70%" stop-color="#FF007F" />
+      <stop offset="100%" stop-color="#FFDE59" stop-opacity="0" />
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- Enemy Drone Palette -->
+    <linearGradient id="enemyDroneFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4D6D" />
+      <stop offset="100%" stop-color="#C9184A" />
+    </linearGradient>
+    <linearGradient id="enemyDroneSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#800F2F" />
+      <stop offset="100%" stop-color="#590D22" />
+    </linearGradient>
+
+    <!-- Badge Gold Gradient -->
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFF066" />
       <stop offset="100%" stop-color="#FFE600" />
     </linearGradient>
 
-    <!-- Neo-Brutalist Hard Drop Shadow Filters -->
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="plasmaGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00F0FF" flood-opacity="0.8" />
+    </filter>
   </defs>
 
   <style>
-    .theme-bg { fill: url(#spaceBgDark); }
-    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.15; }
-    .theme-star { fill: #FFFFFF; opacity: 0.8; }
-    .theme-star-accent { fill: #FFE600; opacity: 0.9; }
-    .theme-star-cyan { fill: #00F0FF; opacity: 0.9; }
-    .theme-card-bg { fill: #130F26; stroke: #FFE600; }
-    .theme-asteroid { fill: #2B1D45; stroke: #000000; }
-    .theme-asteroid-sm { fill: #441E38; stroke: #000000; }
+    .theme-bg { fill: url(#starfighterBgDark); }
+    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #08051E; stroke: #00F0FF; }
+    .theme-stage-grid { stroke: #1E1548; }
     .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
-    .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+    .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
     .theme-tag-text { fill: #000000; }
 
     @media (prefers-color-scheme: light) {
-      .theme-bg { fill: url(#spaceBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.12; }
-      .theme-star { fill: #7C3AED; opacity: 0.7; }
-      .theme-star-accent { fill: #D97706; opacity: 0.9; }
-      .theme-star-cyan { fill: #0284C7; opacity: 0.9; }
-      .theme-card-bg { fill: #FFFFFF; stroke: #000000; }
-      .theme-asteroid { fill: #E9D5FF; stroke: #000000; }
-      .theme-asteroid-sm { fill: #FCE7F3; stroke: #000000; }
+      .theme-bg { fill: url(#starfighterBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
       .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
-      .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+      .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
       .theme-tag-text { fill: #000000; }
     }
   </style>
@@ -70,7 +115,7 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Subtle Space Grid Lines -->
+  <!-- Retro Cyber Grid Backdrop -->
   <g class="theme-grid-line" stroke-width="1.5">
     <line x1="0" y1="50" x2="400" y2="50" />
     <line x1="0" y1="100" x2="400" y2="100" />
@@ -88,91 +133,158 @@
     <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Twinkle Cyber Stars -->
-  <circle cx="80" cy="70" r="3.5" class="theme-star" />
-  <circle cx="340" cy="80" r="4.5" class="theme-star-accent" />
-  <circle cx="45" cy="200" r="3" class="theme-star-cyan" />
-  <circle cx="360" cy="270" r="3.5" class="theme-star-accent" />
-  <circle cx="70" cy="320" r="2.5" class="theme-star" />
-
-  <!-- Cute Asteroids with Neo-Brutalist Shadows -->
-  <g transform="translate(65, 110)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="30" class="theme-asteroid" stroke-width="3" />
-    <circle cx="-10" cy="-10" r="7" fill="#000000" opacity="0.3" />
-    <circle cx="12" cy="5" r="9" fill="#000000" opacity="0.3" />
-    <circle cx="-5" cy="14" r="5" fill="#000000" opacity="0.3" />
-    <!-- Cartoon surprised face on asteroid -->
-    <circle cx="-6" cy="-2" r="3" fill="#FFFFFF" />
-    <circle cx="6" cy="-2" r="3" fill="#FFFFFF" />
-    <circle cx="-5" cy="-2" r="1.5" fill="#000000" />
-    <circle cx="7" cy="-2" r="1.5" fill="#000000" />
-    <ellipse cx="0" cy="7" rx="3.5" ry="5" fill="#FF0055" />
+  <!-- Neo Sparks & Warp Dust -->
+  <g fill="#FFDE59">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <g transform="translate(325, 140)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="22" class="theme-asteroid-sm" stroke-width="3" />
-    <circle cx="-6" cy="-6" r="5" fill="#000000" opacity="0.3" />
-    <circle cx="7" cy="4" r="4" fill="#000000" opacity="0.3" />
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Plasma Lasers Fired Upwards with Hard Shadows -->
-  <g filter="url(#brutalShadowSm)">
-    <rect x="156" y="45" width="10" height="70" rx="5" fill="#000000" />
-    <rect x="154" y="43" width="10" height="70" rx="5" fill="url(#laserGrad)" stroke="#000000" stroke-width="2" />
-    <rect x="236" y="45" width="10" height="70" rx="5" fill="#000000" />
-    <rect x="234" y="43" width="10" height="70" rx="5" fill="url(#laserGrad)" stroke="#000000" stroke-width="2" />
-    <rect x="196" y="25" width="10" height="75" rx="5" fill="#000000" />
-    <rect x="194" y="23" width="10" height="75" rx="5" fill="url(#laserGrad)" stroke="#000000" stroke-width="2" />
+  <!-- Inner Playfield Space Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#03010E" stroke="#000000" stroke-width="2.5" />
+
+  <!-- Perspective Space Grid & Warp Lines -->
+  <g class="theme-stage-grid" stroke-width="1.5" stroke-dasharray="4,3">
+    <!-- Starfield Grid -->
+    <line x1="48" y1="90" x2="352" y2="90" />
+    <line x1="48" y1="140" x2="352" y2="140" />
+    <line x1="48" y1="190" x2="352" y2="190" />
+    <line x1="48" y1="240" x2="352" y2="240" />
+    <line x1="48" y1="290" x2="352" y2="290" />
+    <!-- Warp Perspective Rays -->
+    <line x1="200" y1="48" x2="60" y2="326" />
+    <line x1="200" y1="48" x2="110" y2="326" />
+    <line x1="200" y1="48" x2="160" y2="326" />
+    <line x1="200" y1="48" x2="240" y2="326" />
+    <line x1="200" y1="48" x2="290" y2="326" />
+    <line x1="200" y1="48" x2="340" y2="326" />
   </g>
 
-  <!-- Main Starfighter Ship with Neo-Brutalist Thick Borders and Hard Shadow -->
-  <g transform="translate(200, 240)" filter="url(#brutalShadow)">
-    <!-- Engine Plasma Exhaust Flames -->
-    <path d="M -22,65 Q -22,105 0,115 Q 22,105 22,65 Z" fill="#00F0FF" stroke="#000000" stroke-width="3" />
-    <path d="M -12,65 Q -12,95 0,105 Q 12,95 12,65 Z" fill="#FFE600" />
-
-    <!-- Left Wing -->
-    <path d="M -15,10 L -75,50 L -75,65 L -15,50 Z" fill="#0088FF" stroke="#000000" stroke-width="3.5" />
-    <rect x="-76" y="32" width="10" height="28" rx="4" fill="#FF007F" stroke="#000000" stroke-width="2" />
-
-    <!-- Right Wing -->
-    <path d="M 15,10 L 75,50 L 75,65 L 15,50 Z" fill="#0088FF" stroke="#000000" stroke-width="3.5" />
-    <rect x="66" y="32" width="10" height="28" rx="4" fill="#FF007F" stroke="#000000" stroke-width="2" />
-
-    <!-- Fuselage Body (Chunky spaceship) -->
-    <path d="M 0,-70 L 35,25 L 25,65 L -25,65 L -35,25 Z" fill="url(#shipGrad)" stroke="#000000" stroke-width="4" />
-
-    <!-- Cockpit Dome -->
-    <ellipse cx="0" cy="-5" rx="20" ry="28" fill="#130F26" stroke="#00F0FF" stroke-width="3" />
-
-    <!-- Pilot Visor / Robot Eyes -->
-    <ellipse cx="0" cy="-6" rx="14" ry="11" fill="#FFE600" stroke="#000000" stroke-width="2" />
-    <circle cx="-5" cy="-7" r="3.5" fill="#000000" />
-    <circle cx="5" cy="-7" r="3.5" fill="#000000" />
-    <circle cx="-4" cy="-8" r="1.2" fill="#FFFFFF" />
-    <circle cx="6" cy="-8" r="1.2" fill="#FFFFFF" />
-    <!-- Pilot Smile -->
-    <path d="M -5,0 Q 0,4 5,0" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" />
-
-    <!-- Cockpit Glass Reflection -->
-    <path d="M -10,-22 Q 0,-27 10,-22" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.9" />
+  <!-- WARP PARTICLES & SPACE ASTEROIDS -->
+  <g fill="#00F0FF" opacity="0.6">
+    <circle cx="90" cy="110" r="1.5" />
+    <circle cx="310" cy="120" r="2" />
+    <circle cx="140" cy="80" r="1.5" />
+    <circle cx="280" cy="95" r="1.5" />
   </g>
 
-  <!-- Powerup Orb (Spread Shot 3X) -->
-  <g transform="translate(195, 30)" filter="url(#brutalShadowSm)">
-    <circle cx="5" cy="5" r="17" fill="url(#goldGrad)" stroke="#000000" stroke-width="3" />
-    <text x="5" y="10" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" fill="#000000" font-weight="900" text-anchor="middle">3X</text>
+  <!-- ENEMY DRONE SWARM 1 (Top-Left: Diving Aggressor) -->
+  <g transform="translate(100, 75) rotate(-15)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <!-- 3D Extruded Drone Hull -->
+      <polygon points="0,15 15,35 15,42 0,22" fill="url(#enemyDroneSide)" />
+      <polygon points="30,15 15,35 15,42 30,22" fill="url(#enemyDroneSide)" />
+      <!-- Drone Core Face -->
+      <polygon points="15,0 30,22 15,35 0,22" fill="url(#enemyDroneFace)" />
+      <!-- Drone Eye Core -->
+      <polygon points="15,8 22,20 15,26 8,20" fill="#FFE600" />
+    </g>
+    <!-- Explosion Spark Shockwave -->
+    <circle cx="15" cy="18" r="4" fill="#FFFFFF" opacity="0.8" />
   </g>
 
-  <!-- Top Ribbon Badge: "SPACE COMBAT" -->
-  <g transform="translate(200, 40)" filter="url(#brutalShadowSm)">
-    <rect x="-65" y="-12" width="130" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="1">SPACE COMBAT</text>
+  <!-- ENEMY DRONE SWARM 2 (Top-Right: Exploding Drone with Sparks) -->
+  <g transform="translate(265, 80) rotate(20)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="15,0 30,22 15,35 0,22" fill="url(#enemyDroneFace)" />
+      <polygon points="30,15 15,35 15,42 30,22" fill="url(#enemyDroneSide)" />
+      <polygon points="15,8 22,20 15,26 8,20" fill="#FFE600" />
+    </g>
+    <!-- Plasma Explosion Ring -->
+    <circle cx="15" cy="18" r="14" fill="none" stroke="#FF007F" stroke-width="2.5" stroke-dasharray="3,3" opacity="0.85" />
   </g>
 
-  <!-- Bottom Title Badge: "NEON STARFIGHTER" -->
-  <g transform="translate(200, 362)" filter="url(#brutalShadowSm)">
-    <rect x="-95" y="-15" width="190" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.2">NEON STARFIGHTER</text>
+  <!-- PLASMA DUAL LASER CANNON BEAMS (Firing Upwards) -->
+  <g filter="url(#plasmaGlow)">
+    <!-- Left Laser Cannon Beam -->
+    <polygon points="135,185 139,185 141,60 133,60" fill="url(#laserCyan)" />
+    <line x1="137" y1="185" x2="137" y2="60" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Right Laser Cannon Beam -->
+    <polygon points="261,185 265,185 267,60 259,60" fill="url(#laserCyan)" />
+    <line x1="263" y1="185" x2="263" y2="60" stroke="#FFFFFF" stroke-width="2" />
   </g>
+
+  <!-- 3D HERO NEON STARFIGHTER INTERCEPTOR -->
+  <g transform="translate(200, 210)" filter="url(#brutalShadowLg)">
+    <!-- Thruster Exhaust Jet Flames -->
+    <g transform="translate(0, 48)">
+      <polygon points="-12,0 0,45 12,0" fill="url(#thrusterFire)" />
+      <polygon points="-6,0 0,30 6,0" fill="#FFFFFF" />
+      <polygon points="-38,0 -34,22 -30,0" fill="url(#thrusterFire)" />
+      <polygon points="30,0 34,22 38,0" fill="url(#thrusterFire)" />
+    </g>
+
+    <!-- 3D Extrusion Side Hull Polygons (Dark Drop Sides) -->
+    <g stroke="#000000" stroke-width="3">
+      <!-- Bottom Fuselage Extrusion -->
+      <polygon points="-65,15 -72,25 -20,52 -20,44" fill="url(#fighterCyanSide)" />
+      <polygon points="65,15 72,25 20,52 20,44" fill="url(#fighterCyanSide)" />
+      <!-- Center Engine Under-Belly Depth -->
+      <polygon points="-20,44 -20,54 20,54 20,44" fill="url(#fighterCyanSide)" />
+    </g>
+
+    <!-- Main 3D Starfighter Wings & Fuselage Body -->
+    <g stroke="#000000" stroke-width="3">
+      <!-- Left Swept Wing -->
+      <polygon points="0,-45 -65,15 -62,38 -20,44 0,10" fill="url(#fighterCyanFace)" />
+      <!-- Right Swept Wing -->
+      <polygon points="0,-45 65,15 62,38 20,44 0,10" fill="url(#fighterCyanFace)" />
+      <!-- Neon Yellow Wingtips & Laser Rails -->
+      <polygon points="-65,15 -74,20 -62,38" fill="url(#fighterYellowFace)" />
+      <polygon points="65,15 74,20 62,38" fill="url(#fighterYellowFace)" />
+      <!-- Forward Nose Cone / Fuselage Spine -->
+      <polygon points="0,-65 -16,-10 0,25 16,-10" fill="url(#fighterCyanFace)" />
+      <!-- Wing Spoiler Ridges -->
+      <polygon points="-22,-5 -45,18 -38,24 -18,6" fill="url(#fighterYellowFace)" />
+      <polygon points="22,-5 45,18 38,24 18,6" fill="url(#fighterYellowFace)" />
+    </g>
+
+    <!-- 3D Glowing Cockpit Canopy -->
+    <g stroke="#000000" stroke-width="2.5">
+      <polygon points="0,-38 -10,-8 0,8 10,-8" fill="url(#canopyFace)" />
+      <polygon points="0,-38 0,8 10,-8" fill="url(#canopySide)" />
+    </g>
+
+    <!-- High-Gloss Specular Highlight Reflections -->
+    <!-- Cockpit Glint -->
+    <polygon points="-2,-34 -7,-12 -2,-12" fill="#FFFFFF" opacity="0.8" />
+    <!-- Wing Lead Edge Highlights -->
+    <polygon points="0,-62 -14,-10 0,-15" fill="#FFFFFF" opacity="0.75" />
+    <polygon points="0,-45 -60,14 -45,10 0,-30" fill="#FFFFFF" opacity="0.6" />
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "HYPER DRIVE!" -->
+  <g transform="translate(195, 140)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="9" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      HYPER DRIVE!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "PLASMA COMBAT // 60 FPS" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      SPACE COMBAT // ARCADE
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "NEON STARFIGHTER" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-120" y="-18" width="240" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-115" y="-14" width="230" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="16" text-anchor="middle" letter-spacing="1.5">
+      NEON STARFIGHTER
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="89" cy="360" r="3" fill="#000000" />
+  <circle cx="311" cy="360" r="3" fill="#000000" />
 </svg>

@@ -1,57 +1,91 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
     <!-- Background Gradients -->
-    <linearGradient id="bsBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050C1A" />
-      <stop offset="50%" stop-color="#0B1A38" />
-      <stop offset="100%" stop-color="#02060E" />
+    <linearGradient id="battleBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#021422" />
+      <stop offset="50%" stop-color="#05283b" />
+      <stop offset="100%" stop-color="#010e17" />
     </linearGradient>
-    <linearGradient id="bsBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="battleBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
-      <stop offset="100%" stop-color="#E2F5FF" />
+      <stop offset="50%" stop-color="#F0FDF4" />
+      <stop offset="100%" stop-color="#E0F2FE" />
     </linearGradient>
 
-    <!-- Radar Sweep Gradient -->
-    <linearGradient id="radarSweepGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.5" />
-      <stop offset="70%" stop-color="#00F0FF" stop-opacity="0.1" />
-      <stop offset="100%" stop-color="#00F0FF" stop-opacity="0" />
+    <!-- 3D Battleship Hull Palettes -->
+    <!-- Steel Gray/Cyan Warship Armor Face & Sides -->
+    <linearGradient id="shipArmorFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#0369A1" />
     </linearGradient>
-    <linearGradient id="shipHullDark" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#2A3B5C" />
-      <stop offset="100%" stop-color="#121D33" />
+    <linearGradient id="shipArmorSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C4A6E" />
+      <stop offset="100%" stop-color="#082F49" />
     </linearGradient>
 
-    <!-- Drop Shadows -->
+    <!-- Warship Deck Turret & Trim (Neon Yellow) -->
+    <linearGradient id="turretYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF570" />
+      <stop offset="100%" stop-color="#FFDE59" />
+    </linearGradient>
+    <linearGradient id="turretYellowSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D49B00" />
+      <stop offset="100%" stop-color="#854D0E" />
+    </linearGradient>
+
+    <!-- Artillery Blast Fire & Explosion -->
+    <radialGradient id="blastFire" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="25%" stop-color="#FFE600" />
+      <stop offset="60%" stop-color="#FF007F" />
+      <stop offset="100%" stop-color="#DC2626" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Radar Sonar Sweep Arc Gradient -->
+    <linearGradient id="radarSweep" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00FF66" stop-opacity="0" />
+      <stop offset="60%" stop-color="#00FF66" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#00FF66" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+      <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="sonarGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00FF66" flood-opacity="0.75" />
     </filter>
   </defs>
 
   <style>
-    .theme-bg { fill: url(#bsBgDark); }
-    .theme-grid-line { stroke: #00F0FF; stroke-opacity: 0.2; }
-    .theme-radar-ring { stroke: #00F0FF; stroke-opacity: 0.35; }
-    .theme-ship-hull { fill: url(#shipHullDark); stroke: #00F0FF; }
-    .theme-ship-deck { fill: #1B2845; stroke: #00F0FF; }
-    .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-bg { fill: url(#battleBgDark); }
+    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #041B29; stroke: #00FF66; }
+    .theme-stage-grid { stroke: #0A3C59; }
+    .theme-badge-rect { fill: #00FF66; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
-    .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+    .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
     .theme-tag-text { fill: #000000; }
 
     @media (prefers-color-scheme: light) {
-      .theme-bg { fill: url(#bsBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.12; }
-      .theme-radar-ring { stroke: #0284C7; stroke-opacity: 0.45; }
-      .theme-ship-hull { fill: #FFFFFF; stroke: #000000; }
-      .theme-ship-deck { fill: #F1F5F9; stroke: #000000; }
-      .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-bg { fill: url(#battleBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
+      .theme-badge-rect { fill: #00FF66; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
-      .theme-tag-rect { fill: #FFE600; stroke: #000000; }
+      .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
       .theme-tag-text { fill: #000000; }
     }
   </style>
@@ -59,79 +93,166 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Radar Rings & Coordinates -->
-  <g stroke-width="1.5">
-    <circle cx="200" cy="190" r="140" fill="none" class="theme-radar-ring" stroke-width="2" stroke-dasharray="8,6" />
-    <circle cx="200" cy="190" r="95" fill="none" class="theme-radar-ring" stroke-width="1.5" />
-    <circle cx="200" cy="190" r="50" fill="none" class="theme-radar-ring" stroke-width="1.5" />
-    <circle cx="200" cy="190" r="10" fill="#00F0FF" opacity="0.5" />
-
-    <!-- Crosshair Axes -->
-    <line x1="50" y1="190" x2="350" y2="190" class="theme-radar-ring" stroke-width="2" stroke-dasharray="6,4" />
-    <line x1="200" y1="40" x2="200" y2="340" class="theme-radar-ring" stroke-width="2" stroke-dasharray="6,4" />
-  </g>
-
-  <!-- Tactical Grid Lines -->
+  <!-- Retro Cyber Grid Backdrop -->
   <g class="theme-grid-line" stroke-width="1.5">
-    <line x1="50" y1="90" x2="350" y2="90" />
-    <line x1="50" y1="140" x2="350" y2="140" />
-    <line x1="50" y1="240" x2="350" y2="240" />
-    <line x1="50" y1="290" x2="350" y2="290" />
-    <line x1="100" y1="40" x2="100" y2="340" />
-    <line x1="150" y1="40" x2="150" y2="340" />
-    <line x1="250" y1="40" x2="250" y2="340" />
-    <line x1="300" y1="40" x2="300" y2="340" />
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Radar Sweep Sector -->
-  <path d="M200 190 L300 90 A140 140 0 0 0 200 50 Z" fill="url(#radarSweepGrad)" opacity="0.6" />
-  <line x1="200" y1="190" x2="300" y2="90" stroke="#00F0FF" stroke-width="3" />
-
-  <!-- Heavy Warship Model 2D -->
-  <g transform="translate(100, 205) rotate(-22)" filter="url(#brutalShadow)">
-    <polygon points="0,22 30,0 150,0 175,22 150,44 30,44" class="theme-ship-hull" stroke-width="3" />
-    <!-- Superstructure Deck -->
-    <rect x="42" y="9" width="88" height="26" rx="4" class="theme-ship-deck" stroke-width="2" />
-    <!-- Main Turrets -->
-    <circle cx="60" cy="22" r="9" fill="#FFE600" stroke="#000000" stroke-width="2" />
-    <rect x="60" y="19" width="20" height="6" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
-    <circle cx="110" cy="22" r="9" fill="#FFE600" stroke="#000000" stroke-width="2" />
-    <rect x="110" y="19" width="20" height="6" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
-    <!-- Bridge -->
-    <rect x="78" y="14" width="16" height="16" fill="#00F0FF" stroke="#000000" stroke-width="2" />
+  <!-- Neo Sparks & Radar Blips -->
+  <g fill="#FFDE59">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Explosive Artillery Hit Indicator -->
-  <g transform="translate(280, 110)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <circle cx="0" cy="0" r="10" fill="#FFE600" stroke="#000000" stroke-width="2" />
-    <path d="M-5 -5 L5 5 M-5 5 L5 -5" stroke="#000000" stroke-width="3" stroke-linecap="round" />
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Sonar Recon Ping (Cyan Ripple) -->
-  <g transform="translate(120, 110)">
-    <circle cx="0" cy="0" r="14" fill="none" stroke="#00F0FF" stroke-width="2.5" stroke-dasharray="4,3" />
-    <circle cx="0" cy="0" r="5" fill="#00F0FF" />
+  <!-- Inner Playfield Ocean Radar Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#02101A" stroke="#000000" stroke-width="2.5" />
+
+  <!-- Radar Grid & Concentric Range Rings -->
+  <g class="theme-stage-grid" stroke-width="1.5" stroke-dasharray="4,3">
+    <line x1="48" y1="92" x2="352" y2="92" />
+    <line x1="48" y1="138" x2="352" y2="138" />
+    <line x1="48" y1="184" x2="352" y2="184" />
+    <line x1="48" y1="230" x2="352" y2="230" />
+    <line x1="48" y1="276" x2="352" y2="276" />
+    <line x1="108" y1="48" x2="108" y2="326" />
+    <line x1="168" y1="48" x2="168" y2="326" />
+    <line x1="228" y1="48" x2="228" y2="326" />
+    <line x1="288" y1="48" x2="288" y2="326" />
   </g>
 
-  <!-- Tactical Target Lock Crosshair HUD -->
-  <g transform="translate(200, 190)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="28" fill="none" stroke="#FFE600" stroke-width="2.5" stroke-dasharray="14,8" />
-    <line x1="-35" y1="0" x2="-18" y2="0" stroke="#FFE600" stroke-width="3" />
-    <line x1="18" y1="0" x2="35" y2="0" stroke="#FFE600" stroke-width="3" />
-    <line x1="0" y1="-35" x2="0" y2="-18" stroke="#FFE600" stroke-width="3" />
-    <line x1="0" y1="18" x2="0" y2="35" stroke="#FFE600" stroke-width="3" />
+  <!-- Concentric Sonar Rings -->
+  <g stroke="#00FF66" stroke-width="1.5" stroke-dasharray="6,4" fill="none" opacity="0.45">
+    <circle cx="200" cy="184" r="55" />
+    <circle cx="200" cy="184" r="110" />
   </g>
 
-  <!-- Top Tag Pill: TACTICAL FLEET COMBAT -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-80" y="-10" width="160" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">TACTICAL FLEET COMBAT</text>
+  <!-- RADAR SONAR SWEEP ARC -->
+  <g filter="url(#sonarGlow)">
+    <path d="M 200,184 L 290,100 A 120 120 0 0 0 200,64 Z" fill="url(#radarSweep)" opacity="0.8" />
+    <line x1="200" y1="184" x2="290" y2="100" stroke="#00FF66" stroke-width="2.5" />
   </g>
 
-  <!-- Bottom Title Badge Pill: NAVAL GRID STRIKE -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">NAVAL GRID STRIKE</text>
+  <!-- 3D ENEMY PATROL BOAT (Top-Left Sector: Target Locked) -->
+  <g transform="translate(108, 92) rotate(25)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <!-- 3D Extruded Hull -->
+      <polygon points="-8,25 0,32 50,32 45,25" fill="url(#shipArmorSide)" />
+      <polygon points="-8,25 45,25 55,0 -18,0" fill="url(#shipArmorFace)" />
+      <!-- Radar Mast -->
+      <rect x="14" y="6" width="16" height="12" rx="2" fill="url(#turretYellow)" />
+    </g>
+    <!-- Target Lock Crosshairs -->
+    <circle cx="16" cy="12" r="18" fill="none" stroke="#FF007F" stroke-width="2" stroke-dasharray="3,3" />
   </g>
+
+  <!-- 3D EXPLODING SECTOR: ARTILLERY MISSILE DIRECT HIT (Top-Right: X=275, Y=110) -->
+  <g transform="translate(275, 110)">
+    <!-- Radial Fire Blast -->
+    <circle cx="0" cy="0" r="34" fill="url(#blastFire)" />
+    <!-- Exploding Shrapnel & Smoke Spikes -->
+    <g fill="#FFE600" stroke="#000000" stroke-width="2">
+      <polygon points="0,-24 6,-10 20,-16 12,-4 26,4 10,8 14,24 2,14 -8,22 -6,8 -22,12 -12,0 -24,-8 -8,-8" />
+    </g>
+    <!-- Splash Rings -->
+    <ellipse cx="0" cy="18" rx="26" ry="10" fill="none" stroke="#00F0FF" stroke-width="2" stroke-dasharray="4,3" opacity="0.85" />
+  </g>
+
+  <!-- 3D HERO HEAVY BATTLESHIP CARRIER (Isometric Perspective: X=190, Y=220) -->
+  <g transform="translate(185, 220) rotate(-16)" filter="url(#brutalShadowLg)">
+    <!-- 3D Hull Extrusion Sides -->
+    <g stroke="#000000" stroke-width="3">
+      <!-- Starboard Drop Hull Side -->
+      <polygon points="-80,20 -70,38 75,38 85,20" fill="url(#shipArmorSide)" />
+      <!-- Bow Keel Edge -->
+      <polygon points="85,20 115,-4 105,14 75,38" fill="url(#shipArmorSide)" />
+    </g>
+
+    <!-- Main Armored Deck Face -->
+    <g stroke="#000000" stroke-width="3">
+      <polygon points="-80,20 -65,-12 85,-12 115,-4 85,20" fill="url(#shipArmorFace)" />
+    </g>
+
+    <!-- High-Gloss Specular Deck Stripe -->
+    <polygon points="-75,18 -62,-8 80,-8 75,2 Z" fill="#FFFFFF" opacity="0.65" />
+
+    <!-- 3D Main Cannon Turret 1 (Forward Turret) -->
+    <g transform="translate(45, 4)" stroke="#000000" stroke-width="2">
+      <!-- Dual Gun Barrels -->
+      <line x1="0" y1="-8" x2="32" y2="-16" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+      <line x1="0" y1="-4" x2="32" y2="-12" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+      <line x1="0" y1="-8" x2="30" y2="-16" stroke="#FFE600" stroke-width="2" stroke-linecap="round" />
+      <line x1="0" y1="-4" x2="30" y2="-12" stroke="#FFE600" stroke-width="2" stroke-linecap="round" />
+      <!-- Turret Dome Base -->
+      <ellipse cx="0" cy="4" rx="14" ry="10" fill="url(#turretYellowSide)" />
+      <ellipse cx="0" cy="0" rx="14" ry="10" fill="url(#turretYellow)" />
+    </g>
+
+    <!-- 3D Main Cannon Turret 2 (Aft Turret) -->
+    <g transform="translate(-35, 4)" stroke="#000000" stroke-width="2">
+      <line x1="0" y1="-8" x2="32" y2="-16" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+      <line x1="0" y1="-4" x2="32" y2="-12" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+      <line x1="0" y1="-8" x2="30" y2="-16" stroke="#FFE600" stroke-width="2" stroke-linecap="round" />
+      <line x1="0" y1="-4" x2="30" y2="-12" stroke="#FFE600" stroke-width="2" stroke-linecap="round" />
+      <ellipse cx="0" cy="4" rx="14" ry="10" fill="url(#turretYellowSide)" />
+      <ellipse cx="0" cy="0" rx="14" ry="10" fill="url(#turretYellow)" />
+    </g>
+
+    <!-- Conning Tower / Bridge Superstructure -->
+    <g transform="translate(5, -6)" stroke="#000000" stroke-width="2.5">
+      <rect x="-14" y="-14" width="28" height="20" rx="4" fill="url(#shipArmorFace)" />
+      <rect x="-8" y="-22" width="16" height="10" rx="2" fill="url(#turretYellow)" />
+      <!-- Radar Dish -->
+      <line x1="0" y1="-22" x2="0" y2="-30" stroke="#000000" stroke-width="2.5" />
+      <ellipse cx="0" cy="-30" rx="8" ry="4" fill="#00FF66" />
+    </g>
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "DIRECT HIT!" -->
+  <g transform="translate(200, 140)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="9.5" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      DIRECT HIT!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "NAVAL RADAR // STRIKE" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      NAVAL RADAR // STRIKE
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "NAVAL GRID STRIKE" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      NAVAL GRID STRIKE
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

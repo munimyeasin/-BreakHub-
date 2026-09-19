@@ -2,30 +2,84 @@
   <defs>
     <!-- Background Gradients -->
     <linearGradient id="chromaBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#070014" />
-      <stop offset="60%" stop-color="#14062E" />
-      <stop offset="100%" stop-color="#021526" />
+      <stop offset="0%" stop-color="#08011A" />
+      <stop offset="50%" stop-color="#190638" />
+      <stop offset="100%" stop-color="#021326" />
     </linearGradient>
     <linearGradient id="chromaBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="50%" stop-color="#FAF5FF" />
       <stop offset="100%" stop-color="#FDF4FF" />
     </linearGradient>
 
-    <!-- Drop Shadows -->
+    <!-- 3D Sector Palettes -->
+    <linearGradient id="sectorCyanFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="sectorCyanSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088B8" />
+      <stop offset="100%" stop-color="#004D66" />
+    </linearGradient>
+
+    <linearGradient id="sectorPinkFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF77C8" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+    <linearGradient id="sectorPinkSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B8005A" />
+      <stop offset="100%" stop-color="#700037" />
+    </linearGradient>
+
+    <linearGradient id="sectorYellowFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF570" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+    <linearGradient id="sectorYellowSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D49B00" />
+      <stop offset="100%" stop-color="#805D00" />
+    </linearGradient>
+
+    <linearGradient id="sectorLimeFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" />
+      <stop offset="100%" stop-color="#22C55E" />
+    </linearGradient>
+    <linearGradient id="sectorLimeSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803D" />
+      <stop offset="100%" stop-color="#14532D" />
+    </linearGradient>
+
+    <linearGradient id="coreFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
       <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="soundGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FF007F" flood-opacity="0.85" />
+    </filter>
   </defs>
 
   <style>
     .theme-bg { fill: url(#chromaBgDark); }
-    .theme-grid-line { stroke: #C084FC; stroke-opacity: 0.15; }
-    .theme-housing { fill: #0F0926; stroke: #000000; }
-    .theme-center-btn { fill: #FFE600; stroke: #000000; }
+    .theme-grid-line { stroke: #C084FC; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #120524; stroke: #C084FC; }
+    .theme-stage-grid { stroke: #2E0B54; }
+    .theme-console-base { fill: #080214; stroke: #000000; }
     .theme-badge-rect { fill: #FFE600; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
     .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
@@ -33,9 +87,10 @@
 
     @media (prefers-color-scheme: light) {
       .theme-bg { fill: url(#chromaBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
-      .theme-housing { fill: #FFFFFF; stroke: #000000; }
-      .theme-center-btn { fill: #FFE600; stroke: #000000; }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
+      .theme-console-base { fill: #FFFFFF; stroke: #000000; }
       .theme-badge-rect { fill: #FFE600; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
       .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
@@ -46,67 +101,133 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Geometric Soundwave Pulse Rings -->
-  <g class="theme-grid-line" stroke-width="2" fill="none">
-    <circle cx="200" cy="190" r="165" stroke-dasharray="8,6" />
-    <circle cx="200" cy="190" r="185" stroke-dasharray="4,6" />
+  <!-- Retro Cyber Grid Backdrop -->
+  <g class="theme-grid-line" stroke-width="1.5">
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Simon Reflex 4-Quadrant Ring Body -->
-  <g transform="translate(200, 190)" filter="url(#brutalShadow)">
-    <!-- Base Circular Outer Housing -->
-    <circle cx="0" cy="0" r="140" class="theme-housing" stroke-width="4.5" />
-
-    <!-- 1. Top-Left: Glowing Cyan Quadrant -->
-    <path d="M -12,-125 A 125 125 0 0 0 -125,-12 L -55,-10 A 55 55 0 0 1 -10,-55 Z" fill="#00F0FF" stroke="#000000" stroke-width="3.5" />
-    <!-- Cute Face on Cyan quadrant -->
-    <circle cx="-62" cy="-62" r="5" fill="#000000" />
-    <circle cx="-47" cy="-62" r="5" fill="#000000" />
-    <path d="M -59,-52 Q -54,-47 -49,-52" stroke="#000000" stroke-width="2.5" fill="none" />
-
-    <!-- 2. Top-Right: Glowing Pink Quadrant -->
-    <path d="M 12,-125 A 125 125 0 0 1 125,-12 L 55,-10 A 55 55 0 0 0 10,-55 Z" fill="#FF007F" stroke="#000000" stroke-width="3.5" />
-    <circle cx="47" cy="-62" r="5" fill="#000000" />
-    <circle cx="62" cy="-62" r="5" fill="#000000" />
-    <path d="M 50,-52 Q 55,-47 60,-52" stroke="#000000" stroke-width="2.5" fill="none" />
-
-    <!-- 3. Bottom-Left: Glowing Yellow Quadrant -->
-    <path d="M -12,125 A 125 125 0 0 1 -125,12 L -55,10 A 55 55 0 0 0 -10,55 Z" fill="#FFE600" stroke="#000000" stroke-width="3.5" />
-    <circle cx="-62" cy="62" r="5" fill="#000000" />
-    <circle cx="-47" cy="62" r="5" fill="#000000" />
-    <path d="M -59,72 Q -54,77 -49,72" stroke="#000000" stroke-width="2.5" fill="none" />
-
-    <!-- 4. Bottom-Right: Glowing Lime Green Quadrant -->
-    <path d="M 12,125 A 125 125 0 0 0 125,12 L 55,10 A 55 55 0 0 1 10,55 Z" fill="#00FF88" stroke="#000000" stroke-width="3.5" />
-    <circle cx="47" cy="62" r="5" fill="#000000" />
-    <circle cx="62" cy="62" r="5" fill="#000000" />
-    <path d="M 50,72 Q 55,77 60,72" stroke="#000000" stroke-width="2.5" fill="none" />
-
-    <!-- Center Core Button -->
-    <circle cx="0" cy="0" r="42" class="theme-center-btn" stroke-width="3.5" />
-    <text x="0" y="-3" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="0.5">REFLEX</text>
-    <text x="0" y="15" font-family="'Impact', 'Arial Black', sans-serif" font-size="14" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="1">AUDIO 🎵</text>
+  <!-- Neo Sparks & Particle Accents -->
+  <g fill="#FFE600">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Musical Tone Notes Floating with Neo-Brutalist Badges -->
-  <g transform="translate(60, 60)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2" />
-    <text x="0" y="6" font-size="16" text-anchor="middle">🎵</text>
-  </g>
-  <g transform="translate(340, 60)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2" />
-    <text x="0" y="6" font-size="16" text-anchor="middle">🎶</text>
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Top Tag Pill: CHROMATIC SEQUENCE REFLEX -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-95" y="-10" width="190" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="8.5" font-weight="900" text-anchor="middle" letter-spacing="1">CHROMATIC SEQUENCE REFLEX</text>
+  <!-- Inner Playfield Matrix Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#06010F" stroke="#000000" stroke-width="2.5" />
+
+  <!-- Acoustic Pulse Soundwave Rings -->
+  <g class="theme-stage-grid" stroke-width="1.8" fill="none">
+    <ellipse cx="200" cy="180" rx="135" ry="110" stroke-dasharray="8,6" opacity="0.4" />
+    <ellipse cx="200" cy="180" rx="115" ry="90" stroke-dasharray="6,4" opacity="0.6" />
+    <ellipse cx="200" cy="180" rx="95" ry="75" stroke-dasharray="4,4" opacity="0.8" />
   </g>
 
-  <!-- Bottom Title Badge Pill: CHROMA REFLEX -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-95" y="-15" width="190" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">CHROMA REFLEX</text>
+  <!-- 3D ISOMETRIC CHROMA REFLEX CONSOLE (Center: X=200, Y=180) -->
+  <g transform="translate(200, 180)" filter="url(#brutalShadowLg)">
+    <!-- 3D Base Extrusion Ring -->
+    <g stroke="#000000" stroke-width="4">
+      <ellipse cx="0" cy="14" rx="106" ry="86" fill="#140626" />
+      <ellipse cx="0" cy="0" rx="106" ry="86" class="theme-console-base" />
+    </g>
+
+    <!-- 1. Top-Left: 3D Cyan Quadrant Arc -->
+    <g stroke="#000000" stroke-width="3">
+      <!-- 3D Extrusion Lip -->
+      <path d="M -8,-84 C -54,-84 -84,-54 -84,-8 L -36,-8 C -36,-26 -26,-36 -8,-36 Z" fill="url(#sectorCyanFace)" />
+    </g>
+    <!-- Cyan Specular Arc -->
+    <path d="M -20,-72 C -45,-70 -65,-50 -70,-26" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round" />
+    <!-- Pulse LED Icon -->
+    <circle cx="-46" cy="-46" r="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.8" />
+
+    <!-- 2. Top-Right: 3D Pink Quadrant Arc -->
+    <g stroke="#000000" stroke-width="3">
+      <path d="M 8,-84 C 54,-84 84,-54 84,-8 L 36,-8 C 36,-26 26,-36 8,-36 Z" fill="url(#sectorPinkFace)" />
+    </g>
+    <path d="M 20,-72 C 45,-70 65,-50 70,-26" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round" />
+    <circle cx="46" cy="-46" r="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.8" />
+
+    <!-- 3. Bottom-Left: 3D Yellow Quadrant Arc -->
+    <g stroke="#000000" stroke-width="3">
+      <path d="M -8,84 C -54,84 -84,54 -84,8 L -36,8 C -36,26 -26,36 -8,36 Z" fill="url(#sectorYellowFace)" />
+    </g>
+    <path d="M -20,72 C -45,70 -65,50 -70,26" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round" />
+    <circle cx="-46" cy="46" r="6" fill="#000000" stroke="#000000" stroke-width="1.8" />
+
+    <!-- 4. Bottom-Right: 3D Lime Quadrant Arc -->
+    <g stroke="#000000" stroke-width="3">
+      <path d="M 8,84 C 54,84 84,54 84,8 L 36,8 C 36,26 26,36 8,36 Z" fill="url(#sectorLimeFace)" />
+    </g>
+    <path d="M 20,72 C 45,70 65,50 70,26" stroke="#FFFFFF" stroke-width="3" fill="none" opacity="0.8" stroke-linecap="round" />
+    <circle cx="46" cy="46" r="6" fill="#000000" stroke="#000000" stroke-width="1.8" />
+
+    <!-- Center 3D Audio Core Button -->
+    <g stroke="#000000" stroke-width="3.5">
+      <ellipse cx="0" cy="5" rx="30" ry="24" fill="#D49B00" />
+      <ellipse cx="0" cy="0" rx="30" ry="24" fill="url(#coreFace)" />
+    </g>
+    <!-- Center Label -->
+    <text x="0" y="-3" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" fill="#000000" text-anchor="middle" letter-spacing="0.5">REFLEX</text>
+    <text x="0" y="10" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="11" fill="#000000" text-anchor="middle" letter-spacing="0.8">AUDIO 🎵</text>
   </g>
+
+  <!-- 3D FLOATING AUDIO NOTE DISKS -->
+  <g transform="translate(90, 95) rotate(-15)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="5" font-size="14" text-anchor="middle">🎵</text>
+  </g>
+
+  <g transform="translate(310, 95) rotate(15)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="5" font-size="14" text-anchor="middle">🎶</text>
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "AUDIO SYNC!" -->
+  <g transform="translate(200, 72)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="9" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      AUDIO SYNC!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "CHROMATIC AUDIO REFLEX" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" text-anchor="middle" letter-spacing="1.2">
+      CHROMATIC AUDIO REFLEX
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "CHROMA REFLEX" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      CHROMA REFLEX
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

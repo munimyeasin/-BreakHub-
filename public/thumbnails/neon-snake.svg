@@ -2,45 +2,74 @@
   <defs>
     <!-- Background Gradients -->
     <linearGradient id="snakeBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#04120D" />
-      <stop offset="50%" stop-color="#07241A" />
-      <stop offset="100%" stop-color="#020B08" />
+      <stop offset="0%" stop-color="#03140c" />
+      <stop offset="50%" stop-color="#08291a" />
+      <stop offset="100%" stop-color="#020d08" />
     </linearGradient>
     <linearGradient id="snakeBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
-      <stop offset="100%" stop-color="#ECFDF5" />
+      <stop offset="50%" stop-color="#F0FDF4" />
+      <stop offset="100%" stop-color="#DCFCE7" />
     </linearGradient>
 
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00FF88" stop-opacity="0.35" />
-      <stop offset="100%" stop-color="#00FF88" stop-opacity="0" />
+    <!-- 3D Snake Segment Palettes -->
+    <linearGradient id="snakeFaceLime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" />
+      <stop offset="50%" stop-color="#22C55E" />
+      <stop offset="100%" stop-color="#16A34A" />
+    </linearGradient>
+    <linearGradient id="snakeSideLime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803D" />
+      <stop offset="100%" stop-color="#14532D" />
+    </linearGradient>
+
+    <linearGradient id="snakeFaceCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="snakeSideCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088B8" />
+      <stop offset="100%" stop-color="#005070" />
+    </linearGradient>
+
+    <!-- 3D Cyber Ruby Apple -->
+    <radialGradient id="appleSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="25%" stop-color="#FF3385" />
+      <stop offset="70%" stop-color="#FF007F" />
+      <stop offset="100%" stop-color="#800038" />
     </radialGradient>
-    <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F0FF" />
-      <stop offset="50%" stop-color="#00FF88" />
-      <stop offset="100%" stop-color="#A3E635" />
-    </linearGradient>
-    <linearGradient id="appleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF007F" />
-      <stop offset="100%" stop-color="#E11D48" />
+    <linearGradient id="appleLeafFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BEF264" />
+      <stop offset="100%" stop-color="#84CC16" />
     </linearGradient>
 
-    <!-- Drop Shadows -->
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
       <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="appleGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#FF007F" flood-opacity="0.9" />
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#FF007F" flood-opacity="0.9" />
     </filter>
   </defs>
 
   <style>
     .theme-bg { fill: url(#snakeBgDark); }
-    .theme-grid-line { stroke: #00FF88; stroke-opacity: 0.15; }
+    .theme-grid-line { stroke: #00FF88; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #081C12; stroke: #00FF88; }
+    .theme-stage-grid { stroke: #0E3623; }
+    .theme-slot-bg { fill: #0A2417; stroke: #154D31; }
     .theme-badge-rect { fill: #00FF88; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
     .theme-tag-rect { fill: #FFE600; stroke: #000000; }
@@ -48,7 +77,10 @@
 
     @media (prefers-color-scheme: light) {
       .theme-bg { fill: url(#snakeBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
+      .theme-slot-bg { fill: #F8FAFC; stroke: #CBD5E1; }
       .theme-badge-rect { fill: #00FF88; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
       .theme-tag-rect { fill: #FFE600; stroke: #000000; }
@@ -59,86 +91,189 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Cyber Retro Grid -->
+  <!-- Retro Cyber Grid Backdrop -->
   <g class="theme-grid-line" stroke-width="1.5">
-    <line x1="0" y1="60" x2="400" y2="60" />
-    <line x1="0" y1="120" x2="400" y2="120" />
-    <line x1="0" y1="180" x2="400" y2="180" />
-    <line x1="0" y1="240" x2="400" y2="240" />
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
     <line x1="0" y1="300" x2="400" y2="300" />
-    <line x1="0" y1="360" x2="400" y2="360" />
-    <line x1="60" y1="0" x2="60" y2="400" />
-    <line x1="120" y1="0" x2="120" y2="400" />
-    <line x1="180" y1="0" x2="180" y2="400" />
-    <line x1="240" y1="0" x2="240" y2="400" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
     <line x1="300" y1="0" x2="300" y2="400" />
-    <line x1="360" y1="0" x2="360" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Snake Body Tail Segments with Brutal Drop Shadows -->
-  <g filter="url(#brutalShadowSm)">
-    <!-- Tail tip -->
-    <circle cx="80" cy="300" r="16" fill="url(#snakeGrad)" stroke="#000000" stroke-width="3" />
-    <circle cx="115" cy="310" r="20" fill="url(#snakeGrad)" stroke="#000000" stroke-width="3" />
-    <circle cx="160" cy="305" r="23" fill="url(#snakeGrad)" stroke="#000000" stroke-width="3.5" />
-    <circle cx="190" cy="270" r="26" fill="url(#snakeGrad)" stroke="#000000" stroke-width="3.5" />
-    <circle cx="175" cy="220" r="28" fill="url(#snakeGrad)" stroke="#000000" stroke-width="3.5" />
-    <circle cx="135" cy="185" r="30" fill="url(#snakeGrad)" stroke="#000000" stroke-width="4" />
-    <circle cx="125" cy="130" r="33" fill="url(#snakeGrad)" stroke="#000000" stroke-width="4" />
-
-    <!-- Snake Head -->
-    <ellipse cx="180" cy="110" rx="44" ry="38" fill="url(#snakeGrad)" stroke="#000000" stroke-width="4.5" />
+  <!-- Neo Sparks & Cyber Dots -->
+  <g fill="#FFE600">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Big Expressive Cartoon Eyes -->
-  <!-- Left Eye -->
-  <ellipse cx="165" cy="95" rx="13" ry="16" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
-  <circle cx="169" cy="93" r="8" fill="#000000" />
-  <circle cx="172" cy="89" r="3" fill="#00F0FF" />
-  <circle cx="166" cy="98" r="1.5" fill="#FFFFFF" />
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
+  </g>
 
-  <!-- Right Eye -->
-  <ellipse cx="200" cy="97" rx="12" ry="15" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
-  <circle cx="203" cy="95" r="7.5" fill="#000000" />
-  <circle cx="206" cy="92" r="2.5" fill="#00F0FF" />
-  <circle cx="201" cy="99" r="1.5" fill="#FFFFFF" />
+  <!-- Inner Playfield Matrix Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#030C07" stroke="#000000" stroke-width="2.5" />
 
-  <!-- Cute Cheeks & Smile -->
-  <circle cx="148" cy="116" r="6.5" fill="#FF007F" opacity="0.8" />
-  <circle cx="212" cy="118" r="6.5" fill="#FF007F" opacity="0.8" />
-  <path d="M 170 120 Q 183 132 196 120" stroke="#000000" stroke-width="3.5" fill="none" stroke-linecap="round" />
-  <!-- Tongue -->
-  <path d="M 183 126 Q 187 140 190 142 L 186 138 M 190 142 L 195 138" stroke="#FF007F" stroke-width="3" fill="none" stroke-linecap="round" />
+  <!-- Playfield Floor Matrix Grid -->
+  <g class="theme-stage-grid" stroke-width="1.2" stroke-dasharray="4,4">
+    <line x1="48" y1="100" x2="352" y2="100" />
+    <line x1="48" y1="150" x2="352" y2="150" />
+    <line x1="48" y1="200" x2="352" y2="200" />
+    <line x1="48" y1="250" x2="352" y2="250" />
+    <line x1="108" y1="48" x2="108" y2="326" />
+    <line x1="168" y1="48" x2="168" y2="326" />
+    <line x1="228" y1="48" x2="228" y2="326" />
+    <line x1="288" y1="48" x2="288" y2="326" />
+  </g>
 
-  <!-- Glowing Cyber Apple Target with Neo-Brutalist Shadow -->
-  <g transform="translate(305, 120)" filter="url(#appleGlow)">
-    <g filter="url(#brutalShadowSm)">
-      <circle cx="0" cy="0" r="32" fill="url(#appleGrad)" stroke="#000000" stroke-width="3.5" />
-      <!-- Apple Leaf -->
-      <path d="M 0,-32 Q 15,-45 20,-35 Q 10,-25 0,-32" fill="#A3E635" stroke="#000000" stroke-width="2.5" />
-      <rect x="-3" y="-40" width="6" height="10" rx="2" fill="#FFE600" stroke="#000000" stroke-width="1.5" />
-      <!-- Highlight -->
-      <ellipse cx="-12" cy="-12" rx="7" ry="11" fill="#FFFFFF" opacity="0.7" transform="rotate(-30 -12 -12)" />
+  <!-- 3D EXTRUDED SNAKE BODY SEGMENTS -->
+  <!-- Segment 1: Tail Tip (X=75, Y=275) -->
+  <g transform="translate(75, 275)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="0,26 6,32 32,32 26,26" fill="url(#snakeSideLime)" />
+      <polygon points="26,0 32,6 32,32 26,26" fill="url(#snakeSideLime)" />
+      <rect x="0" y="0" width="26" height="26" rx="6" fill="url(#snakeFaceLime)" />
     </g>
   </g>
 
-  <!-- Sparkles & Particles -->
-  <g fill="#FFE600">
-    <polygon points="310,40 313,48 321,51 313,54 310,62 307,54 299,51 307,48" stroke="#000000" stroke-width="1" />
-    <circle cx="265" cy="85" r="4" fill="#00F0FF" stroke="#000000" stroke-width="1" />
-    <circle cx="275" cy="140" r="3.5" fill="#A3E635" stroke="#000000" stroke-width="1" />
-    <circle cx="60" cy="240" r="4" fill="#FFE600" stroke="#000000" stroke-width="1" />
+  <!-- Segment 2: (X=115, Y=275) -->
+  <g transform="translate(115, 275)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="0,30 8,38 38,38 30,30" fill="url(#snakeSideCyan)" />
+      <polygon points="30,0 38,8 38,38 30,30" fill="url(#snakeSideCyan)" />
+      <rect x="0" y="0" width="30" height="30" rx="6" fill="url(#snakeFaceCyan)" />
+    </g>
   </g>
 
-  <!-- Top Tag Pill: CYBER ARCADE CLASSIC -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-85" y="-10" width="170" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">CYBER ARCADE CLASSIC</text>
+  <!-- Segment 3: (X=160, Y=275) -->
+  <g transform="translate(160, 275)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="0,32 8,40 40,40 32,32" fill="url(#snakeSideLime)" />
+      <polygon points="32,0 40,8 40,40 32,32" fill="url(#snakeSideLime)" />
+      <rect x="0" y="0" width="32" height="32" rx="7" fill="url(#snakeFaceLime)" />
+    </g>
   </g>
 
-  <!-- Bottom Title Badge Pill: NEON SNAKE 2077 -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-95" y="-15" width="190" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">NEON SNAKE 2077</text>
+  <!-- Segment 4: Turning Upward (X=160, Y=225) -->
+  <g transform="translate(160, 225)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="0,34 8,42 42,42 34,34" fill="url(#snakeSideCyan)" />
+      <polygon points="34,0 42,8 42,42 34,34" fill="url(#snakeSideCyan)" />
+      <rect x="0" y="0" width="34" height="34" rx="7" fill="url(#snakeFaceCyan)" />
+    </g>
   </g>
+
+  <!-- Segment 5: (X=115, Y=175) -->
+  <g transform="translate(115, 175)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <polygon points="0,36 9,45 45,45 36,36" fill="url(#snakeSideLime)" />
+      <polygon points="36,0 45,9 45,45 36,36" fill="url(#snakeSideLime)" />
+      <rect x="0" y="0" width="36" height="36" rx="8" fill="url(#snakeFaceLime)" />
+    </g>
+  </g>
+
+  <!-- Segment 6: Neck (X=115, Y=120) -->
+  <g transform="translate(115, 120)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2.5">
+      <polygon points="0,40 10,50 50,50 40,40" fill="url(#snakeSideCyan)" />
+      <polygon points="40,0 50,10 50,50 40,40" fill="url(#snakeSideCyan)" />
+      <rect x="0" y="0" width="40" height="40" rx="8" fill="url(#snakeFaceCyan)" />
+    </g>
+  </g>
+
+  <!-- 3D HERO CYBER VIPER HEAD (X=175, Y=95) -->
+  <g transform="translate(175, 95)" filter="url(#brutalShadowLg)">
+    <!-- 3D Extruded Head Block -->
+    <g stroke="#000000" stroke-width="3.5">
+      <!-- 3D Side/Bottom -->
+      <polygon points="0,62 12,74 80,74 68,62" fill="url(#snakeSideLime)" />
+      <polygon points="68,0 80,12 80,74 68,62" fill="url(#snakeSideLime)" />
+      <!-- Head Face -->
+      <rect x="0" y="0" width="68" height="62" rx="14" fill="url(#snakeFaceLime)" />
+    </g>
+
+    <!-- Specular Highlight Arc -->
+    <polygon points="6,6 62,6 54,16 6,16" fill="#FFFFFF" opacity="0.8" />
+
+    <!-- Cyber Goggles / Eyes -->
+    <g>
+      <!-- Left Eye -->
+      <rect x="10" y="16" width="20" height="22" rx="6" fill="#000000" stroke="#00F0FF" stroke-width="2" />
+      <ellipse cx="20" cy="27" rx="6" ry="8" fill="#FFFFFF" />
+      <circle cx="21" cy="27" r="4" fill="#000000" />
+      <circle cx="23" cy="25" r="1.5" fill="#00F0FF" />
+      <!-- Right Eye -->
+      <rect x="38" y="16" width="20" height="22" rx="6" fill="#000000" stroke="#00F0FF" stroke-width="2" />
+      <ellipse cx="48" cy="27" rx="6" ry="8" fill="#FFFFFF" />
+      <circle cx="49" cy="27" r="4" fill="#000000" />
+      <circle cx="51" cy="25" r="1.5" fill="#00F0FF" />
+    </g>
+
+    <!-- Snake Fangs & Cyber Smile -->
+    <path d="M 22,46 Q 34,54 46,46" stroke="#000000" stroke-width="3" fill="none" stroke-linecap="round" />
+    <polygon points="26,46 29,52 32,46" fill="#FFFFFF" stroke="#000000" stroke-width="1.5" />
+    <polygon points="36,46 39,52 42,46" fill="#FFFFFF" stroke="#000000" stroke-width="1.5" />
+
+    <!-- Forked Laser Tongue -->
+    <path d="M 34,50 Q 34,64 30,70 M 34,64 Q 34,64 38,70" stroke="#FF007F" stroke-width="3" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- 3D FLOATING CYBER RUBY ENERGY APPLE (Target: X=295, Y=125) -->
+  <g transform="translate(295, 125)" filter="url(#appleGlow)">
+    <g filter="url(#brutalShadowLg)">
+      <!-- 3D Glowing Apple Core -->
+      <circle cx="0" cy="0" r="32" fill="url(#appleSphere)" stroke="#000000" stroke-width="3.5" />
+      <!-- Apple Bevel & Highlight -->
+      <ellipse cx="-8" cy="-8" rx="8" ry="12" fill="#FFFFFF" opacity="0.75" transform="rotate(-30 -8 -8)" />
+      <!-- 3D Golden Stem & Lime Cyber Leaf -->
+      <rect x="-3" y="-40" width="6" height="12" rx="2" fill="#FFE600" stroke="#000000" stroke-width="2" />
+      <path d="M 0,-34 Q 16,-46 22,-36 Q 12,-26 0,-34" fill="url(#appleLeafFace)" stroke="#000000" stroke-width="2" />
+    </g>
+  </g>
+
+  <!-- SPEED ENERGY ACCELERATION ARCS -->
+  <g stroke="#00FF88" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7">
+    <path d="M 250,110 Q 270,120 280,125" stroke-dasharray="4,3" />
+    <path d="M 250,140 Q 270,135 280,130" stroke-dasharray="4,3" />
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "TURBO CHOMP!" -->
+  <g transform="translate(200, 120)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="9" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      TURBO CHOMP!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "CYBER REPTILE PROTOCOL" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      CYBER REPTILE PROTOCOL
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "NEON SNAKE 2077" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      NEON SNAKE 2077
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

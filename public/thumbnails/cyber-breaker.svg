@@ -3,27 +3,84 @@
     <!-- Background Gradients -->
     <linearGradient id="breakerBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0B001A" />
-      <stop offset="60%" stop-color="#180436" />
+      <stop offset="50%" stop-color="#180436" />
       <stop offset="100%" stop-color="#050E26" />
     </linearGradient>
     <linearGradient id="breakerBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="50%" stop-color="#FAF5FF" />
       <stop offset="100%" stop-color="#E0F2FE" />
     </linearGradient>
 
-    <!-- Drop Shadows -->
+    <!-- 3D Brick Palettes -->
+    <linearGradient id="brickPinkFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF77C8" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+    <linearGradient id="brickPinkSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B8005A" />
+      <stop offset="100%" stop-color="#700037" />
+    </linearGradient>
+
+    <linearGradient id="brickCyanFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="brickCyanSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088B8" />
+      <stop offset="100%" stop-color="#004D66" />
+    </linearGradient>
+
+    <linearGradient id="brickLimeFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" />
+      <stop offset="100%" stop-color="#22C55E" />
+    </linearGradient>
+    <linearGradient id="brickLimeSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803D" />
+      <stop offset="100%" stop-color="#14532D" />
+    </linearGradient>
+
+    <linearGradient id="paddleFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="paddleSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088B8" />
+      <stop offset="100%" stop-color="#004D66" />
+    </linearGradient>
+
+    <linearGradient id="ballSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#FFF066" />
+      <stop offset="70%" stop-color="#FFE600" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
       <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00F0FF" flood-opacity="0.85" />
+    </filter>
   </defs>
 
   <style>
     .theme-bg { fill: url(#breakerBgDark); }
-    .theme-grid-line { stroke: #00F0FF; stroke-opacity: 0.15; }
+    .theme-grid-line { stroke: #00F0FF; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #130424; stroke: #00F0FF; }
+    .theme-stage-grid { stroke: #2E0B54; }
     .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
     .theme-tag-rect { fill: #FFE600; stroke: #000000; }
@@ -31,7 +88,9 @@
 
     @media (prefers-color-scheme: light) {
       .theme-bg { fill: url(#breakerBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
       .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
       .theme-tag-rect { fill: #FFE600; stroke: #000000; }
@@ -42,95 +101,201 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Cyber Grid Lines -->
+  <!-- Retro Cyber Grid Backdrop -->
   <g class="theme-grid-line" stroke-width="1.5">
-    <line x1="0" y1="60" x2="400" y2="60" />
-    <line x1="0" y1="120" x2="400" y2="120" />
-    <line x1="0" y1="180" x2="400" y2="180" />
-    <line x1="0" y1="240" x2="400" y2="240" />
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
     <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Colorful Neo-Brutalist Brick Grid -->
-  <!-- Row 1: Magenta -->
-  <g stroke="#000000" stroke-width="3" filter="url(#brutalShadowSm)">
-    <rect x="35" y="55" width="60" height="22" rx="6" fill="#FF007F" />
-    <rect x="105" y="55" width="60" height="22" rx="6" fill="#FF007F" />
-    <rect x="175" y="55" width="60" height="22" rx="6" fill="#FF007F" />
-    <rect x="245" y="55" width="60" height="22" rx="6" fill="#FF007F" />
-    <rect x="315" y="55" width="50" height="22" rx="6" fill="#FF007F" />
-
-    <!-- Row 2: Cyan -->
-    <rect x="35" y="85" width="60" height="22" rx="6" fill="#00F0FF" />
-    <rect x="105" y="85" width="60" height="22" rx="6" fill="#00F0FF" />
-    <!-- Exploded gap at 175 -->
-    <rect x="245" y="85" width="60" height="22" rx="6" fill="#00F0FF" />
-    <rect x="315" y="85" width="50" height="22" rx="6" fill="#00F0FF" />
-
-    <!-- Row 3: Lime Green -->
-    <rect x="35" y="115" width="60" height="22" rx="6" fill="#00FF88" />
-    <rect x="105" y="115" width="60" height="22" rx="6" fill="#00FF88" />
-    <rect x="245" y="115" width="60" height="22" rx="6" fill="#00FF88" />
-    <rect x="315" y="115" width="50" height="22" rx="6" fill="#00FF88" />
-
-    <!-- Row 4: Bright Gold -->
-    <rect x="35" y="145" width="60" height="22" rx="6" fill="#FFE600" />
-    <rect x="105" y="145" width="60" height="22" rx="6" fill="#FFE600" />
-    <rect x="245" y="145" width="60" height="22" rx="6" fill="#FFE600" />
-    <rect x="315" y="145" width="50" height="22" rx="6" fill="#FFE600" />
+  <!-- Neo Sparks & Particle Accents -->
+  <g fill="#FFE600">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Brick Shatter Explosion at (205, 100) -->
-  <g transform="translate(205, 100)">
-    <!-- Shards -->
-    <rect x="-25" y="-18" width="16" height="12" rx="3" fill="#00F0FF" stroke="#000000" stroke-width="2" transform="rotate(-25)" />
-    <rect x="15" y="-22" width="14" height="10" rx="3" fill="#00F0FF" stroke="#000000" stroke-width="2" transform="rotate(35)" />
-    <rect x="-18" y="15" width="12" height="12" rx="3" fill="#FF007F" stroke="#000000" stroke-width="2" transform="rotate(45)" />
-    <rect x="20" y="12" width="15" height="10" rx="3" fill="#00FF88" stroke="#000000" stroke-width="2" transform="rotate(-40)" />
-
-    <!-- Star Burst -->
-    <polygon points="0,-25 7,-8 25,-8 11,3 17,21 0,10 -17,21 -11,3 -25,-8 -7,-8" fill="#FFE600" stroke="#000000" stroke-width="2" />
-    <!-- "HIT!" text -->
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" fill="#000000" font-weight="900" text-anchor="middle">HIT!</text>
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Cute Smiling Bouncing Energy Ball -->
-  <g transform="translate(195, 205)" filter="url(#brutalShadowSm)">
-    <!-- Ball trail -->
-    <ellipse cx="10" cy="35" rx="14" ry="8" fill="#FFE600" opacity="0.4" transform="rotate(25 10 35)" />
-    <circle cx="0" cy="0" r="28" fill="#FFE600" stroke="#000000" stroke-width="3.5" />
+  <!-- Inner Playfield Matrix Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#070114" stroke="#000000" stroke-width="2.5" />
 
-    <!-- Cute Eyes -->
-    <ellipse cx="-8" cy="-5" rx="5" ry="7" fill="#000000" />
-    <circle cx="-6" cy="-7" r="2" fill="#FFFFFF" />
-    <ellipse cx="8" cy="-5" rx="5" ry="7" fill="#000000" />
-    <circle cx="10" cy="-7" r="2" fill="#FFFFFF" />
-
-    <!-- Smile & Cheeks -->
-    <path d="M -7,6 Q 0,14 7,6" stroke="#000000" stroke-width="3" fill="none" stroke-linecap="round" />
-    <circle cx="-15" cy="4" r="3.5" fill="#FF007F" />
-    <circle cx="15" cy="4" r="3.5" fill="#FF007F" />
+  <!-- Playfield Subtle Grid Lines -->
+  <g class="theme-stage-grid" stroke-width="1.2" stroke-dasharray="6,4">
+    <line x1="48" y1="140" x2="352" y2="140" opacity="0.4" />
+    <line x1="48" y1="200" x2="352" y2="200" opacity="0.6" />
+    <line x1="48" y1="260" x2="352" y2="260" opacity="0.8" />
   </g>
 
-  <!-- Neon Paddle with Brutalist Drop Shadow -->
-  <g transform="translate(200, 305)" filter="url(#brutalShadow)">
-    <rect x="-70" y="0" width="140" height="24" rx="12" fill="#00F0FF" stroke="#000000" stroke-width="3.5" />
-    <!-- Center Light -->
-    <circle cx="0" cy="12" r="6" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
-    <!-- Grips -->
-    <rect x="-55" y="6" width="26" height="12" rx="4" fill="#0088FF" stroke="#000000" stroke-width="1.5" />
-    <rect x="29" y="6" width="26" height="12" rx="4" fill="#0088FF" stroke="#000000" stroke-width="1.5" />
+  <!-- 3D EXTRUDED CYBER BRICKS FORMATION (Top Field) -->
+  <!-- Row 1: Pink Bricks (Y=62) -->
+  <g filter="url(#brutalShadowSm)">
+    <!-- Brick 1 -->
+    <g transform="translate(60, 62)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickPinkSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickPinkSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickPinkFace)" />
+    </g>
+    <!-- Brick 2 -->
+    <g transform="translate(116, 62)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickPinkSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickPinkSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickPinkFace)" />
+    </g>
+    <!-- Brick 3 (Gap/Shattered at center X=172) -->
+    <!-- Brick 4 -->
+    <g transform="translate(236, 62)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickPinkSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickPinkSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickPinkFace)" />
+    </g>
+    <!-- Brick 5 -->
+    <g transform="translate(292, 62)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickPinkSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickPinkSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickPinkFace)" />
+    </g>
   </g>
 
-  <!-- Top Tag Pill: NEON PADDLE ARCADE -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-85" y="-10" width="170" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">NEON PADDLE ARCADE</text>
+  <!-- Row 2: Cyan Bricks (Y=90) -->
+  <g filter="url(#brutalShadowSm)">
+    <!-- Brick 1 -->
+    <g transform="translate(60, 90)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickCyanSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickCyanSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickCyanFace)" />
+    </g>
+    <!-- Brick 2 -->
+    <g transform="translate(116, 90)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickCyanSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickCyanSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickCyanFace)" />
+    </g>
+    <!-- Brick 4 -->
+    <g transform="translate(236, 90)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickCyanSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickCyanSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickCyanFace)" />
+    </g>
+    <!-- Brick 5 -->
+    <g transform="translate(292, 90)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickCyanSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickCyanSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickCyanFace)" />
+    </g>
   </g>
 
-  <!-- Bottom Title Badge Pill: CYBER BRICK BREAKER -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" font-weight="900" text-anchor="middle" letter-spacing="1.2">CYBER BRICK BREAKER</text>
+  <!-- Row 3: Lime Bricks (Y=118) -->
+  <g filter="url(#brutalShadowSm)">
+    <!-- Brick 1 -->
+    <g transform="translate(60, 118)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickLimeSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickLimeSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickLimeFace)" />
+    </g>
+    <!-- Brick 2 -->
+    <g transform="translate(116, 118)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickLimeSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickLimeSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickLimeFace)" />
+    </g>
+    <!-- Brick 4 -->
+    <g transform="translate(236, 118)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickLimeSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickLimeSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickLimeFace)" />
+    </g>
+    <!-- Brick 5 -->
+    <g transform="translate(292, 118)" stroke="#000000" stroke-width="2">
+      <polygon points="0,18 4,22 52,22 48,18" fill="url(#brickLimeSide)" />
+      <polygon points="48,0 52,4 52,22 48,18" fill="url(#brickLimeSide)" />
+      <rect x="0" y="0" width="48" height="18" rx="4" fill="url(#brickLimeFace)" />
+    </g>
   </g>
+
+  <!-- 3D BRICK SHATTER EXPLOSION DEBRIS (Center Target: X=190, Y=85) -->
+  <g transform="translate(190, 85)" filter="url(#brutalShadow)">
+    <polygon points="-24,-12 -12,-20 -8,-10 -20,-4" fill="#FF007F" stroke="#000000" stroke-width="1.8" />
+    <polygon points="12,-18 26,-12 20,-2 8,-8" fill="#00F0FF" stroke="#000000" stroke-width="1.8" />
+    <polygon points="-16,12 -6,4 2,16 -8,22" fill="#FFE600" stroke="#000000" stroke-width="1.8" />
+    <polygon points="14,8 24,18 16,24 8,14" fill="#00FF88" stroke="#000000" stroke-width="1.8" />
+  </g>
+
+  <!-- 3D BOUNCING ENERGY BALL IN MOTION (Center: X=195, Y=180) -->
+  <g transform="translate(195, 180)" filter="url(#brutalShadowLg)">
+    <!-- Ball Kinetic Trail -->
+    <ellipse cx="12" cy="28" rx="14" ry="7" fill="#FFE600" opacity="0.4" transform="rotate(30 12 28)" />
+    <!-- 3D Sphere -->
+    <circle cx="0" cy="0" r="24" fill="url(#ballSphere)" stroke="#000000" stroke-width="3" />
+    <!-- Specular Highlight Gloss -->
+    <ellipse cx="-7" cy="-7" rx="6" ry="10" fill="#FFFFFF" opacity="0.8" transform="rotate(-30 -7 -7)" />
+    <!-- Cute Energetic Eyes -->
+    <ellipse cx="-6" cy="-2" rx="3.5" ry="5" fill="#000000" />
+    <circle cx="-5" cy="-4" r="1.5" fill="#FFFFFF" />
+    <ellipse cx="6" cy="-2" rx="3.5" ry="5" fill="#000000" />
+    <circle cx="7" cy="-4" r="1.5" fill="#FFFFFF" />
+    <path d="M -5,6 Q 0,11 5,6" stroke="#000000" stroke-width="2.5" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- 3D EXTRUDED CYBER LASER PADDLE (Bottom Center: X=200, Y=280) -->
+  <g transform="translate(200, 275)" filter="url(#brutalShadowLg)">
+    <g stroke="#000000" stroke-width="3.5">
+      <!-- 3D Extruded Side & Bottom -->
+      <polygon points="70,-12 82,0 82,18 70,8" fill="url(#paddleSide)" />
+      <polygon points="-70,8 -58,18 82,18 70,8" fill="url(#paddleSide)" />
+      <!-- Paddle Front Plate -->
+      <rect x="-70" y="-12" width="140" height="20" rx="8" fill="url(#paddleFace)" />
+    </g>
+    <!-- Specular Highlight -->
+    <polygon points="-62,-8 58,-8 50,-2 -62,-2" fill="#FFFFFF" opacity="0.8" />
+    <!-- Center Cyber Power Core -->
+    <circle cx="0" cy="-2" r="5" fill="#FFE600" stroke="#000000" stroke-width="2" />
+    <!-- Grip Accents -->
+    <rect x="-55" y="-6" width="18" height="8" rx="2" fill="#004D66" />
+    <rect x="37" y="-6" width="18" height="8" rx="2" fill="#004D66" />
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "BRICK SHATTER!" -->
+  <g transform="translate(195, 115)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="8.5" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      BRICK SHATTER!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "NEON PADDLE ARCADE" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      NEON PADDLE ARCADE
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "CYBER BRICK BREAKER" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="14.5" text-anchor="middle" letter-spacing="1.2">
+      CYBER BRICK BREAKER
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

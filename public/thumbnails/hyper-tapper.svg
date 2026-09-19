@@ -4,27 +4,60 @@
     <linearGradient id="tapBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#140600" />
       <stop offset="50%" stop-color="#2D1000" />
-      <stop offset="100%" stop-color="#090518" />
+      <stop offset="100%" stop-color="#0c0418" />
     </linearGradient>
     <linearGradient id="tapBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
+      <stop offset="50%" stop-color="#FFF7ED" />
       <stop offset="100%" stop-color="#FFEDD5" />
     </linearGradient>
 
-    <!-- Drop Shadows -->
+    <!-- 3D Button Palettes -->
+    <linearGradient id="btnFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="60%" stop-color="#FFE600" />
+      <stop offset="100%" stop-color="#FFB300" />
+    </linearGradient>
+    <linearGradient id="btnSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#92400E" />
+    </linearGradient>
+
+    <!-- 3D Cyber Gauntlet Palettes -->
+    <linearGradient id="gloveFaceCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="gloveSideCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088B8" />
+      <stop offset="100%" stop-color="#004D66" />
+    </linearGradient>
+
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
       <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="shockwaveGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FFE600" flood-opacity="0.85" />
+    </filter>
   </defs>
 
   <style>
     .theme-bg { fill: url(#tapBgDark); }
-    .theme-grid-line { stroke: #FB923C; stroke-opacity: 0.15; }
-    .theme-btn-base { fill: #2B1506; stroke: #000000; }
+    .theme-grid-line { stroke: #FB923C; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #1C0B02; stroke: #FB923C; }
+    .theme-stage-grid { stroke: #451A03; }
     .theme-badge-rect { fill: #FFE600; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
     .theme-tag-rect { fill: #FF007F; stroke: #000000; }
@@ -32,8 +65,9 @@
 
     @media (prefers-color-scheme: light) {
       .theme-bg { fill: url(#tapBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
-      .theme-btn-base { fill: #FFFFFF; stroke: #000000; }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
       .theme-badge-rect { fill: #FFE600; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
       .theme-tag-rect { fill: #FF007F; stroke: #000000; }
@@ -44,65 +78,137 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Speed Shockwave Ripple Rings -->
-  <g class="theme-grid-line" stroke-width="2">
-    <ellipse cx="200" cy="265" rx="160" ry="55" fill="none" stroke-dasharray="8,6" />
-    <ellipse cx="200" cy="265" rx="120" ry="42" fill="none" />
-    <ellipse cx="200" cy="265" rx="80" ry="28" fill="none" />
+  <!-- Retro Cyber Grid Backdrop -->
+  <g class="theme-grid-line" stroke-width="1.5">
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Giant Glowing Arcade Button Base (3D Neo-Brutalist) -->
-  <g transform="translate(200, 245)" filter="url(#brutalShadow)">
-    <!-- Outer Button Ring Base -->
-    <ellipse cx="0" cy="20" rx="95" ry="38" class="theme-btn-base" stroke-width="4" />
-    <!-- Golden Cap -->
-    <ellipse cx="0" cy="4" rx="78" ry="30" fill="#FF7700" stroke="#000000" stroke-width="3" />
-    <ellipse cx="0" cy="-2" rx="75" ry="28" fill="#FFE600" stroke="#000000" stroke-width="3.5" />
-    <!-- Highlight -->
-    <ellipse cx="-15" cy="-10" rx="42" ry="12" fill="#FFFFFF" opacity="0.6" />
-    <text x="0" y="7" font-family="'Impact', 'Arial Black', sans-serif" font-size="22" fill="#000000" font-weight="900" text-anchor="middle" letter-spacing="1">TAP!</text>
+  <!-- Neo Sparks & Shockwave Accents -->
+  <g fill="#FFE600">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Lightning Sparks Bursting from Tip -->
-  <g stroke="#000000" stroke-width="3.5" fill="none">
-    <path d="M 195,220 L 175,195 L 190,180 L 165,155 L 200,155 L 180,125" stroke="#FFE600" />
-    <path d="M 215,220 L 235,190 L 220,180 L 245,155 L 215,150 L 235,120" stroke="#00F0FF" />
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Cartoon Robo-Glove Tapping Pose -->
-  <g transform="translate(180, 50)" filter="url(#brutalShadowSm)">
-    <!-- Arm -->
-    <rect x="-10" y="0" width="60" height="90" rx="16" fill="#00F0FF" stroke="#000000" stroke-width="3.5" />
-    <rect x="-14" y="68" width="68" height="22" rx="8" fill="#FFE600" stroke="#000000" stroke-width="3" />
+  <!-- Inner Playfield Matrix Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#0C0402" stroke="#000000" stroke-width="2.5" />
 
-    <!-- Index Finger extended downward -->
-    <rect x="5" y="80" width="30" height="95" rx="15" fill="#FFFFFF" stroke="#000000" stroke-width="3.5" />
-
-    <!-- Thumb folded in -->
-    <ellipse cx="-5" cy="115" rx="14" ry="18" fill="#FFFFFF" stroke="#000000" stroke-width="3.5" />
-
-    <!-- Cute Smiling Face on Glove -->
-    <circle cx="10" cy="38" r="3" fill="#000000" />
-    <circle cx="30" cy="38" r="3" fill="#000000" />
-    <path d="M 16,46 Q 20,52 24,46" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" />
+  <!-- Speed Shockwave Ripple Rings (Impact Epicenter at X=200, Y=245) -->
+  <g class="theme-stage-grid" stroke-width="2" fill="none">
+    <ellipse cx="200" cy="245" rx="135" ry="46" stroke-dasharray="6,6" opacity="0.6" />
+    <ellipse cx="200" cy="245" rx="105" ry="36" stroke-dasharray="4,4" opacity="0.8" />
+    <ellipse cx="200" cy="245" rx="75" ry="26" stroke="#FFE600" opacity="0.9" />
   </g>
 
-  <!-- CPS / APM Meter Pill (Top Right) -->
-  <g transform="translate(315, 85)" filter="url(#brutalShadowSm)">
-    <rect x="-40" y="-22" width="80" height="44" rx="12" fill="#FF007F" stroke="#000000" stroke-width="3" />
-    <text x="0" y="-4" font-family="'Impact', 'Arial Black', sans-serif" font-size="11" fill="#FFFFFF" font-weight="900" text-anchor="middle" letter-spacing="0.5">MAX</text>
-    <text x="0" y="14" font-family="'Impact', 'Arial Black', sans-serif" font-size="14" fill="#FFE600" font-weight="900" text-anchor="middle" letter-spacing="1">CPS ⚡</text>
+  <!-- 3D GIANT EXTRUDED ARCADE BUTTON BASE (Bottom Matrix Center: X=200, Y=240) -->
+  <g transform="translate(200, 240)" filter="url(#brutalShadowLg)">
+    <g stroke="#000000" stroke-width="3.5">
+      <!-- 3D Base Bevel Pedestal -->
+      <path d="M -100,10 L -100,32 C -100,52 100,52 100,32 L 100,10 Z" fill="#291203" />
+      <ellipse cx="0" cy="10" rx="100" ry="32" fill="#451E07" />
+      <!-- 3D Button Extruded Side -->
+      <path d="M -85,-5 L -85,15 C -85,38 85,38 85,15 L 85,-5 Z" fill="url(#btnSideGrad)" />
+      <!-- 3D Top Dome Face -->
+      <ellipse cx="0" cy="-5" rx="85" ry="28" fill="url(#btnFaceGrad)" />
+    </g>
+    <!-- Specular Highlight Arc -->
+    <ellipse cx="-20" cy="-14" rx="55" ry="14" fill="#FFFFFF" opacity="0.75" />
+    <!-- Slam Text Embossed -->
+    <text x="0" y="3" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="24" fill="#000000" text-anchor="middle" letter-spacing="1.5">
+      SLAM!
+    </text>
   </g>
 
-  <!-- Top Tag Pill: PRECISION REFLEX CLICKER -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-90" y="-10" width="180" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">PRECISION REFLEX CLICKER</text>
+  <!-- IMPACT ENERGY BURST LIGHTNING ARCS -->
+  <g filter="url(#shockwaveGlow)">
+    <path d="M 170,225 L 140,195 L 160,185 L 130,150 L 165,155 L 145,115" stroke="#FFE600" stroke-width="3.5" fill="none" stroke-linecap="round" />
+    <path d="M 230,225 L 260,195 L 240,185 L 270,150 L 235,155 L 255,115" stroke="#00F0FF" stroke-width="3.5" fill="none" stroke-linecap="round" />
   </g>
 
-  <!-- Bottom Title Badge Pill: HYPER TAPPER -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-90" y="-15" width="180" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">HYPER TAPPER</text>
+  <!-- 3D HERO CYBERNETIC SLAM GLOVE (Descending: X=200, Y=145) -->
+  <g transform="translate(195, 125)" filter="url(#brutalShadowLg)">
+    <!-- Gauntlet Arm Chassis -->
+    <g stroke="#000000" stroke-width="3.5">
+      <!-- 3D Extrusion Side -->
+      <polygon points="26,-75 36,-65 36,15 26,5" fill="url(#gloveSideCyan)" />
+      <polygon points="-30,5 -20,15 36,15 26,5" fill="url(#gloveSideCyan)" />
+      <!-- Arm Main Plate -->
+      <rect x="-30" y="-75" width="56" height="80" rx="14" fill="url(#gloveFaceCyan)" />
+    </g>
+    <!-- Specular Highlight -->
+    <rect x="-24" y="-68" width="10" height="65" rx="4" fill="#FFFFFF" opacity="0.7" />
+    <!-- Gold Cyber Power Core Band -->
+    <rect x="-32" y="-25" width="60" height="18" rx="6" fill="#FFE600" stroke="#000000" stroke-width="3" />
+    <circle cx="-16" cy="-16" r="3" fill="#FF007F" stroke="#000000" stroke-width="1.5" />
+    <circle cx="0" cy="-16" r="3" fill="#000000" />
+    <circle cx="16" cy="-16" r="3" fill="#FF007F" stroke="#000000" stroke-width="1.5" />
+
+    <!-- 3D Extended Power Index Finger -->
+    <g stroke="#000000" stroke-width="3.5">
+      <polygon points="12,5 18,12 18,80 12,72" fill="#D4D4D8" />
+      <polygon points="-12,72 -6,80 18,80 12,72" fill="#A1A1AA" />
+      <rect x="-12" y="5" width="24" height="68" rx="12" fill="#FFFFFF" />
+    </g>
+    <!-- Finger Knuckle Neon Indicator -->
+    <rect x="-8" y="22" width="16" height="6" rx="2" fill="#00F0FF" />
+    <rect x="-8" y="42" width="16" height="6" rx="2" fill="#FFE600" />
+
+    <!-- Thumb Folded Side -->
+    <ellipse cx="-20" cy="25" rx="12" ry="16" fill="#FFFFFF" stroke="#000000" stroke-width="3" />
   </g>
+
+  <!-- CPS / OVERCLOCK COMBO PILL (Top Right Matrix: X=300, Y=90) -->
+  <g transform="translate(300, 90)" filter="url(#brutalShadowSm)">
+    <rect x="-42" y="-22" width="84" height="44" rx="12" fill="#FF007F" stroke="#000000" stroke-width="3" />
+    <text x="0" y="-4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">OVERCLOCK</text>
+    <text x="0" y="14" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="14" fill="#FFE600" text-anchor="middle" letter-spacing="1">99.9 CPS ⚡</text>
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "HYPER BURST!" -->
+  <g transform="translate(100, 90)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="8.5" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      HYPER BURST!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "TURBO REFLEX PROTOCOL" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      TURBO REFLEX PROTOCOL
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "HYPER TAPPER" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      HYPER TAPPER
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
+    <!-- Background Gradients -->
     <linearGradient id="mineBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0B0819" />
-      <stop offset="50%" stop-color="#1C1635" />
-      <stop offset="100%" stop-color="#05030D" />
+      <stop offset="0%" stop-color="#0c071d" />
+      <stop offset="50%" stop-color="#180e36" />
+      <stop offset="100%" stop-color="#05030f" />
     </linearGradient>
     <linearGradient id="mineBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
@@ -12,26 +12,72 @@
       <stop offset="100%" stop-color="#FFE4E6" />
     </linearGradient>
 
-    <!-- Bomb Core Gradient -->
-    <radialGradient id="bombCore" cx="40%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#FF4081" />
-      <stop offset="60%" stop-color="#E11D48" />
-      <stop offset="100%" stop-color="#881337" />
+    <!-- 3D Tile Palettes -->
+    <linearGradient id="tileFaceDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#241a4a" />
+      <stop offset="100%" stop-color="#160f33" />
+    </linearGradient>
+    <linearGradient id="tileSideDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e0824" />
+      <stop offset="100%" stop-color="#070314" />
+    </linearGradient>
+
+    <!-- 3D Quantum Mine Sphere & Spikes -->
+    <radialGradient id="mineSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#4c1d95" />
+      <stop offset="40%" stop-color="#1e103a" />
+      <stop offset="100%" stop-color="#020008" />
+    </radialGradient>
+    <radialGradient id="mineCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="35%" stop-color="#FFE600" />
+      <stop offset="70%" stop-color="#FF007F" />
+      <stop offset="100%" stop-color="#990033" />
     </radialGradient>
 
-    <!-- Drop Shadow Filter for Neo-Brutalist 3D pop -->
-    <filter id="neoShadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    <!-- 3D Number Plate Gradients -->
+    <linearGradient id="plateCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="platePink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF66CC" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+    <linearGradient id="plateGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF570" />
+      <stop offset="100%" stop-color="#FFDE59" />
+    </linearGradient>
+    <linearGradient id="plateLime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86EFAC" />
+      <stop offset="100%" stop-color="#22C55E" />
+    </linearGradient>
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
+    <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
-    <filter id="neoShadowSm" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="mineGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FF007F" flood-opacity="0.8" />
     </filter>
   </defs>
 
   <style>
     .theme-bg { fill: url(#mineBgDark); }
-    .theme-grid-line { stroke: #FFE600; stroke-opacity: 0.15; }
-    .theme-tile-bg { fill: #18132F; stroke: #000000; }
+    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #110924; stroke: #FFE600; }
+    .theme-stage-grid { stroke: #26164A; }
+    .theme-tile-body { fill: #1C1238; stroke: #000000; }
     .theme-badge-rect { fill: #FFE600; stroke: #000000; }
     .theme-badge-text { fill: #000000; }
     .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
@@ -39,8 +85,10 @@
 
     @media (prefers-color-scheme: light) {
       .theme-bg { fill: url(#mineBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.1; }
-      .theme-tile-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #E2E8F0; }
+      .theme-tile-body { fill: #F8FAFC; stroke: #000000; }
       .theme-badge-rect { fill: #FFE600; stroke: #000000; }
       .theme-badge-text { fill: #000000; }
       .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
@@ -48,113 +96,173 @@
     }
   </style>
 
-  <!-- Base Canvas -->
+  <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Neo Dots Pattern Overlay -->
-  <g class="theme-grid-line" fill="#FFE600">
-    <circle cx="30" cy="30" r="2.5" />
-    <circle cx="70" cy="30" r="2.5" />
-    <circle cx="110" cy="30" r="2.5" />
-    <circle cx="150" cy="30" r="2.5" />
-    <circle cx="250" cy="30" r="2.5" />
-    <circle cx="290" cy="30" r="2.5" />
-    <circle cx="330" cy="30" r="2.5" />
-    <circle cx="370" cy="30" r="2.5" />
-
-    <circle cx="30" cy="330" r="2.5" />
-    <circle cx="70" cy="330" r="2.5" />
-    <circle cx="330" cy="330" r="2.5" />
-    <circle cx="370" cy="330" r="2.5" />
+  <!-- Retro Cyber Grid Backdrop -->
+  <g class="theme-grid-line" stroke-width="1.5">
+    <line x1="0" y1="50" x2="400" y2="50" />
+    <line x1="0" y1="100" x2="400" y2="100" />
+    <line x1="0" y1="150" x2="400" y2="150" />
+    <line x1="0" y1="200" x2="400" y2="200" />
+    <line x1="0" y1="250" x2="400" y2="250" />
+    <line x1="0" y1="300" x2="400" y2="300" />
+    <line x1="0" y1="350" x2="400" y2="350" />
+    <line x1="50" y1="0" x2="50" y2="400" />
+    <line x1="100" y1="0" x2="100" y2="400" />
+    <line x1="150" y1="0" x2="150" y2="400" />
+    <line x1="200" y1="0" x2="200" y2="400" />
+    <line x1="250" y1="0" x2="250" y2="400" />
+    <line x1="300" y1="0" x2="300" y2="400" />
+    <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Background Tactile Grid Matrix -->
-  <g filter="url(#neoShadowSm)">
-    <!-- Row 1 -->
-    <rect x="44" y="54" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="78" y="99" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#00F0FF" stroke="#000000" stroke-width="1" text-anchor="middle">1</text>
+  <!-- Neo Sparks & Radar Dots -->
+  <g fill="#FFE600">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
+  </g>
 
-    <rect x="122" y="54" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="156" y="99" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#A3E635" stroke="#000000" stroke-width="1" text-anchor="middle">2</text>
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
+  </g>
 
-    <rect x="200" y="54" width="68" height="68" rx="14" fill="#FFE600" stroke="#000000" stroke-width="3" />
-    <!-- Flag Icon on Yellow Tile -->
-    <path d="M226 74 L248 86 L226 98 Z" fill="#000000" stroke="#000000" stroke-width="2" />
-    <line x1="226" y1="72" x2="226" y2="110" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+  <!-- Inner Playfield Matrix Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#060212" stroke="#000000" stroke-width="2.5" />
 
-    <rect x="278" y="54" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="312" y="99" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#FF007F" stroke="#000000" stroke-width="1" text-anchor="middle">3</text>
+  <!-- 3D TACTILE SECTOR TILES (Background Grid) -->
+  <!-- Top Row Tiles -->
+  <!-- Tile (Col 0, Row 0): Number "1" -->
+  <g transform="translate(60, 60)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#0B051C" />
+      <rect x="0" y="0" width="60" height="54" rx="8" class="theme-tile-body" />
+    </g>
+    <text x="30" y="38" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#00F0FF" text-anchor="middle">1</text>
+  </g>
 
-    <!-- Row 2 -->
-    <rect x="44" y="132" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="78" y="177" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#A3E635" stroke="#000000" stroke-width="1" text-anchor="middle">2</text>
+  <!-- Tile (Col 1, Row 0): Number "2" -->
+  <g transform="translate(130, 60)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#0B051C" />
+      <rect x="0" y="0" width="60" height="54" rx="8" class="theme-tile-body" />
+    </g>
+    <text x="30" y="38" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#22C55E" text-anchor="middle">2</text>
+  </g>
 
-    <!-- Center Giant Quantum Mine Tile -->
-    <rect x="122" y="132" width="146" height="146" rx="24" fill="#FF007F" stroke="#000000" stroke-width="4" filter="url(#neoShadow)" />
+  <!-- Tile (Col 2, Row 0): Flagged Sector -->
+  <g transform="translate(210, 60)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#D49B00" />
+      <rect x="0" y="0" width="60" height="54" rx="8" fill="url(#plateGold)" />
+    </g>
+    <!-- Flag Icon -->
+    <path d="M 22,14 L 42,24 L 22,34 Z" fill="#000000" />
+    <line x1="22" y1="12" x2="22" y2="44" stroke="#000000" stroke-width="3.5" stroke-linecap="round" />
+  </g>
 
-    <!-- Spikes for Quantum Mine -->
-    <g transform="translate(195, 205)">
+  <!-- Tile (Col 3, Row 0): Number "3" -->
+  <g transform="translate(280, 60)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#0B051C" />
+      <rect x="0" y="0" width="60" height="54" rx="8" class="theme-tile-body" />
+    </g>
+    <text x="30" y="38" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#FF007F" text-anchor="middle">3</text>
+  </g>
+
+  <!-- Bottom Left Tile: Number "1" -->
+  <g transform="translate(60, 252)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#0B051C" />
+      <rect x="0" y="0" width="60" height="54" rx="8" class="theme-tile-body" />
+    </g>
+    <text x="30" y="38" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="28" fill="#00F0FF" text-anchor="middle">1</text>
+  </g>
+
+  <!-- Bottom Right Tile: Flagged Sector -->
+  <g transform="translate(280, 252)" filter="url(#brutalShadowSm)">
+    <g stroke="#000000" stroke-width="2">
+      <rect x="0" y="3" width="60" height="54" rx="8" fill="#D49B00" />
+      <rect x="0" y="0" width="60" height="54" rx="8" fill="url(#plateGold)" />
+    </g>
+    <path d="M 22,14 L 42,24 L 22,34 Z" fill="#000000" />
+    <line x1="22" y1="12" x2="22" y2="44" stroke="#000000" stroke-width="3.5" stroke-linecap="round" />
+  </g>
+
+  <!-- 3D HERO CENTRAL QUANTUM PLASMA MINE CLUSTER (X=200, Y=180) -->
+  <g transform="translate(200, 180)" filter="url(#brutalShadowLg)">
+    <!-- 8 Directional Extruded 3D Spikes -->
+    <!-- Heavy Spike Arms with Neon Bulbs -->
+    <g stroke="#000000" stroke-width="3">
+      <!-- Top/Bottom Spikes -->
+      <line x1="0" y1="-62" x2="0" y2="62" stroke="#000000" stroke-width="10" stroke-linecap="round" />
+      <line x1="0" y1="-60" x2="0" y2="60" stroke="#FFE600" stroke-width="5" stroke-linecap="round" />
+      <!-- Left/Right Spikes -->
+      <line x1="-62" y1="0" x2="62" y2="0" stroke="#000000" stroke-width="10" stroke-linecap="round" />
+      <line x1="-60" y1="0" x2="60" y2="0" stroke="#FFE600" stroke-width="5" stroke-linecap="round" />
       <!-- Diagonal Spikes -->
-      <line x1="-52" y1="-52" x2="52" y2="52" stroke="#000000" stroke-width="7" stroke-linecap="round" />
-      <line x1="52" y1="-52" x2="-52" y2="52" stroke="#000000" stroke-width="7" stroke-linecap="round" />
-      <line x1="0" y1="-62" x2="0" y2="62" stroke="#000000" stroke-width="7" stroke-linecap="round" />
-      <line x1="-62" y1="0" x2="62" y2="0" stroke="#000000" stroke-width="7" stroke-linecap="round" />
-
-      <!-- Spike Tips (Cyan Glowing Bulbs) -->
-      <circle cx="0" cy="-62" r="6" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-      <circle cx="0" cy="62" r="6" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-      <circle cx="-62" cy="0" r="6" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-      <circle cx="62" cy="0" r="6" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-      <circle cx="-52" cy="-52" r="5" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
-      <circle cx="52" cy="52" r="5" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
-      <circle cx="52" cy="-52" r="5" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
-      <circle cx="-52" cy="52" r="5" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
-
-      <!-- Mine Main Sphere Body -->
-      <circle cx="0" cy="0" r="44" fill="#000000" stroke="#FFE600" stroke-width="4" />
-      <circle cx="0" cy="0" r="36" fill="url(#bombCore)" stroke="#000000" stroke-width="3" />
-
-      <!-- Hazard Triangle -->
-      <polygon points="0,-18 16,14 -16,14" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
-      <line x1="0" y1="-10" x2="0" y2="3" stroke="#000000" stroke-width="3.5" stroke-linecap="round" />
-      <circle cx="0" cy="9" r="2" fill="#000000" />
+      <line x1="-48" y1="-48" x2="48" y2="48" stroke="#000000" stroke-width="10" stroke-linecap="round" />
+      <line x1="-46" y1="-46" x2="46" y2="46" stroke="#00F0FF" stroke-width="5" stroke-linecap="round" />
+      <line x1="48" y1="-48" x2="-48" y2="48" stroke="#000000" stroke-width="10" stroke-linecap="round" />
+      <line x1="46" y1="-46" x2="-46" y2="46" stroke="#00F0FF" stroke-width="5" stroke-linecap="round" />
     </g>
 
-    <rect x="278" y="132" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="312" y="177" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#00F0FF" stroke="#000000" stroke-width="1" text-anchor="middle">1</text>
+    <!-- Glowing Spike Tip Bulbs -->
+    <g stroke="#000000" stroke-width="2.5">
+      <circle cx="0" cy="-62" r="8" fill="#FFE600" />
+      <circle cx="0" cy="62" r="8" fill="#FFE600" />
+      <circle cx="-62" cy="0" r="8" fill="#FFE600" />
+      <circle cx="62" cy="0" r="8" fill="#FFE600" />
+      <circle cx="-48" cy="-48" r="7" fill="#00F0FF" />
+      <circle cx="48" cy="48" r="7" fill="#00F0FF" />
+      <circle cx="48" cy="-48" r="7" fill="#00F0FF" />
+      <circle cx="-48" cy="48" r="7" fill="#00F0FF" />
+    </g>
 
-    <!-- Row 3 -->
-    <rect x="44" y="210" width="68" height="68" rx="14" fill="#FFE600" stroke="#000000" stroke-width="3" />
-    <path d="M70 230 L92 242 L70 254 Z" fill="#000000" stroke="#000000" stroke-width="2" />
-    <line x1="70" y1="228" x2="70" y2="266" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+    <!-- Main Spherical Armored Core Body -->
+    <circle cx="0" cy="0" r="48" fill="url(#mineSphere)" stroke="#000000" stroke-width="4" />
+    <circle cx="0" cy="0" r="38" fill="url(#mineCoreGlow)" stroke="#000000" stroke-width="2.5" />
 
-    <rect x="278" y="210" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="312" y="255" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#FFE600" stroke="#000000" stroke-width="1" text-anchor="middle">4</text>
+    <!-- Hazard Radiation Symbol / Skull Matrix -->
+    <g stroke="#000000" stroke-width="2.5">
+      <polygon points="0,-20 18,14 -18,14" fill="#FFE600" />
+      <line x1="0" y1="-10" x2="0" y2="3" stroke="#000000" stroke-width="4" stroke-linecap="round" />
+      <circle cx="0" cy="9" r="2.5" fill="#000000" />
+    </g>
 
-    <!-- Row 4 -->
-    <rect x="44" y="288" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="78" y="333" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#00F0FF" stroke="#000000" stroke-width="1" text-anchor="middle">1</text>
-
-    <rect x="122" y="288" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="156" y="333" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#A3E635" stroke="#000000" stroke-width="1" text-anchor="middle">2</text>
-
-    <rect x="200" y="288" width="68" height="68" rx="14" class="theme-tile-bg" stroke-width="3" />
-    <text x="234" y="333" font-family="'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="34" fill="#00F0FF" stroke="#000000" stroke-width="1" text-anchor="middle">1</text>
-
-    <rect x="278" y="288" width="68" height="68" rx="14" fill="#00F0FF" stroke="#000000" stroke-width="3" />
-    <path d="M298 324 L320 302" stroke="#000000" stroke-width="5" stroke-linecap="round" />
-    <path d="M308 300 C318 296 326 298 334 306" fill="none" stroke="#000000" stroke-width="4.5" stroke-linecap="round" />
+    <!-- Specular Highlight Arc on Mine Body -->
+    <path d="M -30,-26 A 40 40 0 0 1 24,-32" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.8" />
   </g>
 
-  <!-- Top Tag Pill: TACTICAL LOGIC SWEEPER -->
-  <g transform="translate(200, 24)" filter="url(#neoShadowSm)">
-    <rect x="-80" y="-10" width="160" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">TACTICAL LOGIC SWEEPER</text>
+  <!-- ACTION POPUP COMBO BADGE: "SAFE CHORD!" -->
+  <g transform="translate(200, 116)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="9" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      SAFE CHORD!
+    </text>
   </g>
 
-  <!-- Bottom Title Badge Pill: QUANTUM MINEFIELD -->
-  <g transform="translate(200, 366)" filter="url(#neoShadowSm)">
-    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">QUANTUM MINEFIELD</text>
+  <!-- TOP TAG RIBBON: "TACTICAL LOGIC SWEEPER" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" text-anchor="middle" letter-spacing="1.2">
+      TACTICAL LOGIC SWEEPER
+    </text>
   </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "QUANTUM MINEFIELD" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      QUANTUM MINEFIELD
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>

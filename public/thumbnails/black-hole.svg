@@ -1,59 +1,97 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
     <!-- Background Gradients -->
-    <linearGradient id="bhBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#070214" />
-      <stop offset="50%" stop-color="#140630" />
-      <stop offset="100%" stop-color="#020008" />
+    <linearGradient id="singularityBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090014" />
+      <stop offset="50%" stop-color="#190326" />
+      <stop offset="100%" stop-color="#020817" />
     </linearGradient>
-    <linearGradient id="bhBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="singularityBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
-      <stop offset="100%" stop-color="#FFECC8" />
+      <stop offset="50%" stop-color="#F5F3FF" />
+      <stop offset="100%" stop-color="#EDE9FE" />
     </linearGradient>
 
-    <!-- Accretion Radial Gradients -->
-    <radialGradient id="bhAccretion" cx="50%" cy="50%" r="50%">
+    <!-- Accretion Disk Radiant Gradients -->
+    <radialGradient id="accretionGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#000000" />
-      <stop offset="35%" stop-color="#180033" />
-      <stop offset="60%" stop-color="#FF007F" />
-      <stop offset="85%" stop-color="#00F0FF" />
+      <stop offset="40%" stop-color="#FF007F" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#00F0FF" stop-opacity="0.8" />
       <stop offset="100%" stop-color="#FFE600" stop-opacity="0" />
     </radialGradient>
-    <radialGradient id="singularityCore" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#000000" />
-      <stop offset="75%" stop-color="#050010" />
-      <stop offset="90%" stop-color="#00F0FF" />
-      <stop offset="100%" stop-color="#FF007F" />
-    </radialGradient>
+    <linearGradient id="accretionRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE600" />
+      <stop offset="35%" stop-color="#FF007F" />
+      <stop offset="70%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#FFFFFF" />
+    </linearGradient>
 
-    <!-- Drop Shadows -->
+    <!-- 3D Node Number Pins -->
+    <linearGradient id="nodeCyanFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DF9FF" />
+      <stop offset="100%" stop-color="#00D0FF" />
+    </linearGradient>
+    <linearGradient id="nodeCyanSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0099CC" />
+      <stop offset="100%" stop-color="#005B80" />
+    </linearGradient>
+
+    <linearGradient id="nodePinkFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF66CC" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+    <linearGradient id="nodePinkSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B8005A" />
+      <stop offset="100%" stop-color="#7A003C" />
+    </linearGradient>
+
+    <linearGradient id="nodeGoldFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF570" />
+      <stop offset="100%" stop-color="#FFDE59" />
+    </linearGradient>
+    <linearGradient id="nodeGoldSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D49B00" />
+      <stop offset="100%" stop-color="#805D00" />
+    </linearGradient>
+
+    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF066" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
+    <filter id="brutalShadowLg" x="-15%" y="-15%" width="135%" height="135%">
+      <feDropShadow dx="5" dy="5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+      <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+    <filter id="eventHorizonGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#FF007F" flood-opacity="0.9" />
     </filter>
   </defs>
 
   <style>
-    .theme-bg { fill: url(#bhBgDark); }
-    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.15; }
-    .theme-tri-line { stroke: #492E86; }
-    .theme-card-body { fill: #120A2C; stroke: #FFE600; }
-    .theme-badge-rect { fill: #FFE600; stroke: #000000; }
-    .theme-badge-text { fill: #000000; }
-    .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+    .theme-bg { fill: url(#singularityBgDark); }
+    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
+    .theme-frame-bg { fill: #0D041A; stroke: #FF007F; }
+    .theme-stage-grid { stroke: #2D1045; }
+    .theme-badge-rect { fill: #FF007F; stroke: #000000; }
+    .theme-badge-text { fill: #FFFFFF; }
+    .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
     .theme-tag-text { fill: #000000; }
 
     @media (prefers-color-scheme: light) {
-      .theme-bg { fill: url(#bhBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.12; }
-      .theme-tri-line { stroke: #000000; stroke-opacity: 0.35; }
-      .theme-card-body { fill: #FFFFFF; stroke: #000000; }
-      .theme-badge-rect { fill: #FFE600; stroke: #000000; }
-      .theme-badge-text { fill: #000000; }
-      .theme-tag-rect { fill: #00F0FF; stroke: #000000; }
+      .theme-bg { fill: url(#singularityBgLight); }
+      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
+      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
+      .theme-stage-grid { stroke: #EDE9FE; }
+      .theme-badge-rect { fill: #FF007F; stroke: #000000; }
+      .theme-badge-text { fill: #FFFFFF; }
+      .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
       .theme-tag-text { fill: #000000; }
     }
   </style>
@@ -61,7 +99,7 @@
   <!-- Background Base Canvas -->
   <rect width="400" height="400" class="theme-bg" />
 
-  <!-- Subtle Coordinate Grid -->
+  <!-- Retro Cyber Grid Backdrop -->
   <g class="theme-grid-line" stroke-width="1.5">
     <line x1="0" y1="50" x2="400" y2="50" />
     <line x1="0" y1="100" x2="400" y2="100" />
@@ -79,125 +117,145 @@
     <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Triangular Network Grid Lines -->
-  <g class="theme-tri-line" stroke-width="2.5" stroke-linecap="round">
-    <!-- Horizontal -->
-    <line x1="170" y1="100" x2="230" y2="100" />
-    <line x1="140" y1="150" x2="260" y2="150" />
-    <line x1="110" y1="200" x2="290" y2="200" />
-    <line x1="80" y1="250" x2="320" y2="250" />
-    <line x1="50" y1="300" x2="350" y2="300" />
-
-    <!-- Diagonals Down-Right -->
-    <line x1="200" y1="50" x2="350" y2="300" />
-    <line x1="170" y1="100" x2="290" y2="300" />
-    <line x1="140" y1="150" x2="230" y2="300" />
-    <line x1="110" y1="200" x2="170" y2="300" />
-    <line x1="80" y1="250" x2="110" y2="300" />
-
-    <!-- Diagonals Down-Left -->
-    <line x1="200" y1="50" x2="50" y2="300" />
-    <line x1="230" y1="100" x2="110" y2="300" />
-    <line x1="260" y1="150" x2="170" y2="300" />
-    <line x1="290" y1="200" x2="230" y2="300" />
-    <line x1="320" y1="250" x2="290" y2="300" />
+  <!-- Neo Sparks & Relativistic Dust -->
+  <g fill="#FFDE59">
+    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
+    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
+    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
+    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
   </g>
 
-  <!-- Central Black Hole Event Horizon -->
-  <g transform="translate(230, 200)" filter="url(#brutalShadow)">
-    <circle cx="0" cy="0" r="44" fill="url(#bhAccretion)" opacity="0.9" />
-    <ellipse cx="0" cy="0" rx="38" ry="18" fill="none" stroke="#FFE600" stroke-width="2.5" transform="rotate(-30)" />
-    <ellipse cx="0" cy="0" rx="30" ry="12" fill="none" stroke="#00F0FF" stroke-width="2" transform="rotate(-30)" />
-    <!-- Singularity Core -->
-    <circle cx="0" cy="0" r="18" fill="url(#singularityCore)" stroke="#000000" stroke-width="2.5" />
-    <circle cx="0" cy="0" r="12" fill="#000000" />
-    <circle cx="-3" cy="-3" r="2.5" fill="#FFFFFF" />
+  <!-- 3D MAIN ARCADE CONTAINER -->
+  <g filter="url(#brutalShadowLg)">
+    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
   </g>
 
-  <!-- Outer Board Triangular Nodes -->
-  <!-- Row 0 -->
-  <g transform="translate(200, 50)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">1</text>
+  <!-- Inner Playfield Void Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#04000C" stroke="#000000" stroke-width="2.5" />
+
+  <!-- 21-Node Triangular Strategy Network Graph Lines -->
+  <g stroke="#4C1D95" stroke-width="1.8" stroke-dasharray="3,3">
+    <!-- Outer Triangular Boundary -->
+    <polygon points="200,66 85,270 315,270" fill="none" stroke="#6D28D9" stroke-width="2" />
+    <!-- Inner Web Lines -->
+    <line x1="200" y1="66" x2="200" y2="270" />
+    <line x1="142" y1="168" x2="258" y2="168" />
+    <line x1="142" y1="168" x2="200" y2="270" />
+    <line x1="258" y1="168" x2="200" y2="270" />
+    <line x1="85" y1="270" x2="258" y2="168" />
+    <line x1="315" y1="270" x2="142" y2="168" />
   </g>
 
-  <!-- Row 1 -->
-  <g transform="translate(170, 100)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" text-anchor="middle">2</text>
-  </g>
-  <g transform="translate(230, 100)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">3</text>
+  <!-- GRAVITATIONAL INFLOW VORTEX ARCS -->
+  <g stroke="#00F0FF" stroke-width="1.5" stroke-dasharray="6,4" fill="none" opacity="0.6">
+    <path d="M 100,100 Q 150,150 200,185" />
+    <path d="M 300,100 Q 250,150 200,185" />
+    <path d="M 120,280 Q 160,230 200,185" />
+    <path d="M 280,280 Q 240,230 200,185" />
   </g>
 
-  <!-- Row 2 -->
-  <g transform="translate(140, 150)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">5</text>
-  </g>
-  <g transform="translate(200, 150)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" text-anchor="middle">8</text>
-  </g>
-  <g transform="translate(260, 150)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" font-weight="900" fill="#000000" text-anchor="middle">10</text>
+  <!-- 3D HERO CENTRAL BLACK HOLE SINGULARITY & ACCRETION DISK -->
+  <!-- Outer Accretion Glow Halo -->
+  <circle cx="200" cy="185" r="75" fill="url(#accretionGlow)" />
+
+  <!-- Swirling 3D Accretion Disk Rings (Tilted Perspective) -->
+  <g transform="translate(200, 185) rotate(-22)" filter="url(#eventHorizonGlow)">
+    <!-- Back Accretion Arc -->
+    <ellipse cx="0" cy="0" rx="68" ry="24" fill="none" stroke="url(#accretionRing)" stroke-width="8" opacity="0.9" />
+    <!-- Photon Sphere Ring -->
+    <ellipse cx="0" cy="0" rx="42" ry="15" fill="none" stroke="#FFFFFF" stroke-width="3" />
   </g>
 
-  <!-- Row 3 -->
-  <g transform="translate(110, 200)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" text-anchor="middle">4</text>
-  </g>
-  <g transform="translate(170, 200)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">7</text>
-  </g>
-  <g transform="translate(290, 200)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" text-anchor="middle">9</text>
+  <!-- Central Pitch-Black Event Horizon Core Sphere -->
+  <g filter="url(#brutalShadowLg)">
+    <circle cx="200" cy="185" r="28" fill="#000000" stroke="#FF007F" stroke-width="3" />
+    <!-- Inner Void Glow -->
+    <circle cx="200" cy="185" r="20" fill="#000000" />
+    <!-- Event Horizon Specular Edge -->
+    <path d="M 178,175 A 24 24 0 0 1 222,175" stroke="#00F0FF" stroke-width="2.5" stroke-linecap="round" fill="none" />
   </g>
 
-  <!-- Row 4 -->
-  <g transform="translate(80, 250)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">2</text>
-  </g>
-  <g transform="translate(140, 250)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#FFFFFF" text-anchor="middle">6</text>
-  </g>
-  <g transform="translate(200, 250)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">4</text>
-  </g>
-  <g transform="translate(260, 250)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="12" font-weight="900" fill="#FFFFFF" text-anchor="middle">10</text>
-  </g>
-  <g transform="translate(320, 250)" filter="url(#brutalShadowSm)">
-    <circle cx="0" cy="0" r="16" fill="#00F0FF" stroke="#000000" stroke-width="2.5" />
-    <text x="0" y="5" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" fill="#000000" text-anchor="middle">8</text>
+  <!-- 3D STRATEGY NODE PINS (Tactical Tokens on Triangle Lattice) -->
+  <!-- Node Pin 1: "10" Golden Final Core Node (Top Apex: X=200, Y=66) -->
+  <g transform="translate(200, 66)" filter="url(#brutalShadow)">
+    <g stroke="#000000" stroke-width="2">
+      <!-- 3D Pin Depth -->
+      <polygon points="-16,0 0,-14 16,0 0,14" fill="url(#nodeGoldSide)" />
+      <circle cx="0" cy="3" r="16" fill="url(#nodeGoldSide)" />
+      <!-- Pin Face -->
+      <circle cx="0" cy="0" r="16" fill="url(#nodeGoldFace)" />
+    </g>
+    <text x="0" y="4.5" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">
+      10
+    </text>
   </g>
 
-  <!-- Row 5 (Bottom Row) -->
-  <g transform="translate(50, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#FF007F" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">1</text></g>
-  <g transform="translate(110, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#00F0FF" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#000" text-anchor="middle">6</text></g>
-  <g transform="translate(170, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#FF007F" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">3</text></g>
-  <g transform="translate(230, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#00F0FF" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#000" text-anchor="middle">9</text></g>
-  <g transform="translate(290, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#FF007F" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#fff" text-anchor="middle">5</text></g>
-  <g transform="translate(350, 300)" filter="url(#brutalShadowSm)"><circle cx="0" cy="0" r="13" fill="#00F0FF" stroke="#000" stroke-width="2" /><text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-size="10" font-weight="900" fill="#000" text-anchor="middle">7</text></g>
-
-  <!-- Top Tag Pill: GALE'S SINGULARITY DUEL -->
-  <g transform="translate(200, 24)" filter="url(#brutalShadowSm)">
-    <rect x="-80" y="-10" width="160" height="20" rx="6" class="theme-tag-rect" stroke-width="2" />
-    <text x="0" y="4" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="9" font-weight="900" text-anchor="middle" letter-spacing="1">GALE'S SINGULARITY DUEL</text>
+  <!-- Node Pin 2: "7" Cyan Player 1 Node (Mid-Left: X=135, Y=168) -->
+  <g transform="translate(135, 168)" filter="url(#brutalShadow)">
+    <g stroke="#000000" stroke-width="2">
+      <circle cx="0" cy="3" r="15" fill="url(#nodeCyanSide)" />
+      <circle cx="0" cy="0" r="15" fill="url(#nodeCyanFace)" />
+    </g>
+    <text x="0" y="4.5" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="12" fill="#000000" text-anchor="middle">
+      7
+    </text>
   </g>
 
-  <!-- Bottom Title Badge Pill: SINGULARITY HORIZON -->
-  <g transform="translate(200, 366)" filter="url(#brutalShadowSm)">
-    <rect x="-105" y="-15" width="210" height="30" rx="10" class="theme-badge-rect" stroke-width="3" />
-    <text x="0" y="5" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-size="13" font-weight="900" text-anchor="middle" letter-spacing="1.5">SINGULARITY HORIZON</text>
+  <!-- Node Pin 3: "8" Magenta Player 2 Node (Mid-Right: X=265, Y=168) -->
+  <g transform="translate(265, 168)" filter="url(#brutalShadow)">
+    <g stroke="#000000" stroke-width="2">
+      <circle cx="0" cy="3" r="15" fill="url(#nodePinkSide)" />
+      <circle cx="0" cy="0" r="15" fill="url(#nodePinkFace)" />
+    </g>
+    <text x="0" y="4.5" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="12" fill="#FFFFFF" text-anchor="middle">
+      8
+    </text>
   </g>
+
+  <!-- Node Pin 4: "3" Cyan Node (Bottom-Left: X=95, Y=265) -->
+  <g transform="translate(95, 265)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="2" r="13" fill="url(#nodeCyanSide)" stroke="#000000" stroke-width="1.8" />
+    <circle cx="0" cy="0" r="13" fill="url(#nodeCyanFace)" stroke="#000000" stroke-width="1.8" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" fill="#000000" text-anchor="middle">
+      3
+    </text>
+  </g>
+
+  <!-- Node Pin 5: "4" Magenta Node (Bottom-Right: X=305, Y=265) -->
+  <g transform="translate(305, 265)" filter="url(#brutalShadowSm)">
+    <circle cx="0" cy="2" r="13" fill="url(#nodePinkSide)" stroke="#000000" stroke-width="1.8" />
+    <circle cx="0" cy="0" r="13" fill="url(#nodePinkFace)" stroke="#000000" stroke-width="1.8" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10" fill="#FFFFFF" text-anchor="middle">
+      4
+    </text>
+  </g>
+
+  <!-- ACTION POPUP COMBO BADGE: "EVENT HORIZON!" -->
+  <g transform="translate(200, 130)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="8" fill="#000000" text-anchor="middle" letter-spacing="0.5">
+      EVENT HORIZON!
+    </text>
+  </g>
+
+  <!-- TOP TAG RIBBON: "SINGULARITY STRATEGY" -->
+  <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
+    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      SINGULARITY STRATEGY
+    </text>
+  </g>
+
+  <!-- BOTTOM TITLE MARQUEE: "SINGULARITY HORIZON" -->
+  <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
+    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
+    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+      SINGULARITY HORIZON
+    </text>
+  </g>
+
+  <!-- Bottom Left/Right Rivet Accents -->
+  <circle cx="84" cy="360" r="3" fill="#000000" />
+  <circle cx="316" cy="360" r="3" fill="#000000" />
 </svg>
