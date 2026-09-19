@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 8,
+      "play_count": 10,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -88,7 +88,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 4,
+      "play_count": 5,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -8005,6 +8005,13 @@
       "user_id": "usr_ctvl8ln",
       "score": 54,
       "created_at": "2026-09-19T14:46:17.286Z"
+    },
+    {
+      "id": "sc_80ivgzgi2",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 3800,
+      "created_at": "2026-09-19T16:04:16.816Z"
     }
   ],
   "ratings": []
