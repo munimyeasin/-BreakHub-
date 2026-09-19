@@ -77,7 +77,7 @@ export default function CookieConsentBanner() {
         {!isCustomizing ? (
           <>
             <p className="text-xs text-slate-300 leading-relaxed mb-4">
-              Stress Buster uses essential local storage to save your game scores, XP progress, and unlocked badges. We also use privacy-first analytics to monitor site performance.
+              Break Hub uses essential local storage to save your game scores, XP progress, and unlocked badges. We also use privacy-first analytics to monitor site performance.
             </p>
 
             <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-bold">

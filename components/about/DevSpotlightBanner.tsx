@@ -103,7 +103,7 @@ export const DEVELOPERS: DeveloperProfile[] = [
     dotColor: '#ec4899',
     avatarSeed: 'TahidaCyber',
     accentColor: 'text-portal-pink',
-    bio: 'Crafted the bold high-contrast Neo-Brutalist design system, responsive mobile layouts, and theme engine across the entire Stress Buster platform.',
+    bio: 'Crafted the bold high-contrast Neo-Brutalist design system, responsive mobile layouts, and theme engine across the entire Break Hub platform.',
     focus: 'Neo-Brutalist UI/UX, Theme Engine & Responsive Layouts',
     keyContributions: [
       'Neo-Brutalist Theme System & Dark/Light Mode',

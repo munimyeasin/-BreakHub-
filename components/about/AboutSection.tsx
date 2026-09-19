@@ -282,7 +282,7 @@ export default function AboutSection({
           <footer className="rounded-2xl bg-portal-surface border-3 border-black p-5 sm:p-6 text-center space-y-2 shadow-neo-sm">
             <div className="flex items-center justify-center gap-2 text-portal-yellow">
               <Users className="w-5 h-5 stroke-[2.5]" />
-              <span className="font-black text-sm tracking-wider uppercase">Stress Buster Engineering Team</span>
+              <span className="font-black text-sm tracking-wider uppercase">Break Hub Engineering Team</span>
             </div>
             <p className="text-xs text-slate-700 dark:text-slate-300 font-bold max-w-xl mx-auto leading-relaxed">
               Munim Yeasin, Tahida, Marzia, and Rahul • Equal Co-Creators
@@ -307,11 +307,11 @@ export default function AboutSection({
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight uppercase leading-tight">
-                About <span className="text-portal-cyan">Stress Buster</span>
+                About <span className="text-portal-cyan">Break Hub</span>
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-bold leading-relaxed">
-                Welcome to <strong className="text-slate-900 dark:text-white font-black">Stress Buster</strong>, an interactive web gaming platform collaboratively designed and developed as an internship project. The hub features 18 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
+                Welcome to <strong className="text-slate-900 dark:text-white font-black">Break Hub</strong>, an interactive web gaming platform collaboratively designed and developed as an internship project. The hub features 18 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -449,13 +449,13 @@ export default function AboutSection({
           <footer className="rounded-2xl bg-portal-card border-3 border-black p-6 text-center space-y-2 shadow-neo-sm">
             <div className="flex items-center justify-center gap-2 text-portal-cyan">
               <Gamepad2 className="w-5 h-5 stroke-[2.5]" />
-              <span className="font-black text-sm tracking-wider uppercase">Stress Buster Arcade Portal</span>
+              <span className="font-black text-sm tracking-wider uppercase">Break Hub Arcade Portal</span>
             </div>
             <p className="text-xs text-slate-700 dark:text-slate-300 font-bold max-w-xl mx-auto leading-relaxed">
               An interactive open-source web arcade platform engineered with Next.js, React, TypeScript, and HTML5 Canvas.
             </p>
             <div className="text-[11px] text-slate-400 font-black uppercase tracking-wider">
-              © {new Date().getFullYear()} Stress Buster. All rights reserved.
+              © {new Date().getFullYear()} Break Hub. All rights reserved.
             </div>
           </footer>
         </div>

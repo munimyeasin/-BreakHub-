@@ -9,9 +9,10 @@ interface NeonStarfighterGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
-const CANVAS_WIDTH = 480; // 3:4 Widescreen Aspect Ratio (480x640) for PC Desktop Expansion & Full Mobile Scaling
-const CANVAS_HEIGHT = 640;
-const PLAYER_BASE_Y = CANVAS_HEIGHT - 75;
+const DESKTOP_WIDTH = 960; // 16:9 Widescreen Landscape for PC/Desktop (960x540)
+const DESKTOP_HEIGHT = 540;
+const MOBILE_WIDTH = 450;  // 9:16 Portrait for Mobile Screens (450x800)
+const MOBILE_HEIGHT = 800;
 
 type PowerupType = 'spread' | 'shield' | 'nuke' | 'hyper';
 
@@ -155,19 +156,57 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
   // Pre-allocated Starfield with Warp Depth
   const starsRef = useRef<Star[]>(
-    Array.from({ length: 65 }, () => ({
-      x: Math.random() * CANVAS_WIDTH,
-      y: Math.random() * CANVAS_HEIGHT,
+    Array.from({ length: 80 }, () => ({
+      x: Math.random() * DESKTOP_WIDTH,
+      y: Math.random() * MOBILE_HEIGHT,
       size: Math.random() > 0.8 ? 2.5 : Math.random() > 0.4 ? 1.5 : 1.0,
       speed: Math.random() * 2.8 + 1.2,
       color: Math.random() > 0.65 ? '#00F0FF' : Math.random() > 0.4 ? '#FF70D9' : Math.random() > 0.2 ? '#FFE600' : '#FFFFFF',
     }))
   );
 
+  // Dynamic responsive resolution state and ref
+  const [isDesktop, setIsDesktop] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') return window.innerWidth >= 768;
+    return true;
+  });
+
+  const canvasDimRef = useRef({
+    width: typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_WIDTH : MOBILE_WIDTH,
+    height: typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_HEIGHT : MOBILE_HEIGHT,
+    playerBaseY: (typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_HEIGHT : MOBILE_HEIGHT) - 75,
+    isDesktop: typeof window !== 'undefined' ? window.innerWidth >= 768 : true,
+  });
+
+  // Synchronize dynamic canvas dimensions and orientation on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const desktop = window.innerWidth >= 768;
+      setIsDesktop(desktop);
+      const w = desktop ? DESKTOP_WIDTH : MOBILE_WIDTH;
+      const h = desktop ? DESKTOP_HEIGHT : MOBILE_HEIGHT;
+      canvasDimRef.current = {
+        width: w,
+        height: h,
+        playerBaseY: h - 75,
+        isDesktop: desktop,
+      };
+
+      // Clamp player into bounds
+      const p = playerRef.current;
+      p.y = h - 75;
+      p.x = Math.max(0, Math.min(w - p.width, p.x));
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Player 3D Interceptor Starfighter state
   const playerRef = useRef({
-    x: CANVAS_WIDTH / 2 - 20,
-    y: PLAYER_BASE_Y,
+    x: DESKTOP_WIDTH / 2 - 20,
+    y: DESKTOP_HEIGHT - 75,
     width: 40,
     height: 42,
     speed: 10,
@@ -342,8 +381,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       const dist = radius * (0.8 + Math.random() * 0.4);
       points.push({ x: Math.cos(angle) * dist, y: Math.sin(angle) * dist });
     }
+    const curW = canvasDimRef.current.width;
     return {
-      x: Math.random() * (CANVAS_WIDTH - 60) + 30,
+      x: Math.random() * (curW - 60) + 30,
       y: -35,
       radius,
       vy: (Math.random() * 1.2 + 1.8) * speedScale,
@@ -355,8 +395,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   };
 
   const createBlackHole = (speedScale = 1.0): BlackHole => {
+    const curW = canvasDimRef.current.width;
     return {
-      x: Math.random() * (CANVAS_WIDTH - 120) + 60,
+      x: Math.random() * (curW - 120) + 60,
       y: -45,
       radius: 20,
       pullRadius: Math.min(170, 135 + (speedScale - 1) * 30),
@@ -366,9 +407,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   };
 
   const triggerNuke = () => {
+    const curW = canvasDimRef.current.width;
+    const curH = canvasDimRef.current.height;
     playSfx('nuke');
     screenShakeRef.current = 16;
-    addShockwave(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, '#FF00EA', 120);
+    addShockwave(curW / 2, curH / 2, '#FF00EA', 120);
 
     enemiesRef.current.forEach((enemy) => {
       scoreRef.current += 150;
@@ -390,10 +433,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
     });
     enemiesRef.current = [];
-    addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'EMP SCREEN CLEAR!');
+    addActionBadge(curW / 2, curH / 2, 'EMP SCREEN CLEAR!');
   };
 
   const revivePlayer = () => {
+    const curW = canvasDimRef.current.width;
+    const curH = canvasDimRef.current.height;
+    const baseY = canvasDimRef.current.playerBaseY;
+
     hasRevivedRef.current = true;
     setHasRevived(true);
     setAdNotice(null);
@@ -401,25 +448,25 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     // 1. Reset ship coordinates safely to base position
     playerRef.current = {
       ...playerRef.current,
-      x: CANVAS_WIDTH / 2 - 20,
-      y: PLAYER_BASE_Y,
+      x: curW / 2 - 20,
+      y: baseY,
       roll: 0,
       hasShield: true,
       tripleShotTimer: Math.max(playerRef.current.tripleShotTimer, 180),
     };
 
     // 2. Clear immediate threats near bottom
-    enemiesRef.current = enemiesRef.current.filter((e) => e.y < CANVAS_HEIGHT * 0.4);
-    meteorsRef.current = meteorsRef.current.filter((m) => m.y < CANVAS_HEIGHT * 0.35);
+    enemiesRef.current = enemiesRef.current.filter((e) => e.y < curH * 0.4);
+    meteorsRef.current = meteorsRef.current.filter((m) => m.y < curH * 0.35);
     blackHolesRef.current = [];
 
     // 3. Spawn revival shockwave & particle burst
     screenShakeRef.current = 16;
-    addShockwave(CANVAS_WIDTH / 2, PLAYER_BASE_Y, '#00F0FF', 80);
+    addShockwave(curW / 2, baseY, '#00F0FF', 80);
     for (let k = 0; k < 25; k++) {
       particlesRef.current.push({
-        x: CANVAS_WIDTH / 2,
-        y: PLAYER_BASE_Y,
+        x: curW / 2,
+        y: baseY,
         vx: (Math.random() - 0.5) * 8,
         vy: (Math.random() - 0.5) * 8,
         alpha: 1,
@@ -430,7 +477,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       });
     }
 
-    addActionBadge(CANVAS_WIDTH / 2, PLAYER_BASE_Y - 40, '⚡ SHIP REVIVED! ⚡');
+    addActionBadge(curW / 2, baseY - 40, '⚡ SHIP REVIVED! ⚡');
     playSfx('powerup');
 
     // 4. Reset clock
@@ -464,12 +511,16 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   };
 
   const startGame = () => {
+    const curW = canvasDimRef.current.width;
+    const curH = canvasDimRef.current.height;
+    const baseY = canvasDimRef.current.playerBaseY;
+
     setAdNotice(null);
     setHasRevived(false);
     hasRevivedRef.current = false;
     playerRef.current = {
-      x: CANVAS_WIDTH / 2 - 20,
-      y: PLAYER_BASE_Y,
+      x: curW / 2 - 20,
+      y: baseY,
       width: 40,
       height: 42,
       speed: 10,
@@ -510,7 +561,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     setIsDead(false);
     setIsPlaying(true);
 
-    addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, 'MISSION LAUNCH!');
+    addActionBadge(curW / 2, curH * 0.45, 'MISSION LAUNCH!');
   };
 
   // Keyboard Event Handlers (Horizontal Movement & Banking)
@@ -541,9 +592,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       target.setPointerCapture(e.pointerId);
     } catch {}
 
+    const curW = canvasDimRef.current.width;
     const rect = target.getBoundingClientRect();
     const clientX = e.clientX - rect.left;
-    const scaledX = (clientX / (rect.width || CANVAS_WIDTH)) * CANVAS_WIDTH;
+    const scaledX = (clientX / (rect.width || curW)) * curW;
 
     pointerRef.current.active = true;
     pointerRef.current.lastX = scaledX;
@@ -553,9 +605,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isPlaying || isDead || !pointerRef.current.active) return;
     const target = e.currentTarget;
+    const curW = canvasDimRef.current.width;
     const rect = target.getBoundingClientRect();
     const clientX = e.clientX - rect.left;
-    const scaledX = (clientX / (rect.width || CANVAS_WIDTH)) * CANVAS_WIDTH;
+    const scaledX = (clientX / (rect.width || curW)) * curW;
 
     const deltaX = scaledX - pointerRef.current.lastX;
     pointerRef.current.lastX = scaledX;
@@ -640,13 +693,16 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       const dt = Math.min(rawDt, 0.045);
       const timeScale = dt * 60;
 
+      const curW = canvasDimRef.current.width;
+      const curH = canvasDimRef.current.height;
+
       // In-Game Background Clear (Deep Indigo Space Ground)
-      const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      const grad = ctx.createLinearGradient(0, 0, 0, curH);
       grad.addColorStop(0, '#030014');
       grad.addColorStop(0.5, '#0a0526');
       grad.addColorStop(1, '#021b2b');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.fillRect(0, 0, curW, curH);
 
       // Perspective Space Warp Grid & Radiating Rays (from neon-starfighter.svg)
       ctx.save();
@@ -655,24 +711,24 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       ctx.setLineDash([4, 3]);
 
       // Perspective Rays
-      const vpX = CANVAS_WIDTH / 2;
+      const vpX = curW / 2;
       const vpY = -40;
       const numRays = 12;
       for (let i = 0; i <= numRays; i++) {
-        const destX = (i / numRays) * (CANVAS_WIDTH + 240) - 120;
+        const destX = (i / numRays) * (curW + 280) - 140;
         ctx.beginPath();
         ctx.moveTo(vpX, vpY);
-        ctx.lineTo(destX, CANVAS_HEIGHT + 20);
+        ctx.lineTo(destX, curH + 20);
         ctx.stroke();
       }
 
       // Moving Horizontal Speed Warp Bars
       warpGridOffsetRef.current = (warpGridOffsetRef.current + 1.2 * timeScale) % 50;
-      for (let y = warpGridOffsetRef.current; y < CANVAS_HEIGHT; y += 50) {
+      for (let y = warpGridOffsetRef.current; y < curH; y += 50) {
         ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.lineTo(curW, y);
         ctx.stroke();
       }
       ctx.setLineDash([]);
@@ -680,8 +736,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       // Cosmic Atmosphere (Neo Pink on Death, Neo Cyan on Launch)
       const radGrad = ctx.createRadialGradient(
-        CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, 10,
-        CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, CANVAS_WIDTH * 0.75
+        curW / 2, curH * 0.45, 10,
+        curW / 2, curH * 0.45, curW * 0.75
       );
       if (isDead) {
         radGrad.addColorStop(0, 'rgba(255, 0, 127, 0.22)');
@@ -693,16 +749,16 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         radGrad.addColorStop(1, 'rgba(8, 4, 23, 0)');
       }
       ctx.fillStyle = radGrad;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.fillRect(0, 0, curW, curH);
 
       // In-Game Moving Starfield
       const stars = starsRef.current;
       for (let s = 0; s < stars.length; s++) {
         const star = stars[s];
         star.y += star.speed * timeScale;
-        if (star.y > CANVAS_HEIGHT) {
+        if (star.y > curH) {
           star.y = 0;
-          star.x = Math.random() * CANVAS_WIDTH;
+          star.x = Math.random() * curW;
         }
         ctx.fillStyle = star.color;
         ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * 1.5);
@@ -733,6 +789,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       const dt = Math.min(rawDt, 0.045);
       const timeScale = dt * 60; // 1.0 at 60 FPS
 
+      const curW = canvasDimRef.current.width;
+      const curH = canvasDimRef.current.height;
+      const playerBaseY = canvasDimRef.current.playerBaseY;
+
       const p = playerRef.current;
 
       // Dynamic Continuous Speed & Difficulty Multiplier (Scales smoothly and gradually with Wave + Score)
@@ -753,8 +813,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           waveRef.current = newWave;
           setWave(newWave);
           screenShakeRef.current = 8;
-          addShockwave(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, '#FFE600', 70);
-          addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, `SECTOR ${newWave} • SPEED +${Math.round((speedScale - 1) * 100)}%!`);
+          addShockwave(curW / 2, curH * 0.35, '#FFE600', 70);
+          addActionBadge(curW / 2, curH * 0.35, `SECTOR ${newWave} • SPEED +${Math.round((speedScale - 1) * 100)}%!`);
           playSfxRef.current('powerup');
         }
 
@@ -781,7 +841,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
 
       // Player Movement: Horizontal Only (A/D, Left/Right Arrows, or Touch/Mouse Drag)
-      p.y = PLAYER_BASE_Y;
+      p.y = playerBaseY;
 
       // Calculate gravitational pull from active black holes
       let totalGravityX = 0;
@@ -827,7 +887,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           targetRoll = -0.22;
         }
         if (keysRef.current.right) {
-          p.x = Math.min(CANVAS_WIDTH - p.width, p.x + currentSpeed);
+          p.x = Math.min(curW - p.width, p.x + currentSpeed);
           targetRoll = 0.22;
         }
         pointerRef.current.active = false;
@@ -850,7 +910,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       if (totalGravityX !== 0) {
         p.x += totalGravityX;
       }
-      p.x = Math.max(0, Math.min(CANVAS_WIDTH - p.width, p.x));
+      p.x = Math.max(0, Math.min(curW - p.width, p.x));
 
       // DUAL WINGTIP PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
       const fireIntervalMs = p.hyperTimer > 0 ? 80 : p.tripleShotTimer > 0 ? 110 : 130;
@@ -883,7 +943,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const rand = Math.random();
         if (rand > 0.75) {
           enemiesRef.current.push({
-            x: Math.random() * (CANVAS_WIDTH - 44) + 6,
+            x: Math.random() * (curW - 44) + 6,
             y: -35,
             width: 38,
             height: 32,
@@ -898,7 +958,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           });
         } else if (rand > 0.4) {
           enemiesRef.current.push({
-            x: Math.random() * (CANVAS_WIDTH - 32) + 6,
+            x: Math.random() * (curW - 32) + 6,
             y: -30,
             width: 28,
             height: 24,
@@ -913,7 +973,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           });
         } else {
           enemiesRef.current.push({
-            x: Math.random() * (CANVAS_WIDTH - 28) + 6,
+            x: Math.random() * (curW - 28) + 6,
             y: -25,
             width: 24,
             height: 20,
@@ -947,7 +1007,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const types: PowerupType[] = ['spread', 'shield', 'nuke', 'hyper'];
         const chosen = types[Math.floor(Math.random() * types.length)];
         powerupsRef.current.push({
-          x: Math.random() * (CANVAS_WIDTH - 40) + 20,
+          x: Math.random() * (curW - 40) + 20,
           y: -20,
           type: chosen,
           vy: 2.2,
@@ -961,7 +1021,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const b = bulletsRef.current[i];
         b.x += b.vx * timeScale;
         b.y += b.vy * timeScale;
-        if (b.y < -25 || b.x < -25 || b.x > CANVAS_WIDTH + 25) {
+        if (b.y < -25 || b.x < -25 || b.x > curW + 25) {
           bulletsRef.current.splice(i, 1);
         }
       }
@@ -997,7 +1057,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           continue;
         }
 
-        if (pow.y > CANVAS_HEIGHT + 30) powerupsRef.current.splice(i, 1);
+        if (pow.y > curH + 30) powerupsRef.current.splice(i, 1);
       }
 
       // UPDATE BLACK HOLES
@@ -1039,7 +1099,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           }
         }
 
-        if (bh.y > CANVAS_HEIGHT + 80) blackHolesRef.current.splice(i, 1);
+        if (bh.y > curH + 80) blackHolesRef.current.splice(i, 1);
       }
 
       // UPDATE METEORS
@@ -1049,7 +1109,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         m.x += m.vx * timeScale;
         m.rotation += m.rotSpeed * timeScale;
 
-        if (m.x <= m.radius || m.x >= CANVAS_WIDTH - m.radius) m.vx *= -1;
+        if (m.x <= m.radius || m.x >= curW - m.radius) m.vx *= -1;
 
         // Laser Deflection
         for (let j = bulletsRef.current.length - 1; j >= 0; j--) {
@@ -1093,7 +1153,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           }
         }
 
-        if (m.y > CANVAS_HEIGHT + 60) meteorsRef.current.splice(i, 1);
+        if (m.y > curH + 60) meteorsRef.current.splice(i, 1);
       }
 
       // UPDATE ENEMIES
@@ -1102,7 +1162,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         enemy.y += enemy.vy * timeScale;
         enemy.x += enemy.vx * timeScale;
 
-        if (enemy.x <= 0 || enemy.x >= CANVAS_WIDTH - enemy.width) enemy.vx *= -1;
+        if (enemy.x <= 0 || enemy.x >= curW - enemy.width) enemy.vx *= -1;
 
         // Check Bullet Collisions
         for (let j = bulletsRef.current.length - 1; j >= 0; j--) {
@@ -1174,7 +1234,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           }
         }
 
-        if (enemy && enemy.y > CANVAS_HEIGHT + 30) enemiesRef.current.splice(i, 1);
+        if (enemy && enemy.y > curH + 30) enemiesRef.current.splice(i, 1);
       }
 
       function handlePlayerDeath() {
@@ -1220,12 +1280,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
 
       // 1. Deep Space Canvas Gradient (from neon-starfighter.svg)
-      const spaceGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      const spaceGrad = ctx.createLinearGradient(0, 0, 0, curH);
       spaceGrad.addColorStop(0, '#030014');
       spaceGrad.addColorStop(0.5, '#0a0526');
       spaceGrad.addColorStop(1, '#021b2b');
       ctx.fillStyle = spaceGrad;
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.fillRect(0, 0, curW, curH);
 
       // 2. Perspective Space Warp Grid & Radiating Rays (from neon-starfighter.svg)
       ctx.save();
@@ -1233,25 +1293,25 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       ctx.lineWidth = 1.2;
       ctx.setLineDash([4, 3]);
 
-      const vpX = CANVAS_WIDTH / 2;
+      const vpX = curW / 2;
       const vpY = -40;
       const numRays = 12;
       for (let i = 0; i <= numRays; i++) {
-        const destX = (i / numRays) * (CANVAS_WIDTH + 240) - 120;
+        const destX = (i / numRays) * (curW + 280) - 140;
         ctx.beginPath();
         ctx.moveTo(vpX, vpY);
-        ctx.lineTo(destX, CANVAS_HEIGHT + 20);
+        ctx.lineTo(destX, curH + 20);
         ctx.stroke();
       }
 
       // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive & scales with sector difficulty)
       const speedMult = (p.hyperTimer > 0 ? 3.5 : 1.0) * speedScale;
       warpGridOffsetRef.current = (warpGridOffsetRef.current + 2.0 * speedMult * timeScale) % 50;
-      for (let y = warpGridOffsetRef.current; y < CANVAS_HEIGHT; y += 50) {
+      for (let y = warpGridOffsetRef.current; y < curH; y += 50) {
         ctx.strokeStyle = p.hyperTimer > 0 ? 'rgba(255, 230, 0, 0.22)' : 'rgba(0, 240, 255, 0.12)';
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.lineTo(curW, y);
         ctx.stroke();
       }
       ctx.setLineDash([]);
@@ -1263,9 +1323,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const star = stars[s];
         const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed * speedScale) * timeScale;
         star.y += starSpeed;
-        if (star.y > CANVAS_HEIGHT) {
+        if (star.y > curH) {
           star.y = 0;
-          star.x = Math.random() * CANVAS_WIDTH;
+          star.x = Math.random() * curW;
         }
         ctx.fillStyle = p.hyperTimer > 0 ? '#FFE600' : star.color;
         const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 1.5 * Math.min(2.0, speedScale);
@@ -1984,18 +2044,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       {/* Active Powerup Banner */}
       {activePowerup && (
-        <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
           <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
           <span>POWERUP: {activePowerup}</span>
         </div>
       )}
 
-      {/* Main Game Screen Canvas (3:4 Aspect Ratio with Desktop Height Scaling) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-auto h-[min(76vh,640px)] md:h-[min(86vh,780px)] max-w-full aspect-[3/4] flex items-center justify-center shrink-0">
+      {/* Main Game Screen Canvas (Dynamic Orientation: 9:16 Portrait on Mobile, 16:9 Widescreen on PC) */}
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl aspect-[9/16] md:aspect-[16/9] max-h-[75vh] md:max-h-[78vh] lg:max-h-[82vh] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
+          width={isDesktop ? DESKTOP_WIDTH : MOBILE_WIDTH}
+          height={isDesktop ? DESKTOP_HEIGHT : MOBILE_HEIGHT}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}

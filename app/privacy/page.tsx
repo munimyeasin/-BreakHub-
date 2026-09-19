@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Shield, ArrowLeft, Lock, Cookie, Database, Eye, Terminal, CheckCircle2, UserCheck, RefreshCw, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Stress Buster Mini-Game Portal',
-  description: 'Learn how Stress Buster protects your privacy, manages local game data, and ensures a secure, retro-arcade experience with zero invasive tracking.',
+  title: 'Privacy Policy | Break Hub Mini-Game Portal',
+  description: 'Learn how Break Hub protects your privacy, manages local game data, and ensures a secure, retro-arcade experience with zero invasive tracking.',
   alternates: {
     canonical: '/privacy',
   },
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
               Privacy <span className="text-portal-yellow">Policy</span>
             </h1>
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl">
-              Stress Buster is committed to transparent, privacy-first gaming. We do not sell your personal data, profile you across the web, or require intrusive sign-ups.
+              Break Hub is committed to transparent, privacy-first gaming. We do not sell your personal data, profile you across the web, or require intrusive sign-ups.
             </p>
             <div className="mt-4 pt-4 border-t-2 border-black/40 flex flex-wrap items-center gap-4 text-xs font-bold text-slate-400">
               <span className="flex items-center gap-1.5">
@@ -69,7 +69,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                Stress Buster was engineered as an instant-access, lightweight arcade portal. We believe that playing games online should not require sacrificing personal privacy.
+                Break Hub was engineered as an instant-access, lightweight arcade portal. We believe that playing games online should not require sacrificing personal privacy.
               </p>
               <ul className="grid sm:grid-cols-2 gap-3 mt-4">
                 <li className="flex items-start gap-2 bg-portal-surface p-3 border-2 border-black">
@@ -138,7 +138,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                Stress Buster relies on browser <code className="bg-black/60 px-1.5 py-0.5 text-portal-lime border border-black font-mono text-xs">localStorage</code> and <code className="bg-black/60 px-1.5 py-0.5 text-portal-lime border border-black font-mono text-xs">sessionStorage</code> to deliver instant loading, persistent gameplay, and offline capability:
+                Break Hub relies on browser <code className="bg-black/60 px-1.5 py-0.5 text-portal-lime border border-black font-mono text-xs">localStorage</code> and <code className="bg-black/60 px-1.5 py-0.5 text-portal-lime border border-black font-mono text-xs">sessionStorage</code> to deliver instant loading, persistent gameplay, and offline capability:
               </p>
               <div className="grid sm:grid-cols-2 gap-3 mt-2">
                 <div className="bg-portal-surface p-3 border-2 border-black">
@@ -231,7 +231,7 @@ export default function PrivacyPolicyPage() {
               </h2>
             </div>
             <p className="text-slate-300 text-sm sm:text-base mb-4 leading-relaxed">
-              Have questions, feedback, or security inquiries regarding this Privacy Policy? Reach out to the Stress Buster development team.
+              Have questions, feedback, or security inquiries regarding this Privacy Policy? Reach out to the Break Hub development team.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a
@@ -254,7 +254,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Footer info */}
         <div className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
-          © {new Date().getFullYear()} Stress Buster Mini-Game Portal • Built with Privacy by Design
+          © {new Date().getFullYear()} Break Hub Mini-Game Portal • Built with Privacy by Design
         </div>
       </div>
     </div>

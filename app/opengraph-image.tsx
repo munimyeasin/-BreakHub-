@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'nodejs';
-export const alt = 'Stress Buster | Retro Arcade HTML5 Mini-Game Portal';
+export const alt = 'Break Hub | Retro Arcade HTML5 Mini-Game Portal';
 export const size = {
   width: 1200,
   height: 630,
@@ -125,8 +125,8 @@ export default async function Image() {
                 lineHeight: '1.05',
               }}
             >
-              <span style={{ color: '#FFFFFF' }}>STRESS</span>
-              <span style={{ color: '#FFE600' }}>BUSTER</span>
+              <span style={{ color: '#FFFFFF' }}>BREAK</span>
+              <span style={{ color: '#FFE600' }}>HUB</span>
             </div>
             <div
               style={{

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { FileText, ArrowLeft, ShieldAlert, Award, Scale, AlertTriangle, Sparkles, Terminal, CheckCircle2, ShieldCheck, Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Stress Buster Mini-Game Portal',
-  description: 'Review the Terms of Service, Fair Play Anti-Cheat rules, and Acceptable Use guidelines for the Stress Buster Mini-Game Portal.',
+  title: 'Terms of Service | Break Hub Mini-Game Portal',
+  description: 'Review the Terms of Service, Fair Play Anti-Cheat rules, and Acceptable Use guidelines for the Break Hub Mini-Game Portal.',
   alternates: {
     canonical: '/terms',
   },
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
               Terms of <span className="text-portal-pink">Service</span>
             </h1>
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl">
-              Welcome to Stress Buster. By playing games, competing on leaderboards, or interacting with our arcade features, you agree to these Terms.
+              Welcome to Break Hub. By playing games, competing on leaderboards, or interacting with our arcade features, you agree to these Terms.
             </p>
             <div className="mt-4 pt-4 border-t-2 border-black/40 flex flex-wrap items-center gap-4 text-xs font-bold text-slate-400">
               <span className="flex items-center gap-1.5">
@@ -69,7 +69,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between you and Stress Buster. By accessing our website, playing HTML5 mini-games, saving progress, or submitting scores, you confirm your acceptance of these Terms and our Privacy Policy.
+                These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement between you and Break Hub. By accessing our website, playing HTML5 mini-games, saving progress, or submitting scores, you confirm your acceptance of these Terms and our Privacy Policy.
               </p>
               <p>
                 If you do not agree with any part of these Terms, you must discontinue use of the portal immediately.
@@ -89,7 +89,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                Stress Buster thrives on genuine skill, quick reflexes, and friendly arcade competition. To preserve fair leaderboards, the following actions are strictly prohibited:
+                Break Hub thrives on genuine skill, quick reflexes, and friendly arcade competition. To preserve fair leaderboards, the following actions are strictly prohibited:
               </p>
               <div className="grid sm:grid-cols-2 gap-3 mt-3">
                 <div className="bg-portal-surface p-3 border-2 border-black flex items-start gap-2">
@@ -127,7 +127,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                When creating a gamer tag on Stress Buster:
+                When creating a gamer tag on Break Hub:
               </p>
               <ul className="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-slate-200">
                 <li>Gamer tags must be between 2 and 20 characters in length.</li>
@@ -149,7 +149,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                The Stress Buster portal code, branding, audio synthesizer engines, UI design tokens, and custom HTML5 canvas games are the intellectual property of the project creators or licensed under open-source standards.
+                The Break Hub portal code, branding, audio synthesizer engines, UI design tokens, and custom HTML5 canvas games are the intellectual property of the project creators or licensed under open-source standards.
               </p>
               <p className="text-xs sm:text-sm text-slate-400">
                 Classic arcade tributes (such as Snake, 2048, Minesweeper, Battleship, and XO) are original indie implementations engineered for stress relief and educational purposes.
@@ -169,7 +169,7 @@ export default function TermsOfServicePage() {
             </div>
             <div className="text-slate-300 text-sm sm:text-base space-y-3 leading-relaxed">
               <p>
-                Stress Buster is provided on an &ldquo;AS IS&rdquo; and &ldquo;AS AVAILABLE&rdquo; basis without warranties of any kind, either express or implied. We do not guarantee uninterrupted, bug-free, or error-free game sessions.
+                Break Hub is provided on an &ldquo;AS IS&rdquo; and &ldquo;AS AVAILABLE&rdquo; basis without warranties of any kind, either express or implied. We do not guarantee uninterrupted, bug-free, or error-free game sessions.
               </p>
               <p className="text-xs sm:text-sm text-slate-400">
                 In no event shall the developers be liable for any indirect, incidental, or consequential damages resulting from your access to or inability to use the portal.
@@ -211,7 +211,7 @@ export default function TermsOfServicePage() {
 
         {/* Footer info */}
         <div className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
-          © {new Date().getFullYear()} Stress Buster Mini-Game Portal • All Rights Reserved
+          © {new Date().getFullYear()} Break Hub Mini-Game Portal • All Rights Reserved
         </div>
       </div>
     </div>

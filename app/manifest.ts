@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Stress Buster | Mini-Game Portal',
-    short_name: 'StressBuster',
+    name: 'Break Hub | Mini-Game Portal',
+    short_name: 'BreakHub',
     description: 'Retro arcade neo-brutalist HTML5 mobile-first mini-game portal and competitive global leaderboards.',
     start_url: '/',
     display: 'standalone',

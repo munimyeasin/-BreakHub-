@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 34,
+      "play_count": 36,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -127,7 +127,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg",
       "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "play_count": 7,
+      "play_count": 8,
       "rating": 5,
       "rating_count": 45,
       "status": "active",
@@ -228,7 +228,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/hyper-tapper.svg",
       "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
-      "play_count": 3,
+      "play_count": 4,
       "rating": 4.9,
       "rating_count": 22,
       "status": "active"
@@ -8201,6 +8201,13 @@
       "user_id": "usr_ctvl8ln",
       "score": 50,
       "created_at": "2026-09-19T17:55:47.721Z"
+    },
+    {
+      "id": "sc_2vtjazm1z",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 8850,
+      "created_at": "2026-09-19T18:53:58.471Z"
     }
   ],
   "ratings": []

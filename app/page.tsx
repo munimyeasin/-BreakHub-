@@ -853,10 +853,10 @@ export default function ArcadePortalDashboard() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-portal-yellow font-black uppercase tracking-wider">
                     <Gamepad2 className="w-4 h-4 text-portal-cyan stroke-[2.5] shrink-0" />
-                    <span>Stress Buster Arcade Portal</span>
+                    <span>Break Hub Arcade Portal</span>
                   </div>
                   <div className="text-slate-200 font-bold">
-                    Internship Web Gaming Platform • 16 Custom HTML5 Games
+                    Internship Web Gaming Platform • 18 Custom HTML5 Games
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">
