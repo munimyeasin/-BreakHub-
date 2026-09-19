@@ -34,7 +34,9 @@ interface Enemy {
   hp: number;
   maxHp: number;
   color: string;
+  sideColor: string;
   type: 'drone' | 'scout' | 'heavy';
+  rotation: number;
 }
 
 interface Meteor {
@@ -63,6 +65,7 @@ interface Bullet {
   vx: number;
   vy: number;
   color: string;
+  isHyper?: boolean;
 }
 
 interface Particle {
@@ -75,6 +78,24 @@ interface Particle {
   size: number;
   life: number;
   maxLife: number;
+}
+
+interface Shockwave {
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  color: string;
+  alpha: number;
+}
+
+interface ActionBadge {
+  x: number;
+  y: number;
+  text: string;
+  alpha: number;
+  scale: number;
+  vy: number;
 }
 
 interface FloatingText {
@@ -106,7 +127,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const [adNotice, setAdNotice] = useState<string | null>(null);
   const [hasRevived, setHasRevived] = useState(false);
 
-  // Pure refs for hot game loop (zero React reconciliation lag on PC)
+  // Pure refs for 60-144+ FPS game loop (zero React reconciliation lag)
   const soundEnabledRef = useRef(true);
   const onGameOverRef = useRef(onGameOver);
   const scoreRef = useRef(0);
@@ -116,6 +137,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const hasRevivedRef = useRef(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const adTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const warpGridOffsetRef = useRef(0);
 
   useEffect(() => {
     return () => {
@@ -131,24 +153,25 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     onGameOverRef.current = onGameOver;
   }, [onGameOver]);
 
-  // Pre-allocated Starfield
+  // Pre-allocated Starfield with Warp Depth
   const starsRef = useRef<Star[]>(
-    Array.from({ length: 50 }, () => ({
+    Array.from({ length: 65 }, () => ({
       x: Math.random() * CANVAS_WIDTH,
       y: Math.random() * CANVAS_HEIGHT,
-      size: Math.random() > 0.75 ? 2 : 1,
-      speed: Math.random() * 2.5 + 1.0,
-      color: Math.random() > 0.7 ? '#00F0FF' : Math.random() > 0.4 ? '#FF00EA' : Math.random() > 0.2 ? '#FFE600' : '#FFFFFF',
+      size: Math.random() > 0.8 ? 2.5 : Math.random() > 0.4 ? 1.5 : 1.0,
+      speed: Math.random() * 2.8 + 1.2,
+      color: Math.random() > 0.65 ? '#00F0FF' : Math.random() > 0.4 ? '#FF70D9' : Math.random() > 0.2 ? '#FFE600' : '#FFFFFF',
     }))
   );
 
-  // Player state
+  // Player 3D Interceptor Starfighter state
   const playerRef = useRef({
-    x: CANVAS_WIDTH / 2 - 16,
+    x: CANVAS_WIDTH / 2 - 20,
     y: PLAYER_BASE_Y,
-    width: 32,
-    height: 36,
+    width: 40,
+    height: 42,
     speed: 10,
+    roll: 0,
     hasShield: false,
     tripleShotTimer: 0,
     hyperTimer: 0,
@@ -170,6 +193,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const powerupsRef = useRef<Powerup[]>([]);
   const bulletsRef = useRef<Bullet[]>([]);
   const particlesRef = useRef<Particle[]>([]);
+  const shockwavesRef = useRef<Shockwave[]>([]);
+  const actionBadgesRef = useRef<ActionBadge[]>([]);
   const floatingTextsRef = useRef<FloatingText[]>([]);
   const screenShakeRef = useRef(0);
 
@@ -189,7 +214,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const lastScoreSyncTimeRef = useRef(0);
   const lastTimeRef = useRef(0);
 
-  // High-Performance Singleton Web Audio Oscillator Engine (Zero Leak, Zero Lag on PC)
+  // High-Performance Singleton Web Audio Oscillator Engine
   const initAudioCtx = useCallback(() => {
     if (typeof window === 'undefined') return null;
     try {
@@ -208,7 +233,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     }
   }, []);
 
-  const playSfx = useCallback((type: 'laser' | 'spread' | 'boom' | 'shield_hit' | 'powerup' | 'nuke' | 'deflect') => {
+  const playSfx = useCallback((type: 'laser' | 'spread' | 'hyper_laser' | 'boom' | 'shield_hit' | 'powerup' | 'nuke' | 'deflect' | 'hyper_start') => {
     if (!soundEnabledRef.current || typeof window === 'undefined') return;
     try {
       const ctx = initAudioCtx();
@@ -222,60 +247,68 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       if (type === 'laser') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(850, now);
-        osc.frequency.exponentialRampToValueAtTime(160, now + 0.05);
-        gain.gain.setValueAtTime(0.06, now);
+        osc.frequency.setValueAtTime(950, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+        gain.gain.setValueAtTime(0.07, now);
         gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
         osc.start(now);
         osc.stop(now + 0.05);
+      } else if (type === 'hyper_laser') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.04);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
       } else if (type === 'spread') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1050, now);
-        osc.frequency.exponentialRampToValueAtTime(260, now + 0.06);
-        gain.gain.setValueAtTime(0.08, now);
+        osc.frequency.setValueAtTime(1150, now);
+        osc.frequency.exponentialRampToValueAtTime(280, now + 0.06);
+        gain.gain.setValueAtTime(0.09, now);
         gain.gain.linearRampToValueAtTime(0.001, now + 0.06);
         osc.start(now);
         osc.stop(now + 0.06);
       } else if (type === 'boom') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.exponentialRampToValueAtTime(25, now + 0.2);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(22, now + 0.22);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.22);
         osc.start(now);
-        osc.stop(now + 0.2);
+        osc.stop(now + 0.22);
       } else if (type === 'shield_hit') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(380, now);
-        osc.frequency.linearRampToValueAtTime(700, now + 0.1);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.linearRampToValueAtTime(800, now + 0.12);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
         osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'powerup') {
+        osc.stop(now + 0.12);
+      } else if (type === 'powerup' || type === 'hyper_start') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.linearRampToValueAtTime(900, now + 0.16);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.16);
+        osc.frequency.setValueAtTime(340, now);
+        osc.frequency.exponentialRampToValueAtTime(1050, now + 0.18);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
         osc.start(now);
-        osc.stop(now + 0.16);
+        osc.stop(now + 0.18);
       } else if (type === 'nuke') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, now);
-        osc.frequency.exponentialRampToValueAtTime(20, now + 0.35);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(18, now + 0.38);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.38);
         osc.start(now);
-        osc.stop(now + 0.35);
+        osc.stop(now + 0.38);
       } else if (type === 'deflect') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(550, now);
-        osc.frequency.linearRampToValueAtTime(220, now + 0.03);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.03);
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.linearRampToValueAtTime(250, now + 0.035);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.035);
         osc.start(now);
-        osc.stop(now + 0.03);
+        osc.stop(now + 0.035);
       }
     } catch {}
   }, [initAudioCtx]);
@@ -286,13 +319,23 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   }, [playSfx]);
 
   const addFloatingText = (x: number, y: number, text: string, color: string) => {
-    if (floatingTextsRef.current.length > 6) floatingTextsRef.current.shift();
+    if (floatingTextsRef.current.length > 8) floatingTextsRef.current.shift();
     floatingTextsRef.current.push({ x, y, text, color, alpha: 1, vy: -1.6 });
   };
 
+  const addActionBadge = (x: number, y: number, text: string) => {
+    if (actionBadgesRef.current.length > 3) actionBadgesRef.current.shift();
+    actionBadgesRef.current.push({ x, y, text, alpha: 1, scale: 0.6, vy: -0.8 });
+  };
+
+  const addShockwave = (x: number, y: number, color = '#FF007F', maxRadius = 32) => {
+    if (shockwavesRef.current.length > 6) shockwavesRef.current.shift();
+    shockwavesRef.current.push({ x, y, radius: 4, maxRadius, color, alpha: 1 });
+  };
+
   const createMeteor = (): Meteor => {
-    const radius = Math.random() * 15 + 15;
-    const numPoints = 6;
+    const radius = Math.random() * 14 + 16;
+    const numPoints = 7;
     const points: { x: number; y: number }[] = [];
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * Math.PI * 2;
@@ -316,7 +359,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       x: Math.random() * (CANVAS_WIDTH - 120) + 60,
       y: -45,
       radius: 20,
-      pullRadius: 135,
+      pullRadius: 140,
       vy: 1.3,
       angle: 0,
     };
@@ -324,28 +367,30 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
   const triggerNuke = () => {
     playSfx('nuke');
-    screenShakeRef.current = 14;
+    screenShakeRef.current = 16;
+    addShockwave(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, '#FF00EA', 120);
 
     enemiesRef.current.forEach((enemy) => {
       scoreRef.current += 150;
-      for (let k = 0; k < 5; k++) {
-        if (particlesRef.current.length < 35) {
+      addShockwave(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.color, 28);
+      for (let k = 0; k < 6; k++) {
+        if (particlesRef.current.length < 40) {
           particlesRef.current.push({
             x: enemy.x + enemy.width / 2,
             y: enemy.y + enemy.height / 2,
-            vx: (Math.random() - 0.5) * 5,
-            vy: (Math.random() - 0.5) * 5,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
             alpha: 1,
             color: enemy.color,
-            size: 2.5,
+            size: 2.8,
             life: 0,
-            maxLife: 18,
+            maxLife: 20,
           });
         }
       }
     });
     enemiesRef.current = [];
-    addFloatingText(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'EMP SCREEN CLEAR!', '#FF00EA');
+    addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'EMP SCREEN CLEAR!');
   };
 
   const revivePlayer = () => {
@@ -356,19 +401,21 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     // 1. Reset ship coordinates safely to base position
     playerRef.current = {
       ...playerRef.current,
-      x: CANVAS_WIDTH / 2 - 16,
+      x: CANVAS_WIDTH / 2 - 20,
       y: PLAYER_BASE_Y,
-      hasShield: true, // Emergency shield granted upon respawn
-      tripleShotTimer: Math.max(playerRef.current.tripleShotTimer, 180), // 3s temporary rapid boost
+      roll: 0,
+      hasShield: true,
+      tripleShotTimer: Math.max(playerRef.current.tripleShotTimer, 180),
     };
 
-    // 2. Clear immediate threats & hazards near bottom/spawn area
+    // 2. Clear immediate threats near bottom
     enemiesRef.current = enemiesRef.current.filter((e) => e.y < CANVAS_HEIGHT * 0.4);
     meteorsRef.current = meteorsRef.current.filter((m) => m.y < CANVAS_HEIGHT * 0.35);
     blackHolesRef.current = [];
 
-    // 3. Spawn EMP shockwave & visual particles for revival blast
+    // 3. Spawn revival shockwave & particle burst
     screenShakeRef.current = 16;
+    addShockwave(CANVAS_WIDTH / 2, PLAYER_BASE_Y, '#00F0FF', 80);
     for (let k = 0; k < 25; k++) {
       particlesRef.current.push({
         x: CANVAS_WIDTH / 2,
@@ -383,10 +430,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       });
     }
 
-    addFloatingText(CANVAS_WIDTH / 2, PLAYER_BASE_Y - 40, '⚡ SHIP REVIVED! +1 LIFE ⚡', '#00F0FF');
+    addActionBadge(CANVAS_WIDTH / 2, PLAYER_BASE_Y - 40, '⚡ SHIP REVIVED! ⚡');
     playSfx('powerup');
 
-    // 4. Reset timestamp clock so delta-time doesn't jump forward
+    // 4. Reset clock
     lastTimeRef.current = performance.now();
     lastShotTimeRef.current = performance.now();
     pointerRef.current = {
@@ -395,7 +442,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       pendingDeltaX: 0,
     };
 
-    // 5. Resume combat game loop
+    // 5. Resume combat loop
     setIsDead(false);
     setIsPlaying(true);
   };
@@ -421,11 +468,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     setHasRevived(false);
     hasRevivedRef.current = false;
     playerRef.current = {
-      x: CANVAS_WIDTH / 2 - 16,
+      x: CANVAS_WIDTH / 2 - 20,
       y: PLAYER_BASE_Y,
-      width: 32,
-      height: 36,
+      width: 40,
+      height: 42,
       speed: 10,
+      roll: 0,
       hasShield: false,
       tripleShotTimer: 0,
       hyperTimer: 0,
@@ -441,6 +489,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     powerupsRef.current = [];
     bulletsRef.current = [];
     particlesRef.current = [];
+    shockwavesRef.current = [];
+    actionBadgesRef.current = [];
     floatingTextsRef.current = [];
     lastShotTimeRef.current = 0;
     lastSpawnEnemyTimeRef.current = 0;
@@ -459,9 +509,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     setActivePowerup(null);
     setIsDead(false);
     setIsPlaying(true);
+
+    addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, 'MISSION LAUNCH!');
   };
 
-  // Keyboard Event Handlers (Horizontal Only)
+  // Keyboard Event Handlers (Horizontal Movement & Banking)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['ArrowLeft', 'a', 'A'].includes(e.key)) keysRef.current.left = true;
@@ -521,7 +573,56 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     pointerRef.current.pendingDeltaX = 0;
   };
 
-  // Idle Background Loop (Exact in-game cosmos starfield)
+  // Helper: Draw 3D Starburst Action Combo Badge matching neon-starfighter.svg
+  const drawStarburstBadge = (ctx: CanvasRenderingContext2D, x: number, y: number, text: string, scale: number, alpha: number) => {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+
+    const pts: [number, number][] = [
+      [0, -22], [8, -8], [24, -14], [16, -1], [30, 10], [14, 14], [18, 28],
+      [4, 20], [-4, 28], [-2, 14], [-18, 18], [-12, 4], [-28, -2], [-14, -10],
+      [-20, -24], [-6, -16]
+    ];
+
+    // Hard drop shadow
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    pts.forEach(([px, py], i) => {
+      if (i === 0) ctx.moveTo(px + 3.5, py + 3.5);
+      else ctx.lineTo(px + 3.5, py + 3.5);
+    });
+    ctx.closePath();
+    ctx.fill();
+
+    // Gold fill
+    ctx.fillStyle = '#FFE600';
+    ctx.beginPath();
+    pts.forEach(([px, py], i) => {
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+    ctx.fill();
+
+    // 2.5px solid black stroke
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'miter';
+    ctx.stroke();
+
+    // Badge text
+    ctx.fillStyle = '#000000';
+    ctx.font = '900 9px Impact, Arial Black, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 0, 1);
+
+    ctx.restore();
+  };
+
+  // Idle Background Loop (Exact in-game cosmos starfield & 3D space warp grid)
   useEffect(() => {
     if (isPlaying && !isDead) return;
 
@@ -539,27 +640,41 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       const dt = Math.min(rawDt, 0.045);
       const timeScale = dt * 60;
 
-      // In-Game Background Clear
-      ctx.fillStyle = '#080417';
+      // In-Game Background Clear (Deep Indigo Space Ground)
+      const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      grad.addColorStop(0, '#030014');
+      grad.addColorStop(0.5, '#0a0526');
+      grad.addColorStop(1, '#021b2b');
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Subtle Background Grid Lines
+      // Perspective Space Warp Grid & Radiating Rays (from neon-starfighter.svg)
       ctx.save();
-      ctx.strokeStyle = '#180e2e';
-      ctx.lineWidth = 1;
-      const gridSize = 40;
-      for (let x = 0; x < CANVAS_WIDTH; x += gridSize) {
+      ctx.strokeStyle = '#1E1548';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 3]);
+
+      // Perspective Rays
+      const vpX = CANVAS_WIDTH / 2;
+      const vpY = -40;
+      const rayDests = [-100, -20, 40, 100, 160, 200, 260, 320, 380, 460];
+      for (let i = 0; i < rayDests.length; i++) {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.moveTo(vpX, vpY);
+        ctx.lineTo(rayDests[i], CANVAS_HEIGHT + 20);
         ctx.stroke();
       }
-      for (let y = 0; y < CANVAS_HEIGHT; y += gridSize) {
+
+      // Moving Horizontal Speed Warp Bars
+      warpGridOffsetRef.current = (warpGridOffsetRef.current + 1.2 * timeScale) % 50;
+      for (let y = warpGridOffsetRef.current; y < CANVAS_HEIGHT; y += 50) {
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
       ctx.restore();
 
       // Cosmic Atmosphere (Neo Pink on Death, Neo Cyan on Launch)
@@ -568,12 +683,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.45, CANVAS_WIDTH * 0.75
       );
       if (isDead) {
-        radGrad.addColorStop(0, 'rgba(254, 144, 232, 0.22)');
+        radGrad.addColorStop(0, 'rgba(255, 0, 127, 0.22)');
         radGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.08)');
         radGrad.addColorStop(1, 'rgba(8, 4, 23, 0)');
       } else {
         radGrad.addColorStop(0, 'rgba(0, 240, 255, 0.16)');
-        radGrad.addColorStop(0.5, 'rgba(254, 144, 232, 0.08)');
+        radGrad.addColorStop(0.5, 'rgba(255, 112, 217, 0.08)');
         radGrad.addColorStop(1, 'rgba(8, 4, 23, 0)');
       }
       ctx.fillStyle = radGrad;
@@ -619,7 +734,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const p = playerRef.current;
 
-      // Sync Wave and Score with React HUD periodically (every 120ms max) without resetting game loop
+      // Sync Wave and Score with React HUD periodically (every 120ms max)
       if (timestamp - lastScoreSyncTimeRef.current > 120) {
         lastScoreSyncTimeRef.current = timestamp;
         setDisplayScore(scoreRef.current);
@@ -628,6 +743,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         if (currentWave !== waveRef.current) {
           waveRef.current = currentWave;
           setWave(currentWave);
+          addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, `SECTOR ${currentWave} REACHED!`);
         }
 
         if (activePowerupRef.current !== lastSyncedPowerupRef.current) {
@@ -653,12 +769,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
 
       // Player Movement: Horizontal Only (A/D, Left/Right Arrows, or Touch/Mouse Drag)
-      p.y = PLAYER_BASE_Y; // Lock vertical position strictly
+      p.y = PLAYER_BASE_Y;
 
-      // Calculate gravitational pull from all active black holes
+      // Calculate gravitational pull from active black holes
       let totalGravityX = 0;
       let strongestPullRatio = 0;
-      let nearestBhX = p.x + p.width / 2;
 
       blackHolesRef.current.forEach((bh) => {
         const dx = bh.x - (p.x + p.width / 2);
@@ -666,20 +781,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const dist = Math.hypot(dx, dy);
 
         if (dist < bh.pullRadius && dist > 1) {
-          const pullRatio = (bh.pullRadius - dist) / bh.pullRadius; // 0 to 1
+          const pullRatio = (bh.pullRadius - dist) / bh.pullRadius;
           if (pullRatio > strongestPullRatio) {
             strongestPullRatio = pullRatio;
-            nearestBhX = bh.x;
           }
-          // Non-linear gravitational suction (stronger acceleration near singularity)
           const force = Math.pow(pullRatio, 1.25) * 11.5 * timeScale;
           totalGravityX += (dx / dist) * force;
 
-          // Spawn gravitational accretion sparks toward black hole
+          // Gravitational accretion sparks
           if (Math.random() < 0.35 && particlesRef.current.length < 45) {
             particlesRef.current.push({
-              x: p.x + p.width / 2 + (Math.random() - 0.5) * 12,
-              y: p.y + p.height / 2 + (Math.random() - 0.5) * 12,
+              x: p.x + p.width / 2 + (Math.random() - 0.5) * 14,
+              y: p.y + p.height / 2 + (Math.random() - 0.5) * 14,
               vx: (dx / dist) * 4.5 + (Math.random() - 0.5) * 2,
               vy: (dy / dist) * 4.5 + (Math.random() - 0.5) * 2,
               alpha: 0.85,
@@ -694,20 +807,32 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const currentSpeed = (p.hyperTimer > 0 ? p.speed * 1.35 : p.speed) * timeScale;
       const hasKeyInput = keysRef.current.left || keysRef.current.right;
+      let targetRoll = 0;
 
       if (hasKeyInput) {
-        if (keysRef.current.left) p.x = Math.max(0, p.x - currentSpeed);
-        if (keysRef.current.right) p.x = Math.min(CANVAS_WIDTH - p.width, p.x + currentSpeed);
+        if (keysRef.current.left) {
+          p.x = Math.max(0, p.x - currentSpeed);
+          targetRoll = -0.22;
+        }
+        if (keysRef.current.right) {
+          p.x = Math.min(CANVAS_WIDTH - p.width, p.x + currentSpeed);
+          targetRoll = 0.22;
+        }
         pointerRef.current.active = false;
         pointerRef.current.pendingDeltaX = 0;
       } else if (pointerRef.current.active || pointerRef.current.pendingDeltaX !== 0) {
         const deltaX = pointerRef.current.pendingDeltaX;
         pointerRef.current.pendingDeltaX = 0;
 
-        // Reduce steering traction when being pulled by strong gravity
+        if (deltaX < -1.5) targetRoll = -0.22;
+        else if (deltaX > 1.5) targetRoll = 0.22;
+
         const controlTraction = Math.max(0.08, 1 - Math.pow(strongestPullRatio, 1.1) * 0.92);
         p.x += deltaX * controlTraction;
       }
+
+      // Smooth banking roll interpolation
+      p.roll += (targetRoll - p.roll) * 0.22 * timeScale;
 
       // Apply gravitational force directly to ship
       if (totalGravityX !== 0) {
@@ -715,45 +840,33 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
       p.x = Math.max(0, Math.min(CANVAS_WIDTH - p.width, p.x));
 
-      // Auto-Shooting Cannon
-      const fireIntervalMs = p.hyperTimer > 0 ? 80 : p.tripleShotTimer > 0 ? 115 : 135;
+      // DUAL WINGTIP PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
+      const fireIntervalMs = p.hyperTimer > 0 ? 80 : p.tripleShotTimer > 0 ? 110 : 130;
       if (timestamp - lastShotTimeRef.current >= fireIntervalMs) {
         lastShotTimeRef.current = timestamp;
 
         if (p.tripleShotTimer > 0) {
+          // 3-Way Spread Plasma Cannons
           bulletsRef.current.push(
-            { x: p.x + p.width / 2 - 2, y: p.y - 4, vx: 0, vy: -14, color: '#00F0FF' },
-            { x: p.x + p.width / 2 - 2, y: p.y - 4, vx: -3, vy: -13.5, color: '#39FF14' },
-            { x: p.x + p.width / 2 - 2, y: p.y - 4, vx: 3, vy: -13.5, color: '#39FF14' }
+            { x: p.x + 4, y: p.y - 2, vx: -3.5, vy: -14, color: '#39FF14' },
+            { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -15, color: '#00F0FF' },
+            { x: p.x + p.width - 8, y: p.y - 2, vx: 3.5, vy: -14, color: '#39FF14' }
           );
           playSfxRef.current('spread');
         } else {
+          // Dual Wingtip Synchronized Plasma Beams (from outer yellow wingtip rails)
+          const isHyp = p.hyperTimer > 0;
           bulletsRef.current.push(
-            { x: p.x + 5, y: p.y - 2, vx: 0, vy: -14, color: p.hyperTimer > 0 ? '#FFE600' : '#00F0FF' },
-            { x: p.x + p.width - 9, y: p.y - 2, vx: 0, vy: -14, color: p.hyperTimer > 0 ? '#FFE600' : '#00F0FF' }
+            { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -16 : -14, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+            { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -16 : -14, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
           );
-          playSfxRef.current('laser');
+          playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
         }
-      }
-
-      // Thruster Exhaust
-      if (particlesRef.current.length < 35) {
-        particlesRef.current.push({
-          x: p.x + p.width / 2 + (Math.random() - 0.5) * 8,
-          y: p.y + p.height - 4,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: Math.random() * 3 + 4,
-          alpha: 0.8,
-          color: p.hyperTimer > 0 ? '#FFE600' : p.tripleShotTimer > 0 ? '#39FF14' : '#00F0FF',
-          size: 2,
-          life: 0,
-          maxLife: 10,
-        });
       }
 
       // SPAWN SYSTEM (Time-Based)
       const currentWave = waveRef.current;
-      const enemyInterval = Math.max(450, 850 - currentWave * 50);
+      const enemyInterval = Math.max(420, 820 - currentWave * 50);
       if (timestamp - lastSpawnEnemyTimeRef.current >= enemyInterval) {
         lastSpawnEnemyTimeRef.current = timestamp;
         const rand = Math.random();
@@ -761,46 +874,52 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           enemiesRef.current.push({
             x: Math.random() * (CANVAS_WIDTH - 44) + 6,
             y: -35,
-            width: 36,
-            height: 30,
+            width: 38,
+            height: 32,
             vx: (Math.random() - 0.5) * 2.2,
             vy: Math.random() * 1.2 + 2.2 + currentWave * 0.15,
             hp: 4,
             maxHp: 4,
             color: '#FF0055',
+            sideColor: '#80002A',
             type: 'heavy',
+            rotation: 0,
           });
         } else if (rand > 0.4) {
           enemiesRef.current.push({
             x: Math.random() * (CANVAS_WIDTH - 32) + 6,
             y: -30,
-            width: 26,
-            height: 22,
+            width: 28,
+            height: 24,
             vx: (Math.random() - 0.5) * 3,
             vy: Math.random() * 1.5 + 3.2 + currentWave * 0.15,
             hp: 2,
             maxHp: 2,
             color: '#FF00EA',
+            sideColor: '#800F2F',
             type: 'scout',
+            rotation: 0,
           });
         } else {
           enemiesRef.current.push({
             x: Math.random() * (CANVAS_WIDTH - 28) + 6,
             y: -25,
-            width: 22,
-            height: 18,
+            width: 24,
+            height: 20,
             vx: (Math.random() - 0.5) * 2,
             vy: Math.random() * 1.5 + 3.8 + currentWave * 0.2,
             hp: 1,
             maxHp: 1,
-            color: '#9D00FF',
+            color: '#FF4D6D',
+            sideColor: '#800F2F',
             type: 'drone',
+            rotation: 0,
           });
         }
       }
 
       // Spawn Meteors
-      if (timestamp - lastSpawnMeteorTimeRef.current >= Math.max(1600, 2600 - currentWave * 100)) {
+      if (timestamp - lastSpawnMeteorTimeRef.current >= Math.max(1500, 2500 - currentWave * 100)) {
         lastSpawnMeteorTimeRef.current = timestamp;
         meteorsRef.current.push(createMeteor());
       }
@@ -831,7 +950,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const b = bulletsRef.current[i];
         b.x += b.vx * timeScale;
         b.y += b.vy * timeScale;
-        if (b.y < -20 || b.x < -20 || b.x > CANVAS_WIDTH + 20) {
+        if (b.y < -25 || b.x < -25 || b.x > CANVAS_WIDTH + 25) {
           bulletsRef.current.splice(i, 1);
         }
       }
@@ -848,17 +967,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           if (pow.type === 'spread') {
             p.tripleShotTimer = 420;
             activePowerupRef.current = 'TRIPLE SPREAD LASER';
-            addFloatingText(pow.x, pow.y, 'TRIPLE LASERS!', '#39FF14');
+            addActionBadge(pow.x, pow.y, 'TRIPLE LASERS!');
           } else if (pow.type === 'shield') {
             p.hasShield = true;
             activePowerupRef.current = 'ENERGY SHIELD';
-            addFloatingText(pow.x, pow.y, 'ENERGY SHIELD!', '#00F0FF');
+            addActionBadge(pow.x, pow.y, 'SHIELD ACTIVE!');
           } else if (pow.type === 'nuke') {
             triggerNuke();
           } else if (pow.type === 'hyper') {
-            p.hyperTimer = 320;
-            activePowerupRef.current = 'HYPERDRIVE RAPID-FIRE';
-            addFloatingText(pow.x, pow.y, 'HYPERDRIVE!', '#FFE600');
+            p.hyperTimer = 340;
+            activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
+            addActionBadge(pow.x, pow.y, 'HYPER DRIVE!');
+            playSfxRef.current('hyper_start');
           }
 
           scoreRef.current += 200;
@@ -887,7 +1007,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             playSfxRef.current('shield_hit');
             screenShakeRef.current = 16;
             bh.y += 45;
-            addFloatingText(p.x, p.y - 20, 'SHIELD CRUSHED BY SINGULARITY!', '#FF00EA');
+            addActionBadge(p.x + p.width / 2, p.y - 20, 'SHIELD CRUSHED!');
             for (let k = 0; k < 15; k++) {
               particlesRef.current.push({
                 x: p.x + p.width / 2,
@@ -954,7 +1074,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             playSfxRef.current('shield_hit');
             screenShakeRef.current = 10;
             m.vy = -m.vy * 0.5;
-            addFloatingText(p.x, p.y, 'SHIELD BROKEN!', '#00F0FF');
+            addActionBadge(p.x + p.width / 2, p.y, 'SHIELD BROKEN!');
           } else {
             handlePlayerDeath();
             cancelAnimationFrame(animId);
@@ -977,32 +1097,40 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         for (let j = bulletsRef.current.length - 1; j >= 0; j--) {
           const b = bulletsRef.current[j];
           if (
-            b.x >= enemy.x &&
-            b.x <= enemy.x + enemy.width &&
+            b.x >= enemy.x - 4 &&
+            b.x <= enemy.x + enemy.width + 4 &&
             b.y >= enemy.y &&
-            b.y <= enemy.y + enemy.height
+            b.y <= enemy.y + enemy.height + 4
           ) {
             bulletsRef.current.splice(j, 1);
             enemy.hp--;
 
             if (enemy.hp <= 0) {
               playSfxRef.current('boom');
-              const pointsEarned = enemy.type === 'heavy' ? 300 : enemy.type === 'scout' ? 200 : 100;
+              const mult = p.hyperTimer > 0 ? 2 : 1;
+              const pointsEarned = (enemy.type === 'heavy' ? 300 : enemy.type === 'scout' ? 200 : 100) * mult;
               scoreRef.current += pointsEarned;
-              addFloatingText(enemy.x, enemy.y, `+${pointsEarned}`, enemy.color);
+              addFloatingText(enemy.x + enemy.width / 2, enemy.y, `+${pointsEarned}`, enemy.color);
 
-              if (particlesRef.current.length < 35) {
-                for (let k = 0; k < 6; k++) {
+              // Circular Dashed Shockwave Ring (from neon-starfighter.svg)
+              addShockwave(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.color, enemy.type === 'heavy' ? 42 : 28);
+
+              if (enemy.type === 'heavy' || Math.random() < 0.25) {
+                addActionBadge(enemy.x + enemy.width / 2, enemy.y - 10, 'TARGET LOCKED!');
+              }
+
+              if (particlesRef.current.length < 40) {
+                for (let k = 0; k < 8; k++) {
                   particlesRef.current.push({
                     x: enemy.x + enemy.width / 2,
                     y: enemy.y + enemy.height / 2,
-                    vx: (Math.random() - 0.5) * 5,
-                    vy: (Math.random() - 0.5) * 5,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
                     alpha: 1,
                     color: enemy.color,
-                    size: 2.2,
+                    size: 2.5,
                     life: 0,
-                    maxLife: 14,
+                    maxLife: 16,
                   });
                 }
               }
@@ -1016,17 +1144,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         // Collision with Ship
         if (
           enemy &&
-          p.x + 4 < enemy.x + enemy.width &&
-          p.x + p.width - 4 > enemy.x &&
-          p.y + 4 < enemy.y + enemy.height &&
-          p.y + p.height - 4 > enemy.y
+          p.x + 6 < enemy.x + enemy.width &&
+          p.x + p.width - 6 > enemy.x &&
+          p.y + 6 < enemy.y + enemy.height &&
+          p.y + p.height - 6 > enemy.y
         ) {
           if (p.hasShield) {
             p.hasShield = false;
             playSfxRef.current('shield_hit');
             screenShakeRef.current = 10;
+            addShockwave(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, '#00F0FF', 36);
             enemiesRef.current.splice(i, 1);
-            addFloatingText(p.x, p.y, 'SHIELD BROKEN!', '#00F0FF');
+            addActionBadge(p.x + p.width / 2, p.y, 'SHIELD BROKEN!');
           } else {
             handlePlayerDeath();
             cancelAnimationFrame(animId);
@@ -1042,18 +1171,19 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         setIsPlaying(false);
         playSfxRef.current('boom');
         screenShakeRef.current = 18;
+        addShockwave(p.x + p.width / 2, p.y + p.height / 2, '#FF007F', 90);
 
-        for (let k = 0; k < 20; k++) {
+        for (let k = 0; k < 25; k++) {
           particlesRef.current.push({
             x: p.x + p.width / 2,
             y: p.y + p.height / 2,
-            vx: (Math.random() - 0.5) * 7,
-            vy: (Math.random() - 0.5) * 7,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8,
             alpha: 1,
             color: '#00F0FF',
-            size: 2.8,
+            size: 3,
             life: 0,
-            maxLife: 20,
+            maxLife: 22,
           });
         }
 
@@ -1064,7 +1194,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
 
       // ==========================================
-      // NEO-BRUTALISM CANVAS 2D RENDER ENGINE
+      // 3D ISOMETRIC VECTOR CANVAS RENDER ENGINE
       // ==========================================
 
       ctx.save();
@@ -1078,48 +1208,64 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         if (screenShakeRef.current < 0.5) screenShakeRef.current = 0;
       }
 
-      // Background Clear (Deep Indigo Ground)
-      ctx.fillStyle = '#080417';
+      // 1. Deep Space Canvas Gradient (from neon-starfighter.svg)
+      const spaceGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      spaceGrad.addColorStop(0, '#030014');
+      spaceGrad.addColorStop(0.5, '#0a0526');
+      spaceGrad.addColorStop(1, '#021b2b');
+      ctx.fillStyle = spaceGrad;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Subtle Background Matrix / Grid Lines
+      // 2. Perspective Space Warp Grid & Radiating Rays (from neon-starfighter.svg)
       ctx.save();
-      ctx.strokeStyle = '#180e2e';
-      ctx.lineWidth = 1;
-      const gridSize = 40;
-      for (let x = 0; x < CANVAS_WIDTH; x += gridSize) {
+      ctx.strokeStyle = '#1E1548';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 3]);
+
+      const vpX = CANVAS_WIDTH / 2;
+      const vpY = -40;
+      const rayDests = [-100, -20, 40, 100, 160, 200, 260, 320, 380, 460];
+      for (let i = 0; i < rayDests.length; i++) {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.moveTo(vpX, vpY);
+        ctx.lineTo(rayDests[i], CANVAS_HEIGHT + 20);
         ctx.stroke();
       }
-      for (let y = 0; y < CANVAS_HEIGHT; y += gridSize) {
+
+      // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive)
+      const speedMult = p.hyperTimer > 0 ? 3.5 : 1.0;
+      warpGridOffsetRef.current = (warpGridOffsetRef.current + 2.0 * speedMult * timeScale) % 50;
+      for (let y = warpGridOffsetRef.current; y < CANVAS_HEIGHT; y += 50) {
+        ctx.strokeStyle = p.hyperTimer > 0 ? 'rgba(255, 230, 0, 0.22)' : 'rgba(0, 240, 255, 0.12)';
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
       ctx.restore();
 
-      // Starfield (Direct Pixel Drawing with Pop Colors)
+      // 3. Starfield & Cosmic Warp Streaks
       const stars = starsRef.current;
       for (let s = 0; s < stars.length; s++) {
         const star = stars[s];
-        star.y += star.speed * timeScale;
+        const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed) * timeScale;
+        star.y += starSpeed;
         if (star.y > CANVAS_HEIGHT) {
           star.y = 0;
           star.x = Math.random() * CANVAS_WIDTH;
         }
-        ctx.fillStyle = star.color;
-        ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * 1.5);
+        ctx.fillStyle = p.hyperTimer > 0 ? '#FFE600' : star.color;
+        const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 1.5;
+        ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * lengthMultiplier);
       }
 
-      // 1. Black Holes (Neo-Brutalist Cosmic Singularity)
+      // 4. Black Holes (Cosmic Singularity with Dual Swirling Rings)
       blackHolesRef.current.forEach((bh) => {
-        // Gravitational Warning Hazard Ring (Dashed Neo Pink)
+        // Gravitational Hazard Warning Ring
         ctx.save();
-        ctx.strokeStyle = 'rgba(254, 144, 232, 0.25)';
-        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'rgba(255, 0, 127, 0.25)';
+        ctx.lineWidth = 4;
         ctx.setLineDash([8, 6]);
         ctx.beginPath();
         ctx.arc(bh.x, bh.y, (bh.pullRadius * 0.75) | 0, 0, Math.PI * 2);
@@ -1127,11 +1273,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.setLineDash([]);
         ctx.restore();
 
-        // Dual Swirling Accretion Disk Rings with Solid Neo Borders
+        // Dual Swirling Accretion Disk Rings
         ctx.save();
         ctx.translate(bh.x, bh.y);
         ctx.rotate(bh.angle);
-        ctx.strokeStyle = '#FE90E8';
+        ctx.strokeStyle = '#FF007F';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(0, 0, bh.radius + 6, 0, Math.PI * 1.5);
@@ -1145,17 +1291,17 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.stroke();
         ctx.restore();
 
-        // Event Horizon (Singularity Core with Solid Neo-Brutalist Border)
+        // Singularity Event Horizon Core
         ctx.fillStyle = '#000000';
         ctx.beginPath();
         ctx.arc(bh.x, bh.y, bh.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#FE90E8';
+        ctx.strokeStyle = '#FF007F';
         ctx.lineWidth = 3.5;
         ctx.stroke();
       });
 
-      // 2. Meteors (Faceted Neo-Brutalist Space Asteroids with Hard Shadows & Black Outlines)
+      // 5. Meteors (Faceted Asteroids with Hard Drop Shadows)
       meteorsRef.current.forEach((m) => {
         ctx.save();
         ctx.translate(m.x, m.y);
@@ -1165,13 +1311,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.fillStyle = '#000000';
         ctx.beginPath();
         m.points.forEach((pt, idx) => {
-          if (idx === 0) ctx.moveTo(pt.x + 3, pt.y + 3);
-          else ctx.lineTo(pt.x + 3, pt.y + 3);
+          if (idx === 0) ctx.moveTo(pt.x + 3.5, pt.y + 3.5);
+          else ctx.lineTo(pt.x + 3.5, pt.y + 3.5);
         });
         ctx.closePath();
         ctx.fill();
 
-        // Asteroid Body (Deep Purple Asteroid)
+        // Asteroid Body
         ctx.fillStyle = '#381E54';
         ctx.beginPath();
         m.points.forEach((pt, idx) => {
@@ -1181,13 +1327,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.closePath();
         ctx.fill();
 
-        // Solid Black 2.5px Border
+        // Solid Black Border
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2.5;
         ctx.lineJoin = 'round';
         ctx.stroke();
 
-        // Comic Crater Details
+        // Crater Details
         ctx.fillStyle = '#220F38';
         ctx.beginPath();
         ctx.arc(m.radius * 0.2, m.radius * 0.2, m.radius * 0.28, 0, Math.PI * 2);
@@ -1205,44 +1351,44 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.restore();
       });
 
-      // 3. Powerups (Neo-Brutalist Tactile Swatch Boxes with Figma Node Accents)
+      // 6. Powerups (Tactile Neo-Brutalist Swatches)
       powerupsRef.current.forEach((pow) => {
         const pulseSize = pow.radius + Math.sin(pow.pulse) * 1.5;
         const color =
           pow.type === 'spread'
-            ? '#99E885'
+            ? '#39FF14'
             : pow.type === 'shield'
-            ? '#C0F7FE'
+            ? '#00F0FF'
             : pow.type === 'nuke'
-            ? '#FE90E8'
-            : '#F7CB46';
+            ? '#FF007F'
+            : '#FFE600';
 
         const size = pulseSize * 1.7;
         const x = pow.x - size / 2;
         const y = pow.y - size / 2;
 
         ctx.save();
-        // 1. Hard Offset Drop Shadow (Neo-Brutalism)
+        // Drop Shadow
         ctx.fillStyle = '#000000';
         ctx.fillRect(x + 3, y + 3, size, size);
 
-        // 2. Main Swatch Box Fill
+        // Main Box
         ctx.fillStyle = color;
         ctx.fillRect(x, y, size, size);
 
-        // 3. Solid Black Border
+        // Solid Black Border
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2.5;
         ctx.strokeRect(x, y, size, size);
 
-        // 4. White Corner Accent Node
+        // Figma Corner Accent Node
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(x - 1, y - 1, 3, 3);
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
         ctx.strokeRect(x - 1, y - 1, 3, 3);
 
-        // 5. Crisp Text Label
+        // Crisp Text Label
         ctx.fillStyle = '#000000';
         ctx.font = '900 10px system-ui, -apple-system, sans-serif';
         ctx.textAlign = 'center';
@@ -1259,265 +1405,466 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.restore();
       });
 
-      // 4. Bullets (High-Impact Chunky Cartoon Plasma Lasers)
+      // 7. Bullets (Dual Wingtip Plasma Cannon Beams matching neon-starfighter.svg)
       bulletsRef.current.forEach((b) => {
         ctx.save();
         // Hard Offset Drop Shadow
         ctx.fillStyle = '#000000';
-        ctx.fillRect(b.x + 1.5, b.y + 1.5, 4, 14);
+        ctx.fillRect(b.x + 1.5, b.y + 1.5, 4, 16);
 
-        // Laser Fill
+        // Plasma Laser Outer Fill
         ctx.fillStyle = b.color;
-        ctx.fillRect(b.x, b.y, 4, 14);
+        ctx.fillRect(b.x, b.y, 4, 16);
 
-        // Laser Black Outline
+        // Solid Black Border
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1.5;
-        ctx.strokeRect(b.x, b.y, 4, 14);
+        ctx.strokeRect(b.x, b.y, 4, 16);
 
-        // White Core Energy Line
+        // White Core Energy Beam Line
         ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(b.x + 1, b.y + 2, 2, 8);
+        ctx.fillRect(b.x + 1, b.y + 2, 2, 10);
         ctx.restore();
       });
 
-      // 5. Enemies (Arcade Neo-Brutalist Invaders with Solid Outlines, Eyes & Health Bars)
+      // 8. Enemies (3D Faceted Diving Drones & Aggressors matching neon-starfighter.svg)
       enemiesRef.current.forEach((enemy) => {
         ctx.save();
+        ctx.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
 
         if (enemy.type === 'heavy') {
+          // 3D Heavy Dreadnought
           // Hard Drop Shadow
           ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2 + 3, enemy.y + enemy.height + 3);
-          ctx.lineTo(enemy.x + 3, enemy.y + 3);
-          ctx.lineTo(enemy.x + 9, enemy.y + 6);
-          ctx.lineTo(enemy.x + enemy.width / 2 + 3, enemy.y + 13);
-          ctx.lineTo(enemy.x + enemy.width - 3, enemy.y + 6);
-          ctx.lineTo(enemy.x + enemy.width + 3, enemy.y + 3);
+          ctx.moveTo(0 + 3.5, 16 + 3.5);
+          ctx.lineTo(-18 + 3.5, -14 + 3.5);
+          ctx.lineTo(0 + 3.5, -4 + 3.5);
+          ctx.lineTo(18 + 3.5, -14 + 3.5);
           ctx.closePath();
           ctx.fill();
 
-          // Main Heavy Hull Fill
+          // Extruded Dark Bottom Hull
+          ctx.fillStyle = enemy.sideColor;
+          ctx.beginPath();
+          ctx.moveTo(0, 16);
+          ctx.lineTo(-18, -14);
+          ctx.lineTo(-14, -14);
+          ctx.lineTo(0, 2);
+          ctx.lineTo(14, -14);
+          ctx.lineTo(18, -14);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // Main Armored Hull
           ctx.fillStyle = enemy.color;
           ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
-          ctx.lineTo(enemy.x, enemy.y);
-          ctx.lineTo(enemy.x + 6, enemy.y + 3);
-          ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + 10);
-          ctx.lineTo(enemy.x + enemy.width - 6, enemy.y + 3);
-          ctx.lineTo(enemy.x + enemy.width, enemy.y);
+          ctx.moveTo(0, 14);
+          ctx.lineTo(-16, -12);
+          ctx.lineTo(0, 0);
+          ctx.lineTo(16, -12);
           ctx.closePath();
           ctx.fill();
-
-          // Solid Black 2.5px Stroke
           ctx.strokeStyle = '#000000';
           ctx.lineWidth = 2.5;
           ctx.lineJoin = 'round';
           ctx.stroke();
 
-          // Dual Angry Eyes
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(enemy.x + 8, enemy.y + 12, 6, 6);
-          ctx.fillRect(enemy.x + enemy.width - 14, enemy.y + 12, 6, 6);
+          // Twin Command Scanner Visors
+          ctx.fillStyle = '#FFE600';
+          ctx.fillRect(-10, -6, 6, 4);
+          ctx.fillRect(4, -6, 6, 4);
           ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(enemy.x + 8, enemy.y + 12, 6, 6);
-          ctx.strokeRect(enemy.x + enemy.width - 14, enemy.y + 12, 6, 6);
-          // Pupils
-          ctx.fillStyle = '#000000';
-          ctx.fillRect(enemy.x + 10, enemy.y + 14, 3, 3);
-          ctx.fillRect(enemy.x + enemy.width - 12, enemy.y + 14, 3, 3);
+          ctx.lineWidth = 1.2;
+          ctx.strokeRect(-10, -6, 6, 4);
+          ctx.strokeRect(4, -6, 6, 4);
 
-          // Neo-Brutalist HP Segmented Bar
+          // HP Bar
           if (enemy.hp < enemy.maxHp) {
             ctx.fillStyle = '#000000';
-            ctx.fillRect(enemy.x + 2, enemy.y - 7, enemy.width, 5);
+            ctx.fillRect(-16, -22, 32, 5);
             ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(enemy.x, enemy.y - 9, enemy.width, 5);
-            ctx.fillStyle = '#99E885';
-            ctx.fillRect(enemy.x, enemy.y - 9, (enemy.hp / enemy.maxHp) * enemy.width, 5);
+            ctx.fillRect(-16, -22, 32, 5);
+            ctx.fillStyle = '#39FF14';
+            ctx.fillRect(-16, -22, (enemy.hp / enemy.maxHp) * 32, 5);
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 1.5;
-            ctx.strokeRect(enemy.x, enemy.y - 9, enemy.width, 5);
+            ctx.strokeRect(-16, -22, 32, 5);
           }
         } else if (enemy.type === 'scout') {
+          // 3D Scout Interceptor
+          ctx.fillStyle = '#000000';
+          ctx.beginPath();
+          ctx.moveTo(0 + 2.5, 12 + 2.5);
+          ctx.lineTo(-14 + 2.5, -10 + 2.5);
+          ctx.lineTo(0 + 2.5, -2 + 2.5);
+          ctx.lineTo(14 + 2.5, -10 + 2.5);
+          ctx.closePath();
+          ctx.fill();
+
+          // Main Body
+          ctx.fillStyle = enemy.color;
+          ctx.beginPath();
+          ctx.moveTo(0, 12);
+          ctx.lineTo(-14, -10);
+          ctx.lineTo(0, -2);
+          ctx.lineTo(14, -10);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // Yellow Eye
+          ctx.fillStyle = '#FFE600';
+          ctx.beginPath();
+          ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        } else {
+          // 3D Diving Aggressor Drone (from neon-starfighter.svg)
           // Hard Drop Shadow
           ctx.fillStyle = '#000000';
           ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2 + 2, enemy.y + enemy.height + 2);
-          ctx.lineTo(enemy.x + 2, enemy.y + 2);
-          ctx.lineTo(enemy.x + enemy.width / 2 + 2, enemy.y + 6);
-          ctx.lineTo(enemy.x + enemy.width + 2, enemy.y + 2);
+          ctx.moveTo(0 + 2.5, 10 + 2.5);
+          ctx.lineTo(12 + 2.5, -2 + 2.5);
+          ctx.lineTo(0 + 2.5, -10 + 2.5);
+          ctx.lineTo(-12 + 2.5, -2 + 2.5);
           ctx.closePath();
           ctx.fill();
 
-          // Main Hull
+          // 3D Extruded Drone Hull Side Facet
+          ctx.fillStyle = enemy.sideColor;
+          ctx.beginPath();
+          ctx.moveTo(-12, -2);
+          ctx.lineTo(0, 10);
+          ctx.lineTo(0, 14);
+          ctx.lineTo(-12, 2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(12, -2);
+          ctx.lineTo(0, 10);
+          ctx.lineTo(0, 14);
+          ctx.lineTo(12, 2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Drone Core Face
           ctx.fillStyle = enemy.color;
           ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
-          ctx.lineTo(enemy.x, enemy.y);
-          ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + 4);
-          ctx.lineTo(enemy.x + enemy.width, enemy.y);
+          ctx.moveTo(0, 10);
+          ctx.lineTo(12, -2);
+          ctx.lineTo(0, -10);
+          ctx.lineTo(-12, -2);
           ctx.closePath();
           ctx.fill();
-
-          // Solid Black Border
           ctx.strokeStyle = '#000000';
           ctx.lineWidth = 2.5;
           ctx.lineJoin = 'round';
           ctx.stroke();
 
-          // Cute Eyes
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(enemy.x + 5, enemy.y + 6, 5, 5);
-          ctx.fillRect(enemy.x + enemy.width - 10, enemy.y + 6, 5, 5);
-          ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(enemy.x + 5, enemy.y + 6, 5, 5);
-          ctx.strokeRect(enemy.x + enemy.width - 10, enemy.y + 6, 5, 5);
-          ctx.fillStyle = '#000000';
-          ctx.fillRect(enemy.x + 7, enemy.y + 8, 2, 2);
-          ctx.fillRect(enemy.x + enemy.width - 8, enemy.y + 8, 2, 2);
-        } else {
-          // Drone Invader: Diamond Saucer
-          ctx.fillStyle = '#000000';
+          // Glowing Diamond Cyclops Eye (from neon-starfighter.svg)
+          ctx.fillStyle = '#FFE600';
           ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2 + 2, enemy.y + enemy.height + 2);
-          ctx.lineTo(enemy.x + 2, enemy.y + enemy.height / 2 + 2);
-          ctx.lineTo(enemy.x + enemy.width / 2 + 2, enemy.y + 2);
-          ctx.lineTo(enemy.x + enemy.width + 2, enemy.y + enemy.height / 2 + 2);
+          ctx.moveTo(0, -4);
+          ctx.lineTo(5, 0);
+          ctx.lineTo(0, 4);
+          ctx.lineTo(-5, 0);
           ctx.closePath();
           ctx.fill();
-
-          // Body
-          ctx.fillStyle = enemy.color;
-          ctx.beginPath();
-          ctx.moveTo(enemy.x + enemy.width / 2, enemy.y + enemy.height);
-          ctx.lineTo(enemy.x, enemy.y + enemy.height / 2);
-          ctx.lineTo(enemy.x + enemy.width / 2, enemy.y);
-          ctx.lineTo(enemy.x + enemy.width, enemy.y + enemy.height / 2);
-          ctx.closePath();
-          ctx.fill();
-
-          // Solid Black Border
           ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 2.5;
-          ctx.lineJoin = 'round';
+          ctx.lineWidth = 1.2;
           ctx.stroke();
 
-          // Single Cyclops Eye
+          // White Specular Glint
           ctx.fillStyle = '#FFFFFF';
           ctx.beginPath();
-          ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.fillStyle = '#000000';
-          ctx.beginPath();
-          ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2 + 0.5, 2, 0, Math.PI * 2);
+          ctx.arc(-1, -2, 1.2, 0, Math.PI * 2);
           ctx.fill();
         }
 
         ctx.restore();
       });
 
-      // 6. Player Starfighter (Tactile Neo-Brutalist Interceptor with Figma Corner Accents & Bold Outlines)
-      const shipColor = p.hyperTimer > 0 ? '#F7CB46' : p.tripleShotTimer > 0 ? '#99E885' : '#00F0FF';
+      // 9. Shockwave Plasma Explosion Rings (from neon-starfighter.svg Swarm 2)
+      for (let i = shockwavesRef.current.length - 1; i >= 0; i--) {
+        const sw = shockwavesRef.current[i];
+        sw.radius += 2.2 * timeScale;
+        sw.alpha = 1 - sw.radius / sw.maxRadius;
+
+        if (sw.radius >= sw.maxRadius) {
+          shockwavesRef.current.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, sw.alpha);
+          ctx.strokeStyle = sw.color;
+          ctx.lineWidth = 2.5;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+        }
+      }
+
+      // ==========================================
+      // 10. 3D HERO NEON STARFIGHTER INTERCEPTOR
+      // (Directly translated from neon-starfighter.svg)
+      // ==========================================
+      const cx = p.x + p.width / 2;
+      const cy = p.y + p.height / 2;
+
       ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(p.roll); // Dynamic Banking Roll Tilt
 
-      // Exhaust Cartoon Flame Blocks
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(p.x + p.width / 2 - 4 + 1.5, p.y + p.height - 2 + 1.5, 8, 8);
-      ctx.fillStyle = '#FE90E8';
-      ctx.fillRect(p.x + p.width / 2 - 4, p.y + p.height - 2, 8, 8);
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(p.x + p.width / 2 - 4, p.y + p.height - 2, 8, 8);
+      const isHyp = p.hyperTimer > 0;
+      const isTrip = p.tripleShotTimer > 0;
 
-      ctx.fillStyle = '#FFE600';
-      ctx.fillRect(p.x + p.width / 2 - 2, p.y + p.height, 4, 4);
+      // 10.1 Thruster Exhaust Jet Flames (3-Nozzle Engine Cluster)
+      const flameOffset = Math.sin(timestamp * 0.04) * 4;
+      const flameColor = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
 
-      // Starfighter Hard Drop Shadow
-      ctx.fillStyle = '#000000';
+      // Center Main High-Energy Thruster
+      ctx.fillStyle = flameColor;
       ctx.beginPath();
-      ctx.moveTo(p.x + p.width / 2 + 3, p.y + 3);
-      ctx.lineTo(p.x + 3, p.y + p.height + 3);
-      ctx.lineTo(p.x + p.width / 2 + 3, p.y + p.height - 8 + 3);
-      ctx.lineTo(p.x + p.width + 3, p.y + p.height + 3);
+      ctx.moveTo(-5, 14);
+      ctx.lineTo(0, 32 + flameOffset);
+      ctx.lineTo(5, 14);
       ctx.closePath();
       ctx.fill();
 
-      // Main Hull Fill
-      ctx.fillStyle = shipColor;
-      ctx.beginPath();
-      ctx.moveTo(p.x + p.width / 2, p.y);
-      ctx.lineTo(p.x, p.y + p.height);
-      ctx.lineTo(p.x + p.width / 2, p.y + p.height - 8);
-      ctx.lineTo(p.x + p.width, p.y + p.height);
-      ctx.closePath();
-      ctx.fill();
-
-      // Solid 3px Black Hull Outline
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 3;
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-
-      // Wing Racing Stripes (Neo Pink)
-      ctx.fillStyle = '#FE90E8';
-      ctx.beginPath();
-      ctx.moveTo(p.x + 6, p.y + p.height - 4);
-      ctx.lineTo(p.x + 12, p.y + p.height - 10);
-      ctx.lineTo(p.x + 15, p.y + p.height - 7);
-      ctx.lineTo(p.x + 9, p.y + p.height - 1);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(p.x + p.width - 6, p.y + p.height - 4);
-      ctx.lineTo(p.x + p.width - 12, p.y + p.height - 10);
-      ctx.lineTo(p.x + p.width - 15, p.y + p.height - 7);
-      ctx.lineTo(p.x + p.width - 9, p.y + p.height - 1);
-      ctx.closePath();
-      ctx.fill();
-
-      // Cockpit Canopy (White Domed Capsule with Solid Outline)
+      // White-Hot Inner Core Flame
       ctx.fillStyle = '#FFFFFF';
       ctx.beginPath();
-      ctx.arc(p.x + p.width / 2, p.y + p.height / 2 - 2, 5, 0, Math.PI * 2);
+      ctx.moveTo(-2.5, 14);
+      ctx.lineTo(0, 22 + flameOffset * 0.5);
+      ctx.lineTo(2.5, 14);
+      ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.stroke();
 
-      // Cockpit Pupil / Pilot HUD Dot
+      // Left & Right Auxiliary Wingtip Thrusters
+      ctx.fillStyle = flameColor;
+      ctx.beginPath();
+      ctx.moveTo(-18, 10);
+      ctx.lineTo(-16, 20 + flameOffset * 0.7);
+      ctx.lineTo(-14, 10);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(14, 10);
+      ctx.lineTo(16, 20 + flameOffset * 0.7);
+      ctx.lineTo(18, 10);
+      ctx.closePath();
+      ctx.fill();
+
+      // 10.2 Hard Offset Drop Shadow (Neo-Brutalism)
       ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.arc(p.x + p.width / 2, p.y + p.height / 2 - 2, 2, 0, Math.PI * 2);
+      ctx.moveTo(0 + 4, -22 + 4);
+      ctx.lineTo(-24 + 4, 8 + 4);
+      ctx.lineTo(-21 + 4, 16 + 4);
+      ctx.lineTo(-7 + 4, 18 + 4);
+      ctx.lineTo(0 + 4, 6 + 4);
+      ctx.lineTo(7 + 4, 18 + 4);
+      ctx.lineTo(21 + 4, 16 + 4);
+      ctx.lineTo(24 + 4, 8 + 4);
+      ctx.closePath();
       ctx.fill();
 
-      // Energy Shield (Segmented Neo Bubble with Hard Shadow)
+      // 10.3 3D Extruded Hull Facets (Dark Cyan Side Plates from SVG: #0369A1 / #0C4A6E)
+      ctx.fillStyle = isHyp ? '#D49B00' : '#0369A1';
+      // Left Fuselage Side Depth
+      ctx.beginPath();
+      ctx.moveTo(-23, 6);
+      ctx.lineTo(-26, 12);
+      ctx.lineTo(-7, 20);
+      ctx.lineTo(-7, 16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Right Fuselage Side Depth
+      ctx.beginPath();
+      ctx.moveTo(23, 6);
+      ctx.lineTo(26, 12);
+      ctx.lineTo(7, 20);
+      ctx.lineTo(7, 16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Center Under-Belly Depth
+      ctx.fillStyle = isHyp ? '#805D00' : '#0C4A6E';
+      ctx.beginPath();
+      ctx.moveTo(-7, 16);
+      ctx.lineTo(-7, 20);
+      ctx.lineTo(7, 20);
+      ctx.lineTo(7, 16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // 10.4 Main Swept Wings & Hull (Vibrant Cyan Armor Plates: #00F0FF)
+      ctx.fillStyle = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.8;
+      ctx.lineJoin = 'round';
+
+      // Left Swept Wing
+      ctx.beginPath();
+      ctx.moveTo(0, -16);
+      ctx.lineTo(-23, 6);
+      ctx.lineTo(-21, 15);
+      ctx.lineTo(-7, 16);
+      ctx.lineTo(0, 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Right Swept Wing
+      ctx.beginPath();
+      ctx.moveTo(0, -16);
+      ctx.lineTo(23, 6);
+      ctx.lineTo(21, 15);
+      ctx.lineTo(7, 16);
+      ctx.lineTo(0, 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 10.5 Neon Yellow Wingtip Rails & Laser Cannon Barrels (#FFF570 / #FFE600)
+      ctx.fillStyle = '#FFE600';
+      // Left Wingtip Rail
+      ctx.beginPath();
+      ctx.moveTo(-23, 6);
+      ctx.lineTo(-27, 8);
+      ctx.lineTo(-21, 15);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Right Wingtip Rail
+      ctx.beginPath();
+      ctx.moveTo(23, 6);
+      ctx.lineTo(27, 8);
+      ctx.lineTo(21, 15);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Wing Spoiler Ridges
+      ctx.beginPath();
+      ctx.moveTo(-8, -2);
+      ctx.lineTo(-16, 6);
+      ctx.lineTo(-13, 9);
+      ctx.lineTo(-6, 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(8, -2);
+      ctx.lineTo(16, 6);
+      ctx.lineTo(13, 9);
+      ctx.lineTo(6, 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 10.6 Forward Nose Cone & Fuselage Spine
+      ctx.fillStyle = isHyp ? '#FFF570' : '#38BDF8';
+      ctx.beginPath();
+      ctx.moveTo(0, -24);
+      ctx.lineTo(-6, -4);
+      ctx.lineTo(0, 10);
+      ctx.lineTo(6, -4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 10.7 Glowing 3D Cockpit Canopy (Neon Magenta with Specular Glint)
+      ctx.fillStyle = '#FF70D9';
+      ctx.beginPath();
+      ctx.moveTo(0, -14);
+      ctx.lineTo(-4, -3);
+      ctx.lineTo(0, 3);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#FF007F';
+      ctx.beginPath();
+      ctx.moveTo(0, -14);
+      ctx.lineTo(4, -3);
+      ctx.lineTo(0, 3);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, -14);
+      ctx.lineTo(-4, -3);
+      ctx.lineTo(0, 3);
+      ctx.lineTo(4, -3);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Cockpit Specular Glint Highlight
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.moveTo(-1, -12);
+      ctx.lineTo(-3, -4);
+      ctx.lineTo(-1, -4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Wing Lead Edge Gloss Highlight
+      ctx.fillStyle = '#FFFFFF';
+      ctx.globalAlpha = 0.65;
+      ctx.beginPath();
+      ctx.moveTo(0, -16);
+      ctx.lineTo(-20, 5);
+      ctx.lineTo(-14, 3);
+      ctx.lineTo(0, -10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // 10.8 Energy Shield Bubble
       if (p.hasShield) {
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 4.5;
         ctx.beginPath();
-        ctx.arc(p.x + p.width / 2 + 2, p.y + p.height / 2 + 2, p.width * 0.82, 0, Math.PI * 2);
+        ctx.arc(2, 2, 32, 0, Math.PI * 2);
         ctx.stroke();
 
         ctx.strokeStyle = '#00F0FF';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(p.x + p.width / 2, p.y + p.height / 2, p.width * 0.82, 0, Math.PI * 2);
+        ctx.arc(0, 0, 32, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 4 Floating Energy Nodes on Shield
-        const shieldNodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
-        shieldNodes.forEach((ang) => {
-          const nx = p.x + p.width / 2 + Math.cos(ang + timestamp * 0.003) * (p.width * 0.82);
-          const ny = p.y + p.height / 2 + Math.sin(ang + timestamp * 0.003) * (p.width * 0.82);
-          ctx.fillStyle = '#FE90E8';
+        // 4 Floating Energy Shield Nodes
+        const nodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+        nodes.forEach((ang) => {
+          const nx = Math.cos(ang + timestamp * 0.003) * 32;
+          const ny = Math.sin(ang + timestamp * 0.003) * 32;
+          ctx.fillStyle = '#FF007F';
           ctx.fillRect(nx - 3, ny - 3, 6, 6);
           ctx.strokeStyle = '#000000';
           ctx.lineWidth = 1.5;
@@ -1527,7 +1874,21 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       ctx.restore();
 
-      // 7. Render Particles (Comic Confetti Shards with Black Outlines)
+      // 11. Render Action Starburst Combo Badges (from neon-starfighter.svg)
+      for (let i = actionBadgesRef.current.length - 1; i >= 0; i--) {
+        const ab = actionBadgesRef.current[i];
+        ab.y += ab.vy * timeScale;
+        ab.scale = Math.min(1.0, ab.scale + 0.08 * timeScale);
+        ab.alpha -= 0.016 * timeScale;
+
+        if (ab.alpha <= 0) {
+          actionBadgesRef.current.splice(i, 1);
+        } else {
+          drawStarburstBadge(ctx, ab.x, ab.y, ab.text, ab.scale, ab.alpha);
+        }
+      }
+
+      // 12. Render Particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const part = particlesRef.current[i];
         part.x += part.vx * timeScale;
@@ -1550,7 +1911,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
       ctx.globalAlpha = 1;
 
-      // 8. Floating Texts (Comic Neo-Brutalist Badges with Solid Black Stroke)
+      // 13. Floating Score Texts
       for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
         const ft = floatingTextsRef.current[i];
         ft.y += ft.vy * timeScale;
@@ -1577,23 +1938,6 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       }
       ctx.globalAlpha = 1;
 
-      // 8. Floating Texts
-      for (let i = floatingTextsRef.current.length - 1; i >= 0; i--) {
-        const ft = floatingTextsRef.current[i];
-        ft.y += ft.vy * timeScale;
-        ft.alpha -= 0.025 * timeScale;
-        if (ft.alpha <= 0) {
-          floatingTextsRef.current.splice(i, 1);
-        } else {
-          ctx.fillStyle = ft.color;
-          ctx.globalAlpha = Math.max(0, ft.alpha);
-          ctx.font = 'bold 12px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(ft.text, ft.x, ft.y);
-        }
-      }
-      ctx.globalAlpha = 1;
-
       ctx.restore();
       animId = requestAnimationFrame(loop);
     };
@@ -1614,7 +1958,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
         <div className="flex items-center gap-2">
           <span className="px-2 py-0.5 rounded-lg bg-portal-purple text-white border border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
-            Wave {wave}
+            Sector {wave}
           </span>
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
@@ -1673,7 +2017,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                     Ship Destroyed
                   </span>
                   <h3 className="text-2xl font-black text-white uppercase tracking-tight mt-1.5">Score: {displayScore}</h3>
-                  <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Reached Wave {wave}</p>
+                  <p className="text-xs font-bold text-portal-cyan uppercase tracking-wider mt-0.5">Reached Sector {wave}</p>
                 </div>
 
                 {/* Ad Transmission Status Alert */}
@@ -1739,7 +2083,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                   </div>
                   <div className="flex items-center gap-2 text-portal-cyan">
                     <Shield className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Powerups: 3X Spread, Shields, EMP Nukes.</span>
+                    <span>Powerups: 3X Spread, Shields, EMP Nukes, Hyperdrive.</span>
                   </div>
                 </div>
 
