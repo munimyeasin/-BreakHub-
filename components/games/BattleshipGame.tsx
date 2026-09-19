@@ -442,6 +442,250 @@ function CloseCallSplashMarker({ shipName, isFriendly }: { shipName?: string; is
 }
 
 /**
+ * 3D Isometric Hero Dreadnought Battleship Showcase
+ * Directly matching the vector illustration from public/thumbnails/retro-battleship.svg
+ */
+function HeroBattleshipShowcase() {
+  return (
+    <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md relative overflow-hidden mb-3 animate-fadeIn">
+      {/* Background Cyber Grid Accent */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <svg width="100%" height="100%">
+          <defs>
+            <pattern id="heroGridPat" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#00f0ff" strokeWidth="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#heroGridPat)" />
+        </svg>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center gap-3 relative z-10">
+        {/* Left: 3D Isometric Warship Illustration */}
+        <div className="w-full sm:w-48 h-28 sm:h-32 shrink-0 bg-slate-950 border-2 border-black rounded-xl flex items-center justify-center relative overflow-hidden shadow-inner">
+          <svg viewBox="0 0 280 180" className="w-full h-full">
+            <defs>
+              <linearGradient id="heroShipSide" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0C4A6E" />
+                <stop offset="100%" stopColor="#082F49" />
+              </linearGradient>
+              <linearGradient id="heroShipFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#38BDF8" />
+                <stop offset="50%" stopColor="#0284C7" />
+                <stop offset="100%" stopColor="#0369A1" />
+              </linearGradient>
+              <linearGradient id="heroTurretFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FFF570" />
+                <stop offset="100%" stopColor="#FFE600" />
+              </linearGradient>
+              <linearGradient id="heroTurretSide" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#D49B00" />
+                <stop offset="100%" stopColor="#805D00" />
+              </linearGradient>
+              <filter id="heroDropShadow" x="-10%" y="-10%" width="130%" height="130%">
+                <feDropShadow dx="3" dy="3" stdDeviation="0" floodColor="#000000" floodOpacity="1" />
+              </filter>
+            </defs>
+
+            {/* Radar Sweep Rings in background */}
+            <g opacity="0.4" stroke="#00f0ff" strokeWidth="1" fill="none" strokeDasharray="4,4">
+              <ellipse cx="140" cy="90" rx="110" ry="60" />
+              <ellipse cx="140" cy="90" rx="65" ry="35" />
+            </g>
+
+            {/* 3D Isometric Warship */}
+            <g transform="translate(130, 95) rotate(-14)" filter="url(#heroDropShadow)">
+              {/* Lower Keel / Side Extrusions */}
+              <polygon points="-75,18 -65,34 68,34 78,18" fill="url(#heroShipSide)" stroke="#000000" strokeWidth="2.5" />
+              <polygon points="78,18 106,-4 96,12 68,34" fill="url(#heroShipSide)" stroke="#000000" strokeWidth="2.5" />
+
+              {/* Top Deck Armored Plate */}
+              <polygon points="-75,18 -60,-10 76,-10 106,-4 78,18" fill="url(#heroShipFace)" stroke="#000000" strokeWidth="2.5" />
+              {/* Specular Highlight */}
+              <polygon points="-70,16 -58,-6 72,-6 68,2" fill="#FFFFFF" opacity="0.65" />
+
+              {/* Command Conning Bridge Tower */}
+              <g transform="translate(-15, -4)" stroke="#000000" strokeWidth="2">
+                <rect x="-16" y="-18" width="32" height="20" rx="4" fill="#0369A1" />
+                <rect x="-12" y="-14" width="24" height="6" rx="2" fill="#00f0ff" />
+                <line x1="0" y1="-18" x2="0" y2="-28" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
+                <circle cx="0" cy="-28" r="3" fill="#FF007F" />
+              </g>
+
+              {/* 3D Turret 1 (Forward) */}
+              <g transform="translate(42, 6)" stroke="#000000" strokeWidth="2">
+                <line x1="0" y1="-7" x2="28" y2="-15" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
+                <line x1="0" y1="-3" x2="28" y2="-11" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
+                <ellipse cx="0" cy="4" rx="13" ry="9" fill="url(#heroTurretSide)" />
+                <ellipse cx="0" cy="0" rx="13" ry="9" fill="url(#heroTurretFace)" />
+                <circle cx="-3" cy="-2" r="1.5" fill="#FFFFFF" opacity="0.8" />
+              </g>
+
+              {/* 3D Turret 2 (Aft) */}
+              <g transform="translate(-48, 4)" stroke="#000000" strokeWidth="2">
+                <line x1="0" y1="-7" x2="26" y2="-15" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="0" y1="-3" x2="26" y2="-11" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <ellipse cx="0" cy="3" rx="11" ry="8" fill="url(#heroTurretSide)" />
+                <ellipse cx="0" cy="0" rx="11" ry="8" fill="url(#heroTurretFace)" />
+              </g>
+
+              {/* Water Wake Foam */}
+              <path d="M -80,24 Q -95,30 -110,26" stroke="#00f0ff" strokeWidth="2.5" fill="none" opacity="0.8" strokeDasharray="3,3" />
+            </g>
+
+            {/* Neo Starburst Badge */}
+            <g transform="translate(230, 40)" filter="url(#heroDropShadow)">
+              <polygon
+                points="0,-18 7,-6 20,-11 13,0 24,8 11,11 14,23 3,16 -3,23 -1,11 -14,14 -10,3 -23,-2 -11,-8 -16,-20 -5,-13"
+                fill="#FFE600"
+                stroke="#000000"
+                strokeWidth="2"
+              />
+              <text x="0" y="3" fontFamily="'Impact', 'Arial Black', sans-serif" fontWeight="900" fontSize="7" fill="#000000" textAnchor="middle" letterSpacing="0.2">
+                ARMED!
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        {/* Right: Technical Fleet Specs */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="px-2 py-0.5 rounded-md bg-portal-yellow text-black font-mono font-black text-[10px] border border-black uppercase shadow-neo-sm">
+              BB-77 DREADNOUGHT
+            </span>
+            <span className="text-[10px] font-mono text-portal-cyan font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-portal-cyan animate-ping" />
+              HEAVY ARTILLERY SPEC
+            </span>
+          </div>
+          <p className="text-xs text-slate-300 font-sans leading-relaxed line-clamp-2">
+            Equipped with 3D twin-barrel kinetic plasma cannons, armored compartmentalized hull segments, and tactical hydro-acoustic sonar recon.
+          </p>
+          <div className="flex items-center gap-3 mt-1.5 text-[10px] font-mono font-bold text-slate-400">
+            <span>SALVO POWER: <strong className="text-portal-pink">4-NODE SPREAD</strong></span>
+            <span>ARMOR: <strong className="text-portal-lime">TITANIUM-CYBER</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 10x10 Tactical Radar Sonar Sweep Overlay
+ * Concentric sonar rings + rotating green radar sweep wedge
+ */
+function RadarSonarSweepOverlay() {
+  return (
+    <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden rounded-xl">
+      <svg className="w-full h-full" viewBox="0 0 320 320">
+        <defs>
+          <radialGradient id="radarSweepGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#00FF66" stopOpacity="0.35" />
+            <stop offset="70%" stopColor="#00FF66" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#00FF66" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* Concentric Sonar Range Rings */}
+        <g stroke="#00FF66" strokeWidth="1" fill="none" opacity="0.3" strokeDasharray="4,4">
+          <circle cx="160" cy="160" r="140" />
+          <circle cx="160" cy="160" r="95" />
+          <circle cx="160" cy="160" r="50" />
+          {/* Crosshair Axes */}
+          <line x1="20" y1="160" x2="300" y2="160" strokeDasharray="none" strokeWidth="0.8" />
+          <line x1="160" y1="20" x2="160" y2="300" strokeDasharray="none" strokeWidth="0.8" />
+        </g>
+
+        {/* Corner Rangefinder Ticks */}
+        <g stroke="#00FF66" strokeWidth="2" opacity="0.6">
+          <path d="M 12 24 L 12 12 L 24 12" fill="none" />
+          <path d="M 308 24 L 308 12 L 296 12" fill="none" />
+          <path d="M 12 296 L 12 308 L 24 308" fill="none" />
+          <path d="M 308 296 L 308 308 L 296 308" fill="none" />
+        </g>
+
+        {/* Rotating Radar Sweep Wedge */}
+        <g className="origin-center animate-[spin_6s_linear_infinite]" style={{ transformOrigin: '160px 160px' }}>
+          <path
+            d="M 160 160 L 160 20 A 140 140 0 0 1 270 70 Z"
+            fill="url(#radarSweepGlow)"
+          />
+          <line x1="160" y1="160" x2="160" y2="20" stroke="#00FF66" strokeWidth="2" opacity="0.8" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * 16-Point Neo-Brutalist Action Starburst Popup Badge
+ * Directly matching the action badges in retro-battleship.svg
+ */
+function ActionStarburstBadge({
+  text,
+  subtext,
+  type = 'hit'
+}: {
+  text: string;
+  subtext?: string;
+  type?: 'hit' | 'sunk' | 'close' | 'sonar' | 'victory';
+}) {
+  return (
+    <div className="fixed top-24 sm:top-28 left-1/2 -translate-x-1/2 z-50 pointer-events-none animate-scaleIn">
+      <div className="relative flex items-center justify-center filter drop-shadow-[4px_4px_0px_#000000]">
+        <svg width="220" height="90" viewBox="0 0 220 90" className="overflow-visible">
+          <defs>
+            <linearGradient id="starburstGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={type === 'sunk' ? '#FF007F' : type === 'close' ? '#F59E0B' : type === 'sonar' ? '#00D0FF' : '#FFF066'} />
+              <stop offset="100%" stopColor={type === 'sunk' ? '#FFE600' : type === 'close' ? '#FFE600' : type === 'sonar' ? '#7DF9FF' : '#FFE600'} />
+            </linearGradient>
+          </defs>
+
+          {/* 16-Point Polygon Outline */}
+          <polygon
+            points="110,4 125,18 148,10 152,28 174,28 168,46 186,54 172,68 182,86 162,84 154,102 138,90 126,104 116,90 104,104 92,90 76,102 68,84 48,86 58,68 44,54 62,46 56,28 78,28 82,10 105,18"
+            transform="scale(1.15) translate(-15, -8)"
+            fill="url(#starburstGrad)"
+            stroke="#000000"
+            strokeWidth="3.5"
+            strokeLinejoin="round"
+          />
+
+          <text
+            x="110"
+            y="42"
+            fontFamily="'Impact', 'Arial Black', sans-serif"
+            fontWeight="900"
+            fontSize="18"
+            fill="#000000"
+            textAnchor="middle"
+            letterSpacing="1.2"
+          >
+            {text}
+          </text>
+          {subtext && (
+            <text
+              x="110"
+              y="58"
+              fontFamily="'Impact', 'Arial Black', sans-serif"
+              fontWeight="900"
+              fontSize="11"
+              fill="#000000"
+              textAnchor="middle"
+              letterSpacing="0.8"
+            >
+              {subtext}
+            </text>
+          )}
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Blueprint Technical Wireframe Card for Fleet Manifest
  */
 function ShipBlueprintCard({
@@ -570,6 +814,26 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
   // Mobile View Tab (Radar vs Fleet vs Both)
   const [mobileTab, setMobileTab] = useState<'radar' | 'fleet' | 'both'>('radar');
+
+  // Action Starburst Event Popup (16-Point Retro Vector Badge)
+  const [starburstEvent, setStarburstEvent] = useState<{
+    text: string;
+    subtext?: string;
+    type: 'hit' | 'sunk' | 'close' | 'sonar' | 'victory';
+    id: number;
+  } | null>(null);
+
+  const triggerStarburst = useCallback((
+    text: string,
+    subtext?: string,
+    type: 'hit' | 'sunk' | 'close' | 'sonar' | 'victory' = 'hit'
+  ) => {
+    const newId = Date.now();
+    setStarburstEvent({ text, subtext, type, id: newId });
+    setTimeout(() => {
+      setStarburstEvent(prev => (prev && prev.id === newId ? null : prev));
+    }, 1800);
+  }, []);
 
   // AI Target Tracking Memory (Hunt & Target Engine)
   const aiHuntQueueRef = useRef<{ r: number; c: number }[]>([]);
@@ -1255,6 +1519,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       if (sunkShipName) {
         playSound('sunk');
         setLastActionLog(`DIRECT HIT & DESTROYED: Hostile ${sunkShipName} has been sunk!`);
+        triggerStarburst('VESSEL SUNK!', `${sunkShipName} destroyed!`, 'sunk');
         confetti({
           particleCount: 35,
           spread: 50,
@@ -1262,6 +1527,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
         });
       } else {
         setLastActionLog(`DIRECT HIT: Heavy armor damage inflicted on enemy hull at ${ROW_LABELS[r]}${COL_LABELS[c]}!`);
+        triggerStarburst('DIRECT HIT!', `Armor pierced at ${ROW_LABELS[r]}${COL_LABELS[c]}`, 'hit');
       }
 
       // Check Victory Condition
@@ -1273,7 +1539,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     } else {
       playSound('miss');
       setStreakCount(0);
-      setLastActionLog(`Salvo plunged into open ocean coordinates ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
+      const closeCall = getCloseCallDetails(r, c, targetShips);
+      if (closeCall.isCloseCall && isP1) {
+        setLastActionLog(`CLOSE CALL: Salvo landed 1 sector from hostile ${closeCall.shipName || 'warship'}!`);
+        triggerStarburst('CLOSE CALL!', `1 tile from ${closeCall.shipName || 'hostile hull'}`, 'close');
+      } else {
+        setLastActionLog(`Salvo plunged into open ocean coordinates ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
+      }
     }
 
     // Turn Hand-off
@@ -1323,8 +1595,10 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
     if (shipFound) {
       setLastActionLog(`SONAR CONTACT DETECTED: Hostile warship presence confirmed in 3x3 sector ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}!`);
+      triggerStarburst('SONAR CONTACT!', `Acoustic contact at ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}`, 'sonar');
     } else {
       setLastActionLog(`SONAR SCAN CLEAR: No enemy naval vessels in 3x3 sector ${ROW_LABELS[centerR]}${COL_LABELS[centerC]}.`);
+      triggerStarburst('SECTOR CLEAR', 'No acoustic signatures', 'sonar');
     }
   };
 
@@ -1338,6 +1612,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
     if (winningPlayer === 'P1') {
       playSound('victory');
+      triggerStarburst('MISSION VICTORY!', 'Hostile battle-group destroyed!', 'victory');
       confetti({
         particleCount: 100,
         spread: 80,
@@ -1430,6 +1705,15 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans relative">
+      {/* 💥 Retro Neo-Brutalist Action Starburst Popup Badge */}
+      {starburstEvent && (
+        <ActionStarburstBadge
+          text={starburstEvent.text}
+          subtext={starburstEvent.subtext}
+          type={starburstEvent.type}
+        />
+      )}
+
       {/* 🎯 POPUP RESULT MODAL OVERLAY (Immediate Post-Match Debrief) */}
       {phase === 'gameover' && showResultModal && (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 min-[360px]:p-4 sm:p-6 overflow-y-auto animate-fadeIn">
@@ -1714,6 +1998,9 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       {/* ========================================================================= */}
       {phase === 'setup' && (
         <div className="w-full flex flex-col items-center">
+          {/* 3D Isometric Hero Battleship Showcase */}
+          <HeroBattleshipShowcase />
+
           {/* Header instructions */}
           <div className="w-full bg-gradient-to-r from-portal-surface via-portal-card to-portal-surface border-3 border-black rounded-2xl p-4 mb-4 shadow-neo-md text-center">
             <div className="flex items-center justify-center gap-2 mb-1">
@@ -2156,6 +2443,9 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
               {/* 10x10 Enemy Targeting Radar Grid */}
               <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-slate-950 border-2 sm:border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+                {/* 3D Isometric Tactical Radar Sonar Sweep Overlay */}
+                <RadarSonarSweepOverlay />
+
                 {/* Column Headers */}
                 <div className="flex ml-3.5 min-[360px]:ml-4 min-[375px]:ml-4.5 min-[390px]:ml-5 min-[414px]:ml-6 sm:ml-7 mb-1 gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                   {COL_LABELS.map(col => (

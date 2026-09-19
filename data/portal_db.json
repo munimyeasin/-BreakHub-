@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 10,
+      "play_count": 23,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -88,7 +88,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 5,
+      "play_count": 7,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -127,7 +127,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/retro-candy-crush.svg",
       "description": "Cyber Match-3 Puzzle Arcade! Align 3+ neon candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
-      "play_count": 3,
+      "play_count": 4,
       "rating": 5,
       "rating_count": 64,
       "status": "active",
@@ -140,7 +140,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/retro-battleship.svg",
       "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "play_count": 15,
+      "play_count": 21,
       "rating": 5,
       "rating_count": 56,
       "status": "active",
@@ -8012,6 +8012,97 @@
       "user_id": "usr_ctvl8ln",
       "score": 3800,
       "created_at": "2026-09-19T16:04:16.816Z"
+    },
+    {
+      "id": "sc_y159a0w9m",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 20,
+      "created_at": "2026-09-19T16:12:38.853Z"
+    },
+    {
+      "id": "sc_w1hqbp4gf",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 80,
+      "created_at": "2026-09-19T16:12:53.287Z"
+    },
+    {
+      "id": "sc_wfvpin3fp",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 800,
+      "created_at": "2026-09-19T16:42:35.137Z"
+    },
+    {
+      "id": "sc_c2peonjl4",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 950,
+      "created_at": "2026-09-19T16:42:44.887Z"
+    },
+    {
+      "id": "sc_n4sabpjq3",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1800,
+      "created_at": "2026-09-19T16:43:03.574Z"
+    },
+    {
+      "id": "sc_wyv43eecj",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 9500,
+      "created_at": "2026-09-19T16:44:02.482Z"
+    },
+    {
+      "id": "sc_6qeum7r5k",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 900,
+      "created_at": "2026-09-19T16:44:13.601Z"
+    },
+    {
+      "id": "sc_djbto63o5",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 3600,
+      "created_at": "2026-09-19T16:44:30.017Z"
+    },
+    {
+      "id": "sc_xne6nkk5d",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 8800,
+      "created_at": "2026-09-19T16:45:13.389Z"
+    },
+    {
+      "id": "sc_j1oxpb6bs",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 2800,
+      "created_at": "2026-09-19T16:45:30.978Z"
+    },
+    {
+      "id": "sc_jnpq2bn4m",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 900,
+      "created_at": "2026-09-19T16:45:52.957Z"
+    },
+    {
+      "id": "sc_9sxqr77pg",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 2900,
+      "created_at": "2026-09-19T16:46:10.961Z"
+    },
+    {
+      "id": "sc_nnrujhrc3",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 12400,
+      "created_at": "2026-09-19T16:47:14.560Z"
     }
   ],
   "ratings": []
