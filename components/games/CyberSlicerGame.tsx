@@ -9,7 +9,7 @@ interface CyberSlicerGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
-const CANVAS_WIDTH = 360; // 9:16 Vertical Ratio (360x640)
+const CANVAS_WIDTH = 480; // 3:4 Widescreen Aspect Ratio (480x640) for Desktop PC & Responsive Mobile
 const CANVAS_HEIGHT = 640;
 const GRAVITY = 0.28;
 
@@ -260,8 +260,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
     for (let i = 0; i < count; i++) {
       const isBomb = spawnBomb && i === 0;
-      const startX = Math.random() * (CANVAS_WIDTH - 100) + 50;
-      const targetX = CANVAS_WIDTH / 2 + (Math.random() - 0.5) * 190;
+      const startX = Math.random() * (CANVAS_WIDTH - 120) + 60;
+      const targetX = CANVAS_WIDTH / 2 + (Math.random() - 0.5) * 260;
       const flightDuration = 65 + Math.random() * 20;
       const vx = (targetX - startX) / flightDuration;
       const vy = -(Math.random() * 3.5 + 12.6); // Launch velocity upwards for 640px vertical space
@@ -336,13 +336,15 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     return dist <= circle.radius;
   };
 
-  // Pointer Events (Mouse / Touch Slicing Blade)
+  // Pointer Events (Mouse / Touch Slicing Blade) with Normalized getBoundingClientRect Scaling
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isPlaying || isDead) return;
     isPointerDownRef.current = true;
-    const target = e.currentTarget;
-    const scaledX = (e.nativeEvent.offsetX / target.clientWidth) * CANVAS_WIDTH;
-    const scaledY = (e.nativeEvent.offsetY / target.clientHeight) * CANVAS_HEIGHT;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
+    const scaledX = (clientX / (rect.width || CANVAS_WIDTH)) * CANVAS_WIDTH;
+    const scaledY = (clientY / (rect.height || CANVAS_HEIGHT)) * CANVAS_HEIGHT;
     bladeTrailRef.current = [{ x: scaledX, y: scaledY, time: performance.now() }];
     lastBladePosRef.current = { x: scaledX, y: scaledY, angle: -Math.PI / 4 };
     playSfx('swipe');
@@ -350,9 +352,11 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isPlaying || isDead || !isPointerDownRef.current) return;
-    const target = e.currentTarget;
-    const scaledX = (e.nativeEvent.offsetX / target.clientWidth) * CANVAS_WIDTH;
-    const scaledY = (e.nativeEvent.offsetY / target.clientHeight) * CANVAS_HEIGHT;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
+    const scaledX = (clientX / (rect.width || CANVAS_WIDTH)) * CANVAS_WIDTH;
+    const scaledY = (clientY / (rect.height || CANVAS_HEIGHT)) * CANVAS_HEIGHT;
 
     const now = performance.now();
     const trail = bladeTrailRef.current;
@@ -1485,8 +1489,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
 
   return (
     <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
-      {/* Top HUD - Neo Brutalism */}
-      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
+      {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
         {/* Score Pill */}
         <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Swords className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
@@ -1528,8 +1532,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         </button>
       </div>
 
-      {/* Main Slicing Dojo Canvas (9:16 Ratio with Viewport Height Scaling) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-[#18000F] touch-none cursor-crosshair w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
+      {/* Main Slicing Dojo Canvas (3:4 Aspect Ratio with Desktop Height Scaling) */}
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-[#18000F] touch-none cursor-crosshair w-auto h-[min(76vh,640px)] md:h-[min(86vh,780px)] max-w-full aspect-[3/4] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -1623,13 +1627,6 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
             )}
           </div>
         )}
-      </div>
-
-      {/* Control Tips Strip */}
-      <div className="mt-2 text-center">
-        <span className="text-[10px] font-black text-slate-300 uppercase tracking-wide bg-portal-card px-3 py-1 rounded-lg border-2 border-black shadow-neo-sm inline-block">
-          Controls: Swipe or drag to wield your 3D plasma katana
-        </span>
       </div>
     </div>
   );

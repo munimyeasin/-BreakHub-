@@ -9,7 +9,7 @@ interface NeonStarfighterGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
-const CANVAS_WIDTH = 360; // 9:16 Vertical Portrait Ratio (360x640)
+const CANVAS_WIDTH = 480; // 3:4 Widescreen Aspect Ratio (480x640) for PC Desktop Expansion & Full Mobile Scaling
 const CANVAS_HEIGHT = 640;
 const PLAYER_BASE_Y = CANVAS_HEIGHT - 75;
 
@@ -657,11 +657,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       // Perspective Rays
       const vpX = CANVAS_WIDTH / 2;
       const vpY = -40;
-      const rayDests = [-100, -20, 40, 100, 160, 200, 260, 320, 380, 460];
-      for (let i = 0; i < rayDests.length; i++) {
+      const numRays = 12;
+      for (let i = 0; i <= numRays; i++) {
+        const destX = (i / numRays) * (CANVAS_WIDTH + 240) - 120;
         ctx.beginPath();
         ctx.moveTo(vpX, vpY);
-        ctx.lineTo(rayDests[i], CANVAS_HEIGHT + 20);
+        ctx.lineTo(destX, CANVAS_HEIGHT + 20);
         ctx.stroke();
       }
 
@@ -1224,11 +1225,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const vpX = CANVAS_WIDTH / 2;
       const vpY = -40;
-      const rayDests = [-100, -20, 40, 100, 160, 200, 260, 320, 380, 460];
-      for (let i = 0; i < rayDests.length; i++) {
+      const numRays = 12;
+      for (let i = 0; i <= numRays; i++) {
+        const destX = (i / numRays) * (CANVAS_WIDTH + 240) - 120;
         ctx.beginPath();
         ctx.moveTo(vpX, vpY);
-        ctx.lineTo(rayDests[i], CANVAS_HEIGHT + 20);
+        ctx.lineTo(destX, CANVAS_HEIGHT + 20);
         ctx.stroke();
       }
 
@@ -1949,7 +1951,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   return (
     <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
-      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
         <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
@@ -1972,14 +1974,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       {/* Active Powerup Banner */}
       {activePowerup && (
-        <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
+        <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
           <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
           <span>POWERUP: {activePowerup}</span>
         </div>
       )}
 
-      {/* Main Game Screen Canvas (9:16 Vertical Aspect Ratio with Viewport Height Scaling) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
+      {/* Main Game Screen Canvas (3:4 Aspect Ratio with Desktop Height Scaling) */}
+      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-auto h-[min(76vh,640px)] md:h-[min(86vh,780px)] max-w-full aspect-[3/4] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -2097,13 +2099,6 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             )}
           </div>
         )}
-      </div>
-
-      {/* Control Tips Strip */}
-      <div className="mt-2 text-center">
-        <span className="text-[10px] font-black text-slate-300 uppercase tracking-wide bg-portal-card px-3 py-1 rounded-lg border-2 border-black shadow-neo-sm inline-block">
-          Controls: Touch & Drag across screen • A/D or Left/Right Keys
-        </span>
       </div>
     </div>
   );

@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 23,
+      "play_count": 33,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -88,7 +88,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 10,
+      "play_count": 14,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -8124,6 +8124,69 @@
       "user_id": "usr_ctvl8ln",
       "score": 65,
       "created_at": "2026-09-19T17:25:48.808Z"
+    },
+    {
+      "id": "sc_bi5wwj8he",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 700,
+      "created_at": "2026-09-19T17:29:40.286Z"
+    },
+    {
+      "id": "sc_4qddb5vfs",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 500,
+      "created_at": "2026-09-19T17:50:53.786Z"
+    },
+    {
+      "id": "sc_vjvrgpga0",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 11250,
+      "created_at": "2026-09-19T17:51:51.004Z"
+    },
+    {
+      "id": "sc_6t0gxizhj",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 7700,
+      "created_at": "2026-09-19T17:52:48.882Z"
+    },
+    {
+      "id": "sc_98pkugk2c",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 700,
+      "created_at": "2026-09-19T17:52:55.114Z"
+    },
+    {
+      "id": "sc_j8tbatwm3",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 50,
+      "created_at": "2026-09-19T17:53:12.757Z"
+    },
+    {
+      "id": "sc_6dmjmnuxr",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 95,
+      "created_at": "2026-09-19T17:53:29.905Z"
+    },
+    {
+      "id": "sc_qb9uvpqe9",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1200,
+      "created_at": "2026-09-19T17:54:16.230Z"
+    },
+    {
+      "id": "sc_8tazy2lgm",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 7600,
+      "created_at": "2026-09-19T17:54:50.512Z"
     }
   ],
   "ratings": []
