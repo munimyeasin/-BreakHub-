@@ -99,10 +99,10 @@ export interface XpGrantResult {
 }
 
 // -------------------------------------------------------------
-// 1. TROPHY VAULT DEFINITIONS (16 Achievements)
+// 1. TROPHY VAULT DEFINITIONS (22 Achievements)
 // -------------------------------------------------------------
 export const TROPHIES: Trophy[] = [
-  // Bronze
+  // Bronze (5 Badges)
   {
     id: 'first_boot',
     title: 'Arcade Initiate',
@@ -139,12 +139,21 @@ export const TROPHIES: Trophy[] = [
     icon: '❤️',
     category: 'social',
   },
+  {
+    id: 'wheel_spinner',
+    title: 'Fate Seeker',
+    description: 'Spin the Random Game Roulette once',
+    rarity: 'BRONZE',
+    xpReward: 40,
+    icon: '🎲',
+    category: 'gameplay',
+  },
 
-  // Silver
+  // Silver (6 Badges)
   {
     id: 'grid_explorer',
     title: 'Grid Explorer',
-    description: 'Play at least 4 different mini-games',
+    description: 'Play at least 4 different mini-games in the catalog',
     rarity: 'SILVER',
     xpReward: 100,
     icon: '🧭',
@@ -165,7 +174,7 @@ export const TROPHIES: Trophy[] = [
     description: 'Spin the Random Game Roulette 3 times',
     rarity: 'SILVER',
     xpReward: 80,
-    icon: '🎲',
+    icon: '🎰',
     category: 'gameplay',
   },
   {
@@ -186,12 +195,21 @@ export const TROPHIES: Trophy[] = [
     icon: '📜',
     category: 'mastery',
   },
+  {
+    id: 'tactical_mind',
+    title: 'Tactical Commander',
+    description: 'Play Strategy games like Multidimension XO or Naval Grid Strike',
+    rarity: 'SILVER',
+    xpReward: 100,
+    icon: '♟️',
+    category: 'gameplay',
+  },
 
-  // Gold
+  // Gold (6 Badges)
   {
     id: 'omnipresent',
     title: 'Arcade Veteran',
-    description: 'Play at least 7 distinct mini-games',
+    description: 'Play at least 8 distinct mini-games across the portal',
     rarity: 'GOLD',
     xpReward: 200,
     icon: '👑',
@@ -227,22 +245,58 @@ export const TROPHIES: Trophy[] = [
   {
     id: 'genre_master',
     title: 'Genre Master',
-    description: 'Play at least 3 distinct game categories (Action, Puzzle, Reflex, Arcade)',
+    description: 'Play across all 4 major genres (Action, Puzzle, Strategy, Arcade)',
     rarity: 'GOLD',
     xpReward: 200,
     icon: '🔮',
     category: 'gameplay',
   },
+  {
+    id: 'tetra_architect',
+    title: 'Polyomino Maestro',
+    description: 'Master the falling matrix in Tetra Matrix arcade',
+    rarity: 'GOLD',
+    xpReward: 200,
+    icon: '🧩',
+    category: 'mastery',
+  },
 
-  // Platinum
+  // Platinum (5 Badges)
+  {
+    id: 'multiverse_overlord',
+    title: 'Multiverse Overlord',
+    description: 'Accumulate 3,000+ total cumulative score across all arcade games',
+    rarity: 'PLATINUM',
+    xpReward: 500,
+    icon: '🌌',
+    category: 'mastery',
+  },
   {
     id: 'cyber_legend',
     title: 'Arcade Legend',
     description: 'Reach Player Level 10 on Stress Buster',
     rarity: 'PLATINUM',
     xpReward: 500,
-    icon: '🌌',
+    icon: '🪐',
     category: 'mastery',
+  },
+  {
+    id: 'perfectionist',
+    title: 'Daily Perfectionist',
+    description: 'Claim the Daily Master 3/3 Bonus chest or complete 10 quests',
+    rarity: 'PLATINUM',
+    xpReward: 400,
+    icon: '🌟',
+    category: 'mastery',
+  },
+  {
+    id: 'catalog_conqueror',
+    title: 'Catalog Conqueror',
+    description: 'Play 12 or more distinct mini-games in the catalog',
+    rarity: 'PLATINUM',
+    xpReward: 600,
+    icon: '🚀',
+    category: 'gameplay',
   },
   {
     id: 'apex_grandmaster',
@@ -251,19 +305,19 @@ export const TROPHIES: Trophy[] = [
     rarity: 'PLATINUM',
     xpReward: 1000,
     icon: '🔱',
-    category: 'mastery',
+    category: 'streak',
   },
 ];
 
 // -------------------------------------------------------------
-// 2. DAILY QUEST POOL (12 Deterministic Missions)
+// 2. DAILY QUEST POOL (21 Deterministic Missions)
 // -------------------------------------------------------------
 export const QUEST_POOL: DailyQuestDefinition[] = [
-  // Easy
+  // Easy (7 Quests)
   {
     id: 'q_play_1',
     title: 'Quick Reflex',
-    description: 'Play any 1 mini-game',
+    description: 'Play any 1 mini-game session',
     type: 'PLAY_GAMES_COUNT',
     target: 1,
     xpReward: 40,
@@ -293,7 +347,7 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
   {
     id: 'q_action_1',
     title: 'Action Seeker',
-    description: 'Play 1 Action game (Neon Starfighter or Retro Slicer)',
+    description: 'Play 1 Action game (Neon Starfighter or Cyber Katana Slicer)',
     type: 'PLAY_CATEGORY',
     category: 'Action',
     target: 1,
@@ -301,8 +355,41 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
     icon: '⚔️',
     tier: 'easy',
   },
+  {
+    id: 'q_strategy_1',
+    title: 'Tactical Deploy',
+    description: 'Play 1 Strategy game (Multidimension XO or Naval Grid Strike)',
+    type: 'PLAY_CATEGORY',
+    category: 'Strategy',
+    target: 1,
+    xpReward: 45,
+    icon: '♟️',
+    tier: 'easy',
+  },
+  {
+    id: 'q_puzzle_1',
+    title: 'Neural Warmup',
+    description: 'Play 1 Puzzle game (Tetra Matrix or Neon Candy Blast)',
+    type: 'PLAY_CATEGORY',
+    category: 'Puzzle',
+    target: 1,
+    xpReward: 45,
+    icon: '🧩',
+    tier: 'easy',
+  },
+  {
+    id: 'q_arcade_1',
+    title: 'Retro Rush',
+    description: 'Play 1 Arcade game in the catalog',
+    type: 'PLAY_CATEGORY',
+    category: 'Arcade',
+    target: 1,
+    xpReward: 45,
+    icon: '👾',
+    tier: 'easy',
+  },
 
-  // Medium
+  // Medium (7 Quests)
   {
     id: 'q_play_3',
     title: 'Arcade Triad',
@@ -324,29 +411,62 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
     tier: 'medium',
   },
   {
-    id: 'q_puzzle_1',
-    title: 'Neural Matrix',
-    description: 'Play a Puzzle or Reflex game (Retro 2048, Memory Matrix, Quantum XO)',
-    type: 'PLAY_CATEGORY',
-    category: 'Puzzle',
+    id: 'q_tetra_1',
+    title: 'Matrix Drop',
+    description: 'Play 1 session of Tetra Matrix polyomino arcade',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'tetra-matrix',
     target: 1,
-    xpReward: 60,
-    icon: '🧠',
+    xpReward: 70,
+    icon: '🧱',
     tier: 'medium',
   },
   {
     id: 'q_slicer_1',
     title: 'Blade Protocol',
-    description: 'Play 1 session of Retro Slicer',
+    description: 'Play 1 session of Cyber Katana Slicer',
     type: 'PLAY_SPECIFIC_GAME',
     gameId: 'cyber-slicer',
     target: 1,
-    xpReward: 60,
+    xpReward: 65,
     icon: '🍉',
     tier: 'medium',
   },
+  {
+    id: 'q_multi_xo_1',
+    title: 'Multidimension Duel',
+    description: 'Play 1 session of Multidimension XO (Ultimate 9x9)',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'multidimension-xo',
+    target: 1,
+    xpReward: 70,
+    icon: '⭕',
+    tier: 'medium',
+  },
+  {
+    id: 'q_candy_1',
+    title: 'Sugar Cascade',
+    description: 'Play 1 session of Neon Candy Blast match-3',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'retro-candy-crush',
+    target: 1,
+    xpReward: 65,
+    icon: '🍬',
+    tier: 'medium',
+  },
+  {
+    id: 'q_battleship_1',
+    title: 'Naval Radar',
+    description: 'Play 1 session of Naval Grid Strike',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'retro-battleship',
+    target: 1,
+    xpReward: 65,
+    icon: '🚢',
+    tier: 'medium',
+  },
 
-  // Hard
+  // Hard (7 Quests)
   {
     id: 'q_score_800',
     title: 'High Score Titan',
@@ -370,12 +490,34 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
   {
     id: 'q_starfighter_1',
     title: 'Starfighter Ace',
-    description: 'Play 1 session of Neon Starfighter',
+    description: 'Play 1 session of Neon Starfighter space combat',
     type: 'PLAY_SPECIFIC_GAME',
     gameId: 'neon-starfighter',
     target: 1,
-    xpReward: 80,
+    xpReward: 85,
     icon: '🚀',
+    tier: 'hard',
+  },
+  {
+    id: 'q_blackhole_1',
+    title: 'Event Horizon',
+    description: 'Play 1 session of Singularity Horizon tactical board',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'black-hole',
+    target: 1,
+    xpReward: 85,
+    icon: '🕳️',
+    tier: 'hard',
+  },
+  {
+    id: 'q_minesweeper_1',
+    title: 'Quantum Defuser',
+    description: 'Play 1 session of Quantum Minefield',
+    type: 'PLAY_SPECIFIC_GAME',
+    gameId: 'cyber-minesweeper',
+    target: 1,
+    xpReward: 85,
+    icon: '💣',
     tier: 'hard',
   },
   {
@@ -386,6 +528,16 @@ export const QUEST_POOL: DailyQuestDefinition[] = [
     target: 150,
     xpReward: 90,
     icon: '💎',
+    tier: 'hard',
+  },
+  {
+    id: 'q_score_1500',
+    title: 'Apex Performance',
+    description: 'Submit a massive score of 1,500+ in any game',
+    type: 'SUBMIT_SCORE',
+    target: 1500,
+    xpReward: 120,
+    icon: '👑',
     tier: 'hard',
   },
 ];
@@ -636,21 +788,40 @@ class GamificationService {
     const currentLevel = getLevelForXp(this.state.xp);
 
     const conditions: Record<string, boolean> = {
+      // Bronze (5)
       first_boot: stats.totalGamesPlayed >= 1,
       neon_initiate: currentLevel >= 2,
       the_critic: stats.gamesRated >= 1,
       curator: stats.favoritesCount >= 3,
+      wheel_spinner: stats.rouletteSpins >= 1,
+
+      // Silver (6)
       grid_explorer: stats.uniqueGamesPlayed.length >= 4,
       daily_devotee: this.state.streak.current >= 3,
       high_roller: stats.rouletteSpins >= 3,
       score_hunter: stats.highestSingleScore >= 500,
       mission_specialist: stats.questsCompletedCount >= 5,
-      omnipresent: stats.uniqueGamesPlayed.length >= 7,
+      tactical_mind:
+        stats.categoriesPlayed.some(c => c.toLowerCase() === 'strategy') ||
+        stats.uniqueGamesPlayed.some(id =>
+          ['multidimension-xo', 'retro-battleship', 'black-hole', 'quantum-xo', 'paper-io', 'chroma-reflex'].includes(id)
+        ),
+
+      // Gold (6)
+      omnipresent: stats.uniqueGamesPlayed.length >= 8,
       flame_keeper: this.state.streak.current >= 7,
       score_titan: stats.highestSingleScore >= 1500,
       cyber_elite: currentLevel >= 5,
-      genre_master: stats.categoriesPlayed.length >= 3,
+      genre_master: stats.categoriesPlayed.length >= 4,
+      tetra_architect:
+        stats.uniqueGamesPlayed.includes('tetra-matrix') ||
+        stats.highestSingleScore >= 2000,
+
+      // Platinum (5)
+      multiverse_overlord: stats.totalScoreAccumulated >= 3000,
       cyber_legend: currentLevel >= 10,
+      perfectionist: this.state.dailyQuests.dailyMasterClaimed || stats.questsCompletedCount >= 10,
+      catalog_conqueror: stats.uniqueGamesPlayed.length >= 12,
       apex_grandmaster: this.state.streak.current >= 14 && stats.questsCompletedCount >= 15,
     };
 

@@ -1127,66 +1127,129 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none outline-none ${screenShake ? 'animate-bounce' : ''}`}
     >
       {/* Top Header Strip */}
-      <div className="w-full flex items-center justify-between gap-2 p-2 sm:p-3 mb-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
-            <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
+      <div className="w-full flex items-center justify-between gap-1.5 sm:gap-2 p-1.5 sm:p-2.5 mb-1.5 sm:mb-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
+            <Zap className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-black stroke-[2.5]" />
             <span>TETRA MATRIX</span>
           </span>
-          <span className="hidden xs:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-portal-card border-2 border-black text-[11px] font-black text-portal-cyan uppercase">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] sm:text-[11px] font-black text-portal-cyan uppercase">
             LVL {level}
           </span>
         </div>
 
         {/* Global Controls */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <button
             type="button"
             onFocus={e => e.currentTarget.blur()}
             onClick={() => setSoundEnabled(prev => !prev)}
-            className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
+            className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
             title={soundEnabled ? 'Mute SFX' : 'Enable SFX'}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            {soundEnabled ? <Volume2 className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> : <VolumeX className="w-3.5 sm:w-4 h-3.5 sm:h-4" />}
           </button>
           {isPlaying && !isGameOver && (
             <button
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => setIsPaused(prev => !prev)}
-              className="p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
+              className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
               title={isPaused ? 'Resume Game' : 'Pause Game'}
             >
-              {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+              {isPaused ? <Play className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> : <Pause className="w-3.5 sm:w-4 h-3.5 sm:h-4" />}
             </button>
           )}
           <button
             type="button"
             onFocus={e => e.currentTarget.blur()}
             onClick={() => startNewGameRef.current()}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm font-black text-xs uppercase transition-all"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm font-black text-[10px] sm:text-xs uppercase transition-all"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">RESET</span>
+            <RotateCcw className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+            <span className="hidden xs:inline">RESET</span>
           </button>
         </div>
       </div>
 
-      {/* Main 3-Column Arena Layout */}
-      <div className="w-full flex flex-col md:flex-row items-center md:items-start justify-center gap-3 sm:gap-4 lg:gap-6">
-        {/* Left Column: HOLD Piece & Tactical Stats */}
-        <div className="w-full md:w-44 flex md:flex-col justify-between md:justify-start gap-2 sm:gap-3 order-2 md:order-1">
+      {/* Main Arena Layout: Flanking Wings on Mobile (< md), 3-Column on Desktop (md+) */}
+      <div className="w-full flex items-center md:items-start justify-center gap-1.5 sm:gap-3 md:gap-4 lg:gap-6">
+        {/* Mobile Left Wing (< md): Mini Hold + Score */}
+        <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
+          {/* Mini Hold Card with Direct Tap-to-Hold */}
+          <button
+            type="button"
+            onFocus={e => e.currentTarget.blur()}
+            onPointerDown={e => {
+              e.preventDefault();
+              holdCurrentPieceRef.current();
+            }}
+            className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex flex-col items-center active:scale-95 transition-transform touch-none"
+            title="Tap to Hold Piece"
+          >
+            <div className="flex items-center justify-between w-full">
+              <span className="text-[8px] min-[380px]:text-[9px] font-black text-portal-pink uppercase flex items-center gap-0.5">
+                <Layers className="w-2.5 h-2.5" /> HOLD
+              </span>
+              <span className="text-[7px] font-mono text-black bg-portal-yellow px-1 rounded border border-black font-black">
+                TAP
+              </span>
+            </div>
+            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-black/80 border border-black/80 flex items-center justify-center mt-1 overflow-hidden">
+              {holdPiece ? (
+                <div
+                  className="grid gap-0.5 p-0.5"
+                  style={{
+                    gridTemplateColumns: `repeat(${TETROMINOES[holdPiece].shapes[0][0].length}, minmax(0, 1fr))`
+                  }}
+                >
+                  {TETROMINOES[holdPiece].shapes[0].map((row, rIdx) =>
+                    row.map((val, cIdx) => (
+                      <div
+                        key={`m-hold-${rIdx}-${cIdx}`}
+                        className={`w-2 h-2 min-[380px]:w-2.5 min-[380px]:h-2.5 rounded-[2px] border ${
+                          val ? `${TETROMINOES[holdPiece].bgClass} border-black shadow-sm` : 'opacity-0'
+                        }`}
+                      />
+                    ))
+                  )}
+                </div>
+              ) : (
+                <span className="text-[8px] text-slate-500 font-bold uppercase">EMPTY</span>
+              )}
+            </div>
+          </button>
+
+          {/* Mini Score Card */}
+          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-center">
+            <span className="text-[7px] min-[380px]:text-[8px] font-black text-slate-400 uppercase block">SCORE</span>
+            <p className="text-xs min-[380px]:text-sm font-black text-portal-yellow truncate leading-tight mt-0.5">
+              {score.toLocaleString()}
+            </p>
+          </div>
+
+          {/* Mini High Score Card */}
+          <div className="w-full p-1 rounded-xl bg-portal-card border border-black text-center">
+            <span className="text-[7px] font-black text-slate-400 uppercase block">BEST</span>
+            <p className="text-[9px] min-[380px]:text-[10px] font-black text-portal-cyan truncate leading-tight">
+              {highScore.toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Desktop Left Column (md+): Full-size HOLD Piece & Tactical Stats */}
+        <div className="hidden md:flex md:w-44 flex-col gap-3">
           {/* Hold Card */}
-          <div className="flex-1 md:flex-initial p-2.5 sm:p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-1.5">
-              <span className="text-[10px] sm:text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
                 <Layers className="w-3 h-3 text-portal-pink" /> HOLD
               </span>
               <span className="text-[8px] font-mono text-black bg-portal-yellow px-1.5 py-0.2 rounded border border-black font-black">
                 [C]
               </span>
             </div>
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-black/60 border-2 border-black/80 flex items-center justify-center relative overflow-hidden">
+            <div className="w-20 h-20 rounded-xl bg-black/60 border-2 border-black/80 flex items-center justify-center relative overflow-hidden">
               {holdPiece ? (
                 <div
                   className="grid gap-0.5 p-1"
@@ -1198,7 +1261,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                     row.map((val, cIdx) => (
                       <div
                         key={`hold-${rIdx}-${cIdx}`}
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-sm border ${
+                        className={`w-4 h-4 rounded-sm border ${
                           val ? `${TETROMINOES[holdPiece].bgClass} border-black shadow-sm` : 'opacity-0'
                         }`}
                       />
@@ -1212,46 +1275,46 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
 
           {/* Stats Deck */}
-          <div className="flex-1 md:flex-initial p-2.5 sm:p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-2">
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-2">
             <div>
               <span className="text-[9px] font-black text-slate-400 uppercase">SCORE</span>
-              <p className="text-lg sm:text-xl font-black text-portal-yellow tracking-tight leading-tight">
+              <p className="text-xl font-black text-portal-yellow tracking-tight leading-tight">
                 {score.toLocaleString()}
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-1 gap-2 pt-1 border-t border-black/40">
+            <div className="grid grid-cols-1 gap-2 pt-1 border-t border-black/40">
               <div>
                 <span className="text-[9px] font-black text-slate-400 uppercase">LINES</span>
-                <p className="text-sm sm:text-base font-black text-white">{lines}</p>
+                <p className="text-base font-black text-white">{lines}</p>
               </div>
               <div>
                 <span className="text-[9px] font-black text-slate-400 uppercase">TOP SCORE</span>
-                <p className="text-sm sm:text-base font-black text-portal-cyan">{highScore.toLocaleString()}</p>
+                <p className="text-base font-black text-portal-cyan">{highScore.toLocaleString()}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Center Column: Primary 10x20 Matrix Canvas Viewport */}
-        <div className="relative order-1 md:order-2 flex flex-col items-center">
+        <div className="relative flex flex-col items-center">
           {/* Active Callout Overlay (Combo / Tetra Matrix Alert) */}
           {calloutText && (
             <div className="absolute -top-3 z-30 pointer-events-none animate-bounce">
-              <span className={`px-3 py-1 rounded-xl bg-black border-2 border-black font-black text-xs sm:text-sm uppercase tracking-wider shadow-neo ${calloutText.color}`}>
+              <span className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl bg-black border-2 border-black font-black text-[10px] sm:text-xs md:text-sm uppercase tracking-wider shadow-neo ${calloutText.color}`}>
                 {calloutText.text}
               </span>
             </div>
           )}
 
           {/* Matrix Board */}
-          <div className="relative p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black shadow-neo-lg">
+          <div className="relative p-1 sm:p-1.5 md:p-2 rounded-xl sm:rounded-2xl md:rounded-3xl bg-portal-surface border-2 sm:border-3 md:border-4 border-black shadow-neo-lg">
             <div
-              className="grid gap-[1.5px] sm:gap-[2px] bg-black/95 p-1 rounded-xl sm:rounded-2xl border-2 border-black overflow-hidden relative"
+              className="grid gap-[1px] sm:gap-[1.5px] md:gap-[2px] bg-black/95 p-0.5 sm:p-1 rounded-lg sm:rounded-xl md:rounded-2xl border border-black/80 md:border-2 md:border-black overflow-hidden relative"
               style={{
                 gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-                width: 'min(78vw, 270px)',
-                height: 'min(156vw, 540px)',
-                maxHeight: 'calc(100dvh - 270px)'
+                width: 'clamp(145px, 42vw, 270px)',
+                height: 'clamp(290px, 84vw, 540px)',
+                maxHeight: 'calc(100dvh - 275px)'
               }}
             >
               {/* Subtle Matrix Laser Scanline FX */}
@@ -1302,7 +1365,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                   return (
                     <div
                       key={`cell-${actualY}-${cIdx}`}
-                      className={`relative w-full h-full rounded-[3px] transition-colors duration-75 flex items-center justify-center ${
+                      className={`relative w-full h-full rounded-[2px] sm:rounded-[3px] transition-colors duration-75 flex items-center justify-center ${
                         isFlashing
                           ? 'bg-white border-2 border-portal-yellow shadow-[0_0_12px_#FFF] animate-ping'
                           : isActiveCell && activePieceType
@@ -1325,21 +1388,21 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
               {/* In-Game Overlays */}
               {!isPlaying && !isGameOver && (
-                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center z-20">
-                  <div className="w-14 h-14 rounded-2xl bg-portal-yellow border-3 border-black shadow-neo flex items-center justify-center mb-3">
-                    <Zap className="w-7 h-7 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-portal-yellow border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-1.5 sm:mb-3">
+                    <Zap className="w-5 h-5 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
                   </div>
-                  <h2 className="text-xl font-black text-white uppercase tracking-tight mb-1">
+                  <h2 className="text-sm sm:text-xl font-black text-white uppercase tracking-tight mb-0.5 sm:mb-1">
                     TETRA MATRIX
                   </h2>
-                  <p className="text-xs text-slate-300 font-medium mb-4 max-w-[200px]">
-                    Align falling polyominoes, clear 4-line Tetra quads, and chain back-to-back multipliers!
+                  <p className="text-[10px] sm:text-xs text-slate-300 font-medium mb-2.5 sm:mb-4 max-w-[150px] sm:max-w-[200px] leading-tight">
+                    Align polyominoes, clear 4-line Tetra quads, & chain multipliers!
                   </p>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[180px] py-2.5 px-4 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
+                    className="w-full max-w-[130px] sm:max-w-[180px] py-1.5 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-portal-cyan text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
                   >
                     START MATRIX
                   </button>
@@ -1347,16 +1410,16 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               )}
 
               {isPaused && !isGameOver && (
-                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center z-20">
-                  <div className="w-12 h-12 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-3">
-                    <Pause className="w-6 h-6 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-portal-pink border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
+                    <Pause className="w-5 h-5 sm:w-6 sm:h-6 fill-black stroke-[2.5]" />
                   </div>
-                  <h3 className="text-lg font-black text-white uppercase mb-3">MATRIX PAUSED</h3>
+                  <h3 className="text-sm sm:text-lg font-black text-white uppercase mb-2 sm:mb-3">PAUSED</h3>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => setIsPaused(false)}
-                    className="py-2 px-5 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                    className="py-1.5 sm:py-2 px-4 sm:px-5 rounded-xl bg-portal-yellow text-black font-black text-[10px] sm:text-xs uppercase border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                   >
                     RESUME
                   </button>
@@ -1364,24 +1427,24 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               )}
 
               {isGameOver && (
-                <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center z-20 animate-fadeIn">
-                  <div className="w-14 h-14 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-2">
-                    <Trophy className="w-7 h-7 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20 animate-fadeIn">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-portal-pink border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-1 sm:mb-2">
+                    <Trophy className="w-5 h-5 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
                   </div>
-                  <h2 className="text-xl font-black text-portal-pink uppercase tracking-tight mb-0.5">
+                  <h2 className="text-sm sm:text-xl font-black text-portal-pink uppercase tracking-tight mb-0.5">
                     MATRIX BREACH
                   </h2>
-                  <p className="text-[11px] text-slate-300 font-bold uppercase mb-2">GAME OVER</p>
-                  <div className="w-full max-w-[190px] p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm mb-3">
-                    <span className="text-[9px] font-black text-slate-400 uppercase">FINAL SCORE</span>
-                    <p className="text-xl font-black text-portal-yellow">{score.toLocaleString()}</p>
-                    <span className="text-[10px] font-black text-portal-cyan">{lines} Lines Cleared</span>
+                  <p className="text-[9px] sm:text-[11px] text-slate-300 font-bold uppercase mb-1.5 sm:mb-2">GAME OVER</p>
+                  <div className="w-full max-w-[130px] sm:max-w-[190px] p-1.5 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm mb-2 sm:mb-3">
+                    <span className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">FINAL SCORE</span>
+                    <p className="text-sm sm:text-xl font-black text-portal-yellow">{score.toLocaleString()}</p>
+                    <span className="text-[9px] sm:text-[10px] font-black text-portal-cyan">{lines} Lines Cleared</span>
                   </div>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[190px] py-2.5 px-4 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                    className="w-full max-w-[130px] sm:max-w-[190px] py-1.5 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-portal-cyan text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                   >
                     RETRY MATRIX
                   </button>
@@ -1391,20 +1454,20 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
         </div>
 
-        {/* Right Column: NEXT Queue & Controls Helper */}
-        <div className="w-full md:w-44 flex md:flex-col justify-between md:justify-start gap-2 sm:gap-3 order-3">
+        {/* Desktop Right Column (md+): NEXT Queue & Controls Helper */}
+        <div className="hidden md:flex md:w-44 flex-col gap-3">
           {/* Next Queue Card */}
-          <div className="flex-1 md:flex-initial p-2.5 sm:p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-1.5">
-              <span className="text-[10px] sm:text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
+              <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-portal-cyan" /> NEXT
               </span>
             </div>
-            <div className="w-full flex md:flex-col items-center justify-around gap-2 p-1.5 rounded-xl bg-black/60 border-2 border-black/80">
+            <div className="w-full flex flex-col items-center justify-around gap-2 p-1.5 rounded-xl bg-black/60 border-2 border-black/80">
               {nextQueue.slice(0, 3).map((nextType, qIdx) => (
                 <div
                   key={`next-${qIdx}`}
-                  className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center p-0.5"
+                  className="w-14 h-14 flex items-center justify-center p-0.5"
                 >
                   <div
                     className="grid gap-0.5"
@@ -1416,7 +1479,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                       row.map((val, cIdx) => (
                         <div
                           key={`next-q-${qIdx}-${rIdx}-${cIdx}`}
-                          className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-[2px] border ${
+                          className={`w-3 h-3 rounded-[2px] border ${
                             val ? `${TETROMINOES[nextType].bgClass} border-black` : 'opacity-0'
                           }`}
                         />
@@ -1429,7 +1492,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
 
           {/* Controls Mini Cheat Sheet for Desktop */}
-          <div className="hidden md:block p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-1.5 text-[10px] font-bold">
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-1.5 text-[10px] font-bold">
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block mb-1">
               CONTROLS
             </span>
@@ -1455,81 +1518,154 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             </div>
           </div>
         </div>
+
+        {/* Mobile Right Wing (< md): Mini Next Preview + Lines */}
+        <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
+          {/* Mini Next Preview Card */}
+          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex flex-col items-center">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-[8px] min-[380px]:text-[9px] font-black text-portal-cyan uppercase flex items-center gap-0.5">
+                <Sparkles className="w-2.5 h-2.5" /> NEXT
+              </span>
+            </div>
+            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-black/80 border border-black/80 flex items-center justify-center mt-1 overflow-hidden">
+              {nextQueue[0] ? (
+                <div
+                  className="grid gap-0.5 p-0.5"
+                  style={{
+                    gridTemplateColumns: `repeat(${TETROMINOES[nextQueue[0]].shapes[0][0].length}, minmax(0, 1fr))`
+                  }}
+                >
+                  {TETROMINOES[nextQueue[0]].shapes[0].map((row, rIdx) =>
+                    row.map((val, cIdx) => (
+                      <div
+                        key={`m-next-${rIdx}-${cIdx}`}
+                        className={`w-2 h-2 min-[380px]:w-2.5 min-[380px]:h-2.5 rounded-[2px] border ${
+                          val ? `${TETROMINOES[nextQueue[0]].bgClass} border-black` : 'opacity-0'
+                        }`}
+                      />
+                    ))
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          {/* Mini Lines Cleared Card */}
+          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-center">
+            <span className="text-[7px] min-[380px]:text-[8px] font-black text-slate-400 uppercase block">LINES</span>
+            <p className="text-xs min-[380px]:text-sm font-black text-white leading-tight mt-0.5">
+              {lines}
+            </p>
+          </div>
+
+          {/* Mini Level Card */}
+          <div className="w-full p-1 rounded-xl bg-portal-card border border-black text-center">
+            <span className="text-[7px] font-black text-slate-400 uppercase block">LEVEL</span>
+            <p className="text-[9px] min-[380px]:text-[10px] font-black text-portal-lime leading-tight">
+              LVL {level}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Mobile Touch Controller (Visible on Phones & Tablets) */}
-      <div className="w-full mt-3 p-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm md:hidden">
-        <div className="grid grid-cols-2 gap-2">
-          {/* Left Sub-Pad: Movement & Soft Drop */}
-          <div className="grid grid-cols-3 gap-1.5 bg-black/40 p-1.5 rounded-xl border border-black">
-            <div />
+      {/* Mobile Touch Controller (Visible on Phones & Tablets, md:hidden) */}
+      <div className="w-full max-w-[420px] mt-1.5 sm:mt-2 p-1.5 rounded-2xl bg-portal-surface border-3 border-black shadow-neo md:hidden select-none touch-none">
+        <div className="grid grid-cols-2 gap-1.5">
+          {/* Left Sub-Pad: Movement & Soft Drop (Left Hand) */}
+          <div className="flex flex-col gap-1 bg-black/40 p-1 rounded-xl border border-black">
+            <div className="grid grid-cols-3 gap-1">
+              <button
+                type="button"
+                onFocus={e => e.currentTarget.blur()}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  moveHorizontalRef.current(-1);
+                }}
+                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
+                aria-label="Move left"
+              >
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              </button>
+              <button
+                type="button"
+                onFocus={e => e.currentTarget.blur()}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  softDropRef.current();
+                }}
+                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
+                aria-label="Soft drop"
+              >
+                <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              </button>
+              <button
+                type="button"
+                onFocus={e => e.currentTarget.blur()}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  moveHorizontalRef.current(1);
+                }}
+                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
+                aria-label="Move right"
+              >
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+              </button>
+            </div>
             <button
               type="button"
               onFocus={e => e.currentTarget.blur()}
-              onClick={() => rotatePieceRef.current(1)}
-              className="h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:translate-y-0.5"
-              aria-label="Rotate piece"
+              onPointerDown={e => {
+                e.preventDefault();
+                holdCurrentPieceRef.current();
+              }}
+              className="h-7 sm:h-8 rounded-lg bg-portal-pink active:bg-white text-black font-black text-[9px] sm:text-[10px] border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
             >
-              <RotateCw className="w-5 h-5 stroke-[2.5]" />
-            </button>
-            <div />
-
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => moveHorizontalRef.current(-1)}
-              className="h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:translate-y-0.5"
-              aria-label="Move left"
-            >
-              <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
-            </button>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => softDropRef.current()}
-              className="h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:translate-y-0.5"
-              aria-label="Soft drop"
-            >
-              <ArrowDown className="w-5 h-5 stroke-[2.5]" />
-            </button>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => moveHorizontalRef.current(1)}
-              className="h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:translate-y-0.5"
-              aria-label="Move right"
-            >
-              <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+              <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
+              <span>HOLD PIECE</span>
             </button>
           </div>
 
-          {/* Right Sub-Pad: Action Buttons (Hold, Rotate CCW, Hard Drop Slam) */}
-          <div className="grid grid-cols-2 gap-1.5 bg-black/40 p-1.5 rounded-xl border border-black">
+          {/* Right Sub-Pad: Rotations & Hard Drop Slam (Right Hand) */}
+          <div className="flex flex-col gap-1 bg-black/40 p-1 rounded-xl border border-black">
+            <div className="grid grid-cols-2 gap-1">
+              <button
+                type="button"
+                onFocus={e => e.currentTarget.blur()}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  rotatePieceRef.current(-1);
+                }}
+                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-cyan text-white active:text-black border-2 border-black flex flex-col items-center justify-center font-black text-[8px] sm:text-[9px] shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
+                aria-label="Rotate Counter-Clockwise"
+              >
+                <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                <span>⟲ ROTATE</span>
+              </button>
+              <button
+                type="button"
+                onFocus={e => e.currentTarget.blur()}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  rotatePieceRef.current(1);
+                }}
+                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex flex-col items-center justify-center font-black text-[8px] sm:text-[9px] shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
+                aria-label="Rotate Clockwise"
+              >
+                <RotateCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                <span>ROTATE ⟳</span>
+              </button>
+            </div>
             <button
               type="button"
               onFocus={e => e.currentTarget.blur()}
-              onClick={() => holdCurrentPieceRef.current()}
-              className="h-11 rounded-lg bg-portal-pink active:bg-white text-black font-black text-[10px] border-2 border-black flex flex-col items-center justify-center shadow-neo-sm active:translate-y-0.5 uppercase"
+              onPointerDown={e => {
+                e.preventDefault();
+                hardDropRef.current();
+              }}
+              className="h-7 sm:h-8 rounded-lg bg-portal-yellow active:bg-white text-black font-black text-[10px] sm:text-xs border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase tracking-wider touch-none"
             >
-              <Layers className="w-4 h-4 stroke-[2.5]" />
-              <span>HOLD</span>
-            </button>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => rotatePieceRef.current(-1)}
-              className="h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex flex-col items-center justify-center font-black text-[10px] shadow-neo-sm active:translate-y-0.5 uppercase"
-            >
-              <RotateCcw className="w-4 h-4 stroke-[2.5]" />
-              <span>ROTATE ⟲</span>
-            </button>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => hardDropRef.current()}
-              className="col-span-2 h-11 rounded-lg bg-portal-yellow active:bg-white text-black font-black text-xs border-2 border-black flex items-center justify-center gap-1.5 shadow-neo-sm active:translate-y-0.5 uppercase"
-            >
-              <Zap className="w-4 h-4 fill-black stroke-[2.5]" />
+              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black stroke-[2.5]" />
               <span>HARD DROP SLAM</span>
             </button>
           </div>

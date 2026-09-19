@@ -88,7 +88,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 2,
+      "play_count": 4,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -114,7 +114,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg",
       "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "play_count": 2,
+      "play_count": 6,
       "rating": 5,
       "rating_count": 45,
       "status": "active",
@@ -7984,6 +7984,27 @@
       "user_id": "usr_ctvl8ln",
       "score": 400,
       "created_at": "2026-09-18T11:02:04.055Z"
+    },
+    {
+      "id": "sc_sprqdqxaw",
+      "game_id": "g_tetris_20",
+      "user_id": "usr_ctvl8ln",
+      "score": 1909,
+      "created_at": "2026-09-18T18:12:00.173Z"
+    },
+    {
+      "id": "sc_f8sqdm8a2",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 15,
+      "created_at": "2026-09-19T14:22:45.088Z"
+    },
+    {
+      "id": "sc_yv6ug1frb",
+      "game_id": "g_tetris_20",
+      "user_id": "usr_ctvl8ln",
+      "score": 54,
+      "created_at": "2026-09-19T14:46:17.286Z"
     }
   ],
   "ratings": []

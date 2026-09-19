@@ -1,9 +1,7 @@
 'use client';
 
-import React from 'react';
-import { X, Palette, Check, Sun, Moon, Zap, Gamepad2, Sparkles, Lock, ArrowRight } from 'lucide-react';
+import { X, Palette, Check, Sun, Moon, Zap, Gamepad2, Sparkles, Lock } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
-import { ThemeDefinition, ThemeId } from '@/lib/theme';
 
 interface ThemeSelectorModalProps {
   isOpen: boolean;
