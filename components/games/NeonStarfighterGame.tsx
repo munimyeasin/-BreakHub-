@@ -333,7 +333,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     shockwavesRef.current.push({ x, y, radius: 4, maxRadius, color, alpha: 1 });
   };
 
-  const createMeteor = (): Meteor => {
+  const createMeteor = (speedScale = 1.0): Meteor => {
     const radius = Math.random() * 14 + 16;
     const numPoints = 7;
     const points: { x: number; y: number }[] = [];
@@ -346,21 +346,21 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       x: Math.random() * (CANVAS_WIDTH - 60) + 30,
       y: -35,
       radius,
-      vy: Math.random() * 1.5 + 2.0,
-      vx: (Math.random() - 0.5) * 1.2,
+      vy: (Math.random() * 1.2 + 1.8) * speedScale,
+      vx: (Math.random() - 0.5) * 1.0 * speedScale,
       rotation: 0,
-      rotSpeed: (Math.random() - 0.5) * 0.04,
+      rotSpeed: (Math.random() - 0.5) * 0.035 * speedScale,
       points,
     };
   };
 
-  const createBlackHole = (): BlackHole => {
+  const createBlackHole = (speedScale = 1.0): BlackHole => {
     return {
       x: Math.random() * (CANVAS_WIDTH - 120) + 60,
       y: -45,
       radius: 20,
-      pullRadius: 140,
-      vy: 1.3,
+      pullRadius: Math.min(170, 135 + (speedScale - 1) * 30),
+      vy: 1.2 * speedScale,
       angle: 0,
     };
   };
@@ -735,16 +735,27 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const p = playerRef.current;
 
+      // Dynamic Continuous Speed & Difficulty Multiplier (Scales smoothly and gradually with Wave + Score)
+      const currentWave = waveRef.current;
+      const scoreProgress = (scoreRef.current % 1500) / 1500;
+      const speedScale = 1.0 + Math.min(0.45, (currentWave - 1) * 0.04 + scoreProgress * 0.04);
+
+      // Jet Handling Agility: scales responsiveness smoothly in tandem with the gentle speed progression
+      p.speed = 10 + Math.min(2.5, (speedScale - 1) * 5.0);
+
       // Sync Wave and Score with React HUD periodically (every 120ms max)
       if (timestamp - lastScoreSyncTimeRef.current > 120) {
         lastScoreSyncTimeRef.current = timestamp;
         setDisplayScore(scoreRef.current);
 
-        const currentWave = Math.floor(scoreRef.current / 1500) + 1;
-        if (currentWave !== waveRef.current) {
-          waveRef.current = currentWave;
-          setWave(currentWave);
-          addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, `SECTOR ${currentWave} REACHED!`);
+        const newWave = Math.floor(scoreRef.current / 1500) + 1;
+        if (newWave !== waveRef.current) {
+          waveRef.current = newWave;
+          setWave(newWave);
+          screenShakeRef.current = 8;
+          addShockwave(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, '#FFE600', 70);
+          addActionBadge(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, `SECTOR ${newWave} • SPEED +${Math.round((speedScale - 1) * 100)}%!`);
+          playSfxRef.current('powerup');
         }
 
         if (activePowerupRef.current !== lastSyncedPowerupRef.current) {
@@ -865,9 +876,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // SPAWN SYSTEM (Time-Based)
-      const currentWave = waveRef.current;
-      const enemyInterval = Math.max(420, 820 - currentWave * 50);
+      // SPAWN SYSTEM (Time-Based with Gentle Progression)
+      const enemyInterval = Math.max(450, 800 - (currentWave - 1) * 25);
       if (timestamp - lastSpawnEnemyTimeRef.current >= enemyInterval) {
         lastSpawnEnemyTimeRef.current = timestamp;
         const rand = Math.random();
@@ -877,8 +887,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -35,
             width: 38,
             height: 32,
-            vx: (Math.random() - 0.5) * 2.2,
-            vy: Math.random() * 1.2 + 2.2 + currentWave * 0.15,
+            vx: (Math.random() - 0.5) * 1.6 * speedScale,
+            vy: (Math.random() * 0.8 + 2.0) * speedScale,
             hp: 4,
             maxHp: 4,
             color: '#FF0055',
@@ -892,8 +902,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -30,
             width: 28,
             height: 24,
-            vx: (Math.random() - 0.5) * 3,
-            vy: Math.random() * 1.5 + 3.2 + currentWave * 0.15,
+            vx: (Math.random() - 0.5) * 2.2 * speedScale,
+            vy: (Math.random() * 1.0 + 2.8) * speedScale,
             hp: 2,
             maxHp: 2,
             color: '#FF00EA',
@@ -907,8 +917,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -25,
             width: 24,
             height: 20,
-            vx: (Math.random() - 0.5) * 2,
-            vy: Math.random() * 1.5 + 3.8 + currentWave * 0.2,
+            vx: (Math.random() - 0.5) * 1.8 * speedScale,
+            vy: (Math.random() * 1.0 + 3.4) * speedScale,
             hp: 1,
             maxHp: 1,
             color: '#FF4D6D',
@@ -919,16 +929,16 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // Spawn Meteors
-      if (timestamp - lastSpawnMeteorTimeRef.current >= Math.max(1500, 2500 - currentWave * 100)) {
+      // Spawn Meteors (Gentle, steady cadence)
+      if (timestamp - lastSpawnMeteorTimeRef.current >= Math.max(1600, 2600 - (currentWave - 1) * 60)) {
         lastSpawnMeteorTimeRef.current = timestamp;
-        meteorsRef.current.push(createMeteor());
+        meteorsRef.current.push(createMeteor(speedScale));
       }
 
       // Spawn Black Holes
       if (timestamp - lastSpawnBlackHoleTimeRef.current >= 5500 && blackHolesRef.current.length === 0) {
         lastSpawnBlackHoleTimeRef.current = timestamp;
-        blackHolesRef.current.push(createBlackHole());
+        blackHolesRef.current.push(createBlackHole(speedScale));
       }
 
       // Spawn Powerups
@@ -1234,8 +1244,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.stroke();
       }
 
-      // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive)
-      const speedMult = p.hyperTimer > 0 ? 3.5 : 1.0;
+      // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive & scales with sector difficulty)
+      const speedMult = (p.hyperTimer > 0 ? 3.5 : 1.0) * speedScale;
       warpGridOffsetRef.current = (warpGridOffsetRef.current + 2.0 * speedMult * timeScale) % 50;
       for (let y = warpGridOffsetRef.current; y < CANVAS_HEIGHT; y += 50) {
         ctx.strokeStyle = p.hyperTimer > 0 ? 'rgba(255, 230, 0, 0.22)' : 'rgba(0, 240, 255, 0.12)';
@@ -1247,18 +1257,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       ctx.setLineDash([]);
       ctx.restore();
 
-      // 3. Starfield & Cosmic Warp Streaks
+      // 3. Starfield & Cosmic Warp Streaks (accelerates with speedScale)
       const stars = starsRef.current;
       for (let s = 0; s < stars.length; s++) {
         const star = stars[s];
-        const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed) * timeScale;
+        const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed * speedScale) * timeScale;
         star.y += starSpeed;
         if (star.y > CANVAS_HEIGHT) {
           star.y = 0;
           star.x = Math.random() * CANVAS_WIDTH;
         }
         ctx.fillStyle = p.hyperTimer > 0 ? '#FFE600' : star.color;
-        const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 1.5;
+        const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 1.5 * Math.min(2.0, speedScale);
         ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * lengthMultiplier);
       }
 

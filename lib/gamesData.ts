@@ -28,6 +28,19 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
+    id: 'g_battleship_18',
+    slug: 'retro-battleship',
+    title: 'Naval Grid Strike',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/retro-battleship.svg',
+    description: 'Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 56,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_multi_xo_13',
     slug: 'multidimension-xo',
     title: 'Multidimension XO',
@@ -63,19 +76,6 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 64,
-    status: 'active',
-    featured: true
-  },
-  {
-    id: 'g_battleship_18',
-    slug: 'retro-battleship',
-    title: 'Naval Grid Strike',
-    category: 'STRATEGY',
-    thumbnail_url: '/thumbnails/retro-battleship.svg',
-    description: 'Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 56,
     status: 'active',
     featured: true
   },

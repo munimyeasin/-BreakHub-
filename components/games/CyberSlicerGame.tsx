@@ -258,22 +258,36 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     // Spawn 1 bomb occasionally (26% probability)
     const spawnBomb = Math.random() < 0.26;
 
+    // Pick non-overlapping start lanes with guaranteed spatial buffer (>=95px separation)
+    const availableSlots = [
+      CANVAS_WIDTH * 0.18,
+      CANVAS_WIDTH * 0.39,
+      CANVAS_WIDTH * 0.61,
+      CANVAS_WIDTH * 0.82,
+    ];
+    // Fisher-Yates shuffle for unpredictable spawn order
+    for (let j = availableSlots.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [availableSlots[j], availableSlots[k]] = [availableSlots[k], availableSlots[j]];
+    }
+
     for (let i = 0; i < count; i++) {
       const isBomb = spawnBomb && i === 0;
-      const startX = Math.random() * (CANVAS_WIDTH - 120) + 60;
-      const targetX = CANVAS_WIDTH / 2 + (Math.random() - 0.5) * 260;
+      const baseSlot = availableSlots[i % availableSlots.length];
+      const startX = Math.max(50, Math.min(CANVAS_WIDTH - 50, baseSlot + (Math.random() - 0.5) * 36));
+      const targetX = CANVAS_WIDTH / 2 + (Math.random() - 0.5) * 240 + (isBomb ? (startX < CANVAS_WIDTH / 2 ? 55 : -55) : 0);
       const flightDuration = 65 + Math.random() * 20;
       const vx = (targetX - startX) / flightDuration;
-      const vy = -(Math.random() * 3.5 + 12.6); // Launch velocity upwards for 640px vertical space
+      const vy = -(Math.random() * 3.0 + (isBomb ? 11.8 : 12.8)); // Launch velocity upwards with distinct apex
 
       if (isBomb) {
         targetsRef.current.push({
           id: Math.random(),
           x: startX,
-          y: CANVAS_HEIGHT + 30,
+          y: CANVAS_HEIGHT + 35,
           vx,
           vy,
-          radius: 22,
+          radius: 23,
           kind: 'hazardBomb',
           rotation: 0,
           vRot: (Math.random() - 0.5) * 0.08,
@@ -501,27 +515,49 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     ctx.rotate(t.rotation);
 
     if (t.kind === 'hazardBomb') {
-      // 3D Spiked Cyber Hazard Mine/Bomb
+      // 3D Spiked Cyber Hazard Mine/Bomb with Warning Pulse Aura
       const r = t.radius;
+      const now = performance.now();
+      const pulse = Math.sin(now * 0.009) * 0.5 + 0.5;
+
+      // Outer Danger Warning Beacon Glow Ring (Non-rotating for high visibility)
+      ctx.save();
+      ctx.rotate(-t.rotation); // un-rotate glow aura for steady beacon pulse
+
+      // Pulsing outer warning dash ring
+      ctx.strokeStyle = '#FF0055';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.arc(0, 0, r + 10 + pulse * 6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Danger radial glow fill
+      ctx.fillStyle = `rgba(255, 0, 85, ${0.14 + pulse * 0.16})`;
+      ctx.beginPath();
+      ctx.arc(0, 0, r + 7 + pulse * 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
 
       // Drop shadow
       ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.arc(3.5, 3.5, r, 0, Math.PI * 2);
+      ctx.arc(4, 4, r + 2, 0, Math.PI * 2);
       ctx.fill();
 
-      // Outer Faceted Spikes (8 spikes)
+      // Outer Faceted Spikes (8 high-contrast alternating hazard spikes)
       for (let s = 0; s < 8; s++) {
         const ang = (s * Math.PI) / 4;
-        const spikeLen = r + 7;
+        const spikeLen = r + 8;
         const x1 = Math.cos(ang) * spikeLen;
         const y1 = Math.sin(ang) * spikeLen;
-        const x2 = Math.cos(ang + 0.25) * (r - 2);
-        const y2 = Math.sin(ang + 0.25) * (r - 2);
-        const x3 = Math.cos(ang - 0.25) * (r - 2);
-        const y3 = Math.sin(ang - 0.25) * (r - 2);
+        const x2 = Math.cos(ang + 0.26) * (r - 2);
+        const y2 = Math.sin(ang + 0.26) * (r - 2);
+        const x3 = Math.cos(ang - 0.26) * (r - 2);
+        const y3 = Math.sin(ang - 0.26) * (r - 2);
 
-        ctx.fillStyle = '#FF0055';
+        ctx.fillStyle = s % 2 === 0 ? '#FF0055' : '#FFE600';
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
@@ -529,31 +565,31 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
         ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2.2;
+        ctx.lineWidth = 2.4;
         ctx.stroke();
       }
 
-      // Dark Faceted Chassis Base
-      ctx.fillStyle = '#180210';
+      // Dark Armored Chassis Base
+      ctx.fillStyle = '#14020D';
       ctx.beginPath();
       ctx.arc(0, 0, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 3.2;
       ctx.stroke();
 
       // Hazard Inner Core Ring
       ctx.fillStyle = '#FF007F';
       ctx.beginPath();
-      ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2);
+      ctx.arc(0, 0, r * 0.65, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Warning Danger Skull / Spark Glyph
+      // Warning Danger Skull / Bomb Spark Glyph
       ctx.fillStyle = '#FFE600';
-      ctx.font = '900 13px system-ui, sans-serif';
+      ctx.font = '900 14px system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('💣', 0, 0);
@@ -1404,14 +1440,25 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
       }
       ctx.globalAlpha = 1;
 
-      // 2. Render 3D Targets & Halves
+      // 2. Render 3D Targets with Guaranteed Hazard Bomb Top-Layer Z-Order
+      // Layer A: Sliced tumbling halves (background debris layer)
       targetsRef.current.forEach((t) => {
-        if (t.sliced) {
-          if (t.half1 && t.half2) {
-            draw3DTargetHalf(ctx, t.half1, t.kind, true);
-            draw3DTargetHalf(ctx, t.half2, t.kind, false);
-          }
-        } else {
+        if (t.sliced && t.half1 && t.half2) {
+          draw3DTargetHalf(ctx, t.half1, t.kind, true);
+          draw3DTargetHalf(ctx, t.half2, t.kind, false);
+        }
+      });
+
+      // Layer B: Intact collectible quantum cubes & prisms
+      targetsRef.current.forEach((t) => {
+        if (!t.sliced && t.kind !== 'hazardBomb') {
+          draw3DTarget(ctx, t);
+        }
+      });
+
+      // Layer C: Intact hazard bombs on TOP-MOST layer (never occluded by cubes)
+      targetsRef.current.forEach((t) => {
+        if (!t.sliced && t.kind === 'hazardBomb') {
           draw3DTarget(ctx, t);
         }
       });
