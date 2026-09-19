@@ -164,180 +164,224 @@ function ShipHullSegment({
 
   // Rotation transform for vertical vs horizontal
   const rotationDeg = orientation === 'V' ? 90 : 0;
+  const gradientId = `${shipId}_${segmentIndex}_${isDamaged ? 'dmg' : 'ok'}_${isSunk ? 'snk' : 'act'}`;
 
   return (
-    <div className="w-full h-full relative overflow-hidden flex items-center justify-center">
+    <div className="w-full h-full relative overflow-hidden flex items-center justify-center select-none pointer-events-none">
       <svg
         viewBox="0 0 40 40"
         className="w-full h-full"
         style={{ transform: `rotate(${rotationDeg}deg)` }}
       >
         <defs>
-          <linearGradient id={`hullGrad_${shipId}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={isSunk ? '#331019' : isDamaged ? '#451a1a' : '#1e293b'} />
-            <stop offset="50%" stopColor={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0f172a'} />
-            <stop offset="100%" stopColor={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#020617'} />
+          {/* 3D Steel Cyan Deck Armor Gradient */}
+          <linearGradient id={`shipArmorFace_${gradientId}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={isSunk ? '#331019' : isDamaged ? '#451a1a' : '#38BDF8'} />
+            <stop offset="50%" stopColor={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0284C7'} />
+            <stop offset="100%" stopColor={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#0369A1'} />
+          </linearGradient>
+
+          {/* 3D Extruded Drop Keel Gradient */}
+          <linearGradient id={`shipArmorSide_${gradientId}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={isSunk ? '#1f080e' : isDamaged ? '#2a0e0e' : '#0C4A6E'} />
+            <stop offset="100%" stopColor={isSunk ? '#0f0205' : isDamaged ? '#180505' : '#082F49'} />
+          </linearGradient>
+
+          {/* 3D Yellow Dome Turret Face */}
+          <linearGradient id={`turretYellow_${gradientId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FFF570" />
+            <stop offset="100%" stopColor="#FFDE59" />
+          </linearGradient>
+
+          {/* 3D Yellow Dome Turret Bevel Side */}
+          <linearGradient id={`turretSide_${gradientId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#D49B00" />
+            <stop offset="100%" stopColor="#854D0E" />
           </linearGradient>
         </defs>
 
-        {/* 1. HULL PLATING BASE */}
+        {/* 1. 3D ISOMETRIC EXTRUDED HULL BASE & DROP KEEL */}
         {isBow && (
-          // Pointed / Streamlined Naval Bow
-          <path
-            d="M 4 20 Q 14 6 38 6 L 38 34 Q 14 34 4 20 Z"
-            fill={`url(#hullGrad_${shipId})`}
-            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
-            strokeWidth="2"
-          />
+          <g stroke="#000000" strokeWidth="2">
+            {/* Extruded Lower Keel */}
+            <polygon points="4,20 12,32 40,32 40,36 10,36 2,20" fill={`url(#shipArmorSide_${gradientId})`} />
+            {/* Armored Bow Deck Plate */}
+            <polygon points="2,20 14,6 40,6 40,32 14,32" fill={`url(#shipArmorFace_${gradientId})`} />
+            {/* Glossy Specular Highlight */}
+            <polygon points="15,9 38,9 38,15 17,15" fill="#FFFFFF" opacity={isSunk ? 0.15 : 0.65} stroke="none" />
+          </g>
         )}
 
         {isMid && (
-          // Armored Midsection
-          <rect
-            x="0"
-            y="6"
-            width="40"
-            height="28"
-            fill={`url(#hullGrad_${shipId})`}
-            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
-            strokeWidth="2"
-          />
+          <g stroke="#000000" strokeWidth="2">
+            {/* Extruded Keel Side */}
+            <polygon points="0,32 40,32 40,36 0,36" fill={`url(#shipArmorSide_${gradientId})`} />
+            {/* Armored Deck Plate */}
+            <rect x="0" y="6" width="40" height="26" fill={`url(#shipArmorFace_${gradientId})`} />
+            {/* Glossy Specular Highlight */}
+            <rect x="0" y="9" width="40" height="6" fill="#FFFFFF" opacity={isSunk ? 0.15 : 0.65} stroke="none" />
+          </g>
         )}
 
         {isStern && (
-          // Tapered Naval Stern with Rudder Fins
-          <path
-            d="M 2 6 L 28 6 Q 36 6 36 20 Q 36 34 28 34 L 2 34 Z"
-            fill={`url(#hullGrad_${shipId})`}
-            stroke={isSunk ? '#ff4081' : isDamaged ? '#ff4081' : color}
-            strokeWidth="2"
-          />
+          <g stroke="#000000" strokeWidth="2">
+            {/* Extruded Stern Keel */}
+            <polygon points="0,32 26,32 36,20 38,22 28,36 0,36" fill={`url(#shipArmorSide_${gradientId})`} />
+            {/* Tapered Stern Deck Plate */}
+            <polygon points="0,6 26,6 38,20 26,32 0,32" fill={`url(#shipArmorFace_${gradientId})`} />
+            {/* Specular Highlight */}
+            <polygon points="0,9 24,9 32,20 24,15 0,15" fill="#FFFFFF" opacity={isSunk ? 0.15 : 0.65} stroke="none" />
+          </g>
         )}
 
         {/* 2. SPECIFIC SHIP CLASS HARDWARE & TURRETS */}
         {shipId === 'carrier' && (
-          // Flight Deck Runway & Arresting Wires
           <g>
-            <line x1="2" y1="20" x2="38" y2="20" stroke={color} strokeWidth="2" strokeDasharray="4,4" opacity="0.9" />
+            {/* Yellow Dashed Flight Deck Markings */}
+            <line x1="2" y1="19" x2="38" y2="19" stroke="#FFE600" strokeWidth="2" strokeDasharray="4,4" opacity="0.9" />
             {isMid && segmentIndex === 2 && (
-              // Island Superstructure Tower
-              <rect x="14" y="8" width="12" height="6" rx="1" fill={color} stroke="#000" strokeWidth="1" />
+              // Starboard Conning Tower Island with Green Radar Dish
+              <g transform="translate(14, 6)" stroke="#000000" strokeWidth="1.5">
+                <rect x="0" y="0" width="14" height="8" rx="2" fill="#0C4A6E" />
+                <rect x="2" y="2" width="10" height="4" rx="1" fill="#00FF66" />
+                <line x1="7" y1="0" x2="7" y2="-4" stroke="#00FF66" strokeWidth="1.5" />
+              </g>
             )}
             {isStern && (
-              // Arresting cable bars
-              <g stroke="#ffffff" strokeWidth="1.5" opacity="0.7">
-                <line x1="10" y1="10" x2="10" y2="30" />
-                <line x1="18" y1="10" x2="18" y2="30" />
+              // Stern Arresting Wire Cables
+              <g stroke="#FFFFFF" strokeWidth="1.5" opacity="0.8">
+                <line x1="8" y1="9" x2="8" y2="28" />
+                <line x1="16" y1="9" x2="16" y2="28" />
               </g>
             )}
           </g>
         )}
 
         {shipId === 'battleship' && (
-          // Heavy Naval Gun Turrets
           <g>
+            {/* Forward Twin-Barrel 3D Yellow Dome Turret */}
             {isBow && (
-              // Forward Main Artillery Turret
-              <g transform="translate(24, 20)">
-                <circle cx="0" cy="0" r="6" fill={color} stroke="#000" strokeWidth="1.5" />
-                <line x1="0" y1="-2" x2="-14" y2="-2" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-                <line x1="0" y1="2" x2="-14" y2="2" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+              <g transform="translate(26, 19)" stroke="#000000" strokeWidth="1.5">
+                <line x1="0" y1="-3" x2="13" y2="-3" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="0" y1="3" x2="13" y2="3" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="0" y1="-3" x2="12" y2="-3" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <line x1="0" y1="3" x2="12" y2="3" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <ellipse cx="0" cy="2" rx="7" ry="5" fill={`url(#turretSide_${gradientId})`} />
+                <ellipse cx="0" cy="0" rx="7" ry="5" fill={`url(#turretYellow_${gradientId})`} />
+                <circle cx="-1.5" cy="-1.5" r="1.2" fill="#FFFFFF" opacity="0.85" />
               </g>
             )}
+
+            {/* Central Bridge Command Tower */}
             {isMid && segmentIndex === 1 && (
-              // Bridge Tower & Fire Radar
-              <g transform="translate(20, 20)">
-                <rect x="-8" y="-7" width="16" height="14" rx="2" fill="#334155" stroke={color} strokeWidth="1.5" />
-                <circle cx="0" cy="0" r="3" fill={color} />
+              <g transform="translate(20, 19)" stroke="#000000" strokeWidth="1.5">
+                <rect x="-9" y="-8" width="18" height="16" rx="3" fill="#0C4A6E" />
+                <rect x="-7" y="-6" width="14" height="6" rx="1.5" fill="#00F0FF" />
+                <line x1="0" y1="-8" x2="0" y2="-13" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="0" cy="-13" r="2" fill="#00FF66" />
               </g>
             )}
+
+            {/* Midship Secondary 3D Turret */}
             {isMid && segmentIndex === 2 && (
-              // Secondary Dual Turret
-              <g transform="translate(18, 20)">
-                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
-                <line x1="0" y1="-1.5" x2="12" y2="-1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-                <line x1="0" y1="1.5" x2="12" y2="1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+              <g transform="translate(20, 19)" stroke="#000000" strokeWidth="1.5">
+                <line x1="0" y1="-2.5" x2="11" y2="-2.5" stroke="#000000" strokeWidth="3" strokeLinecap="round" />
+                <line x1="0" y1="2.5" x2="11" y2="2.5" stroke="#000000" strokeWidth="3" strokeLinecap="round" />
+                <line x1="0" y1="-2.5" x2="10" y2="-2.5" stroke="#FFE600" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="0" y1="2.5" x2="10" y2="2.5" stroke="#FFE600" strokeWidth="1.5" strokeLinecap="round" />
+                <ellipse cx="0" cy="2" rx="6" ry="4.5" fill={`url(#turretSide_${gradientId})`} />
+                <ellipse cx="0" cy="0" rx="6" ry="4.5" fill={`url(#turretYellow_${gradientId})`} />
               </g>
             )}
+
+            {/* Aft Twin-Barrel 3D Turret (Facing Reverse) */}
             {isStern && (
-              // Aft Dual Turret
-              <g transform="translate(14, 20)">
-                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
-                <line x1="0" y1="-1.5" x2="12" y2="-1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-                <line x1="0" y1="1.5" x2="12" y2="1.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+              <g transform="translate(14, 19)" stroke="#000000" strokeWidth="1.5">
+                <line x1="0" y1="-3" x2="-12" y2="-3" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="0" y1="3" x2="-12" y2="3" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="0" y1="-3" x2="-11" y2="-3" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <line x1="0" y1="3" x2="-11" y2="3" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <ellipse cx="0" cy="2" rx="7" ry="5" fill={`url(#turretSide_${gradientId})`} />
+                <ellipse cx="0" cy="0" rx="7" ry="5" fill={`url(#turretYellow_${gradientId})`} />
               </g>
             )}
           </g>
         )}
 
         {shipId === 'cruiser' && (
-          // Guided Missile Silos & Phased Array
           <g>
+            {/* Forward Guided Missile VLS Launch Honeycomb */}
             {isBow && (
-              // VLS Vertical Launch System Grid
-              <g transform="translate(18, 12)">
-                <rect x="0" y="0" width="12" height="16" fill="#0f172a" stroke={color} strokeWidth="1" />
-                <line x1="4" y1="0" x2="4" y2="16" stroke={color} strokeWidth="1" />
-                <line x1="8" y1="0" x2="8" y2="16" stroke={color} strokeWidth="1" />
-                <line x1="0" y1="8" x2="12" y2="8" stroke={color} strokeWidth="1" />
+              <g transform="translate(20, 12)" stroke="#000000" strokeWidth="1">
+                <rect x="0" y="0" width="14" height="14" rx="2" fill="#0C4A6E" />
+                <line x1="5" y1="0" x2="5" y2="14" stroke="#FFE600" strokeWidth="1" />
+                <line x1="9" y1="0" x2="9" y2="14" stroke="#FFE600" strokeWidth="1" />
+                <line x1="0" y1="7" x2="14" y2="7" stroke="#FFE600" strokeWidth="1" />
               </g>
             )}
+            {/* Phased Array Pyramidal Radar Mast */}
             {isMid && (
-              // Phased Array Pyramid Mast
-              <polygon points="12,20 28,12 28,28" fill={color} stroke="#000" strokeWidth="1.5" />
+              <g transform="translate(20, 19)" stroke="#000000" strokeWidth="1.5">
+                <polygon points="-7,5 7,5 0,-8" fill={`url(#turretYellow_${gradientId})`} />
+                <circle cx="0" cy="-8" r="2" fill="#00FF66" />
+              </g>
             )}
+            {/* Aft Helipad */}
             {isStern && (
-              // Helipad Landing Circle
-              <g transform="translate(18, 20)">
-                <circle cx="0" cy="0" r="6" fill="none" stroke={color} strokeWidth="1.5" />
-                <text x="0" y="3.5" fill={color} fontSize="9" fontWeight="900" textAnchor="middle">H</text>
+              <g transform="translate(18, 19)" stroke="#000000" strokeWidth="1.5">
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#FFE600" strokeWidth="1.5" />
+                <text x="0" y="3.5" fill="#FFE600" fontSize="9" fontWeight="900" textAnchor="middle" stroke="none">H</text>
               </g>
             )}
           </g>
         )}
 
         {shipId === 'submarine' && (
-          // Hydrodynamic Sonar Dome & Sail
           <g>
+            {/* Active Sonar Dome & Dual Torpedo Ports */}
             {isBow && (
-              // Active Sonar Dome & Forward Torpedo Tubes
-              <g transform="translate(14, 20)">
-                <circle cx="0" cy="0" r="7" fill={color} stroke="#000" strokeWidth="1.5" />
-                <circle cx="-1" cy="-3" r="1.5" fill="#000" />
-                <circle cx="-1" cy="3" r="1.5" fill="#000" />
+              <g transform="translate(16, 19)" stroke="#000000" strokeWidth="1.5">
+                <circle cx="0" cy="0" r="7" fill="#00F0FF" />
+                <circle cx="4" cy="-3" r="1.5" fill="#000000" stroke="none" />
+                <circle cx="4" cy="3" r="1.5" fill="#000000" stroke="none" />
               </g>
             )}
+            {/* Conning Tower Sail & Periscope */}
             {isMid && (
-              // Conning Tower Sail & Periscope
-              <g transform="translate(12, 14)">
-                <rect x="0" y="0" width="16" height="12" rx="3" fill={color} stroke="#000" strokeWidth="1.5" />
-                <line x1="6" y1="6" x2="12" y2="6" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+              <g transform="translate(14, 13)" stroke="#000000" strokeWidth="1.5">
+                <rect x="0" y="0" width="16" height="12" rx="3" fill="#0C4A6E" />
+                <line x1="8" y1="0" x2="8" y2="-5" stroke="#FFE600" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="8" cy="-5" r="1.5" fill="#00FF66" />
               </g>
             )}
+            {/* X-Plane Rudder Stabilizers */}
             {isStern && (
-              // X-Plane Rudder Stabilizers
-              <g stroke={color} strokeWidth="2.5" strokeLinecap="round">
-                <line x1="16" y1="10" x2="30" y2="30" />
-                <line x1="16" y1="30" x2="30" y2="10" />
+              <g stroke="#00F0FF" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="14" y1="9" x2="30" y2="29" />
+                <line x1="14" y1="29" x2="30" y2="9" />
               </g>
             )}
           </g>
         )}
 
         {shipId === 'destroyer' && (
-          // Fast Attack Prow Gun & Depth Launchers
           <g>
+            {/* Fast-Attack Prow Gun */}
             {isBow && (
-              <g transform="translate(22, 20)">
-                <circle cx="0" cy="0" r="5" fill={color} stroke="#000" strokeWidth="1.5" />
-                <line x1="0" y1="0" x2="-14" y2="0" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+              <g transform="translate(24, 19)" stroke="#000000" strokeWidth="1.5">
+                <line x1="0" y1="0" x2="12" y2="0" stroke="#000000" strokeWidth="3" strokeLinecap="round" />
+                <line x1="0" y1="0" x2="11" y2="0" stroke="#FFE600" strokeWidth="1.5" strokeLinecap="round" />
+                <ellipse cx="0" cy="2" rx="5" ry="4" fill={`url(#turretSide_${gradientId})`} />
+                <ellipse cx="0" cy="0" rx="5" ry="4" fill={`url(#turretYellow_${gradientId})`} />
               </g>
             )}
+            {/* Dual Torpedo Launch Canisters */}
             {isStern && (
-              // Dual Torpedo Launcher Tubes
-              <g transform="translate(14, 13)">
-                <rect x="0" y="0" width="12" height="5" rx="1" fill={color} stroke="#000" strokeWidth="1" />
-                <rect x="0" y="9" width="12" height="5" rx="1" fill={color} stroke="#000" strokeWidth="1" />
+              <g transform="translate(12, 13)" stroke="#000000" strokeWidth="1.5">
+                <rect x="0" y="0" width="14" height="5" rx="1.5" fill="#0C4A6E" />
+                <rect x="0" y="7" width="14" height="5" rx="1.5" fill="#0C4A6E" />
+                <circle cx="12" cy="2.5" r="1" fill="#00FF66" stroke="none" />
+                <circle cx="12" cy="9.5" r="1" fill="#00FF66" stroke="none" />
               </g>
             )}
           </g>
@@ -346,10 +390,9 @@ function ShipHullSegment({
         {/* 3. BALLISTIC IMPACT DAMAGE OVERLAY */}
         {isDamaged && (
           <g>
-            {/* Shrapnel puncture & thermal breach */}
-            <circle cx="20" cy="20" r="10" fill="#ff4081" fillOpacity="0.4" />
-            <circle cx="20" cy="20" r="6" fill="#ffe600" stroke="#ff4081" strokeWidth="2" />
-            <path d="M12 12 L28 28 M12 28 L28 12" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx="20" cy="19" r="11" fill="#FF007F" fillOpacity="0.45" />
+            <circle cx="20" cy="19" r="6" fill="#FFE600" stroke="#FF007F" strokeWidth="2" />
+            <path d="M12 11 L28 27 M12 27 L28 11" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
           </g>
         )}
       </svg>
@@ -437,137 +480,6 @@ function CloseCallSplashMarker({ shipName, isFriendly }: { shipName?: string; is
       </svg>
       {/* Sonar Danger Beacon ping */}
       <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 border border-black animate-ping opacity-80" />
-    </div>
-  );
-}
-
-/**
- * 3D Isometric Hero Dreadnought Battleship Showcase
- * Directly matching the vector illustration from public/thumbnails/retro-battleship.svg
- */
-function HeroBattleshipShowcase() {
-  return (
-    <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-3 sm:p-4 shadow-neo-md relative overflow-hidden mb-3 animate-fadeIn">
-      {/* Background Cyber Grid Accent */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <svg width="100%" height="100%">
-          <defs>
-            <pattern id="heroGridPat" width="24" height="24" patternUnits="userSpaceOnUse">
-              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#00f0ff" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#heroGridPat)" />
-        </svg>
-      </div>
-
-      <div className="flex flex-col sm:flex-row items-center gap-3 relative z-10">
-        {/* Left: 3D Isometric Warship Illustration */}
-        <div className="w-full sm:w-48 h-28 sm:h-32 shrink-0 bg-slate-950 border-2 border-black rounded-xl flex items-center justify-center relative overflow-hidden shadow-inner">
-          <svg viewBox="0 0 280 180" className="w-full h-full">
-            <defs>
-              <linearGradient id="heroShipSide" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0C4A6E" />
-                <stop offset="100%" stopColor="#082F49" />
-              </linearGradient>
-              <linearGradient id="heroShipFace" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#38BDF8" />
-                <stop offset="50%" stopColor="#0284C7" />
-                <stop offset="100%" stopColor="#0369A1" />
-              </linearGradient>
-              <linearGradient id="heroTurretFace" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FFF570" />
-                <stop offset="100%" stopColor="#FFE600" />
-              </linearGradient>
-              <linearGradient id="heroTurretSide" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#D49B00" />
-                <stop offset="100%" stopColor="#805D00" />
-              </linearGradient>
-              <filter id="heroDropShadow" x="-10%" y="-10%" width="130%" height="130%">
-                <feDropShadow dx="3" dy="3" stdDeviation="0" floodColor="#000000" floodOpacity="1" />
-              </filter>
-            </defs>
-
-            {/* Radar Sweep Rings in background */}
-            <g opacity="0.4" stroke="#00f0ff" strokeWidth="1" fill="none" strokeDasharray="4,4">
-              <ellipse cx="140" cy="90" rx="110" ry="60" />
-              <ellipse cx="140" cy="90" rx="65" ry="35" />
-            </g>
-
-            {/* 3D Isometric Warship */}
-            <g transform="translate(130, 95) rotate(-14)" filter="url(#heroDropShadow)">
-              {/* Lower Keel / Side Extrusions */}
-              <polygon points="-75,18 -65,34 68,34 78,18" fill="url(#heroShipSide)" stroke="#000000" strokeWidth="2.5" />
-              <polygon points="78,18 106,-4 96,12 68,34" fill="url(#heroShipSide)" stroke="#000000" strokeWidth="2.5" />
-
-              {/* Top Deck Armored Plate */}
-              <polygon points="-75,18 -60,-10 76,-10 106,-4 78,18" fill="url(#heroShipFace)" stroke="#000000" strokeWidth="2.5" />
-              {/* Specular Highlight */}
-              <polygon points="-70,16 -58,-6 72,-6 68,2" fill="#FFFFFF" opacity="0.65" />
-
-              {/* Command Conning Bridge Tower */}
-              <g transform="translate(-15, -4)" stroke="#000000" strokeWidth="2">
-                <rect x="-16" y="-18" width="32" height="20" rx="4" fill="#0369A1" />
-                <rect x="-12" y="-14" width="24" height="6" rx="2" fill="#00f0ff" />
-                <line x1="0" y1="-18" x2="0" y2="-28" stroke="#FFE600" strokeWidth="2.5" strokeLinecap="round" />
-                <circle cx="0" cy="-28" r="3" fill="#FF007F" />
-              </g>
-
-              {/* 3D Turret 1 (Forward) */}
-              <g transform="translate(42, 6)" stroke="#000000" strokeWidth="2">
-                <line x1="0" y1="-7" x2="28" y2="-15" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
-                <line x1="0" y1="-3" x2="28" y2="-11" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
-                <ellipse cx="0" cy="4" rx="13" ry="9" fill="url(#heroTurretSide)" />
-                <ellipse cx="0" cy="0" rx="13" ry="9" fill="url(#heroTurretFace)" />
-                <circle cx="-3" cy="-2" r="1.5" fill="#FFFFFF" opacity="0.8" />
-              </g>
-
-              {/* 3D Turret 2 (Aft) */}
-              <g transform="translate(-48, 4)" stroke="#000000" strokeWidth="2">
-                <line x1="0" y1="-7" x2="26" y2="-15" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
-                <line x1="0" y1="-3" x2="26" y2="-11" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" />
-                <ellipse cx="0" cy="3" rx="11" ry="8" fill="url(#heroTurretSide)" />
-                <ellipse cx="0" cy="0" rx="11" ry="8" fill="url(#heroTurretFace)" />
-              </g>
-
-              {/* Water Wake Foam */}
-              <path d="M -80,24 Q -95,30 -110,26" stroke="#00f0ff" strokeWidth="2.5" fill="none" opacity="0.8" strokeDasharray="3,3" />
-            </g>
-
-            {/* Neo Starburst Badge */}
-            <g transform="translate(230, 40)" filter="url(#heroDropShadow)">
-              <polygon
-                points="0,-18 7,-6 20,-11 13,0 24,8 11,11 14,23 3,16 -3,23 -1,11 -14,14 -10,3 -23,-2 -11,-8 -16,-20 -5,-13"
-                fill="#FFE600"
-                stroke="#000000"
-                strokeWidth="2"
-              />
-              <text x="0" y="3" fontFamily="'Impact', 'Arial Black', sans-serif" fontWeight="900" fontSize="7" fill="#000000" textAnchor="middle" letterSpacing="0.2">
-                ARMED!
-              </text>
-            </g>
-          </svg>
-        </div>
-
-        {/* Right: Technical Fleet Specs */}
-        <div className="flex-1 min-w-0 flex flex-col justify-center">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="px-2 py-0.5 rounded-md bg-portal-yellow text-black font-mono font-black text-[10px] border border-black uppercase shadow-neo-sm">
-              BB-77 DREADNOUGHT
-            </span>
-            <span className="text-[10px] font-mono text-portal-cyan font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-portal-cyan animate-ping" />
-              HEAVY ARTILLERY SPEC
-            </span>
-          </div>
-          <p className="text-xs text-slate-300 font-sans leading-relaxed line-clamp-2">
-            Equipped with 3D twin-barrel kinetic plasma cannons, armored compartmentalized hull segments, and tactical hydro-acoustic sonar recon.
-          </p>
-          <div className="flex items-center gap-3 mt-1.5 text-[10px] font-mono font-bold text-slate-400">
-            <span>SALVO POWER: <strong className="text-portal-pink">4-NODE SPREAD</strong></span>
-            <span>ARMOR: <strong className="text-portal-lime">TITANIUM-CYBER</strong></span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -1997,26 +1909,24 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
       {/* PHASE 1: FLEET DEPLOYMENT & SETUP STAGE */}
       {/* ========================================================================= */}
       {phase === 'setup' && (
-        <div className="w-full flex flex-col items-center">
-          {/* 3D Isometric Hero Battleship Showcase */}
-          <HeroBattleshipShowcase />
-
-          {/* Header instructions */}
-          <div className="w-full bg-gradient-to-r from-portal-surface via-portal-card to-portal-surface border-3 border-black rounded-2xl p-4 mb-4 shadow-neo-md text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Crosshair className="w-5 h-5 text-portal-yellow stroke-[2.5]" />
-              <h2 className="text-base sm:text-lg font-black uppercase tracking-wider text-white">
-                {mode === 'pvp' && pvpSetupPlayer === 'P2' ? 'PLAYER 2 FLEET DOCK ASSIGNMENT' : 'TACTICAL FLEET DEPLOYMENT'}
+        <div className="w-full flex flex-col items-center animate-fadeIn">
+          {/* Streamlined Tactical Fleet Header */}
+          <div className="w-full bg-[#041B29] border-3 border-black rounded-2xl p-2.5 sm:p-3 mb-3 shadow-neo-md flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Crosshair className="w-4 h-4 sm:w-5 sm:h-5 text-portal-yellow stroke-[2.5]" />
+              <h2 className="text-xs sm:text-sm font-black uppercase tracking-wider text-white">
+                {mode === 'pvp' && pvpSetupPlayer === 'P2' ? 'PLAYER 2 FLEET ASSIGNMENT' : 'TACTICAL FLEET DEPLOYMENT'}
               </h2>
             </div>
-            <p className="text-xs text-slate-300">
-              Assign strategic oceanic coordinates to your 5 war vessels. Click to place, press <strong className="text-portal-yellow font-black">[R]</strong> to rotate hull orientation.
-            </p>
+            <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-300 flex items-center gap-2">
+              <span>CLICK TO PLACE</span>
+              <span className="text-portal-yellow bg-black/50 px-1.5 py-0.5 rounded border border-black font-black">[R] ROTATE</span>
+            </div>
           </div>
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left/Main Placement Grid (10x10) */}
-            <div className="lg:col-span-8 flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-5 shadow-neo-md w-full overflow-hidden">
+            <div className="lg:col-span-8 flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-5 shadow-neo-lg w-full overflow-hidden text-slate-100">
               <div className="flex items-center justify-between w-full mb-2 sm:mb-3 px-1 text-[11px] sm:text-xs">
                 <span className="font-black uppercase text-portal-cyan flex items-center gap-1 sm:gap-1.5 truncate">
                   <Radar className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" /> SECTOR: {ROW_LABELS[0]}1-{ROW_LABELS[9]}10
@@ -2026,12 +1936,12 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                 </span>
               </div>
 
-              {/* 10x10 Grid View */}
-              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-slate-950 border-2 sm:border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              {/* 10x10 Deep Ocean Tactical Grid View */}
+              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-[#02101A] border-2 sm:border-3 border-[#00FF66]/50 rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* Column Headers */}
                 <div className="flex ml-3.5 min-[360px]:ml-4 min-[375px]:ml-4.5 min-[390px]:ml-5 min-[414px]:ml-6 sm:ml-7 mb-1 gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                       {col}
                     </div>
                   ))}
@@ -2042,7 +1952,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   {ROW_LABELS.map((rowLabel, r) => (
                     <div key={rowLabel} className="flex items-center gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                         {rowLabel}
                       </div>
 
@@ -2091,11 +2001,11 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                             className={`w-[21px] h-[21px] min-[360px]:w-[23px] min-[360px]:h-[23px] min-[375px]:w-[24px] min-[375px]:h-[24px] min-[390px]:w-[25px] min-[390px]:h-[25px] min-[414px]:w-[27px] min-[414px]:h-[27px] sm:w-8 sm:h-8 rounded-sm min-[360px]:rounded-md sm:rounded-lg border sm:border-2 transition-all flex items-center justify-center font-mono font-black text-[9px] min-[360px]:text-[10px] sm:text-xs relative overflow-hidden ${
                               isHoveredPreview
                                 ? isValidHover
-                                  ? 'bg-portal-lime/40 border-portal-lime shadow-neo-sm scale-95'
-                                  : 'bg-portal-pink/40 border-portal-pink shadow-neo-sm'
+                                  ? 'bg-emerald-500/30 border-[#00FF66] shadow-[0_0_10px_rgba(0,255,102,0.5)] scale-95'
+                                  : 'bg-rose-500/30 border-[#FF007F] shadow-[0_0_10px_rgba(255,0,127,0.5)]'
                                 : occupyingShip
-                                ? 'bg-slate-900 border-black shadow-neo-sm'
-                                : 'bg-slate-900/80 border-slate-800 hover:border-portal-cyan/60 hover:bg-slate-800/80'
+                                ? 'bg-[#031522] border-black shadow-neo-sm'
+                                : 'bg-[#031522] border-[#0A3C59] hover:border-[#00FF66] hover:bg-[#00FF66]/10'
                             }`}
                           >
                             {occupyingShip && (
@@ -2154,13 +2064,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
             </div>
 
             {/* Right: Fleet Manifest Selector Drawer */}
-            <div className="lg:col-span-4 flex flex-col bg-portal-surface border-3 border-black rounded-2xl p-4 shadow-neo-md divide-y-2 divide-black/40">
+            <div className="lg:col-span-4 flex flex-col bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-4 shadow-neo-lg divide-y-2 divide-black/60 text-slate-100">
               <div className="pb-3">
                 <h3 className="font-black text-xs uppercase tracking-wider text-portal-yellow mb-1 flex items-center gap-1.5">
                   <Shield className="w-4 h-4 stroke-[2.5]" /> SQUADRON MANIFEST
                 </h3>
-                <p className="text-[11px] text-slate-400">
-                  Select each vessel to customize its dock coordinates:
+                <p className="text-[11px] text-slate-300">
+                  Select each vessel to customize dock coordinates:
                 </p>
               </div>
 
@@ -2183,14 +2093,6 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     />
                   );
                 })}
-              </div>
-
-              {/* Tactical Quick Tip */}
-              <div className="pt-3 text-[11px] text-slate-400 flex items-start gap-2">
-                <HelpCircle className="w-4 h-4 text-portal-cyan shrink-0 mt-0.5" />
-                <span>
-                  <strong>TACTICAL RULE:</strong> Disperse warships across different sector quadrants to avoid cluster artillery damage.
-                </span>
               </div>
             </div>
           </div>
@@ -2321,7 +2223,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           )}
 
           {/* Active Turn & Phase Status Banner */}
-          <div className="w-full bg-portal-card border-3 border-black rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 mb-2.5 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
+          <div className="w-full bg-[#041B29] border-3 border-black rounded-2xl p-2 min-[360px]:p-2.5 sm:p-3 mb-2.5 sm:mb-4 shadow-neo-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
             <div className="flex items-center gap-2 min-[360px]:gap-2.5 truncate max-w-full">
               <div
                 className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 rounded-full border-2 border-black ${
@@ -2395,7 +2297,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
           {/* Tactical Post-Match Declassified Legend */}
           {phase === 'gameover' && (
-            <div className="w-full bg-black/60 border-2 border-black rounded-xl p-2 sm:p-2.5 mb-2.5 sm:mb-3 shadow-neo-sm flex flex-wrap items-center justify-center gap-2 min-[360px]:gap-3 sm:gap-4 text-[10px] min-[360px]:text-[11px] sm:text-xs font-mono font-bold animate-fadeIn">
+            <div className="w-full bg-[#041B29] border-2 border-black rounded-xl p-2 sm:p-2.5 mb-2.5 sm:mb-3 shadow-neo-sm flex flex-wrap items-center justify-center gap-2 min-[360px]:gap-3 sm:gap-4 text-[10px] min-[360px]:text-[11px] sm:text-xs font-mono font-bold animate-fadeIn">
               <div className="flex items-center gap-1 text-portal-pink">
                 <span className="w-4 h-4 rounded bg-portal-pink/20 border border-portal-pink flex items-center justify-center text-[10px]">💥</span>
                 <span>DIRECT HIT</span>
@@ -2423,7 +2325,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* 1. ENEMY TARGETING RADAR (Primary Attack View / Post-Match Fog of War Lifted View) */}
             <div
-              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden ${
+              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 ${
                 mobileTab === 'fleet' ? 'hidden md:flex' : 'flex'
               }`}
             >
@@ -2434,7 +2336,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     {phase === 'gameover' ? 'HOSTILE SECTOR (REVEALED)' : 'HOSTILE TARGETING RADAR'}
                   </span>
                 </span>
-                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-slate-800 shrink-0">
+                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-300 uppercase bg-black/60 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-black shrink-0">
                   {phase === 'gameover'
                     ? `${5 - enemyAliveCount}/5 SUNK`
                     : `${enemyAliveCount} DETECTED`}
@@ -2442,14 +2344,14 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
               </div>
 
               {/* 10x10 Enemy Targeting Radar Grid */}
-              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-slate-950 border-2 sm:border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-[#02101A] border-2 sm:border-3 border-[#00FF66]/50 rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* 3D Isometric Tactical Radar Sonar Sweep Overlay */}
                 <RadarSonarSweepOverlay />
 
                 {/* Column Headers */}
                 <div className="flex ml-3.5 min-[360px]:ml-4 min-[375px]:ml-4.5 min-[390px]:ml-5 min-[414px]:ml-6 sm:ml-7 mb-1 gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                       {col}
                     </div>
                   ))}
@@ -2460,7 +2362,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   {ROW_LABELS.map((rowLabel, r) => (
                     <div key={rowLabel} className="flex items-center gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                         {rowLabel}
                       </div>
 
@@ -2502,20 +2404,20 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                               isSunkShipCell
                                 ? 'bg-portal-pink/30 text-white border-portal-pink shadow-neo-sm'
                                 : isRevealedIntactEnemyShip
-                                ? 'bg-slate-900 border-portal-yellow ring-1 ring-portal-yellow/60 shadow-neo-sm'
+                                ? 'bg-[#031522] border-portal-yellow ring-1 ring-portal-yellow/60 shadow-neo-sm'
                                 : shotStatus === 'hit'
                                 ? 'bg-portal-yellow/20 text-black border-portal-yellow shadow-neo-sm'
                                 : enemyCloseCall.isCloseCall
                                 ? 'bg-amber-950/40 border-amber-400 ring-1 ring-amber-400/60 shadow-[0_0_8px_rgba(251,191,36,0.4)]'
                                 : shotStatus === 'miss'
-                                ? 'bg-slate-900 text-slate-400 border-slate-800'
+                                ? 'bg-[#031522] text-[#38BDF8] border-[#0A3C59]'
                                 : isSonarSector
                                 ? scannedSector.found
                                   ? 'bg-portal-cyan/30 border-portal-cyan'
-                                  : 'bg-slate-900 border-slate-800 opacity-60'
+                                  : 'bg-[#031522] border-[#0A3C59] opacity-60'
                                 : isGameOver
-                                ? 'bg-slate-900/60 border-slate-800 cursor-default'
-                                : 'bg-slate-900/90 border-slate-800 hover:border-portal-pink hover:bg-portal-pink/20 active:scale-95'
+                                ? 'bg-[#031522]/60 border-[#0A3C59] cursor-default'
+                                : 'bg-[#031522] border-[#0A3C59] hover:border-[#00FF66] hover:bg-[#00FF66]/10 active:scale-95'
                             }`}
                           >
                             {occupyingEnemyShip && (isSunkShipCell || isGameOver || shotStatus === 'hit') ? (
@@ -2568,7 +2470,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
             {/* 2. FRIENDLY OCEAN FLEET (Defense & Casualty View) */}
             <div
-              className={`flex flex-col items-center bg-portal-surface border-3 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden ${
+              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 ${
                 mobileTab === 'radar' ? 'hidden md:flex' : 'flex'
               }`}
             >
@@ -2579,17 +2481,17 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                     {phase === 'gameover' ? 'FRIENDLY SQUADRON (CASUALTY REVIEW)' : 'FRIENDLY OCEAN FLEET'}
                   </span>
                 </span>
-                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-400 uppercase bg-black/50 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-slate-800 shrink-0">
+                <span className="text-[9px] min-[360px]:text-[10px] font-mono font-bold text-slate-300 uppercase bg-black/60 px-1.5 min-[360px]:px-2 py-0.5 rounded border border-black shrink-0">
                   {friendlyAliveCount} OPERATIONAL
                 </span>
               </div>
 
               {/* 10x10 Friendly Ocean Grid */}
-              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-slate-950 border-2 sm:border-3 border-black rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
+              <div className="relative p-1 min-[360px]:p-1.5 sm:p-2 bg-[#02101A] border-2 sm:border-3 border-[#00FF66]/50 rounded-xl shadow-neo-sm overflow-x-auto max-w-full">
                 {/* Column Headers */}
                 <div className="flex ml-3.5 min-[360px]:ml-4 min-[375px]:ml-4.5 min-[390px]:ml-5 min-[414px]:ml-6 sm:ml-7 mb-1 gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                   {COL_LABELS.map(col => (
-                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                    <div key={col} className="w-[21px] min-[360px]:w-[23px] min-[375px]:w-[24px] min-[390px]:w-[25px] min-[414px]:w-[27px] sm:w-8 h-4 sm:h-6 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                       {col}
                     </div>
                   ))}
@@ -2600,7 +2502,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                   {ROW_LABELS.map((rowLabel, r) => (
                     <div key={rowLabel} className="flex items-center gap-[1px] min-[360px]:gap-0.5 min-[390px]:gap-1">
                       {/* Row Label */}
-                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-slate-400">
+                      <div className="w-3.5 min-[360px]:w-4 min-[375px]:w-4.5 min-[390px]:w-5 min-[414px]:w-6 sm:w-7 flex items-center justify-center text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] sm:text-xs font-mono font-black text-[#00FF66]">
                         {rowLabel}
                       </div>
 
@@ -2633,13 +2535,13 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                                 ? shotStatus === 'hit'
                                   ? 'bg-portal-pink/30 border-portal-pink shadow-neo-sm animate-pulse'
                                   : isGameOver && !occupyingShip.sunk
-                                  ? 'bg-slate-900 border-portal-cyan ring-1 ring-portal-cyan/60 shadow-neo-sm'
-                                  : 'bg-slate-900 border-black shadow-neo-sm'
+                                  ? 'bg-[#031522] border-portal-cyan ring-1 ring-portal-cyan/60 shadow-neo-sm'
+                                  : 'bg-[#031522] border-black shadow-neo-sm'
                                 : friendlyCloseCall.isCloseCall
                                 ? 'bg-amber-950/40 border-amber-400 ring-1 ring-amber-400/60 shadow-[0_0_8px_rgba(251,191,36,0.4)]'
                                 : shotStatus === 'miss'
-                                ? 'bg-slate-900 text-slate-400 border-slate-800'
-                                : 'bg-slate-900/80 border-slate-800'
+                                ? 'bg-[#031522] text-[#38BDF8] border-[#0A3C59]'
+                                : 'bg-[#031522] border-[#0A3C59]'
                             }`}
                           >
                             {occupyingShip ? (

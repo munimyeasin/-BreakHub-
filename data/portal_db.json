@@ -88,7 +88,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 7,
+      "play_count": 10,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -114,7 +114,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg",
       "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "play_count": 6,
+      "play_count": 7,
       "rating": 5,
       "rating_count": 45,
       "status": "active",
@@ -140,7 +140,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/retro-battleship.svg",
       "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "play_count": 21,
+      "play_count": 23,
       "rating": 5,
       "rating_count": 56,
       "status": "active",
@@ -8103,6 +8103,27 @@
       "user_id": "usr_ctvl8ln",
       "score": 12400,
       "created_at": "2026-09-19T16:47:14.560Z"
+    },
+    {
+      "id": "sc_zceuxtn8r",
+      "game_id": "g_battleship_18",
+      "user_id": "usr_ctvl8ln",
+      "score": 18672,
+      "created_at": "2026-09-19T16:59:17.519Z"
+    },
+    {
+      "id": "sc_lv5yku6cc",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 15,
+      "created_at": "2026-09-19T17:03:13.233Z"
+    },
+    {
+      "id": "sc_3kzmtwxcr",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_ctvl8ln",
+      "score": 65,
+      "created_at": "2026-09-19T17:25:48.808Z"
     }
   ],
   "ratings": []
