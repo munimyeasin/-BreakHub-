@@ -27,7 +27,7 @@ const DEFAULT_ACTIVITIES: ActivityItem[] = [
   {
     id: '2',
     icon: <Zap className="w-3.5 h-3.5 text-portal-cyan fill-portal-cyan" />,
-    user: 'Tahida',
+    user: 'CyberPilot_X',
     action: 'ascended to Rank',
     highlight: 'Grid Pilot (LVL 4)',
     tag: 'LEVEL UP',
@@ -36,7 +36,7 @@ const DEFAULT_ACTIVITIES: ActivityItem[] = [
   {
     id: '3',
     icon: <Trophy className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />,
-    user: 'Marzia',
+    user: 'NeonViper',
     action: 'unlocked Holographic Trophy',
     highlight: 'Night Owl Platinum',
     tag: 'TROPHY',

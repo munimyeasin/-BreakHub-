@@ -36,7 +36,7 @@ export default function Footer({
               </div>
               <div>
                 <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
-                  STRESS <span className="text-portal-yellow">BUSTER</span>
+                  BREAK <span className="text-portal-yellow">HUB</span>
                 </h3>
                 <p className="text-xs font-mono font-bold text-portal-cyan uppercase tracking-wider">
                   RETRO ARCADE MINI-GAME PORTAL
@@ -114,7 +114,7 @@ export default function Footer({
                   }}
                   className="hover:text-portal-cyan transition-colors text-left"
                 >
-                  ▶ Meet the Developers
+                  ▶ Meet the Developer
                 </button>
               </li>
             </ul>
@@ -179,10 +179,10 @@ export default function Footer({
         {/* Bottom Strip */}
         <div className="pt-6 border-t-2 border-black/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-400">
           <div className="flex items-center gap-2">
-            <span>© {new Date().getFullYear()} STRESS BUSTER.</span>
+            <span>© {new Date().getFullYear()} BREAK HUB.</span>
             <span>Crafted with</span>
             <Heart className="w-3.5 h-3.5 text-portal-pink inline" />
-            <span>by Munim, Tahida, Marzia & Rahul.</span>
+            <span>by Munim Yeasin.</span>
           </div>
 
           <button

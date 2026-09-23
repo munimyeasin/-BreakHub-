@@ -9,6 +9,81 @@ interface NeonStarfighterGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
+export type StarfighterDifficulty = 'cadet' | 'ace' | 'nightmare';
+
+export interface EnemyBullet {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  color: string;
+  glowColor: string;
+  isSpread?: boolean;
+}
+
+export const DIFFICULTY_CONFIGS: Record<StarfighterDifficulty, {
+  name: string;
+  tag: string;
+  description: string;
+  color: string;
+  badgeBg: string;
+  scoreMultiplier: number;
+  enemySpeedMultiplier: number;
+  enemySpawnRateMs: { base: number; min: number; waveReduction: number };
+  enemyShootCadenceMs: { scout: number; heavy: number; drone?: number };
+  bulletSpeed: number;
+  meteorCadenceMs: number;
+  blackHoleCadenceMs: number;
+  enemyHp: { drone: number; scout: number; heavy: number };
+}> = {
+  cadet: {
+    name: 'CADET',
+    tag: 'NORMAL',
+    description: 'Standard patrol waves & steady hazards.',
+    color: '#00F0FF',
+    badgeBg: 'bg-portal-cyan text-black',
+    scoreMultiplier: 1.0,
+    enemySpeedMultiplier: 1.0,
+    enemySpawnRateMs: { base: 800, min: 450, waveReduction: 25 },
+    enemyShootCadenceMs: { scout: 0, heavy: 2800 },
+    bulletSpeed: 3.8,
+    meteorCadenceMs: 2600,
+    blackHoleCadenceMs: 5500,
+    enemyHp: { drone: 1, scout: 2, heavy: 4 },
+  },
+  ace: {
+    name: 'ACE',
+    tag: 'HARD',
+    description: 'High-speed combat. Scouts & Heavies fire targeted laser salvos.',
+    color: '#FFE600',
+    badgeBg: 'bg-portal-yellow text-black',
+    scoreMultiplier: 1.5,
+    enemySpeedMultiplier: 1.35,
+    enemySpawnRateMs: { base: 550, min: 280, waveReduction: 35 },
+    enemyShootCadenceMs: { scout: 2000, heavy: 1400 },
+    bulletSpeed: 4.8,
+    meteorCadenceMs: 2000,
+    blackHoleCadenceMs: 4200,
+    enemyHp: { drone: 1, scout: 3, heavy: 6 },
+  },
+  nightmare: {
+    name: 'NIGHTMARE',
+    tag: 'BULLET HELL',
+    description: 'Relentless aimed spread lasers, armored swarms & intense gravity.',
+    color: '#FF0055',
+    badgeBg: 'bg-portal-pink text-white animate-pulse',
+    scoreMultiplier: 2.5,
+    enemySpeedMultiplier: 1.65,
+    enemySpawnRateMs: { base: 380, min: 180, waveReduction: 45 },
+    enemyShootCadenceMs: { scout: 1200, heavy: 850, drone: 2400 },
+    bulletSpeed: 6.0,
+    meteorCadenceMs: 1500,
+    blackHoleCadenceMs: 3200,
+    enemyHp: { drone: 2, scout: 4, heavy: 8 },
+  },
+};
+
 const DESKTOP_WIDTH = 960; // 16:9 Widescreen Landscape for PC/Desktop (960x540)
 const DESKTOP_HEIGHT = 540;
 const MOBILE_WIDTH = 450;  // 9:16 Portrait for Mobile Screens (450x800)
@@ -38,6 +113,7 @@ interface Enemy {
   sideColor: string;
   type: 'drone' | 'scout' | 'heavy';
   rotation: number;
+  lastShotTime?: number;
 }
 
 interface Meteor {
@@ -123,12 +199,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const [isDead, setIsDead] = useState(false);
   const [displayScore, setDisplayScore] = useState(0);
   const [wave, setWave] = useState(1);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<StarfighterDifficulty>('ace');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [activePowerup, setActivePowerup] = useState<string | null>(null);
   const [adNotice, setAdNotice] = useState<string | null>(null);
   const [hasRevived, setHasRevived] = useState(false);
 
   // Pure refs for 60-144+ FPS game loop (zero React reconciliation lag)
+  const difficultyRef = useRef<StarfighterDifficulty>('ace');
   const soundEnabledRef = useRef(true);
   const onGameOverRef = useRef(onGameOver);
   const scoreRef = useRef(0);
@@ -955,6 +1033,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             sideColor: '#80002A',
             type: 'heavy',
             rotation: 0,
+            lastShotTime: timestamp,
           });
         } else if (rand > 0.4) {
           enemiesRef.current.push({
@@ -970,6 +1049,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             sideColor: '#800F2F',
             type: 'scout',
             rotation: 0,
+            lastShotTime: timestamp,
           });
         } else {
           enemiesRef.current.push({
@@ -985,6 +1065,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             sideColor: '#800F2F',
             type: 'drone',
             rotation: 0,
+            lastShotTime: timestamp,
           });
         }
       }

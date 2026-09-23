@@ -577,7 +577,7 @@ export default function ArcadePortalDashboard() {
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-black text-sm sm:text-base tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
-                      STRESS<span className="text-portal-cyan">BUSTER</span>
+                      BREAK<span className="text-portal-cyan">HUB</span>
                     </span>
                     <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-black border border-black shadow-neo-sm">
                       PORTAL
@@ -878,7 +878,7 @@ export default function ArcadePortalDashboard() {
                     className="px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5"
                   >
                     <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-                    <span>About Devs →</span>
+                    <span>About Developer →</span>
                   </button>
                 </div>
               </footer>

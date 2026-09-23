@@ -38,8 +38,8 @@
     },
     {
       "id": "usr_yfg1qz2",
-      "username": "Rahul",
-      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Rahul",
+      "username": "CyberRunner",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CyberRunner",
       "created_at": "2026-09-02T11:55:58.316Z"
     },
     {
@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 36,
+      "play_count": 54,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -127,7 +127,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg",
       "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "play_count": 8,
+      "play_count": 9,
       "rating": 5,
       "rating_count": 45,
       "status": "active",
@@ -8208,6 +8208,83 @@
       "user_id": "usr_ctvl8ln",
       "score": 8850,
       "created_at": "2026-09-19T18:53:58.471Z"
+    },
+    {
+      "id": "sc_8mz7otj2n",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 4300,
+      "created_at": "2026-09-19T19:09:48.987Z"
+    },
+    {
+      "id": "sc_0aj081gtk",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 11300,
+      "created_at": "2026-09-19T19:11:02.092Z"
+    },
+    {
+      "id": "sc_q4vvf9jkf",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 17650,
+      "created_at": "2026-09-19T19:13:20.491Z"
+    },
+    {
+      "id": "sc_jdya205ly",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 2500,
+      "created_at": "2026-09-19T19:16:50.780Z"
+    },
+    {
+      "id": "sc_oykfk9hjt",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 4500,
+      "created_at": "2026-09-19T19:17:47.407Z"
+    },
+    {
+      "id": "sc_d83wtkzgk",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 16000,
+      "created_at": "2026-09-19T19:19:13.121Z"
+    },
+    {
+      "id": "sc_a5zbhubkt",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 600,
+      "created_at": "2026-09-19T19:21:20.506Z"
+    },
+    {
+      "id": "sc_bpjbmjhyi",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 25100,
+      "created_at": "2026-09-19T19:23:15.238Z"
+    },
+    {
+      "id": "sc_wy6v2rtzi",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 7100,
+      "created_at": "2026-09-19T19:23:47.569Z"
+    },
+    {
+      "id": "sc_uy6kplzp5",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 22800,
+      "created_at": "2026-09-19T19:25:21.822Z"
+    },
+    {
+      "id": "sc_6emhj5w92",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 4600,
+      "created_at": "2026-09-19T19:34:40.110Z"
     }
   ],
   "ratings": []

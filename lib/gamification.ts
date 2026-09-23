@@ -1,5 +1,5 @@
 /**
- * Core Gamification State & Progression Engine for Stress Buster
+ * Core Gamification State & Progression Engine for Break Hub
  * Implements: XP/Levels, Daily Login Streaks, Deterministic Daily Quests, Cyber Trophy Vault, and Event Dispatching.
  */
 
@@ -106,7 +106,7 @@ export const TROPHIES: Trophy[] = [
   {
     id: 'first_boot',
     title: 'Arcade Initiate',
-    description: 'Play your first mini-game in Stress Buster',
+    description: 'Play your first mini-game in Break Hub',
     rarity: 'BRONZE',
     xpReward: 50,
     icon: '🎮',
@@ -274,7 +274,7 @@ export const TROPHIES: Trophy[] = [
   {
     id: 'cyber_legend',
     title: 'Arcade Legend',
-    description: 'Reach Player Level 10 on Stress Buster',
+    description: 'Reach Player Level 10 on Break Hub',
     rarity: 'PLATINUM',
     xpReward: 500,
     icon: '🪐',

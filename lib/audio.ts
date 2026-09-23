@@ -1,5 +1,5 @@
 /**
- * Procedural Web Audio Synthesizer for Stress Buster Gamification Suite
+ * Procedural Web Audio Synthesizer for Break Hub Gamification Suite
  * Zero external audio files required. Uses Web Audio API with smooth gain ramps.
  */
 

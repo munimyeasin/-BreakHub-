@@ -223,7 +223,7 @@ export default function Sidebar({
                 </span>
               </button>
 
-              {/* About Devs / Spotlight Tab */}
+              {/* About Dev / Spotlight Tab */}
               <button
                 onClick={() => handleTabClick('about-devs')}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black transition-all border-2 border-black uppercase ${
@@ -234,10 +234,10 @@ export default function Sidebar({
               >
                 <div className="flex items-center gap-2.5">
                   <Users className={`w-4 h-4 stroke-[2.5] shrink-0 ${activeTab === 'about-devs' ? 'text-black' : 'text-portal-yellow'}`} />
-                  <span>About Devs</span>
+                  <span>About Developer</span>
                 </div>
                 <span className="text-[9px] font-black text-white bg-portal-pink px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
-                  4 Devs
+                  Creator
                 </span>
               </button>
             </div>

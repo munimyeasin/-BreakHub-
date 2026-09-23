@@ -15,7 +15,8 @@ import {
   Zap,
   Layers,
   Sparkles,
-  Gamepad2
+  Flame,
+  Star
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -24,31 +25,38 @@ interface TetraMatrixGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
-// 10 Columns x 20 Visible Rows Matrix (Zero hidden buffer rows for immediate visibility)
+// 10 Columns x 20 Visible Rows Matrix
 const COLS = 10;
 const ROWS = 20;
 const TOTAL_ROWS = ROWS;
-const BUFFER_ROWS = 0;
 
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 
-interface PieceDefinition {
+export interface PolyominoStyle {
   type: TetrominoType;
-  color: string;
-  bgClass: string;
-  borderClass: string;
+  name: string;
+  faceGrad: string;
+  faceStart: string;
+  faceEnd: string;
+  sideGrad: string;
+  sideStart: string;
+  sideEnd: string;
   glowColor: string;
   shapes: number[][][]; // 4 rotation states
 }
 
-// Complete Standard Polyomino Geometries & Rotation Matrices
-const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
+// 3D Polyomino Palettes exactly matching public/thumbnails/tetra-matrix.svg
+export const TETROMINOES: Record<TetrominoType, PolyominoStyle> = {
   I: {
     type: 'I',
-    color: '#00F0FF',
-    bgClass: 'bg-portal-cyan',
-    borderClass: 'border-cyan-300',
-    glowColor: 'rgba(0, 240, 255, 0.6)',
+    name: 'CYAN I-BAR',
+    faceGrad: 'from-[#7DF9FF] to-[#00D0FF]',
+    faceStart: '#7DF9FF',
+    faceEnd: '#00D0FF',
+    sideGrad: 'from-[#0099CC] to-[#006699]',
+    sideStart: '#0099CC',
+    sideEnd: '#006699',
+    glowColor: 'rgba(0, 240, 255, 0.75)',
     shapes: [
       [
         [0, 0, 0, 0],
@@ -78,10 +86,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   O: {
     type: 'O',
-    color: '#FFDE59',
-    bgClass: 'bg-portal-yellow',
-    borderClass: 'border-yellow-200',
-    glowColor: 'rgba(255, 222, 89, 0.6)',
+    name: 'YELLOW O-BOX',
+    faceGrad: 'from-[#FFF570] to-[#FFDE59]',
+    faceStart: '#FFF570',
+    faceEnd: '#FFDE59',
+    sideGrad: 'from-[#D49B00] to-[#A67800]',
+    sideStart: '#D49B00',
+    sideEnd: '#A67800',
+    glowColor: 'rgba(255, 222, 89, 0.75)',
     shapes: [
       [
         [1, 1],
@@ -103,10 +115,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   T: {
     type: 'T',
-    color: '#FF0080',
-    bgClass: 'bg-portal-pink',
-    borderClass: 'border-pink-300',
-    glowColor: 'rgba(255, 0, 128, 0.6)',
+    name: 'PINK T-CROSS',
+    faceGrad: 'from-[#FF63C6] to-[#FF007F]',
+    faceStart: '#FF63C6',
+    faceEnd: '#FF007F',
+    sideGrad: 'from-[#BA005C] to-[#8A0044]',
+    sideStart: '#BA005C',
+    sideEnd: '#8A0044',
+    glowColor: 'rgba(255, 0, 127, 0.75)',
     shapes: [
       [
         [0, 1, 0],
@@ -132,10 +148,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   S: {
     type: 'S',
-    color: '#00FF66',
-    bgClass: 'bg-portal-lime',
-    borderClass: 'border-emerald-300',
-    glowColor: 'rgba(0, 255, 102, 0.6)',
+    name: 'LIME S-WAVE',
+    faceGrad: 'from-[#7BFF9E] to-[#00FF66]',
+    faceStart: '#7BFF9E',
+    faceEnd: '#00FF66',
+    sideGrad: 'from-[#00B84A] to-[#008033]',
+    sideStart: '#00B84A',
+    sideEnd: '#008033',
+    glowColor: 'rgba(0, 255, 102, 0.75)',
     shapes: [
       [
         [0, 1, 1],
@@ -161,10 +181,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   Z: {
     type: 'Z',
-    color: '#FF3366',
-    bgClass: 'bg-rose-500',
-    borderClass: 'border-rose-300',
-    glowColor: 'rgba(255, 51, 102, 0.6)',
+    name: 'ROSE Z-WAVE',
+    faceGrad: 'from-[#FF6B8B] to-[#FF1A4B]',
+    faceStart: '#FF6B8B',
+    faceEnd: '#FF1A4B',
+    sideGrad: 'from-[#C2002B] to-[#8A001E]',
+    sideStart: '#C2002B',
+    sideEnd: '#8A001E',
+    glowColor: 'rgba(255, 26, 75, 0.75)',
     shapes: [
       [
         [1, 1, 0],
@@ -190,10 +214,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   J: {
     type: 'J',
-    color: '#3B82F6',
-    bgClass: 'bg-blue-500',
-    borderClass: 'border-blue-300',
-    glowColor: 'rgba(59, 130, 246, 0.6)',
+    name: 'ROYAL J-HOOK',
+    faceGrad: 'from-[#60A5FA] to-[#2563EB]',
+    faceStart: '#60A5FA',
+    faceEnd: '#2563EB',
+    sideGrad: 'from-[#1D4ED8] to-[#1E3A8A]',
+    sideStart: '#1D4ED8',
+    sideEnd: '#1E3A8A',
+    glowColor: 'rgba(37, 99, 235, 0.75)',
     shapes: [
       [
         [1, 0, 0],
@@ -219,10 +247,14 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
   },
   L: {
     type: 'L',
-    color: '#FF8800',
-    bgClass: 'bg-orange-500',
-    borderClass: 'border-orange-300',
-    glowColor: 'rgba(255, 136, 0, 0.6)',
+    name: 'ORANGE L-HOOK',
+    faceGrad: 'from-[#FFBD59] to-[#FF8800]',
+    faceStart: '#FFBD59',
+    faceEnd: '#FF8800',
+    sideGrad: 'from-[#C25A00] to-[#8F3F00]',
+    sideStart: '#C25A00',
+    sideEnd: '#8F3F00',
+    glowColor: 'rgba(255, 136, 0, 0.75)',
     shapes: [
       [
         [0, 0, 1],
@@ -250,7 +282,7 @@ const TETROMINOES: Record<TetrominoType, PieceDefinition> = {
 
 const PIECE_TYPES: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
 
-// Wall kick test offsets for SRS rotation
+// Super Rotation System (SRS) Wall Kick Offset Matrices
 const WALL_KICK_OFFSETS = [
   [0, 0],
   [-1, 0],
@@ -263,7 +295,7 @@ const WALL_KICK_OFFSETS = [
   [0, 1]
 ];
 
-// Drop speed based on level (ms)
+// Level Speed Timing (ms per gravity tick)
 const LEVEL_SPEEDS = [
   800, 720, 630, 540, 450, 360, 280, 210, 150, 110, 80, 70, 60, 50, 40
 ];
@@ -277,12 +309,123 @@ interface ActivePiece {
 
 type GridCell = {
   type: TetrominoType;
-  color: string;
-  glowColor: string;
 } | null;
 
+// ==========================================
+// 3D Neo-Brutalist Extruded Polyomino Block
+// ==========================================
+interface TetraBlockProps {
+  type: TetrominoType;
+  sizeClass?: string;
+  isGhost?: boolean;
+  isFlashing?: boolean;
+}
+
+const TetraBlock: React.FC<TetraBlockProps> = React.memo(({ type, sizeClass = 'w-full h-full', isGhost = false, isFlashing = false }) => {
+  const def = TETROMINOES[type];
+
+  if (isFlashing) {
+    return (
+      <div className={`relative ${sizeClass} rounded-[3px] bg-white border-2 border-yellow-300 shadow-[0_0_15px_#FFF] animate-pulse`} />
+    );
+  }
+
+  if (isGhost) {
+    return (
+      <div
+        className={`relative ${sizeClass} rounded-[3px] border-2 border-dashed border-[#00F0FF] bg-[#00F0FF]/15 shadow-[0_0_8px_rgba(0,240,255,0.4)] flex items-center justify-center`}
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-[#00F0FF]/40 animate-ping" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`relative ${sizeClass} rounded-[3px] sm:rounded-[4px] border-[1.5px] sm:border-2 border-black overflow-hidden shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),inset_0_-2px_2px_rgba(0,0,0,0.35)]`}
+      style={{
+        background: `linear-gradient(135deg, ${def.faceStart} 0%, ${def.faceEnd} 100%)`
+      }}
+    >
+      {/* 3D Top-Left High-Gloss Triangular Specular Highlight (from thumbnail) */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 30 30"
+        preserveAspectRatio="none"
+      >
+        {/* Specular Triangle */}
+        <polygon points="2,2 24,2 2,24" fill="#FFFFFF" opacity="0.75" />
+        {/* Top Edge Bevel Line */}
+        <line x1="2" y1="2" x2="28" y2="2" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.9" />
+        {/* Bottom-Right 3D Extrusion Shadow Bevel */}
+        <polygon points="28,4 28,28 4,28" fill="#000000" opacity="0.22" />
+        <line x1="2" y1="28" x2="28" y2="28" stroke="#000000" strokeWidth="1.5" opacity="0.4" />
+        <line x1="28" y1="2" x2="28" y2="28" stroke="#000000" strokeWidth="1.5" opacity="0.4" />
+      </svg>
+    </div>
+  );
+});
+TetraBlock.displayName = 'TetraBlock';
+
+// ==========================================
+// 16-Point Neo-Brutalist Starburst Action Badge
+// ==========================================
+interface StarburstBadgeProps {
+  text: string;
+  subtext?: string;
+  colorGrad?: 'gold' | 'cyan' | 'pink';
+}
+
+const StarburstBadge: React.FC<StarburstBadgeProps> = React.memo(({ text, subtext, colorGrad = 'gold' }) => {
+  const gradColors = {
+    gold: { start: '#FFF066', end: '#FFE600', text: '#000000' },
+    cyan: { start: '#7DF9FF', end: '#00D0FF', text: '#000000' },
+    pink: { start: '#FF63C6', end: '#FF007F', text: '#FFFFFF' }
+  }[colorGrad];
+
+  return (
+    <div className="relative inline-flex items-center justify-center animate-bounce select-none pointer-events-none">
+      <svg
+        viewBox="-35 -35 70 70"
+        className="w-28 h-28 sm:w-36 sm:h-36 drop-shadow-[3px_3px_0px_#000000]"
+      >
+        <defs>
+          <linearGradient id={`starburst-${colorGrad}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={gradColors.start} />
+            <stop offset="100%" stopColor={gradColors.end} />
+          </linearGradient>
+        </defs>
+        {/* 16-Point Starburst Polygon from tetra-matrix.svg */}
+        <polygon
+          points="0,-30 11,-11 32,-19 22,-1 40,14 19,19 24,38 5,27 -5,38 -3,19 -24,24 -16,5 -38,-3 -19,-14 -27,-32 -8,-22"
+          fill={`url(#starburst-${colorGrad})`}
+          stroke="#000000"
+          strokeWidth="3"
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
+        <span
+          className="font-black text-xs sm:text-sm uppercase tracking-tight leading-none drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]"
+          style={{ color: gradColors.text }}
+        >
+          {text}
+        </span>
+        {subtext && (
+          <span className="text-[9px] sm:text-[10px] font-black uppercase text-black bg-white px-1 py-0.2 rounded border border-black mt-1 shadow-sm">
+            {subtext}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+});
+StarburstBadge.displayName = 'StarburstBadge';
+
+// ==========================================
+// Main TetraMatrixGame Component
+// ==========================================
 export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameProps) {
-  // Game State
+  // Game Board State
   const [grid, setGrid] = useState<GridCell[][]>(() =>
     Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null))
   );
@@ -301,12 +444,13 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [flashRows, setFlashRows] = useState<number[]>([]);
-  const [calloutText, setCalloutText] = useState<{ text: string; color: string; id: number } | null>(null);
+  const [laserTrailCol, setLaserTrailCol] = useState<{ x: number; startY: number; endY: number } | null>(null);
+  const [callout, setCallout] = useState<{ text: string; subtext?: string; grad: 'gold' | 'cyan' | 'pink'; id: number } | null>(null);
   const [screenShake, setScreenShake] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sound Synthesizer via Web Audio API
+  // Web Audio API Synthesizer
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = useCallback(() => {
@@ -323,145 +467,148 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     return audioCtxRef.current;
   }, []);
 
-  const playTetraSound = useCallback((type: 'move' | 'rotate' | 'softDrop' | 'hardDrop' | 'hold' | 'single' | 'double' | 'triple' | 'tetra' | 'levelUp' | 'gameOver') => {
-    if (!soundEnabled) return;
-    try {
-      const ctx = getAudioContext();
-      if (!ctx) return;
-      const now = ctx.currentTime;
+  const playTetraSound = useCallback(
+    (type: 'move' | 'rotate' | 'softDrop' | 'hardDrop' | 'hold' | 'single' | 'double' | 'triple' | 'tetra' | 'levelUp' | 'gameOver') => {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
 
-      if (type === 'move') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(240, now);
-        osc.frequency.exponentialRampToValueAtTime(120, now + 0.04);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.04);
-      } else if (type === 'rotate') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(420, now);
-        osc.frequency.exponentialRampToValueAtTime(780, now + 0.06);
-        gain.gain.setValueAtTime(0.09, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.06);
-      } else if (type === 'softDrop') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(90, now + 0.03);
-        gain.gain.setValueAtTime(0.04, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.03);
-      } else if (type === 'hardDrop') {
-        // Heavy Sub-Bass Impact Detonation
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (type === 'hold') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.linearRampToValueAtTime(400, now + 0.08);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'single' || type === 'double') {
-        [523.25, 659.25].forEach((freq, idx) => {
+        if (type === 'move') {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.05);
-          gain.gain.setValueAtTime(0.12, now + idx * 0.05);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.18);
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(130, now + 0.04);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
           osc.connect(gain);
           gain.connect(ctx.destination);
-          osc.start(now + idx * 0.05);
-          osc.stop(now + idx * 0.05 + 0.18);
-        });
-      } else if (type === 'triple') {
-        [523.25, 659.25, 783.99].forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-          gain.gain.setValueAtTime(0.15, now + idx * 0.06);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now + idx * 0.06);
-          osc.stop(now + idx * 0.06 + 0.22);
-        });
-      } else if (type === 'tetra') {
-        // 4-Note Triumphant Quad Clear Fanfare + Synth Blast
-        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-          gain.gain.setValueAtTime(0.2, now + idx * 0.06);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now + idx * 0.06);
-          osc.stop(now + idx * 0.06 + 0.35);
-        });
-      } else if (type === 'levelUp') {
-        [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'rotate') {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-          gain.gain.setValueAtTime(0.15, now + idx * 0.07);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.25);
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
           osc.connect(gain);
           gain.connect(ctx.destination);
-          osc.start(now + idx * 0.07);
-          osc.stop(now + idx * 0.07 + 0.25);
-        });
-      } else if (type === 'gameOver') {
-        [320, 280, 220, 140].forEach((freq, idx) => {
+          osc.start(now);
+          osc.stop(now + 0.06);
+        } else if (type === 'softDrop') {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.09);
-          gain.gain.setValueAtTime(0.16, now + idx * 0.09);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.3);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(90, now + 0.03);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
           osc.connect(gain);
           gain.connect(ctx.destination);
-          osc.start(now + idx * 0.09);
-          osc.stop(now + idx * 0.09 + 0.3);
-        });
-      }
-    } catch {}
-  }, [soundEnabled, getAudioContext]);
+          osc.start(now);
+          osc.stop(now + 0.03);
+        } else if (type === 'hardDrop') {
+          // Sub-Bass Heavy Detonation
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.exponentialRampToValueAtTime(35, now + 0.16);
+          gain.gain.setValueAtTime(0.28, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.16);
+        } else if (type === 'hold') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(620, now);
+          osc.frequency.linearRampToValueAtTime(380, now + 0.08);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'single' || type === 'double') {
+          [523.25, 659.25].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+            gain.gain.setValueAtTime(0.12, now + idx * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.18);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.05);
+            osc.stop(now + idx * 0.05 + 0.18);
+          });
+        } else if (type === 'triple') {
+          [523.25, 659.25, 783.99].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            gain.gain.setValueAtTime(0.15, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.22);
+          });
+        } else if (type === 'tetra') {
+          // Quad-Clear Fanfare
+          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            gain.gain.setValueAtTime(0.22, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.35);
+          });
+        } else if (type === 'levelUp') {
+          [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+            gain.gain.setValueAtTime(0.15, now + idx * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.25);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.07);
+            osc.stop(now + idx * 0.07 + 0.25);
+          });
+        } else if (type === 'gameOver') {
+          [320, 270, 210, 140].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+            gain.gain.setValueAtTime(0.16, now + idx * 0.09);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.09);
+            osc.stop(now + idx * 0.09 + 0.3);
+          });
+        }
+      } catch {}
+    },
+    [soundEnabled, getAudioContext]
+  );
 
-  // Synchronized Refs to avoid stale React closures during animation and tick loops
+  // Synchronized Reference Pointers
   const gridRef = useRef<GridCell[][]>(grid);
   gridRef.current = grid;
   const currentPieceRef = useRef<ActivePiece | null>(currentPiece);
@@ -499,10 +646,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     } catch {}
   }, []);
 
-  // 7-Bag Randomizer generator
+  // Standard 7-Bag Randomizer generator
   const getNextPieceFromBag = useCallback((): TetrominoType => {
     if (bagRef.current.length === 0) {
-      // Create and shuffle a fresh 7-bag
       const newBag = [...PIECE_TYPES];
       for (let i = newBag.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -528,7 +674,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               return false;
             }
 
-            // Check locked blocks (ignore gridY < 0 above ceiling)
+            // Check locked blocks
             if (gridY >= 0 && currentGrid[gridY][gridX] !== null) {
               return false;
             }
@@ -540,14 +686,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     []
   );
 
-  // Calculate Ghost Piece position (Hard Drop projection)
+  // Ghost Piece Landing Raycast Projection
   const getGhostY = useCallback(
     (piece: ActivePiece | null, currentGrid: GridCell[][] = gridRef.current): number => {
       if (!piece) return 0;
       let ghostY = piece.y;
-      while (
-        isValidPosition({ ...piece, y: ghostY + 1 }, currentGrid)
-      ) {
+      while (isValidPosition({ ...piece, y: ghostY + 1 }, currentGrid)) {
         ghostY++;
       }
       return ghostY;
@@ -555,14 +699,13 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [isValidPosition]
   );
 
-  // Spawn a new Tetromino
+  // Spawn a new Tetromino from 7-Bag
   const spawnPiece = useCallback(
     (type?: TetrominoType) => {
       let pieceType = type;
       let newQueue = [...nextQueueRef.current];
 
       if (!pieceType) {
-        // Pop first from queue and replenish
         pieceType = newQueue.shift() || getNextPieceFromBag();
         while (newQueue.length < 3) {
           newQueue.push(getNextPieceFromBag());
@@ -583,7 +726,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       };
 
       if (!isValidPosition(newPiece, gridRef.current)) {
-        // Game Over!
+        // Matrix Breach - Game Over!
         setIsGameOver(true);
         isGameOverRef.current = true;
         setIsPlaying(false);
@@ -610,7 +753,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [getNextPieceFromBag, isValidPosition, onGameOver, playTetraSound, highScore]
   );
 
-  // Clear completed rows, award points & combos
+  // Clear completed rows, award points & starburst popups
   const clearLines = useCallback(
     (newGrid: GridCell[][]) => {
       const fullRowIndices: number[] = [];
@@ -622,7 +765,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       }
 
       if (fullRowIndices.length === 0) {
-        // No lines cleared -> reset combo
         setCombo(0);
         comboRef.current = 0;
         setGrid(newGrid);
@@ -631,7 +773,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // Flash rows animation
+      // Flash Row & Laser Wave Beam FX
       setFlashRows(fullRowIndices);
 
       const linesCleared = fullRowIndices.length;
@@ -639,7 +781,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       const isTetra = linesCleared === 4;
       const isB2B = isTetra && backToBackRef.current;
 
-      // Base scoring: Single=100, Double=300, Triple=500, Tetra=800
+      // Scoring System: Single=100, Double=300, Triple=500, Tetra=800
       let basePoints = 0;
       if (linesCleared === 1) basePoints = 100 * curLevel;
       else if (linesCleared === 2) basePoints = 300 * curLevel;
@@ -681,27 +823,28 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
         try {
           confetti({
-            particleCount: 50,
-            spread: 70,
+            particleCount: 60,
+            spread: 80,
             origin: { y: 0.6 }
           });
         } catch {}
 
-        setCalloutText({
-          text: isB2B ? '⚡ B2B TETRA MATRIX! (+1.5x)' : '🔥 TETRA MATRIX! (+800)',
-          color: 'text-portal-yellow',
+        setCallout({
+          text: isB2B ? 'B2B TETRA!' : '4X TETRIS!',
+          subtext: isB2B ? '+1.5X MULTIPLIER' : '+800 PTS',
+          grad: 'gold',
           id: Date.now()
         });
       } else {
         if (linesCleared === 3) {
           playTetraSound('triple');
-          setCalloutText({ text: 'TRIPLE CLEAR! (+500)', color: 'text-portal-pink', id: Date.now() });
+          setCallout({ text: 'TRIPLE CLEAR!', subtext: '+500 PTS', grad: 'pink', id: Date.now() });
         } else if (linesCleared === 2) {
           playTetraSound('double');
-          setCalloutText({ text: 'DOUBLE CLEAR! (+300)', color: 'text-portal-cyan', id: Date.now() });
+          setCallout({ text: 'DOUBLE CLEAR!', subtext: '+300 PTS', grad: 'cyan', id: Date.now() });
         } else {
           playTetraSound('single');
-          setCalloutText({ text: 'SINGLE (+100)', color: 'text-portal-lime', id: Date.now() });
+          setCallout({ text: 'SINGLE CLEAR', subtext: '+100 PTS', grad: 'cyan', id: Date.now() });
         }
         setBackToBack(false);
         backToBackRef.current = false;
@@ -720,12 +863,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         setGrid(collapsedGrid);
         gridRef.current = collapsedGrid;
         spawnPiece();
-      }, 160);
+      }, 180);
     },
     [spawnPiece, playTetraSound]
   );
 
-  // Lock active piece into the grid
+  // Lock active piece into grid
   const lockPiece = useCallback(
     (pieceToLock: ActivePiece = currentPieceRef.current!) => {
       if (!pieceToLock) return;
@@ -737,7 +880,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
       const shape = TETROMINOES[pieceToLock.type].shapes[pieceToLock.rotation];
       const newGrid = gridRef.current.map(row => [...row]);
-      const def = TETROMINOES[pieceToLock.type];
 
       for (let r = 0; r < shape.length; r++) {
         for (let c = 0; c < shape[r].length; c++) {
@@ -746,9 +888,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             const gridY = pieceToLock.y + r;
             if (gridY >= 0 && gridY < TOTAL_ROWS && gridX >= 0 && gridX < COLS) {
               newGrid[gridY][gridX] = {
-                type: pieceToLock.type,
-                color: def.color,
-                glowColor: def.glowColor
+                type: pieceToLock.type
               };
             }
           }
@@ -762,7 +902,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [clearLines]
   );
 
-  // Move piece left or right
+  // Move Piece Left or Right
   const moveHorizontal = useCallback(
     (dir: -1 | 1) => {
       if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
@@ -779,7 +919,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [isValidPosition, playTetraSound]
   );
 
-  // Rotate piece (clockwise = 1, counter-clockwise = -1)
+  // Rotate Piece Clockwise / Counter-Clockwise with SRS Wall Kicks
   const rotatePiece = useCallback(
     (dir: 1 | -1 = 1) => {
       if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
@@ -809,7 +949,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [isValidPosition, playTetraSound]
   );
 
-  // Soft drop (move down 1 step + award 1 score point)
+  // Soft Drop
   const softDrop = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const piece = currentPieceRef.current;
@@ -823,12 +963,11 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       scoreRef.current += 1;
       playTetraSound('softDrop');
     } else {
-      // Hit bottom or stack
       lockPiece(piece);
     }
   }, [isValidPosition, lockPiece, playTetraSound]);
 
-  // Hard drop (instant drop to bottom + award 2 score points per row dropped)
+  // Hard Drop Slam with Laser Speed Trail
   const hardDrop = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const piece = currentPieceRef.current;
@@ -841,6 +980,10 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     if (dropDistance > 0) {
       setScore(prev => prev + dropDistance * 2);
       scoreRef.current += dropDistance * 2;
+
+      // Trigger Laser Speed Trail Animation
+      setLaserTrailCol({ x: piece.x, startY: piece.y, endY: ghostY });
+      setTimeout(() => setLaserTrailCol(null), 150);
     }
 
     playTetraSound('hardDrop');
@@ -850,7 +993,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     lockPiece(droppedPiece);
   }, [getGhostY, lockPiece, playTetraSound]);
 
-  // Hold piece swap
+  // Hold Piece Vault Swap
   const holdCurrentPiece = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     if (!canHoldRef.current) return;
@@ -899,9 +1042,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     isPausedRef.current = false;
     setIsPlaying(true);
     isPlayingRef.current = true;
-    setCalloutText(null);
+    setCallout(null);
 
-    // Fill initial queue
+    // Initial 3-piece Next Queue
     const initialQueue = [getNextPieceFromBag(), getNextPieceFromBag(), getNextPieceFromBag()];
     setNextQueue(initialQueue);
     nextQueueRef.current = initialQueue;
@@ -941,7 +1084,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         setCurrentPiece(nextPiece);
         currentPieceRef.current = nextPiece;
       } else {
-        // Start lock sequence
         lockPiece(piece);
       }
     }, currentSpeed);
@@ -949,7 +1091,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     return () => clearInterval(interval);
   }, [isPlaying, isPaused, isGameOver, level, isValidPosition, lockPiece]);
 
-  // Synchronized Handlers in Refs to eliminate keyboard listener teardown churn
+  // Synchronized Handlers in Refs
   const moveHorizontalRef = useRef(moveHorizontal);
   moveHorizontalRef.current = moveHorizontal;
   const rotatePieceRef = useRef(rotatePiece);
@@ -963,7 +1105,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const startNewGameRef = useRef(startNewGame);
   startNewGameRef.current = startNewGame;
 
-  // Auto-start once on mount
+  // Auto-start on mount
   const hasStartedRef = useRef(false);
   useEffect(() => {
     if (!hasStartedRef.current) {
@@ -973,10 +1115,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     containerRef.current?.focus();
   }, []);
 
-  // Rock-Solid Capture-Phase Keyboard Event Listeners
+  // Keyboard Capture Listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept if user is typing in a form input
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
@@ -988,7 +1129,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       const key = e.key;
       const code = e.code;
 
-      // Prevent default page scroll on navigation and game action keys
       const isGameControlKey =
         ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Spacebar'].includes(key) ||
         ['w', 'a', 's', 'd', 'z', 'x', 'c', 'h', 'j', 'k', 'p', 'r', 'q', 'e', 'W', 'A', 'S', 'D', 'Z', 'X', 'C', 'H', 'J', 'K', 'P', 'R', 'Q', 'E'].includes(key) ||
@@ -1004,7 +1144,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         e.stopPropagation();
       }
 
-      // 1. Restart / Quick Start trigger (R, or Enter/Space when Game Over)
+      // 1. Restart
       if (
         key === 'r' || key === 'R' || code === 'KeyR' ||
         (isGameOverRef.current && (key === 'Enter' || code === 'Enter' || code === 'NumpadEnter' || key === ' ' || code === 'Space'))
@@ -1013,7 +1153,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 2. Pause / Resume trigger (P)
+      // 2. Pause / Resume
       if (key === 'p' || key === 'P' || code === 'KeyP') {
         if (isPlayingRef.current && !isGameOverRef.current) {
           setIsPaused(prev => !prev);
@@ -1021,7 +1161,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 3. Start Game if on splash screen and any action key is pressed
+      // 3. Start from splash
       if (!isPlayingRef.current) {
         if (
           key === ' ' || key === 'Enter' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowDown' || key === 'ArrowUp' ||
@@ -1032,7 +1172,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 4. If paused, pressing Space, Enter, or P resumes
+      // 4. Resume if paused
       if (isPausedRef.current) {
         if (
           key === ' ' || key === 'Enter' || key === 'p' || key === 'P' ||
@@ -1043,10 +1183,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 5. If Game Over, ignore further movement
       if (isGameOverRef.current) return;
 
-      // 6. Left Movement (ArrowLeft, A, Numpad 4)
+      // 5. Left Movement
       if (
         key === 'ArrowLeft' || key === 'a' || key === 'A' ||
         code === 'ArrowLeft' || code === 'KeyA' || code === 'Numpad4'
@@ -1055,7 +1194,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 7. Right Movement (ArrowRight, D, Numpad 6)
+      // 6. Right Movement
       if (
         key === 'ArrowRight' || key === 'd' || key === 'D' ||
         code === 'ArrowRight' || code === 'KeyD' || code === 'Numpad6'
@@ -1064,7 +1203,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 8. Soft Drop (ArrowDown, S, Numpad 2)
+      // 7. Soft Drop
       if (
         key === 'ArrowDown' || key === 's' || key === 'S' ||
         code === 'ArrowDown' || code === 'KeyS' || code === 'Numpad2'
@@ -1073,7 +1212,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 9. Rotate Clockwise (ArrowUp, W, X, K, E, Numpad 8, Numpad 5)
+      // 8. Rotate Clockwise
       if (
         key === 'ArrowUp' || key === 'w' || key === 'W' || key === 'x' || key === 'X' || key === 'k' || key === 'K' || key === 'e' || key === 'E' ||
         code === 'ArrowUp' || code === 'KeyW' || code === 'KeyX' || code === 'KeyK' || code === 'KeyE' || code === 'Numpad8' || code === 'Numpad5'
@@ -1082,7 +1221,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 10. Rotate Counter-Clockwise (Z, J, Q, Left/Right Control, Numpad 3, Numpad 7)
+      // 9. Rotate Counter-Clockwise
       if (
         key === 'z' || key === 'Z' || key === 'j' || key === 'J' || key === 'q' || key === 'Q' || key === 'Control' ||
         code === 'KeyZ' || code === 'KeyJ' || code === 'KeyQ' || code === 'ControlLeft' || code === 'ControlRight' || code === 'Numpad3' || code === 'Numpad7'
@@ -1091,7 +1230,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 11. Hard Drop Slam (Space, Numpad 0) - Disallow repeat spam
+      // 10. Hard Drop Slam
       if (key === ' ' || key === 'Spacebar' || code === 'Space' || code === 'Numpad0') {
         if (!e.repeat) {
           hardDropRef.current();
@@ -1099,7 +1238,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // 12. Hold Piece Vault (C, Shift, H) - Disallow repeat spam
+      // 11. Hold Piece
       if (
         key === 'c' || key === 'C' || key === 'Shift' || key === 'h' || key === 'H' ||
         code === 'KeyC' || code === 'ShiftLeft' || code === 'ShiftRight' || code === 'KeyH'
@@ -1115,7 +1254,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, []);
 
-  // Calculate Ghost Piece for Rendering
+  // Ghost Piece Calculation
   const ghostY = currentPiece ? getGhostY(currentPiece) : 0;
   const currentShape = currentPiece ? TETROMINOES[currentPiece.type].shapes[currentPiece.rotation] : null;
 
@@ -1124,21 +1263,32 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       ref={containerRef}
       tabIndex={0}
       onClick={() => containerRef.current?.focus()}
-      className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none outline-none ${screenShake ? 'animate-bounce' : ''}`}
+      className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none outline-none ${
+        screenShake ? 'animate-bounce' : ''
+      }`}
     >
-      {/* Top Header Strip */}
+      {/* Top Retro-Arcade Header Marquee Ribbon */}
       <div className="w-full flex items-center justify-between gap-1.5 sm:gap-2 p-1.5 sm:p-2.5 mb-1.5 sm:mb-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm">
+        {/* Left: Game Title Badge & Mode */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
+          <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 rounded-xl bg-gradient-to-r from-[#FFF570] to-[#FFDE59] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
             <Zap className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-black stroke-[2.5]" />
             <span>TETRA MATRIX</span>
+          </div>
+          <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] font-black text-portal-cyan uppercase">
+            SRS // 7-BAG
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] sm:text-[11px] font-black text-portal-cyan uppercase">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] sm:text-[11px] font-black text-portal-yellow uppercase">
             LVL {level}
           </span>
+          {backToBack && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-pink border-2 border-black text-[9px] sm:text-[10px] font-black text-white uppercase animate-pulse">
+              <Flame className="w-2.5 h-2.5 fill-white" /> B2B
+            </span>
+          )}
         </div>
 
-        {/* Global Controls */}
+        {/* Right: Audio & Reset Quick Buttons */}
         <div className="flex items-center gap-1 sm:gap-1.5">
           <button
             type="button"
@@ -1172,11 +1322,11 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         </div>
       </div>
 
-      {/* Main Arena Layout: Flanking Wings on Mobile (< md), 3-Column on Desktop (md+) */}
+      {/* Main Arcade Layout: Mobile Flanking Wings (< md), 3-Column on Desktop (md+) */}
       <div className="w-full flex items-center md:items-start justify-center gap-1.5 sm:gap-3 md:gap-4 lg:gap-6">
-        {/* Mobile Left Wing (< md): Mini Hold + Score */}
+        {/* Mobile Left Wing (< md): 3D HOLD Vault + Score */}
         <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
-          {/* Mini Hold Card with Direct Tap-to-Hold */}
+          {/* Mobile Tap-to-Hold Card */}
           <button
             type="button"
             onFocus={e => e.currentTarget.blur()}
@@ -1195,32 +1345,31 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                 TAP
               </span>
             </div>
-            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-black/80 border border-black/80 flex items-center justify-center mt-1 overflow-hidden">
+            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-[#04020E] border-2 border-black flex items-center justify-center mt-1 overflow-hidden relative">
+              {/* Subtle Matrix Stage Grid */}
+              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:6px_6px] opacity-40 pointer-events-none" />
               {holdPiece ? (
                 <div
-                  className="grid gap-0.5 p-0.5"
+                  className="grid gap-0.5 p-0.5 relative z-10"
                   style={{
                     gridTemplateColumns: `repeat(${TETROMINOES[holdPiece].shapes[0][0].length}, minmax(0, 1fr))`
                   }}
                 >
                   {TETROMINOES[holdPiece].shapes[0].map((row, rIdx) =>
                     row.map((val, cIdx) => (
-                      <div
-                        key={`m-hold-${rIdx}-${cIdx}`}
-                        className={`w-2 h-2 min-[380px]:w-2.5 min-[380px]:h-2.5 rounded-[2px] border ${
-                          val ? `${TETROMINOES[holdPiece].bgClass} border-black shadow-sm` : 'opacity-0'
-                        }`}
-                      />
+                      <div key={`m-hold-${rIdx}-${cIdx}`} className="w-2.5 h-2.5 min-[380px]:w-3 min-[380px]:h-3 flex items-center justify-center">
+                        {val ? <TetraBlock type={holdPiece} /> : <div className="w-full h-full opacity-0" />}
+                      </div>
                     ))
                   )}
                 </div>
               ) : (
-                <span className="text-[8px] text-slate-500 font-bold uppercase">EMPTY</span>
+                <span className="text-[8px] text-slate-500 font-bold uppercase z-10">VAULT</span>
               )}
             </div>
           </button>
 
-          {/* Mini Score Card */}
+          {/* Mobile Score Card */}
           <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-center">
             <span className="text-[7px] min-[380px]:text-[8px] font-black text-slate-400 uppercase block">SCORE</span>
             <p className="text-xs min-[380px]:text-sm font-black text-portal-yellow truncate leading-tight mt-0.5">
@@ -1228,7 +1377,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             </p>
           </div>
 
-          {/* Mini High Score Card */}
+          {/* Mobile Best High Score */}
           <div className="w-full p-1 rounded-xl bg-portal-card border border-black text-center">
             <span className="text-[7px] font-black text-slate-400 uppercase block">BEST</span>
             <p className="text-[9px] min-[380px]:text-[10px] font-black text-portal-cyan truncate leading-tight">
@@ -1237,95 +1386,133 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
         </div>
 
-        {/* Desktop Left Column (md+): Full-size HOLD Piece & Tactical Stats */}
-        <div className="hidden md:flex md:w-44 flex-col gap-3">
-          {/* Hold Card */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
+        {/* Desktop Left Column (md+): 3D HOLD Vault & Tactical Stats */}
+        <div className="hidden md:flex md:w-44 lg:w-48 flex-col gap-3">
+          {/* Hold Piece Vault Card */}
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-1.5">
               <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
-                <Layers className="w-3 h-3 text-portal-pink" /> HOLD
+                <Layers className="w-3.5 h-3.5 text-portal-pink" /> HOLD VAULT
               </span>
-              <span className="text-[8px] font-mono text-black bg-portal-yellow px-1.5 py-0.2 rounded border border-black font-black">
+              <span className="text-[9px] font-mono text-black bg-portal-yellow px-1.5 py-0.5 rounded border border-black font-black">
                 [C]
               </span>
             </div>
-            <div className="w-20 h-20 rounded-xl bg-black/60 border-2 border-black/80 flex items-center justify-center relative overflow-hidden">
+            <div className="w-24 h-24 rounded-xl bg-[#04020E] border-2 border-black flex items-center justify-center relative overflow-hidden shadow-inner">
+              {/* Matrix Stage Grid Backdrop */}
+              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:8px_8px] opacity-50 pointer-events-none" />
               {holdPiece ? (
                 <div
-                  className="grid gap-0.5 p-1"
+                  className="grid gap-1 p-1 relative z-10"
                   style={{
                     gridTemplateColumns: `repeat(${TETROMINOES[holdPiece].shapes[0][0].length}, minmax(0, 1fr))`
                   }}
                 >
                   {TETROMINOES[holdPiece].shapes[0].map((row, rIdx) =>
                     row.map((val, cIdx) => (
-                      <div
-                        key={`hold-${rIdx}-${cIdx}`}
-                        className={`w-4 h-4 rounded-sm border ${
-                          val ? `${TETROMINOES[holdPiece].bgClass} border-black shadow-sm` : 'opacity-0'
-                        }`}
-                      />
+                      <div key={`hold-${rIdx}-${cIdx}`} className="w-5 h-5 flex items-center justify-center">
+                        {val ? <TetraBlock type={holdPiece} /> : <div className="w-full h-full opacity-0" />}
+                      </div>
                     ))
                   )}
                 </div>
               ) : (
-                <span className="text-[9px] text-slate-500 font-bold uppercase">EMPTY</span>
+                <span className="text-[10px] text-slate-500 font-bold uppercase z-10">VAULT EMPTY</span>
               )}
             </div>
           </div>
 
-          {/* Stats Deck */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-2">
+          {/* Tactical Stats Deck */}
+          <div className="p-3.5 rounded-2xl bg-portal-surface border-3 border-black shadow-neo space-y-2.5">
             <div>
-              <span className="text-[9px] font-black text-slate-400 uppercase">SCORE</span>
-              <p className="text-xl font-black text-portal-yellow tracking-tight leading-tight">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">SCORE</span>
+              <p className="text-2xl font-black text-portal-yellow tracking-tight leading-tight">
                 {score.toLocaleString()}
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-2 pt-1 border-t border-black/40">
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t-2 border-black/30">
               <div>
                 <span className="text-[9px] font-black text-slate-400 uppercase">LINES</span>
                 <p className="text-base font-black text-white">{lines}</p>
               </div>
               <div>
-                <span className="text-[9px] font-black text-slate-400 uppercase">TOP SCORE</span>
-                <p className="text-base font-black text-portal-cyan">{highScore.toLocaleString()}</p>
+                <span className="text-[9px] font-black text-slate-400 uppercase">LEVEL</span>
+                <p className="text-base font-black text-portal-lime">LVL {level}</p>
               </div>
+            </div>
+            <div className="pt-2 border-t-2 border-black/30">
+              <span className="text-[9px] font-black text-slate-400 uppercase">BEST RECORD</span>
+              <p className="text-sm font-black text-portal-cyan">{highScore.toLocaleString()}</p>
             </div>
           </div>
         </div>
 
-        {/* Center Column: Primary 10x20 Matrix Canvas Viewport */}
+        {/* Center Column: 3D Neo-Brutalist 10x20 Arcade Matrix Playfield */}
         <div className="relative flex flex-col items-center">
-          {/* Active Callout Overlay (Combo / Tetra Matrix Alert) */}
-          {calloutText && (
-            <div className="absolute -top-3 z-30 pointer-events-none animate-bounce">
-              <span className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl bg-black border-2 border-black font-black text-[10px] sm:text-xs md:text-sm uppercase tracking-wider shadow-neo ${calloutText.color}`}>
-                {calloutText.text}
-              </span>
+          {/* 16-Point Starburst Action Callout Overlay */}
+          {callout && (
+            <div className="absolute -top-10 z-40 pointer-events-none">
+              <StarburstBadge text={callout.text} subtext={callout.subtext} colorGrad={callout.grad} />
             </div>
           )}
 
-          {/* Matrix Board */}
-          <div className="relative p-1 sm:p-1.5 md:p-2 rounded-xl sm:rounded-2xl md:rounded-3xl bg-portal-surface border-2 sm:border-3 md:border-4 border-black shadow-neo-lg">
+          {/* Neo-Brutalist Outer Arcade Container (From Thumbnail: theme-frame-bg with 4px border & brutal shadow) */}
+          <div className="relative p-1.5 sm:p-2 md:p-3 rounded-2xl sm:rounded-3xl bg-[#0B081E] border-3 sm:border-4 border-[#FFE600] shadow-[5px_5px_0px_#000000]">
+            {/* Playfield Inner Stage (From Thumbnail: #04020E with 2.5px border) */}
             <div
-              className="grid gap-[1px] sm:gap-[1.5px] md:gap-[2px] bg-black/95 p-0.5 sm:p-1 rounded-lg sm:rounded-xl md:rounded-2xl border border-black/80 md:border-2 md:border-black overflow-hidden relative"
+              className="grid gap-[1px] sm:gap-[1.5px] md:gap-[2px] bg-[#04020E] p-1 rounded-xl sm:rounded-2xl border-2 border-black overflow-hidden relative shadow-inner"
               style={{
                 gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-                width: 'clamp(145px, 42vw, 270px)',
-                height: 'clamp(290px, 84vw, 540px)',
-                maxHeight: 'calc(100dvh - 275px)'
+                width: 'clamp(150px, 44vw, 280px)',
+                height: 'clamp(300px, 88vw, 560px)',
+                maxHeight: 'calc(100dvh - 270px)'
               }}
             >
-              {/* Subtle Matrix Laser Scanline FX */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-portal-cyan/5 to-transparent h-12 animate-pulse pointer-events-none" />
+              {/* Perspective Floor Cyber Grid Lines (From Thumbnail: theme-stage-grid #2A1C54) */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A1C54_1px,transparent_1px),linear-gradient(to_bottom,#2A1C54_1px,transparent_1px)] bg-[size:10%_5%] opacity-40 pointer-events-none" />
 
-              {/* Render Visible Grid Cells (All 20 Rows) */}
+              {/* Ambient Laser Scanline */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00F0FF]/10 to-transparent h-16 animate-pulse pointer-events-none" />
+
+              {/* Hard Drop Laser Speed Trail FX (From Thumbnail: linearGradient #laserTrail) */}
+              {laserTrailCol && (
+                <div
+                  className="absolute z-20 pointer-events-none transition-opacity duration-150"
+                  style={{
+                    left: `${(laserTrailCol.x / COLS) * 100}%`,
+                    width: `${(1 / COLS) * 100}%`,
+                    top: `${(Math.max(0, laserTrailCol.startY) / TOTAL_ROWS) * 100}%`,
+                    height: `${((laserTrailCol.endY - Math.max(0, laserTrailCol.startY) + 1) / TOTAL_ROWS) * 100}%`
+                  }}
+                >
+                  <div className="w-full h-full bg-gradient-to-b from-transparent via-[#00F0FF]/50 to-[#00F0FF] flex items-center justify-center">
+                    <div className="w-0.5 h-full border-l border-dashed border-white opacity-80" />
+                  </div>
+                </div>
+              )}
+
+              {/* Line Clear Horizontal Energy Laser Waves (From Thumbnail: #cyanGlow + #00F0FF wave) */}
+              {flashRows.map(rowIdx => (
+                <div
+                  key={`laser-wave-${rowIdx}`}
+                  className="absolute left-0 right-0 z-30 pointer-events-none flex items-center justify-center shadow-[0_0_20px_#00F0FF]"
+                  style={{
+                    top: `${(rowIdx / TOTAL_ROWS) * 100}%`,
+                    height: `${(1 / TOTAL_ROWS) * 100}%`
+                  }}
+                >
+                  <div className="w-full h-full bg-[#00F0FF] opacity-90 flex items-center">
+                    <div className="w-full h-1 bg-white shadow-[0_0_10px_#FFF]" />
+                  </div>
+                </div>
+              ))}
+
+              {/* 10x20 Matrix Grid Cells with 3D Extruded Polyomino Rendering */}
               {grid.map((row, actualY) => {
                 const isFlashing = flashRows.includes(actualY);
 
                 return row.map((cell, cIdx) => {
-                  // Check if this cell is occupied by the falling active piece
+                  // Active Falling Piece Cell Check
                   let isActiveCell = false;
                   let activePieceType: TetrominoType | null = null;
 
@@ -1344,7 +1531,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                     }
                   }
 
-                  // Check if this cell is occupied by the Ghost Piece
+                  // Ghost Wireframe Cell Check
                   let isGhostCell = false;
                   let ghostPieceType: TetrominoType | null = null;
                   if (!isActiveCell && currentPiece && currentShape) {
@@ -1365,86 +1552,83 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                   return (
                     <div
                       key={`cell-${actualY}-${cIdx}`}
-                      className={`relative w-full h-full rounded-[2px] sm:rounded-[3px] transition-colors duration-75 flex items-center justify-center ${
-                        isFlashing
-                          ? 'bg-white border-2 border-portal-yellow shadow-[0_0_12px_#FFF] animate-ping'
-                          : isActiveCell && activePieceType
-                          ? `${TETROMINOES[activePieceType].bgClass} border border-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.4)] scale-[0.98]`
-                          : isGhostCell && ghostPieceType
-                          ? 'border border-dashed border-white/60 bg-white/10 shadow-[0_0_6px_rgba(255,255,255,0.2)]'
-                          : cell
-                          ? `${TETROMINOES[cell.type].bgClass} border border-black/90 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.3)]`
-                          : 'bg-slate-900/40 border border-slate-800/30'
-                      }`}
+                      className="relative w-full h-full flex items-center justify-center"
                     >
-                      {/* Gloss Highlight on Filled Blocks */}
-                      {(isActiveCell || cell) && !isFlashing && (
-                        <div className="absolute top-0.5 left-0.5 right-0.5 h-[30%] bg-white/25 rounded-t-sm pointer-events-none" />
+                      {isActiveCell && activePieceType ? (
+                        <TetraBlock type={activePieceType} isFlashing={isFlashing} />
+                      ) : isGhostCell && ghostPieceType ? (
+                        <TetraBlock type={ghostPieceType} isGhost={true} />
+                      ) : cell ? (
+                        <TetraBlock type={cell.type} isFlashing={isFlashing} />
+                      ) : (
+                        <div className="w-full h-full rounded-[2px] bg-slate-950/40 border border-slate-900/30" />
                       )}
                     </div>
                   );
                 });
               })}
 
-              {/* In-Game Overlays */}
+              {/* In-Game Splash Screen Overlay */}
               {!isPlaying && !isGameOver && (
-                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-portal-yellow border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-1.5 sm:mb-3">
-                    <Zap className="w-5 h-5 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-3 sm:p-4 text-center z-30">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#FFF570] to-[#FFDE59] border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
+                    <Zap className="w-6 h-6 sm:w-8 sm:h-8 fill-black stroke-[2.5]" />
                   </div>
-                  <h2 className="text-sm sm:text-xl font-black text-white uppercase tracking-tight mb-0.5 sm:mb-1">
+                  <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight mb-1">
                     TETRA MATRIX
                   </h2>
-                  <p className="text-[10px] sm:text-xs text-slate-300 font-medium mb-2.5 sm:mb-4 max-w-[150px] sm:max-w-[200px] leading-tight">
-                    Align polyominoes, clear 4-line Tetra quads, & chain multipliers!
+                  <p className="text-[10px] sm:text-xs text-slate-300 font-medium mb-3 sm:mb-4 max-w-[160px] sm:max-w-[210px] leading-tight">
+                    Align 3D polyominoes, drop SRS quads, and chain multi-line combos!
                   </p>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[130px] sm:max-w-[180px] py-1.5 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-portal-cyan text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
+                    className="w-full max-w-[140px] sm:max-w-[190px] py-2 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7DF9FF] to-[#00D0FF] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
                   >
                     START MATRIX
                   </button>
                 </div>
               )}
 
+              {/* Pause Overlay */}
               {isPaused && !isGameOver && (
-                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-portal-pink border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
-                    <Pause className="w-5 h-5 sm:w-6 sm:h-6 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-3 sm:p-4 text-center z-30">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
+                    <Pause className="w-6 h-6 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
                   </div>
                   <h3 className="text-sm sm:text-lg font-black text-white uppercase mb-2 sm:mb-3">PAUSED</h3>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => setIsPaused(false)}
-                    className="py-1.5 sm:py-2 px-4 sm:px-5 rounded-xl bg-portal-yellow text-black font-black text-[10px] sm:text-xs uppercase border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                    className="py-1.5 sm:py-2 px-5 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                   >
                     RESUME
                   </button>
                 </div>
               )}
 
+              {/* Matrix Breach / Game Over Overlay */}
               {isGameOver && (
-                <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center z-20 animate-fadeIn">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-portal-pink border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-1 sm:mb-2">
-                    <Trophy className="w-5 h-5 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
+                <div className="absolute inset-0 bg-black/92 backdrop-blur-sm flex flex-col items-center justify-center p-2.5 sm:p-4 text-center z-30 animate-fadeIn">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-1.5 sm:mb-2">
+                    <Trophy className="w-6 h-6 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
                   </div>
                   <h2 className="text-sm sm:text-xl font-black text-portal-pink uppercase tracking-tight mb-0.5">
                     MATRIX BREACH
                   </h2>
-                  <p className="text-[9px] sm:text-[11px] text-slate-300 font-bold uppercase mb-1.5 sm:mb-2">GAME OVER</p>
-                  <div className="w-full max-w-[130px] sm:max-w-[190px] p-1.5 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm mb-2 sm:mb-3">
+                  <p className="text-[9px] sm:text-[11px] text-slate-300 font-bold uppercase mb-2">GAME OVER</p>
+                  <div className="w-full max-w-[140px] sm:max-w-[200px] p-2 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm mb-2.5 sm:mb-3">
                     <span className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">FINAL SCORE</span>
-                    <p className="text-sm sm:text-xl font-black text-portal-yellow">{score.toLocaleString()}</p>
+                    <p className="text-base sm:text-2xl font-black text-portal-yellow">{score.toLocaleString()}</p>
                     <span className="text-[9px] sm:text-[10px] font-black text-portal-cyan">{lines} Lines Cleared</span>
                   </div>
                   <button
                     type="button"
                     onFocus={e => e.currentTarget.blur()}
                     onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[130px] sm:max-w-[190px] py-1.5 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-portal-cyan text-black font-black text-[10px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                    className="w-full max-w-[140px] sm:max-w-[200px] py-2 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7DF9FF] to-[#00D0FF] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                   >
                     RETRY MATRIX
                   </button>
@@ -1454,35 +1638,32 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
         </div>
 
-        {/* Desktop Right Column (md+): NEXT Queue & Controls Helper */}
-        <div className="hidden md:flex md:w-44 flex-col gap-3">
-          {/* Next Queue Card */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm flex flex-col items-center">
+        {/* Desktop Right Column (md+): 3D NEXT 3-Piece Queue & Controls Guide */}
+        <div className="hidden md:flex md:w-44 lg:w-48 flex-col gap-3">
+          {/* Next 3-Piece Preview Queue Card */}
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo flex flex-col items-center">
             <div className="flex items-center justify-between w-full mb-1.5">
               <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-portal-cyan" /> NEXT
+                <Sparkles className="w-3.5 h-3.5 text-portal-cyan" /> NEXT QUEUE
               </span>
             </div>
-            <div className="w-full flex flex-col items-center justify-around gap-2 p-1.5 rounded-xl bg-black/60 border-2 border-black/80">
+            <div className="w-full flex flex-col items-center justify-around gap-2 p-2 rounded-xl bg-[#04020E] border-2 border-black shadow-inner">
               {nextQueue.slice(0, 3).map((nextType, qIdx) => (
                 <div
                   key={`next-${qIdx}`}
-                  className="w-14 h-14 flex items-center justify-center p-0.5"
+                  className="w-16 h-14 flex items-center justify-center p-0.5 relative"
                 >
                   <div
-                    className="grid gap-0.5"
+                    className="grid gap-1 relative z-10"
                     style={{
                       gridTemplateColumns: `repeat(${TETROMINOES[nextType].shapes[0][0].length}, minmax(0, 1fr))`
                     }}
                   >
                     {TETROMINOES[nextType].shapes[0].map((row, rIdx) =>
                       row.map((val, cIdx) => (
-                        <div
-                          key={`next-q-${qIdx}-${rIdx}-${cIdx}`}
-                          className={`w-3 h-3 rounded-[2px] border ${
-                            val ? `${TETROMINOES[nextType].bgClass} border-black` : 'opacity-0'
-                          }`}
-                        />
+                        <div key={`next-q-${qIdx}-${rIdx}-${cIdx}`} className="w-3.5 h-3.5 flex items-center justify-center">
+                          {val ? <TetraBlock type={nextType} /> : <div className="w-full h-full opacity-0" />}
+                        </div>
                       ))
                     )}
                   </div>
@@ -1491,10 +1672,10 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             </div>
           </div>
 
-          {/* Controls Mini Cheat Sheet for Desktop */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm space-y-1.5 text-[10px] font-bold">
+          {/* Desktop Controls Cheat Sheet */}
+          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo space-y-1.5 text-[10px] font-bold">
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block mb-1">
-              CONTROLS
+              CONTROLS MAP
             </span>
             <div className="flex items-center justify-between text-slate-300">
               <span>MOVE</span>
@@ -1510,7 +1691,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             </div>
             <div className="flex items-center justify-between text-slate-300">
               <span>HARD DROP</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-card border border-black rounded text-[9px] font-mono font-black text-white">SPACE</kbd>
+              <kbd className="px-1.5 py-0.5 bg-portal-yellow text-black border border-black rounded text-[9px] font-mono font-black">SPACE</kbd>
             </div>
             <div className="flex items-center justify-between text-slate-300">
               <span>HOLD</span>
@@ -1519,7 +1700,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           </div>
         </div>
 
-        {/* Mobile Right Wing (< md): Mini Next Preview + Lines */}
+        {/* Mobile Right Wing (< md): Mini Next Preview + Lines Cleared */}
         <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
           {/* Mini Next Preview Card */}
           <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex flex-col items-center">
@@ -1528,22 +1709,20 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                 <Sparkles className="w-2.5 h-2.5" /> NEXT
               </span>
             </div>
-            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-black/80 border border-black/80 flex items-center justify-center mt-1 overflow-hidden">
+            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-[#04020E] border-2 border-black flex items-center justify-center mt-1 overflow-hidden relative">
+              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:6px_6px] opacity-40 pointer-events-none" />
               {nextQueue[0] ? (
                 <div
-                  className="grid gap-0.5 p-0.5"
+                  className="grid gap-0.5 p-0.5 relative z-10"
                   style={{
                     gridTemplateColumns: `repeat(${TETROMINOES[nextQueue[0]].shapes[0][0].length}, minmax(0, 1fr))`
                   }}
                 >
                   {TETROMINOES[nextQueue[0]].shapes[0].map((row, rIdx) =>
                     row.map((val, cIdx) => (
-                      <div
-                        key={`m-next-${rIdx}-${cIdx}`}
-                        className={`w-2 h-2 min-[380px]:w-2.5 min-[380px]:h-2.5 rounded-[2px] border ${
-                          val ? `${TETROMINOES[nextQueue[0]].bgClass} border-black` : 'opacity-0'
-                        }`}
-                      />
+                      <div key={`m-next-${rIdx}-${cIdx}`} className="w-2.5 h-2.5 min-[380px]:w-3 min-[380px]:h-3 flex items-center justify-center">
+                        {val ? <TetraBlock type={nextQueue[0]} /> : <div className="w-full h-full opacity-0" />}
+                      </div>
                     ))
                   )}
                 </div>
@@ -1663,7 +1842,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                 e.preventDefault();
                 hardDropRef.current();
               }}
-              className="h-7 sm:h-8 rounded-lg bg-portal-yellow active:bg-white text-black font-black text-[10px] sm:text-xs border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase tracking-wider touch-none"
+              className="h-7 sm:h-8 rounded-lg bg-gradient-to-r from-[#FFF570] to-[#FFDE59] active:bg-white text-black font-black text-[10px] sm:text-xs border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase tracking-wider touch-none"
             >
               <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black stroke-[2.5]" />
               <span>HARD DROP SLAM</span>

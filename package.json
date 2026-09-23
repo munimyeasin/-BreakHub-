@@ -1,5 +1,5 @@
 {
-  "name": "stressbuster",
+  "name": "break-hub",
   "version": "1.0.0",
   "description": "Retro Arcade Neo-Brutalist HTML5 mobile-first mini-game portal & global leaderboards. Built with Next.js 16, TypeScript, Tailwind CSS, Canvas 2D & Web Audio API.",
   "private": true,

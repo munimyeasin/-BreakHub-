@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://stressbuster.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://breakhub.vercel.app';
   const currentDate = new Date();
 
   // Core Static Pages

@@ -104,21 +104,21 @@ const engineeringDomains = [
   },
   {
     title: 'UI/UX & Design Architecture',
-    lead: 'Tahida',
+    lead: 'Munim Yeasin',
     desc: 'High-contrast Neo-Brutalist design tokens, 4x3 responsive mobile game grids, slide bar navigation, and multi-theme engine.',
     color: 'border-portal-pink text-portal-pink',
     badgeBg: 'bg-portal-pink text-black',
   },
   {
     title: 'Game Logic & Deterministic QA',
-    lead: 'Marzia',
+    lead: 'Munim Yeasin',
     desc: 'Mathematical puzzle state machines, Minimax AI game algorithms, fleet grid coordinate logic, and collision verification.',
     color: 'border-portal-cyan text-portal-cyan',
     badgeBg: 'bg-portal-cyan text-black',
   },
   {
     title: 'HTML5 Canvas & Particle Physics',
-    lead: 'Rahul',
+    lead: 'Munim Yeasin',
     desc: 'High-performance 60 FPS requestAnimationFrame rendering, vector normal rebounds, parallax starfields, and mobile touch gamepads.',
     color: 'border-portal-lime text-portal-lime',
     badgeBg: 'bg-portal-lime text-black',
@@ -176,7 +176,7 @@ export default function AboutSection({
               <span>About Project</span>
             </button>
 
-            {/* About Devs Tab */}
+            {/* About Developer Tab */}
             <button
               onClick={() => handleSwitchView('devs')}
               className={`flex items-center gap-2 px-3.5 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all border-2 border-black ${
@@ -186,7 +186,7 @@ export default function AboutSection({
               }`}
             >
               <Users className="w-4 h-4 stroke-[2.5]" />
-              <span>About Developers</span>
+              <span>About Developer</span>
               <span className="text-[9px] px-1.5 py-0.2 rounded bg-portal-pink text-black border border-black shadow-neo-sm font-black hidden sm:inline-block">
                 SPOTLIGHT
               </span>
@@ -207,7 +207,7 @@ export default function AboutSection({
       </div>
 
       {/* ========================================================= */}
-      {/* VIEW A: ABOUT DEVELOPERS (SPOTLIGHT & CO-CREATORS)        */}
+      {/* VIEW A: ABOUT DEVELOPER (SPOTLIGHT & ARCHITECT)           */}
       {/* ========================================================= */}
       {currentView === 'devs' && (
         <div className="space-y-8 animate-fadeIn">
@@ -218,15 +218,15 @@ export default function AboutSection({
             <div className="relative z-10 max-w-3xl space-y-3 pt-1">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-portal-purple border-2 border-black text-black text-xs font-black tracking-wider uppercase shadow-neo-sm">
                 <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>ENGINEERING TEAM & CO-CREATORS</span>
+                <span>CREATOR & LEAD ARCHITECT</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight uppercase leading-tight">
-                Meet The <span className="text-portal-yellow">Developers</span>
+                Meet The <span className="text-portal-yellow">Developer</span>
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-bold leading-relaxed">
-                Stress Buster is collaboratively engineered by our 4-member team. Explore the interactive Developer Spotlight below to view dossiers, core modules engineered, tech stacks, and domain specializations.
+                Break Hub is architected and engineered from the ground up by Munim Yeasin. Explore the interactive Developer Spotlight below to view the architectural dossier, core systems engineered, tech stack, and full-stack modules.
               </p>
             </div>
           </section>
@@ -236,20 +236,20 @@ export default function AboutSection({
             <DevSpotlightBanner onExploreGames={onExploreGames} />
           </section>
 
-          {/* Collaborative Engineering Pillars */}
+          {/* Engineering Pillars & Architecture */}
           <section className="space-y-4">
             <div className="border-b-3 border-black pb-3 flex items-center justify-between flex-wrap gap-2">
               <div>
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase flex items-center gap-2">
                   <Code2 className="w-5 h-5 text-portal-cyan stroke-[2.5]" />
-                  <span>Engineering Pillars & Domain Specializations</span>
+                  <span>Engineering Architecture & Core Modules</span>
                 </h2>
                 <p className="text-xs text-slate-700 dark:text-slate-300 font-bold mt-0.5">
-                  How our 4 co-creators architected the Stress Buster platform
+                  How Munim Yeasin architected and engineered the Break Hub platform
                 </p>
               </div>
               <span className="px-2.5 py-1 rounded-lg bg-portal-cyan text-black text-[10px] font-black uppercase border-2 border-black shadow-neo-sm">
-                4 CORE PILLARS
+                CORE ARCHITECTURE
               </span>
             </div>
 
@@ -282,10 +282,10 @@ export default function AboutSection({
           <footer className="rounded-2xl bg-portal-surface border-3 border-black p-5 sm:p-6 text-center space-y-2 shadow-neo-sm">
             <div className="flex items-center justify-center gap-2 text-portal-yellow">
               <Users className="w-5 h-5 stroke-[2.5]" />
-              <span className="font-black text-sm tracking-wider uppercase">Break Hub Engineering Team</span>
+              <span className="font-black text-sm tracking-wider uppercase">Break Hub Lead Architect</span>
             </div>
             <p className="text-xs text-slate-700 dark:text-slate-300 font-bold max-w-xl mx-auto leading-relaxed">
-              Munim Yeasin, Tahida, Marzia, and Rahul • Equal Co-Creators
+              Munim Yeasin • Creator & Full-Stack Architect
             </p>
           </footer>
         </div>
@@ -311,7 +311,7 @@ export default function AboutSection({
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-bold leading-relaxed">
-                Welcome to <strong className="text-slate-900 dark:text-white font-black">Break Hub</strong>, an interactive web gaming platform collaboratively designed and developed as an internship project. The hub features 18 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
+                Welcome to <strong className="text-slate-900 dark:text-white font-black">Break Hub</strong>, an interactive web gaming platform designed and engineered by Munim Yeasin. The hub features 18 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">

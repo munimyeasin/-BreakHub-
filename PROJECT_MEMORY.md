@@ -1,27 +1,20 @@
-# Stress Buster Portal — Persistent Context & Memory
+# Break Hub Portal — Persistent Context & Memory
 
-- **Live Production URL**: `https://stress-buster-delta.vercel.app/`
+- **Live Production URL**: `https://breakhub.vercel.app/`
 
 > **Note**: This is the workspace mirror of the AI persistent memory. The active system store is located at:  
 > `C:\Users\munim\.claude-omniroute\projects\C--Users-munim-Desktop----InterShip---Project-\memory\`
 
 ---
 
-## 👥 Equal Co-Creators & Developer Spotlight
-- **Developer 3D Stacked Card Deck**: `components/about/DevSpotlightBanner.tsx` interactive 3D physical card deck embedded in `components/about/AboutSection.tsx`:
-  - **Top Card Priority**: Munim Yeasin (Full-Stack & System Architect) is positioned as the primary top card on initial load, followed by Tahida, Marzia, and Rahul in the stack.
-  - **Dynamic Card Stack Box Height Tracking**: Dynamically tracks active card height using `ResizeObserver` and window resize listeners so the 3D card stack container automatically expands or contracts to fit card content without clipping or empty gaps across all viewport dimensions.
+## 👤 Creator & Developer Spotlight
+- **Developer Spotlight Dossier**: `components/about/DevSpotlightBanner.tsx` interactive developer spotlight dossier embedded in `components/about/AboutSection.tsx`:
+  - **Featured Creator & Architect**: Munim Yeasin (Creator & Lead Full-Stack System Architect).
+  - **Dynamic Card Dimensions**: Dynamically handles responsive layout and card aesthetics across all viewport dimensions.
   - **Mobile Zero-Scroll Compact Layout**: Streamlined mobile card hierarchy with horizontal avatar & identity header, compact 2x2 key contribution matrix, inline domain bio strip, and space-efficient bottom CTA dock, enabling mobile visitors to view and interact with the complete developer card without page scrolling.
-  - **Physical Stack Aesthetics & Immersion**: Dynamic z-index layering (`z-30`, `z-20`, `z-10`, `z-5`), splayed lateral and rotational offsets (`translate-x-0 translate-y-0 rotate-0`, `translate-x-2 sm:translate-x-6 rotate-[1.8deg]`, `-translate-x-2 sm:-translate-x-6 -rotate-[1.8deg]`, `translate-y-6 sm:translate-y-12 rotate-[0.6deg]`), 2px–4px black borders, and hard Neo-Brutalist drop shadows (`shadow-neo-lg`).
-  - **Protruding Physical Index Tabs & Direct Peeking**: Staggered protruding index tabs along the top of background cards (`-top-7 sm:-top-8.5`) display mini-avatars, developer names, domain badges, and interactive "Draw" cues so background cards visibly peek out above and around the active card for maximum physical immersion. Includes hover spring animations and a dedicated "Shuffle Stack" CTA.
-  - **7s Auto-Rotation & Timer**: Smooth auto-cycling across the stack with pause on hover/touch.
-  - **Interactive Quick Switcher**: Top tab selector for 1-click developer switching with active neon highlight indicators.
-  - **Mobile Touch-Swipe Gestures**: Swipe left/right gesture recognition on mobile screens with card cycle animations.
-  - **Rich Engineering Dossiers**: High-contrast avatar decks, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, dedicated portfolio links (`/portfolio.html`), and direct Instagram social links (`https://instagram.com/__yeasin__0` / `@__yeasin__0`).
-- **Munim Yeasin**: Full-Stack & System Architect — Procedural zero-asset Web Audio synthesis, gamification economy (Quests/XP/Trophies), Next.js API routes, and database persistence.
-- **Tahida**: UI/UX & Frontend Engineer — Neo-Brutalist design system, responsive mobile layout, dark/light theme engine, micro-interactions & badge systems.
-- **Marzia**: Game Logic & QA Engineer — Deterministic game rules, mathematical puzzle state machines, minimax AI, and collision QA verification.
-- **Rahul**: Systems & Gameplay Developer — High-performance 60 FPS HTML5 Canvas rendering loops, particle physics systems, and mobile virtual touch controls.
+  - **Physical Neo-Brutalist Aesthetics**: Bold 2px–4px black borders, accent gradient lines, and hard Neo-Brutalist drop shadows (`shadow-neo-lg`).
+  - **Rich Engineering Dossier**: High-contrast avatar deck, domain badges, bio quotes, core modules engineered, tech stack chips, mini metric pills, dedicated portfolio link (`/portfolio.html`), and direct Instagram social links (`https://instagram.com/__yeasin__0` / `@__yeasin__0`).
+- **Munim Yeasin**: Creator & Full-Stack System Architect — Procedural zero-asset Web Audio synthesis, 18+ HTML5 Canvas game engines, gamification economy (Quests/XP/Trophies), Next.js 16 API routes, Neo-Brutalist UI/UX design tokens, and database persistence.
 
 ---
 

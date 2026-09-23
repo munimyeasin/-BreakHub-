@@ -1,10 +1,10 @@
-# ⚡ StressBuster — Retro Neo-Brutalist HTML5 Mini-Game Portal & Competitive Leaderboards
+# ⚡ Break Hub — Retro Neo-Brutalist HTML5 Mini-Game Portal & Competitive Leaderboards
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-FFE600?style=for-the-badge&logoColor=black)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-00F0FF?style=for-the-badge&logo=vercel&logoColor=black)](https://stress-buster-delta.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-00F0FF?style=for-the-badge&logo=vercel&logoColor=black)](https://breakhub.vercel.app/)
 
 A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next.js App Router, TypeScript, and a bespoke **Dark Retro Neo-Brutalism** design language. Featuring 15+ custom-engineered 2D Canvas and interactive mini-games, real-time procedural Web Audio sound synthesis, global and per-game competitive leaderboards, user rating systems, and instant zero-cache browser favicon synchronization.
 
@@ -155,18 +155,15 @@ npm run start
 
 ---
 
-## 👥 About the Project & Team
+## 👤 About the Creator & Architect
 
-**Stress Buster** was conceptualized, designed, and engineered as an advanced collaborative internship project. The initiative was built to demonstrate full-stack software architecture, responsive 2D canvas physics, procedural Web Audio generation, and high-performance Neo-Brutalism web design.
+**Break Hub** was conceptualized, designed, and engineered from the ground up by **Munim Yeasin** as an advanced full-stack arcade gaming platform. The initiative demonstrates full-stack software architecture, responsive 2D canvas physics, procedural Web Audio generation, and high-performance Neo-Brutalism web design.
 
-### 🌟 Project Team & Roles
+### 🌟 Lead Developer & Architect
 
-| Engineer | Primary Role | Key Focus Areas |
+| Engineer | Role | Key Focus Areas |
 | :--- | :--- | :--- |
-| **Munim Yeasin** | **Full-Stack & System Architect** | Next.js App Router architecture, procedural Web Audio synthesizer, database persistence, multi-format favicon suite & deployment pipeline. |
-| **Tahida** | **UI/UX & Frontend Engineer** | Dark Retro Neo-Brutalism visual design system, mobile fluid grids, modal dialogs, and typography tokens. |
-| **Marzia** | **Game Logic & QA Engineer** | Canvas collision mathematics, scoring algorithms, edge-case debugging, and cross-browser testing. |
-| **Rahul** | **Systems & Gameplay Developer** | Game loop optimization (60–144 FPS), touch/joystick virtual gamepads, particle physics, and leaderboard integration. |
+| **Munim Yeasin** | **Creator & Full-Stack System Architect** | Next.js 16 App Router architecture, procedural Web Audio synthesizer, 18+ HTML5 Canvas game engines, database persistence, Neo-Brutalist design system, and gamification economy. |
 
 ---
 
@@ -174,4 +171,4 @@ npm run start
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-Developed with ❤️ by **[Munim Yeasin](https://stress-buster-delta.vercel.app/portfolio.html)** & the Stress Buster Engineering Team.
+Developed with ❤️ by **[Munim Yeasin](https://breakhub.vercel.app/portfolio.html)**.
