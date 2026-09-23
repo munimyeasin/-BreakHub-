@@ -160,12 +160,13 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
     genreTag: 'ARCADE // VERTICAL SHMUP',
     objective: 'Pilot the tactical starfighter against invading drone swarms, laser gunships, and black hole bosses.',
     scoring: 'Wave clearance + boss takedowns + weapon upgrade pickups + zero-damage bonus multipliers.',
-    proTip: 'Collect Spread Laser and Shield pickups early. Save your Screen-Clearing EMP wave for dense boss projectile waves.',
+    proTip: 'Collect Spread Laser and Shield pickups early. Hold [Shift] or press BOOST to outrun enemy bullet hell salvos!',
     controls: [
-      { keys: ['A', 'D', '←', '→'], label: 'BANK / MOVE', desc: 'Lateral flight maneuvering' },
-      { keys: ['Space', 'Left Click'], label: 'PLASMA CANNON', desc: 'Fire primary laser cannons' },
-      { keys: ['Shift'], label: 'EMP WAVE', desc: 'Detonate screen-clearing pulse' },
-      { keys: ['R'], label: 'RESPAWN', desc: 'Launch new starfighter' }
+      { keys: ['WASD', '↑ ↓ ← →'], label: '2D SPACE FLIGHT', desc: 'Full 8-way directional flight maneuvering' },
+      { keys: ['Left Click', 'Space'], label: 'FIRE PLASMA', desc: 'Aim & manual plasma salvo burst' },
+      { keys: ['Shift'], label: 'AFTERBURNER BOOST', desc: 'Engage 1.65x speed boost + jet thruster flames' },
+      { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen battle mode' },
+      { keys: ['R'], label: 'REBOOT MISSION', desc: 'Launch / restart starfighter flight' }
     ]
   },
   // 7. Quantum XO

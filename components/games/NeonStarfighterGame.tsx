@@ -1,7 +1,23 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Rocket, Zap, Shield, Sparkles, AlertTriangle, Tv, AlertCircle } from 'lucide-react';
+import {
+  Play,
+  RotateCcw,
+  Volume2,
+  VolumeX,
+  Rocket,
+  Zap,
+  Shield,
+  Sparkles,
+  AlertTriangle,
+  Tv,
+  AlertCircle,
+  Flame,
+  Crosshair,
+  Maximize2,
+  Minimize2,
+} from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface NeonStarfighterGameProps {
@@ -204,6 +220,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const [activePowerup, setActivePowerup] = useState<string | null>(null);
   const [adNotice, setAdNotice] = useState<string | null>(null);
   const [hasRevived, setHasRevived] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isBoostActive, setIsBoostActive] = useState(false);
+
+  // Reference to game container for Web Fullscreen API
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Pure refs for 60-144+ FPS game loop (zero React reconciliation lag)
   const difficultyRef = useRef<StarfighterDifficulty>('ace');
@@ -217,6 +238,32 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const audioCtxRef = useRef<AudioContext | null>(null);
   const adTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const warpGridOffsetRef = useRef(0);
+
+  // Synchronize fullscreen state across standard and vendor prefixes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const doc = document as any;
+      const isFull = !!(
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.mozFullScreenElement ||
+        doc.msFullscreenElement
+      );
+      setIsFullscreen(isFull);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -320,11 +367,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     right: boolean;
     up: boolean;
     down: boolean;
+    boost: boolean;
   }>({
     left: false,
     right: false,
     up: false,
     down: false,
+    boost: false,
   });
 
   const lastShotTimeRef = useRef(0);
@@ -655,6 +704,86 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const handleWatchAdForReviveRef = useRef<() => void>(handleWatchAdForRevive);
   handleWatchAdForReviveRef.current = handleWatchAdForRevive;
 
+  // Fullscreen API toggle with standard & vendor prefix support
+  const toggleFullscreen = useCallback(() => {
+    if (typeof document === 'undefined') return;
+    const container = containerRef.current || canvasRef.current;
+    if (!container) return;
+
+    const doc = document as any;
+    const isFull = !!(
+      doc.fullscreenElement ||
+      doc.webkitFullscreenElement ||
+      doc.mozFullScreenElement ||
+      doc.msFullscreenElement
+    );
+
+    if (!isFull) {
+      const el = container as any;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {});
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else if (el.mozRequestFullScreen) {
+        el.mozRequestFullScreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      }
+    } else {
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen().catch(() => {});
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      } else if (doc.mozCancelFullScreen) {
+        doc.mozCancelFullScreen();
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen();
+      }
+    }
+  }, []);
+
+  // Manual Trigger for Left-Click / Fire Button
+  const triggerManualSalvo = useCallback(() => {
+    if (!isPlayingRef.current || isDeadRef.current) {
+      startGameRef.current();
+      return;
+    }
+    const now = performance.now();
+    const p = playerRef.current;
+    const isHyp = p.hyperTimer > 0;
+    lastShotTimeRef.current = now;
+
+    if (p.tripleShotTimer > 0) {
+      bulletsRef.current.push(
+        { x: p.x + 4, y: p.y - 2, vx: -3.5, vy: -15, color: '#39FF14' },
+        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -16, color: '#00F0FF' },
+        { x: p.x + p.width - 8, y: p.y - 2, vx: 3.5, vy: -15, color: '#39FF14' }
+      );
+      playSfxRef.current('spread');
+    } else {
+      bulletsRef.current.push(
+        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -17 : -15, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -17 : -15, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+      );
+      playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
+    }
+
+    // Muzzle sparks
+    for (let k = 0; k < 4; k++) {
+      particlesRef.current.push({
+        x: p.x + (k % 2 === 0 ? 4 : p.width - 4),
+        y: p.y,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -Math.random() * 4 - 2,
+        alpha: 1,
+        color: '#00F0FF',
+        size: 2,
+        life: 0,
+        maxLife: 10,
+      });
+    }
+  }, []);
+
   // Keyboard Event Handlers (Full 2D Flight, Combat Shortcuts & UI Controls)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -680,16 +809,29 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         keysRef.current.down = true;
       }
 
-      // Space / Enter -> Start or Restart Game
+      // Shift -> Boost / Afterburners
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.key === 'Shift') {
+        keysRef.current.boost = true;
+        setIsBoostActive(true);
+      }
+
+      // Space / Enter -> Start, Restart, or Fire Salvo
       if (e.code === 'Space' || e.code === 'Enter' || e.key === ' ' || e.key === 'Enter') {
         if (!isPlayingRef.current || isDeadRef.current) {
           startGameRef.current();
+        } else {
+          triggerManualSalvo();
         }
       }
 
       // 'R' -> Quick Restart Mission
       if (e.code === 'KeyR' || e.key === 'r' || e.key === 'R') {
         startGameRef.current();
+      }
+
+      // 'F' -> Toggle Fullscreen
+      if (e.code === 'KeyF' || e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
       }
 
       // 'M' -> Toggle Sound Mute
@@ -718,6 +860,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       if (['ArrowDown', 'KeyS', 'Numpad2'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
         keysRef.current.down = false;
       }
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.key === 'Shift') {
+        keysRef.current.boost = false;
+        setIsBoostActive(false);
+      }
     };
 
     const handleBlur = () => {
@@ -725,6 +871,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       keysRef.current.right = false;
       keysRef.current.up = false;
       keysRef.current.down = false;
+      keysRef.current.boost = false;
+      setIsBoostActive(false);
     };
 
     window.addEventListener('keydown', handleKeyDown, { passive: false });
@@ -735,11 +883,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('blur', handleBlur);
     };
-  }, [setSoundEnabled]);
+  }, [setSoundEnabled, toggleFullscreen, triggerManualSalvo]);
 
-  // Relative Delta Pointer Handling (No Teleportation, Touch & Drag anywhere)
+  // Relative Delta Pointer Handling (No Teleportation, Touch & Drag anywhere, Click to shoot)
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!isPlaying || isDead) return;
+    if (!isPlaying || isDead) {
+      startGame();
+      return;
+    }
     const target = e.currentTarget;
     try {
       target.setPointerCapture(e.pointerId);
@@ -753,6 +904,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     pointerRef.current.active = true;
     pointerRef.current.lastX = scaledX;
     pointerRef.current.pendingDeltaX = 0;
+
+    // Instant plasma burst on tap/click
+    triggerManualSalvo();
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -1030,9 +1184,25 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       });
 
-      const currentSpeed = (p.hyperTimer > 0 ? p.speed * 1.35 : p.speed) * timeScale;
+      const boostMultiplier = keysRef.current.boost ? 1.65 : 1.0;
+      const currentSpeed = (p.hyperTimer > 0 ? p.speed * 1.35 : p.speed) * boostMultiplier * timeScale;
       const hasKeyInput = keysRef.current.left || keysRef.current.right || keysRef.current.up || keysRef.current.down;
       let targetRoll = 0;
+
+      // Extra afterburner particles during active boost
+      if (keysRef.current.boost && Math.random() < 0.6 && particlesRef.current.length < 50) {
+        particlesRef.current.push({
+          x: p.x + p.width / 2 + (Math.random() - 0.5) * 12,
+          y: p.y + p.height + 4,
+          vx: (Math.random() - 0.5) * 3,
+          vy: Math.random() * 4 + 5,
+          alpha: 1,
+          color: Math.random() > 0.4 ? '#FFE600' : '#FF0055',
+          size: Math.random() * 2 + 2,
+          life: 0,
+          maxLife: 12,
+        });
+      }
 
       const minY = curH * 0.25;
       const maxY = curH - 55;
@@ -2188,7 +2358,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   }, [isPlaying, isDead]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
+    <div ref={containerRef} className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
       {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
       <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
         <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
@@ -2343,6 +2513,89 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             )}
           </div>
         )}
+      </div>
+
+      {/* Interactive Action Control Bar */}
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mt-2 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
+        <button
+          type="button"
+          onPointerDown={(e) => {
+            e.preventDefault();
+            keysRef.current.boost = true;
+            setIsBoostActive(true);
+          }}
+          onPointerUp={(e) => {
+            e.preventDefault();
+            keysRef.current.boost = false;
+            setIsBoostActive(false);
+          }}
+          onPointerLeave={() => {
+            keysRef.current.boost = false;
+            setIsBoostActive(false);
+          }}
+          onPointerCancel={() => {
+            keysRef.current.boost = false;
+            setIsBoostActive(false);
+          }}
+          className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo transition-all select-none touch-none ${
+            isBoostActive
+              ? 'bg-portal-yellow text-black translate-x-0.5 translate-y-0.5 shadow-none ring-2 ring-yellow-400'
+              : 'bg-portal-surface hover:bg-portal-yellow text-slate-200 hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
+          }`}
+          title="Hold Shift or press this button to engage afterburner speed boost (1.65x Speed)"
+        >
+          <Flame className={`w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5] ${isBoostActive ? 'fill-black animate-bounce text-black' : 'text-portal-yellow'}`} />
+          <span>[SHIFT] BOOST</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            if (!isPlaying || isDead) {
+              startGame();
+            } else {
+              triggerManualSalvo();
+            }
+          }}
+          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-portal-surface hover:bg-portal-cyan text-slate-200 hover:text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all select-none"
+          title="Left click anywhere on canvas or press this button to fire plasma cannon salvo"
+        >
+          <Crosshair className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-cyan hover:text-black stroke-[2.5]" />
+          <span>[CLICK] FIRE</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={startGame}
+          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-portal-surface hover:bg-portal-pink text-slate-200 hover:text-white font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all select-none"
+          title="Press R or click this button to reboot mission flight"
+        >
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-pink hover:text-white stroke-[2.5]" />
+          <span>[R] RESTART</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo transition-all select-none ${
+            isFullscreen
+              ? 'bg-portal-purple text-white translate-x-0.5 translate-y-0.5 shadow-none ring-2 ring-purple-400'
+              : 'bg-portal-surface hover:bg-portal-purple text-slate-200 hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
+          }`}
+          title="Press F or click this button to toggle Fullscreen mode"
+        >
+          {isFullscreen ? (
+            <>
+              <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+              <span>[F] EXIT FULL</span>
+            </>
+          ) : (
+            <>
+              <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+              <span>[F] FULLSCREEN</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );
