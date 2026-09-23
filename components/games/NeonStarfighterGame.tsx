@@ -318,9 +318,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const keysRef = useRef<{
     left: boolean;
     right: boolean;
+    up: boolean;
+    down: boolean;
   }>({
     left: false,
     right: false,
+    up: false,
+    down: false,
   });
 
   const lastShotTimeRef = useRef(0);
@@ -642,25 +646,96 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     addActionBadge(curW / 2, curH * 0.45, 'MISSION LAUNCH!');
   };
 
-  // Keyboard Event Handlers (Horizontal Movement & Banking)
+  const isPlayingRef = useRef(isPlaying);
+  isPlayingRef.current = isPlaying;
+  const isDeadRef = useRef(isDead);
+  isDeadRef.current = isDead;
+  const startGameRef = useRef<() => void>(startGame);
+  startGameRef.current = startGame;
+  const handleWatchAdForReviveRef = useRef<() => void>(handleWatchAdForRevive);
+  handleWatchAdForReviveRef.current = handleWatchAdForRevive;
+
+  // Keyboard Event Handlers (Full 2D Flight, Combat Shortcuts & UI Controls)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['ArrowLeft', 'a', 'A'].includes(e.key)) keysRef.current.left = true;
-      if (['ArrowRight', 'd', 'D'].includes(e.key)) keysRef.current.right = true;
+      // Prevent browser default scrolling for arrow keys, space, etc.
+      if (
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', ' '].includes(e.key) ||
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)
+      ) {
+        e.preventDefault();
+      }
+
+      // Movement input mapping (WASD, Arrow Keys, Numpad 8/4/6/2)
+      if (['ArrowLeft', 'KeyA', 'Numpad4'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) {
+        keysRef.current.left = true;
+      }
+      if (['ArrowRight', 'KeyD', 'Numpad6'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) {
+        keysRef.current.right = true;
+      }
+      if (['ArrowUp', 'KeyW', 'Numpad8'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) {
+        keysRef.current.up = true;
+      }
+      if (['ArrowDown', 'KeyS', 'Numpad2'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
+        keysRef.current.down = true;
+      }
+
+      // Space / Enter -> Start or Restart Game
+      if (e.code === 'Space' || e.code === 'Enter' || e.key === ' ' || e.key === 'Enter') {
+        if (!isPlayingRef.current || isDeadRef.current) {
+          startGameRef.current();
+        }
+      }
+
+      // 'R' -> Quick Restart Mission
+      if (e.code === 'KeyR' || e.key === 'r' || e.key === 'R') {
+        startGameRef.current();
+      }
+
+      // 'M' -> Toggle Sound Mute
+      if (e.code === 'KeyM' || e.key === 'm' || e.key === 'M') {
+        setSoundEnabled((prev) => !prev);
+      }
+
+      // 'V' -> Watch Ad / Trigger Revive on Game Over
+      if (e.code === 'KeyV' || e.key === 'v' || e.key === 'V') {
+        if (isDeadRef.current) {
+          handleWatchAdForReviveRef.current();
+        }
+      }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (['ArrowLeft', 'a', 'A'].includes(e.key)) keysRef.current.left = false;
-      if (['ArrowRight', 'd', 'D'].includes(e.key)) keysRef.current.right = false;
+      if (['ArrowLeft', 'KeyA', 'Numpad4'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) {
+        keysRef.current.left = false;
+      }
+      if (['ArrowRight', 'KeyD', 'Numpad6'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) {
+        keysRef.current.right = false;
+      }
+      if (['ArrowUp', 'KeyW', 'Numpad8'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) {
+        keysRef.current.up = false;
+      }
+      if (['ArrowDown', 'KeyS', 'Numpad2'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
+        keysRef.current.down = false;
+      }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    const handleBlur = () => {
+      keysRef.current.left = false;
+      keysRef.current.right = false;
+      keysRef.current.up = false;
+      keysRef.current.down = false;
+    };
+
+    window.addEventListener('keydown', handleKeyDown, { passive: false });
     window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('blur', handleBlur);
     };
-  }, []);
+  }, [setSoundEnabled]);
 
   // Relative Delta Pointer Handling (No Teleportation, Touch & Drag anywhere)
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -918,11 +993,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // Player Movement: Horizontal Only (A/D, Left/Right Arrows, or Touch/Mouse Drag)
-      p.y = playerBaseY;
-
-      // Calculate gravitational pull from active black holes
+      // Player Movement: Full 2D Combat Maneuvering (WASD / Arrow Keys / Numpad / Touch & Mouse Drag)
+      // Calculate gravitational pull from active black holes in both X & Y axes
       let totalGravityX = 0;
+      let totalGravityY = 0;
       let strongestPullRatio = 0;
 
       blackHolesRef.current.forEach((bh) => {
@@ -937,6 +1011,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           }
           const force = Math.pow(pullRatio, 1.25) * 11.5 * timeScale;
           totalGravityX += (dx / dist) * force;
+          totalGravityY += (dy / dist) * force;
 
           // Gravitational accretion sparks
           if (Math.random() < 0.35 && particlesRef.current.length < 45) {
@@ -956,17 +1031,26 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       });
 
       const currentSpeed = (p.hyperTimer > 0 ? p.speed * 1.35 : p.speed) * timeScale;
-      const hasKeyInput = keysRef.current.left || keysRef.current.right;
+      const hasKeyInput = keysRef.current.left || keysRef.current.right || keysRef.current.up || keysRef.current.down;
       let targetRoll = 0;
+
+      const minY = curH * 0.25;
+      const maxY = curH - 55;
 
       if (hasKeyInput) {
         if (keysRef.current.left) {
           p.x = Math.max(0, p.x - currentSpeed);
-          targetRoll = -0.22;
+          targetRoll = -0.25;
         }
         if (keysRef.current.right) {
           p.x = Math.min(curW - p.width, p.x + currentSpeed);
-          targetRoll = 0.22;
+          targetRoll = 0.25;
+        }
+        if (keysRef.current.up) {
+          p.y = Math.max(minY, p.y - currentSpeed * 0.9);
+        }
+        if (keysRef.current.down) {
+          p.y = Math.min(maxY, p.y + currentSpeed * 0.9);
         }
         pointerRef.current.active = false;
         pointerRef.current.pendingDeltaX = 0;
@@ -988,7 +1072,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       if (totalGravityX !== 0) {
         p.x += totalGravityX;
       }
+      if (totalGravityY !== 0) {
+        p.y += totalGravityY;
+      }
       p.x = Math.max(0, Math.min(curW - p.width, p.x));
+      p.y = Math.max(minY, Math.min(maxY, p.y));
 
       // DUAL WINGTIP PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
       const fireIntervalMs = p.hyperTimer > 0 ? 80 : p.tripleShotTimer > 0 ? 110 : 130;
@@ -2193,17 +2281,17 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                       ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
                       : 'bg-portal-yellow hover:bg-yellow-300 text-black hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
                   }`}
-                  title={hasRevived ? 'Revive already used for this run' : 'Watch video transmission for emergency ship revive'}
+                  title={hasRevived ? 'Revive already used for this run' : 'Watch video transmission for emergency ship revive (Key: V)'}
                 >
                   <Tv className="w-4 h-4 stroke-[2.5]" />
-                  <span>{hasRevived ? 'REVIVE ALREADY USED (1/RUN)' : 'WATCH AD TO REVIVE'}</span>
+                  <span>{hasRevived ? 'REVIVE USED (1/RUN)' : 'WATCH AD TO REVIVE [V]'}</span>
                 </button>
 
                 <button
                   onClick={startGame}
                   className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan hover:bg-cyan-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <RotateCcw className="w-4 h-4 stroke-[2.5]" /> RESTART MISSION
+                  <RotateCcw className="w-4 h-4 stroke-[2.5]" /> RESTART [SPACE / R]
                 </button>
               </div>
             ) : (
@@ -2220,7 +2308,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                 <div>
                   <h3 className="text-xl font-black text-white uppercase tracking-tight">Neon Starfighter</h3>
                   <p className="text-xs font-bold text-portal-yellow uppercase tracking-wider mt-0.5">
-                    Touch & Drag or A/D Keys to Steer
+                    WASD / ARROW KEYS • TOUCH & DRAG
                   </p>
                 </div>
 
@@ -2236,7 +2324,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                   </div>
                   <div className="flex items-center gap-2 text-portal-cyan">
                     <Shield className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Powerups: 3X Spread, Shields, EMP Nukes, Hyperdrive.</span>
+                    <span>Powerups: 3X Spread, Shields, EMP Nukes.</span>
+                  </div>
+                  <div className="pt-1 border-t border-slate-700/80 text-[10px] text-slate-400 flex items-center justify-between font-mono">
+                    <span>[SPACE] LAUNCH</span>
+                    <span>[M] MUTE</span>
+                    <span>[R] RESTART</span>
                   </div>
                 </div>
 
@@ -2244,7 +2337,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                   onClick={startGame}
                   className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan hover:bg-cyan-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                 >
-                  <Play className="w-4 h-4 fill-black stroke-[2.5]" /> LAUNCH MISSION
+                  <Play className="w-4 h-4 fill-black stroke-[2.5]" /> LAUNCH MISSION [SPACE]
                 </button>
               </div>
             )}
