@@ -149,6 +149,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
   const engineOscRef = useRef<OscillatorNode | null>(null);
   const engineGainRef = useRef<GainNode | null>(null);
   const engineFilterRef = useRef<BiquadFilterNode | null>(null);
+  const draftOscRef = useRef<OscillatorNode | null>(null);
   const draftGainRef = useRef<GainNode | null>(null);
 
   // Initialize Particle & Skid Pools
@@ -218,11 +219,63 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
       engineOscRef.current = engineOsc;
       engineGainRef.current = engineGain;
       engineFilterRef.current = engineFilter;
+      draftOscRef.current = draftOsc;
       draftGainRef.current = draftGain;
     } catch (e) {
       console.warn('Web Audio initialization error:', e);
     }
   }, [isMuted]);
+
+  // Complete Audio Teardown to prevent background audio leaks on modal close
+  const cleanupAudio = useCallback(() => {
+    try {
+      if (engineGainRef.current && audioCtxRef.current) {
+        try {
+          engineGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+          engineGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+        } catch {}
+      }
+      if (draftGainRef.current && audioCtxRef.current) {
+        try {
+          draftGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+          draftGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+        } catch {}
+      }
+      if (engineOscRef.current) {
+        try {
+          engineOscRef.current.stop();
+          engineOscRef.current.disconnect();
+        } catch {}
+        engineOscRef.current = null;
+      }
+      if (draftOscRef.current) {
+        try {
+          draftOscRef.current.stop();
+          draftOscRef.current.disconnect();
+        } catch {}
+        draftOscRef.current = null;
+      }
+      if (masterGainRef.current) {
+        try {
+          masterGainRef.current.disconnect();
+        } catch {}
+        masterGainRef.current = null;
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        try {
+          audioCtxRef.current.close().catch(() => {});
+        } catch {}
+        audioCtxRef.current = null;
+      }
+    } catch {}
+  }, []);
+
+  // Unmount Teardown Hook
+  useEffect(() => {
+    return () => {
+      cleanupAudio();
+    };
+  }, [cleanupAudio]);
 
   // Update Engine Pitch with Speed / RPM
   const updateEngineAudio = useCallback((speed: number, maxSpeed: number, isThrottle: boolean, isNitro: boolean) => {
@@ -234,12 +287,23 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
     }
 
     const t = ctx.currentTime;
+    const shouldPlay = isPlayingRef.current && !isGameOverRef.current && !isPausedRef.current && !isMuted;
+    if (!shouldPlay) {
+      try {
+        engineGainRef.current.gain.setTargetAtTime(0, t, 0.04);
+        if (draftGainRef.current) {
+          draftGainRef.current.gain.setTargetAtTime(0, t, 0.04);
+        }
+      } catch {}
+      return;
+    }
+
     const ratio = Math.max(0, Math.min(1, speed / maxSpeed));
     // Dynamic Gear shifting emulation (6 virtual gears)
     const gearFraction = (ratio * 5) % 1;
     const baseFreq = isNitro ? 140 + gearFraction * 140 : 55 + gearFraction * 110 + ratio * 45;
     const filterFreq = isNitro ? 2400 : 350 + ratio * 1400;
-    const targetVolume = isPlayingRef.current && !isGameOverRef.current ? (isThrottle ? 0.22 : 0.12) : 0;
+    const targetVolume = isThrottle ? 0.22 : 0.12;
 
     engineOscRef.current.frequency.setTargetAtTime(baseFreq, t, 0.05);
     engineFilterRef.current.frequency.setTargetAtTime(filterFreq, t, 0.05);
@@ -247,10 +311,10 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
 
     // Drafting hum
     if (draftGainRef.current) {
-      const draftVol = draftingRef.current && isPlayingRef.current ? 0.28 : 0;
+      const draftVol = draftingRef.current ? 0.28 : 0;
       draftGainRef.current.gain.setTargetAtTime(draftVol, t, 0.1);
     }
-  }, []);
+  }, [isMuted]);
 
   // Near Miss Doppler Sound Effect
   const playNearMissSound = useCallback((panValue: number) => {
@@ -390,6 +454,25 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
       const next = !prev;
       if (masterGainRef.current) {
         masterGainRef.current.gain.value = next ? 0 : 0.35;
+      }
+      return next;
+    });
+  }, []);
+
+  // Toggle Pause with Audio Mute
+  const togglePause = useCallback(() => {
+    setIsPaused((prev) => {
+      const next = !prev;
+      isPausedRef.current = next;
+      if (next && engineGainRef.current && audioCtxRef.current) {
+        try {
+          engineGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+          engineGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+          if (draftGainRef.current) {
+            draftGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+            draftGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+          }
+        } catch {}
       }
       return next;
     });
@@ -589,6 +672,20 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
     setIsGameOver(true);
     setIsPlaying(false);
 
+    // Immediately silence ongoing engine and drafting tones
+    if (engineGainRef.current && audioCtxRef.current) {
+      try {
+        engineGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+        engineGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+      } catch {}
+    }
+    if (draftGainRef.current && audioCtxRef.current) {
+      try {
+        draftGainRef.current.gain.cancelScheduledValues(audioCtxRef.current.currentTime);
+        draftGainRef.current.gain.setValueAtTime(0, audioCtxRef.current.currentTime);
+      } catch {}
+    }
+
     playCrashSound();
     screenShakeRef.current = 28;
 
@@ -691,13 +788,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
       if (k === 'r') startGame();
       if (k === 'f') toggleFullscreen();
       if (k === 'm') toggleMute();
-      if (k === 'p') {
-        setIsPaused((prev) => {
-          const next = !prev;
-          isPausedRef.current = next;
-          return next;
-        });
-      }
+      if (k === 'p') togglePause();
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -714,7 +805,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [activateNitro, startGame, toggleFullscreen, toggleMute]);
+  }, [activateNitro, startGame, toggleFullscreen, toggleMute, togglePause]);
 
   // --------------------------------------------------------------------------
   // MAIN GAME LOOP (60-120 FPS High-Performance Engine)
@@ -1812,13 +1903,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
         </button>
 
         <button
-          onClick={() => {
-            setIsPaused((p) => {
-              const n = !p;
-              isPausedRef.current = n;
-              return n;
-            });
-          }}
+          onClick={togglePause}
           className="p-1.5 bg-black/80 text-yellow-400 border-2 border-yellow-400 shadow-neo hover:bg-yellow-400 hover:text-black transition-all rounded"
           title="Pause / Resume"
         >
