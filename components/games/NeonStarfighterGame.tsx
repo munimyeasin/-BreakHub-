@@ -383,6 +383,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const lastSpawnPowerupTimeRef = useRef(0);
   const lastScoreSyncTimeRef = useRef(0);
   const lastTimeRef = useRef(0);
+  const missionStartTimeRef = useRef(0);
+  const [currentSpeedMult, setCurrentSpeedMult] = useState<number>(3.0);
 
   // High-Performance Singleton Web Audio Oscillator Engine
   const initAudioCtx = useCallback(() => {
@@ -681,12 +683,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     lastSpawnPowerupTimeRef.current = 0;
     lastScoreSyncTimeRef.current = 0;
     lastTimeRef.current = performance.now();
+    missionStartTimeRef.current = performance.now();
     scoreRef.current = 0;
     waveRef.current = 1;
     activePowerupRef.current = null;
     lastSyncedPowerupRef.current = null;
     screenShakeRef.current = 0;
     setDisplayScore(0);
+    setCurrentSpeedMult(3.0);
     setWave(1);
     setActivePowerup(null);
     setIsDead(false);
@@ -755,15 +759,15 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
     if (p.tripleShotTimer > 0) {
       bulletsRef.current.push(
-        { x: p.x + 4, y: p.y - 2, vx: -3.5, vy: -15, color: '#39FF14' },
-        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -16, color: '#00F0FF' },
-        { x: p.x + p.width - 8, y: p.y - 2, vx: 3.5, vy: -15, color: '#39FF14' }
+        { x: p.x + 4, y: p.y - 2, vx: -7, vy: -38, color: '#39FF14' },
+        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -42, color: '#00F0FF' },
+        { x: p.x + p.width - 8, y: p.y - 2, vx: 7, vy: -38, color: '#39FF14' }
       );
       playSfxRef.current('spread');
     } else {
       bulletsRef.current.push(
-        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -17 : -15, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
-        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -17 : -15, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
       );
       playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
     }
@@ -1102,18 +1106,19 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const p = playerRef.current;
 
-      // Dynamic Continuous Speed & Difficulty Multiplier (Scales smoothly and gradually with Wave + Score)
-      const currentWave = waveRef.current;
-      const scoreProgress = (scoreRef.current % 1500) / 1500;
-      const speedScale = 1.0 + Math.min(0.45, (currentWave - 1) * 0.04 + scoreProgress * 0.04);
+      // Dynamic Continuous Speed Multiplier: Starts at 3.0x, continuously accelerates with flight time and wave progression
+      const elapsedTimeSec = Math.max(0, (timestamp - (missionStartTimeRef.current || timestamp)) / 1000);
+      const waveBonus = (waveRef.current - 1) * 0.25;
+      const timeSpeedScale = 3.0 * (1.0 + Math.min(elapsedTimeSec * 0.015 + waveBonus, 3.5));
 
-      // Jet Handling Agility: scales responsiveness smoothly in tandem with the gentle speed progression
-      p.speed = 10 + Math.min(2.5, (speedScale - 1) * 5.0);
+      // Jet Strafe Agility: scales dynamically with flight speed
+      p.speed = 18 + Math.min(12, (timeSpeedScale - 3.0) * 3.5);
 
-      // Sync Wave and Score with React HUD periodically (every 120ms max)
+      // Sync Wave, Score, and Speed Multiplier with React HUD periodically (every 120ms max)
       if (timestamp - lastScoreSyncTimeRef.current > 120) {
         lastScoreSyncTimeRef.current = timestamp;
         setDisplayScore(scoreRef.current);
+        setCurrentSpeedMult(parseFloat(timeSpeedScale.toFixed(1)));
 
         const newWave = Math.floor(scoreRef.current / 1500) + 1;
         if (newWave !== waveRef.current) {
@@ -1121,7 +1126,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           setWave(newWave);
           screenShakeRef.current = 8;
           addShockwave(curW / 2, curH * 0.35, '#FFE600', 70);
-          addActionBadge(curW / 2, curH * 0.35, `SECTOR ${newWave} • SPEED +${Math.round((speedScale - 1) * 100)}%!`);
+          addActionBadge(curW / 2, curH * 0.35, `SECTOR ${newWave} • SPEED ${timeSpeedScale.toFixed(1)}x!`);
           playSfxRef.current('powerup');
         }
 
@@ -1147,10 +1152,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // Player Movement: Full 2D Combat Maneuvering (WASD / Arrow Keys / Numpad / Touch & Mouse Drag)
-      // Calculate gravitational pull from active black holes in both X & Y axes
+      // 1D Bottom-Locked Horizontal Strafe Kinematics (Fixed at bottom rail)
+      p.y = playerBaseY;
+
+      // Calculate gravitational pull from active black holes in X axis
       let totalGravityX = 0;
-      let totalGravityY = 0;
       let strongestPullRatio = 0;
 
       blackHolesRef.current.forEach((bh) => {
@@ -1165,7 +1171,6 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           }
           const force = Math.pow(pullRatio, 1.25) * 11.5 * timeScale;
           totalGravityX += (dx / dist) * force;
-          totalGravityY += (dy / dist) * force;
 
           // Gravitational accretion sparks
           if (Math.random() < 0.35 && particlesRef.current.length < 45) {
@@ -1186,7 +1191,6 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const boostMultiplier = keysRef.current.boost ? 1.65 : 1.0;
       const currentSpeed = (p.hyperTimer > 0 ? p.speed * 1.35 : p.speed) * boostMultiplier * timeScale;
-      const hasKeyInput = keysRef.current.left || keysRef.current.right || keysRef.current.up || keysRef.current.down;
       let targetRoll = 0;
 
       // Extra afterburner particles during active boost
@@ -1204,76 +1208,59 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         });
       }
 
-      const minY = curH * 0.25;
-      const maxY = curH - 55;
-
-      if (hasKeyInput) {
-        if (keysRef.current.left) {
-          p.x = Math.max(0, p.x - currentSpeed);
-          targetRoll = -0.25;
-        }
-        if (keysRef.current.right) {
-          p.x = Math.min(curW - p.width, p.x + currentSpeed);
-          targetRoll = 0.25;
-        }
-        if (keysRef.current.up) {
-          p.y = Math.max(minY, p.y - currentSpeed * 0.9);
-        }
-        if (keysRef.current.down) {
-          p.y = Math.min(maxY, p.y + currentSpeed * 0.9);
-        }
-        pointerRef.current.active = false;
-        pointerRef.current.pendingDeltaX = 0;
+      if (keysRef.current.left) {
+        p.x = Math.max(0, p.x - currentSpeed);
+        targetRoll = -0.28;
+      } else if (keysRef.current.right) {
+        p.x = Math.min(curW - p.width, p.x + currentSpeed);
+        targetRoll = 0.28;
       } else if (pointerRef.current.active || pointerRef.current.pendingDeltaX !== 0) {
         const deltaX = pointerRef.current.pendingDeltaX;
         pointerRef.current.pendingDeltaX = 0;
 
-        if (deltaX < -1.5) targetRoll = -0.22;
-        else if (deltaX > 1.5) targetRoll = 0.22;
+        if (deltaX < -1.5) targetRoll = -0.25;
+        else if (deltaX > 1.5) targetRoll = 0.25;
 
-        const controlTraction = Math.max(0.08, 1 - Math.pow(strongestPullRatio, 1.1) * 0.92);
+        const controlTraction = Math.max(0.12, 1 - Math.pow(strongestPullRatio, 1.1) * 0.88);
         p.x += deltaX * controlTraction;
       }
 
       // Smooth banking roll interpolation
-      p.roll += (targetRoll - p.roll) * 0.22 * timeScale;
+      p.roll += (targetRoll - p.roll) * 0.25 * timeScale;
 
-      // Apply gravitational force directly to ship
+      // Apply horizontal gravitational force directly to ship
       if (totalGravityX !== 0) {
         p.x += totalGravityX;
       }
-      if (totalGravityY !== 0) {
-        p.y += totalGravityY;
-      }
       p.x = Math.max(0, Math.min(curW - p.width, p.x));
-      p.y = Math.max(minY, Math.min(maxY, p.y));
+      p.y = playerBaseY;
 
-      // DUAL WINGTIP PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
-      const fireIntervalMs = p.hyperTimer > 0 ? 80 : p.tripleShotTimer > 0 ? 110 : 130;
+      // DUAL WINGTIP HIGH-VELOCITY 3X PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
+      const fireIntervalMs = p.hyperTimer > 0 ? 55 : p.tripleShotTimer > 0 ? 75 : 90;
       if (timestamp - lastShotTimeRef.current >= fireIntervalMs) {
         lastShotTimeRef.current = timestamp;
 
         if (p.tripleShotTimer > 0) {
-          // 3-Way Spread Plasma Cannons
+          // 3-Way Spread High-Speed Plasma Cannons
           bulletsRef.current.push(
-            { x: p.x + 4, y: p.y - 2, vx: -3.5, vy: -14, color: '#39FF14' },
-            { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -15, color: '#00F0FF' },
-            { x: p.x + p.width - 8, y: p.y - 2, vx: 3.5, vy: -14, color: '#39FF14' }
+            { x: p.x + 4, y: p.y - 2, vx: -7, vy: -38, color: '#39FF14' },
+            { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -42, color: '#00F0FF' },
+            { x: p.x + p.width - 8, y: p.y - 2, vx: 7, vy: -38, color: '#39FF14' }
           );
           playSfxRef.current('spread');
         } else {
-          // Dual Wingtip Synchronized Plasma Beams (from outer yellow wingtip rails)
+          // Dual Wingtip High-Speed Synchronized Plasma Beams (from outer yellow wingtip rails)
           const isHyp = p.hyperTimer > 0;
           bulletsRef.current.push(
-            { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -16 : -14, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
-            { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -16 : -14, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+            { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+            { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
           );
           playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
         }
       }
 
-      // SPAWN SYSTEM (Time-Based with Gentle Progression)
-      const enemyInterval = Math.max(450, 800 - (currentWave - 1) * 25);
+      // SPAWN SYSTEM (High-Velocity 3x Scaling with Dynamic Time Progression)
+      const enemyInterval = Math.max(220, 550 / (timeSpeedScale / 3.0));
       if (timestamp - lastSpawnEnemyTimeRef.current >= enemyInterval) {
         lastSpawnEnemyTimeRef.current = timestamp;
         const rand = Math.random();
@@ -1283,8 +1270,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -35,
             width: 38,
             height: 32,
-            vx: (Math.random() - 0.5) * 1.6 * speedScale,
-            vy: (Math.random() * 0.8 + 2.0) * speedScale,
+            vx: (Math.random() - 0.5) * 1.6 * (timeSpeedScale / 3.0) * 3.0,
+            vy: (Math.random() * 1.0 + 2.2) * timeSpeedScale,
             hp: 4,
             maxHp: 4,
             color: '#FF0055',
@@ -1299,8 +1286,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -30,
             width: 28,
             height: 24,
-            vx: (Math.random() - 0.5) * 2.2 * speedScale,
-            vy: (Math.random() * 1.0 + 2.8) * speedScale,
+            vx: (Math.random() - 0.5) * 2.2 * (timeSpeedScale / 3.0) * 3.0,
+            vy: (Math.random() * 1.2 + 3.0) * timeSpeedScale,
             hp: 2,
             maxHp: 2,
             color: '#FF00EA',
@@ -1315,8 +1302,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             y: -25,
             width: 24,
             height: 20,
-            vx: (Math.random() - 0.5) * 1.8 * speedScale,
-            vy: (Math.random() * 1.0 + 3.4) * speedScale,
+            vx: (Math.random() - 0.5) * 1.8 * (timeSpeedScale / 3.0) * 3.0,
+            vy: (Math.random() * 1.2 + 3.6) * timeSpeedScale,
             hp: 1,
             maxHp: 1,
             color: '#FF4D6D',
@@ -1328,20 +1315,23 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // Spawn Meteors (Gentle, steady cadence)
-      if (timestamp - lastSpawnMeteorTimeRef.current >= Math.max(1600, 2600 - (currentWave - 1) * 60)) {
+      // Spawn Meteors (Accelerated cadence & velocity)
+      const meteorInterval = Math.max(750, 1800 / (timeSpeedScale / 3.0));
+      if (timestamp - lastSpawnMeteorTimeRef.current >= meteorInterval) {
         lastSpawnMeteorTimeRef.current = timestamp;
-        meteorsRef.current.push(createMeteor(speedScale));
+        meteorsRef.current.push(createMeteor(timeSpeedScale));
       }
 
-      // Spawn Black Holes
-      if (timestamp - lastSpawnBlackHoleTimeRef.current >= 5500 && blackHolesRef.current.length === 0) {
+      // Spawn Black Holes (Dynamic gravity hazards)
+      const blackHoleInterval = Math.max(3000, 5000 / (timeSpeedScale / 3.0));
+      if (timestamp - lastSpawnBlackHoleTimeRef.current >= blackHoleInterval && blackHolesRef.current.length === 0) {
         lastSpawnBlackHoleTimeRef.current = timestamp;
-        blackHolesRef.current.push(createBlackHole(speedScale));
+        blackHolesRef.current.push(createBlackHole(timeSpeedScale));
       }
 
       // Spawn Powerups
-      if (timestamp - lastSpawnPowerupTimeRef.current >= 4500) {
+      const powerupInterval = Math.max(2800, 4200 / (timeSpeedScale / 3.0));
+      if (timestamp - lastSpawnPowerupTimeRef.current >= powerupInterval) {
         lastSpawnPowerupTimeRef.current = timestamp;
         const types: PowerupType[] = ['spread', 'shield', 'nuke', 'hyper'];
         const chosen = types[Math.floor(Math.random() * types.length)];
@@ -1349,7 +1339,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           x: Math.random() * (curW - 40) + 20,
           y: -20,
           type: chosen,
-          vy: 2.2,
+          vy: 4.5 * (timeSpeedScale / 3.0),
           radius: 13,
           pulse: 0,
         });
@@ -1643,9 +1633,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.stroke();
       }
 
-      // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive & scales with sector difficulty)
-      const speedMult = (p.hyperTimer > 0 ? 3.5 : 1.0) * speedScale;
-      warpGridOffsetRef.current = (warpGridOffsetRef.current + 2.0 * speedMult * timeScale) % 50;
+      // Moving Horizontal Speed Warp Bars (accelerates during Hyper Drive & scales with 3x base + timeSpeedScale)
+      const speedMult = (p.hyperTimer > 0 ? 3.5 : 1.0) * timeSpeedScale;
+      warpGridOffsetRef.current = (warpGridOffsetRef.current + 2.2 * speedMult * timeScale) % 50;
       for (let y = warpGridOffsetRef.current; y < curH; y += 50) {
         ctx.strokeStyle = p.hyperTimer > 0 ? 'rgba(255, 230, 0, 0.22)' : 'rgba(0, 240, 255, 0.12)';
         ctx.beginPath();
@@ -1656,18 +1646,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       ctx.setLineDash([]);
       ctx.restore();
 
-      // 3. Starfield & Cosmic Warp Streaks (accelerates with speedScale)
+      // 3. Starfield & Cosmic Warp Streaks (accelerates with timeSpeedScale)
       const stars = starsRef.current;
       for (let s = 0; s < stars.length; s++) {
         const star = stars[s];
-        const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed * speedScale) * timeScale;
+        const starSpeed = (p.hyperTimer > 0 ? star.speed * 3.8 : star.speed * (timeSpeedScale / 3.0 * 2.0)) * timeScale;
         star.y += starSpeed;
         if (star.y > curH) {
           star.y = 0;
           star.x = Math.random() * curW;
         }
         ctx.fillStyle = p.hyperTimer > 0 ? '#FFE600' : star.color;
-        const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 1.5 * Math.min(2.0, speedScale);
+        const lengthMultiplier = p.hyperTimer > 0 ? 5.5 : 2.2 * Math.min(3.0, timeSpeedScale / 3.0);
         ctx.fillRect(star.x | 0, star.y | 0, star.size, star.size * lengthMultiplier);
       }
 
@@ -2367,7 +2357,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 bg-portal-surface px-2 py-0.5 rounded-lg border border-black shadow-neo-sm">
+            <span className="text-[10px] text-portal-yellow font-black uppercase tracking-wider">
+              ⚡ {currentSpeedMult.toFixed(1)}x SPD
+            </span>
+          </div>
+
           <span className="px-2 py-0.5 rounded-lg bg-portal-purple text-white border border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
             Sector {wave}
           </span>
@@ -2478,7 +2474,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                 <div>
                   <h3 className="text-xl font-black text-white uppercase tracking-tight">Neon Starfighter</h3>
                   <p className="text-xs font-bold text-portal-yellow uppercase tracking-wider mt-0.5">
-                    WASD / ARROW KEYS • TOUCH & DRAG
+                    A / D / ARROW KEYS • HORIZONTAL STRAFE • 3X TIME ACCELERATION
                   </p>
                 </div>
 

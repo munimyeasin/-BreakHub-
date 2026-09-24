@@ -158,12 +158,12 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
   // 6. Neon Starfighter
   g_shooter_07: {
     genreTag: 'ARCADE // VERTICAL SHMUP',
-    objective: 'Pilot the tactical starfighter against invading drone swarms, laser gunships, and black hole bosses.',
-    scoring: 'Wave clearance + boss takedowns + weapon upgrade pickups + zero-damage bonus multipliers.',
-    proTip: 'Collect Spread Laser and Shield pickups early. Hold [Shift] or press BOOST to outrun enemy bullet hell salvos!',
+    objective: 'Pilot the tactical starfighter locked on the bottom perimeter against invading drone swarms, meteors, and cosmic black holes.',
+    scoring: 'Enemy eliminations + continuous speed scaling + weapon upgrade pickups + sector survival bonuses.',
+    proTip: 'Strafe horizontally to evade fast incoming enemy salvos. Hold [Shift] or press BOOST to dodge dense clusters as speed increases over time!',
     controls: [
-      { keys: ['WASD', '↑ ↓ ← →'], label: '2D SPACE FLIGHT', desc: 'Full 8-way directional flight maneuvering' },
-      { keys: ['Left Click', 'Space'], label: 'FIRE PLASMA', desc: 'Aim & manual plasma salvo burst' },
+      { keys: ['A / D', '← / →'], label: 'HORIZONTAL STRAFE', desc: 'Precision left / right bottom-rail maneuvering' },
+      { keys: ['Left Click', 'Space'], label: 'FIRE PLASMA', desc: 'Rapid plasma cannon salvo burst' },
       { keys: ['Shift'], label: 'AFTERBURNER BOOST', desc: 'Engage 1.65x speed boost + jet thruster flames' },
       { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen battle mode' },
       { keys: ['R'], label: 'REBOOT MISSION', desc: 'Launch / restart starfighter flight' }
