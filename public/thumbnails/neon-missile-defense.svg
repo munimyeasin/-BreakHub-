@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="nmdBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020012" />
+      <stop offset="50%" stop-color="#090524" />
+      <stop offset="100%" stop-color="#031b29" />
+    </linearGradient>
+
+    <!-- Neon Missile & Blast Palettes -->
+    <linearGradient id="flakCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E0FFFF" />
+      <stop offset="40%" stop-color="#00F0FF" />
+      <stop offset="80%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#00F0FF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="flakYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFE0" />
+      <stop offset="35%" stop-color="#FFE600" />
+      <stop offset="75%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#FFE600" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="flakMagenta" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0F5" />
+      <stop offset="40%" stop-color="#FF007F" />
+      <stop offset="80%" stop-color="#BE185D" />
+      <stop offset="100%" stop-color="#FF007F" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Trail Gradients -->
+    <linearGradient id="trailCyan" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.1" />
+      <stop offset="80%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#FFFFFF" />
+    </linearGradient>
+
+    <linearGradient id="trailRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF0055" stop-opacity="0.2" />
+      <stop offset="70%" stop-color="#FF0055" />
+      <stop offset="100%" stop-color="#FFE600" />
+    </linearGradient>
+
+    <linearGradient id="trailMagenta" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF00EA" stop-opacity="0.2" />
+      <stop offset="75%" stop-color="#FF00EA" />
+      <stop offset="100%" stop-color="#FFFFFF" />
+    </linearGradient>
+
+    <!-- Turret & Building 3D Palettes -->
+    <linearGradient id="turretFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE600" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <linearGradient id="cityCoreFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="neoShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Hazard Pattern -->
+    <pattern id="hazard" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="20" fill="#FFE600" />
+      <rect x="10" width="10" height="20" fill="#000000" />
+    </pattern>
+  </defs>
+
+  <!-- 1. Background Ground & Stars -->
+  <rect width="400" height="400" fill="url(#nmdBgDark)" />
+
+  <!-- Radar Grid Background Arcs & Polar Lines -->
+  <circle cx="200" cy="380" r="120" fill="none" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.18" stroke-dasharray="4,4" />
+  <circle cx="200" cy="380" r="220" fill="none" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.18" stroke-dasharray="4,4" />
+  <circle cx="200" cy="380" r="320" fill="none" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.18" stroke-dasharray="4,4" />
+
+  <line x1="200" y1="380" x2="60" y2="80" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.15" />
+  <line x1="200" y1="380" x2="200" y2="20" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.2" />
+  <line x1="200" y1="380" x2="340" y2="80" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.15" />
+
+  <!-- Distant Stars & Data Sparks -->
+  <circle cx="45" cy="50" r="1.5" fill="#FFE600" opacity="0.8" />
+  <circle cx="95" cy="90" r="1.2" fill="#00F0FF" opacity="0.7" />
+  <circle cx="160" cy="40" r="2.0" fill="#FFFFFF" opacity="0.9" />
+  <circle cx="270" cy="55" r="1.5" fill="#39FF14" opacity="0.8" />
+  <circle cx="350" cy="45" r="2.2" fill="#FFE600" opacity="0.9" />
+  <circle cx="330" cy="110" r="1.2" fill="#00F0FF" opacity="0.7" />
+  <circle cx="80" cy="170" r="1.5" fill="#FF007F" opacity="0.8" />
+
+  <!-- 2. Incoming Hostile Warhead Trajectories & MIRV Clusters -->
+  <!-- Warhead 1 (Left descent) -->
+  <line x1="30" y1="0" x2="115" y2="145" stroke="url(#trailRed)" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="115" cy="145" r="3.5" fill="#FFE600" filter="url(#glow)" />
+
+  <!-- Warhead 2 (MIRV Cluster from center top splitting) -->
+  <line x1="220" y1="0" x2="235" y2="75" stroke="url(#trailMagenta)" stroke-width="3" stroke-linecap="round" />
+  <circle cx="235" cy="75" r="4" fill="#FF00EA" />
+  <!-- Split A -->
+  <line x1="235" y1="75" x2="190" y2="175" stroke="url(#trailRed)" stroke-width="2.2" stroke-linecap="round" />
+  <circle cx="190" cy="175" r="3.5" fill="#FFE600" />
+  <!-- Split B -->
+  <line x1="235" y1="75" x2="280" y2="185" stroke="url(#trailRed)" stroke-width="2.2" stroke-linecap="round" />
+  <circle cx="280" cy="185" r="3.5" fill="#FFE600" />
+
+  <!-- Warhead 3 (Right steep hypersonic) -->
+  <line x1="370" y1="10" x2="310" y2="135" stroke="url(#trailMagenta)" stroke-width="2.8" stroke-linecap="round" />
+  <circle cx="310" cy="135" r="3.5" fill="#FFFFFF" filter="url(#glow)" />
+
+  <!-- 3. Interceptor Missile Vapor Trails -->
+  <!-- From Alpha Silo (Left) to Explosion 1 -->
+  <path d="M 60 345 Q 85 240 120 150" fill="none" stroke="url(#trailCyan)" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- From Delta Silo (Center) to Super Explosion 2 -->
+  <path d="M 200 340 Q 205 250 205 155" fill="none" stroke="url(#trailCyan)" stroke-width="4" stroke-linecap="round" />
+
+  <!-- From Omega Silo (Right) to Explosion 3 -->
+  <path d="M 340 345 Q 325 240 295 140" fill="none" stroke="url(#trailCyan)" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- 4. Massive Concentric Flak Shockwave Explosions -->
+  <!-- Secondary Cyan/Yellow Blast (Left) -->
+  <circle cx="120" cy="150" r="38" fill="url(#flakCyan)" stroke="#00F0FF" stroke-width="2.5" opacity="0.85" />
+  <circle cx="120" cy="150" r="22" fill="#FFE600" opacity="0.9" filter="url(#glow)" />
+  <circle cx="120" cy="150" r="8" fill="#FFFFFF" />
+
+  <!-- Primary Epic Center Shockwave (Chain Reaction Combo) -->
+  <circle cx="205" cy="155" r="58" fill="url(#flakYellow)" stroke="#FFE600" stroke-width="3" opacity="0.88" />
+  <circle cx="205" cy="155" r="36" fill="url(#flakMagenta)" stroke="#FF007F" stroke-width="2.5" opacity="0.92" />
+  <circle cx="205" cy="155" r="16" fill="#FFFFFF" filter="url(#glow)" />
+
+  <!-- Secondary Shockwave (Right) -->
+  <circle cx="295" cy="140" r="42" fill="url(#flakCyan)" stroke="#00F0FF" stroke-width="2.5" opacity="0.85" />
+  <circle cx="295" cy="140" r="20" fill="#39FF14" opacity="0.9" filter="url(#glow)" />
+  <circle cx="295" cy="140" r="7" fill="#FFFFFF" />
+
+  <!-- Shockwave Ring Ripples & Spark Fragments -->
+  <circle cx="205" cy="155" r="75" fill="none" stroke="#FFE600" stroke-width="2" stroke-dasharray="8,6" opacity="0.6" />
+  <circle cx="120" cy="150" r="50" fill="none" stroke="#00F0FF" stroke-width="1.8" stroke-dasharray="6,4" opacity="0.5" />
+  <circle cx="295" cy="140" r="56" fill="none" stroke="#39FF14" stroke-width="1.8" stroke-dasharray="6,4" opacity="0.5" />
+
+  <!-- Floating Explosion Particles -->
+  <circle cx="165" cy="120" r="3" fill="#FFE600" />
+  <circle cx="245" cy="115" r="2.5" fill="#FF007F" />
+  <circle cx="180" cy="195" r="3" fill="#00F0FF" />
+  <circle cx="240" cy="190" r="3.5" fill="#39FF14" />
+  <circle cx="100" cy="110" r="2.5" fill="#FFFFFF" />
+  <circle cx="325" cy="100" r="3" fill="#FFE600" />
+
+  <!-- 5. Tactical Crosshair Reticle -->
+  <g transform="translate(205, 155)" stroke="#00F0FF" stroke-width="2">
+    <circle cx="0" cy="0" r="24" fill="none" stroke-dasharray="10,6" />
+    <line x1="-32" y1="0" x2="-14" y2="0" stroke-linecap="round" />
+    <line x1="14" y1="0" x2="32" y2="0" stroke-linecap="round" />
+    <line x1="0" y1="-32" x2="0" y2="-14" stroke-linecap="round" />
+    <line x1="0" y1="14" x2="0" y2="32" stroke-linecap="round" />
+    <circle cx="0" cy="0" r="3" fill="#FFE600" />
+  </g>
+
+  <!-- 6. Ground Terrain & Cyber City Baseline -->
+  <!-- Ground Baseline Polygon with Neo Shadow -->
+  <path d="M 0 340 L 40 335 L 80 340 L 130 335 L 180 340 L 220 335 L 270 340 L 320 335 L 360 340 L 400 335 L 400 400 L 0 400 Z" fill="#070314" stroke="#000000" stroke-width="3" />
+  <line x1="0" y1="340" x2="400" y2="340" stroke="#00F0FF" stroke-width="3" />
+
+  <!-- Cyber Skyline Buildings (Data Megacores & Power Grids) -->
+  <!-- City 1 (Left Grid) -->
+  <g filter="url(#neoShadow)">
+    <rect x="95" y="320" width="22" height="35" rx="2" fill="url(#cityCoreFace)" stroke="#000000" stroke-width="2.5" />
+    <rect x="122" y="310" width="26" height="45" rx="2" fill="#0E7490" stroke="#000000" stroke-width="2.5" />
+    <line x1="106" y1="324" x2="106" y2="350" stroke="#FFE600" stroke-width="2" />
+    <line x1="135" y1="315" x2="135" y2="350" stroke="#00F0FF" stroke-width="2" />
+  </g>
+
+  <!-- City 2 (Right Grid) -->
+  <g filter="url(#neoShadow)">
+    <rect x="252" y="312" width="26" height="43" rx="2" fill="#0E7490" stroke="#000000" stroke-width="2.5" />
+    <rect x="283" y="322" width="22" height="33" rx="2" fill="url(#cityCoreFace)" stroke="#000000" stroke-width="2.5" />
+    <line x1="265" y1="318" x2="265" y2="350" stroke="#00F0FF" stroke-width="2" />
+    <line x1="294" y1="326" x2="294" y2="350" stroke="#FFE600" stroke-width="2" />
+  </g>
+
+  <!-- 7. 3 Anti-Missile Battery Silos (Alpha, Delta, Omega) -->
+  <!-- Battery Alpha (Left) -->
+  <g filter="url(#neoShadow)">
+    <path d="M 35 365 L 55 335 L 75 365 Z" fill="url(#turretFace)" stroke="#000000" stroke-width="3" />
+    <rect x="51" y="322" width="8" height="16" rx="2" fill="#FFE600" stroke="#000000" stroke-width="2.5" transform="rotate(20 55 330)" />
+    <circle cx="55" cy="348" r="4" fill="#000000" />
+    <circle cx="55" cy="348" r="2" fill="#00F0FF" />
+  </g>
+
+  <!-- Battery Delta (Center Command Fort) -->
+  <g filter="url(#neoShadow)">
+    <path d="M 175 365 L 200 328 L 225 365 Z" fill="url(#turretFace)" stroke="#000000" stroke-width="3" />
+    <rect x="195" y="312" width="10" height="20" rx="2" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <circle cx="200" cy="344" r="5" fill="#000000" />
+    <circle cx="200" cy="344" r="2.5" fill="#39FF14" />
+  </g>
+
+  <!-- Battery Omega (Right) -->
+  <g filter="url(#neoShadow)">
+    <path d="M 325 365 L 345 335 L 365 365 Z" fill="url(#turretFace)" stroke="#000000" stroke-width="3" />
+    <rect x="341" y="322" width="8" height="16" rx="2" fill="#FFE600" stroke="#000000" stroke-width="2.5" transform="rotate(-20 345 330)" />
+    <circle cx="345" cy="348" r="4" fill="#000000" />
+    <circle cx="345" cy="348" r="2" fill="#00F0FF" />
+  </g>
+
+  <!-- 8. Neo-Brutalist HUD Overlays & Title Badge -->
+  <!-- Top Left Telemetry Tag -->
+  <g filter="url(#neoShadow)">
+    <rect x="16" y="16" width="135" height="28" rx="6" fill="#000000" stroke="#00F0FF" stroke-width="2" />
+    <text x="26" y="34" font-family="'Courier New', monospace" font-weight="900" font-size="11" fill="#00F0FF" letter-spacing="1">
+      SECTOR // 09
+    </text>
+    <circle cx="138" cy="30" r="4" fill="#39FF14" />
+  </g>
+
+  <!-- Top Right Combo Badge -->
+  <g filter="url(#neoShadow)">
+    <rect x="250" y="16" width="134" height="28" rx="6" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <text x="260" y="34" font-family="'Courier New', monospace" font-weight="900" font-size="11" fill="#000000" letter-spacing="0.5">
+      COMBO // 8.4x
+    </text>
+  </g>
+
+  <!-- Bottom Hazard Warning Strip -->
+  <rect x="0" y="386" width="400" height="14" fill="url(#hazard)" stroke="#000000" stroke-width="2" />
+</svg>

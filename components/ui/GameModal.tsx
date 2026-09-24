@@ -38,6 +38,7 @@ import BattleshipGame from '@/components/games/BattleshipGame';
 import CandyCrushGame from '@/components/games/CandyCrushGame';
 import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import TetraMatrixGame from '@/components/games/TetraMatrixGame';
+import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -61,6 +62,20 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // -3. Neon Missile Defense (Cyber Command)
+  g_missile_21: {
+    genreTag: 'ACTION // CYBER FLAK ARTILLERY',
+    objective: 'Defend your 6 Cyber Megacores against incoming ballistic warheads, MIRV cluster bombs, and hypersonic rockets. Trigger chain-reaction flak detonations.',
+    scoring: 'Enemy intercepts (100-300pts) x Chain Multipliers (up to 10x) + surviving cities bonus (500/city) + ammo conserved.',
+    proTip: 'Detonate flak clouds slightly ahead of warheads. A single explosion can catch multiple missiles, sparking cascading multi-kill chain explosions!',
+    controls: [
+      { keys: ['Left Click', 'Touch'], label: 'TARGET & DETONATE', desc: 'Fire interceptor from nearest silo' },
+      { keys: ['1', '2', '3'], label: 'SELECT SILO', desc: 'Fire from Alpha (1), Delta (2), or Omega (3)' },
+      { keys: ['Space'], label: 'ORBITAL EMP NUKE', desc: 'Trigger full-screen tactical air burst' },
+      { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen battle mode' },
+      { keys: ['R'], label: 'REBOOT DEFENSE', desc: 'Launch / restart defense mission' }
+    ]
+  },
   // -2. Tetra Matrix Polyomino Arcade
   g_tetris_20: {
     genreTag: 'PUZZLE // POLYOMINO ARCADE',
@@ -740,6 +755,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
+                <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_tetris_20' || game.slug === 'tetra-matrix' || game.slug === 'tetris') && (
                 <TetraMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

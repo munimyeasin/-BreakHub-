@@ -38,8 +38,8 @@
     },
     {
       "id": "usr_yfg1qz2",
-      "username": "CyberRunner",
-      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CyberRunner",
+      "username": "Rahul",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Rahul",
       "created_at": "2026-09-02T11:55:58.316Z"
     },
     {
@@ -69,13 +69,26 @@
   ],
   "games": [
     {
+      "id": "g_missile_21",
+      "slug": "neon-missile-defense",
+      "title": "Neon Missile Defense",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/neon-missile-defense.svg",
+      "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
+      "play_count": 0,
+      "rating": 5.0,
+      "rating_count": 42,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_shooter_07",
       "slug": "neon-starfighter",
       "title": "Neon Starfighter",
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 54,
+      "play_count": 60,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -8285,6 +8298,41 @@
       "user_id": "usr_ctvl8ln",
       "score": 4600,
       "created_at": "2026-09-19T19:34:40.110Z"
+    },
+    {
+      "id": "sc_lyux023ij",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 100,
+      "created_at": "2026-09-24T07:59:03.541Z"
+    },
+    {
+      "id": "sc_xpevd2990",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 700,
+      "created_at": "2026-09-24T07:59:59.141Z"
+    },
+    {
+      "id": "sc_kymq1nknk",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 200,
+      "created_at": "2026-09-24T08:00:08.146Z"
+    },
+    {
+      "id": "sc_igeqs4hh0",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 400,
+      "created_at": "2026-09-24T08:00:33.481Z"
+    },
+    {
+      "id": "sc_gasymma2f",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 100,
+      "created_at": "2026-09-24T08:00:38.765Z"
     }
   ],
   "ratings": []

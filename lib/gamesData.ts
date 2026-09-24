@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_missile_21',
+    slug: 'neon-missile-defense',
+    title: 'Neon Missile Defense',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/neon-missile-defense.svg',
+    description: 'Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 42,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
