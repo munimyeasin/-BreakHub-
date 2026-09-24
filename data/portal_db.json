@@ -69,14 +69,27 @@
   ],
   "games": [
     {
+      "id": "g_outrun_22",
+      "slug": "cyber-outrun-2077",
+      "title": "Cyber Outrun 2077",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/cyber-outrun-2077.svg",
+      "description": "Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.",
+      "play_count": 15,
+      "rating": 5,
+      "rating_count": 58,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_missile_21",
       "slug": "neon-missile-defense",
       "title": "Neon Missile Defense",
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/neon-missile-defense.svg",
       "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-      "play_count": 0,
-      "rating": 5.0,
+      "play_count": 3,
+      "rating": 5,
       "rating_count": 42,
       "status": "active",
       "featured": true
@@ -316,6 +329,19 @@
       "rating": 5,
       "rating_count": 25,
       "status": "hidden"
+    },
+    {
+      "id": "g_outrun_22",
+      "slug": "cyber-outrun-2077",
+      "title": "Cyber Outrun 2077",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/cyber-outrun-2077.svg",
+      "description": "Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.",
+      "play_count": 0,
+      "rating": 5,
+      "rating_count": 58,
+      "status": "active",
+      "featured": true
     }
   ],
   "scores": [
@@ -8333,6 +8359,41 @@
       "user_id": "usr_ctvl8ln",
       "score": 100,
       "created_at": "2026-09-24T08:00:38.765Z"
+    },
+    {
+      "id": "sc_dkmya3pjb",
+      "game_id": "g_missile_21",
+      "user_id": "usr_ctvl8ln",
+      "score": 3610,
+      "created_at": "2026-09-24T09:45:25.435Z"
+    },
+    {
+      "id": "sc_385wnk8sj",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 1790,
+      "created_at": "2026-09-24T10:06:11.864Z"
+    },
+    {
+      "id": "sc_76rzbdwnm",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 1154,
+      "created_at": "2026-09-24T10:06:38.241Z"
+    },
+    {
+      "id": "sc_w9el0by9k",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 765,
+      "created_at": "2026-09-24T10:11:26.549Z"
+    },
+    {
+      "id": "sc_vai11mkv0",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 9547,
+      "created_at": "2026-09-24T10:13:52.400Z"
     }
   ],
   "ratings": []

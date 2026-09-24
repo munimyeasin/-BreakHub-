@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_outrun_22',
+    slug: 'cyber-outrun-2077',
+    title: 'Cyber Outrun 2077',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-outrun-2077.svg',
+    description: 'Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 58,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_missile_21',
     slug: 'neon-missile-defense',
     title: 'Neon Missile Defense',

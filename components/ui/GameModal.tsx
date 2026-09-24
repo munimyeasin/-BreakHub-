@@ -39,6 +39,7 @@ import CandyCrushGame from '@/components/games/CandyCrushGame';
 import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
+import CyberOutrunGame from '@/components/games/CyberOutrunGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -62,6 +63,22 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // -4. Cyber Outrun 2077 (Neon Highway Racer)
+  g_outrun_22: {
+    genreTag: 'ACTION // SYNTHWAVE HIGHWAY RACER',
+    objective: 'Pilot your Cyber Sports Car across 4 high-speed neon highway lanes. Execute razor-thin Near-Miss grazes to multiply combos, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
+    scoring: 'Base velocity points x Combo Multipliers (up to 8x) + Near-Miss Overtakes (250pts x mult) + Ramming Smashes (1,000pts x mult) + Slipstream Drafting.',
+    proTip: 'Grazing civilian cars at high speeds recharges +20% Nitro instantly! Tucking in the aerodynamic draft cone behind Heavy Haulers boosts top speed past 260 km/h without consuming Nitro.',
+    controls: [
+      { keys: ['A / D', '← / →'], label: 'STEER & STRAFE', desc: 'Shift vehicle smoothly across lanes' },
+      { keys: ['W / S', '↑ / ↓'], label: 'GAS & BRAKE', desc: 'Accelerate throttle or apply rear brakes' },
+      { keys: ['Shift', 'Space'], label: 'NITRO OVERDRIVE', desc: 'Engage 350+ km/h hyper boost & ram shield' },
+      { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen race mode' },
+      { keys: ['R'], label: 'REBOOT RUN', desc: 'Ignite / restart run immediately' },
+      { keys: ['M'], label: 'MUTE AUDIO', desc: 'Toggle procedural engine synth sound' },
+      { keys: ['P'], label: 'PAUSE', desc: 'Pause / Resume highway race' }
+    ]
+  },
   // -3. Neon Missile Defense (Cyber Command)
   g_missile_21: {
     genreTag: 'ACTION // CYBER FLAK ARTILLERY',
@@ -755,6 +772,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_outrun_22' || game.slug === 'cyber-outrun-2077' || game.slug === 'outrun') && (
+                <CyberOutrunGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
                 <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

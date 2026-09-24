@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="outrunSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#020014" />
+      <stop offset="45%" stop-color="#19043b" />
+      <stop offset="75%" stop-color="#4a0e4e" />
+      <stop offset="100%" stop-color="#7928ca" />
+    </linearGradient>
+
+    <!-- Sun Gradient -->
+    <linearGradient id="synthSun" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFE600" />
+      <stop offset="40%" stop-color="#FF5E00" />
+      <stop offset="80%" stop-color="#FF007F" />
+      <stop offset="100%" stop-color="#7928ca" />
+    </linearGradient>
+
+    <!-- Road Gradient -->
+    <linearGradient id="roadAsphalt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0d0426" />
+      <stop offset="100%" stop-color="#030012" />
+    </linearGradient>
+
+    <!-- Nitro Flame Gradients -->
+    <linearGradient id="nitroCyan" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#00F0FF" />
+      <stop offset="70%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#00F0FF" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="nitroMagenta" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#FF007F" />
+      <stop offset="70%" stop-color="#9333EA" />
+      <stop offset="100%" stop-color="#FF007F" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Car Metal / Body Palettes -->
+    <linearGradient id="carBodyDark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0a0a14" />
+      <stop offset="25%" stop-color="#1e1e2f" />
+      <stop offset="50%" stop-color="#2d2d44" />
+      <stop offset="75%" stop-color="#1e1e2f" />
+      <stop offset="100%" stop-color="#0a0a14" />
+    </linearGradient>
+
+    <linearGradient id="carGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#090524" stop-opacity="0.95" />
+    </linearGradient>
+
+    <!-- Neo Shadows & Filters -->
+    <filter id="neoShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
+    </filter>
+
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="superGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Hazard Caution Pattern -->
+    <pattern id="hazard" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="20" fill="#FFE600" />
+      <rect x="10" width="10" height="20" fill="#000000" />
+    </pattern>
+  </defs>
+
+  <!-- 1. Sky & Synthwave Cosmos Background -->
+  <rect width="400" height="400" fill="url(#outrunSky)" />
+
+  <!-- Stars / Digital Data Points -->
+  <circle cx="35" cy="40" r="1.5" fill="#00F0FF" opacity="0.8" />
+  <circle cx="80" cy="25" r="1.2" fill="#FFE600" opacity="0.9" />
+  <circle cx="140" cy="50" r="2.0" fill="#FFFFFF" opacity="0.9" />
+  <circle cx="280" cy="35" r="1.8" fill="#FF007F" opacity="0.8" />
+  <circle cx="340" cy="65" r="1.2" fill="#00F0FF" opacity="0.7" />
+  <circle cx="370" cy="30" r="2.0" fill="#FFE600" opacity="0.9" />
+
+  <!-- 2. Retro Synthwave Sun with Horizontal Blind Slices -->
+  <g transform="translate(200, 160)">
+    <!-- Main Sun Disc -->
+    <circle cx="0" cy="0" r="68" fill="url(#synthSun)" filter="url(#glow)" />
+
+    <!-- Blind Cuts (Synthwave Horizontal Slices) -->
+    <rect x="-70" y="-8" width="140" height="3" fill="#19043b" />
+    <rect x="-70" y="4" width="140" height="4" fill="#2d0a4c" />
+    <rect x="-70" y="16" width="140" height="6" fill="#4a0e4e" />
+    <rect x="-70" y="30" width="140" height="8" fill="#5c135a" />
+    <rect x="-70" y="46" width="140" height="10" fill="#7928ca" />
+    <rect x="-70" y="62" width="140" height="12" fill="#7928ca" />
+  </g>
+
+  <!-- 3. Parallax Cyberpunk City Skyline Silhouettes -->
+  <!-- Distant Layer -->
+  <path d="M 0 195 L 20 195 L 20 170 L 35 170 L 35 195 L 55 195 L 55 155 L 75 155 L 75 195 L 110 195 L 110 165 L 130 165 L 130 195 L 270 195 L 270 160 L 290 160 L 290 195 L 325 195 L 325 150 L 345 150 L 345 195 L 375 195 L 375 175 L 400 175 L 400 205 L 0 205 Z" fill="#150328" opacity="0.9" />
+
+  <!-- Mid Layer with Lit Windows & Antennas -->
+  <path d="M 0 200 L 15 200 L 15 180 L 40 180 L 40 200 L 65 200 L 65 175 L 85 175 L 85 200 L 125 200 L 125 185 L 155 185 L 155 200 L 245 200 L 245 180 L 275 180 L 275 200 L 315 200 L 315 170 L 335 170 L 335 200 L 360 200 L 360 180 L 385 180 L 385 200 L 400 200 L 400 210 L 0 210 Z" fill="#0b0118" />
+
+  <!-- Skyline Window Dots & Antennas -->
+  <line x1="75" y1="155" x2="75" y2="140" stroke="#FF007F" stroke-width="1.5" />
+  <circle cx="75" cy="138" r="2" fill="#FF007F" filter="url(#glow)" />
+  <line x1="335" y1="150" x2="335" y2="135" stroke="#00F0FF" stroke-width="1.5" />
+  <circle cx="335" cy="133" r="2" fill="#00F0FF" filter="url(#glow)" />
+
+  <rect x="20" y="184" width="3" height="3" fill="#FFE600" opacity="0.8" />
+  <rect x="28" y="184" width="3" height="3" fill="#FFE600" opacity="0.8" />
+  <rect x="70" y="180" width="3" height="3" fill="#00F0FF" opacity="0.9" />
+  <rect x="78" y="180" width="3" height="3" fill="#00F0FF" opacity="0.9" />
+  <rect x="320" y="176" width="3" height="3" fill="#FFE600" opacity="0.8" />
+  <rect x="328" y="176" width="3" height="3" fill="#FFE600" opacity="0.8" />
+
+  <!-- 4. Perspective 4-Lane Neon Highway -->
+  <!-- Ground Terrain (Grid Floor) Left & Right -->
+  <polygon points="0,200 170,200 40,400 0,400" fill="#08021a" stroke="#FF007F" stroke-width="0.8" stroke-opacity="0.3" />
+  <polygon points="230,200 400,200 400,400 360,400" fill="#08021a" stroke="#FF007F" stroke-width="0.8" stroke-opacity="0.3" />
+
+  <!-- Main Road Surface Trapezoid -->
+  <polygon points="170,200 230,200 375,400 25,400" fill="url(#roadAsphalt)" stroke="#000000" stroke-width="3" />
+
+  <!-- Neon Glowing Guardrails / Curbs -->
+  <line x1="170" y1="200" x2="25" y2="400" stroke="#00F0FF" stroke-width="5" filter="url(#glow)" />
+  <line x1="230" y1="200" x2="375" y2="400" stroke="#00F0FF" stroke-width="5" filter="url(#glow)" />
+  <line x1="170" y1="200" x2="25" y2="400" stroke="#FFFFFF" stroke-width="1.8" />
+  <line x1="230" y1="200" x2="375" y2="400" stroke="#FFFFFF" stroke-width="1.8" />
+
+  <!-- 4 Highway Lanes (3 Divider Dashed Lines in Perspective) -->
+  <!-- Left Lane Divider -->
+  <line x1="185" y1="200" x2="112" y2="400" stroke="#FFE600" stroke-width="2.5" stroke-dasharray="8,12" opacity="0.85" />
+  <!-- Center Lane Divider (Double Neon Cyan) -->
+  <line x1="200" y1="200" x2="200" y2="400" stroke="#00F0FF" stroke-width="3.5" stroke-dasharray="12,14" opacity="0.9" filter="url(#glow)" />
+  <!-- Right Lane Divider -->
+  <line x1="215" y1="200" x2="288" y2="400" stroke="#FFE600" stroke-width="2.5" stroke-dasharray="8,12" opacity="0.85" />
+
+  <!-- Speed Motion Warp Lines on Road -->
+  <line x1="150" y1="280" x2="135" y2="330" stroke="#00F0FF" stroke-width="1.5" stroke-opacity="0.4" />
+  <line x1="250" y1="280" x2="265" y2="330" stroke="#00F0FF" stroke-width="1.5" stroke-opacity="0.4" />
+  <line x1="80" y1="340" x2="60" y2="385" stroke="#FF007F" stroke-width="2" stroke-opacity="0.5" />
+  <line x1="320" y1="340" x2="340" y2="385" stroke="#FF007F" stroke-width="2" stroke-opacity="0.5" />
+
+  <!-- 5. Distant Traffic Vehicles in Perspective -->
+  <!-- Distant Speeder (Lane 1 Left) -->
+  <g transform="translate(138, 235)">
+    <rect x="-10" y="-5" width="20" height="10" rx="2" fill="#00F0FF" stroke="#000000" stroke-width="1.5" />
+    <rect x="-8" y="2" width="5" height="2" fill="#FF0055" />
+    <rect x="3" y="2" width="5" height="2" fill="#FF0055" />
+  </g>
+
+  <!-- Distant Heavy Hauler Truck (Lane 3 Right) -->
+  <g transform="translate(260, 245)">
+    <rect x="-16" y="-12" width="32" height="20" rx="3" fill="#1f1f2e" stroke="#FFE600" stroke-width="2" />
+    <rect x="-14" y="4" width="8" height="3" fill="#FFE600" />
+    <rect x="6" y="4" width="8" height="3" fill="#FFE600" />
+    <!-- Slipstream Cone Indicator behind truck -->
+    <polygon points="-12,8 12,8 18,35 -18,35" fill="#00F0FF" opacity="0.15" />
+  </g>
+
+  <!-- 6. Foreground Player Cyber Sports Car (Wedge Silhouette) -->
+  <g transform="translate(200, 325)" filter="url(#neoShadow)">
+    <!-- Cyan Neon Underglow Projection on Road -->
+    <ellipse cx="0" cy="38" rx="80" ry="16" fill="#00F0FF" opacity="0.55" filter="url(#superGlow)" />
+
+    <!-- Dual Nitro Thruster Plasma Exhaust Flames -->
+    <!-- Left Exhaust Nitro Flame -->
+    <polygon points="-36,36 -28,36 -32,74" fill="url(#nitroCyan)" filter="url(#glow)" />
+    <polygon points="-35,36 -29,36 -32,58" fill="#FFFFFF" />
+    <!-- Right Exhaust Nitro Flame -->
+    <polygon points="28,36 36,36 32,74" fill="url(#nitroCyan)" filter="url(#glow)" />
+    <polygon points="29,36 35,36 32,58" fill="#FFFFFF" />
+
+    <!-- Nitro Spark / Plasma Bits -->
+    <circle cx="-32" cy="78" r="2.5" fill="#00F0FF" />
+    <circle cx="-25" cy="88" r="1.5" fill="#FFE600" />
+    <circle cx="32" cy="78" r="2.5" fill="#00F0FF" />
+    <circle cx="39" cy="86" r="1.5" fill="#FFE600" />
+    <circle cx="0" cy="82" r="2" fill="#FF007F" />
+
+    <!-- Rear Carbon Diffuser & Quad Aero Fins -->
+    <polygon points="-58,34 58,34 50,42 -50,42" fill="#05050a" stroke="#000000" stroke-width="2" />
+    <line x1="-38" y1="34" x2="-38" y2="42" stroke="#00F0FF" stroke-width="2" />
+    <line x1="-12" y1="34" x2="-12" y2="42" stroke="#FFE600" stroke-width="2" />
+    <line x1="12" y1="34" x2="12" y2="42" stroke="#FFE600" stroke-width="2" />
+    <line x1="38" y1="34" x2="38" y2="42" stroke="#00F0FF" stroke-width="2" />
+
+    <!-- Lower Chassis Body (Wedge Rear) -->
+    <polygon points="-65,15 -54,36 54,36 65,15 52,0 -52,0" fill="url(#carBodyDark)" stroke="#000000" stroke-width="3" />
+
+    <!-- Wide Rear Carbon Wing / Spoiler -->
+    <polygon points="-68,-12 68,-12 62,-4 -62,-4" fill="#0b0b14" stroke="#00F0FF" stroke-width="2" />
+    <line x1="-68" y1="-12" x2="68" y2="-12" stroke="#00F0FF" stroke-width="2.5" filter="url(#glow)" />
+    <!-- Spoiler Struts -->
+    <polygon points="-36,-4 -32,-4 -30,6 -34,6" fill="#1e1e2f" stroke="#000000" stroke-width="1.5" />
+    <polygon points="32,-4 36,-4 34,6 30,6" fill="#1e1e2f" stroke="#000000" stroke-width="1.5" />
+
+    <!-- Cockpit Roof & Rear Slotted Louvers -->
+    <polygon points="-38,-2 -26,-28 26,-28 38,-2" fill="url(#carGlass)" stroke="#000000" stroke-width="2.5" />
+    <!-- Rear Window Louver Slats -->
+    <line x1="-24" y1="-22" x2="24" y2="-22" stroke="#000000" stroke-width="2.5" />
+    <line x1="-28" y1="-15" x2="28" y2="-15" stroke="#000000" stroke-width="2.5" />
+    <line x1="-32" y1="-8" x2="32" y2="-8" stroke="#000000" stroke-width="2.5" />
+
+    <!-- Rear LED Horizon Lightbar (Continuous Neon Red/Magenta Line) -->
+    <rect x="-50" y="8" width="100" height="8" rx="2" fill="#FF0055" stroke="#000000" stroke-width="2" filter="url(#glow)" />
+    <rect x="-46" y="10" width="92" height="4" rx="1" fill="#FFFFFF" />
+
+    <!-- Rear Cyber License Plate Badge -->
+    <rect x="-24" y="20" width="48" height="13" rx="2" fill="#000000" stroke="#00F0FF" stroke-width="1.5" />
+    <text x="0" y="30" font-family="'Courier New', monospace" font-weight="900" font-size="8" fill="#00F0FF" text-anchor="middle" letter-spacing="1">
+      OUTRUN 77
+    </text>
+
+    <!-- Side Cyber Body Line Accents -->
+    <line x1="-54" y1="12" x2="-26" y2="4" stroke="#00F0FF" stroke-width="2" />
+    <line x1="54" y1="12" x2="26" y2="4" stroke="#00F0FF" stroke-width="2" />
+  </g>
+
+  <!-- 7. Neo-Brutalist HUD Overlays & Telemetry Badges -->
+  <!-- Top-Left Telemetry Tag -->
+  <g filter="url(#neoShadow)">
+    <rect x="16" y="16" width="150" height="30" rx="6" fill="#000000" stroke="#00F0FF" stroke-width="2.5" />
+    <text x="26" y="36" font-family="'Courier New', monospace" font-weight="900" font-size="12" fill="#00F0FF" letter-spacing="1">
+      SPEED // 340 KM/H
+    </text>
+    <circle cx="152" cy="31" r="4" fill="#39FF14" />
+  </g>
+
+  <!-- Top-Right Nitro Overdrive Badge -->
+  <g filter="url(#neoShadow)">
+    <rect x="252" y="16" width="132" height="30" rx="6" fill="#FFE600" stroke="#000000" stroke-width="2.5" />
+    <text x="262" y="36" font-family="'Courier New', monospace" font-weight="900" font-size="12" fill="#000000" letter-spacing="0.5">
+      NITRO // 100%
+    </text>
+  </g>
+
+  <!-- Near-Miss Combo Floating Notification -->
+  <g transform="translate(200, 85)" filter="url(#neoShadow)">
+    <rect x="-75" y="-14" width="150" height="28" rx="6" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4" font-family="'Courier New', monospace" font-weight="900" font-size="11" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">
+      ⚡ NEAR MISS x4 ⚡
+    </text>
+  </g>
+
+  <!-- Bottom Hazard Warning Strip -->
+  <rect x="0" y="386" width="400" height="14" fill="url(#hazard)" stroke="#000000" stroke-width="2" />
+</svg>
