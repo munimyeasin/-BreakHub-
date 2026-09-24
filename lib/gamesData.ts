@@ -2,32 +2,6 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
-    id: 'g_outrun_22',
-    slug: 'cyber-outrun-2077',
-    title: 'Cyber Outrun 2077',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-outrun-2077.svg',
-    description: 'Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 58,
-    status: 'active',
-    featured: true
-  },
-  {
-    id: 'g_missile_21',
-    slug: 'neon-missile-defense',
-    title: 'Neon Missile Defense',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/neon-missile-defense.svg',
-    description: 'Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 42,
-    status: 'active',
-    featured: true
-  },
-  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
@@ -63,6 +37,19 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 56,
+    status: 'active',
+    featured: true
+  },
+  {
+    id: 'g_missile_21',
+    slug: 'neon-missile-defense',
+    title: 'Neon Missile Defense',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/neon-missile-defense.svg',
+    description: 'Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 42,
     status: 'active',
     featured: true
   },
@@ -191,6 +178,19 @@ export const INITIAL_GAMES: Game[] = [
     rating: 4.9,
     rating_count: 22,
     status: 'active'
+  },
+  {
+    id: 'g_outrun_22',
+    slug: 'cyber-outrun-2077',
+    title: 'Cyber Outrun 2077',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-outrun-2077.svg',
+    description: 'Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 58,
+    status: 'active',
+    featured: true
   },
   {
     id: 'g_snake_01',

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Maximize2, Minimize2, Zap, Flame, Pause, ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from 'lucide-react';
+import { Play, RotateCcw, Volume2, VolumeX, Maximize2, Minimize2, Zap, Flame, Pause, ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Smartphone, RotateCw } from 'lucide-react';
 
 interface CyberOutrunProps {
   gameId?: string;
@@ -90,6 +90,8 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [nearMissCount, setNearMissCount] = useState(0);
+  const [isPortraitMobile, setIsPortraitMobile] = useState(false);
+  const [dismissRotatePrompt, setDismissRotatePrompt] = useState(false);
 
   // Internal Engine State Refs (60-120 FPS Non-blocking)
   const isPlayingRef = useRef(false);
@@ -1773,7 +1775,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
     };
   }, [handleGameOver, recycleCar, updateEngineAudio, spawnParticle]);
 
-  // Responsive High-DPI Canvas Resize Observer
+  // Responsive High-DPI Canvas Resize & Mobile Orientation Observer
   useEffect(() => {
     const updateSize = () => {
       if (!canvasRef.current || !containerRef.current) return;
@@ -1787,17 +1789,28 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
 
       canvasRef.current.width = Math.floor(targetW * dpr);
       canvasRef.current.height = Math.floor(targetH * dpr);
+
+      // Orientation Detection for Mobile Devices
+      if (typeof window !== 'undefined') {
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 850;
+        const isPortrait = window.innerHeight > window.innerWidth;
+        setIsPortraitMobile(isTouch && isPortrait && window.innerWidth < 768);
+      }
     };
 
     updateSize();
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    window.addEventListener('orientationchange', updateSize);
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      window.removeEventListener('orientationchange', updateSize);
+    };
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[580px] md:h-[640px] bg-black text-white font-mono select-none overflow-hidden flex flex-col items-center justify-center border-4 border-black shadow-neo-lg"
+      className="relative w-full h-[520px] sm:h-[580px] md:h-[640px] max-h-[92vh] bg-black text-white font-mono select-none overflow-hidden flex flex-col items-center justify-center border-4 border-black shadow-neo-lg"
     >
       {/* Background 60-120 FPS High-DPI HTML5 Canvas with Drag Steering */}
       <canvas
@@ -1808,6 +1821,62 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
         onPointerCancel={handlePointerUp}
         className="absolute inset-0 w-full h-full block cursor-ew-resize touch-none"
       />
+
+      {/* MOBILE PORTRAIT ORIENTATION ROTATE PROMPT */}
+      {isPortraitMobile && !dismissRotatePrompt && (
+        <div className="absolute inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in border-4 border-yellow-400">
+          {/* Animated Rotating Smartphone Graphic */}
+          <div className="relative w-20 h-20 mb-5 flex items-center justify-center">
+            <div className="absolute inset-0 bg-cyan-400/20 rounded-full animate-ping" />
+            <div className="relative border-4 border-cyan-400 bg-black p-3 rounded-2xl shadow-neo">
+              <Smartphone className="w-10 h-10 text-yellow-300" />
+            </div>
+            <div className="absolute -top-1 -right-1 bg-yellow-400 text-black p-1 rounded-full border-2 border-black animate-bounce">
+              <RotateCw className="w-4 h-4" />
+            </div>
+          </div>
+
+          <div className="inline-block bg-yellow-400 text-black px-3 py-1 text-xs font-black tracking-widest border-2 border-black shadow-neo mb-2">
+            OPTIMAL VIEWPORT // LANDSCAPE
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-300 to-pink-500 mb-2 font-mono">
+            ROTATE YOUR DEVICE
+          </h2>
+
+          <p className="max-w-xs text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+            Cyber Outrun 2077 is engineered for ultra-wide highway perspective and ergonomic dual-thumb controls.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+            <button
+              onClick={() => {
+                if (containerRef.current) {
+                  try {
+                    if (containerRef.current.requestFullscreen) {
+                      containerRef.current.requestFullscreen();
+                    }
+                    if (screen.orientation && (screen.orientation as any).lock) {
+                      (screen.orientation as any).lock('landscape').catch(() => {});
+                    }
+                  } catch {}
+                }
+              }}
+              className="w-full bg-cyan-400 text-black font-black text-sm py-3 border-2 border-black shadow-neo hover:bg-yellow-400 transition-all flex items-center justify-center gap-2 rounded"
+            >
+              <RotateCw className="w-4 h-4" />
+              <span>LOCK LANDSCAPE</span>
+            </button>
+
+            <button
+              onClick={() => setDismissRotatePrompt(true)}
+              className="w-full bg-gray-900 text-gray-300 font-bold text-xs py-2.5 border-2 border-gray-700 hover:bg-gray-800 hover:text-white transition-all rounded"
+            >
+              PLAY IN PORTRAIT ANYWAY
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Retro CRT Scanline Filter Overlay */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black/60" />
@@ -2001,18 +2070,18 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
 
       {/* MOBILE / ON-SCREEN TOUCH CONTROL ACTION BAR */}
       {isPlaying && !isGameOver && (
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-auto">
+        <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 flex items-center justify-between z-20 pointer-events-auto">
           {/* Left / Right Steering Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               onTouchStart={() => { steerLeftInputRef.current = true; }}
               onTouchEnd={() => { steerLeftInputRef.current = false; }}
               onMouseDown={() => { steerLeftInputRef.current = true; }}
               onMouseUp={() => { steerLeftInputRef.current = false; }}
-              className="w-14 h-14 bg-black/80 active:bg-cyan-400 active:text-black border-2 border-cyan-400 text-cyan-300 font-black text-xl rounded-lg shadow-neo flex items-center justify-center transition-all touch-none select-none"
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-black/85 active:bg-cyan-400 active:text-black border-2 border-cyan-400 text-cyan-300 font-black text-xl rounded-lg shadow-neo flex items-center justify-center transition-all touch-none select-none"
               title="Steer Left"
             >
-              <ArrowLeft className="w-7 h-7" />
+              <ArrowLeft className="w-6 h-6 sm:w-7 sm:h-7" />
             </button>
 
             <button
@@ -2020,10 +2089,10 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
               onTouchEnd={() => { steerRightInputRef.current = false; }}
               onMouseDown={() => { steerRightInputRef.current = true; }}
               onMouseUp={() => { steerRightInputRef.current = false; }}
-              className="w-14 h-14 bg-black/80 active:bg-cyan-400 active:text-black border-2 border-cyan-400 text-cyan-300 font-black text-xl rounded-lg shadow-neo flex items-center justify-center transition-all touch-none select-none"
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-black/85 active:bg-cyan-400 active:text-black border-2 border-cyan-400 text-cyan-300 font-black text-xl rounded-lg shadow-neo flex items-center justify-center transition-all touch-none select-none"
               title="Steer Right"
             >
-              <ArrowRight className="w-7 h-7" />
+              <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7" />
             </button>
           </div>
 
@@ -2031,7 +2100,7 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
           <button
             onClick={activateNitro}
             onTouchStart={activateNitro}
-            className={`px-5 h-14 border-3 border-black font-black text-sm md:text-base rounded-lg shadow-neo flex items-center gap-1.5 transition-all touch-none select-none ${
+            className={`px-3.5 sm:px-5 h-12 sm:h-14 border-2 sm:border-3 border-black font-black text-xs sm:text-base rounded-lg shadow-neo flex items-center gap-1 sm:gap-1.5 transition-all touch-none select-none ${
               isNitroActive
                 ? 'bg-cyan-400 text-black animate-pulse'
                 : nitroEnergy >= 15
@@ -2039,22 +2108,22 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
                 : 'bg-gray-800 text-gray-500 opacity-60'
             }`}
           >
-            <Zap className="w-5 h-5 fill-current" />
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
             <span>NITRO</span>
           </button>
 
           {/* Gas & Brake Pedals */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               onTouchStart={() => { brakeInputRef.current = true; }}
               onTouchEnd={() => { brakeInputRef.current = false; }}
               onMouseDown={() => { brakeInputRef.current = true; }}
               onMouseUp={() => { brakeInputRef.current = false; }}
-              className="w-14 h-14 bg-black/80 active:bg-rose-500 active:text-white border-2 border-rose-500 text-rose-400 font-black text-sm rounded-lg shadow-neo flex flex-col items-center justify-center transition-all touch-none select-none"
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-black/85 active:bg-rose-500 active:text-white border-2 border-rose-500 text-rose-400 font-black text-xs rounded-lg shadow-neo flex flex-col items-center justify-center transition-all touch-none select-none"
               title="Brake"
             >
-              <ArrowDown className="w-5 h-5" />
-              <span className="text-[9px] font-bold">BRAKE</span>
+              <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-[8px] sm:text-[9px] font-bold">BRAKE</span>
             </button>
 
             <button
@@ -2062,11 +2131,11 @@ export default function CyberOutrunGame({ onGameOver, onScoreUpdate }: CyberOutr
               onTouchEnd={() => { throttleInputRef.current = false; }}
               onMouseDown={() => { throttleInputRef.current = true; }}
               onMouseUp={() => { throttleInputRef.current = false; }}
-              className="w-14 h-14 bg-black/80 active:bg-yellow-400 active:text-black border-2 border-yellow-400 text-yellow-300 font-black text-sm rounded-lg shadow-neo flex flex-col items-center justify-center transition-all touch-none select-none"
+              className="w-12 h-12 sm:w-14 sm:h-14 bg-black/85 active:bg-yellow-400 active:text-black border-2 border-yellow-400 text-yellow-300 font-black text-xs rounded-lg shadow-neo flex flex-col items-center justify-center transition-all touch-none select-none"
               title="Gas / Accelerate"
             >
-              <ArrowUp className="w-5 h-5" />
-              <span className="text-[9px] font-bold">GAS</span>
+              <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-[8px] sm:text-[9px] font-bold">GAS</span>
             </button>
           </div>
         </div>
