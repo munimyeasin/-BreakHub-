@@ -7,9 +7,6 @@ import {
   VolumeX,
   Trophy,
   Play,
-  Pause,
-  Shield,
-  Zap,
   Radio,
   Flame,
   Maximize,
@@ -17,8 +14,7 @@ import {
   Crosshair,
   Target,
   AlertTriangle,
-  Sparkles,
-  Award
+  Zap
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -26,6 +22,11 @@ interface NeonMissileDefenseGameProps {
   gameId: string;
   onGameOver: (finalScore: number) => void;
 }
+
+// Tactical Virtual Resolution Constants (Aspect Ratio 3:2)
+const VIRTUAL_WIDTH = 900;
+const VIRTUAL_HEIGHT = 600;
+const VIRTUAL_GROUND_Y = 555; // Ground baseline height in virtual space
 
 // Tactical Game Configuration & Threat Profiles
 interface Battery {
@@ -135,6 +136,14 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // High-DPI & Uniform Aspect-Fit Projection Transform Matrix
+  const viewTransformRef = useRef({
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    dpr: 1
+  });
+
   // Audio Context Ref
   const audioCtxRef = useRef<AudioContext | null>(null);
 
@@ -170,7 +179,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
   const spawnIntervalRef = useRef(1200);
   const radarAngleRef = useRef(0);
   const screenShakeRef = useRef(0);
-  const mousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const mousePosRef = useRef<{ x: number; y: number }>({ x: VIRTUAL_WIDTH / 2, y: VIRTUAL_HEIGHT / 2 });
 
   // Entity Collections
   const batteriesRef = useRef<Battery[]>([]);
@@ -209,49 +218,38 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(480, now);
-        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.16);
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.exponentialRampToValueAtTime(750, now + 0.18);
 
         gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.16);
+        osc.stop(now + 0.18);
       } else if (type === 'explode') {
-        // Bass Flak Explosion
         const osc = ctx.createOscillator();
-        const filter = ctx.createBiquadFilter();
         const gain = ctx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(160, now);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
         osc.frequency.exponentialRampToValueAtTime(35, now + 0.35);
 
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, now);
-        filter.frequency.linearRampToValueAtTime(80, now + 0.35);
-
-        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.setValueAtTime(0.22, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
-        osc.connect(filter);
-        filter.connect(gain);
+        osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.35);
       } else if (type === 'chain') {
-        // High-Voltage Arpeggio Chime
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        const notes = [587.33, 739.99, 880, 1174.66, 1479.98];
-        const randomNote = notes[Math.min(notes.length - 1, comboStreakRef.current % notes.length)];
-        osc.frequency.setValueAtTime(randomNote, now);
-        osc.frequency.exponentialRampToValueAtTime(randomNote * 1.5, now + 0.22);
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(980, now + 0.22);
 
-        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.setValueAtTime(0.25, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
 
         osc.connect(gain);
@@ -262,41 +260,32 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'square';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.setValueAtTime(1200, now + 0.05);
-        osc.frequency.setValueAtTime(600, now + 0.1);
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.linearRampToValueAtTime(300, now + 0.15);
 
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.18);
+        osc.stop(now + 0.15);
       } else if (type === 'nuke') {
-        // Massive Sub-Bass Orbital EMP Shockwave
         const osc = ctx.createOscillator();
-        const filter = ctx.createBiquadFilter();
         const gain = ctx.createGain();
-
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(280, now);
-        osc.frequency.exponentialRampToValueAtTime(20, now + 0.9);
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1200, now);
-        filter.frequency.exponentialRampToValueAtTime(60, now + 0.9);
+        osc.frequency.setValueAtTime(80, now);
+        osc.frequency.linearRampToValueAtTime(25, now + 1.2);
 
         gain.gain.setValueAtTime(0.45, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
 
-        osc.connect(filter);
-        filter.connect(gain);
+        osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.95);
+        osc.stop(now + 1.2);
       } else if (type === 'victory') {
-        const chord = [440, 554.37, 659.25, 880];
+        const chord = [523.25, 659.25, 783.99, 1046.5]; // C E G C
         chord.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -355,62 +344,108 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
     }
   }, [gameId]);
 
-  // Dynamic Canvas Layout Initializer
+  // Dynamic Virtual Canvas Layout Initializer (Fixed in 900x600 coordinate space)
   const initTacticalLayout = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const w = canvas.width;
-    const h = canvas.height;
-
-    const groundY = h - 45;
-
     // Setup 3 Anti-Missile Batteries (Left, Center, Right)
     batteriesRef.current = [
-      { id: 1, x: 45, y: groundY - 10, maxAmmo: 15, ammo: 15, alive: true, name: 'ALPHA' },
-      { id: 2, x: w / 2, y: groundY - 12, maxAmmo: 25, ammo: 25, alive: true, name: 'DELTA' },
-      { id: 3, x: w - 45, y: groundY - 10, maxAmmo: 15, ammo: 15, alive: true, name: 'OMEGA' }
+      { id: 1, x: 60, y: VIRTUAL_GROUND_Y - 10, maxAmmo: 15, ammo: 15, alive: true, name: 'ALPHA' },
+      { id: 2, x: VIRTUAL_WIDTH / 2, y: VIRTUAL_GROUND_Y - 12, maxAmmo: 25, ammo: 25, alive: true, name: 'DELTA' },
+      { id: 3, x: VIRTUAL_WIDTH - 60, y: VIRTUAL_GROUND_Y - 10, maxAmmo: 15, ammo: 15, alive: true, name: 'OMEGA' }
     ];
 
     // Setup 6 Defended Cyber Data Cities (3 on left half, 3 on right half)
-    const citySpacing1 = (w / 2 - 90) / 3;
-    const citySpacing2 = (w - 90 - (w / 2 + 45)) / 3;
-
     citiesRef.current = [
-      { id: 1, x: 45 + citySpacing1 * 0.65, y: groundY - 14, width: 26, height: 20, alive: true, name: 'MEGACORE-A' },
-      { id: 2, x: 45 + citySpacing1 * 1.65, y: groundY - 18, width: 28, height: 24, alive: true, name: 'POWERGRID-B' },
-      { id: 3, x: 45 + citySpacing1 * 2.65, y: groundY - 15, width: 26, height: 21, alive: true, name: 'DATAHUB-C' },
-      { id: 4, x: w / 2 + 35 + citySpacing2 * 0.45, y: groundY - 16, width: 26, height: 22, alive: true, name: 'RESEARCH-D' },
-      { id: 5, x: w / 2 + 35 + citySpacing2 * 1.45, y: groundY - 20, width: 30, height: 26, alive: true, name: 'NEXUS-E' },
-      { id: 6, x: w / 2 + 35 + citySpacing2 * 2.45, y: groundY - 15, width: 26, height: 21, alive: true, name: 'ORBITAL-F' }
+      { id: 1, x: 150, y: VIRTUAL_GROUND_Y - 20, width: 34, height: 20, alive: true, name: 'MEGACORE-A' },
+      { id: 2, x: 240, y: VIRTUAL_GROUND_Y - 24, width: 36, height: 24, alive: true, name: 'POWERGRID-B' },
+      { id: 3, x: 330, y: VIRTUAL_GROUND_Y - 22, width: 34, height: 22, alive: true, name: 'DATAHUB-C' },
+      { id: 4, x: 535, y: VIRTUAL_GROUND_Y - 22, width: 34, height: 22, alive: true, name: 'RESEARCH-D' },
+      { id: 5, x: 625, y: VIRTUAL_GROUND_Y - 26, width: 38, height: 26, alive: true, name: 'NEXUS-E' },
+      { id: 6, x: 715, y: VIRTUAL_GROUND_Y - 22, width: 34, height: 22, alive: true, name: 'ORBITAL-F' }
     ];
 
     setBatteryAmmo({ b1: 15, b2: 25, b3: 15 });
     setCitiesStatus([true, true, true, true, true, true]);
   }, []);
 
-  // Responsive High-DPI Canvas Resizer
+  // Responsive High-DPI Canvas Resizer with Aspect-Fit Transform Matrix
+  const handleResize = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const displayW = Math.floor(rect.width);
+    const displayH = Math.floor(rect.height);
+
+    if (displayW <= 0 || displayH <= 0) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(displayW * dpr);
+    canvas.height = Math.floor(displayH * dpr);
+
+    const scale = Math.min(displayW / VIRTUAL_WIDTH, displayH / VIRTUAL_HEIGHT);
+    const offsetX = (displayW - VIRTUAL_WIDTH * scale) / 2;
+    const offsetY = (displayH - VIRTUAL_HEIGHT * scale) / 2;
+
+    viewTransformRef.current = {
+      scale,
+      offsetX,
+      offsetY,
+      dpr
+    };
+  }, []);
+
   useEffect(() => {
-    const handleResize = () => {
-      const container = containerRef.current;
-      const canvas = canvasRef.current;
-      if (!container || !canvas) return;
+    initTacticalLayout();
+    handleResize();
 
-      const rect = container.getBoundingClientRect();
-      const displayW = Math.floor(rect.width);
-      const displayH = Math.floor(rect.height || (rect.width * 0.72));
-
-      canvas.width = displayW;
-      canvas.height = displayH;
-
-      if (!isPlayingRef.current) {
-        initTacticalLayout();
-      }
+    const onFsChange = () => {
+      const isFs = !!(
+        document.fullscreenElement ||
+        (document as unknown as { webkitFullscreenElement?: Element }).webkitFullscreenElement ||
+        (document as unknown as { mozFullScreenElement?: Element }).mozFullScreenElement
+      );
+      setIsFullscreen(isFs);
+      setTimeout(handleResize, 60);
     };
 
-    handleResize();
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    document.addEventListener('mozfullscreenchange', onFsChange);
+    document.addEventListener('MSFullscreenChange', onFsChange);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [initTacticalLayout]);
+    window.addEventListener('orientationchange', handleResize);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+      document.removeEventListener('mozfullscreenchange', onFsChange);
+      document.removeEventListener('MSFullscreenChange', onFsChange);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [initTacticalLayout, handleResize]);
+
+  // Virtual Coordinate Pointer Mapper
+  const getVirtualCoords = useCallback((clientX: number, clientY: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: VIRTUAL_WIDTH / 2, y: VIRTUAL_HEIGHT / 2, inBounds: false };
+
+    const rect = canvas.getBoundingClientRect();
+    const relX = clientX - rect.left;
+    const relY = clientY - rect.top;
+
+    const { scale, offsetX, offsetY } = viewTransformRef.current;
+    if (scale <= 0) return { x: VIRTUAL_WIDTH / 2, y: VIRTUAL_HEIGHT / 2, inBounds: false };
+
+    const vx = (relX - offsetX) / scale;
+    const vy = (relY - offsetY) / scale;
+
+    return {
+      x: Math.max(0, Math.min(VIRTUAL_WIDTH, vx)),
+      y: Math.max(0, Math.min(VIRTUAL_HEIGHT, vy)),
+      inBounds: vx >= 0 && vx <= VIRTUAL_WIDTH && vy >= 0 && vy <= VIRTUAL_HEIGHT
+    };
+  }, []);
 
   // Add Particle Sparks
   const addExplosionParticles = useCallback((x: number, y: number, color: string, count: number = 16) => {
@@ -448,11 +483,9 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
   // Launch Player Interceptor Missile
   const launchInterceptor = useCallback((targetX: number, targetY: number, preferredBatteryId?: number) => {
     if (!isPlayingRef.current || isPausedRef.current) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
 
-    if (targetY > canvas.height - 55) {
-      targetY = canvas.height - 55; // Prevent targeting below ground baseline
+    if (targetY > VIRTUAL_GROUND_Y - 10) {
+      targetY = VIRTUAL_GROUND_Y - 10; // Prevent targeting below ground baseline
     }
 
     const activeBatteries = batteriesRef.current.filter((b) => b.alive && b.ammo > 0);
@@ -504,8 +537,6 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
   // Trigger Orbital EMP Nuke
   const triggerNuke = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || nukeChargesRef.current <= 0) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
 
     nukeChargesRef.current -= 1;
     setNukeCharges(nukeChargesRef.current);
@@ -513,10 +544,10 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
     explosionsRef.current.push({
       id: idCounterRef.current++,
-      x: canvas.width / 2,
-      y: canvas.height / 2,
+      x: VIRTUAL_WIDTH / 2,
+      y: VIRTUAL_HEIGHT / 2,
       radius: 5,
-      maxRadius: Math.max(canvas.width, canvas.height) * 0.9,
+      maxRadius: 750,
       color: '#00F0FF',
       expanding: true,
       alive: true,
@@ -524,15 +555,12 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       isPlayerFlak: true
     });
 
-    addBadge(canvas.width / 2, canvas.height * 0.35, '⚡ ORBITAL EMP BLAST CLEARED AIRSPACE! ⚡', '#00F0FF');
+    addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.35, '⚡ ORBITAL EMP BLAST CLEARED AIRSPACE! ⚡', '#00F0FF');
     playSfx('nuke');
   }, [playSfx, addBadge]);
 
   // Start New Sector Wave
   const startWave = useCallback((waveNum: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
     waveRef.current = waveNum;
     setWave(waveNum);
     setIsWaveIntermission(false);
@@ -563,10 +591,10 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
     if (waveNum % 2 === 0 && nukeChargesRef.current < 3) {
       nukeChargesRef.current += 1;
       setNukeCharges(nukeChargesRef.current);
-      addBadge(canvas.width / 2, canvas.height * 0.45, '+1 ORBITAL EMP NUKE CHARGE ARMED!', '#FFE600');
+      addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.45, '+1 ORBITAL EMP NUKE CHARGE ARMED!', '#FFE600');
     }
 
-    addBadge(canvas.width / 2, canvas.height * 0.3, `DEFENSE SECTOR ${waveNum} ENGAGED`, '#39FF14');
+    addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.3, `DEFENSE SECTOR ${waveNum} ENGAGED`, '#39FF14');
     playSfx('victory');
   }, [playSfx, addBadge]);
 
@@ -644,7 +672,8 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       }
       setIsFullscreen(false);
     }
-  }, []);
+    setTimeout(handleResize, 60);
+  }, [handleResize]);
 
   // Keyboard Shortcuts Listener
   useEffect(() => {
@@ -681,25 +710,15 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
   // Handle Canvas Click & Touch
   const handleCanvasAction = useCallback((clientX: number, clientY: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !isPlayingRef.current || isPausedRef.current) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = ((clientX - rect.left) / rect.width) * canvas.width;
-    const y = ((clientY - rect.top) / rect.height) * canvas.height;
-
+    if (!isPlayingRef.current || isPausedRef.current) return;
+    const { x, y } = getVirtualCoords(clientX, clientY);
     launchInterceptor(x, y, selectedBattery);
-  }, [launchInterceptor, selectedBattery]);
+  }, [getVirtualCoords, launchInterceptor, selectedBattery]);
 
   // Mouse Move for Custom Crosshairs
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    mousePosRef.current = {
-      x: ((e.clientX - rect.left) / rect.width) * canvas.width,
-      y: ((e.clientY - rect.top) / rect.height) * canvas.height
-    };
+    const { x, y } = getVirtualCoords(e.clientX, e.clientY);
+    mousePosRef.current = { x, y };
   };
 
   // Main 60+ FPS Canvas Animation & Physics Loop
@@ -716,11 +735,27 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       const ctx = canvas?.getContext('2d');
 
       if (canvas && ctx) {
-        const curW = canvas.width;
-        const curH = canvas.height;
-        const groundY = curH - 45;
+        const { scale, offsetX, offsetY, dpr } = viewTransformRef.current;
 
-        // Apply Screen Shake
+        // Clear full canvas with deep space black (letterbox background)
+        ctx.save();
+        ctx.fillStyle = '#02000A';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Apply Uniform Aspect-Fit Projection Transform Matrix
+        ctx.setTransform(
+          scale * dpr, 0,
+          0, scale * dpr,
+          offsetX * dpr, offsetY * dpr
+        );
+
+        // Clip strictly to Virtual Viewport [0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT]
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        ctx.clip();
+
+        // Apply Screen Shake inside Virtual Coordinates
         ctx.save();
         if (screenShakeRef.current > 0) {
           const sx = (Math.random() - 0.5) * screenShakeRef.current * 1.5;
@@ -729,21 +764,21 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           screenShakeRef.current = Math.max(0, screenShakeRef.current - 0.65 * timeScale);
         }
 
-        // 1. Draw Deep Cyber Space Ground
+        // 1. Draw Deep Cyber Space Sky
         ctx.fillStyle = '#060214';
-        ctx.fillRect(0, 0, curW, curH);
+        ctx.fillRect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
         // Radar Scanning Sweep Arc
         radarAngleRef.current = (radarAngleRef.current + 0.015 * timeScale) % (Math.PI * 2);
-        const centerRadarX = curW / 2;
-        const centerRadarY = groundY;
+        const centerRadarX = VIRTUAL_WIDTH / 2;
+        const centerRadarY = VIRTUAL_GROUND_Y;
 
         ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.arc(centerRadarX, centerRadarY, curH * 0.45, Math.PI, 0, false);
-        ctx.arc(centerRadarX, centerRadarY, curH * 0.75, Math.PI, 0, false);
+        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.45, Math.PI, 0, false);
+        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.75, Math.PI, 0, false);
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -752,16 +787,16 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         ctx.beginPath();
         ctx.moveTo(centerRadarX, centerRadarY);
         ctx.lineTo(
-          centerRadarX + Math.cos(radarAngleRef.current) * curH * 0.8,
-          centerRadarY - Math.abs(Math.sin(radarAngleRef.current)) * curH * 0.8
+          centerRadarX + Math.cos(radarAngleRef.current) * VIRTUAL_HEIGHT * 0.8,
+          centerRadarY - Math.abs(Math.sin(radarAngleRef.current)) * VIRTUAL_HEIGHT * 0.8
         );
         ctx.stroke();
 
         // Stars & Background Matrix
         ctx.fillStyle = 'rgba(255, 230, 0, 0.4)';
         for (let i = 1; i <= 25; i++) {
-          const sx = (i * 137.5) % curW;
-          const sy = (i * 73.1) % (curH * 0.65);
+          const sx = (i * 137.5) % VIRTUAL_WIDTH;
+          const sy = (i * 73.1) % (VIRTUAL_HEIGHT * 0.65);
           ctx.fillRect(sx, sy, 1.5, 1.5);
         }
 
@@ -775,7 +810,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
             lastSpawnTimeRef.current = timestamp;
             waveEnemiesSpawnedRef.current += 1;
 
-            const spawnX = Math.random() * (curW - 60) + 30;
+            const spawnX = Math.random() * (VIRTUAL_WIDTH - 80) + 40;
             const startY = 0;
 
             // Pick Target: Live City or Live Battery
@@ -785,7 +820,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
             const chosenTarget = validTargets.length > 0
               ? validTargets[Math.floor(Math.random() * validTargets.length)]
-              : { x: Math.random() * curW, y: groundY };
+              : { x: Math.random() * VIRTUAL_WIDTH, y: VIRTUAL_GROUND_Y };
 
             // Determine Threat Type
             const rand = Math.random();
@@ -821,41 +856,39 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
               type: threatType,
               color,
               trailColor,
-              hasSplit: false,
-              splitY: threatType === 'mirv' ? Math.random() * (curH * 0.35) + curH * 0.2 : undefined,
               progress: 0,
-              scoreValue: scoreVal
+              scoreValue: scoreVal,
+              splitY: threatType === 'mirv' ? Math.random() * (VIRTUAL_HEIGHT * 0.35) + VIRTUAL_HEIGHT * 0.2 : undefined
             });
           }
 
-          // Spawn Orbital Bomber Gunship (Wave 3+)
-          if (currentWave >= 3 && Math.random() < 0.003 && bombersRef.current.length === 0) {
-            const fromLeft = Math.random() < 0.5;
+          // 3. SPAWN BOMBER (Sector 4+)
+          if (currentWave >= 4 && bombersRef.current.length === 0 && Math.random() < 0.004 * timeScale) {
+            const fromLeft = Math.random() > 0.5;
             bombersRef.current.push({
               id: idCounterRef.current++,
-              x: fromLeft ? -40 : curW + 40,
-              y: Math.random() * (curH * 0.2) + 35,
-              vx: fromLeft ? 1.8 + currentWave * 0.15 : -(1.8 + currentWave * 0.15),
-              width: 42,
+              x: fromLeft ? -40 : VIRTUAL_WIDTH + 40,
+              y: Math.random() * (VIRTUAL_HEIGHT * 0.2) + 35,
+              vx: fromLeft ? 1.4 : -1.4,
+              width: 44,
               height: 20,
-              hp: 3,
-              maxHp: 3,
+              hp: 2,
+              maxHp: 2,
               lastBombTime: timestamp,
-              color: '#39FF14'
+              color: '#FF0055'
             });
+            addBadge(VIRTUAL_WIDTH / 2, 80, '⚠️ HOSTILE BOMBER INCOMING! ⚠️', '#FF0055');
+            playSfx('alarm');
           }
 
-          // 3. UPDATE BOMBERS
-          for (let bIdx = bombersRef.current.length - 1; bIdx >= 0; bIdx--) {
-            const bomber = bombersRef.current[bIdx];
+          // Update Bombers
+          bombersRef.current.forEach((bomber) => {
             bomber.x += bomber.vx * timeScale;
-
-            // Drop Bombs
-            if (timestamp - bomber.lastBombTime > 1400) {
+            if (timestamp - bomber.lastBombTime > 1800) {
               bomber.lastBombTime = timestamp;
-              const liveTargets = citiesRef.current.filter((c) => c.alive);
-              const targetCity = liveTargets[Math.floor(Math.random() * liveTargets.length)];
-              const targetX = targetCity ? targetCity.x + targetCity.width / 2 : curW / 2;
+              const liveCities = citiesRef.current.filter((c) => c.alive);
+              const targetCity = liveCities[Math.floor(Math.random() * liveCities.length)];
+              const targetX = targetCity ? targetCity.x + targetCity.width / 2 : VIRTUAL_WIDTH / 2;
 
               enemiesRef.current.push({
                 id: idCounterRef.current++,
@@ -864,56 +897,37 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
                 currentX: bomber.x,
                 currentY: bomber.y,
                 targetX,
-                targetY: groundY,
-                speed: 1.8,
+                targetY: VIRTUAL_GROUND_Y,
+                speed: 1.6,
                 type: 'bomber_drop',
-                color: '#39FF14',
-                trailColor: 'rgba(57, 255, 20, 0.6)',
+                color: '#FF0055',
+                trailColor: 'rgba(255, 0, 85, 0.6)',
                 progress: 0,
-                scoreValue: 200
+                scoreValue: 150
               });
             }
+          });
+          bombersRef.current = bombersRef.current.filter((b) => b.x >= -60 && b.x <= VIRTUAL_WIDTH + 60);
 
-            // Remove out of bounds
-            if (bomber.x < -60 || bomber.x > curW + 60) {
-              bombersRef.current.splice(bIdx, 1);
-            }
-          }
-
-          // 4. UPDATE PLAYER INTERCEPTORS
+          // 4. UPDATE INTERCEPTORS
           for (let i = interceptorsRef.current.length - 1; i >= 0; i--) {
             const ic = interceptorsRef.current[i];
             const dx = ic.targetX - ic.startX;
             const dy = ic.targetY - ic.startY;
-            const totalDist = Math.hypot(dx, dy);
+            const distTotal = Math.hypot(dx, dy);
 
-            ic.progress += (ic.speed * timeScale) / Math.max(1, totalDist);
+            ic.progress += (ic.speed * timeScale) / distTotal;
             ic.currentX = ic.startX + dx * ic.progress;
             ic.currentY = ic.startY + dy * ic.progress;
 
-            // Interceptor vapor sparks
-            if (Math.random() < 0.4) {
-              particlesRef.current.push({
-                x: ic.currentX,
-                y: ic.currentY,
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5,
-                size: 2,
-                color: '#00F0FF',
-                alpha: 0.8,
-                life: 0,
-                maxLife: 12
-              });
-            }
-
-            // Reached Target -> Trigger Flak Shockwave Explosion
-            if (ic.progress >= 1.0) {
+            if (ic.progress >= 1) {
+              // Detonate at target
               explosionsRef.current.push({
                 id: idCounterRef.current++,
                 x: ic.targetX,
                 y: ic.targetY,
                 radius: 4,
-                maxRadius: 36,
+                maxRadius: 46,
                 color: '#00F0FF',
                 expanding: true,
                 alive: true,
@@ -925,44 +939,124 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
             }
           }
 
-          // 5. UPDATE FLAK EXPLOSIONS
+          // 5. UPDATE EXPLOSIONS & FLAK CHAIN REACTIONS
           for (let eIdx = explosionsRef.current.length - 1; eIdx >= 0; eIdx--) {
             const exp = explosionsRef.current[eIdx];
 
             if (exp.expanding) {
-              exp.radius += (exp.isNuke ? 18 : 2.6) * timeScale;
+              exp.radius += (exp.isNuke ? 18.0 : 2.4) * timeScale;
               if (exp.radius >= exp.maxRadius) {
                 exp.expanding = false;
               }
             } else {
-              exp.radius -= (exp.isNuke ? 8 : 1.4) * timeScale;
-              if (exp.radius <= 0) {
+              exp.radius -= 1.6 * timeScale;
+              if (exp.radius <= 0.1) {
+                exp.radius = 0;
                 exp.alive = false;
                 explosionsRef.current.splice(eIdx, 1);
+                continue;
+              }
+            }
+
+            // Check Flak Collisions against Enemy Missiles
+            for (let mIdx = enemiesRef.current.length - 1; mIdx >= 0; mIdx--) {
+              const m = enemiesRef.current[mIdx];
+              const dist = Math.hypot(m.currentX - exp.x, m.currentY - exp.y);
+
+              if (dist <= exp.radius) {
+                // Secondary Chain Reaction Detonation
+                explosionsRef.current.push({
+                  id: idCounterRef.current++,
+                  x: m.currentX,
+                  y: m.currentY,
+                  radius: 3,
+                  maxRadius: 36,
+                  color: '#FFE600',
+                  expanding: true,
+                  alive: true,
+                  isPlayerFlak: false
+                });
+
+                addExplosionParticles(m.currentX, m.currentY, '#FFE600', 16);
+
+                // Calculate Combo & Score
+                const timeSinceLastKill = timestamp - lastKillTimeRef.current;
+                lastKillTimeRef.current = timestamp;
+
+                let streak = comboStreakRef.current;
+                if (timeSinceLastKill < 1800) {
+                  streak += 1;
+                } else {
+                  streak = 1;
+                }
+                comboStreakRef.current = streak;
+                setComboStreak(streak);
+
+                const multiplier = Math.min(10, 1 + (streak - 1) * 0.5);
+                const pointsEarned = Math.floor(m.scoreValue * multiplier);
+                scoreRef.current += pointsEarned;
+                setScore(scoreRef.current);
+
+                addBadge(m.currentX, m.currentY - 10, `+${pointsEarned}`, streak > 2 ? '#FF00EA' : '#FFE600');
+                playSfx(streak > 2 ? 'chain' : 'explode');
+
+                enemiesRef.current.splice(mIdx, 1);
+              }
+            }
+
+            // Check Flak against Bombers
+            for (let bIdx = bombersRef.current.length - 1; bIdx >= 0; bIdx--) {
+              const bomber = bombersRef.current[bIdx];
+              const dist = Math.hypot(bomber.x - exp.x, bomber.y - exp.y);
+
+              if (dist <= exp.radius + bomber.width / 2) {
+                bomber.hp -= 1;
+                addExplosionParticles(bomber.x, bomber.y, '#FF0055', 20);
+
+                if (bomber.hp <= 0) {
+                  explosionsRef.current.push({
+                    id: idCounterRef.current++,
+                    x: bomber.x,
+                    y: bomber.y,
+                    radius: 5,
+                    maxRadius: 52,
+                    color: '#FF0055',
+                    expanding: true,
+                    alive: true,
+                    isPlayerFlak: false
+                  });
+
+                  scoreRef.current += 500;
+                  setScore(scoreRef.current);
+                  addBadge(bomber.x, bomber.y, '+500 BOMBER DOWN!', '#FF0055');
+                  playSfx('explode');
+                  bombersRef.current.splice(bIdx, 1);
+                }
               }
             }
           }
 
-          // 6. UPDATE HOSTILE MISSILES & CHECK COLLISION WITH EXPLOSIONS
+          // 6. UPDATE HOSTILE MISSILES & GROUND IMPACTS
           for (let mIdx = enemiesRef.current.length - 1; mIdx >= 0; mIdx--) {
             const m = enemiesRef.current[mIdx];
             const dx = m.targetX - m.startX;
             const dy = m.targetY - m.startY;
             const totalDist = Math.hypot(dx, dy);
 
-            m.progress += (m.speed * timeScale) / Math.max(1, totalDist);
+            m.progress += (m.speed * timeScale) / totalDist;
             m.currentX = m.startX + dx * m.progress;
             m.currentY = m.startY + dy * m.progress;
 
-            // MIRV Cluster Splitting Mechanic
+            // MIRV Warhead Split Logic
             if (m.type === 'mirv' && !m.hasSplit && m.splitY && m.currentY >= m.splitY) {
               m.hasSplit = true;
               playSfx('mirv');
-              addBadge(m.currentX, m.currentY, '⚠️ MIRV WARHEAD SPLIT!', '#FF00EA');
+              addBadge(m.currentX, m.currentY, '⚡ MIRV CLUSTER DETACHED! ⚡', '#FF00EA');
 
-              // Split into 2 sub-warheads
+              // Spawn 2 sub-warheads targeting nearby sectors
+              const liveCities = citiesRef.current.filter((c) => c.alive);
               for (let s = -1; s <= 1; s += 2) {
-                const targetCity = citiesRef.current.filter((c) => c.alive)[Math.floor(Math.random() * 3)];
+                const targetCity = liveCities[Math.floor(Math.random() * liveCities.length)];
                 const subTargetX = targetCity ? targetCity.x + targetCity.width / 2 : m.currentX + s * 80;
 
                 enemiesRef.current.push({
@@ -971,116 +1065,78 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
                   startY: m.currentY,
                   currentX: m.currentX,
                   currentY: m.currentY,
-                  targetX: Math.max(20, Math.min(curW - 20, subTargetX)),
-                  targetY: groundY,
-                  speed: m.speed * 1.1,
+                  targetX: Math.max(20, Math.min(VIRTUAL_WIDTH - 20, subTargetX)),
+                  targetY: VIRTUAL_GROUND_Y,
+                  speed: m.speed * 1.15,
                   type: 'standard',
-                  color: '#FF0055',
-                  trailColor: 'rgba(255, 0, 85, 0.5)',
+                  color: '#FF00EA',
+                  trailColor: 'rgba(255, 0, 234, 0.65)',
                   progress: 0,
-                  scoreValue: 120
+                  scoreValue: 150
                 });
               }
             }
 
-            // Check Collision Against Active Flak Explosions
-            let intercepted = false;
-            for (let e = 0; e < explosionsRef.current.length; e++) {
-              const exp = explosionsRef.current[e];
-              const dist = Math.hypot(m.currentX - exp.x, m.currentY - exp.y);
+            // Impact Check at Ground Level
+            if (m.progress >= 1 || m.currentY >= VIRTUAL_GROUND_Y) {
+              screenShakeRef.current = 10;
 
-              if (dist <= exp.radius) {
-                intercepted = true;
+              // Crater Explosion
+              explosionsRef.current.push({
+                id: idCounterRef.current++,
+                x: m.targetX,
+                y: VIRTUAL_GROUND_Y,
+                radius: 4,
+                maxRadius: 40,
+                color: '#FF0055',
+                expanding: true,
+                alive: true,
+                isPlayerFlak: false
+              });
 
-                // Chain-Reaction Cascade: Destroyed hostile creates secondary explosion!
-                explosionsRef.current.push({
-                  id: idCounterRef.current++,
-                  x: m.currentX,
-                  y: m.currentY,
-                  radius: 4,
-                  maxRadius: 30,
-                  color: '#FFE600',
-                  expanding: true,
-                  alive: true,
-                  isPlayerFlak: true
-                });
+              addExplosionParticles(m.targetX, VIRTUAL_GROUND_Y, '#FF0055', 24);
+              playSfx('lost');
 
-                addExplosionParticles(m.currentX, m.currentY, '#FFE600', 16);
-
-                // Multiplier Combo Streak Calculation
-                const nowMs = performance.now();
-                if (nowMs - lastKillTimeRef.current < 1600) {
-                  comboStreakRef.current += 1;
-                } else {
-                  comboStreakRef.current = 1;
-                }
-                lastKillTimeRef.current = nowMs;
-                setComboStreak(comboStreakRef.current);
-
-                const comboMultiplier = Math.min(10, 1 + (comboStreakRef.current - 1) * 0.5);
-                const earnedPoints = Math.round(m.scoreValue * comboMultiplier);
-                scoreRef.current += earnedPoints;
-                setScore(scoreRef.current);
-
-                if (comboStreakRef.current > 1) {
-                  addBadge(m.currentX, m.currentY, `CHAIN x${comboMultiplier.toFixed(1)} +${earnedPoints}`, '#FFE600');
-                  playSfx('chain');
-                } else {
-                  addBadge(m.currentX, m.currentY, `+${earnedPoints}`, '#39FF14');
-                  playSfx('explode');
-                }
-
-                enemiesRef.current.splice(mIdx, 1);
-                break;
-              }
-            }
-
-            if (intercepted) continue;
-
-            // Check Ground / Building Impact
-            if (m.progress >= 1.0) {
-              screenShakeRef.current = 8;
-              addExplosionParticles(m.currentX, m.currentY, '#FF0055', 24);
-
-              // Check if hit a City
-              let hitCity = false;
-              citiesRef.current.forEach((city, cIdx) => {
-                if (city.alive && Math.abs(m.currentX - (city.x + city.width / 2)) < city.width * 0.85) {
-                  city.alive = false;
-                  hitCity = true;
-                  addBadge(city.x, city.y - 10, `${city.name} OFFLINE!`, '#FF0055');
-                  playSfx('lost');
-                  setCitiesStatus([...citiesRef.current.map((c) => c.alive)]);
+              // Check Damage to Batteries
+              batteriesRef.current.forEach((bat) => {
+                if (bat.alive && Math.abs(m.targetX - bat.x) < 32) {
+                  bat.alive = false;
+                  bat.ammo = 0;
+                  addBadge(bat.x, bat.y - 20, `SILO ${bat.name} DESTROYED!`, '#FF0055');
                 }
               });
 
-              // Check if hit a Battery Silo
-              batteriesRef.current.forEach((bat) => {
-                if (bat.alive && Math.abs(m.currentX - bat.x) < 30) {
-                  bat.alive = false;
-                  bat.ammo = 0;
-                  addBadge(bat.x, bat.y - 15, `SILO ${bat.name} DESTROYED!`, '#FF0055');
-                  playSfx('lost');
-                  setBatteryAmmo({
-                    b1: batteriesRef.current[0].ammo,
-                    b2: batteriesRef.current[1].ammo,
-                    b3: batteriesRef.current[2].ammo
+              setBatteryAmmo({
+                b1: batteriesRef.current[0]?.ammo || 0,
+                b2: batteriesRef.current[1]?.ammo || 0,
+                b3: batteriesRef.current[2]?.ammo || 0
+              });
+
+              // Check Damage to Cities
+              citiesRef.current.forEach((city, cIdx) => {
+                if (city.alive && Math.abs(m.targetX - (city.x + city.width / 2)) < city.width * 0.85) {
+                  city.alive = false;
+                  addBadge(city.x + city.width / 2, city.y - 15, `${city.name} OFFLINE!`, '#FF0055');
+                  setCitiesStatus((prev) => {
+                    const next = [...prev];
+                    next[cIdx] = false;
+                    return next;
                   });
                 }
               });
 
               enemiesRef.current.splice(mIdx, 1);
 
-              // Check Failure State (All Cities Destroyed)
-              const aliveCities = citiesRef.current.filter((c) => c.alive).length;
-              if (aliveCities === 0) {
+              // Check Game Over Condition (All cities destroyed)
+              const remainingCities = citiesRef.current.filter((c) => c.alive).length;
+              if (remainingCities === 0) {
                 handleGameOver();
-                break;
+                return;
               }
             }
           }
 
-          // 7. CHECK WAVE COMPLETION
+          // 7. CHECK SECTOR WAVE COMPLETION
           if (
             waveEnemiesSpawnedRef.current >= waveEnemyCountRef.current &&
             enemiesRef.current.length === 0 &&
@@ -1089,18 +1145,19 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           ) {
             setIsWaveIntermission(true);
 
-            // Calculate Wave End Bonuses
-            const liveCitiesCount = citiesRef.current.filter((c) => c.alive).length;
-            const remainingAmmo = batteriesRef.current.reduce((sum, b) => sum + (b.alive ? b.ammo : 0), 0);
-            const cityBonus = liveCitiesCount * 500;
-            const ammoBonus = remainingAmmo * 30;
-            const waveBonus = waveRef.current * 1000;
+            // Calculate Ammo & City Bonuses
+            let totalRemainingAmmo = 0;
+            batteriesRef.current.forEach((b) => (totalRemainingAmmo += b.ammo));
+            const liveCityCount = citiesRef.current.filter((c) => c.alive).length;
 
-            const totalWaveBonus = cityBonus + ammoBonus + waveBonus;
+            const ammoBonus = totalRemainingAmmo * 15;
+            const cityBonus = liveCityCount * 200;
+            const totalWaveBonus = ammoBonus + cityBonus;
+
             scoreRef.current += totalWaveBonus;
             setScore(scoreRef.current);
 
-            addBadge(curW / 2, curH * 0.35, `SECTOR CLEARED! BONUS +${totalWaveBonus}`, '#39FF14');
+            addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.35, `SECTOR CLEARED! BONUS +${totalWaveBonus}`, '#39FF14');
             playSfx('victory');
 
             confetti({
@@ -1192,8 +1249,11 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
         // 11. Draw Concentric Flak Shockwave Explosions
         explosionsRef.current.forEach((exp) => {
+          if (!exp.alive || exp.radius <= 0.1) return;
+          const safeRadius = Math.max(0.1, exp.radius);
+
           ctx.save();
-          const grad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, exp.radius);
+          const grad = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, safeRadius);
           grad.addColorStop(0, '#FFFFFF');
           grad.addColorStop(0.35, exp.color);
           grad.addColorStop(0.85, exp.color === '#00F0FF' ? '#0284C7' : '#D97706');
@@ -1201,14 +1261,14 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
           ctx.fillStyle = grad;
           ctx.beginPath();
-          ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
+          ctx.arc(exp.x, exp.y, safeRadius, 0, Math.PI * 2);
           ctx.fill();
 
           // Outer Neon Ring Ripple
           ctx.strokeStyle = exp.color;
           ctx.lineWidth = exp.isNuke ? 3.5 : 2.0;
           ctx.beginPath();
-          ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
+          ctx.arc(exp.x, exp.y, safeRadius, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         });
@@ -1234,13 +1294,13 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
         // 13. Draw Ground Baseline & Cyber Skyline
         ctx.fillStyle = '#080417';
-        ctx.fillRect(0, groundY, curW, curH - groundY);
+        ctx.fillRect(0, VIRTUAL_GROUND_Y, VIRTUAL_WIDTH, VIRTUAL_HEIGHT - VIRTUAL_GROUND_Y);
 
         ctx.strokeStyle = '#00F0FF';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.moveTo(0, groundY);
-        ctx.lineTo(curW, groundY);
+        ctx.moveTo(0, VIRTUAL_GROUND_Y);
+        ctx.lineTo(VIRTUAL_WIDTH, VIRTUAL_GROUND_Y);
         ctx.stroke();
 
         // 14. Draw Defended Cyber Data Cities
@@ -1262,9 +1322,9 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           } else {
             // Destroyed Rubble
             ctx.fillStyle = '#334155';
-            ctx.fillRect(city.x, groundY - 6, city.width, 6);
+            ctx.fillRect(city.x, VIRTUAL_GROUND_Y - 6, city.width, 6);
             ctx.strokeStyle = '#000000';
-            ctx.strokeRect(city.x, groundY - 6, city.width, 6);
+            ctx.strokeRect(city.x, VIRTUAL_GROUND_Y - 6, city.width, 6);
           }
           ctx.restore();
         });
@@ -1281,9 +1341,9 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
             ctx.lineWidth = 3;
 
             ctx.beginPath();
-            ctx.moveTo(bat.x - 22, groundY);
+            ctx.moveTo(bat.x - 22, VIRTUAL_GROUND_Y);
             ctx.lineTo(bat.x, bat.y - 12);
-            ctx.lineTo(bat.x + 22, groundY);
+            ctx.lineTo(bat.x + 22, VIRTUAL_GROUND_Y);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
@@ -1295,16 +1355,16 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
             // Ammo Counter Badge
             ctx.fillStyle = '#000000';
-            ctx.fillRect(bat.x - 16, groundY - 8, 32, 12);
+            ctx.fillRect(bat.x - 16, VIRTUAL_GROUND_Y - 8, 32, 12);
             ctx.fillStyle = bat.ammo > 3 ? '#FFE600' : '#FF0055';
             ctx.font = 'bold 9px monospace';
             ctx.textAlign = 'center';
-            ctx.fillText(`${bat.ammo}`, bat.x, groundY + 1);
+            ctx.fillText(`${bat.ammo}`, bat.x, VIRTUAL_GROUND_Y + 1);
           } else {
             // Destroyed Silo
             ctx.fillStyle = '#1E293B';
             ctx.beginPath();
-            ctx.arc(bat.x, groundY, 14, Math.PI, 0);
+            ctx.arc(bat.x, VIRTUAL_GROUND_Y, 14, Math.PI, 0);
             ctx.fill();
             ctx.strokeStyle = '#000000';
             ctx.stroke();
@@ -1364,7 +1424,15 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           ctx.restore();
         }
 
-        ctx.restore();
+        ctx.restore(); // restore screen shake
+        ctx.restore(); // restore viewport clip
+
+        // 18. Draw Crisp Neo-Brutalist Border around the Virtual Screen
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+
+        ctx.restore(); // restore full canvas transform
       }
 
       animId = requestAnimationFrame(loop);
@@ -1377,10 +1445,12 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full flex flex-col items-center justify-between bg-portal-bg select-none overflow-hidden font-sans p-2 sm:p-4"
+      className={`relative w-full h-full flex flex-col items-center justify-between bg-portal-bg select-none overflow-hidden font-sans ${
+        isFullscreen ? 'fixed inset-0 z-50 p-2 sm:p-4 bg-black w-screen h-screen' : 'p-2 sm:p-4'
+      }`}
     >
       {/* Top Telemetry Header */}
-      <header className="w-full max-w-4xl flex items-center justify-between gap-2 z-20">
+      <header className="w-full max-w-5xl flex items-center justify-between gap-2 z-20 shrink-0">
         {/* Score & Multiplier */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
@@ -1408,7 +1478,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
           <button
             onClick={() => setIsMuted((prev) => !prev)}
-            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-white transition-all"
+            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-white transition-all cursor-pointer"
             title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-slate-400" /> : <Volume2 className="w-4 h-4 text-portal-cyan" />}
@@ -1416,7 +1486,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
           <button
             onClick={toggleFullscreen}
-            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-white transition-all"
+            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-white transition-all cursor-pointer"
             title="Toggle Fullscreen [F]"
           >
             {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
@@ -1425,7 +1495,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       </header>
 
       {/* Main 2D Canvas Viewport */}
-      <div className="relative w-full max-w-4xl flex-1 my-2 flex items-center justify-center min-h-[360px] sm:min-h-[440px] rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black">
+      <div className="relative w-full max-w-5xl flex-1 my-1 sm:my-2 flex items-center justify-center min-h-[300px] rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black">
         <canvas
           ref={canvasRef}
           onMouseDown={(e) => handleCanvasAction(e.clientX, e.clientY)}
@@ -1435,13 +1505,13 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
               handleCanvasAction(e.touches[0].clientX, e.touches[0].clientY);
             }
           }}
-          className="w-full h-full cursor-crosshair block"
+          className="w-full h-full cursor-crosshair block select-none"
         />
 
         {/* Start / Launch Mission Overlay */}
         {!isPlaying && !isGameOver && (
-          <div className="absolute inset-0 z-30 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-            <div className="p-4 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-md w-full space-y-4">
+          <div className="absolute inset-0 z-30 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+            <div className="p-4 sm:p-6 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-md w-full space-y-4">
               <div className="w-16 h-16 rounded-2xl bg-portal-yellow border-3 border-black shadow-neo flex items-center justify-center mx-auto">
                 <Crosshair className="w-9 h-9 text-black stroke-[2.5]" />
               </div>
@@ -1467,12 +1537,13 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
                   <p>• CLICK / TAP anywhere to detonate flak shockwaves</p>
                   <p>• CHAIN REACTION: Enemies touching flak will detonate secondary blasts!</p>
                   <p>• [SPACE] to fire Orbital EMP Tactical Nuke</p>
+                  <p>• [F] Fullscreen toggle with 0 distortion</p>
                 </div>
               </div>
 
               <button
                 onClick={startNewGame}
-                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Play className="w-5 h-5 fill-black stroke-black" />
                 <span>ENGAGE DEFENSE GRID [R]</span>
@@ -1483,8 +1554,8 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
         {/* Game Over Modal */}
         {isGameOver && (
-          <div className="absolute inset-0 z-30 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-            <div className="p-6 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-md w-full space-y-4 animate-in zoom-in-95 duration-200">
+          <div className="absolute inset-0 z-30 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+            <div className="p-4 sm:p-6 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-md w-full space-y-4 animate-in zoom-in-95 duration-200">
               <div className="w-16 h-16 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mx-auto">
                 <AlertTriangle className="w-9 h-9 text-white stroke-[2.5]" />
               </div>
@@ -1509,7 +1580,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
               <button
                 onClick={startNewGame}
-                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <RotateCcw className="w-5 h-5 stroke-[2.5]" />
                 <span>REBOOT DEFENSE GRID [R]</span>
@@ -1520,11 +1591,11 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       </div>
 
       {/* Tactical Battery Ammo & Super Weapon Command Bar */}
-      <footer className="w-full max-w-4xl grid grid-cols-2 sm:grid-cols-4 gap-2 z-20">
+      <footer className="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-2 z-20 shrink-0">
         {/* Battery 1: ALPHA */}
         <button
           onClick={() => setSelectedBattery(1)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
+          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 1 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-white'
           }`}
         >
@@ -1537,7 +1608,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         {/* Battery 2: DELTA (CENTER) */}
         <button
           onClick={() => setSelectedBattery(2)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
+          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 2 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-white'
           }`}
         >
@@ -1550,7 +1621,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         {/* Battery 3: OMEGA */}
         <button
           onClick={() => setSelectedBattery(3)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
+          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 3 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-white'
           }`}
         >
@@ -1565,7 +1636,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           onClick={triggerNuke}
           disabled={nukeCharges <= 0 || !isPlaying}
           className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
-            nukeCharges > 0
+            nukeCharges > 0 && isPlaying
               ? 'bg-portal-cyan hover:bg-cyan-300 text-black cursor-pointer'
               : 'bg-slate-800 text-slate-500 cursor-not-allowed border-slate-700'
           }`}

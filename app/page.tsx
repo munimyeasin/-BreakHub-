@@ -35,7 +35,7 @@ const TrophyRoomModal = dynamic(() => import('@/components/gamification/TrophyRo
 const LevelUpCelebrationModal = dynamic(() => import('@/components/gamification/LevelUpCelebrationModal'), { ssr: false });
 const GameRouletteModal = dynamic(() => import('@/components/gamification/GameRouletteModal'), { ssr: false });
 import { useTheme } from '@/context/ThemeContext';
-import { gamification, GamificationState, LevelInfo } from '@/lib/gamification';
+import { gamification, GamificationState, LevelInfo, getDefaultState } from '@/lib/gamification';
 import { Game } from '@/lib/types';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 import { getAvatarUrl } from '@/lib/avatar';
@@ -67,9 +67,25 @@ export default function ArcadePortalDashboard() {
   const [isTrophiesModalOpen, setIsTrophiesModalOpen] = useState(false);
   const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false);
   const [levelUpInfo, setLevelUpInfo] = useState<LevelInfo | null>(null);
-  const [gameState, setGameState] = useState<GamificationState>(() => gamification.getState());
+  const [gameState, setGameState] = useState<GamificationState>(() => getDefaultState());
 
   const [isHydrated, setIsHydrated] = useState(false);
+
+  // Gamification Synchronization on Client Mount & Event Updates
+  useEffect(() => {
+    try {
+      setGameState(gamification.getState());
+    } catch {}
+
+    const handleSync = (e: any) => {
+      setGameState(e?.detail || gamification.getState());
+    };
+
+    window.addEventListener('stressbuster_gamification_sync', handleSync as EventListener);
+    return () => {
+      window.removeEventListener('stressbuster_gamification_sync', handleSync as EventListener);
+    };
+  }, []);
 
   // 1. Initial State Hydration from URL Search Parameters & Session Storage
   useEffect(() => {

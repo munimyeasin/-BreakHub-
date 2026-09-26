@@ -75,7 +75,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 60,
+      "play_count": 69,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -114,7 +114,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/neon-missile-defense.svg",
       "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-      "play_count": 3,
+      "play_count": 6,
       "rating": 5,
       "rating_count": 42,
       "status": "active",
@@ -253,7 +253,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-outrun-2077.svg",
       "description": "Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.",
-      "play_count": 15,
+      "play_count": 19,
       "rating": 5,
       "rating_count": 58,
       "status": "active",
@@ -8394,6 +8394,69 @@
       "user_id": "usr_ctvl8ln",
       "score": 9547,
       "created_at": "2026-09-24T10:13:52.400Z"
+    },
+    {
+      "id": "sc_3pezg09d1",
+      "game_id": "g_missile_21",
+      "user_id": "usr_ctvl8ln",
+      "score": 6380,
+      "created_at": "2026-09-24T11:55:32.725Z"
+    },
+    {
+      "id": "sc_yxmkyg6v8",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 5424,
+      "created_at": "2026-09-24T11:57:50.896Z"
+    },
+    {
+      "id": "sc_yrfc9ex5k",
+      "game_id": "g_outrun_22",
+      "user_id": "usr_ctvl8ln",
+      "score": 141,
+      "created_at": "2026-09-24T11:58:07.301Z"
+    },
+    {
+      "id": "sc_rl57v7ti4",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 900,
+      "created_at": "2026-09-24T12:04:55.027Z"
+    },
+    {
+      "id": "sc_xa2jtucv2",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1750,
+      "created_at": "2026-09-24T12:05:21.392Z"
+    },
+    {
+      "id": "sc_tiy8c95m4",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 100,
+      "created_at": "2026-09-24T12:09:08.331Z"
+    },
+    {
+      "id": "sc_gdmhbt3ar",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1800,
+      "created_at": "2026-09-24T12:09:24.259Z"
+    },
+    {
+      "id": "sc_vynmeh40y",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 950,
+      "created_at": "2026-09-24T12:09:40.215Z"
+    },
+    {
+      "id": "sc_h6s8h9tac",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_ctvl8ln",
+      "score": 1450,
+      "created_at": "2026-09-24T12:13:33.081Z"
     }
   ],
   "ratings": []

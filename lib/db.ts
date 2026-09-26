@@ -356,7 +356,12 @@ class DatabaseService {
 
   // Leaderboard: Per-Game
   public getPerGameLeaderboard(gameId: string, limit = 10): LeaderboardEntry[] {
-    const gameScores = this.data.scores.filter(s => s.game_id === gameId);
+    const game = this.getGameById(gameId);
+    const targetId = game ? game.id : gameId;
+    const targetSlug = game ? game.slug : gameId;
+    const gameScores = this.data.scores.filter(
+      s => s.game_id === targetId || s.game_id === targetSlug
+    );
 
     // Group highest score per user
     const userBestMap = new Map<string, { score: number; achieved_at: string }>();
@@ -396,9 +401,11 @@ class DatabaseService {
         userGameScores.set(s.user_id, new Map());
       }
       const gMap = userGameScores.get(s.user_id)!;
-      const current = gMap.get(s.game_id) || 0;
+      const game = this.getGameById(s.game_id);
+      const canonicalId = game ? game.id : s.game_id;
+      const current = gMap.get(canonicalId) || 0;
       if (s.score > current) {
-        gMap.set(s.game_id, s.score);
+        gMap.set(canonicalId, s.score);
       }
     });
 

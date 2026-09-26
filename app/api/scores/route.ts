@@ -17,6 +17,8 @@ const MAX_REQUESTS_PER_WINDOW = 20;
 
 // Maximum realistic score limits per game to protect leaderboard integrity
 const MAX_SCORE_LIMITS: Record<string, number> = {
+  g_outrun_22: 1_000_000,
+  g_missile_21: 500_000,
   g_tetris_20: 500_000,
   g_candy_19: 500_000,
   g_battleship_18: 20_000,
@@ -99,8 +101,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid gameId is required' }, { status: 400 });
     }
 
-    const validGame = INITIAL_GAMES.some((g) => g.id === gameId || g.slug === gameId);
-    if (!validGame) {
+    const matchedGame = INITIAL_GAMES.find((g) => g.id === gameId || g.slug === gameId);
+    if (!matchedGame) {
       return NextResponse.json({ error: 'Unrecognized game title' }, { status: 400 });
     }
 
@@ -122,7 +124,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid positive score number is required' }, { status: 400 });
     }
 
-    const maxAllowed = MAX_SCORE_LIMITS[gameId] || 1_000_000;
+    const maxAllowed = MAX_SCORE_LIMITS[matchedGame.id] || MAX_SCORE_LIMITS[gameId] || 1_000_000;
     if (score > maxAllowed) {
       return NextResponse.json(
         { error: `Score exceeds verified maximum threshold for this arcade module (${maxAllowed})` },
@@ -131,7 +133,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 6. Record verified score
-    const result = db.submitScore(gameId, cleanUsername, Math.round(score));
+    const result = db.submitScore(matchedGame.id, cleanUsername, Math.round(score));
 
     return NextResponse.json(
       {

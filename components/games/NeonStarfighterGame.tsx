@@ -17,6 +17,8 @@ import {
   Crosshair,
   Maximize2,
   Minimize2,
+  Smartphone,
+  RotateCw,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -222,6 +224,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const [hasRevived, setHasRevived] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isBoostActive, setIsBoostActive] = useState(false);
+  const [isPortraitMobile, setIsPortraitMobile] = useState(false);
+  const [dismissRotatePrompt, setDismissRotatePrompt] = useState(false);
 
   // Reference to game container for Web Fullscreen API
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -292,21 +296,27 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
   // Dynamic responsive resolution state and ref
   const [isDesktop, setIsDesktop] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') return window.innerWidth >= 768;
+    if (typeof window !== 'undefined') return window.innerWidth >= 768 || window.innerWidth > window.innerHeight;
     return true;
   });
 
   const canvasDimRef = useRef({
-    width: typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_WIDTH : MOBILE_WIDTH,
-    height: typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_HEIGHT : MOBILE_HEIGHT,
-    playerBaseY: (typeof window !== 'undefined' && window.innerWidth >= 768 ? DESKTOP_HEIGHT : MOBILE_HEIGHT) - 75,
-    isDesktop: typeof window !== 'undefined' ? window.innerWidth >= 768 : true,
+    width: typeof window !== 'undefined' && (window.innerWidth >= 768 || window.innerWidth > window.innerHeight) ? DESKTOP_WIDTH : MOBILE_WIDTH,
+    height: typeof window !== 'undefined' && (window.innerWidth >= 768 || window.innerWidth > window.innerHeight) ? DESKTOP_HEIGHT : MOBILE_HEIGHT,
+    playerBaseY: (typeof window !== 'undefined' && (window.innerWidth >= 768 || window.innerWidth > window.innerHeight) ? DESKTOP_HEIGHT : MOBILE_HEIGHT) - 75,
+    isDesktop: typeof window !== 'undefined' ? (window.innerWidth >= 768 || window.innerWidth > window.innerHeight) : true,
   });
 
-  // Synchronize dynamic canvas dimensions and orientation on window resize
+  // Synchronize dynamic canvas dimensions and orientation on window resize and orientation change
   useEffect(() => {
-    const handleResize = () => {
-      const desktop = window.innerWidth >= 768;
+    const updateLayoutAndOrientation = () => {
+      if (typeof window === 'undefined') return;
+      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 850;
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const portraitMobile = isTouch && isPortrait && window.innerWidth < 768;
+      setIsPortraitMobile(portraitMobile);
+
+      const desktop = window.innerWidth >= 768 || window.innerWidth > window.innerHeight;
       setIsDesktop(desktop);
       const w = desktop ? DESKTOP_WIDTH : MOBILE_WIDTH;
       const h = desktop ? DESKTOP_HEIGHT : MOBILE_HEIGHT;
@@ -323,9 +333,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       p.x = Math.max(0, Math.min(w - p.width, p.x));
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateLayoutAndOrientation();
+    window.addEventListener('resize', updateLayoutAndOrientation);
+    window.addEventListener('orientationchange', updateLayoutAndOrientation);
+    return () => {
+      window.removeEventListener('resize', updateLayoutAndOrientation);
+      window.removeEventListener('orientationchange', updateLayoutAndOrientation);
+    };
   }, []);
 
   // Player 3D Interceptor Starfighter state
@@ -733,6 +747,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       } else if (el.msRequestFullscreen) {
         el.msRequestFullscreen();
       }
+      if (screen.orientation && (screen.orientation as any).lock) {
+        (screen.orientation as any).lock('landscape').catch(() => {});
+      }
     } else {
       if (doc.exitFullscreen) {
         doc.exitFullscreen().catch(() => {});
@@ -742,6 +759,11 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         doc.mozCancelFullScreen();
       } else if (doc.msExitFullscreen) {
         doc.msExitFullscreen();
+      }
+      if (screen.orientation && (screen.orientation as any).unlock) {
+        try {
+          (screen.orientation as any).unlock();
+        } catch {}
       }
     }
   }, []);
@@ -2348,9 +2370,74 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   }, [isPlaying, isDead]);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
+    <div
+      ref={containerRef}
+      className={`relative flex flex-col items-center select-none w-full justify-center transition-colors ${
+        isFullscreen
+          ? 'fixed inset-0 z-50 bg-black p-2 sm:p-4 h-screen max-h-screen overflow-hidden flex flex-col items-center justify-center'
+          : 'max-w-full h-full flex-1'
+      }`}
+    >
+      {/* MOBILE PORTRAIT ORIENTATION ROTATE PROMPT */}
+      {isPortraitMobile && !dismissRotatePrompt && (
+        <div className="absolute inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in border-4 border-yellow-400">
+          {/* Animated Rotating Smartphone Graphic */}
+          <div className="relative w-20 h-20 mb-5 flex items-center justify-center">
+            <div className="absolute inset-0 bg-cyan-400/20 rounded-full animate-ping" />
+            <div className="relative border-4 border-cyan-400 bg-black p-3 rounded-2xl shadow-neo">
+              <Smartphone className="w-10 h-10 text-yellow-300" />
+            </div>
+            <div className="absolute -top-1 -right-1 bg-yellow-400 text-black p-1 rounded-full border-2 border-black animate-bounce">
+              <RotateCw className="w-4 h-4" />
+            </div>
+          </div>
+
+          <div className="inline-block bg-yellow-400 text-black px-3 py-1 text-xs font-black tracking-widest border-2 border-black shadow-neo mb-2">
+            OPTIMAL VIEWPORT // LANDSCAPE
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-300 to-pink-500 mb-2 font-mono">
+            ROTATE YOUR DEVICE
+          </h2>
+
+          <p className="max-w-xs text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+            Neon Starfighter is engineered for ultra-wide cosmic combat perspective and ergonomic controls.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
+            <button
+              onClick={() => {
+                if (containerRef.current) {
+                  try {
+                    if (containerRef.current.requestFullscreen) {
+                      containerRef.current.requestFullscreen();
+                    } else if ((containerRef.current as any).webkitRequestFullscreen) {
+                      (containerRef.current as any).webkitRequestFullscreen();
+                    }
+                    if (screen.orientation && (screen.orientation as any).lock) {
+                      (screen.orientation as any).lock('landscape').catch(() => {});
+                    }
+                  } catch {}
+                }
+              }}
+              className="w-full bg-cyan-400 text-black font-black text-sm py-3 border-2 border-black shadow-neo hover:bg-yellow-400 transition-all flex items-center justify-center gap-2 rounded"
+            >
+              <RotateCw className="w-4 h-4" />
+              <span>LOCK LANDSCAPE</span>
+            </button>
+
+            <button
+              onClick={() => setDismissRotatePrompt(true)}
+              className="w-full bg-gray-900 text-gray-300 font-bold text-xs py-2.5 border-2 border-gray-700 hover:bg-gray-800 hover:text-white transition-all rounded"
+            >
+              PLAY IN PORTRAIT ANYWAY
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
-      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*3/4))] md:max-w-[min(100%,calc(min(86vh,780px)*3/4))] flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0">
+      <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0`}>
         <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
@@ -2379,14 +2466,20 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       {/* Active Powerup Banner */}
       {activePowerup && (
-        <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0">
+        <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0`}>
           <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
           <span>POWERUP: {activePowerup}</span>
         </div>
       )}
 
-      {/* Main Game Screen Canvas (Dynamic Orientation: 9:16 Portrait on Mobile, 16:9 Widescreen on PC) */}
-      <div className="relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl aspect-[9/16] md:aspect-[16/9] max-h-[75vh] md:max-h-[78vh] lg:max-h-[82vh] flex items-center justify-center shrink-0">
+      {/* Main Game Screen Canvas (Dynamic Orientation: 9:16 Portrait on Mobile, 16:9 Widescreen on PC/Landscape) */}
+      <div
+        className={`relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair flex items-center justify-center shrink-0 ${
+          isDesktop
+            ? 'aspect-[16/9] w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl max-h-[72vh] md:max-h-[78vh] lg:max-h-[82vh]'
+            : 'aspect-[9/16] w-full max-w-sm max-h-[75vh]'
+        } ${isFullscreen ? (isDesktop ? 'max-h-[78vh] sm:max-h-[82vh] w-auto h-full max-w-full' : 'max-h-[82vh] w-full h-auto') : ''}`}
+      >
         <canvas
           ref={canvasRef}
           width={isDesktop ? DESKTOP_WIDTH : MOBILE_WIDTH}

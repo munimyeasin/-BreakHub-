@@ -408,6 +408,16 @@ export default function GameModal({
     fetchTopScores();
   }, [fetchTopScores]);
 
+  // Record game launch on mount to update stats, daily quests, and streaks
+  useEffect(() => {
+    try {
+      const result = gamification.recordGamePlayed(game.id, game.category);
+      if (result.didLevelUp) {
+        audio.playLevelUpSound();
+      }
+    } catch {}
+  }, [game.id, game.category]);
+
   // Sync fullscreen state with native browser events
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -641,7 +651,7 @@ export default function GameModal({
                 />
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-black text-xs sm:text-sm md:text-base text-white leading-tight truncate uppercase tracking-wide">
+                    <h3 className="font-black text-xs sm:text-sm md:text-base text-portal-text leading-tight truncate uppercase tracking-wide">
                       {game.title}
                     </h3>
                     <span className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-portal-card border border-black text-[9px] font-black text-portal-yellow uppercase shadow-neo-sm">
@@ -662,7 +672,7 @@ export default function GameModal({
                   className={`hidden md:flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-black uppercase border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
                     showCompanionDeck
                       ? 'bg-portal-card text-portal-cyan'
-                      : 'bg-portal-surface text-slate-400 hover:text-white'
+                      : 'bg-portal-surface text-portal-text-muted hover:text-portal-text'
                   }`}
                   title="Toggle PC Companion Command Deck [Hotkey: C]"
                 >
@@ -692,7 +702,7 @@ export default function GameModal({
 
                 <button
                   onClick={toggleFullscreen}
-                  className="p-1 sm:p-1.5 rounded-xl bg-portal-card text-slate-200 hover:text-white border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  className="p-1 sm:p-1.5 rounded-xl bg-portal-card text-portal-text hover:text-portal-cyan border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title={isFullscreen ? 'Exit Fullscreen [Hotkey: F]' : 'Enter Fullscreen [Hotkey: F]'}
                   aria-label="Toggle Fullscreen"
                 >
@@ -701,7 +711,7 @@ export default function GameModal({
 
                 <button
                   onClick={onClose}
-                  className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-pink text-white hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-pink text-portal-text hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                   title="Close [Hotkey: Esc]"
                   aria-label="Close Modal"
                 >
@@ -719,7 +729,7 @@ export default function GameModal({
                   className="w-5 h-5 rounded-full object-cover bg-slate-800 border-2 border-black shadow-neo-sm shrink-0"
                 />
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="text-[10px] text-slate-300 font-black uppercase">PLAYER:</span>
+                  <span className="text-[10px] text-portal-text-muted font-black uppercase">PLAYER:</span>
                   <span className="text-[11px] text-portal-cyan font-black tracking-wide truncate max-w-[100px] sm:max-w-[160px] uppercase">
                     {username}
                   </span>
@@ -729,7 +739,7 @@ export default function GameModal({
                 </div>
                 <button
                   onClick={onChangeUsername}
-                  className="px-1.5 py-0.5 rounded bg-portal-surface hover:bg-portal-yellow hover:text-black text-slate-300 border border-black text-[9px] font-black uppercase shadow-neo-sm transition-all flex items-center gap-0.5"
+                  className="px-1.5 py-0.5 rounded bg-portal-surface hover:bg-portal-yellow hover:text-black text-portal-text-muted border border-black text-[9px] font-black uppercase shadow-neo-sm transition-all flex items-center gap-0.5"
                   title="Change Gamer Tag"
                 >
                   <Edit3 className="w-2.5 h-2.5" /> Edit
