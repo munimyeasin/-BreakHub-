@@ -9,14 +9,11 @@ import {
   Maximize2,
   Minimize2,
   Dices,
-  Zap,
   Crown,
   RefreshCw,
   Terminal,
-  MousePointer,
   Crosshair,
   Sliders,
-  Flame,
   Info
 } from 'lucide-react';
 import NeonSnakeGame from '@/components/games/NeonSnakeGame';
@@ -39,7 +36,9 @@ import CandyCrushGame from '@/components/games/CandyCrushGame';
 import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
+import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberOutrunGame from '@/components/games/CyberOutrunGame';
+import NeonFlipperPinballGame from '@/components/games/NeonFlipperPinballGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -63,6 +62,22 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // -5. Neon Flipper: Cyber Pinball (Arcade / Vector Physics)
+  g_pinball_23: {
+    genreTag: 'ARCADE // CYBER PINBALL',
+    objective: 'Launch into the Neon Matrix! Master dual-flipper angular physics, trigger 3 Pop Bumper cascades, drop C-Y-B-E-R bank targets, and lock 3 balls into the Matrix Chamber to trigger 3-Ball Multi-Ball Frenzy.',
+    scoring: 'Pop Bumpers (250pts x streak) + Drop Target Bank (10,000pts Overdrive) + Slingshots (150pts) + Wireform Orbit Loops (1,000-5,000pts) + Multi-Ball Frenzy (3x score multiplier).',
+    proTip: 'Trap the pinball by holding the flipper up to stabilize trajectory. Complete all C-Y-B-E-R drop targets to light the Matrix Lock chamber for high-multiplier Multi-Ball scoring!',
+    controls: [
+      { keys: ['A', '←', 'Z'], label: 'LEFT FLIPPER', desc: 'Activate Left Flipper solenoid' },
+      { keys: ['D', '→', '/'], label: 'RIGHT FLIPPER', desc: 'Activate Right Flipper solenoid' },
+      { keys: ['Space', '↓'], label: 'LAUNCH PLUNGER', desc: 'Pull tension & release pinball' },
+      { keys: ['W', 'C'], label: 'TABLE NUDGE', desc: 'Nudge table physics (watch Tilt gauge)' },
+      { keys: ['P', 'Esc'], label: 'PAUSE', desc: 'Pause / Resume pinball session' },
+      { keys: ['M'], label: 'MUTE AUDIO', desc: 'Toggle procedural flipper synth audio' },
+      { keys: ['R'], label: 'REBOOT BALL', desc: 'Restart table simulation' }
+    ]
+  },
   // -4. Cyber Outrun 2077 (Neon Highway Racer)
   g_outrun_22: {
     genreTag: 'ACTION // SYNTHWAVE HIGHWAY RACER',
@@ -91,6 +106,20 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['Space'], label: 'ORBITAL EMP NUKE', desc: 'Trigger full-screen tactical air burst' },
       { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen battle mode' },
       { keys: ['R'], label: 'REBOOT DEFENSE', desc: 'Launch / restart defense mission' }
+    ]
+  },
+  // Quantum Cyber Chess (8x8 Matrix Chess)
+  g_chess_24: {
+    genreTag: 'STRATEGY // 8x8 CYBER CHESS',
+    objective: 'Outmaneuver and checkmate the opponent King! Battle Novice, Tactician, and Grandmaster Minimax Cortex AI or play local 2P Pass & Play with full standard chess rules.',
+    scoring: 'Piece captures (Pawn: 100, Knight/Bishop: 320, Rook: 500, Queen: 900) + Check bonus (200pts) + Checkmate victory (10,000pts - 25,000pts based on AI difficulty).',
+    proTip: 'Control the four central matrix nodes (d4, d5, e4, e5) early with pawns and knights. Castle early to protect your King behind pawn shields while activating your rooks.',
+    controls: [
+      { keys: ['Click / Tap'], label: 'SELECT & MOVE', desc: 'Select piece to preview valid target coordinates' },
+      { keys: ['Drag & Drop'], label: 'PIECE MOVEMENT', desc: 'Drag piece directly to target square' },
+      { keys: ['Difficulty Selector'], label: 'AI CORTEX', desc: 'Toggle Novice, Tactician, or Grandmaster depth' },
+      { keys: ['Clock Preset'], label: 'CHESS CLOCK', desc: 'Select 3m Blitz, 5m Rapid, 10m Classic, or Infinite' },
+      { keys: ['R'], label: 'RESTART MATCH', desc: 'Reset 8x8 matrix board and restart match' }
     ]
   },
   // -2. Tetra Matrix Polyomino Arcade
@@ -782,12 +811,20 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_pinball_23' || game.slug === 'neon-flipper-pinball' || game.slug === 'pinball') && (
+                <NeonFlipperPinballGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_outrun_22' || game.slug === 'cyber-outrun-2077' || game.slug === 'outrun') && (
                 <CyberOutrunGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
                 <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
+              {(game.id === 'g_chess_24' || game.slug === 'cyber-chess' || game.slug === 'chess') && (
+                <CyberChessGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_tetris_20' || game.slug === 'tetra-matrix' || game.slug === 'tetris') && (

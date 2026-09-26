@@ -14,8 +14,7 @@
 1. **Instant Web Arcade**: Zero downloads, zero account setup friction, instant gameplay directly in the browser across all mobile, tablet, and desktop devices.
 2. **Procedural Zero-Asset Performance**: All sound effects and visual graphics are synthesized in real-time via the HTML5 Canvas 2D API and the native Web Audio API, delivering sub-second initial load times with zero external `.mp3`, `.wav`, or heavy game engine binaries.
 3. **Behavioral Gamification Economy**: Daily login streaks, exponential XP progression across 14 Cyber Clearance Rank Titles, daily deterministic quests, holographic trophy vault, and real-time global leaderboards.
-4. **Universal 9:16 Portrait Canvas Standard**: All games adhere to a standardized 9:16 vertical viewport (360x640 virtual coordinates) optimized for one-handed thumb navigation and mobile gaming.
-
+4. **Universal 9:16 Portrait Canvas Standard**: All games adhere to a standardized 9:16 vertical viewport (360x640 virtual coordinates) optimized for one-handed thumb navigation and mobile gaming
 ---
 
 ## 2. Target Audience & User Personas

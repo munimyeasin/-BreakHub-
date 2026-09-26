@@ -15,8 +15,7 @@ import {
   Zap,
   Layers,
   Sparkles,
-  Flame,
-  Star
+  Flame
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 

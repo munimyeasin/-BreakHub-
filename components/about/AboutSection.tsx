@@ -10,11 +10,9 @@ import {
   Cpu,
   CheckCircle2,
   Sparkles,
-  Layers,
   Code2,
   Target,
   Award,
-  Volume2,
   Flame,
   ArrowRight,
 } from 'lucide-react';
@@ -24,8 +22,8 @@ import { audio } from '@/lib/audio';
 const projectHighlights = [
   {
     icon: Gamepad2,
-    title: '18 Custom Mini-Games',
-    desc: 'From fast-paced space shooters, katana slicing, and match-3 puzzles to naval grid warfare and multi-board strategy, all running on HTML5 Canvas.',
+    title: '22 Custom Mini-Games',
+    desc: 'From fast-paced space shooters, synthwave highway racing, and katana slicing to polyomino matrices and flak defense, all running on HTML5 Canvas.',
     color: 'text-black',
     badgeBg: 'bg-portal-cyan text-black',
   },
@@ -46,7 +44,7 @@ const projectHighlights = [
   {
     icon: ShieldCheck,
     title: 'Modern Tech Stack',
-    desc: 'Powered by Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS for robust typing, performance, and retro-arcade aesthetics.',
+    desc: 'Powered by Next.js 16 App Router, React 18, TypeScript, and Tailwind CSS for robust typing, performance, and retro-arcade aesthetics.',
     color: 'text-black',
     badgeBg: 'bg-portal-purple text-black',
   },
@@ -85,7 +83,7 @@ const gamificationFeatures = [
 
 const techStack = [
   { name: 'Next.js 16', category: 'Framework (App Router)' },
-  { name: 'React 19', category: 'UI Component Library' },
+  { name: 'React 18', category: 'UI Component Library' },
   { name: 'TypeScript', category: 'Static Type Safety' },
   { name: 'Tailwind CSS', category: 'Styling & Neo-Brutal Themes' },
   { name: 'HTML5 Canvas API', category: '60 FPS 2D Physics Engine' },
@@ -311,7 +309,7 @@ export default function AboutSection({
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-bold leading-relaxed">
-                Welcome to <strong className="text-slate-900 dark:text-white font-black">Break Hub</strong>, an interactive web gaming platform designed and engineered by Munim Yeasin. The hub features 18 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
+                Welcome to <strong className="text-slate-900 dark:text-white font-black">Break Hub</strong>, an interactive web gaming platform designed and engineered by Munim Yeasin. The hub features 22 custom HTML5 Canvas games, high-contrast Retro Neo-Brutalist aesthetics, responsive physics, zero-asset procedural Web Audio, and live competitive leaderboards.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">

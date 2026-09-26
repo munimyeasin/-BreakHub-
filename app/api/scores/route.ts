@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { INITIAL_GAMES } from '@/lib/gamesData';
+import { censorText } from '@/lib/censor';
+
+export const dynamic = 'force-dynamic';
 
 interface ScorePayload {
   gameId: string;
@@ -17,8 +20,10 @@ const MAX_REQUESTS_PER_WINDOW = 20;
 
 // Maximum realistic score limits per game to protect leaderboard integrity
 const MAX_SCORE_LIMITS: Record<string, number> = {
+  g_pinball_23: 1_000_000,
   g_outrun_22: 1_000_000,
   g_missile_21: 500_000,
+  g_chess_24: 50_000,
   g_tetris_20: 500_000,
   g_candy_19: 500_000,
   g_battleship_18: 20_000,
@@ -111,7 +116,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
 
-    const cleanUsername = sanitizeUsername(username);
+    const cleanUsername = censorText(sanitizeUsername(username));
     if (cleanUsername.length < 2 || cleanUsername.length > 20) {
       return NextResponse.json(
         { error: 'Gamer tag must be between 2 and 20 alphanumeric characters' },

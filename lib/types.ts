@@ -46,3 +46,17 @@ export interface LeaderboardEntry {
   games_played?: number;
   achieved_at?: string;
 }
+
+export interface GameRequest {
+  id: string;
+  title: string;
+  genre: 'ACTION' | 'PUZZLE' | 'ARCADE' | 'STRATEGY' | 'CARD' | 'OTHER';
+  description: string;
+  requested_by: string;
+  user_id?: string;
+  upvotes: number;
+  upvoted_by: string[];
+  status: 'under_review' | 'planned' | 'in_development' | 'completed' | 'declined';
+  created_at: string;
+}
+

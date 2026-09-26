@@ -54,6 +54,19 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
+    id: 'g_chess_24',
+    slug: 'cyber-chess',
+    title: 'Quantum Cyber Chess',
+    category: 'STRATEGY',
+    thumbnail_url: '/thumbnails/cyber-chess.svg',
+    description: 'Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 68,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_multi_xo_13',
     slug: 'multidimension-xo',
     title: 'Multidimension XO',
@@ -262,5 +275,18 @@ export const INITIAL_GAMES: Game[] = [
     rating: 5.0,
     rating_count: 25,
     status: 'hidden'
+  },
+  {
+    id: 'g_pinball_23',
+    slug: 'neon-flipper-pinball',
+    title: 'Neon Flipper: Cyber Pinball',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/neon-flipper-pinball.svg',
+    description: 'High-Velocity 2D Vector Pinball Arcade! Master dual-flipper angular physics, spring plunger launches, C-Y-B-E-R drop target banks, reactive pop bumpers, and 3-Ball Multi-Ball Matrix Frenzy.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 48,
+    status: 'active',
+    featured: true
   }
 ];

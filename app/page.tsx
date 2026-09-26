@@ -13,7 +13,8 @@ import {
   X,
   Sun,
   Moon,
-  Palette
+  Palette,
+  Sparkles
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
@@ -34,6 +35,7 @@ const DailyQuestsModal = dynamic(() => import('@/components/gamification/DailyQu
 const TrophyRoomModal = dynamic(() => import('@/components/gamification/TrophyRoomModal'), { ssr: false });
 const LevelUpCelebrationModal = dynamic(() => import('@/components/gamification/LevelUpCelebrationModal'), { ssr: false });
 const GameRouletteModal = dynamic(() => import('@/components/gamification/GameRouletteModal'), { ssr: false });
+const GameRequestModal = dynamic(() => import('@/components/ui/GameRequestModal'), { ssr: false });
 import { useTheme } from '@/context/ThemeContext';
 import { gamification, GamificationState, LevelInfo, getDefaultState } from '@/lib/gamification';
 import { Game } from '@/lib/types';
@@ -66,6 +68,7 @@ export default function ArcadePortalDashboard() {
   const [isQuestsModalOpen, setIsQuestsModalOpen] = useState(false);
   const [isTrophiesModalOpen, setIsTrophiesModalOpen] = useState(false);
   const [isRouletteModalOpen, setIsRouletteModalOpen] = useState(false);
+  const [isGameRequestModalOpen, setIsGameRequestModalOpen] = useState(false);
   const [levelUpInfo, setLevelUpInfo] = useState<LevelInfo | null>(null);
   const [gameState, setGameState] = useState<GamificationState>(() => getDefaultState());
 
@@ -156,6 +159,8 @@ export default function ArcadePortalDashboard() {
         setIsTrophiesModalOpen(true);
       } else if (modalParam === 'roulette') {
         setIsRouletteModalOpen(true);
+      } else if (modalParam === 'requests' || modalParam === 'wishlist') {
+        setIsGameRequestModalOpen(true);
       } else if (modalParam === 'themes') {
         setIsThemeSelectorOpen(true);
       } else if (modalParam === 'username') {
@@ -209,6 +214,8 @@ export default function ArcadePortalDashboard() {
         params.set('modal', 'trophies');
       } else if (isRouletteModalOpen) {
         params.set('modal', 'roulette');
+      } else if (isGameRequestModalOpen) {
+        params.set('modal', 'requests');
       } else if (isThemeSelectorOpen) {
         params.set('modal', 'themes');
       } else if (isUsernameModalOpen) {
@@ -239,6 +246,8 @@ export default function ArcadePortalDashboard() {
             ? 'trophies'
             : isRouletteModalOpen
             ? 'roulette'
+            : isGameRequestModalOpen
+            ? 'requests'
             : isThemeSelectorOpen
             ? 'themes'
             : isUsernameModalOpen
@@ -260,6 +269,7 @@ export default function ArcadePortalDashboard() {
     isQuestsModalOpen,
     isTrophiesModalOpen,
     isRouletteModalOpen,
+    isGameRequestModalOpen,
     isThemeSelectorOpen,
     isUsernameModalOpen,
   ]);
@@ -313,6 +323,7 @@ export default function ArcadePortalDashboard() {
       setIsQuestsModalOpen(modalParam === 'quests');
       setIsTrophiesModalOpen(modalParam === 'trophies');
       setIsRouletteModalOpen(modalParam === 'roulette');
+      setIsGameRequestModalOpen(modalParam === 'requests' || modalParam === 'wishlist');
       setIsThemeSelectorOpen(modalParam === 'themes');
       setIsUsernameModalOpen(modalParam === 'username');
     };
@@ -599,7 +610,9 @@ export default function ArcadePortalDashboard() {
                       PORTAL
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">12 Mini-Games</p>
+                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">
+                    {games.length > 0 ? `${games.length} Mini-Games` : '21 Mini-Games'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -771,6 +784,7 @@ export default function ArcadePortalDashboard() {
           onOpenQuests={() => setIsQuestsModalOpen(true)}
           onOpenTrophies={() => setIsTrophiesModalOpen(true)}
           onOpenRoulette={() => setIsRouletteModalOpen(true)}
+          onOpenGameRequests={() => setIsGameRequestModalOpen(true)}
           unclaimedQuestsCount={unclaimedQuestsCount}
           categoryCounts={categoryCounts}
           totalGamesCount={categoryCounts['ALL'] || 0}
@@ -1013,6 +1027,14 @@ export default function ArcadePortalDashboard() {
       <ThemeSelectorModal
         isOpen={isThemeSelectorOpen}
         onClose={() => setIsThemeSelectorOpen(false)}
+      />
+
+      {/* 14. GAME REQUEST & COMMUNITY WISHLIST MODAL */}
+      <GameRequestModal
+        isOpen={isGameRequestModalOpen}
+        onClose={() => setIsGameRequestModalOpen(false)}
+        playerTag={playerTag}
+        onOpenUsernameModal={() => setIsUsernameModalOpen(true)}
       />
     </div>
   );

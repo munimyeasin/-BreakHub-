@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { User, Game, Score, LeaderboardEntry, Rating } from './types';
+import { User, Game, Score, LeaderboardEntry, Rating, GameRequest } from './types';
 import { INITIAL_GAMES } from './gamesData';
+import { censorText } from './censor';
 
 export { INITIAL_GAMES };
 
@@ -10,6 +11,7 @@ interface DatabaseSchema {
   games: Game[];
   scores: Score[];
   ratings?: Rating[];
+  game_requests?: GameRequest[];
 }
 
 const IS_VERCEL = !!process.env.VERCEL;
@@ -21,6 +23,41 @@ const SEED_FILE = path.resolve(process.cwd(), 'data', 'portal_db.json');
 const INITIAL_USERS: User[] = [];
 const INITIAL_SCORES: Score[] = [];
 const INITIAL_RATINGS: Rating[] = [];
+const INITIAL_REQUESTS: GameRequest[] = [
+  {
+    id: 'req_cyber_chess',
+    title: 'Neon Cyber Chess 3D',
+    genre: 'STRATEGY',
+    description: 'Holographic cyber chess with neon piece skins, timed blitz clocks, and adaptive heuristic chess engine AI.',
+    requested_by: 'GrandmasterNeon',
+    upvotes: 42,
+    upvoted_by: [],
+    status: 'in_development',
+    created_at: '2026-09-20T10:00:00.000Z'
+  },
+  {
+    id: 'req_rhythm_blade',
+    title: 'Synthwave Rhythm Matrix',
+    genre: 'ACTION',
+    description: 'Cyberpunk rhythm game matching synthwave BPM beat drops with dynamic laser trail combos.',
+    requested_by: 'AudioViper',
+    upvotes: 35,
+    upvoted_by: [],
+    status: 'planned',
+    created_at: '2026-09-21T14:30:00.000Z'
+  },
+  {
+    id: 'req_cyber_tower',
+    title: 'Neon Tower Defense: Core Breach',
+    genre: 'STRATEGY',
+    description: 'Grid-based tactical defense with EMP turrets, plasma railguns, and waves of rogue virus crawler swarms.',
+    requested_by: 'SectorDefender',
+    upvotes: 28,
+    upvoted_by: [],
+    status: 'under_review',
+    created_at: '2026-09-22T08:15:00.000Z'
+  }
+];
 
 class DatabaseService {
   private data: DatabaseSchema;
@@ -53,10 +90,14 @@ class DatabaseService {
     if (content) {
       try {
         const parsed: DatabaseSchema = JSON.parse(content);
+        let updated = false;
         if (!Array.isArray(parsed.ratings)) {
           parsed.ratings = [];
         }
-        let updated = false;
+        if (!Array.isArray(parsed.game_requests)) {
+          parsed.game_requests = INITIAL_REQUESTS;
+          updated = true;
+        }
         INITIAL_GAMES.forEach(ig => {
           const existing = parsed.games.find((g: any) => g.id === ig.id || g.slug === ig.slug);
           if (!existing) {
@@ -93,6 +134,7 @@ class DatabaseService {
       games: INITIAL_GAMES,
       scores: INITIAL_SCORES,
       ratings: INITIAL_RATINGS,
+      game_requests: INITIAL_REQUESTS,
     };
     this.saveDatabase(initial);
     return initial;
@@ -104,6 +146,7 @@ class DatabaseService {
       games: INITIAL_GAMES.map(g => ({ ...g, play_count: 0 })),
       scores: [],
       ratings: [],
+      game_requests: INITIAL_REQUESTS,
     };
     this.data = fresh;
     this.saveDatabase(fresh);
@@ -429,6 +472,88 @@ class DatabaseService {
 
     entries.sort((a, b) => b.score - a.score);
     return entries.slice(0, limit).map((e, idx) => ({ ...e, rank: idx + 1 }));
+  }
+
+  // Game Requests & Community Wishlist
+  public getGameRequests(): GameRequest[] {
+    try {
+      if (fs.existsSync(DB_FILE)) {
+        const content = fs.readFileSync(DB_FILE, 'utf-8');
+        const parsed = JSON.parse(content);
+        if (parsed && Array.isArray(parsed.game_requests)) {
+          this.data.game_requests = parsed.game_requests;
+          return parsed.game_requests;
+        }
+      }
+    } catch {}
+    if (!Array.isArray(this.data.game_requests)) {
+      this.data.game_requests = INITIAL_REQUESTS;
+      this.saveDatabase();
+    }
+    return this.data.game_requests;
+  }
+
+  public addGameRequest(
+    title: string,
+    genre: 'ACTION' | 'PUZZLE' | 'ARCADE' | 'STRATEGY' | 'CARD' | 'OTHER',
+    description: string,
+    username: string
+  ): GameRequest {
+    const all = this.getGameRequests();
+    const cleanTitle = censorText(title.trim());
+    const cleanDesc = censorText(description.trim());
+    const cleanUser = censorText(username.trim()) || 'Anonymous Player';
+
+    const user = this.findOrCreateUser(cleanUser);
+
+    const newRequest: GameRequest = {
+      id: `req_${Math.random().toString(36).substring(2, 10)}_${Date.now().toString(36)}`,
+      title: cleanTitle,
+      genre: genre || 'ARCADE',
+      description: cleanDesc,
+      requested_by: user.username,
+      user_id: user.id,
+      upvotes: 1,
+      upvoted_by: [user.username.toLowerCase()],
+      status: 'under_review',
+      created_at: new Date().toISOString()
+    };
+
+    all.unshift(newRequest);
+    this.data.game_requests = all;
+    this.saveDatabase();
+    return newRequest;
+  }
+
+  public upvoteGameRequest(requestId: string, username: string): { upvotes: number; isUpvoted: boolean; request?: GameRequest } {
+    const all = this.getGameRequests();
+    const req = all.find(r => r.id === requestId);
+    if (!req) {
+      throw new Error(`Game request '${requestId}' not found`);
+    }
+
+    const cleanUser = (username || 'Anonymous').trim().toLowerCase();
+    if (!Array.isArray(req.upvoted_by)) {
+      req.upvoted_by = [];
+    }
+
+    const hasUpvoted = req.upvoted_by.includes(cleanUser);
+    if (hasUpvoted) {
+      // Toggle off upvote
+      req.upvoted_by = req.upvoted_by.filter(u => u !== cleanUser);
+      req.upvotes = Math.max(0, req.upvotes - 1);
+    } else {
+      // Add upvote
+      req.upvoted_by.push(cleanUser);
+      req.upvotes = (req.upvotes || 0) + 1;
+    }
+
+    this.saveDatabase();
+    return {
+      upvotes: req.upvotes,
+      isUpvoted: !hasUpvoted,
+      request: req
+    };
   }
 }
 

@@ -11,7 +11,6 @@ import {
   Shield,
   Swords,
   Rocket,
-  Grid3X3,
   Boxes,
   Flame,
   ChevronLeft,
@@ -19,6 +18,7 @@ import {
   Gamepad2,
   Target,
   Layers,
+  Crown,
 } from 'lucide-react';
 import { Game } from '@/lib/types';
 import { formatPlayCount } from '@/components/games/GameCard';
@@ -44,12 +44,16 @@ export default function SpotlightBanner({
     g =>
       g.status !== 'hidden' &&
       g.slug !== 'multidimension-xo' &&
-      (g.slug === 'neon-starfighter' ||
+      (g.slug === 'neon-flipper-pinball' ||
+        g.slug === 'neon-starfighter' ||
         g.slug === 'cyber-slicer' ||
         g.slug === 'tetra-matrix' ||
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
-        g.slug === 'black-hole')
+        g.slug === 'black-hole' ||
+        g.slug === 'cyber-outrun-2077' ||
+        g.slug === 'neon-missile-defense' ||
+        g.slug === 'cyber-chess')
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,6 +77,7 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
+    if (slug === 'neon-flipper-pinball') return <Zap className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'tetra-matrix') return <Boxes className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;
@@ -81,6 +86,9 @@ export default function SpotlightBanner({
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'cyber-minesweeper') return <Target className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'cyber-maze') return <Layers className="w-3.5 h-3.5 text-portal-lime" />;
+    if (slug === 'cyber-outrun-2077') return <Flame className="w-3.5 h-3.5 text-portal-pink" />;
+    if (slug === 'neon-missile-defense') return <Shield className="w-3.5 h-3.5 text-portal-yellow" />;
+    if (slug === 'cyber-chess') return <Crown className="w-3.5 h-3.5 text-portal-yellow" />;
     return <Gamepad2 className="w-3.5 h-3.5 text-portal-cyan" />;
   };
 

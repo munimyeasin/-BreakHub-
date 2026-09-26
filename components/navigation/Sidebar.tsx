@@ -24,7 +24,8 @@ import {
   Sun,
   Moon,
   Palette,
-  Info
+  Info,
+  Lightbulb
 } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -45,6 +46,7 @@ interface SidebarProps {
   onOpenQuests?: () => void;
   onOpenTrophies?: () => void;
   onOpenRoulette?: () => void;
+  onOpenGameRequests?: () => void;
   unclaimedQuestsCount?: number;
   categoryCounts?: Record<string, number>;
   totalGamesCount?: number;
@@ -75,6 +77,7 @@ export default function Sidebar({
   onOpenQuests,
   onOpenTrophies,
   onOpenRoulette,
+  onOpenGameRequests,
   unclaimedQuestsCount = 0,
   categoryCounts = {},
   totalGamesCount = 0
@@ -219,7 +222,7 @@ export default function Sidebar({
                   <span>About Project</span>
                 </div>
                 <span className="text-[9px] font-black text-black bg-portal-cyan px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
-                  16 Games
+                  {totalGamesCount ? `${totalGamesCount} Games` : '21 Games'}
                 </span>
               </button>
 
@@ -313,6 +316,25 @@ export default function Sidebar({
                   </div>
                   <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase bg-portal-surface text-portal-cyan border border-black">
                     RANDOM
+                  </span>
+                </button>
+              )}
+
+              {/* Game Request & Wishlist Lab */}
+              {onOpenGameRequests && (
+                <button
+                  onClick={() => {
+                    onOpenGameRequests();
+                    onClose();
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-black bg-portal-card hover:bg-portal-pink text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all uppercase group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Lightbulb className="w-4 h-4 text-portal-pink group-hover:text-black stroke-[2.5]" />
+                    <span>Request a Game</span>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase bg-portal-pink text-black border border-black group-hover:bg-black group-hover:text-white">
+                    WISHLIST
                   </span>
                 </button>
               )}
