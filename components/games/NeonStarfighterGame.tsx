@@ -19,6 +19,7 @@ import {
   Minimize2,
   Smartphone,
   RotateCw,
+  Bomb,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -398,7 +399,46 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const lastScoreSyncTimeRef = useRef(0);
   const lastTimeRef = useRef(0);
   const missionStartTimeRef = useRef(0);
-  const [currentSpeedMult, setCurrentSpeedMult] = useState<number>(3.0);
+  const [currentSpeedMult, setCurrentSpeedMult] = useState<number>(1.0);
+  const [inventory, setInventory] = useState<PowerupType[]>([]);
+  const inventoryRef = useRef<PowerupType[]>([]);
+
+  // Tactical Powerup Activation Callback (On-demand hotkey & UI trigger)
+  const activatePowerup = useCallback((slotIndex: number) => {
+    if (!isPlayingRef.current || isDeadRef.current) return;
+    if (slotIndex < 0 || slotIndex >= inventoryRef.current.length) return;
+    const type = inventoryRef.current[slotIndex];
+    inventoryRef.current.splice(slotIndex, 1);
+    setInventory([...inventoryRef.current]);
+
+    const p = playerRef.current;
+    if (type === 'spread') {
+      p.tripleShotTimer = 420;
+      activePowerupRef.current = 'TRIPLE SPREAD LASER';
+      setActivePowerup('TRIPLE SPREAD LASER');
+      addActionBadge(p.x + p.width / 2, p.y - 20, 'TRIPLE LASERS ACTIVATED!');
+      playSfxRef.current('powerup');
+    } else if (type === 'shield') {
+      p.hasShield = true;
+      activePowerupRef.current = 'ENERGY SHIELD';
+      setActivePowerup('ENERGY SHIELD');
+      addActionBadge(p.x + p.width / 2, p.y - 20, 'ENERGY SHIELD ONLINE!');
+      playSfxRef.current('powerup');
+    } else if (type === 'nuke') {
+      activePowerupRef.current = 'EMP NUKE BLAST';
+      setActivePowerup('EMP NUKE BLAST');
+      triggerNuke();
+    } else if (type === 'hyper') {
+      p.hyperTimer = 340;
+      activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
+      setActivePowerup('HYPERDRIVE OVERDRIVE');
+      addActionBadge(p.x + p.width / 2, p.y - 20, 'HYPERDRIVE ENGAGED!');
+      playSfxRef.current('hyper_start');
+    }
+  }, []);
+
+  const activatePowerupRef = useRef(activatePowerup);
+  activatePowerupRef.current = activatePowerup;
 
   // High-Performance Singleton Web Audio Oscillator Engine
   const initAudioCtx = useCallback(() => {
@@ -703,8 +743,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     activePowerupRef.current = null;
     lastSyncedPowerupRef.current = null;
     screenShakeRef.current = 0;
+    inventoryRef.current = [];
+    setInventory([]);
     setDisplayScore(0);
-    setCurrentSpeedMult(3.0);
+    setCurrentSpeedMult(1.0);
     setWave(1);
     setActivePowerup(null);
     setIsDead(false);
@@ -839,6 +881,17 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       if (e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.key === 'Shift') {
         keysRef.current.boost = true;
         setIsBoostActive(true);
+      }
+
+      // Tactical Power-Up Vault Hotkeys: [1], [2], [3], [Q], [E], [X]
+      if (e.code === 'Digit1' || e.key === '1' || e.code === 'KeyQ' || e.key === 'q' || e.key === 'Q') {
+        activatePowerupRef.current(0);
+      }
+      if (e.code === 'Digit2' || e.key === '2' || e.code === 'KeyE' || e.key === 'e' || e.key === 'E') {
+        activatePowerupRef.current(1);
+      }
+      if (e.code === 'Digit3' || e.key === '3' || e.code === 'KeyX' || e.key === 'x' || e.key === 'X') {
+        activatePowerupRef.current(2);
       }
 
       // Space / Enter -> Start, Restart, or Fire Salvo
@@ -1386,21 +1439,40 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const dist = Math.hypot(p.x + p.width / 2 - pow.x, p.y + p.height / 2 - pow.y);
         if (dist < pow.radius + p.width / 2) {
           playSfxRef.current('powerup');
-          if (pow.type === 'spread') {
-            p.tripleShotTimer = 420;
-            activePowerupRef.current = 'TRIPLE SPREAD LASER';
-            addActionBadge(pow.x, pow.y, 'TRIPLE LASERS!');
-          } else if (pow.type === 'shield') {
-            p.hasShield = true;
-            activePowerupRef.current = 'ENERGY SHIELD';
-            addActionBadge(pow.x, pow.y, 'SHIELD ACTIVE!');
-          } else if (pow.type === 'nuke') {
-            triggerNuke();
-          } else if (pow.type === 'hyper') {
-            p.hyperTimer = 340;
-            activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
-            addActionBadge(pow.x, pow.y, 'HYPER DRIVE!');
-            playSfxRef.current('hyper_start');
+          if (inventoryRef.current.length < 3) {
+            inventoryRef.current.push(pow.type);
+            setInventory([...inventoryRef.current]);
+            const slotNum = inventoryRef.current.length;
+            const typeLabel =
+              pow.type === 'spread'
+                ? 'SPREAD LASER'
+                : pow.type === 'shield'
+                ? 'SHIELD'
+                : pow.type === 'nuke'
+                ? 'EMP NUKE'
+                : 'HYPERDRIVE';
+            addActionBadge(pow.x, pow.y, `STORED: ${typeLabel} [${slotNum}]`);
+          } else {
+            // Vault full -> Auto-trigger immediately so power-up is not wasted
+            if (pow.type === 'spread') {
+              p.tripleShotTimer = 420;
+              activePowerupRef.current = 'TRIPLE SPREAD LASER';
+              setActivePowerup('TRIPLE SPREAD LASER');
+              addActionBadge(pow.x, pow.y, 'TRIPLE LASERS!');
+            } else if (pow.type === 'shield') {
+              p.hasShield = true;
+              activePowerupRef.current = 'ENERGY SHIELD';
+              setActivePowerup('ENERGY SHIELD');
+              addActionBadge(pow.x, pow.y, 'SHIELD ACTIVE!');
+            } else if (pow.type === 'nuke') {
+              triggerNuke();
+            } else if (pow.type === 'hyper') {
+              p.hyperTimer = 340;
+              activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
+              setActivePowerup('HYPERDRIVE OVERDRIVE');
+              addActionBadge(pow.x, pow.y, 'HYPER DRIVE!');
+              playSfxRef.current('hyper_start');
+            }
           }
 
           scoreRef.current += 200;
@@ -2567,7 +2639,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                 <div>
                   <h3 className="text-xl font-black text-white uppercase tracking-tight">Neon Starfighter</h3>
                   <p className="text-xs font-bold text-portal-yellow uppercase tracking-wider mt-0.5">
-                    A / D / ARROW KEYS • HORIZONTAL STRAFE • 3X TIME ACCELERATION
+                    A / D / ARROWS • 1.0X→5.0X ACCEL • [1][2][3] TACTICAL VAULT
                   </p>
                 </div>
 
@@ -2583,7 +2655,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
                   </div>
                   <div className="flex items-center gap-2 text-portal-cyan">
                     <Shield className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-                    <span>Powerups: 3X Spread, Shields, EMP Nukes.</span>
+                    <span>Vault: Collect & use powerups anytime with [1], [2], [3] (or Q/E/X).</span>
                   </div>
                   <div className="pt-1 border-t border-slate-700/80 text-[10px] text-slate-400 flex items-center justify-between font-mono">
                     <span>[SPACE] LAUNCH</span>
@@ -2604,8 +2676,61 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         )}
       </div>
 
+      {/* 3-Slot Tactical Power-Up Vault HUD */}
+      <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} mt-1.5 p-1.5 bg-portal-card border-2 border-black rounded-xl shadow-neo flex items-center justify-between gap-1.5 shrink-0`}>
+        <div className="flex items-center gap-1 px-2 py-1 bg-portal-surface border border-black rounded-lg shrink-0 shadow-neo-sm">
+          <Zap className="w-3 h-3 text-portal-yellow stroke-[2.5]" />
+          <span className="text-[9px] sm:text-[10px] font-black text-slate-300 uppercase tracking-widest">VAULT</span>
+        </div>
+
+        <div className="grid grid-cols-3 gap-1.5 flex-1">
+          {[0, 1, 2].map((slotIdx) => {
+            const item = inventory[slotIdx];
+            const hotkey = slotIdx === 0 ? '1' : slotIdx === 1 ? '2' : '3';
+            const altKey = slotIdx === 0 ? 'Q' : slotIdx === 1 ? 'E' : 'X';
+
+            if (!item) {
+              return (
+                <div
+                  key={slotIdx}
+                  className="flex items-center justify-center gap-1 py-1 px-1.5 rounded-lg bg-black/40 border border-dashed border-slate-700 text-slate-500 text-[10px] font-mono font-bold select-none"
+                >
+                  <span className="text-[9px] text-slate-400 font-black">[{hotkey}]</span>
+                  <span className="text-[9px] uppercase tracking-wider">EMPTY</span>
+                </div>
+              );
+            }
+
+            const itemConfig =
+              item === 'spread'
+                ? { label: 'SPREAD', bg: 'bg-[#39FF14] text-black', icon: Sparkles }
+                : item === 'shield'
+                ? { label: 'SHIELD', bg: 'bg-portal-cyan text-black', icon: Shield }
+                : item === 'nuke'
+                ? { label: 'EMP NUKE', bg: 'bg-portal-pink text-white', icon: Bomb }
+                : { label: 'HYPER', bg: 'bg-portal-yellow text-black', icon: Flame };
+
+            const IconComp = itemConfig.icon;
+
+            return (
+              <button
+                key={slotIdx}
+                type="button"
+                onClick={() => activatePowerup(slotIdx)}
+                className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-lg border-2 border-black shadow-neo-sm font-black text-[10px] uppercase tracking-wider transition-all hover:scale-105 active:scale-95 cursor-pointer ${itemConfig.bg}`}
+                title={`Press [${hotkey}] or [${altKey}] or tap to trigger ${itemConfig.label}`}
+              >
+                <IconComp className="w-3 h-3 stroke-[2.5] shrink-0" />
+                <span className="truncate">{itemConfig.label}</span>
+                <span className="text-[8px] bg-black/30 text-white px-1 py-0.2 rounded font-mono font-black">[{hotkey}]</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Interactive Action Control Bar */}
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mt-2 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mt-1.5 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
         <button
           type="button"
           onPointerDown={(e) => {

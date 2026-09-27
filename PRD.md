@@ -23,7 +23,7 @@
 | :--- | :--- | :--- | :--- |
 | **The Casual Breaker** | Quick 2–5 min mental break between work/study sessions. | One-handed mobile gaming, quick touch/swipe interactions, casual puzzles. | Neural Game Roulette, Neon Candy Blast, Quantum 2048, Cyber Labyrinth Escape. |
 | **The Cyber Netrunner (Competitive)** | Chasing high scores, leaderboard prestige, and achievement completion. | Daily logins, min-maxing score multipliers, grinding high-difficulty game modes. | Global Leaderboards, 16 Holographic Trophies, Daily Quests, Multidimension XO (Overthinker Boss). |
-| **The Retro Arcade Purist** | Enjoys classic arcade mechanics with modern tactile responsiveness. | Keyboard navigation on PC, appreciating SRS Tetris rotation, naval strategy, outrun racing. | Tetra Matrix (SRS 7-bag), Naval Grid Strike, Singularity Horizon, Cyber Outrun 2077. |
+| **The Retro Arcade Purist** | Enjoys classic arcade mechanics with modern tactile responsiveness. | Keyboard navigation on PC, appreciating SRS Tetris rotation, naval strategy, matrix chess. | Tetra Matrix (SRS 7-bag), Naval Grid Strike, Singularity Horizon, Quantum Cyber Chess. |
 
 ---
 

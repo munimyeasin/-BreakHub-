@@ -81,7 +81,6 @@
 | **Quantum 2048** | `quantum-2048` | `g_card_05` | PUZZLE | `active` | Cyber-arcade sliding energy node block merger. |
 | **Memory Matrix** | `memory-matrix` | `g_flip_02` | PUZZLE | `active` | Neural memory card matching grid with multiplier streaks. |
 | **Hyper Tapper** | `hyper-tapper` | `g_tap_04` | ACTION | `active` | Precision reaction-time clicker testing APM speeds. |
-| **Cyber Outrun 2077** | `cyber-outrun-2077` | `g_outrun_22` | ACTION | `active` | 4-lane retro highway racer with 350+ km/h Nitro overdrive. |
 | **Neon Snake 2077** | `neon-snake` | `g_snake_01` | ARCADE | `coming_soon` | Cyber snake with interactive community hype registration. |
 | **Cyber Dash 2077** | `cyber-dash` | `g_action_06` | ACTION | `hidden` | Endless cyber runner with double jump thrusters. |
 | **Neon Pulse Dash** | `geometry-dash` | `g_geometry_10` | ACTION | `hidden` | Rhythm cube runner with neon hazards. |

@@ -8,7 +8,7 @@ html[data-theme="neo-dark"] {
   --portal-bg: #0B0819;
   --portal-surface: #130F26;
   --portal-card: #1C1635;
-  --portal-border: #2A224D;
+  --portal-border: #000000;
   --portal-text: #FFFFFF;
   --portal-text-muted: #94A3B8;
   --portal-dot-color: rgba(255, 255, 255, 0.12);
@@ -35,6 +35,57 @@ html[data-theme="neo-light"] {
   --background: #FFFDF0;
   --foreground: #000000;
   color-scheme: light;
+}
+
+/* Cyberpunk Neon 2077 Tokens (High Voltage Holographic Matrix) */
+html[data-theme="cyberpunk-neon"] {
+  --portal-bg: #050814;
+  --portal-surface: #0B132B;
+  --portal-card: #121E3A;
+  --portal-border: #00F0FF;
+  --portal-text: #E0FBFC;
+  --portal-text-muted: #88D8E8;
+  --portal-dot-color: rgba(0, 240, 255, 0.25);
+  --portal-grid-color: rgba(0, 240, 255, 0.12);
+  --portal-scrollbar-track: #050814;
+  --portal-scrollbar-thumb: #FF0055;
+  --background: #050814;
+  --foreground: #E0FBFC;
+  color-scheme: dark;
+}
+
+/* 8-Bit GameBoy Ultra (Phosphor LCD Matrix & Arcade Power) Tokens */
+html[data-theme="gameboy-retro"] {
+  --portal-bg: #7E8C5A;
+  --portal-surface: #A4C614;
+  --portal-card: #91B012;
+  --portal-border: #081808;
+  --portal-text: #081808;
+  --portal-text-muted: #244418;
+  --portal-dot-color: rgba(8, 24, 8, 0.3);
+  --portal-grid-color: rgba(8, 24, 8, 0.18);
+  --portal-scrollbar-track: #7E8C5A;
+  --portal-scrollbar-thumb: #D91448;
+  --background: #7E8C5A;
+  --foreground: #081808;
+  color-scheme: light;
+}
+
+/* Vaporwave Sunset (Synthwave 80s Dusk & Laser Horizon) Tokens */
+html[data-theme="vaporwave-80s"] {
+  --portal-bg: #140827;
+  --portal-surface: #220F3E;
+  --portal-card: #311559;
+  --portal-border: #05FFA1;
+  --portal-text: #FFFFFF;
+  --portal-text-muted: #D1B3FF;
+  --portal-dot-color: rgba(255, 113, 206, 0.25);
+  --portal-grid-color: rgba(1, 205, 254, 0.15);
+  --portal-scrollbar-track: #140827;
+  --portal-scrollbar-thumb: #FF71CE;
+  --background: #140827;
+  --foreground: #FFFFFF;
+  color-scheme: dark;
 }
 
 body {
@@ -185,6 +236,181 @@ html[data-theme="neo-light"] {
   input[type="text"]::placeholder,
   textarea::placeholder {
     color: #64748B !important;
+  }
+}
+
+/* ==========================================================================
+   8-BIT GAMEBOY CLASSIC (DMG-01) 4-SHADE OLIVE RETRO UI ENGINE
+   ========================================================================== */
+
+/* Authentic LCD Scanline & Pixel Grid Overlay */
+html[data-theme="gameboy-retro"]::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background:
+    linear-gradient(rgba(15, 56, 15, 0) 50%, rgba(15, 56, 15, 0.06) 50%),
+    linear-gradient(90deg, rgba(15, 56, 15, 0.04), rgba(15, 56, 15, 0.01), rgba(15, 56, 15, 0.04));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.65;
+}
+
+html[data-theme="gameboy-retro"] {
+  /* Selection Highlights */
+  ::selection {
+    background-color: #081808 !important;
+    color: #A4C614 !important;
+  }
+
+  /* Dot & Grid Matrix */
+  .bg-neo-dots {
+    background-image: radial-gradient(rgba(8, 24, 8, 0.35) 1.5px, transparent 1.5px) !important;
+    background-size: 16px 16px !important;
+  }
+
+  .bg-neo-grid {
+    background-image:
+      linear-gradient(to right, rgba(8, 24, 8, 0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(8, 24, 8, 0.2) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+  }
+
+  /* Universal Text & Typography in GameBoy LCD Palette */
+  body, p, span, div, a, label, li {
+    color: #081808;
+  }
+
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-300 {
+    color: #081808 !important;
+  }
+
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600 {
+    color: #244418 !important;
+  }
+
+  /* Headings & prominent text elements */
+  h1, h2, h3, h4, h5, h6 {
+    color: #081808 !important;
+  }
+
+  /* Preserve authentic Nintendo GameBoy Arcade accents: Burgundy A/B buttons, Cobalt D-pad, Phosphor Yellow */
+  .bg-portal-pink,
+  .bg-rose-500,
+  .bg-red-500 {
+    background-color: #D91448 !important;
+    color: #FFFFFF !important;
+    border-color: #081808 !important;
+  }
+
+  .bg-portal-cyan,
+  .bg-blue-500,
+  .bg-indigo-500 {
+    background-color: #2B304A !important;
+    color: #FFFFFF !important;
+    border-color: #081808 !important;
+  }
+
+  .bg-portal-yellow,
+  .bg-amber-400 {
+    background-color: #FFE600 !important;
+    color: #081808 !important;
+    border-color: #081808 !important;
+  }
+
+  .bg-portal-lime,
+  .bg-emerald-400 {
+    background-color: #A4C614 !important;
+    color: #081808 !important;
+    border-color: #081808 !important;
+  }
+
+  /* Neo-Brutalist Box Shadows -> Crisp Dark Pixel Shadow */
+  .shadow-neo-sm {
+    box-shadow: 2px 2px 0px 0px #081808 !important;
+  }
+  .shadow-neo {
+    box-shadow: 3px 3px 0px 0px #081808 !important;
+  }
+  .shadow-neo-lg {
+    box-shadow: 5px 5px 0px 0px #081808 !important;
+  }
+  .shadow-neo-xl {
+    box-shadow: 7px 7px 0px 0px #081808 !important;
+  }
+
+  /* Borders */
+  .border-black,
+  .border-slate-800,
+  .border-slate-700 {
+    border-color: #081808 !important;
+  }
+
+  /* Input fields, textareas, selects & search bars */
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    background-color: #A4C614 !important;
+    border-color: #081808 !important;
+    color: #081808 !important;
+    box-shadow: 2px 2px 0px #081808 !important;
+  }
+
+  input[type="text"]::placeholder,
+  textarea::placeholder {
+    color: #244418 !important;
+  }
+
+  /* Cards & Surface Containers */
+  .bg-portal-surface {
+    background-color: #A4C614 !important;
+    border-color: #081808 !important;
+  }
+
+  .bg-portal-card {
+    background-color: #91B012 !important;
+    border-color: #081808 !important;
+  }
+
+  /* Modals & Dialogs */
+  .backdrop-blur-sm {
+    background-color: rgba(8, 24, 8, 0.8) !important;
+  }
+}
+
+/* Cyberpunk Neon 2077 Glows & Accents */
+html[data-theme="cyberpunk-neon"] {
+  .shadow-neo-sm {
+    box-shadow: 2px 2px 0px 0px #00F0FF, 0 0 10px rgba(0, 240, 255, 0.4) !important;
+  }
+  .shadow-neo {
+    box-shadow: 3px 3px 0px 0px #FF0055, 0 0 12px rgba(255, 0, 85, 0.4) !important;
+  }
+  .shadow-neo-lg {
+    box-shadow: 5px 5px 0px 0px #39FF14, 0 0 16px rgba(57, 255, 20, 0.45) !important;
+  }
+}
+
+/* Vaporwave Sunset Glows & Accents */
+html[data-theme="vaporwave-80s"] {
+  .shadow-neo-sm {
+    box-shadow: 2px 2px 0px 0px #05FFA1, 0 0 8px rgba(5, 255, 161, 0.35) !important;
+  }
+  .shadow-neo {
+    box-shadow: 3px 3px 0px 0px #FF71CE, 0 0 12px rgba(255, 113, 206, 0.4) !important;
+  }
+  .shadow-neo-lg {
+    box-shadow: 5px 5px 0px 0px #01CDFE, 0 0 16px rgba(1, 205, 254, 0.45) !important;
   }
 }
 

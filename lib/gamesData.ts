@@ -193,19 +193,6 @@ export const INITIAL_GAMES: Game[] = [
     status: 'active'
   },
   {
-    id: 'g_outrun_22',
-    slug: 'cyber-outrun-2077',
-    title: 'Cyber Outrun 2077',
-    category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-outrun-2077.svg',
-    description: 'Synthwave 4-Lane Retro Highway Racer! Strafe lanes, execute razor-thin near-miss grazes, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 58,
-    status: 'active',
-    featured: true
-  },
-  {
     id: 'g_snake_01',
     slug: 'neon-snake',
     title: 'Neon Snake 2077',
@@ -275,18 +262,5 @@ export const INITIAL_GAMES: Game[] = [
     rating: 5.0,
     rating_count: 25,
     status: 'hidden'
-  },
-  {
-    id: 'g_pinball_23',
-    slug: 'neon-flipper-pinball',
-    title: 'Neon Flipper: Cyber Pinball',
-    category: 'ARCADE',
-    thumbnail_url: '/thumbnails/neon-flipper-pinball.svg',
-    description: 'High-Velocity 2D Vector Pinball Arcade! Master dual-flipper angular physics, spring plunger launches, C-Y-B-E-R drop target banks, reactive pop bumpers, and 3-Ball Multi-Ball Matrix Frenzy.',
-    play_count: 0,
-    rating: 5.0,
-    rating_count: 48,
-    status: 'active',
-    featured: true
   }
 ];

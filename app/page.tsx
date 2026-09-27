@@ -14,7 +14,11 @@ import {
   Sun,
   Moon,
   Palette,
-  Sparkles
+  Sparkles,
+  Grid,
+  Cpu,
+  Layers,
+  Clock
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
@@ -42,8 +46,18 @@ import { Game } from '@/lib/types';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 import { getAvatarUrl } from '@/lib/avatar';
 
+const QUICK_CATEGORIES = [
+  { id: 'ALL', label: 'All Games', icon: Sparkles, color: 'bg-portal-cyan text-black' },
+  { id: 'ARCADE', label: 'Arcade', icon: Gamepad2, color: 'bg-portal-cyan text-black' },
+  { id: 'ACTION', label: 'Action', icon: Zap, color: 'bg-portal-pink text-black' },
+  { id: 'PUZZLE', label: 'Puzzles', icon: Grid, color: 'bg-portal-purple text-black' },
+  { id: 'STRATEGY', label: 'Strategy', icon: Cpu, color: 'bg-portal-lime text-black' },
+  { id: 'CARD', label: 'Cards', icon: Layers, color: 'bg-portal-yellow text-black' },
+  { id: 'UPCOMING', label: 'Coming Soon', icon: Clock, color: 'bg-portal-yellow text-black' },
+];
+
 export default function ArcadePortalDashboard() {
-  const { toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
+  const { theme, toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
   const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<PortalTab>('all');
@@ -52,6 +66,10 @@ export default function ArcadePortalDashboard() {
   const [hypedGames, setHypedGames] = useState<string[]>([]);
   const [userRatings, setUserRatings] = useState<Record<string, number>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  // Search input refs for global shortcut focus
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
 
   // User Profile / Tag State
   const [playerTag, setPlayerTag] = useState<string>('');
@@ -88,6 +106,39 @@ export default function ArcadePortalDashboard() {
     return () => {
       window.removeEventListener('stressbuster_gamification_sync', handleSync as EventListener);
     };
+  }, []);
+
+  // Global Keyboard Shortcuts (⌘K, Ctrl+K, /, Escape)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement as HTMLElement | null;
+      const isInputActive = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable);
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (window.innerWidth >= 768) {
+          desktopSearchInputRef.current?.focus();
+          desktopSearchInputRef.current?.select();
+        } else {
+          mobileSearchInputRef.current?.focus();
+          mobileSearchInputRef.current?.select();
+        }
+      } else if (e.key === '/' && !isInputActive) {
+        e.preventDefault();
+        if (window.innerWidth >= 768) {
+          desktopSearchInputRef.current?.focus();
+          desktopSearchInputRef.current?.select();
+        } else {
+          mobileSearchInputRef.current?.focus();
+          mobileSearchInputRef.current?.select();
+        }
+      } else if (e.key === 'Escape' && isInputActive) {
+        activeEl?.blur();
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
   // 1. Initial State Hydration from URL Search Parameters & Session Storage
@@ -622,23 +673,31 @@ export default function ArcadePortalDashboard() {
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <input
+                  ref={desktopSearchInputRef}
                   type="text"
-                  placeholder="Search games, genres, puzzles..."
+                  placeholder="Search games, genres, puzzles... (/ or ⌘K)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck={false}
-                  className="w-full pl-10 pr-8 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
+                  className="w-full pl-10 pr-16 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
                 />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs font-black p-1"
-                  >
-                    ✕
-                  </button>
-                )}
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  {searchQuery ? (
+                    <button
+                      onClick={() => { setSearchQuery(''); desktopSearchInputRef.current?.focus(); }}
+                      className="text-slate-400 hover:text-white text-xs font-black p-1"
+                      aria-label="Clear search"
+                    >
+                      ✕
+                    </button>
+                  ) : (
+                    <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-black uppercase text-slate-400 bg-portal-surface border border-black rounded shadow-neo-sm pointer-events-none">
+                      ⌘K
+                    </kbd>
+                  )}
+                </div>
               </div>
               <button
                 onClick={() => handleOpenLeaderboard('global')}
@@ -654,26 +713,47 @@ export default function ArcadePortalDashboard() {
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               {/* Theme Quick Toggle & Engine Trigger with Onboarding Discovery Hint */}
               <div className="relative flex items-center gap-1">
-                {/* Instant Dark/Light Switch */}
+                {/* Instant Theme Cycle Switch */}
                 <button
                   onClick={toggleTheme}
                   className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
-                    isDark
+                    theme === 'cyberpunk-neon'
+                      ? 'bg-portal-cyan text-black hover:bg-portal-pink'
+                      : theme === 'gameboy-retro'
+                      ? 'bg-[#A3C815] text-[#081808] hover:bg-[#B6DE1A]'
+                      : theme === 'vaporwave-80s'
+                      ? 'bg-portal-pink text-black hover:bg-portal-cyan'
+                      : isDark
                       ? 'bg-portal-yellow text-black hover:bg-portal-cyan'
                       : 'bg-portal-card text-white hover:bg-portal-yellow hover:text-black'
                   }`}
-                  title={isDark ? 'Switch to Light Neo-Brutalist Theme' : 'Switch to Dark Neo-Brutalist Theme'}
-                  aria-label="Toggle Theme"
+                  title="Cycle Break Hub Themes"
+                  aria-label="Cycle Break Hub UI Theme"
                 >
-                  {isDark ? (
+                  {theme === 'cyberpunk-neon' ? (
                     <>
-                      <Sun className="w-3.5 h-3.5 stroke-[2.5]" />
-                      <span className="hidden sm:inline">Light</span>
+                      <Zap className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+                      <span className="hidden sm:inline">Cyber</span>
+                    </>
+                  ) : theme === 'gameboy-retro' ? (
+                    <>
+                      <Gamepad2 className="w-3.5 h-3.5 text-[#081808] stroke-[2.5]" />
+                      <span className="hidden sm:inline">8-Bit</span>
+                    </>
+                  ) : theme === 'vaporwave-80s' ? (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+                      <span className="hidden sm:inline">Synth</span>
+                    </>
+                  ) : isDark ? (
+                    <>
+                      <Moon className="w-3.5 h-3.5 text-black stroke-[2.5]" />
+                      <span className="hidden sm:inline">Dark</span>
                     </>
                   ) : (
                     <>
-                      <Moon className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-                      <span className="hidden sm:inline">Dark</span>
+                      <Sun className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
+                      <span className="hidden sm:inline">Light</span>
                     </>
                   )}
                 </button>
@@ -724,6 +804,7 @@ export default function ArcadePortalDashboard() {
             <div className="relative flex-1">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
               <input
+                ref={mobileSearchInputRef}
                 type="text"
                 placeholder="Search games, genres..."
                 value={searchQuery}
@@ -735,8 +816,9 @@ export default function ArcadePortalDashboard() {
               />
               {searchQuery && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); mobileSearchInputRef.current?.focus(); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-sm font-black p-1"
+                  aria-label="Clear search"
                 >
                   ✕
                 </button>
@@ -816,6 +898,38 @@ export default function ArcadePortalDashboard() {
                 />
               )}
 
+              {/* QUICK CATEGORY CHIPS BAR (Mobile & Desktop horizontal scroll carousel) */}
+              {activeTab === 'all' && (
+                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 mb-3 pt-0.5 no-scrollbar touch-pan-x select-none">
+                  {QUICK_CATEGORIES.map(cat => {
+                    const Icon = cat.icon;
+                    const isSelected = selectedCategory === cat.id;
+                    const count = categoryCounts[cat.id] || 0;
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          setSelectedCategory(cat.id);
+                        }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider border-2 border-black whitespace-nowrap transition-all duration-150 shrink-0 ${
+                          isSelected
+                            ? `${cat.color} shadow-neo-sm translate-x-0.5 translate-y-0.5`
+                            : 'bg-portal-card text-slate-300 hover:text-white hover:bg-portal-surface shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
+                        }`}
+                      >
+                        <Icon className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <span>{cat.label}</span>
+                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-black border border-black ${
+                          isSelected ? 'bg-black text-white' : 'bg-portal-surface text-portal-cyan'
+                        }`}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
               {/* Active Filter Bar & Breadcrumb Status */}
               <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 sm:pb-2.5 border-b-3 border-black">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -886,7 +1000,7 @@ export default function ArcadePortalDashboard() {
                     <span>Break Hub Arcade Portal</span>
                   </div>
                   <div className="text-slate-200 font-bold">
-                    Internship Web Gaming Platform • 18 Custom HTML5 Games
+                    Internship Web Gaming Platform • 22 Custom HTML5 Games
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">

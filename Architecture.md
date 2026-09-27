@@ -129,7 +129,6 @@ Dream_project/
 │   │   ├── CyberDashGame.tsx         # Cyber Dash 2077 (Endless Runner)
 │   │   ├── CyberMazeGame.tsx         # Cyber Labyrinth Escape (10-Level Maze)
 │   │   ├── CyberMinesweeperGame.tsx  # Quantum Minefield (Safe-click Sweeper)
-│   │   ├── CyberOutrunGame.tsx       # Cyber Outrun 2077 (Synthwave Highway)
 │   │   ├── CyberSlicerGame.tsx       # Cyber Katana Slicer (Parabolic Blade)
 │   │   ├── GameCard.tsx              # Neo-Brutalist interactive game card
 │   │   ├── GameGrid.tsx              # Responsive 4x3 to 6-column game grid

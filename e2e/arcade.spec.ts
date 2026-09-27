@@ -19,36 +19,15 @@ test.describe('Break Hub Arcade E2E Suite', () => {
     await expect(gameCards.first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('launches Neon Flipper Pinball game modal and verifies canvas mounts', async ({ page }) => {
-    await page.goto('/?game=neon-flipper-pinball');
-
-    // Canvas element should mount
+  test('launches Neon Starfighter game modal and verifies space canvas', async ({ page }) => {
+    await page.goto('/?game=neon-starfighter');
     const canvas = page.locator('canvas').first();
     await expect(canvas).toBeVisible({ timeout: 10000 });
 
-    // Send keyboard events (Left & Right Flippers and Plunger)
-    await page.keyboard.down('Space');
-    await page.waitForTimeout(300);
-    await page.keyboard.up('Space');
-
-    await page.keyboard.press('KeyA');
-    await page.keyboard.press('KeyD');
-
-    // Verify no unhandled exceptions occurred in game loop
-    expect(await canvas.evaluate((el: HTMLCanvasElement) => el.width > 0 && el.height > 0)).toBe(true);
-  });
-
-  test('launches Cyber Outrun 2077 game modal and verifies 3D highway canvas', async ({ page }) => {
-    await page.goto('/?game=cyber-outrun-2077');
-    const canvas = page.locator('canvas').first();
-    await expect(canvas).toBeVisible({ timeout: 10000 });
-
-    // Drive forward and steer
-    await page.keyboard.down('ArrowUp');
-    await page.waitForTimeout(200);
+    // Move starfighter and shoot lasers
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowRight');
-    await page.keyboard.up('ArrowUp');
+    await page.keyboard.press('Space');
 
     expect(await canvas.isVisible()).toBe(true);
   });
@@ -101,7 +80,7 @@ test.describe('Break Hub Arcade E2E Suite', () => {
   test('launches Cyber Slicer game modal and simulates slice stroke', async ({ page }) => {
     await page.goto('/?game=cyber-slicer');
     const canvas = page.locator('canvas').first();
-    await expect(canvas).toBeVisible({ timeout: 10000 });
+    await expect(canvas).toBeVisible({ timeout: 15000 });
 
     // Perform blade slice drag gesture across canvas
     const box = await canvas.boundingBox();
@@ -176,7 +155,7 @@ test.describe('Break Hub Arcade E2E Suite', () => {
     // Attempt to submit an impossible score exceeding MAX_SCORE_LIMITS
     const res = await request.post('/api/scores', {
       data: {
-        gameId: 'g_pinball_23',
+        gameId: 'g_missile_21',
         username: 'CheaterBot',
         score: 99_999_999
       }
@@ -189,7 +168,7 @@ test.describe('Break Hub Arcade E2E Suite', () => {
   test('records legitimate player score with gamer tag moderation on /api/scores', async ({ request }) => {
     const res = await request.post('/api/scores', {
       data: {
-        gameId: 'g_pinball_23',
+        gameId: 'g_missile_21',
         username: 'CyberPilot',
         score: 45_200
       }

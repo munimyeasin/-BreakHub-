@@ -111,10 +111,10 @@ export default function PlayerXpBadge({
         )}
       </div>
 
-      {/* 3. Daily Quests Shortcut Button with Unclaimed Badge */}
+      {/* 3. Daily Quests Shortcut Button with Unclaimed Badge (Hidden on mobile/tablet to eliminate header crowding) */}
       <button
         onClick={onOpenQuests}
-        className="relative p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-purple text-portal-purple hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
+        className="hidden lg:flex relative p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-purple text-portal-purple hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Daily Quests"
         aria-label="Daily Quests"
       >
@@ -126,10 +126,10 @@ export default function PlayerXpBadge({
         )}
       </button>
 
-      {/* 4. Trophy Room Shortcut Button */}
+      {/* 4. Trophy Room Shortcut Button (Hidden on mobile/tablet to eliminate header crowding) */}
       <button
         onClick={onOpenTrophies}
-        className="p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-yellow text-portal-yellow hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
+        className="hidden lg:flex p-2 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:bg-portal-yellow text-portal-yellow hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
         title="Open Holographic Trophy Vault"
         aria-label="Trophy Vault"
       >

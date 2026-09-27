@@ -89,6 +89,7 @@ export default function Sidebar({
     if (tab !== 'all') {
       onSelectCategory('ALL');
     }
+    onClose();
   };
 
   const handleCategoryClick = (catId: string) => {
@@ -96,6 +97,7 @@ export default function Sidebar({
     if (activeTab !== 'all') {
       onSelectTab('all');
     }
+    onClose();
   };
 
   return (
@@ -122,7 +124,7 @@ export default function Sidebar({
               <SlidersHorizontal className="w-4 h-4 text-black stroke-[2.5]" />
             </div>
             <div>
-              <span className="font-black text-sm text-white tracking-wide uppercase">PORTAL MENU</span>
+              <span className="font-black text-sm text-white tracking-wide uppercase">BREAK HUB MENU</span>
               <p className="text-[10px] text-portal-yellow font-black uppercase">Navigation & Genres</p>
             </div>
           </div>
@@ -222,7 +224,7 @@ export default function Sidebar({
                   <span>About Project</span>
                 </div>
                 <span className="text-[9px] font-black text-black bg-portal-cyan px-1.5 py-0.5 rounded border border-black uppercase shadow-neo-sm">
-                  {totalGamesCount ? `${totalGamesCount} Games` : '21 Games'}
+                  {totalGamesCount ? `${totalGamesCount} Games` : '22 Games'}
                 </span>
               </button>
 
@@ -452,7 +454,10 @@ export default function Sidebar({
         {/* Bottom Profile Quick Widget */}
         <div className="p-3 border-t-3 border-black bg-portal-surface">
           <div
-            onClick={onOpenUsernameModal}
+            onClick={() => {
+              onOpenUsernameModal();
+              onClose();
+            }}
             className="flex items-center justify-between p-2.5 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black cursor-pointer group transition-all shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5"
             title="Edit Player Handle"
           >

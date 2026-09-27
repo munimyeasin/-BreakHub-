@@ -31,8 +31,8 @@ export default function Footer({
           {/* Col 1: Branding & Intro */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-portal-yellow text-black font-black flex items-center justify-center border-2 border-black shadow-[3px_3px_0px_#000000]">
-                <Gamepad2 className="w-6 h-6" />
+              <div className="w-10 h-10 bg-portal-yellow text-black font-black flex items-center justify-center border-2 border-black shadow-neo-sm rounded-xl">
+                <Gamepad2 className="w-6 h-6 stroke-[2.5]" />
               </div>
               <div>
                 <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
@@ -49,12 +49,12 @@ export default function Footer({
             </p>
 
             <div className="flex items-center gap-3 pt-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-portal-surface border-2 border-black text-[11px] font-mono font-bold text-portal-lime shadow-[2px_2px_0px_#000000]">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-portal-surface border-2 border-black text-[11px] font-mono font-bold text-portal-lime shadow-neo-sm rounded-lg">
                 <span className="w-2 h-2 rounded-full bg-portal-lime animate-ping" />
                 <span>SERVER_STATUS: ONLINE (100%)</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-portal-surface border-2 border-black text-[11px] font-mono font-bold text-portal-yellow shadow-[2px_2px_0px_#000000]">
-                <Cpu className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-portal-surface border-2 border-black text-[11px] font-mono font-bold text-portal-yellow shadow-neo-sm rounded-lg">
+                <Cpu className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>CANVAS 2D & WEB AUDIO</span>
               </div>
             </div>
@@ -75,7 +75,7 @@ export default function Footer({
                   }}
                   className="hover:text-portal-cyan transition-colors text-left"
                 >
-                  ▶ All 20+ Mini-Games
+                  ▶ All 22+ Mini-Games
                 </button>
               </li>
               <li>

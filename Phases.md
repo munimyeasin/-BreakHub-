@@ -51,7 +51,7 @@
     8. *Multidimension XO* (`g_multi_xo_13`): 9x9 Nested Tic-Tac-Toe with macro-node sector conquests.
     9. *Tetra Matrix* (`g_tetris_20`): Polyomino arcade with 7-bag generation and SRS wall kicks.
     10. *Neon Missile Defense* (`g_missile_21`): Tactical command flak defense against ballistic missiles.
-    11. *Cyber Outrun 2077* (`g_outrun_22`): Synthwave 4-lane retro highway racer with Nitro overdrive.
+    11. *Quantum Cyber Chess* (`g_chess_24`): 8x8 matrix cyber chess with Minimax AI and GM Munim bot.
     12. *Quantum 2048*, *Memory Matrix*, *Hyper Tapper*, *Quantum XO*.
   - Fullsuite of 19 theme-adaptive vector SVG thumbnails with Light/Dark CSS support in `public/thumbnails/`.
 

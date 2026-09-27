@@ -37,7 +37,8 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Download,
-  Upload
+  Upload,
+  MessageSquare
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -86,8 +87,74 @@ export interface Move {
 }
 
 export type GameMode = 'ai' | 'pvp';
-export type AiDifficulty = 'novice' | 'tactician' | 'grandmaster';
+export type AiDifficulty = 'novice' | 'tactician' | 'grandmaster' | 'ruthless';
 export type TimeControl = 'unlimited' | 'blitz' | 'rapid' | 'classic';
+
+export interface BotProfile {
+  id: string;
+  name: string;
+  title: string;
+  elo: number;
+  difficulty: AiDifficulty;
+  depth: number;
+  avatar: string;
+  badgeColor: string;
+  description: string;
+  playstyle: string;
+  ruthless?: boolean;
+}
+
+export const CHESS_BOTS: BotProfile[] = [
+  {
+    id: 'sparky',
+    name: 'Sparky',
+    title: 'Cyber Apprentice',
+    elo: 800,
+    difficulty: 'novice',
+    depth: 1,
+    avatar: '🤖',
+    badgeColor: 'from-emerald-400 to-teal-500',
+    description: 'Energetic junior AI learning tactical openings.',
+    playstyle: 'Aggressive & Casual'
+  },
+  {
+    id: 'cyberbyte',
+    name: 'CyberByte',
+    title: 'Matrix Tactician',
+    elo: 1500,
+    difficulty: 'tactician',
+    depth: 2,
+    avatar: '⚡',
+    badgeColor: 'from-cyan-400 to-blue-600',
+    description: 'Calculated intermediate matrix entity with solid positional fundamentals.',
+    playstyle: 'Solid & Positional'
+  },
+  {
+    id: 'quantum',
+    name: 'Quantum Core',
+    title: 'Deep Grandmaster',
+    elo: 2200,
+    difficulty: 'grandmaster',
+    depth: 3,
+    avatar: '🔮',
+    badgeColor: 'from-purple-500 to-pink-500',
+    description: 'Deep neural engine running 3-ply minimax with relentless king-safety evaluation.',
+    playstyle: 'Deep Calculation & Relentless'
+  },
+  {
+    id: 'munim',
+    name: 'Munim',
+    title: 'Ruthless Grandmaster',
+    elo: 2950,
+    difficulty: 'ruthless',
+    depth: 4,
+    avatar: '👑',
+    badgeColor: 'from-[#FFE600] via-[#FF0055] to-[#00F0FF]',
+    description: 'The invincible final boss of Break Hub. A savage 2950 Elo chess titan with 4-ply minimax.',
+    playstyle: 'Ruthless, Aggressive & Unforgiving',
+    ruthless: true
+  }
+];
 
 // Piece value mapping for material calculation and AI evaluation
 const PIECE_VALUES: Record<PieceType, number> = {
@@ -303,9 +370,12 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
     toC: number;
   } | null>(null);
 
-  // Modals & Popups
+  // Modals & Bot Selection
   const [gameMode, setGameMode] = useState<GameMode>('ai');
   const [aiDifficulty, setAiDifficulty] = useState<AiDifficulty>('tactician');
+  const [selectedBotId, setSelectedBotId] = useState<string>('cyberbyte');
+  const [showBotModal, setShowBotModal] = useState<boolean>(false);
+
   const [playerColor, setPlayerColor] = useState<PieceColor>('w');
   const [boardFlipped, setBoardFlipped] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -487,6 +557,11 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
     },
     [soundEnabled, getAudioContext]
   );
+
+  // Active Bot Profile Helper
+  const currentBotProfile = useMemo(() => {
+    return CHESS_BOTS.find(b => b.id === selectedBotId) || CHESS_BOTS[1];
+  }, [selectedBotId]);
 
   // Time Control Init
   useEffect(() => {
@@ -888,16 +963,27 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
       if (depth === 0 || moves.length === 0) {
         if (moves.length === 0) {
           if (isInCheck(activeColor, b)) {
-            return isMaximizing ? -50000 + (3 - depth) : 50000 - (3 - depth);
+            return isMaximizing ? -50000 + (4 - depth) : 50000 - (4 - depth);
           }
           return 0;
         }
         return evaluateBoard(b);
       }
 
+      // Move ordering: evaluate captures and promotions first for maximum alpha-beta cutoffs
+      const sortedMoves = depth > 1
+        ? [...moves].sort((a, b) => {
+            const victimA = b[a.toR][a.toC];
+            const victimB = b[b.toR][b.toC];
+            const valA = victimA ? PIECE_VALUES[victimA.type] : 0;
+            const valB = victimB ? PIECE_VALUES[victimB.type] : 0;
+            return valB - valA;
+          })
+        : moves;
+
       if (isMaximizing) {
         let maxEval = -Infinity;
-        for (const m of moves) {
+        for (const m of sortedMoves) {
           const nextB = b.map(row => [...row]);
           const movingP = nextB[m.fromR][m.fromC]!;
           nextB[m.toR][m.toC] = { ...movingP, hasMoved: true };
@@ -915,7 +1001,7 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
         return maxEval;
       } else {
         let minEval = Infinity;
-        for (const m of moves) {
+        for (const m of sortedMoves) {
           const nextB = b.map(row => [...row]);
           const movingP = nextB[m.fromR][m.fromC]!;
           nextB[m.toR][m.toC] = { ...movingP, hasMoved: true };
@@ -1228,6 +1314,7 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
       if (aiDifficulty === 'novice') base = 5000;
       else if (aiDifficulty === 'tactician') base = 12000;
       else if (aiDifficulty === 'grandmaster') base = 25000;
+      else if (aiDifficulty === 'ruthless') base = 40000;
     } else {
       base = 1000;
     }
@@ -1328,7 +1415,7 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
           chosenMove = legalMoves[Math.floor(Math.random() * legalMoves.length)];
         }
       } else {
-        const searchDepth = aiDifficulty === 'grandmaster' ? 3 : 2;
+        const searchDepth = aiDifficulty === 'ruthless' ? 4 : aiDifficulty === 'grandmaster' ? 3 : 2;
         let bestVal = aiColor === 'b' ? Infinity : -Infinity;
         const shuffled = [...legalMoves].sort(() => Math.random() - 0.5);
 
@@ -1396,6 +1483,16 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
     getAllLegalMoves,
     minimax
   ]);
+
+  // Select Bot and Start Game
+  const selectBot = (botId: string) => {
+    const bot = CHESS_BOTS.find(b => b.id === botId);
+    if (!bot) return;
+    setSelectedBotId(bot.id);
+    setAiDifficulty(bot.difficulty);
+    setShowBotModal(false);
+    resetGame();
+  };
 
   // Restart / Reset Game
   const resetGame = () => {
@@ -1495,83 +1592,184 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
     return pgn.trim();
   }, [moveHistory, gameResult, playerColor]);
 
-  // SVG Piece Icon Renderer
+  // SVG Piece Icon Renderer with Neo-Brutalist Cyber Gradients matching Thumbnail
   const renderPieceIcon = (type: PieceType, color: PieceColor) => {
     const isWhite = color === 'w';
-    const fill = isWhite ? '#FFF570' : '#FF4B91';
+    const gradId = isWhite ? 'chessGoldPieceGrad' : 'chessPinkPieceGrad';
 
     if (type === 'p') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[75%] h-[75%] drop-shadow-md transition-transform duration-150">
-          <circle cx="22.5" cy="14" r="6" fill={fill} stroke="#000" strokeWidth="2.5" />
-          <path d="M 17 22 C 17 22, 12 30, 14 36 L 31 36 C 33 30, 28 22, 28 22 Z" fill={fill} stroke="#000" strokeWidth="2.5" />
-          <rect x="11" y="36" width="23" height="4.5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+        <svg viewBox="0 0 45 45" className="w-[78%] h-[78%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+            <linearGradient id="chessCyanPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#E0FFFF" />
+              <stop offset="40%" stopColor="#00F0FF" />
+              <stop offset="100%" stopColor="#0284C7" />
+            </linearGradient>
+          </defs>
+          <circle cx="22.5" cy="14" r="6.5" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
+          <circle cx="22.5" cy="14" r="2" fill={isWhite ? '#00F0FF' : '#FFE600'} />
+          <path d="M 16 22 C 16 22, 11 29, 13 36 L 32 36 C 34 29, 29 22, 29 22 Z" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
+          <rect x="10" y="36" width="25" height="5" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
     if (type === 'r') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[80%] h-[80%] drop-shadow-md transition-transform duration-150">
-          <path d="M 12 11 L 12 17 L 15 17 L 15 14 L 20 14 L 20 17 L 25 17 L 25 14 L 30 14 L 30 17 L 33 17 L 33 11 Z" fill={fill} stroke="#000" strokeWidth="2.5" />
-          <path d="M 15 17 L 16 34 L 29 34 L 30 17 Z" fill={fill} stroke="#000" strokeWidth="2.5" />
-          <rect x="11" y="34" width="23" height="5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+        <svg viewBox="0 0 45 45" className="w-[82%] h-[82%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+          </defs>
+          <path d="M 11 10 L 11 17 L 14.5 17 L 14.5 14 L 19.5 14 L 19.5 17 L 25.5 17 L 25.5 14 L 30.5 14 L 30.5 17 L 34 17 L 34 10 Z" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
+          <path d="M 14.5 17 L 15.5 34 L 29.5 34 L 30.5 17 Z" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
+          <line x1="22.5" y1="20" x2="22.5" y2="30" stroke="#00F0FF" strokeWidth="2" strokeLinecap="round" />
+          <rect x="10" y="34" width="25" height="5.5" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
     if (type === 'n') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[82%] h-[82%] drop-shadow-md transition-transform duration-150">
+        <svg viewBox="0 0 45 45" className="w-[85%] h-[85%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+          </defs>
           <path
-            d="M 22 10 C 22 10, 14 11, 12 20 C 11 25, 14 27, 18 26 C 13 30, 11 36, 11 36 L 33 36 C 33 36, 34 26, 30 19 C 27 14, 25 10, 22 10 Z"
-            fill={fill}
+            d="M 28 8 C 28 8, 16 10, 14 22 C 12 28, 16 31, 22 30 C 15 36, 12 44, 12 44 L 40 44 C 40 44, 42 32, 38 23 C 34 16, 31 10, 28 8 Z"
+            fill={`url(#${gradId})`}
             stroke="#000"
             strokeWidth="2.5"
           />
-          <circle cx="16" cy="18" r="2" fill="#000" />
-          <rect x="10" y="36" width="25" height="4.5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+          <circle cx="20" cy="20" r="2.5" fill="#000" />
+          <circle cx="20" cy="20" r="1" fill="#FFF" />
+          <path d="M 17 25 L 26 23" stroke="#00F0FF" strokeWidth="2" strokeLinecap="round" />
+          <rect x="11" y="44" width="31" height="6" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
     if (type === 'b') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[82%] h-[82%] drop-shadow-md transition-transform duration-150">
-          <circle cx="22.5" cy="10" r="3" fill={fill} stroke="#000" strokeWidth="2.5" />
+        <svg viewBox="0 0 45 45" className="w-[84%] h-[84%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+          </defs>
+          <circle cx="22.5" cy="9.5" r="3" fill="#00F0FF" stroke="#000" strokeWidth="1.8" />
           <path
-            d="M 22.5 13 C 15 13, 13 22, 16 28 C 17 30, 15 34, 15 34 L 30 34 C 30 34, 28 30, 29 28 C 32 22, 30 13, 22.5 13 Z"
-            fill={fill}
+            d="M 22.5 12.5 C 14.5 12.5, 12.5 22, 15.5 28 C 16.5 30, 14.5 34, 14.5 34 L 30.5 34 C 30.5 34, 28.5 30, 29.5 28 C 32.5 22, 30.5 12.5, 22.5 12.5 Z"
+            fill={`url(#${gradId})`}
             stroke="#000"
             strokeWidth="2.5"
           />
-          <path d="M 22.5 17 L 22.5 24 M 19 20.5 L 26 20.5" stroke="#000" strokeWidth="2.5" strokeLinecap="round" />
-          <rect x="11" y="34" width="23" height="5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+          <path d="M 22.5 16.5 L 22.5 25 M 18.5 20.5 L 26.5 20.5" stroke="#000" strokeWidth="2.2" strokeLinecap="round" />
+          <rect x="11" y="34" width="23" height="5.5" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
     if (type === 'q') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[86%] h-[86%] drop-shadow-md transition-transform duration-150">
-          <circle cx="9" cy="14" r="2.5" fill={fill} stroke="#000" strokeWidth="2" />
-          <circle cx="15.5" cy="11" r="2.5" fill={fill} stroke="#000" strokeWidth="2" />
-          <circle cx="22.5" cy="9.5" r="2.5" fill={fill} stroke="#000" strokeWidth="2" />
-          <circle cx="29.5" cy="11" r="2.5" fill={fill} stroke="#000" strokeWidth="2" />
-          <circle cx="36" cy="14" r="2.5" fill={fill} stroke="#000" strokeWidth="2" />
-          <path d="M 10 16 L 14 33 L 31 33 L 35 16 L 28 23 L 22.5 12 L 17 23 Z" fill={fill} stroke="#000" strokeWidth="2.5" />
-          <rect x="10" y="33" width="25" height="5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+        <svg viewBox="0 0 45 45" className="w-[88%] h-[88%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessCyanPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#E0FFFF" />
+              <stop offset="40%" stopColor="#00F0FF" />
+              <stop offset="100%" stopColor="#0284C7" />
+            </linearGradient>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+          </defs>
+          <circle cx="9" cy="14" r="2.5" fill="url(#chessCyanPieceGrad)" stroke="#000" strokeWidth="1.8" />
+          <circle cx="15.5" cy="11" r="2.5" fill="url(#chessCyanPieceGrad)" stroke="#000" strokeWidth="1.8" />
+          <circle cx="22.5" cy="9.5" r="2.5" fill="url(#chessCyanPieceGrad)" stroke="#000" strokeWidth="1.8" />
+          <circle cx="29.5" cy="11" r="2.5" fill="url(#chessCyanPieceGrad)" stroke="#000" strokeWidth="1.8" />
+          <circle cx="36" cy="14" r="2.5" fill="url(#chessCyanPieceGrad)" stroke="#000" strokeWidth="1.8" />
+          <path d="M 10 16 L 14 36 L 31 36 L 35 16 L 28 24 L 22.5 12 L 17 24 Z" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
+          <rect x="10" y="36" width="25" height="5.5" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
     if (type === 'k') {
       return (
-        <svg viewBox="0 0 45 45" className="w-[88%] h-[88%] drop-shadow-md transition-transform duration-150">
-          <path d="M 22.5 6 L 22.5 14 M 18.5 10 L 26.5 10" stroke={fill} strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M 22.5 6 L 22.5 14 M 18.5 10 L 26.5 10" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+        <svg viewBox="0 0 45 45" className="w-[90%] h-[90%] drop-shadow-md transition-transform duration-150">
+          <defs>
+            <linearGradient id="chessGoldPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="30%" stopColor="#FFF570" />
+              <stop offset="80%" stopColor="#FFE600" />
+              <stop offset="100%" stopColor="#EAB308" />
+            </linearGradient>
+            <linearGradient id="chessPinkPieceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFE4F1" />
+              <stop offset="35%" stopColor="#FF4B91" />
+              <stop offset="80%" stopColor="#FF0055" />
+              <stop offset="100%" stopColor="#BE185D" />
+            </linearGradient>
+          </defs>
+          <path d="M 22.5 4 L 22.5 15 M 17.5 9.5 L 27.5 9.5" stroke="#FFE600" strokeWidth="4" strokeLinecap="round" />
+          <path d="M 22.5 4 L 22.5 15 M 17.5 9.5 L 27.5 9.5" stroke="#000" strokeWidth="1.8" strokeLinecap="round" />
           <path
-            d="M 12 18 C 12 18, 14 14, 22.5 14 C 31 14, 33 18, 33 18 C 33 24, 29 27, 29 33 L 16 33 C 16 27, 12 24, 12 18 Z"
-            fill={fill}
+            d="M 10 20 C 10 20, 13 15, 22.5 15 C 32 15, 35 20, 35 20 C 35 28, 30 32, 30 40 L 15 40 C 15 32, 10 28, 10 20 Z"
+            fill={`url(#${gradId})`}
             stroke="#000"
             strokeWidth="2.5"
           />
-          <rect x="11" y="33" width="23" height="5" rx="2" fill={fill} stroke="#000" strokeWidth="2.5" />
+          <circle cx="22.5" cy="24" r="3" fill="#00F0FF" stroke="#000" strokeWidth="1.2" />
+          <line x1="22.5" y1="27" x2="22.5" y2="35" stroke="#00F0FF" strokeWidth="1.8" />
+          <circle cx="22.5" cy="35" r="1.5" fill="#00F0FF" />
+          <rect x="9" y="40" width="27" height="6.5" rx="2" fill={`url(#${gradId})`} stroke="#000" strokeWidth="2.5" />
         </svg>
       );
     }
@@ -1638,21 +1836,21 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
           </button>
 
           {gameMode === 'ai' && (
-            <div className="hidden sm:flex items-center gap-0.5 bg-black/40 p-0.5 rounded-lg border border-black">
-              {(['novice', 'tactician', 'grandmaster'] as AiDifficulty[]).map(diff => (
-                <button
-                  key={diff}
-                  onClick={() => setAiDifficulty(diff)}
-                  className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase transition-all ${
-                    aiDifficulty === diff
-                      ? 'bg-portal-pink text-white border border-black shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  {diff.slice(0, 3)}
-                </button>
-              ))}
-            </div>
+            <button
+              onClick={() => setShowBotModal(true)}
+              className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border-2 border-black text-[10px] sm:text-[11px] font-black uppercase transition-all shadow-neo-sm ${
+                currentBotProfile.ruthless
+                  ? 'bg-gradient-to-r from-red-600 via-amber-500 to-yellow-400 text-black animate-pulse'
+                  : 'bg-portal-card text-portal-cyan hover:bg-portal-cyan hover:text-black'
+              }`}
+              title="Choose Opponent Bot Roster"
+            >
+              <span>{currentBotProfile.avatar}</span>
+              <span className="hidden sm:inline">{currentBotProfile.name}</span>
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-black/50 text-white border border-black/40">
+                {currentBotProfile.elo}
+              </span>
+            </button>
           )}
         </div>
 
@@ -1775,34 +1973,77 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
 
         {/* Board Column - Dynamically sized to maximize viewport dimensions */}
         <div className="flex flex-col items-center w-full max-w-[min(96vw,calc(100vh-210px))] sm:max-w-[min(92vw,calc(100vh-230px))] lg:max-w-[min(54vw,calc(100vh-210px))] xl:max-w-[min(58vw,calc(100vh-210px))] shrink-0">
-          {/* Top Opponent Bar */}
-          <div className="w-full flex items-center justify-between px-3 py-1.5 mb-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-3.5 h-3.5 rounded-full bg-portal-pink border-2 border-black shadow-sm flex items-center justify-center">
-                <span className="text-[8px] font-black text-white">B</span>
-              </div>
-              <span className="font-black text-xs text-white uppercase tracking-wide">
-                {gameMode === 'ai' ? `CORTEX AI (${aiDifficulty.toUpperCase()})` : 'PLAYER 2 (BLACK)'}
-              </span>
-              {isAiThinking && (
-                <span className="px-1.5 py-0.2 rounded bg-portal-cyan/20 text-portal-cyan text-[9px] font-black uppercase animate-pulse">
-                  CALCULATING...
-                </span>
-              )}
-            </div>
+          {/* Top Opponent Bar with Bot Persona */}
+          <div className="w-full mb-1.5">
+            <div className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-sm ${
+              gameMode === 'ai' && currentBotProfile.ruthless
+                ? 'bg-gradient-to-r from-red-950 via-slate-900 to-amber-950/80'
+                : 'bg-portal-surface'
+            }`}>
+              <div className="flex items-center gap-2">
+                {gameMode === 'ai' ? (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base select-none">{currentBotProfile.avatar}</span>
+                    <div className="flex flex-col leading-none">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black text-xs text-white uppercase tracking-wide">
+                          {currentBotProfile.name}
+                        </span>
+                        <span className={`px-1 py-0.2 rounded text-[9px] font-mono font-black border border-black ${
+                          currentBotProfile.ruthless
+                            ? 'bg-gradient-to-r from-[#FFE600] to-[#FF0055] text-black animate-pulse'
+                            : 'bg-black text-portal-cyan'
+                        }`}>
+                          {currentBotProfile.elo} ELO
+                        </span>
+                      </div>
+                      <span className="text-[9px] font-medium text-slate-400">
+                        {currentBotProfile.title}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="w-3.5 h-3.5 rounded-full bg-portal-pink border-2 border-black shadow-sm flex items-center justify-center">
+                      <span className="text-[8px] font-black text-white">B</span>
+                    </div>
+                    <span className="font-black text-xs text-white uppercase tracking-wide">
+                      PLAYER 2 (BLACK)
+                    </span>
+                  </div>
+                )}
 
-            {timeControl !== 'unlimited' && (
-              <div
-                className={`flex items-center gap-1 px-2 py-0.5 rounded-lg border-2 border-black font-mono font-black text-xs ${
-                  turn === 'b' && isClockRunning
-                    ? 'bg-portal-pink text-white animate-pulse'
-                    : 'bg-portal-card text-slate-300'
-                }`}
-              >
-                <Clock className="w-3 h-3" />
-                <span>{formatTime(blackTime)}</span>
+                {isAiThinking && (
+                  <span className="px-1.5 py-0.2 rounded bg-portal-cyan/20 text-portal-cyan text-[9px] font-black uppercase animate-pulse border border-portal-cyan/40">
+                    CALCULATING...
+                  </span>
+                )}
               </div>
-            )}
+
+              <div className="flex items-center gap-2">
+                {gameMode === 'ai' && (
+                  <button
+                    onClick={() => setShowBotModal(true)}
+                    className="px-2 py-0.5 rounded-lg bg-black/60 hover:bg-portal-yellow hover:text-black text-slate-300 text-[10px] font-black uppercase border border-slate-700 hover:border-black transition-all"
+                  >
+                    BOTS
+                  </button>
+                )}
+
+                {timeControl !== 'unlimited' && (
+                  <div
+                    className={`flex items-center gap-1 px-2 py-0.5 rounded-lg border-2 border-black font-mono font-black text-xs ${
+                      turn === 'b' && isClockRunning
+                        ? 'bg-portal-pink text-white animate-pulse'
+                        : 'bg-portal-card text-slate-300'
+                    }`}
+                  >
+                    <Clock className="w-3 h-3" />
+                    <span>{formatTime(blackTime)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Captured Graveyard (White pieces captured by Black) */}
@@ -1822,8 +2063,16 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
           </div>
 
           {/* 8x8 CYBER MATRIX CHESSBOARD - Aspect Square Fluid Scaler */}
-          <div className="relative w-full aspect-square p-1.5 sm:p-2.5 rounded-2xl bg-portal-surface border-3 sm:border-4 border-black shadow-neo-lg overflow-hidden flex items-center justify-center">
-            <div className="grid grid-cols-8 grid-rows-8 w-full h-full aspect-square border-2 border-black rounded-xl overflow-hidden bg-portal-card">
+          <div className="relative w-full aspect-square p-1.5 sm:p-2.5 rounded-2xl bg-[#030112] border-3 sm:border-4 border-black shadow-neo-lg overflow-hidden flex items-center justify-center">
+            {/* Hologram Laser Backdrop Rays matching thumbnail */}
+            <div className="absolute inset-0 pointer-events-none opacity-30 z-0">
+              <svg className="w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="none">
+                <line x1="0" y1="400" x2="400" y2="0" stroke="#00F0FF" strokeWidth="1.5" strokeDasharray="6,6" />
+                <line x1="400" y1="400" x2="0" y2="0" stroke="#FF0055" strokeWidth="1.5" strokeDasharray="6,6" />
+              </svg>
+            </div>
+
+            <div className="relative z-10 grid grid-cols-8 grid-rows-8 w-full h-full aspect-square border-2 border-black rounded-xl overflow-hidden bg-[#0A0F1D]">
               {Array.from({ length: 8 }).map((_, rawR) => {
                 const r = isFlipped ? 7 - rawR : rawR;
                 return Array.from({ length: 8 }).map((_, rawC) => {
@@ -1838,9 +2087,9 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
                   const isHintFrom = bestMoveHint && bestMoveHint.fromR === r && bestMoveHint.fromC === c;
                   const isHintTo = bestMoveHint && bestMoveHint.toR === r && bestMoveHint.toC === c;
 
-                  let bgClass = isLightSquare ? 'bg-[#1E293B]' : 'bg-[#0F172A]';
+                  let bgClass = isLightSquare ? 'bg-[#1E293B]' : 'bg-[#0A0F1D]';
                   if (isSelected) bgClass = 'bg-[#00F0FF]/30 ring-2 ring-portal-cyan inset-0';
-                  else if (isLastMoveTo || isLastMoveFrom) bgClass = 'bg-[#FFF570]/20';
+                  else if (isLastMoveTo || isLastMoveFrom) bgClass = 'bg-[#FFF570]/25';
                   if (isHintFrom || isHintTo) bgClass = 'bg-emerald-500/30 ring-2 ring-emerald-400 animate-pulse';
                   if (isKingInCheck) bgClass = 'bg-rose-600/40 ring-4 ring-rose-500 animate-pulse';
 
@@ -1851,27 +2100,30 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
                       data-coord={`${String.fromCharCode(97 + c)}${8 - r}`}
                       aria-label={`Square ${String.fromCharCode(97 + c)}${8 - r}`}
                       onClick={() => handleSquareClick(r, c)}
-                      className={`relative flex items-center justify-center aspect-square p-0.5 border-[0.5px] border-black/40 cursor-pointer select-none transition-colors ${bgClass}`}
+                      className={`relative flex items-center justify-center aspect-square p-0.5 border-[0.5px] border-cyan-400/20 cursor-pointer select-none transition-colors ${bgClass}`}
                     >
                       {rawC === 0 && (
-                        <span className="absolute top-0.5 left-0.5 sm:left-1 text-[7px] sm:text-[9px] md:text-[10px] font-black text-slate-500 pointer-events-none">
+                        <span className="absolute top-0.5 left-0.5 sm:left-1 text-[7px] sm:text-[9px] md:text-[10px] font-black text-cyan-500/70 pointer-events-none">
                           {8 - r}
                         </span>
                       )}
                       {rawR === 7 && (
-                        <span className="absolute bottom-0.5 right-0.5 sm:right-1 text-[7px] sm:text-[9px] md:text-[10px] font-black text-slate-500 pointer-events-none">
+                        <span className="absolute bottom-0.5 right-0.5 sm:right-1 text-[7px] sm:text-[9px] md:text-[10px] font-black text-cyan-500/70 pointer-events-none">
                           {String.fromCharCode(97 + c)}
                         </span>
                       )}
 
-                      {isValidTarget && (
-                        <div
-                          className={`absolute z-20 pointer-events-none ${
-                            piece
-                              ? 'w-full h-full border-2 sm:border-3 border-portal-yellow rounded-lg bg-portal-yellow/20 animate-pulse'
-                              : 'w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-portal-cyan/80 shadow-neo-sm ring-2 ring-black'
-                          }`}
-                        />
+                      {/* Active Attack Target Crosshair matching thumbnail */}
+                      {isValidTarget && piece && (
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none p-0.5 z-20 animate-pulse" viewBox="0 0 40 40">
+                          <circle cx="20" cy="20" r="16" fill="#FF0055" fillOpacity="0.25" stroke="#FF0055" strokeWidth="2" strokeDasharray="4,2" />
+                          <circle cx="20" cy="20" r="4.5" fill="#FF0055" stroke="#000" strokeWidth="1" />
+                        </svg>
+                      )}
+
+                      {/* Empty Target Destination Dot */}
+                      {isValidTarget && !piece && (
+                        <div className="absolute z-20 pointer-events-none w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-portal-cyan/90 shadow-neo-sm ring-2 ring-black" />
                       )}
 
                       {piece && renderPieceIcon(piece.type, piece.color)}
@@ -1880,6 +2132,32 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
                 });
               })}
             </div>
+
+            {/* In-Game Action Burst Popups: "CHECKMATE!" or "CHECK!" matching thumbnail */}
+            {(gameResult === 'w' || gameResult === 'b' || isCheck) && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center animate-bounce">
+                <svg viewBox="-30 -30 60 60" className="w-24 sm:w-28 md:w-32 drop-shadow-[3px_3px_0px_#000000]">
+                  <polygon
+                    points="0,-24 9,-9 27,-15 18,-2 33,10 15,15 19,30 5,21 -5,30 -2,15 -19,20 -14,4 -30,-3 -15,-12 -21,-27 -6,-18"
+                    fill={gameResult ? '#FFE600' : '#FF0055'}
+                    stroke="#000000"
+                    strokeWidth="3"
+                  />
+                  <text
+                    x="0"
+                    y="4"
+                    fontFamily="'Impact', 'Arial Black', sans-serif"
+                    fontWeight="900"
+                    fontSize={gameResult ? '8' : '10'}
+                    fill={gameResult ? '#000000' : '#FFFFFF'}
+                    textAnchor="middle"
+                    letterSpacing="0.5"
+                  >
+                    {gameResult ? 'CHECKMATE!' : 'CHECK!'}
+                  </text>
+                </svg>
+              </div>
+            )}
 
             {/* Pawn Promotion Modal Overlay */}
             {promotionPending && (
@@ -1956,7 +2234,11 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
         <div className="flex flex-col w-full max-w-[min(96vw,calc(100vh-210px))] lg:max-w-sm xl:max-w-md lg:flex-1 gap-2 self-stretch">
           {/* Game Over Victory / Defeat Banner */}
           {gameResult && (
-            <div className="w-full p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo flex flex-col items-center text-center">
+            <div className={`w-full p-3.5 rounded-2xl border-3 border-black shadow-neo flex flex-col items-center text-center ${
+              currentBotProfile.ruthless
+                ? 'bg-gradient-to-br from-red-950/90 via-slate-900 to-amber-950/80'
+                : 'bg-portal-surface'
+            }`}>
               <div className="flex items-center gap-2 mb-1">
                 {gameResult === playerColor || (gameMode === 'pvp' && gameResult !== 'draw') ? (
                   <Award className="w-5 h-5 text-portal-yellow" />
@@ -1971,8 +2253,10 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
                     : 'MISSION DEFEAT'}
                 </h4>
               </div>
-              <p className="text-xs text-slate-300 font-semibold mb-2">{resultReason}</p>
-              <div className="flex items-center gap-2">
+              <p className="text-xs text-slate-300 font-semibold mb-2.5">{resultReason}</p>
+
+              {/* End Screen Quick Actions */}
+              <div className="flex items-center gap-2 flex-wrap justify-center mb-2.5">
                 <button
                   onClick={resetGame}
                   className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-portal-yellow to-portal-cyan text-black font-black text-xs uppercase border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
@@ -1986,6 +2270,34 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
                   ACCURACY REPORT
                 </button>
               </div>
+
+              {/* Prominent Play Against Munim Bot (2950 Elo) CTA Button */}
+              {selectedBotId !== 'munim' ? (
+                <button
+                  onClick={() => {
+                    setSelectedBotId('munim');
+                    setAiDifficulty('ruthless');
+                    setGameMode('ai');
+                    resetGame();
+                  }}
+                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#FFE600] via-[#FF0055] to-[#00F0FF] text-black font-black text-xs uppercase border-2 border-black shadow-neo hover:brightness-110 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center justify-center gap-2 animate-pulse"
+                >
+                  <span>🔥</span>
+                  <span>PLAY AGAINST MUNIM BOT (2950 ELO)</span>
+                  <span>👑</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    resetGame();
+                  }}
+                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-red-600 via-amber-500 to-yellow-400 text-black font-black text-xs uppercase border-2 border-black shadow-neo hover:brightness-110 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                >
+                  <span>⚔️</span>
+                  <span>REMATCH GM MUNIM (2950 ELO)</span>
+                  <span>🔥</span>
+                </button>
+              )}
             </div>
           )}
 
@@ -2260,6 +2572,119 @@ export default function CyberChessGame({ gameId, onGameOver }: CyberChessGamePro
             >
               CLOSE REVIEW
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Bot Selection Roster Modal */}
+      {showBotModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto bg-portal-surface border-4 border-black rounded-3xl shadow-neo p-4 sm:p-6 flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-portal-yellow to-portal-pink border-2 border-black flex items-center justify-center text-lg">
+                  🤖
+                </div>
+                <div>
+                  <h3 className="font-black text-base sm:text-lg uppercase text-white tracking-wider">
+                    CHOOSE BOT OPPONENT
+                  </h3>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-medium">
+                    Select your AI rival ranging from novice apprentice to ruthless 2950 Elo GM
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowBotModal(false)}
+                className="w-8 h-8 rounded-xl bg-portal-card hover:bg-rose-600 text-white font-black border-2 border-black flex items-center justify-center transition-all"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 4-Tier Bot Roster Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {CHESS_BOTS.map(bot => {
+                const isSelected = selectedBotId === bot.id && gameMode === 'ai';
+                return (
+                  <div
+                    key={bot.id}
+                    onClick={() => {
+                      setSelectedBotId(bot.id);
+                      setAiDifficulty(bot.difficulty);
+                      setGameMode('ai');
+                      setShowBotModal(false);
+                      resetGame();
+                    }}
+                    className={`relative p-3.5 rounded-2xl border-3 border-black cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between gap-2.5 ${
+                      bot.ruthless
+                        ? isSelected
+                          ? 'bg-gradient-to-br from-red-950 via-slate-900 to-amber-950 border-[#FFE600] shadow-neo ring-2 ring-[#FFE600]'
+                          : 'bg-gradient-to-br from-red-950/70 via-slate-900 to-amber-950/60 shadow-neo-sm hover:border-[#FFE600]'
+                        : isSelected
+                        ? 'bg-portal-card border-portal-cyan shadow-neo ring-2 ring-portal-cyan'
+                        : 'bg-portal-card/70 hover:bg-portal-card shadow-neo-sm'
+                    }`}
+                  >
+                    {/* Bot Header */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${bot.badgeColor} border-2 border-black flex items-center justify-center text-2xl shadow-sm`}>
+                          {bot.avatar}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <h4 className="font-black text-sm text-white uppercase">{bot.name}</h4>
+                            {bot.ruthless && (
+                              <span className="px-1.5 py-0.2 rounded-full bg-red-600 text-white text-[8px] font-black uppercase tracking-wider animate-pulse">
+                                BOSS
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-slate-400 font-semibold">{bot.title}</p>
+                        </div>
+                      </div>
+
+                      <div className={`px-2 py-0.5 rounded-lg border-2 border-black font-mono font-black text-xs ${
+                        bot.ruthless
+                          ? 'bg-gradient-to-r from-[#FFE600] to-[#FF0055] text-black animate-pulse'
+                          : 'bg-black text-portal-cyan'
+                      }`}>
+                        {bot.elo} ELO
+                      </div>
+                    </div>
+
+                    {/* Bot Playstyle & Description */}
+                    <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                      {bot.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-black/40 text-[10px]">
+                      <span className="text-slate-400 font-semibold">
+                        Style: <strong className="text-portal-yellow">{bot.playstyle}</strong>
+                      </span>
+                      <span className={`font-black uppercase px-2 py-0.5 rounded border border-black ${
+                        isSelected
+                          ? 'bg-portal-yellow text-black'
+                          : 'bg-black/50 text-slate-300'
+                      }`}>
+                        {isSelected ? 'ACTIVE' : 'SELECT'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-black/60 text-xs text-slate-400">
+              <span>💡 All bots utilize positional heuristics & minimax search.</span>
+              <button
+                onClick={() => setShowBotModal(false)}
+                className="px-4 py-1.5 rounded-xl bg-portal-card hover:bg-slate-700 text-white font-black uppercase text-xs border-2 border-black transition-all"
+              >
+                CLOSE
+              </button>
+            </div>
           </div>
         </div>
       )}

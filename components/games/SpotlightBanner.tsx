@@ -44,14 +44,12 @@ export default function SpotlightBanner({
     g =>
       g.status !== 'hidden' &&
       g.slug !== 'multidimension-xo' &&
-      (g.slug === 'neon-flipper-pinball' ||
-        g.slug === 'neon-starfighter' ||
+      (g.slug === 'neon-starfighter' ||
         g.slug === 'cyber-slicer' ||
         g.slug === 'tetra-matrix' ||
         g.slug === 'retro-candy-crush' ||
         g.slug === 'retro-battleship' ||
         g.slug === 'black-hole' ||
-        g.slug === 'cyber-outrun-2077' ||
         g.slug === 'neon-missile-defense' ||
         g.slug === 'cyber-chess')
   );
@@ -77,7 +75,6 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
-    if (slug === 'neon-flipper-pinball') return <Zap className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'tetra-matrix') return <Boxes className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;
@@ -86,7 +83,6 @@ export default function SpotlightBanner({
     if (slug === 'black-hole') return <Zap className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'cyber-minesweeper') return <Target className="w-3.5 h-3.5 text-portal-cyan" />;
     if (slug === 'cyber-maze') return <Layers className="w-3.5 h-3.5 text-portal-lime" />;
-    if (slug === 'cyber-outrun-2077') return <Flame className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'neon-missile-defense') return <Shield className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'cyber-chess') return <Crown className="w-3.5 h-3.5 text-portal-yellow" />;
     return <Gamepad2 className="w-3.5 h-3.5 text-portal-cyan" />;
@@ -172,22 +168,62 @@ export default function SpotlightBanner({
     return () => clearInterval(timer);
   }, [featuredGames.length, isPaused]);
 
+  // Keyboard navigation when hovering / focusing banner
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if user is typing in an input or textarea
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
+
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+        try { audio.playClickSound(); } catch {}
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+        try { audio.playClickSound(); } catch {}
+      }
+    };
+
+    const bannerEl = bannerRef.current;
+    if (!bannerEl) return;
+
+    bannerEl.addEventListener('keydown', handleKeyDown);
+    return () => {
+      bannerEl.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [featuredGames.length]);
+
   return (
     <div
       ref={bannerRef}
+      tabIndex={0}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Featured Arcade Games Spotlight"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
-      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-5 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden touch-pan-y"
+      className="relative w-full rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black p-3 sm:p-4 md:p-5 mb-3 sm:mb-4 md:mb-6 shadow-neo-lg overflow-hidden touch-pan-y focus:outline-none focus:ring-2 focus:ring-portal-cyan"
     >
-      {/* Top Tri-Color Accent Line */}
-      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black" />
+      {/* Top Tri-Color Accent Line with Active Rotation Timer */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan border-b-2 border-black">
+        {!isPaused && featuredGames.length > 1 && (
+          <div
+            key={`progress-${activeIndex}-${transitionKey}`}
+            className="h-full bg-white/50 animate-[spotlightTimer_7s_linear_forwards]"
+          />
+        )}
+      </div>
 
       {/* Animation Styles */}
       <style jsx>{`
+        @keyframes spotlightTimer {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
         @keyframes spotlightSlideNext {
           0% {
             opacity: 0;
@@ -409,6 +445,24 @@ export default function SpotlightBanner({
             <Heart className={`w-4 h-4 stroke-[2.5] ${isFavorite ? 'fill-black text-black' : ''}`} />
           </button>
         </div>
+
+        {/* Mobile Dot Page Indicators */}
+        {featuredGames.length > 1 && (
+          <div className="flex items-center justify-center gap-1.5 pt-1">
+            {featuredGames.map((game, idx) => (
+              <button
+                key={`dot-${game.id}`}
+                onClick={() => handleSelect(idx)}
+                className={`h-1.5 rounded-full transition-all duration-300 border border-black ${
+                  idx === activeIndex
+                    ? 'w-6 bg-portal-cyan'
+                    : 'w-2 bg-slate-600 hover:bg-slate-400'
+                }`}
+                aria-label={`Jump to slide ${idx + 1}: ${game.title}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ========================================================= */}

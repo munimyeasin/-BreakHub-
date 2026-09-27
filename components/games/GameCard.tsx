@@ -57,13 +57,14 @@ export default function GameCard({
       onClick={() => onPlay(game)}
       role="button"
       tabIndex={0}
+      aria-label={`Play ${game.title} - ${game.category} retro arcade game`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           onPlay(game);
         }
       }}
-      className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all duration-200 select-none"
+      className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:ring-2 focus-visible:ring-portal-cyan focus-visible:outline-none focus-visible:translate-x-0.5 focus-visible:translate-y-0.5 transition-all duration-200 select-none"
     >
       {/* Thumbnail Container */}
       <div className="game-thumbnail-container relative aspect-square w-full rounded-xl overflow-hidden mb-2 border-2 border-black shadow-neo-sm">
@@ -80,8 +81,8 @@ export default function GameCard({
         {/* Coming Soon Top Ribbon */}
         {isComingSoon && (
           <div className="absolute top-1.5 left-1.5 z-10">
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-portal-yellow text-black text-[9px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
-              <Clock className="w-2.5 h-2.5 stroke-[2.5]" /> SOON
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-portal-yellow text-black text-[10px] sm:text-[11px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
+              <Clock className="w-3 h-3 stroke-[2.5]" /> SOON
             </span>
           </div>
         )}
@@ -89,8 +90,8 @@ export default function GameCard({
         {/* Featured Top Ribbon */}
         {!isComingSoon && (game.featured || game.slug === 'cyber-slicer' || game.slug === 'neon-starfighter') && (
           <div className="absolute top-1.5 left-1.5 z-10">
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-portal-cyan text-black text-[9px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
-              <Star className="w-2.5 h-2.5 fill-black stroke-[2.5]" /> <span>FEATURED</span>
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-portal-cyan text-black text-[10px] sm:text-[11px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
+              <Star className="w-3 h-3 fill-black stroke-[2.5]" /> <span>FEATURED</span>
             </span>
           </div>
         )}
@@ -134,7 +135,7 @@ export default function GameCard({
       <div className="flex flex-col flex-1 justify-between min-w-0">
         <div>
           <div className="flex items-center gap-1 mb-1">
-            <span className={`inline-block px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border border-black shadow-neo-sm ${badge.bg} ${badge.text} truncate max-w-full`}>
+            <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-black uppercase tracking-wider border border-black shadow-neo-sm ${badge.bg} ${badge.text} truncate max-w-full`}>
               {game.category}
             </span>
           </div>
@@ -145,11 +146,11 @@ export default function GameCard({
           </h3>
         </div>
 
-        <div className="flex items-center justify-between mt-2 pt-1.5 border-t-2 border-black text-[10px] text-slate-300 font-black uppercase">
+        <div className="flex items-center justify-between mt-2 pt-1.5 border-t-2 border-black text-[11px] sm:text-xs text-slate-300 font-black uppercase">
           {isComingSoon ? (
             <>
-              <span className="text-portal-yellow font-black flex items-center gap-1">
-                <Sparkles className="w-3 h-3 stroke-[2.5]" /> In Dev
+              <span className="text-portal-yellow font-black flex items-center gap-1 text-[11px] sm:text-xs">
+                <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" /> In Dev
               </span>
               <button
                 type="button"
@@ -157,7 +158,7 @@ export default function GameCard({
                   e.stopPropagation();
                   onToggleHype?.(game.id, e);
                 }}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded-lg border-2 border-black text-[10px] font-black tracking-wide shadow-neo-sm transition-all z-10 hover:translate-x-0.5 hover:translate-y-0.5 ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border-2 border-black text-[11px] font-black tracking-wide shadow-neo-sm transition-all z-10 hover:translate-x-0.5 hover:translate-y-0.5 ${
                   isHyped
                     ? 'bg-portal-yellow text-black'
                     : 'bg-portal-surface text-portal-yellow hover:bg-portal-yellow hover:text-black'
@@ -170,7 +171,7 @@ export default function GameCard({
             </>
           ) : (
             <>
-              <span className="truncate tracking-wider">{formatPlayCount(game.play_count)}</span>
+              <span className="truncate tracking-wider text-[11px] sm:text-xs">{formatPlayCount(game.play_count)}</span>
               <div onClick={(e) => e.stopPropagation()} className="shrink-0 z-10">
                 <StarRating
                   gameId={game.id}

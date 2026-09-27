@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import FaviconManager from '@/components/ui/FaviconManager';
+import ServiceWorkerRegister from '@/components/ui/ServiceWorkerRegister';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -112,6 +113,7 @@ export default function RootLayout({
       <body className="bg-portal-bg min-h-screen text-slate-100 antialiased selection:bg-portal-cyan selection:text-black">
         <ThemeProvider>
           <FaviconManager />
+          <ServiceWorkerRegister />
           {children}
           <Analytics />
           <SpeedInsights />

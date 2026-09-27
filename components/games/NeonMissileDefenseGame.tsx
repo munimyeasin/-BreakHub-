@@ -700,7 +700,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       x: VIRTUAL_WIDTH / 2,
       y: VIRTUAL_HEIGHT / 2,
       radius: 5,
-      maxRadius: 850,
+      maxRadius: 220,
       color: '#00F0FF',
       expanding: true,
       alive: true,
@@ -708,7 +708,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       isPlayerFlak: true
     });
 
-    addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.35, '⚡ ORBITAL EMP BLAST CLEARED AIRSPACE! ⚡', '#00F0FF');
+    addBadge(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT * 0.35, '⚡ TACTICAL EMP BLAST DETONATED (220M RADIUS) ⚡', '#00F0FF');
     playSfx('nuke');
   }, [playSfx, addBadge]);
 
@@ -894,12 +894,22 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [triggerNuke, startNewGame, toggleFullscreen]);
 
-  // Handle Canvas Click & Touch
+  // Handle Canvas Click & Touch Targeting with crosshair tracking
   const handleCanvasAction = useCallback((clientX: number, clientY: number, preferredBattery?: number) => {
     if (!isPlayingRef.current || isPausedRef.current) return;
     const { x, y } = getVirtualCoords(clientX, clientY);
+    mousePosRef.current = { x, y };
     launchInterceptor(x, y, preferredBattery !== undefined ? preferredBattery : selectedBattery);
   }, [getVirtualCoords, launchInterceptor, selectedBattery]);
+
+  // Touch Move / Drag Targeting for mobile aiming
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      const { x, y } = getVirtualCoords(touch.clientX, touch.clientY);
+      mousePosRef.current = { x, y };
+    }
+  }, [getVirtualCoords]);
 
   // Mouse Move for Custom Crosshairs
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -968,33 +978,66 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
         ctx.fillStyle = isSlowMo ? '#040d1a' : '#060214';
         ctx.fillRect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
-        // Radar Scanning Sweep Arc
+        // Radar Scanning Sweep Arcs & Radial Sector Grid (matching thumbnail)
         radarAngleRef.current = (radarAngleRef.current + 0.015 * timeScale) % (Math.PI * 2);
         const centerRadarX = VIRTUAL_WIDTH / 2;
         const centerRadarY = VIRTUAL_GROUND_Y;
 
-        ctx.strokeStyle = isSlowMo ? 'rgba(0, 240, 255, 0.25)' : 'rgba(0, 240, 255, 0.12)';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = isSlowMo ? 'rgba(0, 240, 255, 0.35)' : 'rgba(0, 240, 255, 0.16)';
+        ctx.lineWidth = 1.2;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.45, Math.PI, 0, false);
+        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.25, Math.PI, 0, false);
+        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.50, Math.PI, 0, false);
         ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 0.75, Math.PI, 0, false);
+        ctx.arc(centerRadarX, centerRadarY, VIRTUAL_HEIGHT * 1.00, Math.PI, 0, false);
+        ctx.stroke();
+
+        // Sector Radial Division Lines (matching thumbnail)
+        ctx.beginPath();
+        ctx.moveTo(centerRadarX, centerRadarY);
+        ctx.lineTo(centerRadarX - VIRTUAL_HEIGHT * 0.8, centerRadarY - VIRTUAL_HEIGHT * 0.8);
+        ctx.moveTo(centerRadarX, centerRadarY);
+        ctx.lineTo(centerRadarX, centerRadarY - VIRTUAL_HEIGHT * 0.95);
+        ctx.moveTo(centerRadarX, centerRadarY);
+        ctx.lineTo(centerRadarX + VIRTUAL_HEIGHT * 0.8, centerRadarY - VIRTUAL_HEIGHT * 0.8);
         ctx.stroke();
         ctx.setLineDash([]);
 
         // Radar Sweep Line
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(centerRadarX, centerRadarY);
         ctx.lineTo(
-          centerRadarX + Math.cos(radarAngleRef.current) * VIRTUAL_HEIGHT * 0.8,
-          centerRadarY - Math.abs(Math.sin(radarAngleRef.current)) * VIRTUAL_HEIGHT * 0.8
+          centerRadarX + Math.cos(radarAngleRef.current) * VIRTUAL_HEIGHT * 0.9,
+          centerRadarY - Math.abs(Math.sin(radarAngleRef.current)) * VIRTUAL_HEIGHT * 0.9
         );
         ctx.stroke();
 
-        // Stars & Background Matrix
-        ctx.fillStyle = 'rgba(255, 230, 0, 0.4)';
-        for (let i = 1; i <= 28; i++) {
+        // Cyber Skyline Silhouettes in Backdrop
+        ctx.fillStyle = '#050218';
+        const skylineBlocks = [
+          { x: 30, w: 45, h: 60 },
+          { x: 85, w: 35, h: 85 },
+          { x: 190, w: 40, h: 70 },
+          { x: 280, w: 42, h: 90 },
+          { x: 390, w: 50, h: 65 },
+          { x: 470, w: 45, h: 80 },
+          { x: 580, w: 38, h: 95 },
+          { x: 670, w: 36, h: 60 },
+          { x: 760, w: 48, h: 75 },
+          { x: 830, w: 40, h: 85 }
+        ];
+        skylineBlocks.forEach((b) => {
+          ctx.fillRect(b.x, VIRTUAL_GROUND_Y - b.h, b.w, b.h);
+          ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+          ctx.strokeRect(b.x, VIRTUAL_GROUND_Y - b.h, b.w, b.h);
+        });
+
+        // Stars & Background Quantum Sparks
+        ctx.fillStyle = 'rgba(255, 230, 0, 0.5)';
+        for (let i = 1; i <= 32; i++) {
           const sx = (i * 137.5) % VIRTUAL_WIDTH;
           const sy = (i * 73.1) % (VIRTUAL_HEIGHT * 0.65);
           ctx.fillRect(sx, sy, 1.5, 1.5);
@@ -1927,74 +1970,74 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       }`}
     >
       {/* Top Telemetry Header */}
-      <header className="w-full max-w-5xl flex items-center justify-between gap-2 z-20 shrink-0">
+      <header className="w-full max-w-5xl flex items-center justify-between gap-1.5 sm:gap-2 z-20 shrink-0">
         {/* Score & Multiplier */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
-            <Trophy className="w-4 h-4 text-portal-yellow stroke-[2.5]" />
-            <span className="text-xs font-black uppercase text-portal-text-muted">SCORE:</span>
-            <span className="text-sm font-black text-portal-yellow tracking-wide">{score}</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div className="flex items-center gap-1 sm:gap-1.5 bg-portal-card px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
+            <Trophy className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-portal-yellow stroke-[2.5]" />
+            <span className="text-[10px] sm:text-xs font-black uppercase text-portal-text-muted">SCORE:</span>
+            <span className="text-xs sm:text-sm font-black text-portal-yellow tracking-wide">{score}</span>
           </div>
 
           {comboStreak > 1 && (
-            <div className="flex items-center gap-1 bg-portal-pink px-2.5 py-1 rounded-xl border-2 border-black shadow-neo-sm animate-pulse">
-              <Flame className="w-3.5 h-3.5 text-white stroke-[2.5]" />
-              <span className="text-xs font-black text-white uppercase tracking-wider">
-                {Math.min(10, 1 + (comboStreak - 1) * 0.5).toFixed(1)}x COMBO
+            <div className="flex items-center gap-1 bg-portal-pink px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-neo-sm animate-pulse">
+              <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white stroke-[2.5]" />
+              <span className="text-[10px] sm:text-xs font-black text-white uppercase tracking-wider">
+                {Math.min(10, 1 + (comboStreak - 1) * 0.5).toFixed(1)}x
               </span>
             </div>
           )}
 
           {/* Active Buff Badges */}
           {shieldActive && (
-            <div className="hidden sm:flex items-center gap-1 bg-portal-cyan px-2 py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[11px] font-black uppercase">
-              <Shield className="w-3.5 h-3.5 fill-current" />
-              <span>SHIELD ACTIVE</span>
+            <div className="flex items-center gap-1 bg-portal-cyan px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[10px] sm:text-[11px] font-black uppercase">
+              <Shield className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current" />
+              <span className="hidden sm:inline">SHIELD</span>
             </div>
           )}
 
           {laserTimeLeft > 0 && (
-            <div className="hidden sm:flex items-center gap-1 bg-portal-yellow px-2 py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[11px] font-black uppercase">
-              <Zap className="w-3.5 h-3.5 fill-current" />
-              <span>CIWS LASER ({laserTimeLeft.toFixed(0)}s)</span>
+            <div className="flex items-center gap-1 bg-portal-yellow px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[10px] sm:text-[11px] font-black uppercase">
+              <Zap className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current" />
+              <span>{laserTimeLeft.toFixed(0)}s</span>
             </div>
           )}
 
           {slowMoTimeLeft > 0 && (
-            <div className="hidden sm:flex items-center gap-1 bg-portal-lime px-2 py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[11px] font-black uppercase">
-              <Clock className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>SLOW-MO ({slowMoTimeLeft.toFixed(0)}s)</span>
+            <div className="flex items-center gap-1 bg-portal-lime px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-xl border-2 border-black shadow-neo-sm text-black text-[10px] sm:text-[11px] font-black uppercase">
+              <Clock className="w-3 sm:w-3.5 h-3 sm:h-3.5 stroke-[2.5]" />
+              <span>{slowMoTimeLeft.toFixed(0)}s</span>
             </div>
           )}
         </div>
 
-        {/* Sector Wave & Ammo Badges */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="flex items-center gap-1 bg-portal-purple px-2.5 py-1 rounded-xl text-white border-2 border-black text-xs font-black uppercase tracking-wider shadow-neo-sm">
-            <Radio className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-            <span>SECTOR {wave}</span>
+        {/* Sector Wave & Controls */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1 bg-portal-purple px-2 sm:px-2.5 py-1 rounded-xl text-white border-2 border-black text-[10px] sm:text-xs font-black uppercase tracking-wider shadow-neo-sm">
+            <Radio className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-portal-cyan stroke-[2.5]" />
+            <span>SEC {wave}</span>
           </div>
 
           <button
             onClick={() => setIsMuted((prev) => !prev)}
-            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-portal-text transition-all cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-portal-text transition-all cursor-pointer"
             title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-portal-text-muted" /> : <Volume2 className="w-4 h-4 text-portal-cyan" />}
+            {isMuted ? <VolumeX className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-portal-text-muted" /> : <Volume2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-portal-cyan" />}
           </button>
 
           <button
             onClick={toggleFullscreen}
-            className="p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-portal-text transition-all cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-xl bg-portal-card border-2 border-black shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] text-portal-text transition-all cursor-pointer"
             title="Toggle Fullscreen [F]"
           >
-            {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
+            {isFullscreen ? <Minimize className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> : <Maximize className="w-3.5 sm:w-4 h-3.5 sm:h-4" />}
           </button>
         </div>
       </header>
 
       {/* Main 2D Canvas Viewport */}
-      <div className="relative w-full max-w-5xl flex-1 my-1 sm:my-2 flex items-center justify-center min-h-[300px] rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black">
+      <div className="relative w-full max-w-5xl flex-1 my-1 sm:my-2 flex items-center justify-center min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none">
         <canvas
           ref={canvasRef}
           onMouseDown={(e) => handleCanvasAction(e.clientX, e.clientY)}
@@ -2004,102 +2047,103 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
               handleCanvasAction(e.touches[0].clientX, e.touches[0].clientY);
             }
           }}
-          className="w-full h-full cursor-crosshair block select-none"
+          onTouchMove={handleTouchMove}
+          className="w-full h-full cursor-crosshair block select-none touch-none"
         />
 
-        {/* Start / Launch Mission Overlay */}
+        {/* Start / Launch Mission Overlay (Optimized for 9:16 Mobile & Desktop Aspect Ratio) */}
         {!isPlaying && !isGameOver && (
-          <div className="absolute inset-0 z-30 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-3 sm:p-6 text-center">
-            <div className="p-4 sm:p-6 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-lg w-full space-y-3.5 max-h-[92vh] overflow-y-auto">
+          <div className="absolute inset-0 z-30 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-2 sm:p-4 text-center">
+            <div className="p-3 sm:p-5 rounded-2xl bg-portal-surface border-3 sm:border-4 border-black shadow-neo-xl max-w-sm sm:max-w-md w-full space-y-2 sm:space-y-3 max-h-[94%] flex flex-col justify-between overflow-y-auto">
               {/* Header Badge & Title */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center shrink-0">
                 {highScore > 0 && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-2 rounded-full bg-portal-yellow/20 border-2 border-portal-yellow text-portal-yellow text-[11px] font-black uppercase tracking-wider">
-                    <Trophy className="w-3.5 h-3.5 fill-portal-yellow" />
-                    <span>SECTOR RECORD: {highScore.toLocaleString()} PTS</span>
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 mb-1 rounded-full bg-portal-yellow/20 border border-portal-yellow text-portal-yellow text-[9px] sm:text-[10px] font-black uppercase tracking-wider">
+                    <Trophy className="w-2.5 h-2.5 fill-portal-yellow" />
+                    <span>RECORD: {highScore.toLocaleString()} PTS</span>
                   </div>
                 )}
 
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-portal-yellow border-3 border-black shadow-neo flex items-center justify-center mb-2">
-                  <Crosshair className="w-8 h-8 sm:w-9 sm:h-9 text-black stroke-[2.5]" />
+                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-portal-yellow border-2 sm:border-3 border-black shadow-neo flex items-center justify-center mb-1">
+                  <Crosshair className="w-5 h-5 sm:w-8 sm:h-8 text-black stroke-[2.5]" />
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-black text-portal-text uppercase tracking-tight">
+                <h2 className="text-base sm:text-2xl font-black text-portal-text uppercase tracking-tight">
                   NEON MISSILE DEFENSE
                 </h2>
-                <p className="text-[11px] sm:text-xs font-black text-portal-cyan uppercase tracking-wider mt-0.5">
-                  TACTICAL CYBER FLAK COMMAND SIMULATOR
+                <p className="text-[9px] sm:text-[11px] font-black text-portal-cyan uppercase tracking-wider">
+                  TACTICAL CYBER FLAK SIMULATOR
                 </p>
               </div>
 
               {/* Navigation Tabs */}
-              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-portal-bg border-2 border-black">
+              <div className="grid grid-cols-3 gap-1 p-1 rounded-xl sm:rounded-2xl bg-portal-bg border-2 border-black">
                 <button
                   onClick={() => setMenuTab('intel')}
-                  className={`py-1.5 px-2 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  className={`py-1 sm:py-1.5 px-1.5 sm:px-2 rounded-lg sm:rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer ${
                     menuTab === 'intel'
                       ? 'bg-portal-yellow text-black border-2 border-black shadow-neo-sm'
                       : 'text-portal-text-muted hover:text-portal-text'
                   }`}
                 >
-                  <Target className="w-3.5 h-3.5" />
+                  <Target className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   <span>INTEL</span>
                 </button>
 
                 <button
                   onClick={() => setMenuTab('arsenal')}
-                  className={`py-1.5 px-2 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  className={`py-1 sm:py-1.5 px-1.5 sm:px-2 rounded-lg sm:rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer ${
                     menuTab === 'arsenal'
                       ? 'bg-portal-cyan text-black border-2 border-black shadow-neo-sm'
                       : 'text-portal-text-muted hover:text-portal-text'
                   }`}
                 >
-                  <Zap className="w-3.5 h-3.5" />
+                  <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   <span>ARSENAL</span>
                 </button>
 
                 <button
                   onClick={() => setMenuTab('controls')}
-                  className={`py-1.5 px-2 rounded-xl text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  className={`py-1 sm:py-1.5 px-1.5 sm:px-2 rounded-lg sm:rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer ${
                     menuTab === 'controls'
                       ? 'bg-portal-pink text-white border-2 border-black shadow-neo-sm'
                       : 'text-portal-text-muted hover:text-portal-text'
                   }`}
                 >
-                  <Keyboard className="w-3.5 h-3.5" />
+                  <Keyboard className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   <span>CONTROLS</span>
                 </button>
               </div>
 
               {/* Tab 1: Tactical Intel */}
               {menuTab === 'intel' && (
-                <div className="p-3 sm:p-4 rounded-2xl bg-portal-card border-2 border-black text-left space-y-2.5 text-xs text-portal-text animate-in fade-in duration-150">
-                  <div className="flex items-center gap-2 text-portal-yellow font-black">
-                    <Target className="w-4 h-4 text-portal-yellow" />
+                <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-portal-card border-2 border-black text-left space-y-2 text-xs text-portal-text animate-in fade-in duration-150">
+                  <div className="flex items-center gap-1.5 text-portal-yellow font-black text-xs">
+                    <Target className="w-3.5 h-3.5 text-portal-yellow" />
                     <span className="uppercase">Mission Objective:</span>
                   </div>
-                  <p className="text-[11px] leading-relaxed text-portal-text-muted">
-                    Defend your 6 Cyber Megacores against incoming ballistic warheads across escalating sectors. Maintain active flak coverage and trigger chain reaction blasts.
+                  <p className="text-[10px] sm:text-[11px] leading-relaxed text-portal-text-muted">
+                    Defend your 6 Cyber Megacores against incoming ballistic warheads across escalating sectors. Tap / click anywhere in the sky to detonate flak clusters.
                   </p>
 
-                  <div className="space-y-1.5 pt-2 border-t border-portal-border">
-                    <span className="text-[10px] font-black text-portal-cyan uppercase tracking-wider">THREAT PROFILES:</span>
-                    <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-                      <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-portal-pink animate-pulse shrink-0" />
-                        <span className="text-portal-text font-bold">ICBM Heavy</span>
+                  <div className="space-y-1 pt-1.5 border-t border-portal-border">
+                    <span className="text-[9px] sm:text-[10px] font-black text-portal-cyan uppercase tracking-wider">THREAT PROFILES:</span>
+                    <div className="grid grid-cols-2 gap-1 sm:gap-1.5 text-[9px] sm:text-[10px] font-mono">
+                      <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1 sm:gap-1.5">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-portal-pink animate-pulse shrink-0" />
+                        <span className="text-portal-text font-bold truncate">ICBM Heavy</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
-                        <span className="text-portal-text font-bold">MIRV Cluster</span>
+                      <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1 sm:gap-1.5">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-400 shrink-0" />
+                        <span className="text-portal-text font-bold truncate">MIRV Cluster</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-portal-yellow shrink-0" />
-                        <span className="text-portal-text font-bold">Hypersonic</span>
+                      <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1 sm:gap-1.5">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-portal-yellow shrink-0" />
+                        <span className="text-portal-text font-bold truncate">Hypersonic</span>
                       </div>
-                      <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-portal-green shrink-0" />
-                        <span className="text-portal-text font-bold">Stealth Cruise</span>
+                      <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center gap-1 sm:gap-1.5">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-portal-green shrink-0" />
+                        <span className="text-portal-text font-bold truncate">Stealth Cruise</span>
                       </div>
                     </div>
                   </div>
@@ -2108,38 +2152,38 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
               {/* Tab 2: Defense Arsenal & Power-Ups */}
               {menuTab === 'arsenal' && (
-                <div className="p-3 sm:p-4 rounded-2xl bg-portal-card border-2 border-black text-left space-y-2 text-xs text-portal-text animate-in fade-in duration-150">
-                  <div className="flex items-center gap-2 text-portal-cyan font-black">
-                    <Sparkles className="w-4 h-4 text-portal-cyan" />
+                <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-portal-card border-2 border-black text-left space-y-1.5 sm:space-y-2 text-xs text-portal-text animate-in fade-in duration-150">
+                  <div className="flex items-center gap-1.5 text-portal-cyan font-black text-xs">
+                    <Sparkles className="w-3.5 h-3.5 text-portal-cyan" />
                     <span className="uppercase">Tactical Superweapons & Pods:</span>
                   </div>
-                  <div className="space-y-1.5 text-[11px]">
-                    <div className="flex items-start gap-2 p-1.5 rounded-lg bg-portal-bg border border-portal-border">
-                      <Shield className="w-4 h-4 text-portal-cyan shrink-0 mt-0.5" />
+                  <div className="space-y-1 sm:space-y-1.5 text-[10px] sm:text-[11px]">
+                    <div className="flex items-start gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border">
+                      <Shield className="w-3.5 h-3.5 text-portal-cyan shrink-0 mt-0.5" />
                       <div>
                         <span className="font-black text-portal-cyan">QUANTUM SHIELD:</span>
-                        <p className="text-[10px] text-portal-text-muted">Total ground invulnerability absorbing all warhead impacts.</p>
+                        <p className="text-[9px] sm:text-[10px] text-portal-text-muted">Total ground invulnerability absorbing warhead impacts.</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-2 p-1.5 rounded-lg bg-portal-bg border border-portal-border">
-                      <Zap className="w-4 h-4 text-portal-yellow shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border">
+                      <Zap className="w-3.5 h-3.5 text-portal-yellow shrink-0 mt-0.5" />
                       <div>
                         <span className="font-black text-portal-yellow">CIWS LASER GRID:</span>
-                        <p className="text-[10px] text-portal-text-muted">Automated laser turrets instantly vaporize threats in range.</p>
+                        <p className="text-[9px] sm:text-[10px] text-portal-text-muted">Automated laser turrets vaporize nearby incoming threats.</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-2 p-1.5 rounded-lg bg-portal-bg border border-portal-border">
-                      <Clock className="w-4 h-4 text-portal-green shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border">
+                      <Clock className="w-3.5 h-3.5 text-portal-green shrink-0 mt-0.5" />
                       <div>
                         <span className="font-black text-portal-green">CHRONO MATRIX:</span>
-                        <p className="text-[10px] text-portal-text-muted">Dilates time by 50% for maximum interception precision.</p>
+                        <p className="text-[9px] sm:text-[10px] text-portal-text-muted">Dilates time by 50% for maximum interception precision.</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-2 p-1.5 rounded-lg bg-portal-bg border border-portal-border">
-                      <Bomb className="w-4 h-4 text-portal-pink shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border">
+                      <Bomb className="w-3.5 h-3.5 text-portal-pink shrink-0 mt-0.5" />
                       <div>
                         <span className="font-black text-portal-pink">ORBITAL EMP NUKE [SPACE]:</span>
-                        <p className="text-[10px] text-portal-text-muted">Global tactical shockwave neutralizing all active air threats.</p>
+                        <p className="text-[9px] sm:text-[10px] text-portal-text-muted">Tactical screen-clearing blast neutralizing all threats.</p>
                       </div>
                     </div>
                   </div>
@@ -2148,34 +2192,34 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
               {/* Tab 3: Controls & Keybindings */}
               {menuTab === 'controls' && (
-                <div className="p-3 sm:p-4 rounded-2xl bg-portal-card border-2 border-black text-left space-y-2 text-xs text-portal-text animate-in fade-in duration-150">
-                  <div className="flex items-center gap-2 text-portal-pink font-black">
-                    <Keyboard className="w-4 h-4 text-portal-pink" />
+                <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-portal-card border-2 border-black text-left space-y-1.5 sm:space-y-2 text-xs text-portal-text animate-in fade-in duration-150">
+                  <div className="flex items-center gap-1.5 text-portal-pink font-black text-xs">
+                    <Keyboard className="w-3.5 h-3.5 text-portal-pink" />
                     <span className="uppercase">Tactical Command Bindings:</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] font-mono">
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-mono">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
                       <span className="text-portal-text-muted">Target & Flak</span>
                       <span className="font-black text-portal-yellow">CLICK / TAP</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
                       <span className="text-portal-text-muted">EMP Orbital Nuke</span>
-                      <span className="font-black text-portal-pink">[SPACE]</span>
+                      <span className="font-black text-portal-pink">[SPACE] / NUKE BTN</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
                       <span className="text-portal-text-muted">Auto Silo Routing</span>
-                      <span className="font-black text-portal-cyan">[0]</span>
+                      <span className="font-black text-portal-cyan">[0] AUTO</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
                       <span className="text-portal-text-muted">Manual Silos</span>
                       <span className="font-black text-portal-text">[1] [2] [3]</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
                       <span className="text-portal-text-muted">Reboot / Engage</span>
                       <span className="font-black text-portal-green">[R]</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
-                      <span className="text-portal-text-muted">Toggle Audio / FS</span>
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-portal-bg border border-portal-border flex items-center justify-between">
+                      <span className="text-portal-text-muted">Mute / Fullscreen</span>
                       <span className="font-black text-portal-text">[M] / [F]</span>
                     </div>
                   </div>
@@ -2185,10 +2229,10 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
               {/* Action Button */}
               <button
                 onClick={startNewGame}
-                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 sm:py-3.5 px-4 sm:px-6 rounded-xl sm:rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer active:translate-x-1 active:translate-y-1"
               >
-                <Play className="w-5 h-5 fill-black stroke-black" />
-                <span>ENGAGE DEFENSE GRID [R]</span>
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-black stroke-black" />
+                <span>ENGAGE DEFENSE GRID</span>
               </button>
             </div>
           </div>
@@ -2196,35 +2240,35 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
         {/* Game Over Modal */}
         {isGameOver && (
-          <div className="absolute inset-0 z-30 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center">
-            <div className="p-4 sm:p-6 rounded-3xl bg-portal-surface border-4 border-black shadow-neo-xl max-w-md w-full space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mx-auto">
-                <AlertTriangle className="w-9 h-9 text-white stroke-[2.5]" />
+          <div className="absolute inset-0 z-30 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 text-center">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-portal-surface border-3 sm:border-4 border-black shadow-neo-xl max-w-md w-full space-y-3.5 sm:space-y-4 animate-in zoom-in-95 duration-200">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mx-auto">
+                <AlertTriangle className="w-7 h-7 sm:w-9 sm:h-9 text-white stroke-[2.5]" />
               </div>
 
               <div>
-                <h2 className="text-3xl font-black text-portal-text uppercase tracking-tight">DEFENSE BREACHED</h2>
-                <p className="text-xs font-black text-portal-pink uppercase tracking-wider mt-1">
+                <h2 className="text-2xl sm:text-3xl font-black text-portal-text uppercase tracking-tight">DEFENSE BREACHED</h2>
+                <p className="text-[11px] sm:text-xs font-black text-portal-pink uppercase tracking-wider mt-0.5">
                   ALL CYBER MEGACORES OFFLINE
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-portal-card border-2 border-black">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-2xl bg-portal-card border-2 border-black">
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] font-black uppercase text-portal-text-muted">FINAL SCORE</span>
-                  <span className="text-xl font-black text-portal-yellow">{score}</span>
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase text-portal-text-muted">FINAL SCORE</span>
+                  <span className="text-lg sm:text-xl font-black text-portal-yellow">{score}</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-[10px] font-black uppercase text-portal-text-muted">SECTOR REACHED</span>
-                  <span className="text-xl font-black text-portal-cyan">{wave}</span>
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase text-portal-text-muted">SECTOR REACHED</span>
+                  <span className="text-lg sm:text-xl font-black text-portal-cyan">{wave}</span>
                 </div>
               </div>
 
               <button
                 onClick={startNewGame}
-                className="w-full py-3.5 px-6 rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 sm:py-3.5 px-4 sm:px-6 rounded-xl sm:rounded-2xl bg-portal-yellow hover:bg-yellow-300 text-black font-black text-xs sm:text-sm uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center justify-center gap-2 cursor-pointer active:translate-x-1 active:translate-y-1"
               >
-                <RotateCcw className="w-5 h-5 stroke-[2.5]" />
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
                 <span>REBOOT DEFENSE GRID [R]</span>
               </button>
             </div>
@@ -2233,76 +2277,76 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       </div>
 
       {/* Tactical Battery Ammo & Super Weapon Command Bar */}
-      <footer className="w-full max-w-5xl grid grid-cols-2 sm:grid-cols-5 gap-2 z-20 shrink-0">
+      <footer className="w-full max-w-5xl grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2 z-20 shrink-0">
         {/* Smart AUTO Silo Selector */}
         <button
           onClick={() => setSelectedBattery(0)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
+          className={`p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm flex flex-col sm:flex-row items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 0 ? 'bg-portal-cyan text-black' : 'bg-portal-card text-portal-text'
           }`}
           title="Smart Auto-Routing: Closest available silo with ammo"
         >
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="text-[10px] font-black uppercase tracking-wider">[0] SMART AUTO</span>
+          <div className="flex items-center gap-1">
+            <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 stroke-[2.5]" />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">AUTO</span>
           </div>
-          <span className="text-xs font-mono font-black">ACTIVE</span>
+          <span className="text-[10px] sm:text-xs font-mono font-black">ON</span>
         </button>
 
         {/* Battery 1: ALPHA */}
         <button
           onClick={() => setSelectedBattery(1)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
+          className={`p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm flex flex-col sm:flex-row items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 1 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-portal-text'
           }`}
         >
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider">[1] ALPHA</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">ALPHA</span>
           </div>
-          <span className="text-xs font-mono font-black">{batteryAmmo.b1} RDS</span>
+          <span className="text-[10px] sm:text-xs font-mono font-black">{batteryAmmo.b1}</span>
         </button>
 
         {/* Battery 2: DELTA (CENTER) */}
         <button
           onClick={() => setSelectedBattery(2)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
+          className={`p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm flex flex-col sm:flex-row items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 2 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-portal-text'
           }`}
         >
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider">[2] DELTA</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">DELTA</span>
           </div>
-          <span className="text-xs font-mono font-black">{batteryAmmo.b2} RDS</span>
+          <span className="text-[10px] sm:text-xs font-mono font-black">{batteryAmmo.b2}</span>
         </button>
 
         {/* Battery 3: OMEGA */}
         <button
           onClick={() => setSelectedBattery(3)}
-          className={`p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all cursor-pointer ${
+          className={`p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm flex flex-col sm:flex-row items-center justify-between transition-all cursor-pointer ${
             selectedBattery === 3 ? 'bg-portal-yellow text-black' : 'bg-portal-card text-portal-text'
           }`}
         >
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider">[3] OMEGA</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">OMEGA</span>
           </div>
-          <span className="text-xs font-mono font-black">{batteryAmmo.b3} RDS</span>
+          <span className="text-[10px] sm:text-xs font-mono font-black">{batteryAmmo.b3}</span>
         </button>
 
         {/* Super Weapon: EMP Tactical Nuke */}
         <button
           onClick={triggerNuke}
           disabled={nukeCharges <= 0 || !isPlaying}
-          className={`col-span-2 sm:col-span-1 p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
+          className={`col-span-4 sm:col-span-1 p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm flex items-center justify-between transition-all ${
             nukeCharges > 0 && isPlaying
-              ? 'bg-portal-pink hover:bg-pink-400 text-white cursor-pointer'
+              ? 'bg-portal-pink hover:bg-pink-400 text-white cursor-pointer active:translate-x-1 active:translate-y-1'
               : 'bg-portal-surface text-portal-text-muted cursor-not-allowed border-black opacity-60'
           }`}
         >
           <div className="flex items-center gap-1.5">
             <Zap className="w-3.5 h-3.5 fill-current stroke-current" />
-            <span className="text-[10px] font-black uppercase tracking-wider">[SPACE] EMP NUKE</span>
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">EMP NUKE</span>
           </div>
-          <span className="text-xs font-mono font-black">{nukeCharges}x</span>
+          <span className="text-[10px] sm:text-xs font-mono font-black">{nukeCharges}x</span>
         </button>
       </footer>
     </div>

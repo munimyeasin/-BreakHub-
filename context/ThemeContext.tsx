@@ -79,7 +79,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [applyThemeToDOM]);
 
   const toggleTheme = useCallback(() => {
-    const nextTheme: ThemeId = theme === 'neo-dark' ? 'neo-light' : 'neo-dark';
+    const activeList = THEMES_REGISTRY.filter(t => t.status === 'active');
+    const currentIndex = activeList.findIndex(t => t.id === theme);
+    const nextTheme = activeList[(currentIndex + 1) % activeList.length]?.id || DEFAULT_THEME;
     setTheme(nextTheme);
   }, [theme, setTheme]);
 

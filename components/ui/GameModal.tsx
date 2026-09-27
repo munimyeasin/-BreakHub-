@@ -37,8 +37,6 @@ import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
-import CyberOutrunGame from '@/components/games/CyberOutrunGame';
-import NeonFlipperPinballGame from '@/components/games/NeonFlipperPinballGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -62,38 +60,6 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
-  // -5. Neon Flipper: Cyber Pinball (Arcade / Vector Physics)
-  g_pinball_23: {
-    genreTag: 'ARCADE // CYBER PINBALL',
-    objective: 'Launch into the Neon Matrix! Master dual-flipper angular physics, trigger 3 Pop Bumper cascades, drop C-Y-B-E-R bank targets, and lock 3 balls into the Matrix Chamber to trigger 3-Ball Multi-Ball Frenzy.',
-    scoring: 'Pop Bumpers (250pts x streak) + Drop Target Bank (10,000pts Overdrive) + Slingshots (150pts) + Wireform Orbit Loops (1,000-5,000pts) + Multi-Ball Frenzy (3x score multiplier).',
-    proTip: 'Trap the pinball by holding the flipper up to stabilize trajectory. Complete all C-Y-B-E-R drop targets to light the Matrix Lock chamber for high-multiplier Multi-Ball scoring!',
-    controls: [
-      { keys: ['A', '←', 'Z'], label: 'LEFT FLIPPER', desc: 'Activate Left Flipper solenoid' },
-      { keys: ['D', '→', '/'], label: 'RIGHT FLIPPER', desc: 'Activate Right Flipper solenoid' },
-      { keys: ['Space', '↓'], label: 'LAUNCH PLUNGER', desc: 'Pull tension & release pinball' },
-      { keys: ['W', 'C'], label: 'TABLE NUDGE', desc: 'Nudge table physics (watch Tilt gauge)' },
-      { keys: ['P', 'Esc'], label: 'PAUSE', desc: 'Pause / Resume pinball session' },
-      { keys: ['M'], label: 'MUTE AUDIO', desc: 'Toggle procedural flipper synth audio' },
-      { keys: ['R'], label: 'REBOOT BALL', desc: 'Restart table simulation' }
-    ]
-  },
-  // -4. Cyber Outrun 2077 (Neon Highway Racer)
-  g_outrun_22: {
-    genreTag: 'ACTION // SYNTHWAVE HIGHWAY RACER',
-    objective: 'Pilot your Cyber Sports Car across 4 high-speed neon highway lanes. Execute razor-thin Near-Miss grazes to multiply combos, draft behind Heavy Haulers, and trigger 350+ km/h Nitro Overdrive with ramming shields.',
-    scoring: 'Base velocity points x Combo Multipliers (up to 8x) + Near-Miss Overtakes (250pts x mult) + Ramming Smashes (1,000pts x mult) + Slipstream Drafting.',
-    proTip: 'Grazing civilian cars at high speeds recharges +20% Nitro instantly! Tucking in the aerodynamic draft cone behind Heavy Haulers boosts top speed past 260 km/h without consuming Nitro.',
-    controls: [
-      { keys: ['A / D', '← / →'], label: 'STEER & STRAFE', desc: 'Shift vehicle smoothly across lanes' },
-      { keys: ['W / S', '↑ / ↓'], label: 'GAS & BRAKE', desc: 'Accelerate throttle or apply rear brakes' },
-      { keys: ['Shift', 'Space'], label: 'NITRO OVERDRIVE', desc: 'Engage 350+ km/h hyper boost & ram shield' },
-      { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen race mode' },
-      { keys: ['R'], label: 'REBOOT RUN', desc: 'Ignite / restart run immediately' },
-      { keys: ['M'], label: 'MUTE AUDIO', desc: 'Toggle procedural engine synth sound' },
-      { keys: ['P'], label: 'PAUSE', desc: 'Pause / Resume highway race' }
-    ]
-  },
   // -3. Neon Missile Defense (Cyber Command)
   g_missile_21: {
     genreTag: 'ACTION // CYBER FLAK ARTILLERY',
@@ -412,6 +378,13 @@ export default function GameModal({
   const [loadingScores, setLoadingScores] = useState<boolean>(false);
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Optimize companion command deck default for tablet vs desktop viewports
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setShowCompanionDeck(false);
+    }
+  }, []);
 
   // Fetch live top scores for the current game
   const fetchTopScores = useCallback(async () => {
@@ -811,14 +784,6 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
-              {(game.id === 'g_pinball_23' || game.slug === 'neon-flipper-pinball' || game.slug === 'pinball') && (
-                <NeonFlipperPinballGame gameId={game.id} onGameOver={handleScoreSubmit} />
-              )}
-
-              {(game.id === 'g_outrun_22' || game.slug === 'cyber-outrun-2077' || game.slug === 'outrun') && (
-                <CyberOutrunGame gameId={game.id} onGameOver={handleScoreSubmit} />
-              )}
-
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
                 <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
@@ -907,7 +872,7 @@ export default function GameModal({
 
           {/* Right: Desktop Companion Command Deck (Visible on md+ screens when toggled outside fullscreen) */}
           {!isFullscreen && showCompanionDeck && (
-            <aside className="hidden md:flex w-72 lg:w-80 xl:w-96 shrink-0 bg-portal-surface border-l-4 border-black flex-col overflow-y-auto divide-y-3 divide-black select-none custom-scrollbar">
+            <aside className="hidden md:flex w-64 lg:w-72 xl:w-80 shrink-0 bg-portal-surface border-l-3 sm:border-l-4 border-black flex-col overflow-y-auto divide-y-3 divide-black select-none custom-scrollbar">
               {/* Deck Header */}
               <div className="p-3 bg-portal-card flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
