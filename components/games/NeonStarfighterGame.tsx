@@ -1927,6 +1927,12 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       // 7. Bullets (Dual Wingtip Plasma Cannon Beams matching neon-starfighter.svg)
       bulletsRef.current.forEach((b) => {
         ctx.save();
+        // Water-flow glow trail behind bullet
+        ctx.fillStyle = b.color + '55';
+        ctx.beginPath();
+        ctx.ellipse(b.x + 2, b.y + 8, 6, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+
         // Hard Offset Drop Shadow
         ctx.fillStyle = '#000000';
         ctx.fillRect(b.x + 1.5, b.y + 1.5, 4, 16);
