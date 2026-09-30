@@ -1126,7 +1126,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
   }, [resetGame]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-xl mx-auto select-none p-1 sm:p-2">
+    <div className="flex flex-col items-center justify-center w-full max-w-full md:max-w-4xl lg:max-w-5xl mx-auto md:max-h-[90vh] h-[100dvh] select-none p-1 sm:p-2">
       {/* Top Neo-Brutalist HUD Control Bar */}
       <div className="w-full bg-portal-card border-3 border-black rounded-xl p-2.5 sm:p-3 mb-2 shadow-neo flex items-center justify-between gap-2">
         {/* Score & Combo */}
@@ -1156,7 +1156,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
           {/* Next Fruit Radar */}
           <div className="bg-portal-surface border-2 border-black rounded-lg p-1 shadow-neo-sm flex flex-col items-center justify-center w-12 h-12 relative group" title="Next Fruit in Queue">
             <div className="text-[8px] font-black text-portal-text-muted uppercase tracking-tighter leading-none mb-0.5">NEXT</div>
-            <canvas ref={nextCanvasRef} className="w-7 h-7 object-contain" />
+            <canvas ref={nextCanvasRef} className="w-full h-full object-contain w-7 h-7 object-contain" />
           </div>
 
           {/* Evolution Chart Toggle */}
@@ -1238,7 +1238,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       )}
 
       {/* Main Game Canvas Viewport */}
-      <div className="relative w-full max-w-[420px] aspect-[420/620] bg-black rounded-2xl border-4 border-black shadow-neo-lg overflow-hidden flex items-center justify-center">
+      <div className="relative w-full max-w-full max-h-[100dvh] aspect-[420/620] bg-black rounded-2xl border-4 border-black shadow-neo-lg overflow-hidden flex items-center justify-center mx-auto">
         <canvas
           ref={canvasRef}
           onPointerMove={handlePointerMove}

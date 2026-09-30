@@ -9,7 +9,10 @@ export default function FaviconManager() {
     try {
       // 1. Remove all old/stale favicon links to trigger browser tab favicon update
       const existingIcons = document.querySelectorAll("link[rel*='icon']");
-      existingIcons.forEach((el) => el.parentNode?.removeChild(el));
+      existingIcons.forEach((el) => {
+        const parent = el && el.parentNode;
+        if (parent && parent.removeChild) parent.removeChild(el);
+      });
 
       // 2. Create and append the fresh Neo-Brutalist SVG data-uri icon
       const svgLink = document.createElement('link');

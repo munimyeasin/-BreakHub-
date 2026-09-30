@@ -2040,6 +2040,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
       <div className="relative w-full max-w-5xl flex-1 my-1 sm:my-2 flex items-center justify-center min-h-[260px] sm:min-h-[320px] rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none">
         <canvas
           ref={canvasRef}
+          className="w-full h-full object-contain cursor-crosshair block select-none touch-none"
           onMouseDown={(e) => handleCanvasAction(e.clientX, e.clientY)}
           onMouseMove={handleMouseMove}
           onTouchStart={(e) => {
@@ -2048,7 +2049,6 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
             }
           }}
           onTouchMove={handleTouchMove}
-          className="w-full h-full cursor-crosshair block select-none touch-none"
         />
 
         {/* Start / Launch Mission Overlay (Optimized for 9:16 Mobile & Desktop Aspect Ratio) */}

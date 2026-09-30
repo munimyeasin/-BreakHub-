@@ -726,35 +726,14 @@ export default function ArcadePortalDashboard() {
                 <button
                   onClick={toggleTheme}
                   className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
-                    theme === 'cyberpunk-neon'
-                      ? 'bg-portal-cyan text-black hover:bg-portal-pink'
-                      : theme === 'gameboy-retro'
-                      ? 'bg-[#A3C815] text-[#081808] hover:bg-[#B6DE1A]'
-                      : theme === 'vaporwave-80s'
-                      ? 'bg-portal-pink text-black hover:bg-portal-cyan'
-                      : isDark
+                    isDark
                       ? 'bg-portal-yellow text-black hover:bg-portal-cyan'
                       : 'bg-portal-card text-white hover:bg-portal-yellow hover:text-black'
                   }`}
                   title="Cycle Break Hub Themes"
                   aria-label="Cycle Break Hub UI Theme"
                 >
-                  {theme === 'cyberpunk-neon' ? (
-                    <>
-                      <Zap className="w-3.5 h-3.5 text-black stroke-[2.5]" />
-                      <span className="hidden sm:inline">Cyber</span>
-                    </>
-                  ) : theme === 'gameboy-retro' ? (
-                    <>
-                      <Gamepad2 className="w-3.5 h-3.5 text-[#081808] stroke-[2.5]" />
-                      <span className="hidden sm:inline">8-Bit</span>
-                    </>
-                  ) : theme === 'vaporwave-80s' ? (
-                    <>
-                      <Sparkles className="w-3.5 h-3.5 text-black stroke-[2.5]" />
-                      <span className="hidden sm:inline">Synth</span>
-                    </>
-                  ) : isDark ? (
+                  {isDark ? (
                     <>
                       <Moon className="w-3.5 h-3.5 text-black stroke-[2.5]" />
                       <span className="hidden sm:inline">Dark</span>

@@ -189,7 +189,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
       "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 20,
+      "play_count": 22,
       "rating": 5,
       "rating_count": 52,
       "status": "active",
@@ -202,7 +202,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/flappy-bird.svg",
       "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "play_count": 1,
+      "play_count": 66,
       "rating": 4.8,
       "rating_count": 14,
       "status": "active",
@@ -215,7 +215,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 29,
+      "play_count": 31,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -228,7 +228,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 3,
+      "play_count": 5,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -254,7 +254,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/neon-missile-defense.svg",
       "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-      "play_count": 30,
+      "play_count": 36,
       "rating": 5,
       "rating_count": 42,
       "status": "active",
@@ -293,7 +293,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg",
       "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "play_count": 0,
+      "play_count": 3,
       "rating": 5,
       "rating_count": 45,
       "status": "active",
@@ -418,7 +418,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-dash.svg",
       "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
-      "play_count": 0,
+      "play_count": 15,
       "rating": 4.9,
       "rating_count": 19,
       "status": "active"
@@ -430,7 +430,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/geometry-dash.svg",
       "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
-      "play_count": 0,
+      "play_count": 9,
       "rating": 5,
       "rating_count": 31,
       "status": "active"
@@ -821,6 +821,251 @@
       "user_id": "usr_p00qpc7",
       "score": 5850,
       "created_at": "2026-09-30T06:37:24.343Z"
+    },
+    {
+      "id": "sc_iqbfgfuwn",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 1,
+      "created_at": "2026-09-30T07:07:08.363Z"
+    },
+    {
+      "id": "sc_oo2lk8eyj",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 125,
+      "created_at": "2026-09-30T07:28:48.242Z"
+    },
+    {
+      "id": "sc_ggyo84fp9",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 56,
+      "created_at": "2026-09-30T07:32:51.788Z"
+    },
+    {
+      "id": "sc_lqa9jekw6",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 4000,
+      "created_at": "2026-09-30T07:36:33.006Z"
+    },
+    {
+      "id": "sc_pjf9thg1k",
+      "game_id": "g_missile_21",
+      "user_id": "usr_p00qpc7",
+      "score": 27475,
+      "created_at": "2026-09-30T07:38:03.784Z"
+    },
+    {
+      "id": "sc_s3m4xmu0x",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 1,
+      "created_at": "2026-09-30T09:17:35.459Z"
+    },
+    {
+      "id": "sc_iihq1b6yz",
+      "game_id": "g_missile_21",
+      "user_id": "usr_p00qpc7",
+      "score": 52670,
+      "created_at": "2026-09-30T09:20:24.454Z"
+    },
+    {
+      "id": "sc_mgb93sde2",
+      "game_id": "g_missile_21",
+      "user_id": "usr_p00qpc7",
+      "score": 700,
+      "created_at": "2026-09-30T09:21:08.336Z"
+    },
+    {
+      "id": "sc_gf5ds5cl6",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 1,
+      "created_at": "2026-09-30T09:25:12.032Z"
+    },
+    {
+      "id": "sc_amfry2ot4",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 1,
+      "created_at": "2026-09-30T09:25:57.153Z"
+    },
+    {
+      "id": "sc_fqzqga59g",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 2,
+      "created_at": "2026-09-30T09:26:39.752Z"
+    },
+    {
+      "id": "sc_ewujsdh0a",
+      "game_id": "g_tetris_20",
+      "user_id": "usr_p00qpc7",
+      "score": 3070,
+      "created_at": "2026-09-30T09:39:51.198Z"
+    },
+    {
+      "id": "sc_rfpsq8kdx",
+      "game_id": "g_tetris_20",
+      "user_id": "usr_p00qpc7",
+      "score": 710,
+      "created_at": "2026-09-30T09:43:35.697Z"
+    },
+    {
+      "id": "sc_9exrmaxu1",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 2740,
+      "created_at": "2026-09-30T09:46:50.593Z"
+    },
+    {
+      "id": "sc_m8yg080tv",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 793,
+      "created_at": "2026-09-30T09:46:57.064Z"
+    },
+    {
+      "id": "sc_kpoyv384z",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 1551,
+      "created_at": "2026-09-30T09:47:07.758Z"
+    },
+    {
+      "id": "sc_ek4zmqusf",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 140,
+      "created_at": "2026-09-30T09:47:11.286Z"
+    },
+    {
+      "id": "sc_93m482kbh",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 1370,
+      "created_at": "2026-09-30T09:47:23.359Z"
+    },
+    {
+      "id": "sc_y9eoo8ugy",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 290,
+      "created_at": "2026-09-30T09:47:29.594Z"
+    },
+    {
+      "id": "sc_2hpbg5spj",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 465,
+      "created_at": "2026-09-30T09:47:55.912Z"
+    },
+    {
+      "id": "sc_uqlv04fve",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 390,
+      "created_at": "2026-09-30T09:47:59.353Z"
+    },
+    {
+      "id": "sc_0bu7nvgel",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 6504,
+      "created_at": "2026-09-30T09:48:48.550Z"
+    },
+    {
+      "id": "sc_rxo3u84k0",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 4525,
+      "created_at": "2026-09-30T09:49:17.307Z"
+    },
+    {
+      "id": "sc_8x9wm352w",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 3800,
+      "created_at": "2026-09-30T09:49:36.740Z"
+    },
+    {
+      "id": "sc_euuq4fx6a",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 2918,
+      "created_at": "2026-09-30T09:49:55.005Z"
+    },
+    {
+      "id": "sc_k0evtg56z",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 3296,
+      "created_at": "2026-09-30T09:50:15.530Z"
+    },
+    {
+      "id": "sc_0y481o08p",
+      "game_id": "g_action_06",
+      "user_id": "usr_p00qpc7",
+      "score": 3730,
+      "created_at": "2026-09-30T09:50:39.744Z"
+    },
+    {
+      "id": "sc_bzbkujgeg",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:39.026Z"
+    },
+    {
+      "id": "sc_1er4uw5jh",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:40.446Z"
+    },
+    {
+      "id": "sc_fw0gd4avi",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:46.934Z"
+    },
+    {
+      "id": "sc_cllq9tp1t",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 900,
+      "created_at": "2026-09-30T09:51:52.144Z"
+    },
+    {
+      "id": "sc_v6wx6qjub",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:53.574Z"
+    },
+    {
+      "id": "sc_qtae8hy2h",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:55.240Z"
+    },
+    {
+      "id": "sc_g4h9ptztk",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:56.677Z"
+    },
+    {
+      "id": "sc_c82arw8lj",
+      "game_id": "g_geometry_10",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-09-30T09:51:58.158Z"
     }
   ],
   "ratings": [],
