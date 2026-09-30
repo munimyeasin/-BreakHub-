@@ -607,7 +607,6 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
         for (let j = i + 1; j < fruits.length; j++) {
           const f1 = fruits[i];
           const f2 = fruits[j];
-          if (f1.isMerging || f2.isMerging) continue;
 
           const dx = f2.x - f1.x;
           const dy = f2.y - f1.y;

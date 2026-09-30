@@ -189,7 +189,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
       "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 15,
+      "play_count": 20,
       "rating": 5,
       "rating_count": 52,
       "status": "active",
@@ -202,7 +202,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 25,
+      "play_count": 29,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -753,6 +753,48 @@
       "user_id": "usr_p00qpc7",
       "score": 6900,
       "created_at": "2026-09-30T05:59:12.591Z"
+    },
+    {
+      "id": "sc_is7vy6nta",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 100,
+      "created_at": "2026-09-30T06:31:24.214Z"
+    },
+    {
+      "id": "sc_j9o4t1mkt",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 88,
+      "created_at": "2026-09-30T06:32:23.687Z"
+    },
+    {
+      "id": "sc_g8a8yrbfl",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 4,
+      "created_at": "2026-09-30T06:33:48.360Z"
+    },
+    {
+      "id": "sc_hqoch33me",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 5200,
+      "created_at": "2026-09-30T06:36:00.766Z"
+    },
+    {
+      "id": "sc_exv0os9u7",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1200,
+      "created_at": "2026-09-30T06:36:27.379Z"
+    },
+    {
+      "id": "sc_4e47j6f1c",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 5850,
+      "created_at": "2026-09-30T06:37:24.343Z"
     }
   ],
   "ratings": [],

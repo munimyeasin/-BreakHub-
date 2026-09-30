@@ -38,6 +38,7 @@ import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
+import CyberAviatorGame from '@/components/games/CyberAviatorGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -800,6 +801,10 @@ export default function GameModal({
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
               {(game.id === 'g_merge_25' || game.slug === 'cyber-fruit-merge' || game.slug === 'fruit-merge') && (
                 <CyberFruitMergeGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
+              {(game.id === 'g_aviator_26' || game.slug === 'aviator-arcade' || game.slug === 'aviator') && (
+                <CyberAviatorGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
