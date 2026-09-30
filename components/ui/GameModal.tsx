@@ -38,6 +38,7 @@ import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
+import FlappyBirdCloneGame from '@/components/games/FlappyBirdCloneGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -280,6 +281,18 @@ const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
       { keys: ['H'], label: 'SYNAPTIC HINT', desc: 'Calculate optimal tactical response' },
       { keys: ['U'], label: 'TACTICAL UNDO', desc: 'Step back previous move' },
       { keys: ['M'], label: 'MODE SWITCH', desc: 'Toggle Solo AI ↔ 2P Pass & Play' }
+    ]
+  },
+  // Flappy Bird Clone (Cyber Arcade)
+  g_flappy_27: {
+    genreTag: 'ARCADE // NEON BIRD FLYER',
+    objective: 'Guide the neon plasma bird through vertical pipe corridors. Flap to stay airborne and avoid collision.',
+    scoring: 'Each pipe cleared = +1 point. No combo multipliers — pure reflex endurance.',
+    proTip: 'Flap at the apex of each drop for maximum vertical clearance. Short rapid taps beat long holds.',
+    controls: [
+      { keys: ['Space', '↑', 'Click', 'Tap'], label: 'FLAP', desc: 'Propel bird upward' },
+      { keys: ['R'], label: 'RESTART', desc: 'Reset run' },
+      { keys: ['F'], label: 'FULLSCREEN', desc: 'Toggle true fullscreen' }
     ]
   },
   // 13. Cyber Dash 2077
@@ -884,6 +897,10 @@ export default function GameModal({
 
               {(game.id === 'g_paper_12' || game.slug === 'paper-io' || game.slug === 'neon-paper-io') && (
                 <NeonPaperIoGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
+              {(game.id === 'g_flappy_27' || game.slug === 'flappy-bird' || game.slug === 'cyber-flappy') && (
+                <FlappyBirdCloneGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
             </div>
           </div>

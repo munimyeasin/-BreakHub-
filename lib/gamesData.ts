@@ -15,6 +15,19 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
+    id: 'g_flappy_27',
+    slug: 'cyber-flappy',
+    title: 'Neon Flappy Flyer',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/flappy-bird.svg',
+    description: 'Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.',
+    play_count: 0,
+    rating: 4.8,
+    rating_count: 14,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
