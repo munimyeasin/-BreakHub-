@@ -894,12 +894,20 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         activatePowerupRef.current(2);
       }
 
-      // Space / Enter -> Start, Restart, or Fire Salvo
+      // Space / Enter (double-space for slot 0) -> Start, Restart, Fire Salvo, or Powerup
       if (e.code === 'Space' || e.code === 'Enter' || e.key === ' ' || e.key === 'Enter') {
         if (!isPlayingRef.current || isDeadRef.current) {
           startGameRef.current();
         } else {
-          triggerManualSalvo();
+          // Double-space activates inventory slot 0
+          const now = performance.now();
+          const keyLast = (e as any)._keyLastTime || 0;
+          (e as any)._keyLastTime = now;
+          if (now - keyLast < 350 && inventoryRef.current[0]) {
+            activatePowerupRef.current(0);
+          } else {
+            triggerManualSalvo();
+          }
         }
       }
 
@@ -964,8 +972,20 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
     };
   }, [setSoundEnabled, toggleFullscreen, triggerManualSalvo]);
 
-  // Relative Delta Pointer Handling (No Teleportation, Touch & Drag anywhere, Click to shoot)
+  // Double-tap / double-click activates inventory slot 0 (powerup) via pointer or key (Space)
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const now = performance.now();
+    const dt = now - (pointerRef.current as any)._lastDownTime || Infinity;
+    (pointerRef.current as any)._lastDownTime = now;
+
+    if (dt < 350) {
+      // Double-tap / double-click: activate first inventory slot if available
+      if (inventoryRef.current[0]) {
+        activatePowerupRef.current(0);
+      }
+      return;
+    }
+
     if (!isPlaying || isDead) {
       startGame();
       return;
@@ -2450,101 +2470,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
           : 'max-w-full h-full flex-1'
       }`}
     >
-      {/* MOBILE PORTRAIT ORIENTATION ROTATE PROMPT */}
-      {isPortraitMobile && !dismissRotatePrompt && (
-        <div className="absolute inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in border-4 border-yellow-400">
-          {/* Animated Rotating Smartphone Graphic */}
-          <div className="relative w-20 h-20 mb-5 flex items-center justify-center">
-            <div className="absolute inset-0 bg-cyan-400/20 rounded-full animate-ping" />
-            <div className="relative border-4 border-cyan-400 bg-black p-3 rounded-2xl shadow-neo">
-              <Smartphone className="w-10 h-10 text-yellow-300" />
-            </div>
-            <div className="absolute -top-1 -right-1 bg-yellow-400 text-black p-1 rounded-full border-2 border-black animate-bounce">
-              <RotateCw className="w-4 h-4" />
-            </div>
-          </div>
-
-          <div className="inline-block bg-yellow-400 text-black px-3 py-1 text-xs font-black tracking-widest border-2 border-black shadow-neo mb-2">
-            OPTIMAL VIEWPORT // LANDSCAPE
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-300 to-pink-500 mb-2 font-mono">
-            ROTATE YOUR DEVICE
-          </h2>
-
-          <p className="max-w-xs text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
-            Neon Starfighter is engineered for ultra-wide cosmic combat perspective and ergonomic controls.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
-            <button
-              onClick={() => {
-                if (containerRef.current) {
-                  try {
-                    if (containerRef.current.requestFullscreen) {
-                      containerRef.current.requestFullscreen();
-                    } else if ((containerRef.current as any).webkitRequestFullscreen) {
-                      (containerRef.current as any).webkitRequestFullscreen();
-                    }
-                    if (screen.orientation && (screen.orientation as any).lock) {
-                      (screen.orientation as any).lock('landscape').catch(() => {});
-                    }
-                  } catch {}
-                }
-              }}
-              className="w-full bg-cyan-400 text-black font-black text-sm py-3 border-2 border-black shadow-neo hover:bg-yellow-400 transition-all flex items-center justify-center gap-2 rounded"
-            >
-              <RotateCw className="w-4 h-4" />
-              <span>LOCK LANDSCAPE</span>
-            </button>
-
-            <button
-              onClick={() => setDismissRotatePrompt(true)}
-              className="w-full bg-gray-900 text-gray-300 font-bold text-xs py-2.5 border-2 border-gray-700 hover:bg-gray-800 hover:text-white transition-all rounded"
-            >
-              PLAY IN PORTRAIT ANYWAY
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
-      <div className={`w-full ${isDesktop ? 'max-w-5xl lg:max-w-6xl' : 'max-w-md'} flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0`}>
-        <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
-          <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
-          <span className="text-sm font-black text-portal-yellow tracking-wide">{displayScore}</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="flex items-center gap-1 bg-portal-surface px-2 py-0.5 rounded-lg border border-black shadow-neo-sm">
-            <span className="text-[10px] text-portal-yellow font-black uppercase tracking-wider">
-              ⚡ {currentSpeedMult.toFixed(1)}x SPD
-            </span>
-          </div>
-
-          <span className="px-2 py-0.5 rounded-lg bg-portal-purple text-white border border-black text-[10px] font-black uppercase tracking-wider shadow-neo-sm">
-            Sector {wave}
-          </span>
-          <button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-surface hover:bg-portal-cyan text-white hover:text-black border border-black shadow-neo-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
-            title={soundEnabled ? "Mute audio" : "Enable audio"}
-          >
-            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 stroke-[2.5]" /> : <VolumeX className="w-3.5 h-3.5 stroke-[2.5]" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Active Powerup Banner */}
-      {activePowerup && (
-        <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} mb-1.5 px-3 py-1 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider animate-pulse shrink-0`}>
-          <Zap className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
-          <span>POWERUP: {activePowerup}</span>
-        </div>
-      )}
-
-      {/* Main Game Screen Canvas (Dynamic Orientation: 9:16 Portrait on Mobile, 16:9 Widescreen on PC/Landscape) */}
+      {/* Main Canvas - Adaptive Orientation (no rotate prompt) */}
       <div
         className={`relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair flex items-center justify-center shrink-0 ${
           isDesktop
@@ -2676,141 +2602,6 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         )}
       </div>
 
-      {/* 3-Slot Tactical Power-Up Vault HUD */}
-      <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} mt-1.5 p-1.5 bg-portal-card border-2 border-black rounded-xl shadow-neo flex items-center justify-between gap-1.5 shrink-0`}>
-        <div className="flex items-center gap-1 px-2 py-1 bg-portal-surface border border-black rounded-lg shrink-0 shadow-neo-sm">
-          <Zap className="w-3 h-3 text-portal-yellow stroke-[2.5]" />
-          <span className="text-[9px] sm:text-[10px] font-black text-slate-300 uppercase tracking-widest">VAULT</span>
-        </div>
-
-        <div className="grid grid-cols-3 gap-1.5 flex-1">
-          {[0, 1, 2].map((slotIdx) => {
-            const item = inventory[slotIdx];
-            const hotkey = slotIdx === 0 ? '1' : slotIdx === 1 ? '2' : '3';
-            const altKey = slotIdx === 0 ? 'Q' : slotIdx === 1 ? 'E' : 'X';
-
-            if (!item) {
-              return (
-                <div
-                  key={slotIdx}
-                  className="flex items-center justify-center gap-1 py-1 px-1.5 rounded-lg bg-black/40 border border-dashed border-slate-700 text-slate-500 text-[10px] font-mono font-bold select-none"
-                >
-                  <span className="text-[9px] text-slate-400 font-black">[{hotkey}]</span>
-                  <span className="text-[9px] uppercase tracking-wider">EMPTY</span>
-                </div>
-              );
-            }
-
-            const itemConfig =
-              item === 'spread'
-                ? { label: 'SPREAD', bg: 'bg-[#39FF14] text-black', icon: Sparkles }
-                : item === 'shield'
-                ? { label: 'SHIELD', bg: 'bg-portal-cyan text-black', icon: Shield }
-                : item === 'nuke'
-                ? { label: 'EMP NUKE', bg: 'bg-portal-pink text-white', icon: Bomb }
-                : { label: 'HYPER', bg: 'bg-portal-yellow text-black', icon: Flame };
-
-            const IconComp = itemConfig.icon;
-
-            return (
-              <button
-                key={slotIdx}
-                type="button"
-                onClick={() => activatePowerup(slotIdx)}
-                className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-lg border-2 border-black shadow-neo-sm font-black text-[10px] uppercase tracking-wider transition-all hover:scale-105 active:scale-95 cursor-pointer ${itemConfig.bg}`}
-                title={`Press [${hotkey}] or [${altKey}] or tap to trigger ${itemConfig.label}`}
-              >
-                <IconComp className="w-3 h-3 stroke-[2.5] shrink-0" />
-                <span className="truncate">{itemConfig.label}</span>
-                <span className="text-[8px] bg-black/30 text-white px-1 py-0.2 rounded font-mono font-black">[{hotkey}]</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Interactive Action Control Bar */}
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl mt-1.5 grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 shrink-0">
-        <button
-          type="button"
-          onPointerDown={(e) => {
-            e.preventDefault();
-            keysRef.current.boost = true;
-            setIsBoostActive(true);
-          }}
-          onPointerUp={(e) => {
-            e.preventDefault();
-            keysRef.current.boost = false;
-            setIsBoostActive(false);
-          }}
-          onPointerLeave={() => {
-            keysRef.current.boost = false;
-            setIsBoostActive(false);
-          }}
-          onPointerCancel={() => {
-            keysRef.current.boost = false;
-            setIsBoostActive(false);
-          }}
-          className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo transition-all select-none touch-none ${
-            isBoostActive
-              ? 'bg-portal-yellow text-black translate-x-0.5 translate-y-0.5 shadow-none ring-2 ring-yellow-400'
-              : 'bg-portal-surface hover:bg-portal-yellow text-slate-200 hover:text-black hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
-          }`}
-          title="Hold Shift or press this button to engage afterburner speed boost (1.65x Speed)"
-        >
-          <Flame className={`w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5] ${isBoostActive ? 'fill-black animate-bounce text-black' : 'text-portal-yellow'}`} />
-          <span>[SHIFT] BOOST</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            if (!isPlaying || isDead) {
-              startGame();
-            } else {
-              triggerManualSalvo();
-            }
-          }}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-portal-surface hover:bg-portal-cyan text-slate-200 hover:text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all select-none"
-          title="Left click anywhere on canvas or press this button to fire plasma cannon salvo"
-        >
-          <Crosshair className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-cyan hover:text-black stroke-[2.5]" />
-          <span>[CLICK] FIRE</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={startGame}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-portal-surface hover:bg-portal-pink text-slate-200 hover:text-white font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all select-none"
-          title="Press R or click this button to reboot mission flight"
-        >
-          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-portal-pink hover:text-white stroke-[2.5]" />
-          <span>[R] RESTART</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={toggleFullscreen}
-          className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 sm:border-3 border-black shadow-neo transition-all select-none ${
-            isFullscreen
-              ? 'bg-portal-purple text-white translate-x-0.5 translate-y-0.5 shadow-none ring-2 ring-purple-400'
-              : 'bg-portal-surface hover:bg-portal-purple text-slate-200 hover:text-white hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
-          }`}
-          title="Press F or click this button to toggle Fullscreen mode"
-        >
-          {isFullscreen ? (
-            <>
-              <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-              <span>[F] EXIT FULL</span>
-            </>
-          ) : (
-            <>
-              <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-              <span>[F] FULLSCREEN</span>
-            </>
-          )}
-        </button>
-      </div>
     </div>
   );
 }

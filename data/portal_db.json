@@ -215,7 +215,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 32,
+      "play_count": 39,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -1066,6 +1066,48 @@
       "user_id": "usr_p00qpc7",
       "score": 300,
       "created_at": "2026-09-30T09:51:58.158Z"
+    },
+    {
+      "id": "sc_m0tmu47kp",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 4750,
+      "created_at": "2026-09-30T12:12:01.151Z"
+    },
+    {
+      "id": "sc_k4ymy9n5y",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2100,
+      "created_at": "2026-09-30T12:23:01.456Z"
+    },
+    {
+      "id": "sc_a8beumphl",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1500,
+      "created_at": "2026-09-30T12:23:32.677Z"
+    },
+    {
+      "id": "sc_7hb91unrj",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 3000,
+      "created_at": "2026-09-30T12:24:06.832Z"
+    },
+    {
+      "id": "sc_1vstzsv3j",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 900,
+      "created_at": "2026-09-30T12:28:52.570Z"
+    },
+    {
+      "id": "sc_9oq58np8w",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1500,
+      "created_at": "2026-09-30T12:29:16.556Z"
     }
   ],
   "ratings": [],
