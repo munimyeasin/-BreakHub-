@@ -619,12 +619,8 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
             const nx = dx / dist;
             const ny = dy / dist;
 
-            // Unmatched tier collision — do NOT apply separation impulse
-            // (only identical-tier pairs merge; unmatched must not bounce/jump)
-            if (f1.tier !== f2.tier) {
-              // No positional separation, no velocity impulse — just skip
-              continue;
-            }
+            // Unmatched tier — do NOT separate (prevent bounce/jump), but allow merge check below
+            const tiersUnmatched = f1.tier !== f2.tier;
 
             // Check Identical Tier Merge Event! (only once, not per sub-step)
             if (f1.tier === f2.tier) {
@@ -636,25 +632,28 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
             // Skip impulse for merging pairs (no separation/jump while merging)
             if (f1.isMerging || f2.isMerging) continue;
 
-            // Normal Positional Separation based on mass
-            const totalMass = f1.mass + f2.mass;
-            const m1Ratio = f2.mass / totalMass;
-            const m2Ratio = f1.mass / totalMass;
+            // Skip separation impulse when tiers differ (prevent unmatched bounce/jump)
+            if (!tiersUnmatched) {
+              // Normal Positional Separation based on mass
+              const totalMass = f1.mass + f2.mass;
+              const m1Ratio = f2.mass / totalMass;
+              const m2Ratio = f1.mass / totalMass;
 
-            f1.x -= nx * overlap * m1Ratio;
-            f1.y -= ny * overlap * m1Ratio;
-            f2.x += nx * overlap * m2Ratio;
-            f2.y += ny * overlap * m2Ratio;
+              f1.x -= nx * overlap * m1Ratio;
+              f1.y -= ny * overlap * m1Ratio;
+              f2.x += nx * overlap * m2Ratio;
+              f2.y += ny * overlap * m2Ratio;
 
-            // Velocity Impulse Response
-            const kx = f1.vx - f2.vx;
-            const ky = f1.vy - f2.vy;
-            const p = 2 * (nx * kx + ny * ky) / totalMass;
+              // Velocity Impulse Response
+              const kx = f1.vx - f2.vx;
+              const ky = f1.vy - f2.vy;
+              const p = 2 * (nx * kx + ny * ky) / totalMass;
 
-            f1.vx -= p * f2.mass * nx * (1 + RESTITUTION);
-            f1.vy -= p * f2.mass * ny * (1 + RESTITUTION);
-            f2.vx += p * f1.mass * nx * (1 + RESTITUTION);
-            f2.vy += p * f1.mass * ny * (1 + RESTITUTION);
+              f1.vx -= p * f2.mass * nx * (1 + RESTITUTION);
+              f1.vy -= p * f2.mass * ny * (1 + RESTITUTION);
+              f2.vx += p * f1.mass * nx * (1 + RESTITUTION);
+              f2.vy += p * f1.mass * ny * (1 + RESTITUTION);
+            }
 
             // Tangential Friction & Spin
             const tx = -ny;
