@@ -353,7 +353,7 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
   // Pointer Events (Mouse / Touch Slicing Blade) with Normalized getBoundingClientRect Scaling
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isPlaying || isDead) return;
-    isPointerDownRef.current = true;
+    // PC: slicing by mouse movement; start trail on enter without requiring hold
     const rect = e.currentTarget.getBoundingClientRect();
     const clientX = e.clientX - rect.left;
     const clientY = e.clientY - rect.top;
@@ -361,11 +361,12 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     const scaledY = (clientY / (rect.height || CANVAS_HEIGHT)) * CANVAS_HEIGHT;
     bladeTrailRef.current = [{ x: scaledX, y: scaledY, time: performance.now() }];
     lastBladePosRef.current = { x: scaledX, y: scaledY, angle: -Math.PI / 4 };
-    playSfx('swipe');
+    // Only play swipe sound once at start; do not require continuous hold
+    if (bladeTrailRef.current.length <= 1) playSfx('swipe');
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!isPlaying || isDead || !isPointerDownRef.current) return;
+    if (!isPlaying || isDead) return; // PC: slice just by moving mouse — no click required
     const rect = e.currentTarget.getBoundingClientRect();
     const clientX = e.clientX - rect.left;
     const clientY = e.clientY - rect.top;
@@ -490,8 +491,8 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
   };
 
   const handlePointerUp = () => {
-    isPointerDownRef.current = false;
-    bladeTrailRef.current = [];
+    // PC: no need to clear trail on mouse-up; keep slicing with movement
+    // bladeTrailRef.current = [];
   };
 
   const handleGameOver = (hitBomb = false) => {
