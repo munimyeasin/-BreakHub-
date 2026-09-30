@@ -1607,14 +1607,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
         if (enemy.x <= 0 || enemy.x >= curW - enemy.width) enemy.vx *= -1;
 
-        // Check Bullet Collisions
+        // Check Bullet Collisions (Continuous Segment Sweep to prevent fast bullet tunneling)
         for (let j = bulletsRef.current.length - 1; j >= 0; j--) {
           const b = bulletsRef.current[j];
+          const prevY = b.y - b.vy * timeScale;
+          const minY = Math.min(b.y, prevY);
+          const maxY = Math.max(b.y, prevY);
+
           if (
-            b.x >= enemy.x - 4 &&
-            b.x <= enemy.x + enemy.width + 4 &&
-            b.y >= enemy.y &&
-            b.y <= enemy.y + enemy.height + 4
+            b.x >= enemy.x - 10 &&
+            b.x <= enemy.x + enemy.width + 10 &&
+            minY <= enemy.y + enemy.height + 10 &&
+            maxY >= enemy.y - 10
           ) {
             bulletsRef.current.splice(j, 1);
             enemy.hp--;
