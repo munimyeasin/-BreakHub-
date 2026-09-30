@@ -15,6 +15,19 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
+    id: 'g_aviator_26',
+    slug: 'aviator-arcade',
+    title: 'Cyber Aviator Arcade',
+    category: 'ARCADE',
+    thumbnail_url: '/thumbnails/aviator-arcade.svg',
+    description: '5-flight fuel-and-multiplier arcade chaser! Ride neon lift lines, grab multiplier orbs, dodge storm clouds, and chase the leaderboard.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 12,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
