@@ -896,18 +896,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       // Space / Enter (double-space for slot 0) -> Start, Restart, Fire Salvo, or Powerup
       if (e.code === 'Space' || e.code === 'Enter' || e.key === ' ' || e.key === 'Enter') {
+        // Double-space guard: only when playing (not start/restart)
         if (!isPlayingRef.current || isDeadRef.current) {
           startGameRef.current();
+          return;
+        }
+        const spaceLast = (window as any).__sf_space_last || 0;
+        const nowSpace = performance.now();
+        (window as any).__sf_space_last = nowSpace;
+        if (nowSpace - spaceLast < 350 && inventoryRef.current[0]) {
+          activatePowerupRef.current(0);
         } else {
-          // Double-space activates inventory slot 0
-          const now = performance.now();
-          const keyLast = (e as any)._keyLastTime || 0;
-          (e as any)._keyLastTime = now;
-          if (now - keyLast < 350 && inventoryRef.current[0]) {
-            activatePowerupRef.current(0);
-          } else {
-            triggerManualSalvo();
-          }
+          triggerManualSalvo();
         }
       }
 
