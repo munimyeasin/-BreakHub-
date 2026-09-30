@@ -620,12 +620,15 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
             const nx = dx / dist;
             const ny = dy / dist;
 
-            // Check Identical Tier Merge Event!
-            if (f1.tier === f2.tier && step === 0) {
+            // Check Identical Tier Merge Event! (only once, not per sub-step)
+            if (f1.tier === f2.tier) {
               f1.isMerging = true;
               f2.isMerging = true;
               continue;
             }
+
+            // Skip impulse for merging pairs (no separation/jump while merging)
+            if (f1.isMerging || f2.isMerging) continue;
 
             // Normal Positional Separation based on mass
             const totalMass = f1.mass + f2.mass;
@@ -670,10 +673,15 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
     for (let i = 0; i < mergedList.length; i += 2) {
       const f1 = mergedList[i];
       const f2 = mergedList[i + 1];
-      if (!f1) continue;
+      if (!f1 || !f2) continue;
+      if (f1.tier !== f2.tier) {
+        f1.isMerging = false; f2.isMerging = false;
+        remainingFruits.push(f1, f2);
+        continue;
+      }
 
       if (!f2) {
-        // Orphaned flag, restore
+        // Orphaned (single merge flag) — shouldn't happen with tier guard, but safe
         f1.isMerging = false;
         remainingFruits.push(f1);
         continue;
