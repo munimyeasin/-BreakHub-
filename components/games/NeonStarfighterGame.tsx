@@ -2509,7 +2509,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       )}
 
       {/* Top Combat HUD - Ultra Slim Neo Brutalism */}
-      <div className={`w-full ${isDesktop ? 'max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl' : 'max-w-sm'} flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0`}>
+      <div className={`w-full ${isDesktop ? 'max-w-5xl lg:max-w-6xl' : 'max-w-md'} flex items-center justify-between bg-portal-card px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo shrink-0`}>
         <div className="flex items-center gap-2 bg-portal-surface px-2.5 py-0.5 rounded-lg border border-black shadow-neo-sm">
           <Rocket className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
           <span className="text-[10px] text-slate-300 font-black uppercase tracking-wider">Score</span>
@@ -2548,8 +2548,8 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       <div
         className={`relative rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg bg-black touch-none cursor-crosshair flex items-center justify-center shrink-0 ${
           isDesktop
-            ? 'aspect-[16/9] w-full max-w-sm sm:max-w-md md:max-w-4xl lg:max-w-5xl max-h-[72vh] md:max-h-[78vh] lg:max-h-[82vh]'
-            : 'aspect-[9/16] w-full max-w-sm max-h-[75vh]'
+            ? 'aspect-[16/9] w-full max-w-5xl lg:max-w-6xl max-h-[72vh] md:max-h-[78vh] lg:max-h-[82vh]'
+            : 'aspect-[9/16] w-full max-w-md max-h-[75vh]'
         } ${isFullscreen ? (isDesktop ? 'max-h-[78vh] sm:max-h-[82vh] w-auto h-full max-w-full' : 'max-h-[82vh] w-full h-auto') : ''}`}
       >
         <canvas
