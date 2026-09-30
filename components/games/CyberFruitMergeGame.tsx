@@ -1055,7 +1055,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
 
     const loop = (time: number) => {
       if (!active) return;
-      if (!lastTimeRef.current) lastTimeRef.current = time;
+      if (!lastTimestampRef.current) lastTimestampRef.current = time;
 
       updatePhysics();
       renderCanvas();
