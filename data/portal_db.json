@@ -183,13 +183,39 @@
   ],
   "games": [
     {
+      "id": "g_shooter_07",
+      "slug": "neon-starfighter",
+      "title": "Neon Starfighter",
+      "category": "ARCADE",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg",
+      "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "play_count": 71,
+      "rating": 4.9,
+      "rating_count": 28,
+      "status": "active",
+      "featured": true
+    },
+    {
+      "id": "g_slicer_11",
+      "slug": "cyber-slicer",
+      "title": "Cyber Katana Slicer",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/cyber-slicer.svg",
+      "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
+      "play_count": 28,
+      "rating": 4.9,
+      "rating_count": 36,
+      "status": "active",
+      "featured": true
+    },
+    {
       "id": "g_merge_25",
       "slug": "cyber-fruit-merge",
       "title": "Cyber Fruit Merge",
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
       "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 22,
+      "play_count": 23,
       "rating": 5,
       "rating_count": 52,
       "status": "active",
@@ -205,32 +231,6 @@
       "play_count": 66,
       "rating": 4.8,
       "rating_count": 14,
-      "status": "active",
-      "featured": true
-    },
-    {
-      "id": "g_shooter_07",
-      "slug": "neon-starfighter",
-      "title": "Neon Starfighter",
-      "category": "ARCADE",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg",
-      "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 39,
-      "rating": 4.9,
-      "rating_count": 28,
-      "status": "active",
-      "featured": true
-    },
-    {
-      "id": "g_slicer_11",
-      "slug": "cyber-slicer",
-      "title": "Cyber Katana Slicer",
-      "category": "ACTION",
-      "thumbnail_url": "/thumbnails/cyber-slicer.svg",
-      "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 5,
-      "rating": 4.9,
-      "rating_count": 36,
       "status": "active",
       "featured": true
     },
@@ -470,19 +470,6 @@
       "rating": 5,
       "rating_count": 25,
       "status": "active"
-    },
-    {
-      "id": "g_flappy_27",
-      "slug": "cyber-flappy",
-      "title": "Neon Flappy Flyer",
-      "category": "ARCADE",
-      "thumbnail_url": "/thumbnails/flappy-bird.svg",
-      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "play_count": 0,
-      "rating": 4.8,
-      "rating_count": 14,
-      "status": "active",
-      "featured": true
     }
   ],
   "scores": [
@@ -1108,6 +1095,377 @@
       "user_id": "usr_p00qpc7",
       "score": 1500,
       "created_at": "2026-09-30T12:29:16.556Z"
+    },
+    {
+      "id": "sc_czlscjm67",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 3400,
+      "created_at": "2026-09-30T12:29:53.462Z"
+    },
+    {
+      "id": "sc_d0o8t70e2",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1400,
+      "created_at": "2026-09-30T12:30:20.157Z"
+    },
+    {
+      "id": "sc_behxp8b0y",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2800,
+      "created_at": "2026-09-30T12:30:52.881Z"
+    },
+    {
+      "id": "sc_tkukp150j",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 200,
+      "created_at": "2026-09-30T12:31:12.079Z"
+    },
+    {
+      "id": "sc_h28nujg4t",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 3000,
+      "created_at": "2026-09-30T12:31:44.691Z"
+    },
+    {
+      "id": "sc_l1qu2eshj",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1500,
+      "created_at": "2026-09-30T12:32:08.851Z"
+    },
+    {
+      "id": "sc_z120qla2b",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 4250,
+      "created_at": "2026-09-30T12:35:28.854Z"
+    },
+    {
+      "id": "sc_ftjlxwgi6",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2100,
+      "created_at": "2026-09-30T12:35:58.690Z"
+    },
+    {
+      "id": "sc_iiqxeuilz",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 900,
+      "created_at": "2026-09-30T12:39:16.134Z"
+    },
+    {
+      "id": "sc_98e3lt84t",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2400,
+      "created_at": "2026-09-30T12:39:49.123Z"
+    },
+    {
+      "id": "sc_ks977kkwj",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1700,
+      "created_at": "2026-09-30T12:40:15.436Z"
+    },
+    {
+      "id": "sc_uruuzr6hn",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1200,
+      "created_at": "2026-09-30T12:40:32.106Z"
+    },
+    {
+      "id": "sc_8m2ij14cg",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 7150,
+      "created_at": "2026-09-30T12:41:30.137Z"
+    },
+    {
+      "id": "sc_ex2kd2s6i",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2200,
+      "created_at": "2026-09-30T12:44:46.667Z"
+    },
+    {
+      "id": "sc_otmqmlkvw",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1700,
+      "created_at": "2026-09-30T12:45:37.688Z"
+    },
+    {
+      "id": "sc_rpsabe0ey",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2900,
+      "created_at": "2026-09-30T12:46:17.356Z"
+    },
+    {
+      "id": "sc_0egs1e48l",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 8050,
+      "created_at": "2026-09-30T12:50:40.454Z"
+    },
+    {
+      "id": "sc_rjmwi7ty3",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 700,
+      "created_at": "2026-09-30T12:51:24.550Z"
+    },
+    {
+      "id": "sc_mhh1wkm7f",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 10850,
+      "created_at": "2026-09-30T12:56:40.980Z"
+    },
+    {
+      "id": "sc_rfx2zrmm5",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 800,
+      "created_at": "2026-09-30T12:56:56.932Z"
+    },
+    {
+      "id": "sc_pshql6frs",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2800,
+      "created_at": "2026-09-30T12:57:20.135Z"
+    },
+    {
+      "id": "sc_ngift8bd6",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1600,
+      "created_at": "2026-09-30T13:00:25.323Z"
+    },
+    {
+      "id": "sc_qwgsyzvhn",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 4900,
+      "created_at": "2026-09-30T13:01:15.566Z"
+    },
+    {
+      "id": "sc_5p66jkmax",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 500,
+      "created_at": "2026-09-30T13:01:30.560Z"
+    },
+    {
+      "id": "sc_l84zd3fcr",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 600,
+      "created_at": "2026-09-30T13:03:01.414Z"
+    },
+    {
+      "id": "sc_ka59b7lu7",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 9500,
+      "created_at": "2026-09-30T13:04:09.183Z"
+    },
+    {
+      "id": "sc_z46fhh27z",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1000,
+      "created_at": "2026-09-30T13:07:35.576Z"
+    },
+    {
+      "id": "sc_x0tmu7mlo",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 5550,
+      "created_at": "2026-09-30T13:08:17.855Z"
+    },
+    {
+      "id": "sc_71gai6dh8",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 8850,
+      "created_at": "2026-09-30T13:09:15.881Z"
+    },
+    {
+      "id": "sc_oi2q1q6bb",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 4900,
+      "created_at": "2026-09-30T13:10:05.272Z"
+    },
+    {
+      "id": "sc_l06kqof28",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 2150,
+      "created_at": "2026-09-30T13:10:51.922Z"
+    },
+    {
+      "id": "sc_ekoj7pr4c",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 6400,
+      "created_at": "2026-09-30T13:12:10.208Z"
+    },
+    {
+      "id": "sc_wvumotpef",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 90,
+      "created_at": "2026-09-30T13:22:19.139Z"
+    },
+    {
+      "id": "sc_ijvkv5xe5",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 265,
+      "created_at": "2026-09-30T14:20:29.127Z"
+    },
+    {
+      "id": "sc_cvjd06p8g",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 90,
+      "created_at": "2026-09-30T14:20:38.998Z"
+    },
+    {
+      "id": "sc_my941xy7h",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 15,
+      "created_at": "2026-09-30T14:20:47.883Z"
+    },
+    {
+      "id": "sc_ostxc0nkp",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 335,
+      "created_at": "2026-09-30T14:21:06.477Z"
+    },
+    {
+      "id": "sc_tag3v96am",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 260,
+      "created_at": "2026-09-30T14:21:22.426Z"
+    },
+    {
+      "id": "sc_rdvzmmh0a",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 910,
+      "created_at": "2026-09-30T14:22:05.362Z"
+    },
+    {
+      "id": "sc_segnqf6rt",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 70,
+      "created_at": "2026-09-30T14:22:18.828Z"
+    },
+    {
+      "id": "sc_la26w7s57",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 190,
+      "created_at": "2026-09-30T14:22:40.642Z"
+    },
+    {
+      "id": "sc_rfuvpaw4q",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 75,
+      "created_at": "2026-09-30T14:22:55.630Z"
+    },
+    {
+      "id": "sc_209uij51z",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 550,
+      "created_at": "2026-09-30T14:23:33.930Z"
+    },
+    {
+      "id": "sc_1h2u54hz7",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 85,
+      "created_at": "2026-09-30T14:38:02.451Z"
+    },
+    {
+      "id": "sc_hat52soyt",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 120,
+      "created_at": "2026-09-30T14:38:11.610Z"
+    },
+    {
+      "id": "sc_y9hwc8r0v",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 45,
+      "created_at": "2026-09-30T14:38:25.724Z"
+    },
+    {
+      "id": "sc_w0vfvdc10",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 35,
+      "created_at": "2026-09-30T14:38:32.293Z"
+    },
+    {
+      "id": "sc_qczcvyyxo",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 390,
+      "created_at": "2026-09-30T14:38:57.505Z"
+    },
+    {
+      "id": "sc_y7f54xbuk",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 400,
+      "created_at": "2026-09-30T14:39:17.341Z"
+    },
+    {
+      "id": "sc_zwx6udlv3",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 135,
+      "created_at": "2026-09-30T14:39:27.876Z"
+    },
+    {
+      "id": "sc_3ckc1yr1c",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 25,
+      "created_at": "2026-09-30T14:39:34.770Z"
+    },
+    {
+      "id": "sc_e1ivujqep",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 405,
+      "created_at": "2026-09-30T14:39:59.110Z"
+    },
+    {
+      "id": "sc_ejs41gntr",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 65,
+      "created_at": "2026-09-30T14:40:09.641Z"
     }
   ],
   "ratings": [],

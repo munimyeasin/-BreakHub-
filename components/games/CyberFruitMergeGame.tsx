@@ -619,6 +619,13 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
             const nx = dx / dist;
             const ny = dy / dist;
 
+            // Unmatched tier collision — do NOT apply separation impulse
+            // (only identical-tier pairs merge; unmatched must not bounce/jump)
+            if (f1.tier !== f2.tier) {
+              // No positional separation, no velocity impulse — just skip
+              continue;
+            }
+
             // Check Identical Tier Merge Event! (only once, not per sub-step)
             if (f1.tier === f2.tier) {
               f1.isMerging = true;
