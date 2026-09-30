@@ -1,5 +1,5 @@
 // Break Hub Arcade Offline Service Worker
-const CACHE_NAME = 'breakhub-offline-v2';
+const CACHE_NAME = 'breakhub-offline-v3';
 const OFFLINE_FALLBACK = '/offline';
 
 const PRECACHE_ASSETS = [

@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_merge_25',
+    slug: 'cyber-fruit-merge',
+    title: 'Cyber Fruit Merge',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/cyber-fruit-merge.svg',
+    description: 'Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.',
+    play_count: 0,
+    rating: 5.0,
+    rating_count: 52,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_shooter_07',
     slug: 'neon-starfighter',
     title: 'Neon Starfighter',
@@ -200,8 +213,9 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-snake.svg',
     description: 'Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
     play_count: 0,
-    hype_count: 0,
-    status: 'coming_soon'
+    rating: 4.9,
+    rating_count: 34,
+    status: 'active'
   },
   {
     id: 'g_action_06',
@@ -213,7 +227,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.9,
     rating_count: 19,
-    status: 'hidden'
+    status: 'active'
   },
   {
     id: 'g_geometry_10',
@@ -225,7 +239,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 31,
-    status: 'hidden'
+    status: 'active'
   },
   {
     id: 'g_breaker_08',
@@ -237,7 +251,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.8,
     rating_count: 12,
-    status: 'hidden'
+    status: 'active'
   },
   {
     id: 'g_reflex_09',
@@ -249,7 +263,7 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 4.8,
     rating_count: 9,
-    status: 'hidden'
+    status: 'active'
   },
   {
     id: 'g_paper_12',
@@ -261,6 +275,6 @@ export const INITIAL_GAMES: Game[] = [
     play_count: 0,
     rating: 5.0,
     rating_count: 25,
-    status: 'hidden'
+    status: 'active'
   }
 ];

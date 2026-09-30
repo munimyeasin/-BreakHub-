@@ -37,6 +37,7 @@ import MultidimensionXOGame from '@/components/games/MultidimensionXOGame';
 import TetraMatrixGame from '@/components/games/TetraMatrixGame';
 import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
+import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -60,6 +61,19 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  // Cyber Fruit Fusion (2D Physics Fruit Merge)
+  g_merge_25: {
+    genreTag: 'PUZZLE // 2D PHYSICS FRUIT FUSION',
+    objective: 'Drop and merge identical cyber fruit spheres to ascend 11 evolution tiers. Prevent fruit stack from overflowing past the critical Danger Limit Line for over 3 seconds to forge the Singularity Watermelon (+10,000pts).',
+    scoring: 'Tier merges (2pts to 2,048pts) x Combo Multipliers (up to 10x) + Watermelon Singularity Fusion bonus (+10,000pts).',
+    proTip: 'Aim high-tier heavy fruits toward the bottom corners. Drop smaller fruits into slopes to trigger cascading chain-reaction merge rolls!',
+    controls: [
+      { keys: ['← / →', 'A / D'], label: 'AIM DROPPER', desc: 'Slide fruit dropper crane left / right' },
+      { keys: ['Space', '↓', 'S'], label: 'DROP FRUIT', desc: 'Deploy fruit sphere down the laser guide' },
+      { keys: ['Mouse / Touch'], label: 'DIRECT AIM & DROP', desc: 'Move pointer to aim, release / click to drop' },
+      { keys: ['R'], label: 'RESTART', desc: 'Reset physics container and start fresh run' }
+    ]
+  },
   // -3. Neon Missile Defense (Cyber Command)
   g_missile_21: {
     genreTag: 'ACTION // CYBER FLAK ARTILLERY',
@@ -784,6 +798,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_merge_25' || game.slug === 'cyber-fruit-merge' || game.slug === 'fruit-merge') && (
+                <CyberFruitMergeGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
                 <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

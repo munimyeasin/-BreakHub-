@@ -8,6 +8,16 @@ export default function ServiceWorkerRegister() {
       return;
     }
 
+    // In development mode, unregister any active service worker to prevent stale cached HTML/hydration mismatches
+    if (process.env.NODE_ENV === 'development') {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const reg of registrations) {
+          reg.unregister();
+        }
+      }).catch(() => {});
+      return;
+    }
+
     const registerSW = () => {
       navigator.serviceWorker
         .register('/sw.js')

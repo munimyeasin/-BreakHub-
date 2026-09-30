@@ -44,7 +44,9 @@ export default function SpotlightBanner({
     g =>
       g.status !== 'hidden' &&
       g.slug !== 'multidimension-xo' &&
-      (g.slug === 'neon-starfighter' ||
+      (g.featured === true ||
+        g.slug === 'cyber-fruit-merge' ||
+        g.slug === 'neon-starfighter' ||
         g.slug === 'cyber-slicer' ||
         g.slug === 'tetra-matrix' ||
         g.slug === 'retro-candy-crush' ||
@@ -75,6 +77,7 @@ export default function SpotlightBanner({
   const isComingSoon = currentGame.status === 'coming_soon';
 
   const getGameIcon = (slug: string) => {
+    if (slug === 'cyber-fruit-merge') return <Flame className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'tetra-matrix') return <Boxes className="w-3.5 h-3.5 text-portal-yellow" />;
     if (slug === 'neon-starfighter') return <Rocket className="w-3.5 h-3.5 text-portal-pink" />;
     if (slug === 'cyber-slicer') return <Swords className="w-3.5 h-3.5 text-portal-lime" />;

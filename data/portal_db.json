@@ -173,9 +173,28 @@
       "username": "CensorTester_1790531039337",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CensorTester_1790531039337",
       "created_at": "2026-09-27T17:44:00.370Z"
+    },
+    {
+      "id": "usr_slq15m4",
+      "username": "CyberNinja",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CyberNinja",
+      "created_at": "2026-09-29T05:58:53.929Z"
     }
   ],
   "games": [
+    {
+      "id": "g_merge_25",
+      "slug": "cyber-fruit-merge",
+      "title": "Cyber Fruit Merge",
+      "category": "PUZZLE",
+      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
+      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
+      "play_count": 15,
+      "rating": 5,
+      "rating_count": 52,
+      "status": "active",
+      "featured": true
+    },
     {
       "id": "g_shooter_07",
       "slug": "neon-starfighter",
@@ -183,7 +202,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg",
       "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "play_count": 18,
+      "play_count": 25,
       "rating": 4.9,
       "rating_count": 28,
       "status": "active",
@@ -209,7 +228,7 @@
       "category": "STRATEGY",
       "thumbnail_url": "/thumbnails/retro-battleship.svg",
       "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "play_count": 0,
+      "play_count": 1,
       "rating": 5,
       "rating_count": 56,
       "status": "active",
@@ -375,8 +394,9 @@
       "thumbnail_url": "/thumbnails/neon-snake.svg",
       "description": "Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
       "play_count": 0,
-      "hype_count": 0,
-      "status": "coming_soon"
+      "rating": 4.9,
+      "rating_count": 34,
+      "status": "active"
     },
     {
       "id": "g_action_06",
@@ -388,7 +408,7 @@
       "play_count": 0,
       "rating": 4.9,
       "rating_count": 19,
-      "status": "hidden"
+      "status": "active"
     },
     {
       "id": "g_geometry_10",
@@ -400,7 +420,7 @@
       "play_count": 0,
       "rating": 5,
       "rating_count": 31,
-      "status": "hidden"
+      "status": "active"
     },
     {
       "id": "g_breaker_08",
@@ -412,7 +432,7 @@
       "play_count": 0,
       "rating": 4.8,
       "rating_count": 12,
-      "status": "hidden"
+      "status": "active"
     },
     {
       "id": "g_reflex_09",
@@ -424,7 +444,7 @@
       "play_count": 0,
       "rating": 4.8,
       "rating_count": 9,
-      "status": "hidden"
+      "status": "active"
     },
     {
       "id": "g_paper_12",
@@ -436,20 +456,7 @@
       "play_count": 0,
       "rating": 5,
       "rating_count": 25,
-      "status": "hidden"
-    },
-    {
-      "id": "g_chess_24",
-      "slug": "cyber-chess",
-      "title": "Quantum Cyber Chess",
-      "category": "STRATEGY",
-      "thumbnail_url": "/thumbnails/cyber-chess.svg",
-      "description": "Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
-      "play_count": 1,
-      "rating": 5,
-      "rating_count": 68,
-      "status": "active",
-      "featured": true
+      "status": "active"
     }
   ],
   "scores": [
@@ -648,6 +655,104 @@
       "user_id": "usr_kb236y0",
       "score": 45200,
       "created_at": "2026-09-27T17:44:00.475Z"
+    },
+    {
+      "id": "sc_macc0rfop",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1200,
+      "created_at": "2026-09-28T08:43:46.932Z"
+    },
+    {
+      "id": "sc_emoz6ti21",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1000,
+      "created_at": "2026-09-28T08:44:06.062Z"
+    },
+    {
+      "id": "sc_g4g1k2pr0",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 1100,
+      "created_at": "2026-09-28T08:44:15.946Z"
+    },
+    {
+      "id": "sc_k5zi6km0m",
+      "game_id": "g_merge_25",
+      "user_id": "usr_slq15m4",
+      "score": 2,
+      "created_at": "2026-09-29T06:08:13.280Z"
+    },
+    {
+      "id": "sc_p5uucqqjw",
+      "game_id": "g_merge_25",
+      "user_id": "usr_slq15m4",
+      "score": 2,
+      "created_at": "2026-09-29T06:08:56.072Z"
+    },
+    {
+      "id": "sc_oospht0co",
+      "game_id": "g_merge_25",
+      "user_id": "usr_slq15m4",
+      "score": 26,
+      "created_at": "2026-09-29T06:09:44.722Z"
+    },
+    {
+      "id": "sc_whtacfisd",
+      "game_id": "g_merge_25",
+      "user_id": "usr_slq15m4",
+      "score": 2,
+      "created_at": "2026-09-29T06:49:17.570Z"
+    },
+    {
+      "id": "sc_ki93kf2nk",
+      "game_id": "g_merge_25",
+      "user_id": "usr_slq15m4",
+      "score": 2,
+      "created_at": "2026-09-29T07:01:07.349Z"
+    },
+    {
+      "id": "sc_u9mt4gidb",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 124,
+      "created_at": "2026-09-29T07:19:58.192Z"
+    },
+    {
+      "id": "sc_accxqry28",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 100,
+      "created_at": "2026-09-29T07:22:14.629Z"
+    },
+    {
+      "id": "sc_8pprht28o",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 40,
+      "created_at": "2026-09-29T07:22:56.697Z"
+    },
+    {
+      "id": "sc_yfaptf2vl",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 18,
+      "created_at": "2026-09-29T07:23:23.628Z"
+    },
+    {
+      "id": "sc_hv69oryny",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 36,
+      "created_at": "2026-09-29T07:24:08.249Z"
+    },
+    {
+      "id": "sc_73gufsdcx",
+      "game_id": "g_shooter_07",
+      "user_id": "usr_p00qpc7",
+      "score": 6900,
+      "created_at": "2026-09-30T05:59:12.591Z"
     }
   ],
   "ratings": [],

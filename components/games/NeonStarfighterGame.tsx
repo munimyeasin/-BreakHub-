@@ -1181,13 +1181,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const p = playerRef.current;
 
-      // Dynamic Continuous Speed Multiplier: Starts at 3.0x, continuously accelerates with flight time and wave progression
+      // Dynamic Continuous Speed Multiplier: Starts at 1.0x (easy) and progressively scales with flight time / waves
       const elapsedTimeSec = Math.max(0, (timestamp - (missionStartTimeRef.current || timestamp)) / 1000);
       const waveBonus = (waveRef.current - 1) * 0.25;
-      const timeSpeedScale = 3.0 * (1.0 + Math.min(elapsedTimeSec * 0.015 + waveBonus, 3.5));
+      const timeSpeedScale = 1.0 * (1.0 + Math.min(elapsedTimeSec * 0.015 + waveBonus, 4.5));
 
       // Jet Strafe Agility: scales dynamically with flight speed
-      p.speed = 18 + Math.min(12, (timeSpeedScale - 3.0) * 3.5);
+      p.speed = 18 + Math.min(12, (timeSpeedScale - 1.0) * 3.5);
 
       // Sync Wave, Score, and Speed Multiplier with React HUD periodically (every 120ms max)
       if (timestamp - lastScoreSyncTimeRef.current > 120) {

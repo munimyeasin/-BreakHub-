@@ -1,7 +1,23 @@
 'use client';
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Play, RotateCcw, Volume2, VolumeX, Sparkles, Zap, Flame } from 'lucide-react';
+import {
+  Play,
+  RotateCcw,
+  Volume2,
+  VolumeX,
+  Sparkles,
+  Zap,
+  Flame,
+  Globe,
+  Square,
+  Gauge,
+  Trophy,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight
+} from 'lucide-react';
 import confetti from 'canvas-confetti';
 import MobileGamepad from '@/components/ui/MobileGamepad';
 
@@ -11,7 +27,18 @@ interface NeonSnakeGameProps {
 }
 
 type Point = { x: number; y: number };
-type Particle = { x: number; y: number; vx: number; vy: number; alpha: number; color: string; size: number };
+type Particle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  alpha: number;
+  color: string;
+  size: number;
+};
+
+export type SnakeMode = 'classic' | 'portal'; // Classic = fatal walls, Portal = wrap around screen
+export type SnakeSpeed = 'normal' | 'turbo' | 'dynamic';
 
 const GRID_SIZE = 20;
 const CANVAS_WIDTH = 360; // 18 cells * 20px (9:16 Vertical Ratio)
@@ -19,7 +46,88 @@ const CANVAS_HEIGHT = 640; // 32 cells * 20px (9:16 Vertical Ratio)
 const MAX_CELLS_X = CANVAS_WIDTH / GRID_SIZE; // 18
 const MAX_CELLS_Y = CANVAS_HEIGHT / GRID_SIZE; // 32
 
-export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps) {
+const SPEED_CONFIGS: Record<SnakeSpeed, { label: string; interval: number }> = {
+  normal: { label: 'Normal (105ms)', interval: 110 },
+  turbo: { label: 'Turbo (80ms)', interval: 80 },
+  dynamic: { label: 'Dynamic (Ramps)', interval: 110 },
+};
+
+// Web Audio Synth for instant arcade SFX without external audio files
+class SnakeAudioEngine {
+  private ctx: AudioContext | null = null;
+
+  private getContext(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
+    try {
+      if (!this.ctx || this.ctx.state === 'closed') {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
+      return this.ctx;
+    } catch {
+      return null;
+    }
+  }
+
+  public playSound(type: 'eat' | 'bonus' | 'wrap' | 'die') {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      if (type === 'eat') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.09);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'bonus') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, now); // D5
+        osc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.15); // D6
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.16);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.17);
+      } else if (type === 'wrap') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.07);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } else if (type === 'die') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.linearRampToValueAtTime(40, now + 0.35);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.42);
+      }
+    } catch {}
+  }
+}
+
+const snakeAudio = new SnakeAudioEngine();
+
+export default function NeonSnakeGame({ onGameOver }: NeonSnakeGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,53 +135,52 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(1);
   const [highScore, setHighScore] = useState(0);
+  const [applesEaten, setApplesEaten] = useState(0);
+
+  const [mode, setMode] = useState<SnakeMode>('classic');
+  const [speedMode, setSpeedMode] = useState<SnakeSpeed>('normal');
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  const snakeRef = useRef<Point[]>([{ x: 9, y: 16 }, { x: 9, y: 17 }, { x: 9, y: 18 }]);
+  // Snake coordinates and double-buffered input queue
+  const snakeRef = useRef<Point[]>([
+    { x: 9, y: 16 },
+    { x: 9, y: 17 },
+    { x: 9, y: 18 },
+  ]);
   const dirRef = useRef<Point>({ x: 0, y: -1 });
-  const nextDirRef = useRef<Point>({ x: 0, y: -1 });
+  const inputQueueRef = useRef<Point[]>([]); // FIFO input queue prevents self-collisions on rapid turns
   const foodRef = useRef<Point>({ x: 9, y: 8 });
-  const bonusFoodRef = useRef<Point | null>(null);
+  const bonusFoodRef = useRef<{ x: number; y: number; timer: number } | null>(null);
   const particlesRef = useRef<Particle[]>([]);
   const touchStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Web Audio Synth for instant arcade SFX without external audio files
-  const playSfx = useCallback((type: 'eat' | 'die' | 'bonus') => {
-    if (!soundEnabled || typeof window === 'undefined') return;
-    try {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+  const scoreRef = useRef(0);
+  const modeRef = useRef<SnakeMode>(mode);
+  const speedModeRef = useRef<SnakeSpeed>(speedMode);
+  const soundEnabledRef = useRef(soundEnabled);
+  const onGameOverRef = useRef(onGameOver);
 
-      if (type === 'eat') {
-        osc.frequency.setValueAtTime(440, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
-      } else if (type === 'bonus') {
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.2);
-      } else if (type === 'die') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.5, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
-      }
-    } catch {}
+  useEffect(() => {
+    onGameOverRef.current = onGameOver;
+  }, [onGameOver]);
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
+
+  useEffect(() => {
+    speedModeRef.current = speedMode;
+  }, [speedMode]);
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
   }, [soundEnabled]);
+
+  const playSfx = useCallback((type: 'eat' | 'bonus' | 'wrap' | 'die') => {
+    if (soundEnabledRef.current) {
+      snakeAudio.playSound(type);
+    }
+  }, []);
 
   const spawnFood = useCallback(() => {
     let newFood: Point;
@@ -82,19 +189,25 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         x: Math.floor(Math.random() * MAX_CELLS_X),
         y: Math.floor(Math.random() * MAX_CELLS_Y),
       };
-      const collides = snakeRef.current.some(s => s.x === newFood.x && s.y === newFood.y);
+      const collides = snakeRef.current.some((s) => s.x === newFood.x && s.y === newFood.y);
       if (!collides) break;
     }
     foodRef.current = newFood;
 
-    // 20% chance to spawn a glowing bonus orb
-    if (Math.random() < 0.25) {
-      bonusFoodRef.current = {
-        x: Math.floor(Math.random() * MAX_CELLS_X),
-        y: Math.floor(Math.random() * MAX_CELLS_Y),
-      };
-    } else {
-      bonusFoodRef.current = null;
+    // 25% chance to spawn a timed bonus core (lasts 8 seconds)
+    if (Math.random() < 0.28) {
+      let newBonus: Point;
+      while (true) {
+        newBonus = {
+          x: Math.floor(Math.random() * MAX_CELLS_X),
+          y: Math.floor(Math.random() * MAX_CELLS_Y),
+        };
+        const collides =
+          (newBonus.x === newFood.x && newBonus.y === newFood.y) ||
+          snakeRef.current.some((s) => s.x === newBonus.x && s.y === newBonus.y);
+        if (!collides) break;
+      }
+      bonusFoodRef.current = { ...newBonus, timer: 75 }; // ~75 ticks
     }
   }, []);
 
@@ -114,44 +227,57 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
     }
   };
 
+  const queueDirection = useCallback((newDir: Point) => {
+    const queue = inputQueueRef.current;
+    const lastDir = queue.length > 0 ? queue[queue.length - 1] : dirRef.current;
+
+    // Disallow 180-degree reversals
+    if (newDir.x !== 0 && lastDir.x !== 0) return;
+    if (newDir.y !== 0 && lastDir.y !== 0) return;
+
+    // Limit queue size to 2 to keep controls ultra-responsive
+    if (queue.length < 2) {
+      queue.push(newDir);
+    }
+  }, []);
+
   const startGame = () => {
-    snakeRef.current = [{ x: 16, y: 9 }, { x: 16, y: 10 }, { x: 16, y: 11 }];
+    snakeRef.current = [
+      { x: 9, y: 16 },
+      { x: 9, y: 17 },
+      { x: 9, y: 18 },
+    ];
     dirRef.current = { x: 0, y: -1 };
-    nextDirRef.current = { x: 0, y: -1 };
+    inputQueueRef.current = [];
     particlesRef.current = [];
+    bonusFoodRef.current = null;
+
+    scoreRef.current = 0;
     setScore(0);
     setCombo(1);
+    setApplesEaten(0);
     setIsDead(false);
     setIsPlaying(true);
     spawnFood();
   };
 
-  const handleDirection = (dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
-    const cur = dirRef.current;
-    if (dir === 'UP' && cur.y === 0) nextDirRef.current = { x: 0, y: -1 };
-    if (dir === 'DOWN' && cur.y === 0) nextDirRef.current = { x: 0, y: 1 };
-    if (dir === 'LEFT' && cur.x === 0) nextDirRef.current = { x: -1, y: 0 };
-    if (dir === 'RIGHT' && cur.x === 0) nextDirRef.current = { x: 1, y: 0 };
-  };
-
-  // Keyboard controls
+  // Keyboard navigation with double-buffer queue
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const { key } = e;
-      const cur = dirRef.current;
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(key)) {
         e.preventDefault();
       }
 
-      if ((key === 'ArrowUp' || key === 'w' || key === 'W') && cur.y === 0) nextDirRef.current = { x: 0, y: -1 };
-      if ((key === 'ArrowDown' || key === 's' || key === 'S') && cur.y === 0) nextDirRef.current = { x: 0, y: 1 };
-      if ((key === 'ArrowLeft' || key === 'a' || key === 'A') && cur.x === 0) nextDirRef.current = { x: -1, y: 0 };
-      if ((key === 'ArrowRight' || key === 'd' || key === 'D') && cur.x === 0) nextDirRef.current = { x: 1, y: 0 };
+      if (key === 'ArrowUp' || key === 'w' || key === 'W') queueDirection({ x: 0, y: -1 });
+      if (key === 'ArrowDown' || key === 's' || key === 'S') queueDirection({ x: 0, y: 1 });
+      if (key === 'ArrowLeft' || key === 'a' || key === 'A') queueDirection({ x: -1, y: 0 });
+      if (key === 'ArrowRight' || key === 'd' || key === 'D') queueDirection({ x: 1, y: 0 });
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [queueDirection]);
 
   // Touch Swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -166,15 +292,15 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
     const dy = touch.clientY - touchStartRef.current.y;
 
     if (Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 25 && dirRef.current.x === 0) nextDirRef.current = { x: 1, y: 0 };
-      if (dx < -25 && dirRef.current.x === 0) nextDirRef.current = { x: -1, y: 0 };
+      if (dx > 25) queueDirection({ x: 1, y: 0 });
+      if (dx < -25) queueDirection({ x: -1, y: 0 });
     } else {
-      if (dy > 25 && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: 1 };
-      if (dy < -25 && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: -1 };
+      if (dy > 25) queueDirection({ x: 0, y: 1 });
+      if (dy < -25) queueDirection({ x: 0, y: -1 });
     }
   };
 
-  // Game Loop
+  // Main Canvas & Interval Game Loop
   useEffect(() => {
     if (!isPlaying || isDead) return;
 
@@ -183,28 +309,67 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const interval = setInterval(() => {
-      dirRef.current = nextDirRef.current;
-      const head = {
-        x: snakeRef.current[0].x + dirRef.current.x,
-        y: snakeRef.current[0].y + dirRef.current.y,
-      };
+    let baseInterval = SPEED_CONFIGS[speedMode].interval;
+    if (speedMode === 'dynamic') {
+      // Dynamic speed ramps up as apples are eaten
+      baseInterval = Math.max(65, 110 - Math.floor(applesEaten / 3) * 5);
+    }
 
-      // Wall collision or Self collision
-      if (
-        head.x < 0 || head.x >= MAX_CELLS_X ||
-        head.y < 0 || head.y >= MAX_CELLS_Y ||
-        snakeRef.current.some(s => s.x === head.x && s.y === head.y)
-      ) {
+    const interval = setInterval(() => {
+      // Dequeue next direction if queued
+      if (inputQueueRef.current.length > 0) {
+        dirRef.current = inputQueueRef.current.shift()!;
+      }
+
+      let nextX = snakeRef.current[0].x + dirRef.current.x;
+      let nextY = snakeRef.current[0].y + dirRef.current.y;
+
+      // Check Mode Boundary Handling
+      if (modeRef.current === 'portal') {
+        // Wrap around seamlessly
+        let didWrap = false;
+        if (nextX < 0) {
+          nextX = MAX_CELLS_X - 1;
+          didWrap = true;
+        } else if (nextX >= MAX_CELLS_X) {
+          nextX = 0;
+          didWrap = true;
+        }
+
+        if (nextY < 0) {
+          nextY = MAX_CELLS_Y - 1;
+          didWrap = true;
+        } else if (nextY >= MAX_CELLS_Y) {
+          nextY = 0;
+          didWrap = true;
+        }
+
+        if (didWrap) {
+          playSfx('wrap');
+        }
+      } else {
+        // Classic mode: Wall hit = instant crash
+        if (nextX < 0 || nextX >= MAX_CELLS_X || nextY < 0 || nextY >= MAX_CELLS_Y) {
+          setIsDead(true);
+          setIsPlaying(false);
+          playSfx('die');
+          createExplosion(snakeRef.current[0].x, snakeRef.current[0].y, '#FF0055', 25);
+          const finalScore = scoreRef.current;
+          setTimeout(() => onGameOverRef.current(finalScore), 400);
+          return;
+        }
+      }
+
+      const head = { x: nextX, y: nextY };
+
+      // Self-collision check
+      if (snakeRef.current.some((s) => s.x === head.x && s.y === head.y)) {
         setIsDead(true);
         setIsPlaying(false);
         playSfx('die');
         createExplosion(head.x, head.y, '#FF0055', 25);
-
-        if (score > 1000) {
-          confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
-        }
-        setTimeout(() => onGameOver(score), 0);
+        const finalScore = scoreRef.current;
+        setTimeout(() => onGameOverRef.current(finalScore), 400);
         return;
       }
 
@@ -212,63 +377,95 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
 
       // Regular Food Collision
       if (head.x === foodRef.current.x && head.y === foodRef.current.y) {
+        setApplesEaten((prev) => prev + 1);
         const added = 100 * combo;
-        const newScore = score + added;
+        const newScore = scoreRef.current + added;
+        scoreRef.current = newScore;
         setScore(newScore);
-        setCombo(prev => Math.min(prev + 1, 5));
+        setCombo((prev) => Math.min(prev + 1, 5));
         if (newScore > highScore) setHighScore(newScore);
-        createExplosion(foodRef.current.x, foodRef.current.y, '#00F0FF', 14);
+
+        createExplosion(foodRef.current.x, foodRef.current.y, '#00F0FF', 16);
         playSfx('eat');
         spawnFood();
       }
       // Bonus Core Collision
       else if (bonusFoodRef.current && head.x === bonusFoodRef.current.x && head.y === bonusFoodRef.current.y) {
-        const added = 300 * combo;
-        const newScore = score + added;
+        const bonusPoints = 300 * combo + Math.floor(bonusFoodRef.current.timer * 4);
+        const newScore = scoreRef.current + bonusPoints;
+        scoreRef.current = newScore;
         setScore(newScore);
         if (newScore > highScore) setHighScore(newScore);
-        createExplosion(bonusFoodRef.current.x, bonusFoodRef.current.y, '#FFD700', 20);
+
+        createExplosion(bonusFoodRef.current.x, bonusFoodRef.current.y, '#FFD700', 22);
         playSfx('bonus');
         bonusFoodRef.current = null;
       } else {
         newSnake.pop();
       }
 
+      // Decrement Bonus Timer if active
+      if (bonusFoodRef.current) {
+        bonusFoodRef.current.timer--;
+        if (bonusFoodRef.current.timer <= 0) {
+          bonusFoodRef.current = null;
+        }
+      }
+
       snakeRef.current = newSnake;
 
-      // Render Frame
-      ctx.fillStyle = '#0B0819';
+      // 4. RENDER CANVAS
+      ctx.fillStyle = '#070512';
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // Grid background
-      ctx.strokeStyle = '#1A1438';
+      ctx.strokeStyle = '#150f33';
       ctx.lineWidth = 1;
       for (let x = 0; x <= CANVAS_WIDTH; x += GRID_SIZE) {
         ctx.beginPath();
-        ctx.moveTo(x, 0); ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, CANVAS_HEIGHT);
         ctx.stroke();
       }
       for (let y = 0; y <= CANVAS_HEIGHT; y += GRID_SIZE) {
         ctx.beginPath();
-        ctx.moveTo(0, y); ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.moveTo(0, y);
+        ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
 
-      // Draw Bonus Core (Gold Pulse)
+      // Draw Portal Edges if in Portal Mode
+      if (modeRef.current === 'portal') {
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#00F0FF';
+        ctx.shadowBlur = 8;
+        ctx.strokeRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.shadowBlur = 0;
+      }
+
+      // Draw Bonus Core (Gold Pulse with Countdown Ring)
       if (bonusFoodRef.current) {
+        const bx = bonusFoodRef.current.x * GRID_SIZE + GRID_SIZE / 2;
+        const by = bonusFoodRef.current.y * GRID_SIZE + GRID_SIZE / 2;
+
         ctx.fillStyle = '#FFD700';
         ctx.shadowColor = '#FFD700';
         ctx.shadowBlur = 18;
         ctx.beginPath();
-        ctx.arc(
-          bonusFoodRef.current.x * GRID_SIZE + GRID_SIZE / 2,
-          bonusFoodRef.current.y * GRID_SIZE + GRID_SIZE / 2,
-          GRID_SIZE / 2.2, 0, Math.PI * 2
-        );
+        ctx.arc(bx, by, GRID_SIZE / 2.2, 0, Math.PI * 2);
         ctx.fill();
+
+        // Countdown circular indicator
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const progress = bonusFoodRef.current.timer / 75;
+        ctx.arc(bx, by, GRID_SIZE / 2.2 + 3, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
+        ctx.stroke();
       }
 
-      // Draw Food (Electric Cyan Glow)
+      // Draw Regular Food (Electric Cyan Energy Cell)
       ctx.fillStyle = '#00F0FF';
       ctx.shadowColor = '#00F0FF';
       ctx.shadowBlur = 15;
@@ -276,11 +473,13 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
       ctx.arc(
         foodRef.current.x * GRID_SIZE + GRID_SIZE / 2,
         foodRef.current.y * GRID_SIZE + GRID_SIZE / 2,
-        GRID_SIZE / 2.6, 0, Math.PI * 2
+        GRID_SIZE / 2.5,
+        0,
+        Math.PI * 2
       );
       ctx.fill();
 
-      // Draw Snake Body with Gradient Neon
+      // Draw Snake Body
       snakeRef.current.forEach((segment, idx) => {
         const isHead = idx === 0;
         ctx.fillStyle = isHead ? '#9D00FF' : '#5E00D9';
@@ -297,14 +496,16 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
         );
         ctx.fill();
 
-        // Cyber head eyes
+        // Head Eyes
         if (isHead) {
           ctx.fillStyle = '#00F0FF';
           ctx.beginPath();
           ctx.arc(
-            segment.x * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.x * 3,
-            segment.y * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.y * 3,
-            2.5, 0, Math.PI * 2
+            segment.x * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.x * 4,
+            segment.y * GRID_SIZE + GRID_SIZE / 2 + dirRef.current.y * 4,
+            2.5,
+            0,
+            Math.PI * 2
           );
           ctx.fill();
         }
@@ -329,51 +530,77 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
       });
 
       ctx.shadowBlur = 0;
-    }, 105);
+    }, baseInterval);
 
     return () => clearInterval(interval);
-  }, [isPlaying, isDead, score, highScore, combo, onGameOver, spawnFood, playSfx]);
+  }, [isPlaying, isDead, applesEaten, combo, highScore, speedMode, onGameOver, spawnFood, playSfx]);
 
-  const handleDirectionChange = useCallback((dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
-    if (dir === 'UP' && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: -1 };
-    else if (dir === 'DOWN' && dirRef.current.y === 0) nextDirRef.current = { x: 0, y: 1 };
-    else if (dir === 'LEFT' && dirRef.current.x === 0) nextDirRef.current = { x: -1, y: 0 };
-    else if (dir === 'RIGHT' && dirRef.current.x === 0) nextDirRef.current = { x: 1, y: 0 };
-  }, []);
+  const handleDirectionChange = useCallback(
+    (dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
+      if (dir === 'UP') queueDirection({ x: 0, y: -1 });
+      else if (dir === 'DOWN') queueDirection({ x: 0, y: 1 });
+      else if (dir === 'LEFT') queueDirection({ x: -1, y: 0 });
+      else if (dir === 'RIGHT') queueDirection({ x: 1, y: 0 });
+    },
+    [queueDirection]
+  );
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
-      {/* Top HUD - Ultra Slim */}
-      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-cyan">{score}</span>
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center font-sans">
+      {/* Top Streamlined HUD Strip */}
+      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/95 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
+        {/* Left: Mode & Score */}
+        <div className="flex items-center gap-2">
+          {/* Mode Badge Button */}
+          <button
+            onClick={() => setMode((prev) => (prev === 'classic' ? 'portal' : 'classic'))}
+            className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase flex items-center gap-1 transition-all cursor-pointer ${
+              mode === 'portal'
+                ? 'bg-portal-cyan text-black shadow-glow-cyan'
+                : 'bg-portal-card text-slate-300 border border-portal-border/60'
+            }`}
+            title={`Toggle Mode: ${mode === 'portal' ? 'Portal Wrap' : 'Classic Walls'}`}
+          >
+            {mode === 'portal' ? <Globe className="w-2.5 h-2.5" /> : <Square className="w-2.5 h-2.5" />}
+            {mode === 'portal' ? 'PORTAL' : 'WALLS'}
+          </button>
+
+          <div className="h-4 w-px bg-portal-border/60" />
+
+          {/* Score */}
+          <div className="flex items-center gap-1">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase">PTS</span>
+            <span className="text-xs font-black text-portal-cyan font-mono">{score}</span>
+          </div>
+
+          {/* Combo Multiplier */}
+          {combo > 1 && (
+            <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-portal-neon/20 border border-portal-neon/40 text-portal-neon text-[9px] font-black animate-pulse">
+              <Flame className="w-2.5 h-2.5 text-portal-cyan" /> {combo}x
+            </div>
+          )}
         </div>
 
-        {combo > 1 && (
-          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-portal-neon/20 border border-portal-neon/40 text-purple-300 text-[9px] font-black animate-pulse">
-            <Flame className="w-2.5 h-2.5 text-portal-cyan" /> {combo}x
-          </div>
-        )}
-
+        {/* Right: Best Score & Sound */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
-            <span className="text-[10px] text-slate-400 font-extrabold uppercase">Best</span>
-            <span className="text-sm font-black text-portal-gold">{highScore}</span>
+            <Trophy className="w-3 h-3 text-portal-gold" />
+            <span className="text-xs font-black text-portal-gold font-mono">{highScore}</span>
           </div>
+
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
-            title="Toggle Sound"
+            className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 cursor-pointer"
+            title={soundEnabled ? 'Mute' : 'Unmute'}
           >
             {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
           </button>
         </div>
       </div>
 
-      {/* Canvas Screen (9:16 Vertical Ratio with Viewport Height Scaling) */}
+      {/* Screen Canvas (9:16 Aspect Ratio) */}
       <div
-        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
+        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -381,7 +608,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain block"
         />
 
         {/* Start / Death Screen Overlay */}
@@ -396,7 +623,7 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
                 <p className="text-xs text-slate-400">Score synced to global rankings</p>
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-gradient-to-r from-portal-cyan to-blue-600 text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider shadow-glow-cyan active:scale-95 transition-all cursor-pointer"
                 >
                   <RotateCcw className="w-4 h-4" /> PLAY AGAIN
                 </button>
@@ -407,14 +634,34 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
                   <Sparkles className="w-7 h-7" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white">Joystick or WASD</h3>
-                  <p className="text-xs text-slate-400 mt-1">Eat cyan cores & golden energy cells</p>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">Cyber Snake</h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Slither, eat glowing energy cells, and toggle wrap-around portal mode!
+                  </p>
                 </div>
+
+                {/* Speed & Mode Selector */}
+                <div className="flex items-center justify-center gap-1.5 py-1">
+                  {(['classic', 'portal'] as SnakeMode[]).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setMode(m)}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase transition-all ${
+                        mode === m
+                          ? 'bg-portal-cyan text-black shadow-sm'
+                          : 'bg-portal-surface text-slate-400 border border-portal-border/60'
+                      }`}
+                    >
+                      {m === 'portal' ? '🌐 Wrap Portal' : '🧱 Solid Walls'}
+                    </button>
+                  ))}
+                </div>
+
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider shadow-glow-cyan active:scale-95 transition-all cursor-pointer"
                 >
-                  <Play className="w-4 h-4 fill-black" /> START RUN
+                  <Play className="w-4 h-4 fill-black" /> START SLITHER
                 </button>
               </div>
             )}
@@ -423,12 +670,14 @@ export default function NeonSnakeGame({ gameId, onGameOver }: NeonSnakeGameProps
       </div>
 
       {/* Switchable Joystick / Arrow D-Pad (Mobile / Touch) */}
-      <div className="mt-3 flex justify-center w-full sm:hidden">
-        <MobileGamepad
-          mode="4way"
-          onDirectionChange={handleDirectionChange}
-          label="STEER"
-        />
+      <div className="mt-2 flex justify-center w-full sm:hidden">
+        <MobileGamepad mode="4way" onDirectionChange={handleDirectionChange} label="STEER" />
+      </div>
+
+      {/* Desktop Helper Bar */}
+      <div className="hidden md:flex w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] mt-1.5 items-center justify-between text-[9px] font-bold text-slate-400 bg-portal-card/80 px-3 py-1 rounded-xl border border-portal-border/60 shrink-0">
+        <span className="text-portal-cyan flex items-center gap-1">⌨️ [WASD / ARROWS] STEER</span>
+        <span className="text-portal-yellow flex items-center gap-1">⚡ DOUBLE-BUFFER QUEUE ACTIVE</span>
       </div>
     </div>
   );

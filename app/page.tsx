@@ -582,11 +582,20 @@ export default function ArcadePortalDashboard() {
 
   // Filtered games (excluding hidden games)
   const filteredGames = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    const searchTerms = query.split(/\s+/).filter(Boolean);
+
     return games.filter(game => {
       if (game.status === 'hidden') return false;
-      const matchesSearch = game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            game.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            game.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch =
+        searchTerms.length === 0 ||
+        searchTerms.every(
+          term =>
+            game.title.toLowerCase().includes(term) ||
+            game.slug.toLowerCase().includes(term) ||
+            game.category.toLowerCase().includes(term) ||
+            game.description.toLowerCase().includes(term)
+        );
       const matchesCategory = selectedCategory === 'ALL'
         ? true
         : selectedCategory === 'UPCOMING'
@@ -638,7 +647,7 @@ export default function ArcadePortalDashboard() {
 
                   {/* Active filter counter pill if active */}
                   {selectedCategory !== 'ALL' && !isSidebarOpen && (
-                    <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-black uppercase rounded bg-black text-white border border-black">
+                    <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-black text-white border border-black">
                       {selectedCategory}
                     </span>
                   )}
@@ -661,8 +670,8 @@ export default function ArcadePortalDashboard() {
                       PORTAL
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">
-                    {games.length > 0 ? `${games.length} Mini-Games` : '21 Mini-Games'}
+                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block" suppressHydrationWarning>
+                    {`${games.length} Mini-Games`}
                   </p>
                 </div>
               </div>

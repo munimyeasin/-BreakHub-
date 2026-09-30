@@ -1,0 +1,45 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: SIGNAL RESTORED! INTERNET CONNECTION ACTIVE.
+    - link "ENTER ARCADE" [ref=e9] [cursor=pointer]:
+      - /url: /
+  - generic [ref=e10]:
+    - generic [ref=e15]:
+      - generic [ref=e16]: ONLINE // READY
+      - generic [ref=e25]:
+        - button "Mute 8-Bit Audio" [ref=e26] [cursor=pointer]
+        - generic [ref=e31]: "PORTAL: CACHED"
+    - generic [ref=e32]:
+      - generic [ref=e33]: NO INTERNET DETECTED
+      - heading "TRANSMISSION SEVERED" [level=1] [ref=e41]
+      - paragraph [ref=e42]: Your connection went down, but the fun doesn't have to stop! Play our built-in offline Cyber Runner mini-game below while we scan for a signal.
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - generic [ref=e45]: Cyber Runner [Offline Arcade]
+        - generic [ref=e49]:
+          - generic [ref=e50]: "SCORE: 0"
+          - generic [ref=e54]: "BEST: 0"
+      - generic "Click or Tap anywhere to Jump!" [ref=e61] [cursor=pointer]: SPACE / TAP TO JUMP
+    - generic [ref=e63]:
+      - button "RETRY SIGNAL" [ref=e64] [cursor=pointer]
+      - link "HOME (CACHED)" [ref=e71] [cursor=pointer]:
+        - /url: /
+      - button "PLAY RUNNER" [ref=e76] [cursor=pointer]
+    - generic [ref=e81]:
+      - generic [ref=e82]: Tactical Connection Intel
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: •
+          - generic [ref=e89]: All 20+ mini-games support offline cache once previously loaded.
+        - generic [ref=e90]:
+          - generic [ref=e91]: •
+          - generic [ref=e92]: Local XP and offline high scores are preserved in device storage.
+        - generic [ref=e93]:
+          - generic [ref=e94]: •
+          - generic [ref=e95]: Online leaderboards sync automatically as soon as Wi-Fi reconnects.
+        - generic [ref=e96]:
+          - generic [ref=e97]: •
+          - generic [ref=e98]: Press [Space] or [Tap] anytime to jump over glitch firewalls.
+    - generic [ref=e99]:
+      - generic [ref=e100]: "CLIENT_ENGINE: V1.4_OFFLINE_READY"
+      - generic [ref=e103]: PWA_SERVICE_CACHE // ACTIVE

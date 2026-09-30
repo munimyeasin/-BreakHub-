@@ -425,29 +425,30 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
   }, [isPlaying, isDead, onGameOver, playSfx]);
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center">
-      {/* HUD - Ultra Slim */}
-      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Dist</span>
-          <span className="text-sm font-black text-portal-cyan">{Math.floor(distance / 10)}m</span>
+    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center font-mono">
+      {/* HUD - Neo-Brutalist Bar */}
+      <div className="w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] flex items-center justify-between bg-black text-white px-3.5 py-2 border-2 border-black shadow-neo-sm mb-2 shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider">Dist</span>
+          <span className="text-sm font-black text-[#7DF9FF]">{Math.floor(distance / 10)}m</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">Score</span>
-          <span className="text-sm font-black text-portal-gold">{score}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-zinc-400 font-black uppercase tracking-wider">Score</span>
+          <span className="text-sm font-black text-[#FFF570]">{score}</span>
         </div>
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60"
+          className="p-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 active:scale-95 transition-transform"
+          title="Toggle Audio"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-[#7DF9FF]" /> : <VolumeX className="w-3.5 h-3.5 text-zinc-500" />}
         </button>
       </div>
 
       {/* Screen Canvas (9:16 Aspect Ratio with Viewport Height Scaling) */}
       <div
         onClick={() => { if (isPlaying && !isDead) jump(); }}
-        className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none cursor-pointer w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
+        className="relative overflow-hidden border-2 border-black shadow-neo bg-[#0B0819] touch-none cursor-pointer w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0"
       >
         <canvas
           ref={canvasRef}
@@ -457,34 +458,38 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
         />
 
         {!isPlaying && (
-          <div className="absolute inset-0 bg-portal-bg/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-3">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-4">
             {isDead ? (
-              <div className="space-y-3">
-                <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] font-black uppercase">
-                  Run Over
+              <div className="space-y-4 w-full max-w-xs">
+                <span className="inline-block px-3 py-1 bg-[#FF63C6] text-black border-2 border-black font-black text-xs uppercase shadow-neo-sm">
+                  RUN TERMINATED
                 </span>
-                <h3 className="text-2xl font-black text-white">Score: {score}</h3>
+                <div className="bg-zinc-950 border-2 border-black p-3.5 shadow-neo-sm">
+                  <div className="text-[10px] text-zinc-400 font-black uppercase">Final Distance & Score</div>
+                  <h3 className="text-2xl font-black text-[#FFF570] mt-0.5">{score} PTS</h3>
+                  <div className="text-xs font-bold text-[#7DF9FF] mt-1">{Math.floor(distance / 10)} METERS</div>
+                </div>
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#7DF9FF] text-black font-black text-sm border-2 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
                 >
-                  <RotateCcw className="w-4 h-4" /> TRY AGAIN
+                  <RotateCcw className="w-4 h-4" /> REBOOT RUNNER
                 </button>
               </div>
             ) : (
-              <div className="space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-portal-neon/20 border border-portal-neon/40 flex items-center justify-center mx-auto text-portal-cyan shadow-glow-cyan">
-                  <Zap className="w-7 h-7" />
+              <div className="space-y-4 w-full max-w-xs">
+                <div className="w-14 h-14 bg-[#FFF570] border-2 border-black shadow-neo-sm flex items-center justify-center mx-auto text-black">
+                  <Zap className="w-7 h-7 fill-black" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-white">Cyber Dash 2077</h3>
-                  <p className="text-xs text-slate-400 mt-1">Tap screen or Space to jump (Double jump available!).</p>
+                  <h3 className="text-xl font-black text-white tracking-wider">CYBER DASH 2077</h3>
+                  <p className="text-xs text-zinc-400 font-medium mt-1">Tap screen or Space to jump (Double jump available!).</p>
                 </div>
                 <button
                   onClick={startGame}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-portal-cyan text-black font-black text-sm shadow-glow-cyan active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#7DF9FF] text-black font-black text-sm border-2 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
                 >
-                  <Play className="w-4 h-4 fill-black" /> START DASH
+                  <Play className="w-4 h-4 fill-black" /> LAUNCH RUNNER
                 </button>
               </div>
             )}
@@ -493,11 +498,11 @@ export default function CyberDashGame({ gameId, onGameOver }: CyberDashGameProps
       </div>
 
       {/* Mobile Jump Button */}
-      <div className="mt-2.5 sm:hidden w-full px-1">
+      <div className="mt-2.5 sm:hidden w-full max-w-[min(100%,calc(min(78vh,680px)*9/16))] px-1">
         <button
           onClick={jump}
           disabled={!isPlaying || isDead}
-          className="w-full py-3 bg-portal-surface border border-portal-cyan/60 text-portal-cyan font-black text-sm rounded-xl active:bg-portal-cyan active:text-black shadow-glow-cyan"
+          className="w-full py-3.5 bg-[#FF63C6] border-2 border-black text-black font-black text-sm shadow-neo active:translate-x-1 active:translate-y-1 active:shadow-none transition-all disabled:opacity-50"
         >
           ▲ TAP TO JUMP (DOUBLE JUMP)
         </button>
