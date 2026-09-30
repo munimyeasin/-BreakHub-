@@ -1459,41 +1459,35 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         const dist = Math.hypot(p.x + p.width / 2 - pow.x, p.y + p.height / 2 - pow.y);
         if (dist < pow.radius + p.width / 2) {
           playSfxRef.current('powerup');
-          if (inventoryRef.current.length < 3) {
-            inventoryRef.current.push(pow.type);
-            setInventory([...inventoryRef.current]);
-            const slotNum = inventoryRef.current.length;
-            const typeLabel =
-              pow.type === 'spread'
-                ? 'SPREAD LASER'
-                : pow.type === 'shield'
-                ? 'SHIELD'
-                : pow.type === 'nuke'
-                ? 'EMP NUKE'
-                : 'HYPERDRIVE';
-            addActionBadge(pow.x, pow.y, `STORED: ${typeLabel} [${slotNum}]`);
-          } else {
-            // Vault full -> Auto-trigger immediately so power-up is not wasted
-            if (pow.type === 'spread') {
-              p.tripleShotTimer = 420;
-              activePowerupRef.current = 'TRIPLE SPREAD LASER';
-              setActivePowerup('TRIPLE SPREAD LASER');
-              addActionBadge(pow.x, pow.y, 'TRIPLE LASERS!');
-            } else if (pow.type === 'shield') {
-              p.hasShield = true;
-              activePowerupRef.current = 'ENERGY SHIELD';
-              setActivePowerup('ENERGY SHIELD');
-              addActionBadge(pow.x, pow.y, 'SHIELD ACTIVE!');
-            } else if (pow.type === 'nuke') {
-              triggerNuke();
-            } else if (pow.type === 'hyper') {
-              p.hyperTimer = 340;
-              activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
-              setActivePowerup('HYPERDRIVE OVERDRIVE');
-              addActionBadge(pow.x, pow.y, 'HYPER DRIVE!');
-              playSfxRef.current('hyper_start');
-            }
+          // Auto-use on pickup — consume immediately
+          if (pow.type === 'spread') {
+            p.tripleShotTimer = 420;
+            activePowerupRef.current = 'TRIPLE SPREAD LASER';
+            setActivePowerup('TRIPLE SPREAD LASER');
+            addActionBadge(pow.x, pow.y, 'TRIPLE LASERS!');
+          } else if (pow.type === 'shield') {
+            p.hasShield = true;
+            activePowerupRef.current = 'ENERGY SHIELD';
+            setActivePowerup('ENERGY SHIELD');
+            addActionBadge(pow.x, pow.y, 'SHIELD ACTIVE!');
+          } else if (pow.type === 'nuke') {
+            triggerNuke();
+          } else if (pow.type === 'hyper') {
+            p.hyperTimer = 340;
+            activePowerupRef.current = 'HYPERDRIVE OVERDRIVE';
+            setActivePowerup('HYPERDRIVE OVERDRIVE');
+            addActionBadge(pow.x, pow.y, 'HYPER DRIVE!');
+            playSfxRef.current('hyper_start');
           }
+          const typeLabel =
+            pow.type === 'spread'
+              ? 'SPREAD LASER'
+              : pow.type === 'shield'
+              ? 'SHIELD'
+              : pow.type === 'nuke'
+              ? 'EMP NUKE'
+              : 'HYPERDRIVE';
+          addActionBadge(pow.x, pow.y, `USED: ${typeLabel}`);
 
           scoreRef.current += 200;
           powerupsRef.current.splice(i, 1);
