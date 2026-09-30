@@ -823,15 +823,15 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
     if (p.tripleShotTimer > 0) {
       bulletsRef.current.push(
-        { x: p.x + 4, y: p.y - 2, vx: -7, vy: -38, color: '#39FF14' },
-        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -42, color: '#00F0FF' },
+        { x: p.x + 4, y: p.y - 2, vx: -7, vy: -50, color: '#39FF14' },
+        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -55, color: '#00F0FF' },
         { x: p.x + p.width - 8, y: p.y - 2, vx: 7, vy: -38, color: '#39FF14' }
       );
       playSfxRef.current('spread');
     } else {
       bulletsRef.current.push(
-        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
-        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -55 : -48, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -55 : -48, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
       );
       playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
     }
