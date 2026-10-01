@@ -382,6 +382,12 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // DPR scaling for HiDPI displays
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = CANVAS_WIDTH * dpr;
+    canvas.height = CANVAS_HEIGHT * dpr;
+    ctx.scale(dpr, dpr);
+
     let beatCounter = 0;
 
     const render = () => {

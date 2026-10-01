@@ -309,6 +309,12 @@ export default function NeonSnakeGame({ onGameOver }: NeonSnakeGameProps) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // DPR scaling for HiDPI displays
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = CANVAS_WIDTH * dpr;
+    canvas.height = CANVAS_HEIGHT * dpr;
+    ctx.scale(dpr, dpr);
+
     let baseInterval = SPEED_CONFIGS[speedMode].interval;
     if (speedMode === 'dynamic') {
       // Dynamic speed ramps up as apples are eaten

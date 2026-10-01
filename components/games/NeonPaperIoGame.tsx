@@ -619,6 +619,12 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // DPR scaling for HiDPI displays
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = CANVAS_WIDTH * dpr;
+    canvas.height = CANVAS_HEIGHT * dpr;
+    ctx.scale(dpr, dpr);
+
     let running = true;
     const stepInterval = 1000 / 14; // 14 steps per second for responsive pacing
 

@@ -240,6 +240,12 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver }: 
         return;
       }
 
+      // DPR scaling for HiDPI displays
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.scale(dpr, dpr);
+
       if (started && !isOver) {
         tickRef.current += 1;
 
@@ -561,9 +567,9 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver }: 
   }, [flap, reset]);
 
   return (
-    <div className="flex flex-col items-center w-screen h-[100dvh] md:w-full md:max-w-4xl md:max-h-[90vh] mx-auto select-none p-2">
+    <div className="flex flex-col items-center w-full max-w-full h-full flex-1 justify-center select-none p-2">
       {/* HUD */}
-      <div className="w-full bg-portal-card border-3 border-black rounded-xl p-3 mb-3 shadow-neo flex items-center justify-between gap-3">
+      <div className="w-full bg-portal-card border-3 border-black rounded-xl p-3 mb-3 shadow-neo flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3">
           <div className="bg-portal-surface border-2 border-black rounded-lg px-3 py-1 shadow-neo-sm">
             <div className="text-[10px] font-black text-portal-text-muted uppercase tracking-wider">SCORE</div>
@@ -601,7 +607,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver }: 
       </div>
 
       {/* Canvas Area */}
-      <div className="relative w-screen h-[calc(100dvh-8rem)] md:w-full md:max-w-4xl md:max-h-[90vh] md:mx-auto aspect-[420/620] bg-black rounded-2xl border-4 border-black shadow-neo-lg overflow-hidden">
+      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
         <canvas
           ref={canvasRef}
           width={W}

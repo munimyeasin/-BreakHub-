@@ -996,6 +996,12 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // DPR scaling for HiDPI displays
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = CANVAS_WIDTH * dpr;
+    canvas.height = CANVAS_HEIGHT * dpr;
+    ctx.scale(dpr, dpr);
+
     let animId: number;
     let lastTime = performance.now();
 

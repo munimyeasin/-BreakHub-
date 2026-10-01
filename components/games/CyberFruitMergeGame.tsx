@@ -187,6 +187,10 @@ interface FruitBody {
   isMerging: boolean;
   spawnTime: number;
   isResting: boolean;
+  // Water balloon deformation state
+  deformX: number;  // horizontal squish
+  deformY: number;  // vertical squish
+  impactScale: number; // impact bounce squash amount
 }
 
 // Particle Shockwave Effect
@@ -223,10 +227,10 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
   const FLOOR_Y = CANVAS_HEIGHT - 20;
   const DANGER_LINE_Y = 115;
   const DROPPER_Y = 55;
-  const GRAVITY = 0.28;
-  const RESTITUTION = 0.03;
-  const DAMPING_X = 0.992;
-  const DAMPING_Y = 0.996;
+  const GRAVITY = 0.35; // Higher gravity like real water balloon
+  const RESTITUTION = 0.08; // Low bounce — energy dissipates quickly like real water balloon
+  const DAMPING_X = 0.96; // Air resistance slows motion gradually
+  const DAMPING_Y = 0.96;
   const DAMPING_ROT = 0.98;
   const DANGER_MAX_TIME = 3.0; // seconds above line before game over
 
@@ -457,12 +461,12 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       tier,
       x: clampedX,
       y: DROPPER_Y,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: 1.5,
+      vx: (Math.random() - 0.5) * 0.8, // wobble drift
+      vy: 0.6, // slow initial fall
       radius: config.radius,
       mass: config.mass,
       rotation: Math.random() * Math.PI * 2,
-      vRot: (Math.random() - 0.5) * 0.05,
+      vRot: (Math.random() - 0.5) * 0.06, // gentle spin
       isMerging: false,
       spawnTime: performance.now(),
       isResting: false
@@ -563,6 +567,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       f.y += f.vy;
       f.vRot *= DAMPING_ROT;
       f.rotation += f.vRot;
+
     }
 
     // 2. Multi-step Constraint & Collision Resolution (8 sub-steps for smooth circle physics)
@@ -572,14 +577,18 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       for (let i = 0; i < fruits.length; i++) {
         const f = fruits[i];
 
-        // Floor boundary
+        // Floor boundary (water balloon splatter)
         if (f.y + f.radius > FLOOR_Y) {
+          // Water balloon squash on impact — stretch wide, compress flat
+          const impactForce = Math.abs(f.vy);
           f.y = FLOOR_Y - f.radius;
           if (f.vy > 0) {
-            f.vy = -f.vy * RESTITUTION;
+            f.vy = -f.vy * RESTITUTION * 0.7; // softer bounce
             // Floor rolling friction imparts angular velocity
             f.vRot += f.vx * 0.015;
-            f.vx *= 0.88;
+            f.vx *= 0.94;
+            // Water balloon spin-down
+            f.vRot *= 0.98;
           }
         }
 
@@ -639,15 +648,18 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
             f2.x += nx * overlap * m2Ratio;
             f2.y += ny * overlap * m2Ratio;
 
-            // Velocity Impulse Response
+            // Velocity Impulse Response (Energy dissipation)
+            // Unlike fruits dissipate energy quickly like water balloons hitting non-compressible surfaces
+            const energyRetention = f1.tier === f2.tier ? 0.4 : 0.15; // Same tier: partial bounce; Different tier: almost no bounce
+
             const kx = f1.vx - f2.vx;
             const ky = f1.vy - f2.vy;
-            const p = 2 * (nx * kx + ny * ky) / totalMass;
+            const p = (2 * (nx * kx + ny * ky) / totalMass) * energyRetention;
 
-            f1.vx -= p * f2.mass * nx * (1 + RESTITUTION);
-            f1.vy -= p * f2.mass * ny * (1 + RESTITUTION);
-            f2.vx += p * f1.mass * nx * (1 + RESTITUTION);
-            f2.vy += p * f1.mass * ny * (1 + RESTITUTION);
+            f1.vx -= p * f2.mass * nx;
+            f1.vy -= p * f2.mass * ny;
+            f2.vx += p * f1.mass * nx;
+            f2.vy += p * f1.mass * ny;
 
             // Tangential Friction & Spin
             const tx = -ny;
@@ -726,7 +738,7 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
           x: midX,
           y: midY,
           vx: (f1.vx + f2.vx) * 0.4,
-          vy: -2.0, // slight upward pop on merge
+          vy: -0.8, // gentle upward wobble on merge
           radius: nextConfig.radius,
           mass: nextConfig.mass,
           rotation: (f1.rotation + f2.rotation) / 2,
@@ -967,8 +979,6 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
     ctx.rotate(rotation);
 
     const r = config.radius;
-
-    // Glowing Neon Shadow
     ctx.shadowColor = config.glowColor;
     ctx.shadowBlur = isHanging ? 8 : 12;
 
@@ -1238,12 +1248,12 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       )}
 
       {/* Main Game Canvas Viewport */}
-      <div className="relative w-full max-w-full max-h-[100dvh] aspect-[420/620] bg-black rounded-2xl border-4 border-black shadow-neo-lg overflow-hidden flex items-center justify-center mx-auto">
+      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0 mx-auto">
         <canvas
           ref={canvasRef}
           onPointerMove={handlePointerMove}
           onPointerDown={handlePointerDown}
-          className="w-full h-full cursor-crosshair touch-none select-none"
+          className="w-full h-full object-contain cursor-crosshair touch-none select-none block"
         />
 
         {/* Danger Warning Banner Overlay */}

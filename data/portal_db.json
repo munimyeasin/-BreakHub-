@@ -202,7 +202,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg",
       "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "play_count": 28,
+      "play_count": 34,
       "rating": 4.9,
       "rating_count": 36,
       "status": "active",
@@ -215,7 +215,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
       "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 23,
+      "play_count": 45,
       "rating": 5,
       "rating_count": 52,
       "status": "active",
@@ -228,7 +228,7 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/flappy-bird.svg",
       "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "play_count": 66,
+      "play_count": 81,
       "rating": 4.8,
       "rating_count": 14,
       "status": "active",
@@ -254,7 +254,7 @@
       "category": "ACTION",
       "thumbnail_url": "/thumbnails/neon-missile-defense.svg",
       "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-      "play_count": 36,
+      "play_count": 37,
       "rating": 5,
       "rating_count": 42,
       "status": "active",
@@ -332,7 +332,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-minesweeper.svg",
       "description": "Procedural Neo-Brutalist Quantum Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
-      "play_count": 0,
+      "play_count": 6,
       "rating": 5,
       "rating_count": 38,
       "status": "active",
@@ -1466,6 +1466,188 @@
       "user_id": "usr_p00qpc7",
       "score": 65,
       "created_at": "2026-09-30T14:40:09.641Z"
+    },
+    {
+      "id": "sc_va2qdywsz",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 18,
+      "created_at": "2026-09-30T15:03:50.328Z"
+    },
+    {
+      "id": "sc_hfgtc6zf8",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 738,
+      "created_at": "2026-09-30T15:11:22.071Z"
+    },
+    {
+      "id": "sc_r5shcdk7q",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 1036,
+      "created_at": "2026-09-30T15:46:55.672Z"
+    },
+    {
+      "id": "sc_ox0y0ndc3",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 2314,
+      "created_at": "2026-09-30T16:02:03.885Z"
+    },
+    {
+      "id": "sc_yahraz78s",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 6,
+      "created_at": "2026-10-01T02:39:04.543Z"
+    },
+    {
+      "id": "sc_k7om5l9yf",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 844,
+      "created_at": "2026-10-01T03:32:41.617Z"
+    },
+    {
+      "id": "sc_sd7oh89r6",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 2062,
+      "created_at": "2026-10-01T03:33:36.425Z"
+    },
+    {
+      "id": "sc_piz6vvzye",
+      "game_id": "g_flappy_27",
+      "user_id": "usr_p00qpc7",
+      "score": 3,
+      "created_at": "2026-10-01T03:36:27.720Z"
+    },
+    {
+      "id": "sc_oglokclf7",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 455,
+      "created_at": "2026-10-01T03:53:09.058Z"
+    },
+    {
+      "id": "sc_xkmd9ok1d",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 85,
+      "created_at": "2026-10-01T03:53:14.760Z"
+    },
+    {
+      "id": "sc_n6pmpbbiw",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 650,
+      "created_at": "2026-10-01T03:53:53.239Z"
+    },
+    {
+      "id": "sc_nipifyl9l",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 240,
+      "created_at": "2026-10-01T03:54:17.765Z"
+    },
+    {
+      "id": "sc_fzuuu3a85",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 885,
+      "created_at": "2026-10-01T04:01:52.771Z"
+    },
+    {
+      "id": "sc_lylhhv7jd",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 8,
+      "created_at": "2026-10-01T04:28:50.943Z"
+    },
+    {
+      "id": "sc_xbyi7p5nt",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 50,
+      "created_at": "2026-10-01T04:33:30.955Z"
+    },
+    {
+      "id": "sc_9w0a8acds",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 18,
+      "created_at": "2026-10-01T04:33:41.211Z"
+    },
+    {
+      "id": "sc_ke5z737bd",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 28,
+      "created_at": "2026-10-01T04:33:59.629Z"
+    },
+    {
+      "id": "sc_mavd8jplu",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 2690,
+      "created_at": "2026-10-01T04:35:06.655Z"
+    },
+    {
+      "id": "sc_nx7drzbqb",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 558,
+      "created_at": "2026-10-01T04:35:35.760Z"
+    },
+    {
+      "id": "sc_ynbwt7ck1",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_p00qpc7",
+      "score": 1305,
+      "created_at": "2026-10-01T04:58:05.154Z"
+    },
+    {
+      "id": "sc_wtshlkvbw",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_p00qpc7",
+      "score": 2025,
+      "created_at": "2026-10-01T04:58:19.241Z"
+    },
+    {
+      "id": "sc_q7podqqw6",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_p00qpc7",
+      "score": 1350,
+      "created_at": "2026-10-01T04:58:24.036Z"
+    },
+    {
+      "id": "sc_i2oga4zw4",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_p00qpc7",
+      "score": 1800,
+      "created_at": "2026-10-01T04:58:35.423Z"
+    },
+    {
+      "id": "sc_371xetjp3",
+      "game_id": "g_sweeper_16",
+      "user_id": "usr_p00qpc7",
+      "score": 1530,
+      "created_at": "2026-10-01T04:58:48.836Z"
+    },
+    {
+      "id": "sc_u40u749ca",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 33058,
+      "created_at": "2026-10-01T05:09:39.863Z"
+    },
+    {
+      "id": "sc_tl25ud070",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 24608,
+      "created_at": "2026-10-01T05:13:57.192Z"
     }
   ],
   "ratings": [],
