@@ -24,6 +24,9 @@ import {
 import confetti from 'canvas-confetti';
 import MobileGamepad from '@/components/ui/MobileGamepad';
 
+const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 600;
+
 export interface CandyCrushGameProps {
   gameId: string;
   onGameOver: (finalScore: number) => void;

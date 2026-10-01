@@ -469,7 +469,10 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
       vRot: (Math.random() - 0.5) * 0.06, // gentle spin
       isMerging: false,
       spawnTime: performance.now(),
-      isResting: false
+      isResting: false,
+      deformX: 1,
+      deformY: 1,
+      impactScale: 0
     };
 
     fruitsRef.current.push(newFruit);
@@ -745,7 +748,10 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
           vRot: (Math.random() - 0.5) * 0.08,
           isMerging: false,
           spawnTime: performance.now(),
-          isResting: false
+          isResting: false,
+          deformX: 1,
+          deformY: 1,
+          impactScale: 0
         });
 
         if (nextTierIndex === 10) {
