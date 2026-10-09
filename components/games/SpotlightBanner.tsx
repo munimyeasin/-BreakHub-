@@ -473,7 +473,7 @@ export default function SpotlightBanner({
       {/* ========================================================= */}
       <div
         key={`desktop-${currentGame.id}-${transitionKey}`}
-        className={`hidden md:grid relative z-10 grid-cols-12 gap-5 lg:gap-6 items-center ${
+        className={`hidden md:grid relative z-10 grid-cols-12 gap-5 lg:gap-6 items-center min-h-[320px] lg:min-h-[380px] ${
           animDirection === 'next' ? 'animate-spotlight-next' : 'animate-spotlight-prev'
         }`}
       >

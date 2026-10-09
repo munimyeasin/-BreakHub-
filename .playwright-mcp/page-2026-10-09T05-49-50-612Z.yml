@@ -1,0 +1,505 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - button "Toggle navigation slide bar" [ref=e7] [cursor=pointer]:
+          - generic [ref=e8]: GENRES
+        - generic [ref=e17] [cursor=pointer]:
+          - generic [ref=e18]: BREAKHUB
+          - generic [ref=e19]: PORTAL
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - textbox "Search games, genres, puzzles... (/ or ⌘K)" [ref=e22]
+          - generic [ref=e23]: ⌘K
+        - button "Ranks" [ref=e24] [cursor=pointer]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - button "Cycle Break Hub UI Theme" [ref=e34] [cursor=pointer]:
+            - generic [ref=e37]: Dark
+          - button "Open Theme Engine" [ref=e38] [cursor=pointer]
+        - generic [ref=e45]:
+          - 'generic "Active Play Streak: 1 day. Click to view Daily Quests." [ref=e46] [cursor=pointer]': 1d
+          - 'generic "Player Level 1: Novice Netrunner (0/100 XP). Click to open Trophy Room." [ref=e52] [cursor=pointer]': LVL 1
+          - button "Daily Quests" [ref=e57] [cursor=pointer]
+          - button "Trophy Vault" [ref=e62] [cursor=pointer]
+          - button "Toggle Sound" [ref=e69] [cursor=pointer]
+        - button "Set Handle" [ref=e74] [cursor=pointer]
+  - generic [ref=e79]:
+    - generic [ref=e90]:
+      - generic [ref=e94]: Munim
+      - generic [ref=e95]: ignited a
+      - generic [ref=e96]: 7-Day Play Streak
+      - generic [ref=e97]: STREAK
+    - generic [ref=e98]:
+      - button "Slide 1" [ref=e99] [cursor=pointer]
+      - button "Slide 2" [ref=e100] [cursor=pointer]
+      - button "Slide 3" [ref=e101] [cursor=pointer]
+      - button "Slide 4" [ref=e102] [cursor=pointer]
+      - button "Slide 5" [ref=e103] [cursor=pointer]
+  - generic [ref=e104]:
+    - complementary [ref=e105]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - generic [ref=e108]:
+            - generic [ref=e109]: EXPLORE
+            - generic [ref=e113]: 23 Games
+          - generic [ref=e114]:
+            - button "All Games" [ref=e115] [cursor=pointer]
+            - button "Favorites 0" [ref=e122] [cursor=pointer]:
+              - generic [ref=e123]: Favorites
+              - generic [ref=e127]: "0"
+            - button "Hall of Fame" [ref=e128] [cursor=pointer]
+            - button "About Project 23 Games" [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]: About Project
+              - generic [ref=e144]: 23 Games
+            - button "About Developer Creator" [ref=e145] [cursor=pointer]:
+              - generic [ref=e146]: About Developer
+              - generic [ref=e153]: Creator
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - generic [ref=e156]: QUESTS & REWARDS
+            - generic [ref=e161]: LIVE
+          - generic [ref=e162]:
+            - button "Daily Quests 3/day" [ref=e163] [cursor=pointer]:
+              - generic [ref=e164]: Daily Quests
+              - generic [ref=e170]: 3/day
+            - button "Trophy Vault" [ref=e171] [cursor=pointer]
+            - button "Game Roulette RANDOM" [ref=e179] [cursor=pointer]:
+              - generic [ref=e180]: Game Roulette
+              - generic [ref=e185]: RANDOM
+            - button "Request a Game WISHLIST" [ref=e186] [cursor=pointer]:
+              - generic [ref=e187]: Request a Game
+              - generic [ref=e191]: WISHLIST
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - generic [ref=e194]: GENRES & MODES
+            - generic [ref=e197]: Filter
+          - generic [ref=e198]:
+            - button "All Genres 23" [ref=e199] [cursor=pointer]:
+              - generic [ref=e200]: All Genres
+              - generic [ref=e205]: "23"
+            - button "Upcoming / Soon" [ref=e206] [cursor=pointer]
+            - button "Arcade Classics 4" [ref=e212] [cursor=pointer]:
+              - generic [ref=e213]: Arcade Classics
+              - generic [ref=e217]: "4"
+            - button "Action & Rush 5" [ref=e218] [cursor=pointer]:
+              - generic [ref=e219]: Action & Rush
+              - generic [ref=e223]: "5"
+            - button "Neural Puzzles 7" [ref=e224] [cursor=pointer]:
+              - generic [ref=e225]: Neural Puzzles
+              - generic [ref=e229]: "7"
+            - button "Tactical Strategy 7" [ref=e230] [cursor=pointer]:
+              - generic [ref=e231]: Tactical Strategy
+              - generic [ref=e236]: "7"
+            - button "Card & Memory" [ref=e237] [cursor=pointer]
+        - generic [ref=e244]:
+          - generic [ref=e245]:
+            - generic [ref=e246]: THEME & DESIGN
+            - generic [ref=e253]: Neo-Brutal
+          - generic [ref=e254]:
+            - generic [ref=e255]:
+              - button "Dark" [ref=e256] [cursor=pointer]
+              - button "Light" [ref=e260] [cursor=pointer]
+            - button "Design Engine Lab 5 THEMES" [ref=e268] [cursor=pointer]:
+              - generic [ref=e269]: Design Engine Lab
+              - generic [ref=e274]: 5 THEMES
+      - generic "Edit Player Handle" [ref=e276] [cursor=pointer]:
+        - generic [ref=e281]:
+          - paragraph [ref=e282]: Player Tag
+          - paragraph [ref=e283]: Set Gamer Tag
+    - main [ref=e287]:
+      - region "Featured Arcade Games Spotlight" [ref=e288]:
+        - generic [ref=e291]:
+          - generic [ref=e292]: SPOTLIGHT
+          - generic [ref=e298]:
+            - button "Previous Game" [ref=e299] [cursor=pointer]
+            - button "Next Game" [ref=e302] [cursor=pointer]
+        - generic [ref=e305]:
+          - generic [ref=e307] [cursor=pointer]:
+            - img "Cyber Fruit Merge" [ref=e308]
+            - generic:
+              - generic: PUZZLE
+              - generic: "5.0"
+            - generic: 0 PLAYS
+          - generic [ref=e313]:
+            - generic [ref=e314]:
+              - generic [ref=e315]: PUZZLE
+              - generic [ref=e318]:
+                - text: "5.0"
+                - generic [ref=e321]: (52 reviews)
+              - generic [ref=e322]: 0 PLAYS
+            - generic [ref=e323]:
+              - heading "Cyber Fruit Merge" [level=1] [ref=e324]
+              - paragraph [ref=e326]: Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.
+            - generic [ref=e327]:
+              - button "PLAY NOW" [ref=e328] [cursor=pointer]
+              - button "Leaderboard" [ref=e332] [cursor=pointer]
+              - button "Add to favorites" [ref=e340] [cursor=pointer]
+      - generic [ref=e343]:
+        - button "All Games 23" [ref=e344] [cursor=pointer]:
+          - generic [ref=e348]: All Games
+          - generic [ref=e349]: "23"
+        - button "Arcade 4" [ref=e350] [cursor=pointer]:
+          - generic [ref=e353]: Arcade
+          - generic [ref=e354]: "4"
+        - button "Action 5" [ref=e355] [cursor=pointer]:
+          - generic [ref=e358]: Action
+          - generic [ref=e359]: "5"
+        - button "Puzzles 7" [ref=e360] [cursor=pointer]:
+          - generic [ref=e363]: Puzzles
+          - generic [ref=e364]: "7"
+        - button "Strategy 7" [ref=e365] [cursor=pointer]:
+          - generic [ref=e369]: Strategy
+          - generic [ref=e370]: "7"
+        - button "Cards 0" [ref=e371] [cursor=pointer]:
+          - generic [ref=e376]: Cards
+          - generic [ref=e377]: "0"
+        - button "Coming Soon 0" [ref=e378] [cursor=pointer]:
+          - generic [ref=e382]: Coming Soon
+          - generic [ref=e383]: "0"
+      - heading "Available Mini-Games 23" [level=2] [ref=e386]:
+        - generic [ref=e390]: Available Mini-Games
+        - generic [ref=e391]: "23"
+      - generic [ref=e392]:
+        - button "Play Cyber Fruit Merge - PUZZLE retro arcade game" [ref=e393] [cursor=pointer]:
+          - generic [ref=e394]:
+            - img "Cyber Fruit Merge - PUZZLE retro arcade mini-game thumbnail" [ref=e395]
+            - generic [ref=e396]: FEATURED
+            - button "Add to favorites" [ref=e401]
+            - button "View Top Scores" [ref=e404]
+          - generic [ref=e411]:
+            - generic [ref=e412]:
+              - generic [ref=e413]: PUZZLE
+              - heading "Cyber Fruit Merge" [level=3] [ref=e415]
+            - generic [ref=e416]:
+              - generic [ref=e417]: 0 PLAYS
+              - button "5.0 (52)" [ref=e419]:
+                - generic [ref=e422]: "5.0"
+                - generic [ref=e423]: (52)
+        - button "Play Neon Flappy Flyer - ARCADE retro arcade game" [ref=e424] [cursor=pointer]:
+          - generic [ref=e425]:
+            - img "Neon Flappy Flyer - ARCADE retro arcade mini-game thumbnail" [ref=e426]
+            - generic [ref=e427]: FEATURED
+            - button "Add to favorites" [ref=e432]
+            - button "View Top Scores" [ref=e435]
+          - generic [ref=e442]:
+            - generic [ref=e443]:
+              - generic [ref=e444]: ARCADE
+              - heading "Neon Flappy Flyer" [level=3] [ref=e446]
+            - generic [ref=e447]:
+              - generic [ref=e448]: 0 PLAYS
+              - button "4.8 (14)" [ref=e450]:
+                - generic [ref=e453]: "4.8"
+                - generic [ref=e454]: (14)
+        - button "Play Neon Starfighter - ARCADE retro arcade game" [ref=e455] [cursor=pointer]:
+          - generic [ref=e456]:
+            - img "Neon Starfighter - ARCADE retro arcade mini-game thumbnail" [ref=e457]
+            - generic [ref=e458]: FEATURED
+            - button "Add to favorites" [ref=e463]
+            - button "View Top Scores" [ref=e466]
+          - generic [ref=e473]:
+            - generic [ref=e474]:
+              - generic [ref=e475]: ARCADE
+              - heading "Neon Starfighter" [level=3] [ref=e477]
+            - generic [ref=e478]:
+              - generic [ref=e479]: 0 PLAYS
+              - button "4.9 (28)" [ref=e481]:
+                - generic [ref=e484]: "4.9"
+                - generic [ref=e485]: (28)
+        - button "Play Cyber Katana Slicer - ACTION retro arcade game" [ref=e486] [cursor=pointer]:
+          - generic [ref=e487]:
+            - img "Cyber Katana Slicer - ACTION retro arcade mini-game thumbnail" [ref=e488]
+            - generic [ref=e489]: FEATURED
+            - button "Add to favorites" [ref=e494]
+            - button "View Top Scores" [ref=e497]
+          - generic [ref=e504]:
+            - generic [ref=e505]:
+              - generic [ref=e506]: ACTION
+              - heading "Cyber Katana Slicer" [level=3] [ref=e508]
+            - generic [ref=e509]:
+              - generic [ref=e510]: 0 PLAYS
+              - button "4.9 (36)" [ref=e512]:
+                - generic [ref=e515]: "4.9"
+                - generic [ref=e516]: (36)
+        - button "Play Naval Grid Strike - STRATEGY retro arcade game" [ref=e517] [cursor=pointer]:
+          - generic [ref=e518]:
+            - img "Naval Grid Strike - STRATEGY retro arcade mini-game thumbnail" [ref=e519]
+            - generic [ref=e520]: FEATURED
+            - button "Add to favorites" [ref=e525]
+            - button "View Top Scores" [ref=e528]
+          - generic [ref=e535]:
+            - generic [ref=e536]:
+              - generic [ref=e537]: STRATEGY
+              - heading "Naval Grid Strike" [level=3] [ref=e539]
+            - generic [ref=e540]:
+              - generic [ref=e541]: 0 PLAYS
+              - button "5.0 (56)" [ref=e543]:
+                - generic [ref=e546]: "5.0"
+                - generic [ref=e547]: (56)
+        - button "Play Neon Missile Defense - ACTION retro arcade game" [ref=e548] [cursor=pointer]:
+          - generic [ref=e549]:
+            - img "Neon Missile Defense - ACTION retro arcade mini-game thumbnail" [ref=e550]
+            - generic [ref=e551]: FEATURED
+            - button "Add to favorites" [ref=e556]
+            - button "View Top Scores" [ref=e559]
+          - generic [ref=e566]:
+            - generic [ref=e567]:
+              - generic [ref=e568]: ACTION
+              - heading "Neon Missile Defense" [level=3] [ref=e570]
+            - generic [ref=e571]:
+              - generic [ref=e572]: 0 PLAYS
+              - button "5.0 (42)" [ref=e574]:
+                - generic [ref=e577]: "5.0"
+                - generic [ref=e578]: (42)
+        - button "Play Quantum Cyber Chess - STRATEGY retro arcade game" [ref=e579] [cursor=pointer]:
+          - generic [ref=e580]:
+            - img "Quantum Cyber Chess - STRATEGY retro arcade mini-game thumbnail" [ref=e581]
+            - generic [ref=e582]: FEATURED
+            - button "Add to favorites" [ref=e587]
+            - button "View Top Scores" [ref=e590]
+          - generic [ref=e597]:
+            - generic [ref=e598]:
+              - generic [ref=e599]: STRATEGY
+              - heading "Quantum Cyber Chess" [level=3] [ref=e601]
+            - generic [ref=e602]:
+              - generic [ref=e603]: 0 PLAYS
+              - button "5.0 (68)" [ref=e605]:
+                - generic [ref=e608]: "5.0"
+                - generic [ref=e609]: (68)
+        - button "Play Multidimension XO - STRATEGY retro arcade game" [ref=e610] [cursor=pointer]:
+          - generic [ref=e611]:
+            - img "Multidimension XO - STRATEGY retro arcade mini-game thumbnail" [ref=e612]
+            - generic [ref=e613]: FEATURED
+            - button "Add to favorites" [ref=e618]
+            - button "View Top Scores" [ref=e621]
+          - generic [ref=e628]:
+            - generic [ref=e629]:
+              - generic [ref=e630]: STRATEGY
+              - heading "Multidimension XO" [level=3] [ref=e632]
+            - generic [ref=e633]:
+              - generic [ref=e634]: 0 PLAYS
+              - button "4.9 (24)" [ref=e636]:
+                - generic [ref=e639]: "4.9"
+                - generic [ref=e640]: (24)
+        - button "Play Tetra Matrix - PUZZLE retro arcade game" [ref=e641] [cursor=pointer]:
+          - generic [ref=e642]:
+            - img "Tetra Matrix - PUZZLE retro arcade mini-game thumbnail" [ref=e643]
+            - generic [ref=e644]: FEATURED
+            - button "Add to favorites" [ref=e649]
+            - button "View Top Scores" [ref=e652]
+          - generic [ref=e659]:
+            - generic [ref=e660]:
+              - generic [ref=e661]: PUZZLE
+              - heading "Tetra Matrix" [level=3] [ref=e663]
+            - generic [ref=e664]:
+              - generic [ref=e665]: 0 PLAYS
+              - button "5.0 (45)" [ref=e667]:
+                - generic [ref=e670]: "5.0"
+                - generic [ref=e671]: (45)
+        - button "Play Neon Candy Blast - PUZZLE retro arcade game" [ref=e672] [cursor=pointer]:
+          - generic [ref=e673]:
+            - img "Neon Candy Blast - PUZZLE retro arcade mini-game thumbnail" [ref=e674]
+            - generic [ref=e675]: FEATURED
+            - button "Add to favorites" [ref=e680]
+            - button "View Top Scores" [ref=e683]
+          - generic [ref=e690]:
+            - generic [ref=e691]:
+              - generic [ref=e692]: PUZZLE
+              - heading "Neon Candy Blast" [level=3] [ref=e694]
+            - generic [ref=e695]:
+              - generic [ref=e696]: 0 PLAYS
+              - button "5.0 (64)" [ref=e698]:
+                - generic [ref=e701]: "5.0"
+                - generic [ref=e702]: (64)
+        - button "Play Singularity Horizon - STRATEGY retro arcade game" [ref=e703] [cursor=pointer]:
+          - generic [ref=e704]:
+            - img "Singularity Horizon - STRATEGY retro arcade mini-game thumbnail" [ref=e705]
+            - generic [ref=e706]: FEATURED
+            - button "Add to favorites" [ref=e711]
+            - button "View Top Scores" [ref=e714]
+          - generic [ref=e721]:
+            - generic [ref=e722]:
+              - generic [ref=e723]: STRATEGY
+              - heading "Singularity Horizon" [level=3] [ref=e725]
+            - generic [ref=e726]:
+              - generic [ref=e727]: 0 PLAYS
+              - button "5.0 (48)" [ref=e729]:
+                - generic [ref=e732]: "5.0"
+                - generic [ref=e733]: (48)
+        - button "Play Quantum Minefield - PUZZLE retro arcade game" [ref=e734] [cursor=pointer]:
+          - generic [ref=e735]:
+            - img "Quantum Minefield - PUZZLE retro arcade mini-game thumbnail" [ref=e736]
+            - generic [ref=e737]: FEATURED
+            - button "Add to favorites" [ref=e742]
+            - button "View Top Scores" [ref=e745]
+          - generic [ref=e752]:
+            - generic [ref=e753]:
+              - generic [ref=e754]: PUZZLE
+              - heading "Quantum Minefield" [level=3] [ref=e756]
+            - generic [ref=e757]:
+              - generic [ref=e758]: 0 PLAYS
+              - button "5.0 (38)" [ref=e760]:
+                - generic [ref=e763]: "5.0"
+                - generic [ref=e764]: (38)
+        - button "Play Cyber Labyrinth Escape - PUZZLE retro arcade game" [ref=e765] [cursor=pointer]:
+          - generic [ref=e766]:
+            - img "Cyber Labyrinth Escape - PUZZLE retro arcade mini-game thumbnail" [ref=e767]
+            - generic [ref=e768]: FEATURED
+            - button "Add to favorites" [ref=e773]
+            - button "View Top Scores" [ref=e776]
+          - generic [ref=e783]:
+            - generic [ref=e784]:
+              - generic [ref=e785]: PUZZLE
+              - heading "Cyber Labyrinth Escape" [level=3] [ref=e787]
+            - generic [ref=e788]:
+              - generic [ref=e789]: 0 PLAYS
+              - button "5.0 (42)" [ref=e791]:
+                - generic [ref=e794]: "5.0"
+                - generic [ref=e795]: (42)
+        - button "Play Quantum XO - STRATEGY retro arcade game" [ref=e796] [cursor=pointer]:
+          - generic [ref=e797]:
+            - img "Quantum XO - STRATEGY retro arcade mini-game thumbnail" [ref=e798]
+            - button "Add to favorites" [ref=e799]
+            - button "View Top Scores" [ref=e802]
+          - generic [ref=e809]:
+            - generic [ref=e810]:
+              - generic [ref=e811]: STRATEGY
+              - heading "Quantum XO" [level=3] [ref=e813]
+            - generic [ref=e814]:
+              - generic [ref=e815]: 0 PLAYS
+              - button "4.8 (16)" [ref=e817]:
+                - generic [ref=e820]: "4.8"
+                - generic [ref=e821]: (16)
+        - button "Play Quantum 2048 - PUZZLE retro arcade game" [ref=e822] [cursor=pointer]:
+          - generic [ref=e823]:
+            - img "Quantum 2048 - PUZZLE retro arcade mini-game thumbnail" [ref=e824]
+            - button "Add to favorites" [ref=e825]
+            - button "View Top Scores" [ref=e828]
+          - generic [ref=e835]:
+            - generic [ref=e836]:
+              - generic [ref=e837]: PUZZLE
+              - heading "Quantum 2048" [level=3] [ref=e839]
+            - generic [ref=e840]:
+              - generic [ref=e841]: 0 PLAYS
+              - button "4.9 (15)" [ref=e843]:
+                - generic [ref=e846]: "4.9"
+                - generic [ref=e847]: (15)
+        - button "Play Memory Matrix - PUZZLE retro arcade game" [ref=e848] [cursor=pointer]:
+          - generic [ref=e849]:
+            - img "Memory Matrix - PUZZLE retro arcade mini-game thumbnail" [ref=e850]
+            - button "Add to favorites" [ref=e851]
+            - button "View Top Scores" [ref=e854]
+          - generic [ref=e861]:
+            - generic [ref=e862]:
+              - generic [ref=e863]: PUZZLE
+              - heading "Memory Matrix" [level=3] [ref=e865]
+            - generic [ref=e866]:
+              - generic [ref=e867]: 0 PLAYS
+              - button "4.9 (11)" [ref=e869]:
+                - generic [ref=e872]: "4.9"
+                - generic [ref=e873]: (11)
+        - button "Play Hyper Tapper - ACTION retro arcade game" [ref=e874] [cursor=pointer]:
+          - generic [ref=e875]:
+            - img "Hyper Tapper - ACTION retro arcade mini-game thumbnail" [ref=e876]
+            - button "Add to favorites" [ref=e877]
+            - button "View Top Scores" [ref=e880]
+          - generic [ref=e887]:
+            - generic [ref=e888]:
+              - generic [ref=e889]: ACTION
+              - heading "Hyper Tapper" [level=3] [ref=e891]
+            - generic [ref=e892]:
+              - generic [ref=e893]: 0 PLAYS
+              - button "4.9 (22)" [ref=e895]:
+                - generic [ref=e898]: "4.9"
+                - generic [ref=e899]: (22)
+        - button "Play Neon Snake 2077 - ARCADE retro arcade game" [ref=e900] [cursor=pointer]:
+          - generic [ref=e901]:
+            - img "Neon Snake 2077 - ARCADE retro arcade mini-game thumbnail" [ref=e902]
+            - button "Add to favorites" [ref=e903]
+            - button "View Top Scores" [ref=e906]
+          - generic [ref=e913]:
+            - generic [ref=e914]:
+              - generic [ref=e915]: ARCADE
+              - heading "Neon Snake 2077" [level=3] [ref=e917]
+            - generic [ref=e918]:
+              - generic [ref=e919]: 0 PLAYS
+              - button "4.9 (34)" [ref=e921]:
+                - generic [ref=e924]: "4.9"
+                - generic [ref=e925]: (34)
+        - button "Play Cyber Dash 2077 - ACTION retro arcade game" [ref=e926] [cursor=pointer]:
+          - generic [ref=e927]:
+            - img "Cyber Dash 2077 - ACTION retro arcade mini-game thumbnail" [ref=e928]
+            - button "Add to favorites" [ref=e929]
+            - button "View Top Scores" [ref=e932]
+          - generic [ref=e939]:
+            - generic [ref=e940]:
+              - generic [ref=e941]: ACTION
+              - heading "Cyber Dash 2077" [level=3] [ref=e943]
+            - generic [ref=e944]:
+              - generic [ref=e945]: 0 PLAYS
+              - button "4.9 (19)" [ref=e947]:
+                - generic [ref=e950]: "4.9"
+                - generic [ref=e951]: (19)
+        - button "Play Neon Pulse Dash - ACTION retro arcade game" [ref=e952] [cursor=pointer]:
+          - generic [ref=e953]:
+            - img "Neon Pulse Dash - ACTION retro arcade mini-game thumbnail" [ref=e954]
+            - button "Add to favorites" [ref=e955]
+            - button "View Top Scores" [ref=e958]
+          - generic [ref=e965]:
+            - generic [ref=e966]:
+              - generic [ref=e967]: ACTION
+              - heading "Neon Pulse Dash" [level=3] [ref=e969]
+            - generic [ref=e970]:
+              - generic [ref=e971]: 0 PLAYS
+              - button "5.0 (31)" [ref=e973]:
+                - generic [ref=e976]: "5.0"
+                - generic [ref=e977]: (31)
+        - button "Play Cyber Brick Breaker - ARCADE retro arcade game" [ref=e978] [cursor=pointer]:
+          - generic [ref=e979]:
+            - img "Cyber Brick Breaker - ARCADE retro arcade mini-game thumbnail" [ref=e980]
+            - button "Add to favorites" [ref=e981]
+            - button "View Top Scores" [ref=e984]
+          - generic [ref=e991]:
+            - generic [ref=e992]:
+              - generic [ref=e993]: ARCADE
+              - heading "Cyber Brick Breaker" [level=3] [ref=e995]
+            - generic [ref=e996]:
+              - generic [ref=e997]: 0 PLAYS
+              - button "4.8 (12)" [ref=e999]:
+                - generic [ref=e1002]: "4.8"
+                - generic [ref=e1003]: (12)
+        - button "Play Chroma Reflex - STRATEGY retro arcade game" [ref=e1004] [cursor=pointer]:
+          - generic [ref=e1005]:
+            - img "Chroma Reflex - STRATEGY retro arcade mini-game thumbnail" [ref=e1006]
+            - button "Add to favorites" [ref=e1007]
+            - button "View Top Scores" [ref=e1010]
+          - generic [ref=e1017]:
+            - generic [ref=e1018]:
+              - generic [ref=e1019]: STRATEGY
+              - heading "Chroma Reflex" [level=3] [ref=e1021]
+            - generic [ref=e1022]:
+              - generic [ref=e1023]: 0 PLAYS
+              - button "4.8 (9)" [ref=e1025]:
+                - generic [ref=e1028]: "4.8"
+                - generic [ref=e1029]: (9)
+        - button "Play Neon Paper Grid - STRATEGY retro arcade game" [ref=e1030] [cursor=pointer]:
+          - generic [ref=e1031]:
+            - img "Neon Paper Grid - STRATEGY retro arcade mini-game thumbnail" [ref=e1032]
+            - button "Add to favorites" [ref=e1033]
+            - button "View Top Scores" [ref=e1036]
+          - generic [ref=e1043]:
+            - generic [ref=e1044]:
+              - generic [ref=e1045]: STRATEGY
+              - heading "Neon Paper Grid" [level=3] [ref=e1047]
+            - generic [ref=e1048]:
+              - generic [ref=e1049]: 0 PLAYS
+              - button "5.0 (25)" [ref=e1051]:
+                - generic [ref=e1054]: "5.0"
+                - generic [ref=e1055]: (25)
+      - generic [ref=e1056]:
+        - generic [ref=e1057]:
+          - generic [ref=e1058]: Break Hub Arcade Portal
+          - generic [ref=e1062]: Internship Web Gaming Platform • 22 Custom HTML5 Games
+        - generic [ref=e1063]:
+          - button "About Project" [ref=e1064] [cursor=pointer]
+          - button "About Developer →" [ref=e1068] [cursor=pointer]
