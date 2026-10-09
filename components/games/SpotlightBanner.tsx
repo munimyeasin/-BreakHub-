@@ -478,7 +478,7 @@ export default function SpotlightBanner({
         }`}
       >
         {/* Left Column (5 cols): Cinematic Artwork Preview */}
-        <div className="col-span-5">
+        <div className="col-span-5 h-full">
           <div
             onClick={() => onPlayGame(currentGame)}
             className="game-thumbnail-container relative group aspect-[16/10] lg:aspect-[4/3] w-full rounded-2xl overflow-hidden border-3 border-black shadow-neo-lg cursor-pointer"
@@ -523,7 +523,7 @@ export default function SpotlightBanner({
         </div>
 
         {/* Right Column (7 cols): Clean Game Title & Action Buttons */}
-        <div className="col-span-7 flex flex-col justify-center space-y-4">
+        <div className="col-span-7 flex flex-col justify-center space-y-4 h-full">
           {/* Header Row: Category Badge + Rating + Play Count */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-purple border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
