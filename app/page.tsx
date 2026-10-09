@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
-import SpotlightBanner from '@/components/games/SpotlightBanner';
 import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar, { PortalTab } from '@/components/navigation/Sidebar';
@@ -875,17 +874,6 @@ export default function ArcadePortalDashboard() {
             />
           ) : (
             <>
-              {/* SPOTLIGHT HERO BANNER (Top featured: Retro Slicer & Neon Starfighter) */}
-              {activeTab === 'all' && selectedCategory === 'ALL' && !searchQuery && (
-                <SpotlightBanner
-                  games={games}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  onPlayGame={(game) => handleLaunchGame(game)}
-                  onViewLeaderboard={(gameId) => handleOpenLeaderboard(gameId)}
-                />
-              )}
-
               {/* QUICK CATEGORY CHIPS BAR (Mobile & Desktop horizontal scroll carousel) */}
               {activeTab === 'all' && (
                 <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 mb-3 pt-0.5 no-scrollbar touch-pan-x select-none">
