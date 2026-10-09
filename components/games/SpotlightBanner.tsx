@@ -222,7 +222,7 @@ export default function SpotlightBanner({
       </div>
 
       {/* Animation Styles */}
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes spotlightTimer {
           0% { width: 0%; }
           100% { width: 100%; }
@@ -280,7 +280,7 @@ export default function SpotlightBanner({
             </button>
 
             {/* Game Tabs */}
-            <div className="hidden xs:flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm overflow-x-auto max-w-[420px] sm:max-w-none">
+            <div className="hidden sm:flex items-center gap-1 bg-portal-card p-1 rounded-xl border-2 border-black shadow-neo-sm overflow-x-auto max-w-[420px] sm:max-w-none">
               {featuredGames.map((game, idx) => {
                 const isActive = idx === activeIndex;
                 return (
@@ -327,7 +327,7 @@ export default function SpotlightBanner({
         {/* Cinematic Artwork with Center Play Overlay */}
         <div
           onClick={() => onPlayGame(currentGame)}
-          className="game-thumbnail-container relative group w-full h-[220px] xs:h-[240px] rounded-2xl overflow-hidden border-3 border-black shadow-neo cursor-pointer select-none"
+          className="game-thumbnail-container relative group w-full h-[220px] sm:h-[240px] rounded-2xl overflow-hidden border-3 border-black shadow-neo cursor-pointer select-none"
         >
           <img
             src={currentGame.thumbnail_url}
@@ -399,7 +399,7 @@ export default function SpotlightBanner({
 
         {/* Title & Gameplay Details */}
         <div className="space-y-1.5">
-          <h1 className="text-lg xs:text-xl font-black tracking-tight text-white uppercase truncate">
+          <h1 className="text-lg sm:text-xl font-black tracking-tight text-white uppercase truncate">
             {currentGame.title}
           </h1>
           <p className="text-slate-300 text-xs font-medium line-clamp-2 leading-relaxed">

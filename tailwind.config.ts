@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: '475px',
+      },
       borderWidth: {
         '3': '3px',
         '4': '4px',
