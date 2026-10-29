@@ -1,6 +1,4 @@
-export type ThemeId =
-  | 'neo-dark'
-  | 'neo-light';
+export type ThemeId = 'light' | 'dark';
 
 export interface ThemeDefinition {
   id: ThemeId;
@@ -8,66 +6,55 @@ export interface ThemeDefinition {
   label: string;
   tagline: string;
   description: string;
-  badge?: string;
   isDark: boolean;
   status: 'active' | 'upcoming';
   icon: 'Moon' | 'Sun' | 'Zap' | 'Gamepad2' | 'Sparkles';
+  badge?: string;
   previewColors: {
     bg: string;
-    surface: string;
     card: string;
     accent: string;
     accentSecondary: string;
-    border: string;
-    text: string;
   };
 }
 
 export const THEMES_REGISTRY: ThemeDefinition[] = [
   {
-    id: 'neo-dark',
-    name: 'Dark Neo-Brutalist',
-    label: 'Dark Mode',
-    tagline: 'Midnight Cyber Arcade Ground',
-    description: 'High-contrast midnight violet foundation with electric cyan, cyber yellow, and hot pink neon accents under crisp solid borders.',
-    badge: 'CLASSIC',
-    isDark: true,
-    status: 'active',
-    icon: 'Moon',
-    previewColors: {
-      bg: '#0B0819',
-      surface: '#130F26',
-      card: '#1C1635',
-      accent: '#00F0FF',
-      accentSecondary: '#FFE600',
-      border: '#000000',
-      text: '#FFFFFF',
-    },
-  },
-  {
-    id: 'neo-light',
-    name: 'Light Neo-Brutalist',
+    id: 'light',
+    name: 'Clean Light',
     label: 'Light Mode',
-    tagline: 'Retro Vintage Paper Canvas',
-    description: 'Warm cream paper ground, crisp white panels, bold pitch-black borders, tactile drop shadows, and high-contrast retro arcade typography.',
-    badge: 'RETRO',
+    tagline: 'Modern Minimalist Light Canvas',
+    description: 'Clean white background, crisp neutral borders, and high readability.',
     isDark: false,
     status: 'active',
     icon: 'Sun',
     previewColors: {
-      bg: '#FFFDF0',
-      surface: '#FFFFFF',
-      card: '#FFF8E7',
-      accent: '#FFE600',
-      accentSecondary: '#FF4081',
-      border: '#000000',
-      text: '#000000',
+      bg: '#f8fafc',
+      card: '#ffffff',
+      accent: '#2563eb',
+      accentSecondary: '#3b82f6',
+    },
+  },
+  {
+    id: 'dark',
+    name: 'Clean Dark',
+    label: 'Dark Mode',
+    tagline: 'Sleek Modern Dark Canvas',
+    description: 'Deep slate background with high-contrast text and clean borders.',
+    isDark: true,
+    status: 'active',
+    icon: 'Moon',
+    previewColors: {
+      bg: '#0f172a',
+      card: '#1e293b',
+      accent: '#3b82f6',
+      accentSecondary: '#60a5fa',
     },
   },
 ];
 
-export const DEFAULT_THEME: ThemeId = 'neo-dark';
-export const THEME_STORAGE_KEY = 'stressbuster_ui_theme';
+export const DEFAULT_THEME: ThemeId = 'light';
+export const THEME_STORAGE_KEY = 'breakhub_ui_theme';
 
 export function getTheme(id: string): ThemeDefinition {
   return THEMES_REGISTRY.find(t => t.id === id) || THEMES_REGISTRY[0];

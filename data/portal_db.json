@@ -179,6 +179,18 @@
       "username": "CyberNinja",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CyberNinja",
       "created_at": "2026-09-29T05:58:53.929Z"
+    },
+    {
+      "id": "usr_xy22t2r",
+      "username": "CensorTester_1792816510760",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CensorTester_1792816510760",
+      "created_at": "2026-10-24T04:35:11.032Z"
+    },
+    {
+      "id": "usr_gd7zezs",
+      "username": "CensorTester_1792816531399",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=CensorTester_1792816531399",
+      "created_at": "2026-10-24T04:35:31.956Z"
     }
   ],
   "games": [
@@ -215,7 +227,7 @@
       "category": "PUZZLE",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
       "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 46,
+      "play_count": 47,
       "rating": 5,
       "rating_count": 52,
       "status": "active",
@@ -1655,10 +1667,115 @@
       "user_id": "usr_p00qpc7",
       "score": 36702,
       "created_at": "2026-10-01T05:28:11.428Z"
+    },
+    {
+      "id": "sc_93kq7fb5z",
+      "game_id": "g_merge_25",
+      "user_id": "usr_p00qpc7",
+      "score": 58474,
+      "created_at": "2026-10-13T03:00:32.797Z"
+    },
+    {
+      "id": "sc_u6e7ihrce",
+      "game_id": "g_missile_21",
+      "user_id": "usr_p00qpc7",
+      "score": 28935,
+      "created_at": "2026-10-13T03:06:46.901Z"
+    },
+    {
+      "id": "sc_ziovzdql6",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 855,
+      "created_at": "2026-10-13T03:08:44.639Z"
+    },
+    {
+      "id": "sc_70c69s0dw",
+      "game_id": "g_slicer_11",
+      "user_id": "usr_p00qpc7",
+      "score": 85,
+      "created_at": "2026-10-13T03:08:58.861Z"
+    },
+    {
+      "id": "sc_dtvopa9ik",
+      "game_id": "g_tap_04",
+      "user_id": "usr_p00qpc7",
+      "score": 12480,
+      "created_at": "2026-10-13T03:24:58.037Z"
+    },
+    {
+      "id": "sc_5qsfd764v",
+      "game_id": "g_tap_04",
+      "user_id": "usr_p00qpc7",
+      "score": 8160,
+      "created_at": "2026-10-13T03:25:25.231Z"
+    },
+    {
+      "id": "sc_macsp6tlm",
+      "game_id": "g_missile_21",
+      "user_id": "usr_kb236y0",
+      "score": 45200,
+      "created_at": "2026-10-24T04:35:11.243Z"
+    },
+    {
+      "id": "sc_hkd87kpa2",
+      "game_id": "g_missile_21",
+      "user_id": "usr_kb236y0",
+      "score": 45200,
+      "created_at": "2026-10-24T04:35:32.488Z"
+    },
+    {
+      "id": "sc_3k2trusd3",
+      "game_id": "g_ttt_03",
+      "user_id": "usr_p00qpc7",
+      "score": 150,
+      "created_at": "2026-10-29T12:21:05.323Z"
+    },
+    {
+      "id": "sc_jss3j7dzk",
+      "game_id": "g_ttt_03",
+      "user_id": "usr_p00qpc7",
+      "score": 300,
+      "created_at": "2026-10-29T12:21:30.173Z"
+    },
+    {
+      "id": "sc_yinghtdkw",
+      "game_id": "g_ttt_03",
+      "user_id": "usr_p00qpc7",
+      "score": 450,
+      "created_at": "2026-10-29T12:21:50.792Z"
     }
   ],
   "ratings": [],
   "game_requests": [
+    {
+      "id": "req_9wz4mb2i_mvlwo9h3",
+      "title": "**** Game Test 1792816531399",
+      "genre": "ARCADE",
+      "description": "Testing profanity moderation filters in description ******",
+      "requested_by": "CensorTester_1792816531399",
+      "user_id": "usr_gd7zezs",
+      "upvotes": 1,
+      "upvoted_by": [
+        "censortester_1792816531399"
+      ],
+      "status": "under_review",
+      "created_at": "2026-10-24T04:35:31.959Z"
+    },
+    {
+      "id": "req_7t14vj7c_mvlwntbx",
+      "title": "**** Game Test 1792816510760",
+      "genre": "ARCADE",
+      "description": "Testing profanity moderation filters in description ******",
+      "requested_by": "CensorTester_1792816510760",
+      "user_id": "usr_xy22t2r",
+      "upvotes": 1,
+      "upvoted_by": [
+        "censortester_1792816510760"
+      ],
+      "status": "under_review",
+      "created_at": "2026-10-24T04:35:11.037Z"
+    },
     {
       "id": "req_q47sc8ev_muk3y8vo",
       "title": "**** Game Test 1790531039337",
