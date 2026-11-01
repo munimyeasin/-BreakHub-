@@ -18,7 +18,8 @@ import {
   Grid,
   Cpu,
   Layers,
-  Clock
+  Clock,
+  Shield
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
@@ -27,6 +28,8 @@ import AboutSection from '@/components/about/AboutSection';
 import Sidebar, { PortalTab } from '@/components/navigation/Sidebar';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
 import ActivityTicker from '@/components/gamification/ActivityTicker';
+import AdminLoginModal from '@/components/admin/AdminLoginModal';
+import AdminPanel from '@/components/admin/AdminPanel';
 
 // High-Performance Dynamic Chunk Loading for Modals (Zero Initial Bundle Overhead)
 const GameModal = dynamic(() => import('@/components/ui/GameModal'), { ssr: false });
@@ -56,7 +59,7 @@ const QUICK_CATEGORIES = [
 ];
 
 export default function ArcadePortalDashboard() {
-  const { theme, toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
+  const { toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
   const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<PortalTab>('all');
@@ -65,6 +68,11 @@ export default function ArcadePortalDashboard() {
   const [hypedGames, setHypedGames] = useState<string[]>([]);
   const [userRatings, setUserRatings] = useState<Record<string, number>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  // Admin Panel states
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
   // Search input refs for global shortcut focus
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
@@ -90,6 +98,14 @@ export default function ArcadePortalDashboard() {
   const [gameState, setGameState] = useState<GamificationState>(() => getDefaultState());
 
   const [isHydrated, setIsHydrated] = useState(false);
+
+  // Check admin session on mount
+  useEffect(() => {
+    try {
+      const session = localStorage.getItem('breakhub_admin_session');
+      if (session) setIsAdminAuthenticated(true);
+    } catch {}
+  }, []);
 
   // Gamification Synchronization on Client Mount & Event Updates
   useEffect(() => {
@@ -398,7 +414,6 @@ export default function ArcadePortalDashboard() {
       if (savedTag && savedTag.trim().length >= 2) {
         setPlayerTag(savedTag.trim());
       } else {
-        // Leave empty for first-time visitors so they are prompted to name themselves before playing
         setPlayerTag('');
       }
     } catch {}
@@ -413,7 +428,6 @@ export default function ArcadePortalDashboard() {
       return updated;
     });
 
-    // Gamification Hook: Record rating XP & daily quest progression
     try {
       gamification.recordGameRated(gameId, rating);
     } catch {}
@@ -430,14 +444,6 @@ export default function ArcadePortalDashboard() {
   const handleSelectGameFromRoulette = (selectedGame: any) => {
     setIsRouletteModalOpen(false);
     handleLaunchGame(selectedGame);
-  };
-
-  const handleQuickPlay = () => {
-    const activeGames = games.filter(g => g.status === 'active');
-    if (activeGames.length > 0) {
-      const randomGame = activeGames[Math.floor(Math.random() * activeGames.length)];
-      handleLaunchGame(randomGame);
-    }
   };
 
   const unclaimedQuestsCount = useMemo(() => {
@@ -466,7 +472,6 @@ export default function ArcadePortalDashboard() {
       return updated;
     });
 
-    // Optimistically update games state
     setGames(prev =>
       prev.map(g => {
         if (g.id === gameId || g.slug === gameId) {
@@ -477,7 +482,6 @@ export default function ArcadePortalDashboard() {
       })
     );
 
-    // Update comingSoonGame state if open
     setComingSoonGame(prev => {
       if (prev && (prev.id === gameId || prev.slug === gameId)) {
         const current = prev.hype_count || 0;
@@ -486,7 +490,6 @@ export default function ArcadePortalDashboard() {
       return prev;
     });
 
-    // Persist in backend
     try {
       fetch('/api/games/hype', {
         method: 'POST',
@@ -497,12 +500,10 @@ export default function ArcadePortalDashboard() {
   };
 
   const launchGameSession = (game: Game) => {
-    // Optimistically increment play count in local state
     setGames(prev =>
       prev.map(g => (g.id === game.id || g.slug === game.slug ? { ...g, play_count: (g.play_count || 0) + 1 } : g))
     );
 
-    // Persist increment in backend
     try {
       fetch('/api/games/play', {
         method: 'POST',
@@ -515,7 +516,6 @@ export default function ArcadePortalDashboard() {
     setActiveGame(updatedGame);
   };
 
-  // Launch Game Directly or show Coming Soon / Mandatory Username Modal
   const handleLaunchGame = (game: Game) => {
     if (game.status === 'hidden') return;
     if (game.status === 'coming_soon') {
@@ -523,7 +523,6 @@ export default function ArcadePortalDashboard() {
       return;
     }
 
-    // Enforce mandatory player naming before launching their first game
     if (!playerTag || playerTag.trim().length < 2) {
       setPendingGameToPlay(game);
       setIsUsernameModalOpen(true);
@@ -565,7 +564,6 @@ export default function ArcadePortalDashboard() {
     setIsLeaderboardOpen(true);
   };
 
-  // Dynamic category counts for non-hidden games
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { ALL: 0, UPCOMING: 0 };
     games.forEach(g => {
@@ -579,7 +577,6 @@ export default function ArcadePortalDashboard() {
     return counts;
   }, [games]);
 
-  // Filtered games (excluding hidden games)
   const filteredGames = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
     const searchTerms = query.split(/\s+/).filter(Boolean);
@@ -614,42 +611,21 @@ export default function ArcadePortalDashboard() {
       <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
         <div className="max-w-7xl mx-auto flex flex-col gap-2">
 
-          {/* Top Bar */}
           <div className="flex items-center justify-between gap-2.5 sm:gap-3">
-
-            {/* Left Controls: Sidebar Toggle & Brand Logo */}
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
                 className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
                   isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
                 }`}
-                title="Open Genres, Navigation & Filters"
-                aria-label="Toggle navigation slide bar"
               >
                 <div className="flex items-center gap-1.5 z-10">
                   {isSidebarOpen ? (
                     <X className="w-4 h-4 stroke-[2.5]" />
                   ) : (
-                    <div className="relative flex items-center justify-center">
-                      <SlidersHorizontal className="w-4 h-4 stroke-[2.5] group-hover:rotate-180 transition-transform duration-300" />
-                      {(selectedCategory !== 'ALL' || activeTab !== 'all') && (
-                        <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-portal-pink opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-portal-pink"></span>
-                        </span>
-                      )}
-                    </div>
+                    <SlidersHorizontal className="w-4 h-4 stroke-[2.5] group-hover:rotate-180 transition-transform duration-300" />
                   )}
-
                   <span>{isSidebarOpen ? 'CLOSE' : 'GENRES'}</span>
-
-                  {/* Active filter counter pill if active */}
-                  {selectedCategory !== 'ALL' && !isSidebarOpen && (
-                    <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-black text-white border border-black">
-                      {selectedCategory}
-                    </span>
-                  )}
                 </div>
               </button>
 
@@ -669,14 +645,13 @@ export default function ArcadePortalDashboard() {
                       PORTAL
                     </span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block" suppressHydrationWarning>
+                  <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">
                     {`${games.length} Mini-Games`}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Desktop Search Bar & Leaderboard Action (Hidden on Mobile < md) */}
             <div className="hidden md:flex items-center gap-2 flex-1 max-w-lg mx-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
@@ -686,78 +661,41 @@ export default function ArcadePortalDashboard() {
                   placeholder="Search games, genres, puzzles... (/ or ⌘K)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  autoComplete="off"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  className="w-full pl-10 pr-16 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
+                  className="w-full pl-10 pr-16 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all"
                 />
-                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                  {searchQuery ? (
-                    <button
-                      onClick={() => { setSearchQuery(''); desktopSearchInputRef.current?.focus(); }}
-                      className="text-slate-400 hover:text-white text-xs font-black p-1"
-                      aria-label="Clear search"
-                    >
-                      ✕
-                    </button>
-                  ) : (
-                    <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-black uppercase text-slate-400 bg-portal-surface border border-black rounded shadow-neo-sm pointer-events-none">
-                      ⌘K
-                    </kbd>
-                  )}
-                </div>
               </div>
               <button
                 onClick={() => handleOpenLeaderboard('global')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 group"
-                title="Open Global Leaderboard"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all shrink-0"
               >
                 <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Ranks</span>
               </button>
             </div>
 
-            {/* Theme Toggle & Gamification Player XP Badge & Gamer Tag */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* Theme Quick Toggle & Engine Trigger with Onboarding Discovery Hint */}
-              <div className="relative flex items-center gap-1">
-                {/* Instant Theme Cycle Switch */}
-                <button
-                  onClick={toggleTheme}
-                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all ${
-                    isDark
-                      ? 'bg-portal-yellow text-black hover:bg-portal-cyan'
-                      : 'bg-portal-card text-white hover:bg-portal-yellow hover:text-black'
-                  }`}
-                  title="Cycle Break Hub Themes"
-                  aria-label="Cycle Break Hub UI Theme"
-                >
-                  {isDark ? (
-                    <>
-                      <Moon className="w-3.5 h-3.5 text-black stroke-[2.5]" />
-                      <span className="hidden sm:inline">Dark</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sun className="w-3.5 h-3.5 text-portal-yellow stroke-[2.5]" />
-                      <span className="hidden sm:inline">Light</span>
-                    </>
-                  )}
-                </button>
+              {/* Admin Panel Button */}
+              <button
+                onClick={() => {
+                  if (isAdminAuthenticated) {
+                    setIsAdminPanelOpen(true);
+                  } else {
+                    setIsAdminLoginOpen(true);
+                  }
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-pink text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                title="Admin Control Panel"
+              >
+                <Shield className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span className="hidden sm:inline">Admin</span>
+              </button>
 
-                {/* Theme Selector Modal Trigger */}
-                <button
-                  onClick={() => setIsThemeSelectorOpen(true)}
-                  className="p-1.5 sm:p-2 rounded-xl bg-portal-card hover:bg-portal-purple text-slate-200 hover:text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-                  title="Design Engine & Theme Lab"
-                  aria-label="Open Theme Engine"
-                >
-                  <Palette className="w-3.5 h-3.5 stroke-[2.5]" />
-                </button>
-
-                {/* First-Time Visitor Theme Discovery Indicator */}
-                <ThemeOnboardingHint onOpenThemeSelector={() => setIsThemeSelectorOpen(true)} />
-              </div>
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm bg-portal-yellow text-black hover:bg-portal-cyan transition-all"
+              >
+                {isDark ? <Moon className="w-3.5 h-3.5 stroke-[2.5]" /> : <Sun className="w-3.5 h-3.5 stroke-[2.5]" />}
+              </button>
 
               <PlayerXpBadge
                 onOpenQuests={() => setIsQuestsModalOpen(true)}
@@ -767,17 +705,16 @@ export default function ArcadePortalDashboard() {
               {playerTag ? (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-                  title="Change Player Handle"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm"
                 >
-                  {avatarUrl && <img src={avatarUrl} alt={`${playerTag}'s player avatar`} className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black shadow-neo-sm shrink-0" />}
+                  {avatarUrl && <img src={avatarUrl} alt="Avatar" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black" />}
                   <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
                   <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
                 </button>
               ) : (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm"
                 >
                   <User className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span className="hidden sm:inline">Set Handle</span>
@@ -785,53 +722,12 @@ export default function ArcadePortalDashboard() {
               )}
             </div>
           </div>
-
-          {/* Mobile Search Bar & Leaderboard Button Row (Visible on mobile/tablet < md) */}
-          <div className="flex md:hidden items-center gap-2 w-full">
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-              <input
-                ref={mobileSearchInputRef}
-                type="text"
-                placeholder="Search games, genres..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoComplete="off"
-                autoCorrect="off"
-                spellCheck={false}
-                className="w-full pl-10 pr-9 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all appearance-none"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => { setSearchQuery(''); mobileSearchInputRef.current?.focus(); }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-sm font-black p-1"
-                  aria-label="Clear search"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            {/* Mobile Leaderboard Button near Search */}
-            <button
-              onClick={() => handleOpenLeaderboard('global')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0"
-              title="Open Global Leaderboard"
-            >
-              <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Ranks</span>
-            </button>
-          </div>
         </div>
       </header>
 
-      {/* Real-time Arcade Activity Marquee Ticker */}
       <ActivityTicker />
 
-      {/* 2. DUAL-PANE LAYOUT: LEFT SLIDE BAR + MAIN PORTAL ARENA */}
       <div className="flex w-full min-h-[calc(100vh-61px)]">
-
-        {/* LEFT SLIDE BAR */}
         <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
@@ -859,7 +755,6 @@ export default function ArcadePortalDashboard() {
           totalGamesCount={categoryCounts['ALL'] || 0}
         />
 
-        {/* MAIN CONTENT ARENA */}
         <main className="flex-1 w-full min-w-0 px-2.5 sm:px-6 py-2.5 sm:py-3 pb-24 overflow-x-hidden">
           {(activeTab === 'about-project' || activeTab === 'about-devs') ? (
             <AboutSection
@@ -874,9 +769,8 @@ export default function ArcadePortalDashboard() {
             />
           ) : (
             <>
-              {/* QUICK CATEGORY CHIPS BAR (Mobile & Desktop horizontal scroll carousel) */}
               {activeTab === 'all' && (
-                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 mb-3 pt-0.5 no-scrollbar touch-pan-x select-none">
+                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 mb-3 pt-0.5 no-scrollbar">
                   {QUICK_CATEGORIES.map(cat => {
                     const Icon = cat.icon;
                     const isSelected = selectedCategory === cat.id;
@@ -884,20 +778,14 @@ export default function ArcadePortalDashboard() {
                     return (
                       <button
                         key={cat.id}
-                        onClick={() => {
-                          setSelectedCategory(cat.id);
-                        }}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider border-2 border-black whitespace-nowrap transition-all duration-150 shrink-0 ${
-                          isSelected
-                            ? `${cat.color} shadow-neo-sm translate-x-0.5 translate-y-0.5`
-                            : 'bg-portal-card text-slate-300 hover:text-white hover:bg-portal-surface shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none'
+                        onClick={() => setSelectedCategory(cat.id)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider border-2 border-black whitespace-nowrap transition-all shrink-0 ${
+                          isSelected ? `${cat.color} shadow-neo-sm translate-x-0.5 translate-y-0.5` : 'bg-portal-card text-slate-300 hover:text-white hover:bg-portal-surface shadow-neo-sm'
                         }`}
                       >
                         <Icon className="w-3.5 h-3.5 stroke-[2.5]" />
                         <span>{cat.label}</span>
-                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-black border border-black ${
-                          isSelected ? 'bg-black text-white' : 'bg-portal-surface text-portal-cyan'
-                        }`}>
+                        <span className={`px-1.5 py-0.2 rounded text-[10px] font-black border border-black ${isSelected ? 'bg-black text-white' : 'bg-portal-surface text-portal-cyan'}`}>
                           {count}
                         </span>
                       </button>
@@ -906,49 +794,6 @@ export default function ArcadePortalDashboard() {
                 </div>
               )}
 
-              {/* Active Filter Bar & Breadcrumb Status */}
-              <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 sm:pb-2.5 border-b-3 border-black">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h2 className="text-xs sm:text-sm font-black tracking-wider uppercase text-white flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-md bg-portal-yellow border border-black shadow-neo-sm flex items-center justify-center">
-                      <Zap className="w-3 h-3 text-black stroke-[3]" />
-                    </div>
-                    <span>{activeTab === 'favorites' ? 'Your Saved Games' : 'Available Mini-Games'}</span>
-                    <span className="px-1.5 py-0.2 rounded bg-portal-surface text-portal-cyan text-[11px] font-black border border-black shadow-neo-sm">
-                      {filteredGames.length}
-                    </span>
-                  </h2>
-
-                  {selectedCategory !== 'ALL' && activeTab === 'all' && (
-                    <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-portal-cyan text-black text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm">
-                      <span>{selectedCategory === 'UPCOMING' ? 'Filter: Upcoming' : `Category: ${selectedCategory}`}</span>
-                      <button
-                        onClick={() => setSelectedCategory('ALL')}
-                        className="hover:scale-125 ml-0.5 font-black"
-                        title="Clear category filter"
-                      >
-                        ✕
-                      </button>
-                    </span>
-                  )}
-                </div>
-
-                {/* Quick reset if filter or search active */}
-                {(selectedCategory !== 'ALL' || searchQuery || activeTab !== 'all') && (
-                  <button
-                    onClick={() => {
-                      setSelectedCategory('ALL');
-                      setSearchQuery('');
-                      setActiveTab('all');
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-portal-pink text-black text-[10px] font-black uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-                  >
-                    Reset Filters
-                  </button>
-                )}
-              </div>
-
-              {/* GAME GRID */}
               <GameGrid
                 games={filteredGames}
                 favorites={favorites}
@@ -967,57 +812,37 @@ export default function ArcadePortalDashboard() {
                   setActiveTab('all');
                 }}
               />
-
-              {/* FOOTER PROJECT STRIP */}
-              <footer className="mt-14 p-5 sm:p-6 bg-portal-surface border-3 border-black rounded-2xl shadow-neo flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-portal-yellow font-black uppercase tracking-wider">
-                    <Gamepad2 className="w-4 h-4 text-portal-cyan stroke-[2.5] shrink-0" />
-                    <span>Break Hub Arcade Portal</span>
-                  </div>
-                  <div className="text-slate-200 font-bold">
-                    Internship Web Gaming Platform • 22 Custom HTML5 Games
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">
-                  <button
-                    onClick={() => {
-                      setActiveTab('about-project');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="px-3.5 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5"
-                  >
-                    <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                    <span>About Project</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setActiveTab('about-devs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-1.5"
-                  >
-                    <Users className="w-3.5 h-3.5 stroke-[2.5]" />
-                    <span>About Developer →</span>
-                  </button>
-                </div>
-              </footer>
             </>
           )}
         </main>
       </div>
 
-      {/* 5. USERNAME PROMPT MODAL */}
+      {/* Admin Modals */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onClose={() => setIsAdminLoginOpen(false)}
+        onSuccess={() => {
+          setIsAdminAuthenticated(true);
+          setIsAdminPanelOpen(true);
+        }}
+      />
+
+      <AdminPanel
+        isOpen={isAdminPanelOpen}
+        onClose={() => setIsAdminPanelOpen(false)}
+        onLogout={() => {
+          localStorage.removeItem('breakhub_admin_session');
+          setIsAdminAuthenticated(false);
+          setIsAdminPanelOpen(false);
+        }}
+      />
+
       <UsernamePromptModal
         isOpen={isUsernameModalOpen}
         initialUsername={playerTag}
         title={pendingGameToPlay ? "Enter Your Gamer Tag" : (playerTag ? "Update Gamer Tag" : "Create Player Handle")}
-        subtitle={
-          pendingGameToPlay
-            ? `Choose your gamer tag before launching ${pendingGameToPlay.title} to record your high scores!`
-            : "Choose a player handle to record your high scores on the global leaderboard."
-        }
-        confirmText={pendingGameToPlay ? "CONFIRM & PLAY NOW" : "SAVE HANDLE"}
+        subtitle="Choose a player handle to record your high scores."
+        confirmText="SAVE HANDLE"
         onClose={() => {
           setIsUsernameModalOpen(false);
           setPendingGameToPlay(null);
@@ -1025,7 +850,6 @@ export default function ArcadePortalDashboard() {
         onConfirm={handleConfirmUsername}
       />
 
-      {/* 6. PLAYABLE GAME MODAL */}
       {activeGame && (
         <GameModal
           game={activeGame}
@@ -1048,7 +872,6 @@ export default function ArcadePortalDashboard() {
         />
       )}
 
-      {/* 7. GLOBAL & PER-GAME LEADERBOARD MODAL */}
       {isLeaderboardOpen && (
         <LeaderboardModal
           initialGameId={leaderboardGameId}
@@ -1057,7 +880,6 @@ export default function ArcadePortalDashboard() {
         />
       )}
 
-      {/* 8. COMING SOON MODAL */}
       {comingSoonGame && (
         <ComingSoonModal
           game={comingSoonGame}
@@ -1072,7 +894,6 @@ export default function ArcadePortalDashboard() {
         />
       )}
 
-      {/* 9. DAILY QUESTS & BOUNTIES MODAL */}
       <DailyQuestsModal
         isOpen={isQuestsModalOpen}
         onClose={() => setIsQuestsModalOpen(false)}
@@ -1089,43 +910,11 @@ export default function ArcadePortalDashboard() {
         }}
       />
 
-      {/* 10. HOLOGRAPHIC TROPHY VAULT MODAL */}
-      <TrophyRoomModal
-        isOpen={isTrophiesModalOpen}
-        onClose={() => setIsTrophiesModalOpen(false)}
-      />
-
-      {/* 11. CYBER LEVEL-UP CELEBRATION MODAL */}
-      <LevelUpCelebrationModal
-        levelInfo={levelUpInfo}
-        onClose={() => setLevelUpInfo(null)}
-        onOpenTrophies={() => {
-          setLevelUpInfo(null);
-          setIsTrophiesModalOpen(true);
-        }}
-      />
-
-      {/* 12. NEURAL GAME ROULETTE MODAL */}
-      <GameRouletteModal
-        isOpen={isRouletteModalOpen}
-        onClose={() => setIsRouletteModalOpen(false)}
-        games={games}
-        onSelectGame={handleSelectGameFromRoulette}
-      />
-
-      {/* 13. DESIGN ENGINE & THEME LAB MODAL */}
-      <ThemeSelectorModal
-        isOpen={isThemeSelectorOpen}
-        onClose={() => setIsThemeSelectorOpen(false)}
-      />
-
-      {/* 14. GAME REQUEST & COMMUNITY WISHLIST MODAL */}
-      <GameRequestModal
-        isOpen={isGameRequestModalOpen}
-        onClose={() => setIsGameRequestModalOpen(false)}
-        playerTag={playerTag}
-        onOpenUsernameModal={() => setIsUsernameModalOpen(true)}
-      />
+      <TrophyRoomModal isOpen={isTrophiesModalOpen} onClose={() => setIsTrophiesModalOpen(false)} />
+      <LevelUpCelebrationModal levelInfo={levelUpInfo} onClose={() => setLevelUpInfo(null)} onOpenTrophies={() => { setLevelUpInfo(null); setIsTrophiesModalOpen(true); }} />
+      <GameRouletteModal isOpen={isRouletteModalOpen} onClose={() => setIsRouletteModalOpen(false)} games={games} onSelectGame={handleSelectGameFromRoulette} />
+      <ThemeSelectorModal isOpen={isThemeSelectorOpen} onClose={() => setIsThemeSelectorOpen(false)} />
+      <GameRequestModal isOpen={isGameRequestModalOpen} onClose={() => setIsGameRequestModalOpen(false)} playerTag={playerTag} onOpenUsernameModal={() => setIsUsernameModalOpen(true)} />
     </div>
   );
 }
