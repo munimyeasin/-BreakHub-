@@ -152,8 +152,20 @@ class DatabaseService {
     try {
       const { data, error } = await supabase.from('games').select('*');
       if (!error && data && data.length > 0) {
-        this.data.games = data;
-        return data;
+        this.data.games = data.map((g: any) => ({
+          ...g,
+          thumbnail_url: g.thumbnail_url || g.image_url || '/thumbnails/cyber-fruit-merge.svg'
+        }));
+
+        // Also fetch ratings from Supabase
+        try {
+          const { data: remoteRatings } = await supabase.from('ratings').select('*');
+          if (remoteRatings && Array.isArray(remoteRatings)) {
+            this.data.ratings = remoteRatings;
+          }
+        } catch {}
+
+        return this.data.games;
       }
     } catch {}
 
@@ -289,24 +301,34 @@ class DatabaseService {
   public async getUserRating(gameId: string, username: string): Promise<number | null> {
     if (!username) return null;
     const cleanName = username.trim().toLowerCase();
-    const user = this.data.users.find(u => u.username.toLowerCase() === cleanName) ||
-      (await supabase.from('users').select('*').ilike('username', cleanName).single()).data;
+
+    let user = this.data.users.find(u => u.username.toLowerCase() === cleanName);
+    if (!user) {
+      try {
+        const { data } = await supabase.from('users').select('*').ilike('username', cleanName).single();
+        if (data) user = data;
+      } catch {}
+    }
     if (!user) return null;
 
     const game = await this.getGameById(gameId);
     if (!game) return null;
 
+    // Check Supabase first
+    try {
+      const { data } = await supabase.from('ratings').select('rating').eq('game_id', game.id).eq('user_id', user.id).single();
+      if (data && typeof data.rating === 'number') {
+        return data.rating;
+      }
+    } catch {}
+
+    // Fallback to local ratings
     if (Array.isArray(this.data.ratings)) {
       const found = this.data.ratings.find(
         r => (r.game_id === game.id || r.game_id === game.slug) && r.user_id === user.id
       );
       if (found) return found.rating;
     }
-
-    try {
-      const { data } = await supabase.from('ratings').select('rating').eq('game_id', game.id).eq('user_id', user.id).single();
-      if (data) return data.rating;
-    } catch {}
 
     return null;
   }
