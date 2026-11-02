@@ -200,6 +200,31 @@ export default function StarRating({
     }
   }, [userRating]);
 
+  // Fetch latest live rating & user rating from Supabase when modal opens
+  useEffect(() => {
+    if (!isOpen || !gameId) return;
+    try {
+      const storedTag = localStorage.getItem('stressbuster_player_tag') || localStorage.getItem('nexus_player_tag') || 'Player';
+      fetch(`/api/games/rate?gameId=${encodeURIComponent(gameId)}&username=${encodeURIComponent(storedTag)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.success) {
+            if (typeof data.userRating === 'number') {
+              setDisplayUserRating(data.userRating);
+              setSelectedRating(data.userRating);
+            }
+            if (typeof data.rating === 'number') {
+              setDisplayRating(data.rating);
+            }
+            if (typeof data.rating_count === 'number') {
+              setDisplayCount(data.rating_count);
+            }
+          }
+        })
+        .catch(() => {});
+    } catch {}
+  }, [isOpen, gameId]);
+
   // Keyboard navigation when modal is open
   useEffect(() => {
     if (!isOpen) return;
