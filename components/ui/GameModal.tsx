@@ -586,7 +586,7 @@ export default function GameModal({
   };
 
   const handleScoreSubmit = async (score: number) => {
-    if (score <= 0 || hasSubmittedRef.current) return;
+    if (score <= 0) return;
     hasSubmittedRef.current = true;
     currentScoreRef.current = score;
     setStatusMsg('Syncing score...');
