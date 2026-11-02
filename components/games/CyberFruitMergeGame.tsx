@@ -1142,9 +1142,9 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
   }, [resetGame]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-full md:max-w-4xl lg:max-w-5xl mx-auto md:max-h-[90vh] h-[100dvh] select-none p-1 sm:p-2">
+    <div className="flex flex-col items-center justify-center w-full max-w-full md:max-w-4xl lg:max-w-5xl mx-auto md:max-h-[90vh] h-[100dvh] select-none p-1 sm:p-2 overflow-x-hidden box-border">
       {/* Top Neo-Brutalist HUD Control Bar */}
-      <div className="w-full bg-portal-card border-3 border-black rounded-xl p-2.5 sm:p-3 mb-2 shadow-neo flex items-center justify-between gap-2">
+      <div className="w-full bg-portal-card border-3 border-black rounded-xl p-2 sm:p-3 mb-2 shadow-neo flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 overflow-hidden box-border">
         {/* Score & Combo */}
         <div className="flex items-center gap-3">
           <div className="bg-portal-surface border-2 border-black rounded-lg px-2.5 py-1 shadow-neo-sm">
