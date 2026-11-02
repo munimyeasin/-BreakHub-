@@ -200,9 +200,9 @@ export default function StarRating({
     }
   }, [userRating]);
 
-  // Fetch latest live rating & user rating from Supabase when modal opens
+  // Fetch latest live rating & user rating from Supabase on mount and when modal opens
   useEffect(() => {
-    if (!isOpen || !gameId) return;
+    if (!gameId) return;
     try {
       const storedTag = localStorage.getItem('stressbuster_player_tag') || localStorage.getItem('nexus_player_tag') || 'Player';
       fetch(`/api/games/rate?gameId=${encodeURIComponent(gameId)}&username=${encodeURIComponent(storedTag)}`)
@@ -223,7 +223,7 @@ export default function StarRating({
         })
         .catch(() => {});
     } catch {}
-  }, [isOpen, gameId]);
+  }, [gameId, isOpen]);
 
   // Keyboard navigation when modal is open
   useEffect(() => {
