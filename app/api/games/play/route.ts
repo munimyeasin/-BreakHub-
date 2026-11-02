@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid gameId is required' }, { status: 400 });
     }
 
-    const newPlayCount = db.incrementPlayCount(gameId);
+    const newPlayCount = await db.incrementPlayCount(gameId);
     return NextResponse.json({ success: true, playCount: newPlayCount });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to increment play count' }, { status: 500 });

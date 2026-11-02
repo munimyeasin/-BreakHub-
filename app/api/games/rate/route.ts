@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Rating must be an integer between 1 and 5' }, { status: 400 });
     }
 
-    const result = db.rateGame(gameId, username.trim(), Math.round(numRating));
+    const result = await db.rateGame(gameId, username.trim(), Math.round(numRating));
 
     return NextResponse.json({
       success: true,
@@ -49,13 +49,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'gameId is required' }, { status: 400 });
     }
 
-    const userRating = username ? db.getUserRating(gameId, username) : null;
-    const game = db.getGameById(gameId);
+    const userRating = username ? await db.getUserRating(gameId, username) : null;
+    const game = await db.getGameById(gameId);
 
     return NextResponse.json({
       success: true,
       gameId,
-      rating: game?.rating || 4.9,
+      rating: game?.rating || 0,
       rating_count: game?.rating_count || 0,
       userRating
     });

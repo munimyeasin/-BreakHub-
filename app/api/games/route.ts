@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const games = db.getGames();
+    const games = await db.getGames();
     return NextResponse.json({ success: true, games }, {
       headers: {
         'Cache-Control': 'no-store, max-age=0',

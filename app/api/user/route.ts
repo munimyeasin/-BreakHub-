@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid new username is required' }, { status: 400 });
     }
 
-    const result = db.updateUsername(oldUsername || '', newUsername);
+    const result = await db.updateUsername(oldUsername || '', newUsername);
     return NextResponse.json({ success: true, user: result.user });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to update username' }, { status: 500 });

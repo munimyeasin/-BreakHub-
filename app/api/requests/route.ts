@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get('status');
     const sort = searchParams.get('sort') || 'upvotes'; // 'upvotes' | 'recent'
 
-    let requests = db.getGameRequests();
+    let requests = await db.getGameRequests();
 
     if (genre && genre !== 'ALL') {
       requests = requests.filter(r => r.genre.toUpperCase() === genre.toUpperCase());
@@ -26,7 +26,6 @@ export async function GET(req: NextRequest) {
     if (sort === 'recent') {
       requests.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     } else {
-      // Default: sort by upvotes descending, then recent
       requests.sort((a, b) => {
         if (b.upvotes !== a.upvotes) {
           return b.upvotes - a.upvotes;
@@ -53,7 +52,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { action = 'create' } = body;
 
-    // UPVOTE ACTION
     if (action === 'upvote') {
       const { requestId, username } = body;
       if (!requestId || typeof requestId !== 'string') {
@@ -63,7 +61,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Gamer tag username is required to upvote' }, { status: 400 });
       }
 
-      const result = db.upvoteGameRequest(requestId, username.trim());
+      const result = await db.upvoteGameRequest(requestId, username.trim());
       return NextResponse.json({
         success: true,
         requestId,
@@ -73,15 +71,12 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // CREATE ACTION
     const { title, genre, description, username, hp_code } = body;
 
-    // 1. Anti-Spam Honeypot Check (Hidden bot trap)
     if (hp_code) {
       return NextResponse.json({ error: 'Bot signature detected' }, { status: 400 });
     }
 
-    // 2. Validation & Content Moderation
     if (!title || typeof title !== 'string' || title.trim().length < 3 || title.trim().length > 60) {
       return NextResponse.json({ error: 'Game title must be between 3 and 60 characters' }, { status: 400 });
     }
@@ -100,11 +95,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Gamer tag username is required' }, { status: 400 });
     }
 
-    // Apply profanity moderation filter
     const sanitized = sanitizeGameRequest(title.trim(), description.trim());
 
-    // 3. Duplicate check (same user requesting exact same title recently)
-    const existing = db.getGameRequests();
+    const existing = await db.getGameRequests();
     const isDuplicate = existing.some(
       r => r.title.toLowerCase() === sanitized.title.toLowerCase() &&
            r.requested_by.toLowerCase() === cleanUsername.toLowerCase()
@@ -113,8 +106,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'You have already submitted a request with this title' }, { status: 409 });
     }
 
-    // 4. Save sanitized request
-    const newRequest = db.addGameRequest(
+    const newRequest = await db.addGameRequest(
       sanitized.title,
       cleanGenre as any,
       sanitized.description,

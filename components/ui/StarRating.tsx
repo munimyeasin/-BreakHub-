@@ -148,7 +148,7 @@ export default function StarRating({
   gameTitle,
   gameCategory,
   thumbnailUrl,
-  rating = 4.9,
+  rating = 0,
   ratingCount = 0,
   userRating = null,
   size = 'sm',

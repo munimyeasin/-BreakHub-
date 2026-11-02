@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid gameId is required' }, { status: 400 });
     }
 
-    const newHypeCount = db.toggleHypeCount(gameId, Boolean(increment));
+    const newHypeCount = await db.toggleHypeCount(gameId, Boolean(increment));
     return NextResponse.json({ success: true, hypeCount: newHypeCount });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to update hype count' }, { status: 500 });

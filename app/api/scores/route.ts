@@ -63,7 +63,6 @@ function checkRateLimit(identifier: string): boolean {
   validHistory.push(now);
   ipRequestHistory.set(identifier, validHistory);
 
-  // Periodic cleanup if map grows too large
   if (ipRequestHistory.size > 2000) {
     for (const [key, timestamps] of ipRequestHistory.entries()) {
       if (timestamps.every((t) => now - t > RATE_LIMIT_WINDOW_MS)) {
@@ -77,7 +76,6 @@ function checkRateLimit(identifier: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. IP / Client Rate Limiting
     const forwardedFor = req.headers.get('x-forwarded-for');
     const clientIp = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
 
@@ -91,16 +89,13 @@ export async function POST(req: NextRequest) {
     const body: ScorePayload = await req.json();
     const { gameId, username, score, honeypot } = body;
 
-    // 2. Anti-Bot Honeypot Trap
     if (honeypot && typeof honeypot === 'string' && honeypot.trim().length > 0) {
-      // Silently reject automated bot submissions
       return NextResponse.json(
         { error: 'Submission rejected by security policy' },
         { status: 400 }
       );
     }
 
-    // 3. Validation on Game ID
     if (!gameId || typeof gameId !== 'string') {
       return NextResponse.json({ error: 'Valid gameId is required' }, { status: 400 });
     }
@@ -110,7 +105,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unrecognized game title' }, { status: 400 });
     }
 
-    // 4. Validation on Username
     if (!username || typeof username !== 'string') {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
@@ -123,7 +117,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 5. Validation on Score
     if (typeof score !== 'number' || isNaN(score) || !isFinite(score) || score < 0) {
       return NextResponse.json({ error: 'Valid positive score number is required' }, { status: 400 });
     }
@@ -136,8 +129,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 6. Record verified score
-    const result = db.submitScore(matchedGame.id, cleanUsername, Math.round(score));
+    const result = await db.submitScore(matchedGame.id, cleanUsername, Math.round(score));
 
     return NextResponse.json(
       {

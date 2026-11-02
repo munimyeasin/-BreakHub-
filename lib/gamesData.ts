@@ -9,8 +9,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-fruit-merge.svg',
     description: 'Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 52,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -22,8 +22,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/flappy-bird.svg',
     description: 'Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 14,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -35,8 +35,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-starfighter.svg',
     description: 'Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 28,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -48,8 +48,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-slicer.svg',
     description: 'Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 36,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -61,8 +61,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/retro-battleship.svg',
     description: 'Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 56,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -74,8 +74,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-missile-defense.svg',
     description: 'Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 42,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -87,8 +87,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-chess.svg',
     description: 'Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 68,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -100,8 +100,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/multidimension-xo.svg',
     description: 'Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 24,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -113,8 +113,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/tetra-matrix.svg',
     description: 'Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 45,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -126,8 +126,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/retro-candy-crush.svg',
     description: 'Cyber Match-3 Puzzle Arcade! Align 3+ neon candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 64,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -139,8 +139,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/black-hole.svg',
     description: 'David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 48,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -152,8 +152,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-minesweeper.svg',
     description: 'Procedural Neo-Brutalist Quantum Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 38,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -165,8 +165,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-maze.svg',
     description: '10-Level Neural Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 42,
+    rating: 0,
+    rating_count: 0,
     status: 'active',
     featured: true
   },
@@ -178,8 +178,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/quantum-xo.svg',
     description: 'Futuristic 3x3 tactical showdown against Overthinker Final Boss.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 16,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -190,8 +190,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/quantum-2048.svg',
     description: 'Cyber-arcade sliding block merger. Combine identical energy nodes to forge the 2048 core.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 15,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -202,8 +202,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/memory-matrix.svg',
     description: 'Fast-paced neural memory card matching grid with multiplier streaks.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 11,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -214,8 +214,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/hyper-tapper.svg',
     description: 'Precision reaction-time clicker testing ultra-high APM speeds.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 22,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -226,8 +226,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/neon-snake.svg',
     description: 'Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 34,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -238,8 +238,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-dash.svg',
     description: 'Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.',
     play_count: 0,
-    rating: 4.9,
-    rating_count: 19,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -250,8 +250,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/geometry-dash.svg',
     description: 'Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 31,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -262,8 +262,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/cyber-breaker.svg',
     description: 'Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 12,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -274,8 +274,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/chroma-reflex.svg',
     description: 'Color-quadrant chromatic memory sequence & audio tone reflex test.',
     play_count: 0,
-    rating: 4.8,
-    rating_count: 9,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   },
   {
@@ -286,8 +286,8 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/paper-io.svg',
     description: 'Conquer the arcade grid! Expand your neon territory, encircle massive zones, and slice enemy trails before they cut yours.',
     play_count: 0,
-    rating: 5.0,
-    rating_count: 25,
+    rating: 0,
+    rating_count: 0,
     status: 'active'
   }
 ];

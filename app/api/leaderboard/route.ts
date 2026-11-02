@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
     const gameId = searchParams.get('gameId');
 
     if (gameId && gameId !== 'global') {
-      const leaderboard = db.getPerGameLeaderboard(gameId, 10);
-      const game = db.getGameById(gameId);
+      const leaderboard = await db.getPerGameLeaderboard(gameId, 10);
+      const game = await db.getGameById(gameId);
       return NextResponse.json({
         type: 'game',
         gameId,
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         headers: { 'Cache-Control': 'no-store, max-age=0' },
       });
     } else {
-      const leaderboard = db.getGlobalLeaderboard(50);
+      const leaderboard = await db.getGlobalLeaderboard(50);
       return NextResponse.json({
         type: 'global',
         leaderboard

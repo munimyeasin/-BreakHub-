@@ -787,7 +787,7 @@ export default function GameModal({
                       gameTitle={game.title}
                       gameCategory={game.category}
                       thumbnailUrl={game.thumbnail_url}
-                      rating={game.rating || 4.9}
+                      rating={game.rating || 0}
                       ratingCount={game.rating_count || 0}
                       userRating={userRating}
                       size="xs"

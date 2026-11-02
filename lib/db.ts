@@ -3,6 +3,7 @@ import path from 'path';
 import { User, Game, Score, LeaderboardEntry, Rating, GameRequest } from './types';
 import { INITIAL_GAMES } from './gamesData';
 import { censorText } from './censor';
+import { supabase } from './supabase';
 
 export { INITIAL_GAMES };
 
@@ -19,7 +20,6 @@ const DATA_DIR = IS_VERCEL ? path.join('/tmp', 'data') : path.resolve(process.cw
 const DB_FILE = path.join(DATA_DIR, 'portal_db.json');
 const SEED_FILE = path.resolve(process.cwd(), 'data', 'portal_db.json');
 
-// Clean empty initial state with zero fake data
 const INITIAL_USERS: User[] = [];
 const INITIAL_SCORES: Score[] = [];
 const INITIAL_RATINGS: Rating[] = [];
@@ -76,8 +76,6 @@ class DatabaseService {
 
   private loadDatabase(): DatabaseSchema {
     this.ensureDirectory();
-
-    // Check if db file exists in active location or can be seeded from project repo
     let content: string | null = null;
     try {
       if (fs.existsSync(DB_FILE)) {
@@ -103,23 +101,6 @@ class DatabaseService {
           if (!existing) {
             parsed.games.push(ig);
             updated = true;
-          } else {
-            if (ig.status !== undefined && existing.status !== ig.status) {
-              existing.status = ig.status;
-              updated = true;
-            }
-            if (ig.hype_count !== undefined && existing.hype_count === undefined) {
-              existing.hype_count = ig.hype_count;
-              updated = true;
-            }
-            if (ig.rating_count !== undefined && existing.rating_count === undefined) {
-              existing.rating_count = ig.rating_count;
-              updated = true;
-            }
-            if (ig.rating !== undefined && existing.rating === undefined) {
-              existing.rating = ig.rating;
-              updated = true;
-            }
           }
         });
         if (updated) {
@@ -161,42 +142,27 @@ class DatabaseService {
       fs.writeFileSync(tempFile, JSON.stringify(payload, null, 2), 'utf-8');
       fs.renameSync(tempFile, DB_FILE);
     } catch {
-      // In-memory fallback if disk writes are restricted
       this.data = payload;
     }
   }
 
   // Games
-  public getGames(): Game[] {
+  public async getGames(): Promise<Game[]> {
+    try {
+      const { data, error } = await supabase.from('games').select('*');
+      if (!error && data && data.length > 0) {
+        this.data.games = data;
+        return data;
+      }
+    } catch {}
+
     try {
       if (fs.existsSync(DB_FILE)) {
         const content = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(content);
         if (parsed && Array.isArray(parsed.games)) {
-          let updated = false;
-          INITIAL_GAMES.forEach(ig => {
-            const existing = parsed.games.find((g: any) => g.id === ig.id || g.slug === ig.slug);
-            if (!existing) {
-              parsed.games.push(ig);
-              updated = true;
-            } else {
-              if (ig.status !== undefined && existing.status !== ig.status) {
-                existing.status = ig.status;
-                updated = true;
-              }
-              if (ig.rating_count !== undefined && existing.rating_count === undefined) {
-                existing.rating_count = ig.rating_count;
-                updated = true;
-              }
-            }
-          });
-          if (updated) {
-            this.saveDatabase(parsed);
-          }
           this.data.games = parsed.games;
-          if (Array.isArray(parsed.ratings)) {
-            this.data.ratings = parsed.ratings;
-          }
+          if (Array.isArray(parsed.ratings)) this.data.ratings = parsed.ratings;
           return parsed.games;
         }
       }
@@ -204,44 +170,50 @@ class DatabaseService {
     return this.data.games;
   }
 
-  public getGameById(id: string): Game | undefined {
-    const all = this.getGames();
+  public async getGameById(id: string): Promise<Game | undefined> {
+    const all = await this.getGames();
     return all.find(g => g.id === id || g.slug === id);
   }
 
-  public incrementPlayCount(gameId: string): number {
-    this.getGames();
-    const game = this.data.games.find(g => g.id === gameId || g.slug === gameId);
+  public async incrementPlayCount(gameId: string): Promise<number> {
+    const games = await this.getGames();
+    const game = games.find(g => g.id === gameId || g.slug === gameId);
     if (game) {
       game.play_count = (game.play_count || 0) + 1;
       this.saveDatabase();
+      try {
+        await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
+      } catch {}
       return game.play_count;
     }
     return 0;
   }
 
-  public toggleHypeCount(gameId: string, increment = true): number {
-    this.getGames();
-    const game = this.data.games.find(g => g.id === gameId || g.slug === gameId);
+  public async toggleHypeCount(gameId: string, increment = true): Promise<number> {
+    const games = await this.getGames();
+    const game = games.find(g => g.id === gameId || g.slug === gameId);
     if (game) {
       const current = game.hype_count || 0;
       game.hype_count = increment ? current + 1 : Math.max(0, current - 1);
       this.saveDatabase();
+      try {
+        await supabase.from('games').update({ hype_count: game.hype_count }).eq('id', game.id);
+      } catch {}
       return game.hype_count;
     }
     return 0;
   }
 
   // Rate a Game
-  public rateGame(gameId: string, username: string, ratingValue: number): { rating: number; rating_count: number; userRating: number; isUpdate: boolean } {
-    this.getGames();
-    const game = this.data.games.find(g => g.id === gameId || g.slug === gameId);
+  public async rateGame(gameId: string, username: string, ratingValue: number): Promise<{ rating: number; rating_count: number; userRating: number; isUpdate: boolean }> {
+    const games = await this.getGames();
+    const game = games.find(g => g.id === gameId || g.slug === gameId);
     if (!game) {
       throw new Error(`Game '${gameId}' not found`);
     }
 
     const cleanRating = Math.min(5, Math.max(1, Math.round(ratingValue)));
-    const user = this.findOrCreateUser(username);
+    const user = await this.findOrCreateUser(username);
 
     if (!Array.isArray(this.data.ratings)) {
       this.data.ratings = [];
@@ -267,22 +239,35 @@ class DatabaseService {
       this.data.ratings.push(newRating);
     }
 
-    // Recalculate dynamic average rating & count
-    const initialConfig = INITIAL_GAMES.find(ig => ig.id === game.id || ig.slug === game.slug);
-    const baseRating = initialConfig?.rating || 4.9;
-    const baseCount = initialConfig?.rating_count || 20;
+    const initialConfig = INITIAL_GAMES.find(ig => ig.id === game.id || ig.slug === ig.slug);
+    const baseRating = initialConfig?.rating || 0;
+    const baseCount = initialConfig?.rating_count || 0;
 
     const gameUserRatings = this.data.ratings.filter(r => r.game_id === game.id || r.game_id === game.slug);
     const userRatingSum = gameUserRatings.reduce((sum, r) => sum + r.rating, 0);
 
     const totalSum = (baseRating * baseCount) + userRatingSum;
     const totalCount = baseCount + gameUserRatings.length;
-    const computedAverage = Number((totalSum / totalCount).toFixed(1));
+    const computedAverage = totalCount > 0 ? Number((totalSum / totalCount).toFixed(1)) : 0;
 
-    game.rating = Math.min(5.0, Math.max(1.0, computedAverage));
+    game.rating = Math.min(5.0, Math.max(0.0, computedAverage));
     game.rating_count = totalCount;
 
     this.saveDatabase();
+
+    try {
+      await supabase.from('ratings').upsert({
+        game_id: game.id,
+        user_id: user.id,
+        rating: cleanRating,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'game_id,user_id' });
+
+      await supabase.from('games').update({
+        rating: game.rating,
+        rating_count: game.rating_count
+      }).eq('id', game.id);
+    } catch {}
 
     return {
       rating: game.rating,
@@ -292,24 +277,45 @@ class DatabaseService {
     };
   }
 
-  public getUserRating(gameId: string, username: string): number | null {
-    if (!username || !Array.isArray(this.data.ratings)) return null;
-    const user = this.data.users.find(u => u.username.toLowerCase() === username.trim().toLowerCase());
+  public async getUserRating(gameId: string, username: string): Promise<number | null> {
+    if (!username) return null;
+    const cleanName = username.trim().toLowerCase();
+    const user = this.data.users.find(u => u.username.toLowerCase() === cleanName) ||
+      (await supabase.from('users').select('*').ilike('username', cleanName).single()).data;
     if (!user) return null;
 
-    const game = this.getGameById(gameId);
+    const game = await this.getGameById(gameId);
     if (!game) return null;
 
-    const found = this.data.ratings.find(
-      r => (r.game_id === game.id || r.game_id === game.slug) && r.user_id === user.id
-    );
-    return found ? found.rating : null;
+    if (Array.isArray(this.data.ratings)) {
+      const found = this.data.ratings.find(
+        r => (r.game_id === game.id || r.game_id === game.slug) && r.user_id === user.id
+      );
+      if (found) return found.rating;
+    }
+
+    try {
+      const { data } = await supabase.from('ratings').select('rating').eq('game_id', game.id).eq('user_id', user.id).single();
+      if (data) return data.rating;
+    } catch {}
+
+    return null;
   }
 
   // Users
-  public findOrCreateUser(username: string): User {
+  public async findOrCreateUser(username: string): Promise<User> {
     const cleanName = username.trim();
     let user = this.data.users.find(u => u.username.toLowerCase() === cleanName.toLowerCase());
+
+    if (!user) {
+      try {
+        const { data } = await supabase.from('users').select('*').ilike('username', cleanName).single();
+        if (data) {
+          user = data;
+          this.data.users.push(user);
+        }
+      } catch {}
+    }
 
     if (!user) {
       user = {
@@ -320,33 +326,33 @@ class DatabaseService {
       };
       this.data.users.push(user);
       this.saveDatabase();
+
+      try {
+        await supabase.from('users').insert(user);
+      } catch {}
     }
     return user;
   }
 
-  // Rename User & Migrate Existing Leaderboard Records
-  public updateUsername(oldUsername: string, newUsername: string): { success: boolean; user?: User } {
+  public async updateUsername(oldUsername: string, newUsername: string): Promise<{ success: boolean; user?: User }> {
     const cleanOld = (oldUsername || '').trim().toLowerCase();
     const cleanNew = (newUsername || '').trim();
     if (!cleanNew) return { success: false };
 
-    // Find user by old username if provided
     const existingUser = cleanOld ? this.data.users.find(u => u.username.toLowerCase() === cleanOld) : null;
-    const targetUser = this.data.users.find(u => u.username.toLowerCase() === cleanNew.toLowerCase());
+    let targetUser = this.data.users.find(u => u.username.toLowerCase() === cleanNew.toLowerCase());
+
+    if (!targetUser) {
+      targetUser = await this.findOrCreateUser(cleanNew);
+    }
 
     if (existingUser && targetUser && existingUser.id !== targetUser.id) {
-      // Merge scores
       this.data.scores.forEach(s => {
-        if (s.user_id === existingUser.id) {
-          s.user_id = targetUser.id;
-        }
+        if (s.user_id === existingUser.id) s.user_id = targetUser!.id;
       });
-      // Merge ratings
       if (Array.isArray(this.data.ratings)) {
         this.data.ratings.forEach(r => {
-          if (r.user_id === existingUser.id) {
-            r.user_id = targetUser.id;
-          }
+          if (r.user_id === existingUser.id) r.user_id = targetUser!.id;
         });
       }
       this.data.users = this.data.users.filter(u => u.id !== existingUser.id);
@@ -358,17 +364,20 @@ class DatabaseService {
       existingUser.username = cleanNew;
       existingUser.avatar_url = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanNew)}`;
       this.saveDatabase();
+      try {
+        await supabase.from('users').update({ username: cleanNew, avatar_url: existingUser.avatar_url }).eq('id', existingUser.id);
+      } catch {}
       return { success: true, user: existingUser };
     } else {
-      const user = this.findOrCreateUser(cleanNew);
+      const user = await this.findOrCreateUser(cleanNew);
       return { success: true, user };
     }
   }
 
   // Submit Score
-  public submitScore(gameId: string, username: string, scoreValue: number) {
-    const user = this.findOrCreateUser(username);
-    const game = this.getGameById(gameId);
+  public async submitScore(gameId: string, username: string, scoreValue: number) {
+    const user = await this.findOrCreateUser(username);
+    const game = await this.getGameById(gameId);
     if (!game) {
       throw new Error(`Game with id '${gameId}' does not exist.`);
     }
@@ -382,10 +391,14 @@ class DatabaseService {
     };
 
     this.data.scores.push(newScore);
-    game.play_count += 1;
+    game.play_count = (game.play_count || 0) + 1;
     this.saveDatabase();
 
-    // Calculate personal best
+    try {
+      await supabase.from('scores').insert(newScore);
+      await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
+    } catch {}
+
     const userScores = this.data.scores.filter(s => s.game_id === game.id && s.user_id === user.id);
     const personalBest = Math.max(...userScores.map(s => s.score));
 
@@ -398,15 +411,22 @@ class DatabaseService {
   }
 
   // Leaderboard: Per-Game
-  public getPerGameLeaderboard(gameId: string, limit = 10): LeaderboardEntry[] {
-    const game = this.getGameById(gameId);
+  public async getPerGameLeaderboard(gameId: string, limit = 10): Promise<LeaderboardEntry[]> {
+    const game = await this.getGameById(gameId);
     const targetId = game ? game.id : gameId;
     const targetSlug = game ? game.slug : gameId;
-    const gameScores = this.data.scores.filter(
+
+    let gameScores = this.data.scores.filter(
       s => s.game_id === targetId || s.game_id === targetSlug
     );
 
-    // Group highest score per user
+    try {
+      const { data } = await supabase.from('scores').select('*').or(`game_id.eq.${targetId},game_id.eq.${targetSlug}`);
+      if (data && data.length > 0) {
+        gameScores = data;
+      }
+    } catch {}
+
     const userBestMap = new Map<string, { score: number; achieved_at: string }>();
     gameScores.forEach(s => {
       const current = userBestMap.get(s.user_id);
@@ -434,21 +454,26 @@ class DatabaseService {
     return entries.slice(0, limit).map((e, idx) => ({ ...e, rank: idx + 1 }));
   }
 
-  // Leaderboard: Global (Cumulative high-score across distinct games)
-  public getGlobalLeaderboard(limit = 50): LeaderboardEntry[] {
-    // Map of userId -> Map of gameId -> bestScore
+  // Leaderboard: Global
+  public async getGlobalLeaderboard(limit = 50): Promise<LeaderboardEntry[]> {
+    let allScores = this.data.scores;
+    try {
+      const { data } = await supabase.from('scores').select('*');
+      if (data && data.length > 0) {
+        allScores = data;
+      }
+    } catch {}
+
     const userGameScores = new Map<string, Map<string, number>>();
 
-    this.data.scores.forEach(s => {
+    allScores.forEach(s => {
       if (!userGameScores.has(s.user_id)) {
         userGameScores.set(s.user_id, new Map());
       }
       const gMap = userGameScores.get(s.user_id)!;
-      const game = this.getGameById(s.game_id);
-      const canonicalId = game ? game.id : s.game_id;
-      const current = gMap.get(canonicalId) || 0;
+      const current = gMap.get(s.game_id) || 0;
       if (s.score > current) {
-        gMap.set(canonicalId, s.score);
+        gMap.set(s.game_id, s.score);
       }
     });
 
@@ -475,7 +500,15 @@ class DatabaseService {
   }
 
   // Game Requests & Community Wishlist
-  public getGameRequests(): GameRequest[] {
+  public async getGameRequests(): Promise<GameRequest[]> {
+    try {
+      const { data } = await supabase.from('game_requests').select('*');
+      if (data && data.length > 0) {
+        this.data.game_requests = data;
+        return data;
+      }
+    } catch {}
+
     try {
       if (fs.existsSync(DB_FILE)) {
         const content = fs.readFileSync(DB_FILE, 'utf-8');
@@ -486,6 +519,7 @@ class DatabaseService {
         }
       }
     } catch {}
+
     if (!Array.isArray(this.data.game_requests)) {
       this.data.game_requests = INITIAL_REQUESTS;
       this.saveDatabase();
@@ -493,18 +527,18 @@ class DatabaseService {
     return this.data.game_requests;
   }
 
-  public addGameRequest(
+  public async addGameRequest(
     title: string,
     genre: 'ACTION' | 'PUZZLE' | 'ARCADE' | 'STRATEGY' | 'CARD' | 'OTHER',
     description: string,
     username: string
-  ): GameRequest {
-    const all = this.getGameRequests();
+  ): Promise<GameRequest> {
+    const all = await this.getGameRequests();
     const cleanTitle = censorText(title.trim());
     const cleanDesc = censorText(description.trim());
     const cleanUser = censorText(username.trim()) || 'Anonymous Player';
 
-    const user = this.findOrCreateUser(cleanUser);
+    const user = await this.findOrCreateUser(cleanUser);
 
     const newRequest: GameRequest = {
       id: `req_${Math.random().toString(36).substring(2, 10)}_${Date.now().toString(36)}`,
@@ -522,11 +556,16 @@ class DatabaseService {
     all.unshift(newRequest);
     this.data.game_requests = all;
     this.saveDatabase();
+
+    try {
+      await supabase.from('game_requests').insert(newRequest);
+    } catch {}
+
     return newRequest;
   }
 
-  public upvoteGameRequest(requestId: string, username: string): { upvotes: number; isUpvoted: boolean; request?: GameRequest } {
-    const all = this.getGameRequests();
+  public async upvoteGameRequest(requestId: string, username: string): Promise<{ upvotes: number; isUpvoted: boolean; request?: GameRequest }> {
+    const all = await this.getGameRequests();
     const req = all.find(r => r.id === requestId);
     if (!req) {
       throw new Error(`Game request '${requestId}' not found`);
@@ -539,16 +578,22 @@ class DatabaseService {
 
     const hasUpvoted = req.upvoted_by.includes(cleanUser);
     if (hasUpvoted) {
-      // Toggle off upvote
       req.upvoted_by = req.upvoted_by.filter(u => u !== cleanUser);
       req.upvotes = Math.max(0, req.upvotes - 1);
     } else {
-      // Add upvote
       req.upvoted_by.push(cleanUser);
       req.upvotes = (req.upvotes || 0) + 1;
     }
 
     this.saveDatabase();
+
+    try {
+      await supabase.from('game_requests').update({
+        upvotes: req.upvotes,
+        upvoted_by: req.upvoted_by
+      }).eq('id', req.id);
+    } catch {}
+
     return {
       upvotes: req.upvotes,
       isUpvoted: !hasUpvoted,
