@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { User, Game, Score, LeaderboardEntry, Rating, GameRequest } from './types';
 import { INITIAL_GAMES } from './gamesData';
 import { censorText } from './censor';
-import { supabase } from './supabase';
+import { supabaseServer as supabase } from './supabaseServer';
 
 export { INITIAL_GAMES };
 
