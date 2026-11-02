@@ -462,6 +462,15 @@ class DatabaseService {
     );
 
     try {
+      const { data: remoteUsers } = await supabase.from('users').select('*');
+      if (remoteUsers && Array.isArray(remoteUsers)) {
+        remoteUsers.forEach(ru => {
+          if (!this.data.users.some(u => u.id === ru.id)) {
+            this.data.users.push(ru);
+          }
+        });
+      }
+
       const { data } = await supabase.from('scores').select('*').or(`game_id.eq.${targetId},game_id.eq.${targetSlug}`);
       if (data && data.length > 0) {
         gameScores = data;
@@ -499,6 +508,15 @@ class DatabaseService {
   public async getGlobalLeaderboard(limit = 50): Promise<LeaderboardEntry[]> {
     let allScores = this.data.scores;
     try {
+      const { data: remoteUsers } = await supabase.from('users').select('*');
+      if (remoteUsers && Array.isArray(remoteUsers)) {
+        remoteUsers.forEach(ru => {
+          if (!this.data.users.some(u => u.id === ru.id)) {
+            this.data.users.push(ru);
+          }
+        });
+      }
+
       const { data } = await supabase.from('scores').select('*');
       if (data && data.length > 0) {
         allScores = data;

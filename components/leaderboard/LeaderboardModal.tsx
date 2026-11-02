@@ -30,6 +30,10 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
 
   useEffect(() => {
     fetchLeaderboard(selectedGameId);
+    const interval = setInterval(() => {
+      fetchLeaderboard(selectedGameId);
+    }, 5000);
+    return () => clearInterval(interval);
   }, [selectedGameId]);
 
   const top3 = leaderboard.slice(0, 3);
