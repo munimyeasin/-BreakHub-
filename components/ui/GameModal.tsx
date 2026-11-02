@@ -837,95 +837,95 @@ export default function GameModal({
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
               {(game.id === 'g_merge_25' || game.slug === 'cyber-fruit-merge' || game.slug === 'fruit-merge') && (
-                <CyberFruitMergeGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberFruitMergeGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_missile_21' || game.slug === 'neon-missile-defense' || game.slug === 'missile-defense') && (
-                <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <NeonMissileDefenseGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_chess_24' || game.slug === 'cyber-chess' || game.slug === 'chess') && (
-                <CyberChessGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberChessGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_tetris_20' || game.slug === 'tetra-matrix' || game.slug === 'tetris') && (
-                <TetraMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <TetraMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_candy_19' || game.slug === 'retro-candy-crush' || game.slug === 'candy-crush') && (
-                <CandyCrushGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CandyCrushGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_battleship_18' || game.slug === 'retro-battleship' || game.slug === 'battleship') && (
-                <BattleshipGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <BattleshipGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_blackhole_17' || game.slug === 'black-hole') && (
-                <BlackHoleGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <BlackHoleGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_sweeper_16' || game.slug === 'cyber-minesweeper') && (
-                <CyberMinesweeperGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberMinesweeperGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_maze_15' || game.slug === 'cyber-maze') && (
-                <CyberMazeGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberMazeGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_slicer_11' || game.slug === 'cyber-slicer') && (
-                <CyberSlicerGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberSlicerGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_shooter_07' || game.slug === 'neon-starfighter') && (
-                <NeonStarfighterGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <NeonStarfighterGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_ttt_03' || game.slug === 'quantum-xo') && (
-                <QuantumXOGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <QuantumXOGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_card_05' || game.slug === 'quantum-2048') && (
-                <Cyber2048Game gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <Cyber2048Game gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_flip_02' || game.slug === 'memory-matrix') && (
-                <MemoryMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <MemoryMatrixGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_tap_04' || game.slug === 'hyper-tapper') && (
-                <HyperTapperGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <HyperTapperGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_snake_01' || game.slug === 'neon-snake') && (
-                <NeonSnakeGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <NeonSnakeGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_multi_xo_13' || game.slug === 'multidimension-xo') && (
-                <MultidimensionXOGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <MultidimensionXOGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_action_06' || game.slug === 'cyber-dash') && (
-                <CyberDashGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberDashGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_geometry_10' || game.slug === 'geometry-dash') && (
-                <GeometryDashGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <GeometryDashGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_breaker_08' || game.slug === 'cyber-breaker') && (
-                <CyberBreakerGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <CyberBreakerGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_reflex_09' || game.slug === 'chroma-reflex') && (
-                <ChromaReflexGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <ChromaReflexGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_paper_12' || game.slug === 'paper-io' || game.slug === 'neon-paper-io') && (
-                <NeonPaperIoGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <NeonPaperIoGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_flappy_27' || game.slug === 'flappy-bird' || game.slug === 'cyber-flappy') && (
-                <FlappyBirdCloneGame gameId={game.id} onGameOver={handleScoreSubmit} onScoreUpdate={(s) => { currentScoreRef.current = s; }} />
+                <FlappyBirdCloneGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
             </div>
           </div>
