@@ -203,7 +203,13 @@ class DatabaseService {
 
   public async getGameById(id: string): Promise<Game | undefined> {
     const all = await this.getGames();
-    return all.find(g => g.id === id || g.slug === id);
+    if (!id) return undefined;
+    const cleanId = id.trim().toLowerCase();
+    return all.find(g =>
+      g.id.toLowerCase() === cleanId ||
+      g.slug.toLowerCase() === cleanId ||
+      g.title.toLowerCase().includes(cleanId)
+    );
   }
 
   public async incrementPlayCount(gameId: string): Promise<number> {

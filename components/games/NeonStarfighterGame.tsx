@@ -235,6 +235,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const difficultyRef = useRef<StarfighterDifficulty>('ace');
   const soundEnabledRef = useRef(true);
   const onGameOverRef = useRef(onGameOver);
+  useEffect(() => {
+    onGameOverRef.current = onGameOver;
+  }, [onGameOver]);
   const scoreRef = useRef(0);
   const waveRef = useRef(1);
   const activePowerupRef = useRef<string | null>(null);
