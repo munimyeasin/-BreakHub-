@@ -25,7 +25,8 @@ import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
 import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
-import Sidebar, { PortalTab } from '@/components/navigation/Sidebar';
+import Sidebar from '@/components/navigation/Sidebar';
+type PortalTab = 'all' | 'favorites' | 'about-project' | 'about-devs';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
 import ActivityTicker from '@/components/gamification/ActivityTicker';
 import AdminLoginModal from '@/components/admin/AdminLoginModal';
@@ -62,7 +63,7 @@ export default function ArcadePortalDashboard() {
   const { toggleTheme, isThemeSelectorOpen, setIsThemeSelectorOpen, isDark } = useTheme();
   const [games, setGames] = useState<Game[]>(INITIAL_GAMES);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<PortalTab>('all');
+  const [activeTab, setActiveTab] = useState<any>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [hypedGames, setHypedGames] = useState<string[]>([]);
@@ -757,7 +758,7 @@ export default function ArcadePortalDashboard() {
           onClose={() => setIsSidebarOpen(false)}
           activeTab={activeTab}
           onSelectTab={(tab) => {
-            setActiveTab(tab);
+            setActiveTab(tab as 'all' | 'favorites' | 'about-project' | 'about-devs');
             setIsSidebarOpen(false);
           }}
           selectedCategory={selectedCategory}
@@ -818,24 +819,33 @@ export default function ArcadePortalDashboard() {
                 </div>
               )}
 
-              <GameGrid
-                games={filteredGames}
-                favorites={favorites}
-                hypedGames={hypedGames}
-                isFavoritesTab={activeTab === 'favorites'}
-                onToggleFavorite={toggleFavorite}
-                onToggleHype={handleToggleHype}
-                onPlayGame={(game) => handleLaunchGame(game)}
-                onViewLeaderboard={(gameId, e) => {
-                  e.stopPropagation();
-                  handleOpenLeaderboard(gameId);
-                }}
-                onResetFilters={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('ALL');
-                  setActiveTab('all');
-                }}
-              />
+              {activeTab === 'about-project' || activeTab === 'about-devs' ? (
+                <AboutSection
+                  initialView={activeTab === 'about-devs' ? 'devs' : 'project'}
+                  onExploreGames={() => setActiveTab('all')}
+                  onOpenLeaderboard={() => handleOpenLeaderboard('global')}
+                  onViewChange={(v) => setActiveTab(v === 'devs' ? 'about-devs' : 'about-project')}
+                />
+              ) : (
+                <GameGrid
+                  games={filteredGames}
+                  favorites={favorites}
+                  hypedGames={hypedGames}
+                  isFavoritesTab={activeTab === 'favorites'}
+                  onToggleFavorite={toggleFavorite}
+                  onToggleHype={handleToggleHype}
+                  onPlayGame={(game) => handleLaunchGame(game)}
+                  onViewLeaderboard={(gameId, e) => {
+                    e.stopPropagation();
+                    handleOpenLeaderboard(gameId);
+                  }}
+                  onResetFilters={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('ALL');
+                    setActiveTab('all');
+                  }}
+                />
+              )}
             </>
           )}
         </main>
