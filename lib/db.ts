@@ -424,7 +424,7 @@ class DatabaseService {
     }
 
     const newScore: Score = {
-      id: `sc_${Math.random().toString(36).substring(2, 11)}`,
+      id: crypto.randomUUID(),
       game_id: game.id,
       user_id: user.id,
       score: scoreValue,
@@ -436,9 +436,14 @@ class DatabaseService {
     this.saveDatabase();
 
     try {
-      await supabase.from('scores').insert(newScore);
-      await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
-    } catch {}
+      const { error: sErr } = await supabase.from('scores').insert(newScore);
+      if (sErr) console.error('Supabase score insert error:', sErr);
+
+      const { error: gErr } = await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
+      if (gErr) console.error('Supabase game play_count update error:', gErr);
+    } catch (err) {
+      console.error('Supabase score sync exception:', err);
+    }
 
     const userScores = this.data.scores.filter(s => s.game_id === game.id && s.user_id === user.id);
     const personalBest = Math.max(...userScores.map(s => s.score));
