@@ -42,6 +42,7 @@ const MAX_SCORE_LIMITS: Record<string, number> = {
   g_ttt_03: 50_000,
   g_flip_02: 100_000,
   g_snake_01: 150_000,
+  g_flappy_27: 100_000,
 };
 
 function sanitizeUsername(input: string): string {

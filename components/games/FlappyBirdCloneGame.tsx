@@ -6,6 +6,7 @@ import { Trophy, RotateCcw, Volume2, VolumeX, Zap, Shield, Sparkles } from "luci
 interface FlappyCloneProps {
   gameId?: string;
   onGameOver?: (score: number) => void;
+  onScoreUpdate?: (score: number) => void;
 }
 
 interface Particle {
@@ -37,7 +38,7 @@ interface Star {
   alpha: number;
 }
 
-export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver }: FlappyCloneProps) {
+export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, onScoreUpdate }: FlappyCloneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
@@ -272,6 +273,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver }: 
             comboRef.current += 1;
             setScore(scoreRef.current);
             setCombo(comboRef.current);
+            onScoreUpdate?.(scoreRef.current);
             playSound('score');
 
             // Floating text popup
