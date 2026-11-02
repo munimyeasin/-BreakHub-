@@ -176,11 +176,25 @@ export default function StarRating({
   const [justRated, setJustRated] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
+  // Optimistic UI states
+  const [displayRating, setDisplayRating] = useState<number>(rating);
+  const [displayCount, setDisplayCount] = useState<number>(ratingCount);
+  const [displayUserRating, setDisplayUserRating] = useState<number | null>(userRating);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
+    setDisplayRating(rating);
+  }, [rating]);
+
+  useEffect(() => {
+    setDisplayCount(ratingCount);
+  }, [ratingCount]);
+
+  useEffect(() => {
+    setDisplayUserRating(userRating);
     if (userRating) {
       setSelectedRating(userRating);
     }
@@ -247,6 +261,19 @@ export default function StarRating({
     ratingAudio.playSubmitChime(starsToSubmit);
     setIsSubmitting(true);
     setJustRated(true);
+
+    // Optimistic UI calculation
+    const prevCount = displayCount;
+    const isNewRating = !displayUserRating;
+    const nextCount = isNewRating ? prevCount + 1 : prevCount;
+    const prevTotal = displayRating * prevCount;
+    const prevUserVal = displayUserRating || 0;
+    const nextSum = prevTotal - prevUserVal + starsToSubmit;
+    const nextAvg = nextCount > 0 ? Number((nextSum / nextCount).toFixed(1)) : starsToSubmit;
+
+    setDisplayUserRating(starsToSubmit);
+    setDisplayCount(nextCount);
+    setDisplayRating(Math.min(5, Math.max(1, nextAvg)));
 
     if (starsToSubmit >= 4) {
       try {
@@ -351,8 +378,8 @@ export default function StarRating({
 
               <div className="flex items-center gap-1 bg-portal-surface px-2.5 py-1 rounded-lg border-2 border-black shadow-neo-sm shrink-0">
                 <Star className="w-3.5 h-3.5 fill-portal-yellow text-portal-yellow stroke-[2.5]" />
-                <span className="text-xs font-black text-white">{rating.toFixed(1)}</span>
-                <span className="text-[9px] text-slate-400 font-bold">({ratingCount})</span>
+                <span className="text-xs font-black text-white">{displayRating.toFixed(1)}</span>
+                <span className="text-[9px] text-slate-400 font-bold">({displayCount})</span>
               </div>
             </div>
           )}
@@ -514,27 +541,27 @@ export default function StarRating({
             : 'cursor-default px-1 py-0.5'
         }`}
         title={
-          userRating
-            ? `Your rating: ${userRating} ★ (Click to review)`
-            : `Rating: ${rating.toFixed(1)} ★ (${ratingCount} reviews) - Click to review!`
+          displayUserRating
+            ? `Your rating: ${displayUserRating} ★ (Click to review)`
+            : `Rating: ${displayRating.toFixed(1)} ★ (${displayCount} reviews) - Click to review!`
         }
       >
         <Star
           className={`${starSizeClass} fill-portal-yellow text-portal-yellow group-hover/rate:text-black group-hover/rate:fill-black stroke-[2.5] transition-colors`}
         />
         <span className="text-[10px] sm:text-[11px] font-black tracking-tight uppercase group-hover/rate:text-black">
-          {rating.toFixed(1)}
+          {displayRating.toFixed(1)}
         </span>
 
-        {showCount && ratingCount > 0 && (
+        {showCount && displayCount > 0 && (
           <span className="text-[9px] sm:text-[10px] text-slate-400 group-hover/rate:text-black font-bold">
-            ({ratingCount})
+            ({displayCount})
           </span>
         )}
 
-        {userRating && (
+        {displayUserRating && (
           <span className="ml-0.5 px-1.5 py-0.2 rounded-md bg-portal-yellow text-black text-[8px] sm:text-[9px] font-black uppercase tracking-wider border border-black shadow-neo-sm">
-            {userRating}★
+            {displayUserRating}★
           </span>
         )}
       </button>

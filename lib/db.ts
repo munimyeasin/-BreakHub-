@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { User, Game, Score, LeaderboardEntry, Rating, GameRequest } from './types';
 import { INITIAL_GAMES } from './gamesData';
 import { censorText } from './censor';
@@ -256,18 +257,26 @@ class DatabaseService {
     this.saveDatabase();
 
     try {
+      await supabase.from('games').upsert({
+        id: game.id,
+        slug: game.slug,
+        title: game.title,
+        description: game.description,
+        category: game.category,
+        image_url: game.thumbnail_url,
+        rating: game.rating,
+        rating_count: game.rating_count
+      });
+
       await supabase.from('ratings').upsert({
         game_id: game.id,
         user_id: user.id,
         rating: cleanRating,
         updated_at: new Date().toISOString()
       }, { onConflict: 'game_id,user_id' });
-
-      await supabase.from('games').update({
-        rating: game.rating,
-        rating_count: game.rating_count
-      }).eq('id', game.id);
-    } catch {}
+    } catch (err) {
+      console.error('Supabase rating sync error:', err);
+    }
 
     return {
       rating: game.rating,
@@ -319,7 +328,7 @@ class DatabaseService {
 
     if (!user) {
       user = {
-        id: `usr_${Math.random().toString(36).substring(2, 9)}`,
+        id: crypto.randomUUID(),
         username: cleanName,
         avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanName)}`,
         created_at: new Date().toISOString()
@@ -328,8 +337,18 @@ class DatabaseService {
       this.saveDatabase();
 
       try {
-        await supabase.from('users').insert(user);
-      } catch {}
+        const { data: insertedUser } = await supabase.from('users').upsert({
+          id: user.id,
+          username: user.username,
+          avatar_url: user.avatar_url,
+          created_at: user.created_at
+        }).select().single();
+        if (insertedUser && insertedUser.id) {
+          user.id = insertedUser.id;
+        }
+      } catch (err) {
+        console.error('Supabase user insert error:', err);
+      }
     }
     return user;
   }
