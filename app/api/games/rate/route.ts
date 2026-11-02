@@ -12,16 +12,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid gameId is required' }, { status: 400 });
     }
 
-    if (!username || typeof username !== 'string' || !username.trim()) {
-      return NextResponse.json({ error: 'Gamer tag username is required to rate' }, { status: 400 });
-    }
+    let finalUsername = typeof username === 'string' && username.trim() ? username.trim() : 'Player';
 
     const numRating = Number(rating);
     if (isNaN(numRating) || numRating < 1 || numRating > 5) {
       return NextResponse.json({ error: 'Rating must be an integer between 1 and 5' }, { status: 400 });
     }
 
-    const result = await db.rateGame(gameId, username.trim(), Math.round(numRating));
+    const result = await db.rateGame(gameId, finalUsername, Math.round(numRating));
 
     return NextResponse.json({
       success: true,

@@ -433,12 +433,36 @@ export default function ArcadePortalDashboard() {
     } catch {}
 
     try {
-      await fetch('/api/games/rate', {
+      const res = await fetch('/api/games/rate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, rating }),
+        body: JSON.stringify({
+          gameId,
+          rating,
+          username: playerTag || 'Player'
+        }),
       });
-    } catch {}
+
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof data.rating === 'number' && typeof data.rating_count === 'number') {
+          setGames(prev =>
+            prev.map(g =>
+              g.id === gameId || g.slug === gameId
+                ? { ...g, rating: data.rating, rating_count: data.rating_count }
+                : g
+            )
+          );
+          setActiveGame(prev =>
+            prev && (prev.id === gameId || prev.slug === gameId)
+              ? { ...prev, rating: data.rating, rating_count: data.rating_count }
+              : prev
+          );
+        }
+      }
+    } catch (err) {
+      console.error('Failed to submit rating', err);
+    }
   };
 
   const handleSelectGameFromRoulette = (selectedGame: any) => {
