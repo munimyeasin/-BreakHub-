@@ -2,17 +2,38 @@
   "users": [],
   "games": [
     {
+      "id": "g_starfighter_1",
+      "slug": "neon-starfighter",
+      "title": "Neon Starfighter",
+      "description": "Space arcade",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.8,
+      "rating_count": 5,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:29:20.903992+00:00",
+      "updated_at": "2026-11-02T07:29:20.903992+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
       "id": "g_merge_25",
       "slug": "cyber-fruit-merge",
       "title": "Cyber Fruit Merge",
+      "description": "Suika fusion",
       "category": "PUZZLE",
-      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg",
-      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "play_count": 0,
-      "rating": 0,
-      "rating_count": 0,
       "status": "active",
-      "featured": true
+      "image_url": "/thumbnails/cyber-fruit-merge.svg",
+      "game_url": null,
+      "rating": 5,
+      "rating_count": 1,
+      "play_count": 6,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:28:45.411749+00:00",
+      "updated_at": "2026-11-02T07:28:45.411749+00:00",
+      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
     },
     {
       "id": "g_flappy_27",
@@ -21,19 +42,6 @@
       "category": "ARCADE",
       "thumbnail_url": "/thumbnails/flappy-bird.svg",
       "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "play_count": 0,
-      "rating": 0,
-      "rating_count": 0,
-      "status": "active",
-      "featured": true
-    },
-    {
-      "id": "g_shooter_07",
-      "slug": "neon-starfighter",
-      "title": "Neon Starfighter",
-      "category": "ARCADE",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg",
-      "description": "Cyber-arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
       "play_count": 0,
       "rating": 0,
       "rating_count": 0,
@@ -292,7 +300,24 @@
     }
   ],
   "scores": [],
-  "ratings": [],
+  "ratings": [
+    {
+      "id": "003da321-6261-442c-b3f6-b858ab50a3bf",
+      "game_id": "g_merge_25",
+      "user_id": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "rating": 5,
+      "created_at": "2026-11-02T07:28:46.623567+00:00",
+      "updated_at": "2026-11-02T07:28:44.897+00:00"
+    },
+    {
+      "id": "1df64ac4-6554-4c1c-8594-144347d77058",
+      "game_id": "g_starfighter_1",
+      "user_id": "edb575e2-d634-46d6-8bcc-a4582c905a91",
+      "rating": 5,
+      "created_at": "2026-11-02T07:29:21.302976+00:00",
+      "updated_at": "2026-11-02T07:29:19.598+00:00"
+    }
+  ],
   "game_requests": [
     {
       "id": "req_cyber_chess",

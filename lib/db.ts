@@ -150,6 +150,24 @@ class DatabaseService {
   // Games
   public async getGames(): Promise<Game[]> {
     try {
+      for (const ig of INITIAL_GAMES) {
+        try {
+          await supabase.from('games').upsert({
+            id: ig.id,
+            slug: ig.slug,
+            title: ig.title,
+            description: ig.description,
+            category: ig.category,
+            image_url: ig.thumbnail_url,
+            status: ig.status || 'active',
+            rating: ig.rating || 0,
+            rating_count: ig.rating_count || 0,
+            play_count: ig.play_count || 0,
+            hype_count: ig.hype_count || 0
+          }, { onConflict: 'id' });
+        } catch {}
+      }
+
       const { data, error } = await supabase.from('games').select('*');
       if (!error && data && data.length > 0) {
         this.data.games = data.map((g: any) => ({
