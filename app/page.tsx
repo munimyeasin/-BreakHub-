@@ -8,29 +8,23 @@ import {
   Zap,
   User,
   Edit3,
-  Users,
   SlidersHorizontal,
   X,
   Sun,
   Moon,
-  Palette,
   Sparkles,
   Grid,
   Cpu,
   Layers,
-  Clock,
-  Shield
+  Clock
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import GameGrid from '@/components/games/GameGrid';
-import ThemeOnboardingHint from '@/components/ui/ThemeOnboardingHint';
 import AboutSection from '@/components/about/AboutSection';
 import Sidebar from '@/components/navigation/Sidebar';
 type PortalTab = 'all' | 'favorites' | 'about-project' | 'about-devs';
 import PlayerXpBadge from '@/components/gamification/PlayerXpBadge';
 import ActivityTicker from '@/components/gamification/ActivityTicker';
-import AdminLoginModal from '@/components/admin/AdminLoginModal';
-import AdminPanel from '@/components/admin/AdminPanel';
 
 // High-Performance Dynamic Chunk Loading for Modals (Zero Initial Bundle Overhead)
 const GameModal = dynamic(() => import('@/components/ui/GameModal'), { ssr: false });
@@ -70,11 +64,6 @@ export default function ArcadePortalDashboard() {
   const [userRatings, setUserRatings] = useState<Record<string, number>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
-  // Admin Panel states
-  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
-  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-
   // Search input refs for global shortcut focus
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
@@ -99,14 +88,6 @@ export default function ArcadePortalDashboard() {
   const [gameState, setGameState] = useState<GamificationState>(() => getDefaultState());
 
   const [isHydrated, setIsHydrated] = useState(false);
-
-  // Check admin session on mount
-  useEffect(() => {
-    try {
-      const session = localStorage.getItem('breakhub_admin_session');
-      if (session) setIsAdminAuthenticated(true);
-    } catch {}
-  }, []);
 
   // Gamification Synchronization on Client Mount & Event Updates
   useEffect(() => {
@@ -699,22 +680,6 @@ export default function ArcadePortalDashboard() {
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              {/* Admin Panel Button */}
-              <button
-                onClick={() => {
-                  if (isAdminAuthenticated) {
-                    setIsAdminPanelOpen(true);
-                  } else {
-                    setIsAdminLoginOpen(true);
-                  }
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-pink text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-                title="Admin Control Panel"
-              >
-                <Shield className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span className="hidden sm:inline">Admin</span>
-              </button>
-
               <button
                 onClick={toggleTheme}
                 className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm bg-portal-yellow text-black hover:bg-portal-cyan transition-all"
@@ -850,26 +815,6 @@ export default function ArcadePortalDashboard() {
           )}
         </main>
       </div>
-
-      {/* Admin Modals */}
-      <AdminLoginModal
-        isOpen={isAdminLoginOpen}
-        onClose={() => setIsAdminLoginOpen(false)}
-        onSuccess={() => {
-          setIsAdminAuthenticated(true);
-          setIsAdminPanelOpen(true);
-        }}
-      />
-
-      <AdminPanel
-        isOpen={isAdminPanelOpen}
-        onClose={() => setIsAdminPanelOpen(false)}
-        onLogout={() => {
-          localStorage.removeItem('breakhub_admin_session');
-          setIsAdminAuthenticated(false);
-          setIsAdminPanelOpen(false);
-        }}
-      />
 
       <UsernamePromptModal
         isOpen={isUsernameModalOpen}
