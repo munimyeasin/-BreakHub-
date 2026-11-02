@@ -160,7 +160,7 @@ export default function AboutSection({
             }`}
           >
             <Users className="w-4 h-4 stroke-[2.5]" />
-            <span>Lead Architect</span>
+            <span>Core Team</span>
           </button>
 
           <button
