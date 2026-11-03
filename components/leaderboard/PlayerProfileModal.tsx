@@ -55,30 +55,33 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
   // The server saves: days_played, longest_streak, total_score, games_played,
   // level (from XP), xp, unlocked_trophies, stats.
   // ==========================================================================
-  const mockProfile: PlayerProfile = {
-    id: userId,
-    username: 'Player',
-    avatar_url: '/avatars/default.png',
-    days_played: 87,
-    longest_streak: 14,
-    level: 6,
-    total_score: 3240,
-    games_played: 42,
-    xp: 1250,
-    unlocked_trophies: {
-      first_boot: { unlockedAt: '2026-09-20' },
-      neon_initiate: { unlockedAt: '2026-10-01' },
-      grid_explorer: { unlockedAt: '2026-10-10' },
-      daily_devotee: { unlockedAt: '2026-10-15' },
-      flame_keeper: { unlockedAt: '2026-10-20' },
-      score_titan: { unlockedAt: '2026-10-25' },
-    }
-  };
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setProfile({
+        id: userId,
+        username: `Player_${userId.substring(0, 6)}`,
+        avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
+        days_played: 45,
+        longest_streak: 12,
+        level: 5,
+        total_score: 2450,
+        games_played: 28,
+        xp: 950,
+        unlocked_trophies: {
+          first_boot: { unlockedAt: '2026-09-20' },
+          neon_initiate: { unlockedAt: '2026-10-01' },
+          grid_explorer: { unlockedAt: '2026-10-10' },
+          daily_devotee: { unlockedAt: '2026-10-15' },
+        }
+      });
+      setIsLoading(false);
+    }, 150);
 
-  setProfile(mockProfile);
-  setIsLoading(false);
+    return () => clearTimeout(timer);
+  }, [userId]);
 
-  if (!profile) {
+  if (isLoading || !profile) {
     return (
       <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-fadeIn">
         <div className="bg-portal-card border-4 border-black rounded-3xl p-8 shadow-neo-xl text-center animate-scaleIn">
