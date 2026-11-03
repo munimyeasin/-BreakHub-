@@ -2319,8 +2319,8 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {/* 1. ENEMY TARGETING RADAR (Primary Attack View / Post-Match Fog of War Lifted View) */}
             <div
-              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 ${
-                mobileTab === 'fleet' ? 'hidden md:flex' : 'flex'
+              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 md:flex ${
+                mobileTab === 'fleet' ? 'max-md:hidden' : 'flex'
               }`}
             >
               <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2 px-1 text-[11px] sm:text-xs">
@@ -2455,8 +2455,8 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
 
             {/* 2. FRIENDLY OCEAN FLEET (Defense & Casualty View) */}
             <div
-              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 ${
-                mobileTab === 'radar' ? 'hidden md:flex' : 'flex'
+              className={`flex flex-col items-center bg-[#041B29] border-3 sm:border-4 border-black rounded-2xl p-1.5 min-[360px]:p-2.5 sm:p-4 shadow-neo-md w-full overflow-hidden text-slate-100 md:flex ${
+                mobileTab === 'radar' ? 'max-md:hidden' : 'flex'
               }`}
             >
               <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2 px-1 text-[11px] sm:text-xs">
