@@ -2378,11 +2378,6 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                         const isGameOver = phase === 'gameover';
                         const isRevealedIntactEnemyShip = isGameOver && occupyingEnemyShip && !occupyingEnemyShip.sunk && !shotStatus;
 
-                        // Close call evaluation for missed shots during post-match inspection
-                        const enemyCloseCall = (shotStatus === 'miss' && isGameOver)
-                          ? getCloseCallDetails(r, c, enemyTargetShips)
-                          : { isCloseCall: false };
-
                         // Sonar highlight
                         const isSonarSector =
                           scannedSector &&
@@ -2401,8 +2396,6 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                                 ? 'bg-[#031522] border-portal-yellow ring-1 ring-portal-yellow/60 shadow-neo-sm'
                                 : shotStatus === 'hit'
                                 ? 'bg-portal-yellow/20 text-black border-portal-yellow shadow-neo-sm'
-                                : enemyCloseCall.isCloseCall
-                                ? 'bg-amber-950/40 border-amber-400 ring-1 ring-amber-400/60 shadow-[0_0_8px_rgba(251,191,36,0.4)]'
                                 : shotStatus === 'miss'
                                 ? 'bg-[#031522] text-[#38BDF8] border-[#0A3C59]'
                                 : isSonarSector
@@ -2426,8 +2419,6 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
                               />
                             ) : shotStatus === 'hit' ? (
                               <BallisticImpactBlast isSunk={false} />
-                            ) : enemyCloseCall.isCloseCall ? (
-                              <CloseCallSplashMarker shipName={enemyCloseCall.shipName} isFriendly={false} />
                             ) : shotStatus === 'miss' ? (
                               <WaterSplashMarker />
                             ) : null}
