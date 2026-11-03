@@ -688,6 +688,41 @@ class DatabaseService {
       request: req
     };
   }
+
+  // Get a user's detailed profile (progression, stats, streaks, trophies)
+  public async getUserProfile(userId: string): Promise<User | null> {
+    if (!userId) return null;
+    const user = this.data.users.find(u => u.id === userId);
+    if (user) return user;
+
+    try {
+      const { data } = await supabase.from('users').select('*').eq('id', userId).single();
+      if (data) {
+        this.data.users.push(data);
+        return data;
+      }
+    } catch {}
+
+    return null;
+  }
+
+  // Save/Sync a user's progression profile (days played, streaks, level, stats, trophies)
+  public async saveUserProfile(user: User, updates: Partial<User>): Promise<User> {
+    const target = this.data.users.find(u => u.id === user.id);
+    if (target) {
+      Object.assign(target, updates);
+    } else {
+      const merged = { ...user, ...updates };
+      this.data.users.push(merged);
+    }
+    this.saveDatabase();
+
+    try {
+      await supabase.from('users').upsert({ ...target || { ...user, ...updates }, ...updates });
+    } catch {}
+
+    return target || { ...user, ...updates };
+  }
 }
 
 export const db = new DatabaseService();

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Crown, RefreshCw, X, Filter } from 'lucide-react';
 import { Game, LeaderboardEntry } from '@/lib/types';
+import PlayerProfileModal from './PlayerProfileModal';
 
 interface LeaderboardModalProps {
   initialGameId?: string | 'global';
@@ -14,6 +15,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
   const [selectedGameId, setSelectedGameId] = useState<string | 'global'>(initialGameId);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedProfileUserId, setSelectedProfileUserId] = useState<string | null>(null);
 
   const fetchLeaderboard = async (gameId: string, isInitial = false) => {
     if (isInitial || leaderboard.length === 0) {
@@ -124,7 +126,11 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
 
                 {/* 2nd Place (Silver) */}
                 {top3[1] ? (
-                  <div className="w-full min-w-0 flex flex-col items-center bg-portal-card border-3 border-black rounded-xl sm:rounded-2xl p-2 sm:p-3 relative order-1 shadow-neo">
+                  <div
+                    onClick={() => setSelectedProfileUserId(top3[1].user_id)}
+                    className="w-full min-w-0 flex flex-col items-center bg-portal-card border-3 border-black rounded-xl sm:rounded-2xl p-2 sm:p-3 relative order-1 shadow-neo cursor-pointer hover:bg-portal-surface transition-all"
+                    title="Click to view player profile"
+                  >
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-slate-300 text-black font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
                       2
                     </div>
@@ -137,7 +143,11 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
 
                 {/* 1st Place (Gold / Crown) */}
                 {top3[0] && (
-                  <div className="w-full min-w-0 flex flex-col items-center bg-portal-card border-4 border-black rounded-xl sm:rounded-2xl p-2.5 sm:p-4 relative order-2 shadow-neo-lg -translate-y-2 sm:-translate-y-2.5">
+                  <div
+                    onClick={() => setSelectedProfileUserId(top3[0].user_id)}
+                    className="w-full min-w-0 flex flex-col items-center bg-portal-card border-4 border-black rounded-xl sm:rounded-2xl p-2.5 sm:p-4 relative order-2 shadow-neo-lg -translate-y-2 sm:-translate-y-2.5 cursor-pointer hover:bg-portal-surface transition-all"
+                    title="Click to view player profile"
+                  >
                     <div className="w-8 h-8 rounded-lg bg-portal-yellow border-2 border-black text-black flex items-center justify-center -top-4 sm:-top-5 absolute shadow-neo-sm">
                       <Crown className="w-5 h-5 fill-black stroke-[2.5]" />
                     </div>
@@ -152,7 +162,11 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
 
                 {/* 3rd Place (Bronze) */}
                 {top3[2] ? (
-                  <div className="w-full min-w-0 flex flex-col items-center bg-portal-card border-3 border-black rounded-xl sm:rounded-2xl p-2 sm:p-3 relative order-3 shadow-neo">
+                  <div
+                    onClick={() => setSelectedProfileUserId(top3[2].user_id)}
+                    className="w-full min-w-0 flex flex-col items-center bg-portal-card border-3 border-black rounded-xl sm:rounded-2xl p-2 sm:p-3 relative order-3 shadow-neo cursor-pointer hover:bg-portal-surface transition-all"
+                    title="Click to view player profile"
+                  >
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-400 text-black font-black text-[11px] sm:text-xs flex items-center justify-center -top-3 sm:-top-3.5 absolute border-2 border-black shadow-neo-sm">
                       3
                     </div>
@@ -173,7 +187,9 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
                   {rest.map((entry) => (
                     <div
                       key={entry.user_id + entry.rank}
-                      className="flex items-center justify-between gap-2.5 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-portal-card hover:bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all min-w-0"
+                      onClick={() => setSelectedProfileUserId(entry.user_id)}
+                      className="flex items-center justify-between gap-2.5 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-portal-card hover:bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all min-w-0 cursor-pointer"
+                      title="Click to view player profile"
                     >
                       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                         <span className="w-6 sm:w-7 h-6 sm:h-7 rounded-md bg-portal-surface border border-black flex items-center justify-center font-black text-xs text-slate-200 shrink-0 shadow-neo-sm">
@@ -197,6 +213,10 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
             </>
           )}
         </div>
+
+        {selectedProfileUserId && (
+          <PlayerProfileModal userId={selectedProfileUserId} onClose={() => setSelectedProfileUserId(null)} />
+        )}
       </div>
     </div>
   );

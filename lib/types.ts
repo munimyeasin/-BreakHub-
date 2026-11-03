@@ -3,6 +3,14 @@ export interface User {
   username: string;
   avatar_url: string;
   created_at: string;
+  days_played?: number;
+  longest_streak?: number;
+  total_score?: number;
+  games_played?: number;
+  level?: number;
+  xp?: number;
+  unlocked_trophies?: Record<string, { unlockedAt: string }>;
+  stats?: any;
 }
 
 export interface Game {
