@@ -15,8 +15,10 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchLeaderboard = async (gameId: string) => {
-    setIsLoading(true);
+  const fetchLeaderboard = async (gameId: string, isInitial = false) => {
+    if (isInitial || leaderboard.length === 0) {
+      setIsLoading(true);
+    }
     try {
       const res = await fetch(`/api/leaderboard?gameId=${gameId}`);
       const data = await res.json();
@@ -29,10 +31,10 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
   };
 
   useEffect(() => {
-    fetchLeaderboard(selectedGameId);
+    fetchLeaderboard(selectedGameId, true);
     const interval = setInterval(() => {
-      fetchLeaderboard(selectedGameId);
-    }, 5000);
+      fetchLeaderboard(selectedGameId, false);
+    }, 30000); // 30 seconds interval
     return () => clearInterval(interval);
   }, [selectedGameId]);
 
@@ -104,7 +106,7 @@ export default function LeaderboardModal({ initialGameId = 'global', games, onCl
 
         {/* Body Viewport */}
         <div className="p-3.5 sm:p-6 overflow-y-auto flex-1 space-y-4 sm:space-y-6 overscroll-contain min-w-0">
-          {isLoading ? (
+          {isLoading && leaderboard.length === 0 ? (
             <div className="py-16 sm:py-20 flex flex-col items-center justify-center space-y-3">
               <RefreshCw className="w-8 h-8 text-portal-yellow animate-spin stroke-[2.5]" />
               <p className="text-xs text-slate-300 font-black uppercase tracking-wider">Querying high-score database...</p>
