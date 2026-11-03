@@ -1451,13 +1451,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
     } else {
       playSound('miss');
       setStreakCount(0);
-      const closeCall = getCloseCallDetails(r, c, targetShips);
-      if (closeCall.isCloseCall && isP1) {
-        setLastActionLog(`CLOSE CALL: Salvo landed 1 sector from hostile ${closeCall.shipName || 'warship'}!`);
-        triggerStarburst('CLOSE CALL!', `1 tile from ${closeCall.shipName || 'hostile hull'}`, 'close');
-      } else {
-        setLastActionLog(`Salvo plunged into open ocean coordinates ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
-      }
+      setLastActionLog(`Salvo plunged into open ocean coordinates ${ROW_LABELS[r]}${COL_LABELS[c]}.`);
     }
 
     // Turn Hand-off
