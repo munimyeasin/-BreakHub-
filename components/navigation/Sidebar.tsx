@@ -113,7 +113,7 @@ export default function Sidebar({
 
       {/* 2. Slide Bar Container */}
       <aside
-        className={`fixed lg:sticky top-0 lg:top-[61px] left-0 z-50 lg:z-20 h-full lg:h-[calc(100vh-61px)] w-72 sm:w-80 lg:w-64 shrink-0 bg-portal-surface border-r-3 lg:border-r-4 border-black flex flex-col justify-between transition-transform duration-300 ease-in-out select-none shadow-neo-lg lg:shadow-none ${
+        className={`fixed lg:sticky top-0 lg:top-[61px] left-0 z-50 lg:z-20 h-full lg:h-[calc(100vh-61px)] w-72 sm:w-80 lg:w-64 shrink-0 bg-portal-surface border-r-3 lg:border-r-4 border-black flex flex-col justify-between transition-transform duration-300 ease-in-out select-none shadow-neo-lg lg:shadow-none overflow-x-hidden box-border ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >

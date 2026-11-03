@@ -51,7 +51,7 @@ export default function PlayerXpBadge({
   ).length;
 
   return (
-    <div className="flex items-center gap-1.5 sm:gap-2">
+    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 overflow-x-hidden box-border">
       {/* 1. Daily Streak Pill */}
       <div
         onClick={onOpenQuests}
