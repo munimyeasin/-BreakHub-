@@ -66,12 +66,12 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
     games_played: 42,
     xp: 1250,
     unlocked_trophies: {
-      first_boot: '2026-09-20',
-      neon_initiate: '2026-10-01',
-      grid_explorer: '2026-10-10',
-      dail_devotee: '2026-10-15',
-      flame_keeper: '2026-10-20',
-      score_titan: '2026-10-25',
+      first_boot: { unlockedAt: '2026-09-20' },
+      neon_initiate: { unlockedAt: '2026-10-01' },
+      grid_explorer: { unlockedAt: '2026-10-10' },
+      daily_devotee: { unlockedAt: '2026-10-15' },
+      flame_keeper: { unlockedAt: '2026-10-20' },
+      score_titan: { unlockedAt: '2026-10-25' },
     }
   };
 
@@ -83,7 +83,7 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
       <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-fadeIn">
         <div className="bg-portal-card border-4 border-black rounded-3xl p-8 shadow-neo-xl text-center animate-scaleIn">
           <div className="w-16 h-16 rounded-2xl bg-portal-surface border-4 border-black flex items-center justify-center mx-auto mb-4 shadow-neo-sm">
-            <Avatar className="w-8 h-8" />
+            <Trophy className="w-8 h-8 text-portal-yellow stroke-[2.5]" />
           </div>
           <h2 className="text-2xl font-black text-white mb-2">Loading Profile...</h2>
           <p className="text-slate-400 text-sm mb-6">Fetching player data...</p>
@@ -155,19 +155,20 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
 
         {/* Unlocked Trophies / Achievements Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-8">
-          {profile?.unlocked_trophies && Object.entries(profile.unlocked_trophies).map(([id, unlockedAt]) => {
+          {profile?.unlocked_trophies && Object.entries(profile.unlocked_trophies).map(([id, val]) => {
             const trophy = TROPHIES.find(t => t.id === id);
             if (!trophy) return null;
+            const dateStr = typeof val === 'string' ? val : val?.unlockedAt || new Date().toISOString();
             return (
               <div
                 key={id}
                 className="bg-portal-surface border-2 border-black rounded-xl p-3 text-center shadow-neo-sm hover:bg-portal-pink/20 transition-all"
               >
-                <div className="w-8 h-8 rounded-md mx-auto mb-2">
+                <div className="w-8 h-8 rounded-md mx-auto mb-2 text-xl flex items-center justify-center">
                   {trophy.icon}
                 </div>
-                <div className="text-xs text-slate-400 uppercase tracking-wider">{trophy.title}</div>
-                <div className="text-xs text-portal-yellow mt-1">unlocked {new Date(unlockedAt).toLocaleDateString()}</div>
+                <div className="text-[10px] font-black text-white uppercase tracking-wider truncate">{trophy.title}</div>
+                <div className="text-[9px] text-portal-yellow font-mono mt-0.5">unlocked {new Date(dateStr).toLocaleDateString()}</div>
               </div>
             );
           })}
