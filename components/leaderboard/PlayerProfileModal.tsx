@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Avatar, Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle } from 'lucide-react';
+import { Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle, X } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
-import { getLevelInfo } from '@/lib/gamification';
+import { getLevelInfo, TROPHIES } from '@/lib/gamification';
 import { GamificationState } from '@/lib/gamification';
 
 interface PlayerProfile {
@@ -109,12 +109,12 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-xl bg-portal-surface text-black border-2 border-black font-black text-xs uppercase hover:bg-portal-yellow hover:text-black transition-all"
         >
-          <span className="material-symbols-outlined">close</span>
+          <X className="w-4 h-4 stroke-[2.5]" />
         </button>
 
         {/* Header Crest */}
-        <div className="w-16 h-16 rounded-2xl bg-portal-surface border-4 border-black flex items-center justify-center mx-auto mb-6 shadow-neo-md">
-          <Avatar className="w-8 h-8 rounded-full" src={profile?.avatar_url || '/avatars/default.png'} />
+        <div className="w-16 h-16 rounded-2xl bg-portal-surface border-4 border-black flex items-center justify-center mx-auto mb-6 shadow-neo-md overflow-hidden">
+          <img src={profile?.avatar_url || '/avatars/default.png'} alt="Avatar" className="w-full h-full object-cover" />
         </div>
 
         {/* Profile Header Info */}
