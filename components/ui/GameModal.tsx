@@ -39,6 +39,7 @@ import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
 import FlappyBirdCloneGame from '@/components/games/FlappyBirdCloneGame';
+import CyberKnifeThrowerGame from '@/components/games/CyberKnifeThrowerGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -62,6 +63,16 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  g_knife_28: {
+    genreTag: 'ACTION // PRECISION KNIFE THROWER',
+    objective: 'Throw cyber knives into the rotating target wheel. Stick all reserve knives without hitting any previously stuck knives to clear levels.',
+    scoring: 'Knife stick (+10pts) + Level clear bonus (100pts x level).',
+    proTip: 'Watch the rotation speed and gaps carefully before timing your throw. Avoid clustering knives too close together!',
+    controls: [
+      { keys: ['Space', '↑', 'W', 'Click', 'Tap'], label: 'THROW KNIFE', desc: 'Launch blade upward toward rotating wheel' },
+      { keys: ['R'], label: 'RESTART', desc: 'Restart fresh arcade run' }
+    ]
+  },
   // Cyber Fruit Fusion (2D Physics Fruit Merge)
   g_merge_25: {
     genreTag: 'PUZZLE // 2D PHYSICS FRUIT FUSION',
@@ -836,6 +847,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_knife_28' || game.slug === 'cyber-knife-thrower') && (
+                <CyberKnifeThrowerGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_merge_25' || game.slug === 'cyber-fruit-merge' || game.slug === 'fruit-merge') && (
                 <CyberFruitMergeGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}

@@ -428,6 +428,19 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
+    },
+    {
+      "id": "g_knife_28",
+      "slug": "cyber-knife-thrower",
+      "title": "Cyber Knife Thrower",
+      "category": "ACTION",
+      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg",
+      "description": "Neon knife throwing precision arcade challenge! Toss cyber blades into spinning target wheels, chain multi-knife sticks, and conquer progressive difficulty levels without blade collisions.",
+      "play_count": 0,
+      "rating": 0,
+      "rating_count": 0,
+      "status": "active",
+      "featured": true
     }
   ],
   "scores": [],

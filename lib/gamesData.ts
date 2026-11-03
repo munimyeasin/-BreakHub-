@@ -2,6 +2,19 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_knife_28',
+    slug: 'cyber-knife-thrower',
+    title: 'Cyber Knife Thrower',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-knife-thrower.svg',
+    description: 'Neon knife throwing precision arcade challenge! Toss cyber blades into spinning target wheels, chain multi-knife sticks, and conquer progressive difficulty levels without blade collisions.',
+    play_count: 0,
+    rating: 0,
+    rating_count: 0,
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_merge_25',
     slug: 'cyber-fruit-merge',
     title: 'Cyber Fruit Merge',
