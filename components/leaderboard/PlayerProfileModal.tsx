@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle, X } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { getLevelInfo, TROPHIES } from '@/lib/gamification';
