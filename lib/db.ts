@@ -347,7 +347,7 @@ class DatabaseService {
       }
     } catch {}
 
-    const userBestMap = new Map<string, { score: number; achieved_at: string }>();
+    const userBestMap = new Map<string, { score: number; achieved_at?: string }>();
     gameScores.forEach(s => {
       const current = userBestMap.get(s.user_id);
       if (!current || s.score > current.score) {
@@ -356,18 +356,18 @@ class DatabaseService {
     });
 
     const entries: LeaderboardEntry[] = [];
-    userBestMap.forEach((val, userId) => {
-      const user = this.data.users.find(u => u.id === userId);
-      if (user) {
-        entries.push({
-          rank: 0,
-          user_id: user.id,
-          username: user.username,
-          avatar_url: user.avatar_url,
-          score: val.score,
-          achieved_at: val.achieved_at
-        });
-      }
+
+    // Include all registered users, even those with zero scores
+    this.data.users.forEach(user => {
+      const best = userBestMap.get(user.id);
+      entries.push({
+        rank: 0,
+        user_id: user.id,
+        username: user.username,
+        avatar_url: user.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`,
+        score: best ? best.score : 0,
+        achieved_at: best ? best.achieved_at : undefined
+      });
     });
 
     entries.sort((a, b) => b.score - a.score);
@@ -407,21 +407,25 @@ class DatabaseService {
     });
 
     const entries: LeaderboardEntry[] = [];
-    userGameScores.forEach((gMap, userId) => {
-      const user = this.data.users.find(u => u.id === userId);
-      if (user) {
-        let totalScore = 0;
-        gMap.forEach(sc => { totalScore += sc; });
 
-        entries.push({
-          rank: 0,
-          user_id: user.id,
-          username: user.username,
-          avatar_url: user.avatar_url,
-          score: totalScore,
-          games_played: gMap.size,
-        });
+    // Include ALL registered users, even if they have zero scores
+    this.data.users.forEach(user => {
+      const gMap = userGameScores.get(user.id);
+      let totalScore = 0;
+      let gamesPlayed = 0;
+      if (gMap) {
+        gamesPlayed = gMap.size;
+        gMap.forEach(sc => { totalScore += sc; });
       }
+
+      entries.push({
+        rank: 0,
+        user_id: user.id,
+        username: user.username,
+        avatar_url: user.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`,
+        score: totalScore,
+        games_played: gamesPlayed,
+      });
     });
 
     entries.sort((a, b) => b.score - a.score);
