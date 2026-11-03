@@ -384,15 +384,12 @@ export default function SpotlightBanner({
             <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-black text-[9px] font-black uppercase border border-black shadow-neo-sm">
               {currentGame.category}
             </span>
-            <span className="flex items-center gap-1 text-black text-[9px] font-black bg-portal-yellow border border-black px-2 py-0.5 rounded-md shadow-neo-sm uppercase">
-              <Star className="w-3 h-3 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '5.0'}
-            </span>
           </div>
 
           {/* Bottom In-Artwork Badges */}
           <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
             <span className="text-[9px] font-black text-white bg-portal-surface px-2 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
-              {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
+              {isComingSoon ? 'COMING SOON' : 'FEATURED ARCADE'}
             </span>
           </div>
         </div>
@@ -508,15 +505,12 @@ export default function SpotlightBanner({
               <span className="px-2.5 py-0.5 rounded-md bg-portal-purple text-black text-[10px] font-black uppercase border border-black shadow-neo-sm">
                 {currentGame.category}
               </span>
-              <span className="flex items-center gap-1 text-black text-[10px] font-black bg-portal-yellow border border-black px-2.5 py-0.5 rounded-md shadow-neo-sm uppercase">
-                <Star className="w-3.5 h-3.5 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '5.0'}
-              </span>
             </div>
 
             {/* Bottom In-Preview Badges */}
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white z-10 pointer-events-none">
               <span className="text-[10px] font-black text-white bg-portal-surface px-2.5 py-0.5 rounded-md border border-black shadow-neo-sm uppercase">
-                {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
+                {isComingSoon ? 'COMING SOON' : 'FEATURED ARCADE'}
               </span>
             </div>
           </div>
@@ -524,19 +518,10 @@ export default function SpotlightBanner({
 
         {/* Right Column (7 cols): Clean Game Title & Action Buttons */}
         <div className="col-span-7 flex flex-col justify-center space-y-4 h-full">
-          {/* Header Row: Category Badge + Rating + Play Count */}
+          {/* Header Row: Category Badge */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-purple border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
               <Gamepad2 className="w-3.5 h-3.5 stroke-[2.5]" /> {currentGame.category}
-            </span>
-            <span className="flex items-center gap-1.5 text-black text-xs font-black bg-portal-yellow border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
-              <Star className="w-3.5 h-3.5 fill-black stroke-[2.5]" /> {currentGame.rating?.toFixed(1) || '5.0'}
-              {currentGame.rating_count ? (
-                <span className="text-black/80 font-bold">({currentGame.rating_count} reviews)</span>
-              ) : null}
-            </span>
-            <span className="text-xs font-black text-white bg-portal-card border-2 border-black px-2.5 py-0.5 rounded-lg shadow-neo-sm uppercase">
-              {isComingSoon ? 'COMING SOON' : formatPlayCount(currentGame.play_count)}
             </span>
           </div>
 

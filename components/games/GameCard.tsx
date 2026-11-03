@@ -170,24 +170,18 @@ export default function GameCard({
               </button>
             </>
           ) : (
-            <>
-              <span className="truncate tracking-wider text-[11px] sm:text-xs">{formatPlayCount(game.play_count)}</span>
-              <div onClick={(e) => e.stopPropagation()} className="shrink-0 z-10">
-                <StarRating
-                  gameId={game.id}
-                  gameTitle={game.title}
-                  gameCategory={game.category}
-                  thumbnailUrl={game.thumbnail_url}
-                  rating={game.rating || 0}
-                  ratingCount={game.rating_count || 0}
-                  userRating={userRating}
-                  size="xs"
-                  showCount={true}
-                  interactive={true}
-                  onRate={(rating) => onRateGame?.(game.id, rating)}
-                />
-              </div>
-            </>
+            <div className="w-full flex items-center justify-end">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewLeaderboard(game.id, e);
+                }}
+                className="flex items-center gap-1 text-[11px] text-portal-yellow font-black hover:underline"
+              >
+                <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Leaderboard</span>
+              </button>
+            </div>
           )}
         </div>
       </div>

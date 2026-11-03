@@ -610,6 +610,21 @@ export default function GameModal({
       } else {
         audio.playXpGainSound();
       }
+
+      const gs = gamification.getState();
+      await fetch('/api/user/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: username.trim() || 'Player',
+          days_played: gs.streak.current || 1,
+          longest_streak: gs.streak.longest || 1,
+          level: gs.level || 1,
+          xp: gs.xp || 0,
+          unlocked_trophies: gs.unlockedTrophies || {},
+          stats: gs.stats || {},
+        }),
+      });
     } catch {}
 
     try {
@@ -812,26 +827,10 @@ export default function GameModal({
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                {statusMsg ? (
+                {statusMsg && (
                   <span className="flex items-center gap-1 text-[10px] text-portal-lime font-black uppercase animate-pulse">
                     <Check className="w-3 h-3 stroke-[2.5]" /> {statusMsg}
                   </span>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <StarRating
-                      gameId={game.id}
-                      gameTitle={game.title}
-                      gameCategory={game.category}
-                      thumbnailUrl={game.thumbnail_url}
-                      rating={game.rating || 0}
-                      ratingCount={game.rating_count || 0}
-                      userRating={userRating}
-                      size="xs"
-                      showCount={true}
-                      interactive={true}
-                      onRate={(val) => onRateGame?.(game.id, val)}
-                    />
-                  </div>
                 )}
               </div>
             </div>

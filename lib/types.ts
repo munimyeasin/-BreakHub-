@@ -3,6 +3,14 @@ export interface User {
   username: string;
   avatar_url: string;
   created_at: string;
+  days_played?: number;
+  longest_streak?: number;
+  total_score?: number;
+  games_played?: number;
+  level?: number;
+  xp?: number;
+  unlocked_trophies?: Record<string, { unlockedAt: string }>;
+  stats?: any;
 }
 
 export interface Game {
@@ -12,21 +20,9 @@ export interface Game {
   category: 'ACTION' | 'PUZZLE' | 'ARCADE' | 'STRATEGY' | 'CARD';
   thumbnail_url: string;
   description: string;
-  play_count: number;
-  rating?: number;
-  rating_count?: number;
   hype_count?: number;
   status?: 'active' | 'coming_soon' | 'hidden';
   featured?: boolean;
-}
-
-export interface Rating {
-  id: string;
-  game_id: string;
-  user_id: string;
-  rating: number;
-  created_at: string;
-  updated_at?: string;
 }
 
 export interface Score {
