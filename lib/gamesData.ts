@@ -8,9 +8,6 @@ export const INITIAL_GAMES: Game[] = [
     category: 'ACTION',
     thumbnail_url: '/thumbnails/cyber-knife-thrower.svg',
     description: 'Neon knife throwing precision arcade challenge! Toss cyber blades into spinning target wheels, chain multi-knife sticks, and conquer progressive difficulty levels without blade collisions.',
-    play_count: 0,
-    rating: 0,
-    rating_count: 0,
     status: 'active',
     featured: true
   },
