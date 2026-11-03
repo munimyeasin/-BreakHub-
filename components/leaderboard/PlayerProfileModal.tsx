@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle, X } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
-import { getLevelInfo, TROPHIES } from '@/lib/gamification';
+import { getLevelInfo, TROPHIES, gamification } from '@/lib/gamification';
 import { GamificationState } from '@/lib/gamification';
 
 interface PlayerProfile {
@@ -56,29 +56,53 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
   // level (from XP), xp, unlocked_trophies, stats.
   // ==========================================================================
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setProfile({
-        id: userId,
-        username: `Player_${userId.substring(0, 6)}`,
-        avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
-        days_played: 45,
-        longest_streak: 12,
-        level: 5,
-        total_score: 2450,
-        games_played: 28,
-        xp: 950,
-        unlocked_trophies: {
-          first_boot: { unlockedAt: '2026-09-20' },
-          neon_initiate: { unlockedAt: '2026-10-01' },
-          grid_explorer: { unlockedAt: '2026-10-10' },
-          daily_devotee: { unlockedAt: '2026-10-15' },
+    let active = true;
+    const fetchProfileData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/user/profile?userId=${encodeURIComponent(userId)}`);
+        const data = await res.json();
+        if (active && res.ok && data.profile) {
+          setProfile(data.profile);
+        } else if (active) {
+          // Fallback to local gamification state if remote user not found
+          const localState = gamification.getState();
+          setProfile({
+            id: userId,
+            username: userId,
+            avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
+            days_played: localState.streak.current || 1,
+            longest_streak: localState.streak.longest || 1,
+            level: localState.level || 1,
+            total_score: localState.stats.totalScoreAccumulated || 0,
+            games_played: localState.stats.totalGamesPlayed || 0,
+            xp: localState.xp || 0,
+            unlocked_trophies: localState.unlockedTrophies || {},
+          });
         }
-      });
-      setIsLoading(false);
-    }, 150);
+      } catch (e) {
+        if (active) {
+          const localState = gamification.getState();
+          setProfile({
+            id: userId,
+            username: userId,
+            avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
+            days_played: localState.streak.current || 1,
+            longest_streak: localState.streak.longest || 1,
+            level: localState.level || 1,
+            total_score: localState.stats.totalScoreAccumulated || 0,
+            games_played: localState.stats.totalGamesPlayed || 0,
+            xp: localState.xp || 0,
+            unlocked_trophies: localState.unlockedTrophies || {},
+          });
+        }
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchProfileData();
+    return () => { active = false; };
   }, [userId]);
 
   if (isLoading || !profile) {

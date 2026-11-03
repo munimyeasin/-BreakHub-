@@ -599,6 +599,21 @@ export default function GameModal({
       } else {
         audio.playXpGainSound();
       }
+
+      const gs = gamification.getState();
+      await fetch('/api/user/profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: username.trim() || 'Player',
+          days_played: gs.streak.current || 1,
+          longest_streak: gs.streak.longest || 1,
+          level: gs.level || 1,
+          xp: gs.xp || 0,
+          unlocked_trophies: gs.unlockedTrophies || {},
+          stats: gs.stats || {},
+        }),
+      });
     } catch {}
 
     try {
