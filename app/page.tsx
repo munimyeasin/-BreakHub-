@@ -506,20 +506,7 @@ export default function ArcadePortalDashboard() {
   };
 
   const launchGameSession = (game: Game) => {
-    setGames(prev =>
-      prev.map(g => (g.id === game.id || g.slug === game.slug ? { ...g, play_count: (g.play_count || 0) + 1 } : g))
-    );
-
-    try {
-      fetch('/api/games/play', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId: game.id }),
-      }).catch(err => console.error('Failed to increment play count', err));
-    } catch {}
-
-    const updatedGame = { ...game, play_count: (game.play_count || 0) + 1 };
-    setActiveGame(updatedGame);
+    setActiveGame(game);
   };
 
   const handleLaunchGame = (game: Game) => {
@@ -846,8 +833,6 @@ export default function ArcadePortalDashboard() {
               handleLaunchGame(nextGame);
             }
           }}
-          userRating={userRatings[activeGame.id] || null}
-          onRateGame={handleRateGame}
         />
       )}
 

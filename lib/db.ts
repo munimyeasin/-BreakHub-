@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { User, Game, Score, LeaderboardEntry, Rating, GameRequest } from './types';
+import { User, Game, Score, LeaderboardEntry, GameRequest } from './types';
 import { INITIAL_GAMES } from './gamesData';
 import { censorText } from './censor';
 import { supabaseServer as supabase } from './supabaseServer';
@@ -12,7 +12,6 @@ interface DatabaseSchema {
   users: User[];
   games: Game[];
   scores: Score[];
-  ratings?: Rating[];
   game_requests?: GameRequest[];
 }
 
@@ -23,7 +22,6 @@ const SEED_FILE = path.resolve(process.cwd(), 'data', 'portal_db.json');
 
 const INITIAL_USERS: User[] = [];
 const INITIAL_SCORES: Score[] = [];
-const INITIAL_RATINGS: Rating[] = [];
 const INITIAL_REQUESTS: GameRequest[] = [
   {
     id: 'req_cyber_chess',
@@ -90,9 +88,6 @@ class DatabaseService {
       try {
         const parsed: DatabaseSchema = JSON.parse(content);
         let updated = false;
-        if (!Array.isArray(parsed.ratings)) {
-          parsed.ratings = [];
-        }
         if (!Array.isArray(parsed.game_requests)) {
           parsed.game_requests = INITIAL_REQUESTS;
           updated = true;
@@ -115,7 +110,6 @@ class DatabaseService {
       users: INITIAL_USERS,
       games: INITIAL_GAMES,
       scores: INITIAL_SCORES,
-      ratings: INITIAL_RATINGS,
       game_requests: INITIAL_REQUESTS,
     };
     this.saveDatabase(initial);
@@ -125,9 +119,8 @@ class DatabaseService {
   public resetAllData() {
     const fresh: DatabaseSchema = {
       users: [],
-      games: INITIAL_GAMES.map(g => ({ ...g, play_count: 0 })),
+      games: INITIAL_GAMES,
       scores: [],
-      ratings: [],
       game_requests: INITIAL_REQUESTS,
     };
     this.data = fresh;
@@ -160,9 +153,6 @@ class DatabaseService {
             category: ig.category,
             image_url: ig.thumbnail_url,
             status: ig.status || 'active',
-            rating: ig.rating || 0,
-            rating_count: ig.rating_count || 0,
-            play_count: ig.play_count || 0,
             hype_count: ig.hype_count || 0
           }, { onConflict: 'id' });
         } catch {}
@@ -174,15 +164,6 @@ class DatabaseService {
           ...g,
           thumbnail_url: g.thumbnail_url || g.image_url || '/thumbnails/cyber-fruit-merge.svg'
         }));
-
-        // Also fetch ratings from Supabase
-        try {
-          const { data: remoteRatings } = await supabase.from('ratings').select('*');
-          if (remoteRatings && Array.isArray(remoteRatings)) {
-            this.data.ratings = remoteRatings;
-          }
-        } catch {}
-
         return this.data.games;
       }
     } catch {}
@@ -193,7 +174,6 @@ class DatabaseService {
         const parsed = JSON.parse(content);
         if (parsed && Array.isArray(parsed.games)) {
           this.data.games = parsed.games;
-          if (Array.isArray(parsed.ratings)) this.data.ratings = parsed.ratings;
           return parsed.games;
         }
       }
@@ -212,20 +192,6 @@ class DatabaseService {
     );
   }
 
-  public async incrementPlayCount(gameId: string): Promise<number> {
-    const games = await this.getGames();
-    const game = games.find(g => g.id === gameId || g.slug === gameId);
-    if (game) {
-      game.play_count = (game.play_count || 0) + 1;
-      this.saveDatabase();
-      try {
-        await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
-      } catch {}
-      return game.play_count;
-    }
-    return 0;
-  }
-
   public async toggleHypeCount(gameId: string, increment = true): Promise<number> {
     const games = await this.getGames();
     const game = games.find(g => g.id === gameId || g.slug === gameId);
@@ -239,122 +205,6 @@ class DatabaseService {
       return game.hype_count;
     }
     return 0;
-  }
-
-  // Rate a Game
-  public async rateGame(gameId: string, username: string, ratingValue: number): Promise<{ rating: number; rating_count: number; userRating: number; isUpdate: boolean }> {
-    const games = await this.getGames();
-    const game = games.find(g => g.id === gameId || g.slug === gameId);
-    if (!game) {
-      throw new Error(`Game '${gameId}' not found`);
-    }
-
-    const cleanRating = Math.min(5, Math.max(1, Math.round(ratingValue)));
-    const user = await this.findOrCreateUser(username);
-
-    if (!Array.isArray(this.data.ratings)) {
-      this.data.ratings = [];
-    }
-
-    const existingIndex = this.data.ratings.findIndex(
-      r => (r.game_id === game.id || r.game_id === game.slug) && r.user_id === user.id
-    );
-
-    const isUpdate = existingIndex >= 0;
-
-    if (isUpdate) {
-      this.data.ratings[existingIndex].rating = cleanRating;
-      this.data.ratings[existingIndex].updated_at = new Date().toISOString();
-    } else {
-      const newRating: Rating = {
-        id: `rt_${Math.random().toString(36).substring(2, 11)}`,
-        game_id: game.id,
-        user_id: user.id,
-        rating: cleanRating,
-        created_at: new Date().toISOString()
-      };
-      this.data.ratings.push(newRating);
-    }
-
-    const initialConfig = INITIAL_GAMES.find(ig => ig.id === game.id || ig.slug === ig.slug);
-    const baseRating = initialConfig?.rating || 0;
-    const baseCount = initialConfig?.rating_count || 0;
-
-    const gameUserRatings = this.data.ratings.filter(r => r.game_id === game.id || r.game_id === game.slug);
-    const userRatingSum = gameUserRatings.reduce((sum, r) => sum + r.rating, 0);
-
-    const totalSum = (baseRating * baseCount) + userRatingSum;
-    const totalCount = baseCount + gameUserRatings.length;
-    const computedAverage = totalCount > 0 ? Number((totalSum / totalCount).toFixed(1)) : 0;
-
-    game.rating = Math.min(5.0, Math.max(0.0, computedAverage));
-    game.rating_count = totalCount;
-
-    this.saveDatabase();
-
-    try {
-      await supabase.from('games').upsert({
-        id: game.id,
-        slug: game.slug,
-        title: game.title,
-        description: game.description,
-        category: game.category,
-        image_url: game.thumbnail_url,
-        rating: game.rating,
-        rating_count: game.rating_count
-      });
-
-      await supabase.from('ratings').upsert({
-        game_id: game.id,
-        user_id: user.id,
-        rating: cleanRating,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'game_id,user_id' });
-    } catch (err) {
-      console.error('Supabase rating sync error:', err);
-    }
-
-    return {
-      rating: game.rating,
-      rating_count: game.rating_count,
-      userRating: cleanRating,
-      isUpdate
-    };
-  }
-
-  public async getUserRating(gameId: string, username: string): Promise<number | null> {
-    if (!username) return null;
-    const cleanName = username.trim().toLowerCase();
-
-    let user = this.data.users.find(u => u.username.toLowerCase() === cleanName);
-    if (!user) {
-      try {
-        const { data } = await supabase.from('users').select('*').ilike('username', cleanName).single();
-        if (data) user = data;
-      } catch {}
-    }
-    if (!user) return null;
-
-    const game = await this.getGameById(gameId);
-    if (!game) return null;
-
-    // Check Supabase first
-    try {
-      const { data } = await supabase.from('ratings').select('rating').eq('game_id', game.id).eq('user_id', user.id).single();
-      if (data && typeof data.rating === 'number') {
-        return data.rating;
-      }
-    } catch {}
-
-    // Fallback to local ratings
-    if (Array.isArray(this.data.ratings)) {
-      const found = this.data.ratings.find(
-        r => (r.game_id === game.id || r.game_id === game.slug) && r.user_id === user.id
-      );
-      if (found) return found.rating;
-    }
-
-    return null;
   }
 
   // Users
@@ -415,11 +265,6 @@ class DatabaseService {
       this.data.scores.forEach(s => {
         if (s.user_id === existingUser.id) s.user_id = targetUser!.id;
       });
-      if (Array.isArray(this.data.ratings)) {
-        this.data.ratings.forEach(r => {
-          if (r.user_id === existingUser.id) r.user_id = targetUser!.id;
-        });
-      }
       this.data.users = this.data.users.filter(u => u.id !== existingUser.id);
       this.saveDatabase();
       return { success: true, user: targetUser };
@@ -456,15 +301,11 @@ class DatabaseService {
     };
 
     this.data.scores.push(newScore);
-    game.play_count = (game.play_count || 0) + 1;
     this.saveDatabase();
 
     try {
       const { error: sErr } = await supabase.from('scores').insert(newScore);
       if (sErr) console.error('Supabase score insert error:', sErr);
-
-      const { error: gErr } = await supabase.from('games').update({ play_count: game.play_count }).eq('id', game.id);
-      if (gErr) console.error('Supabase game play_count update error:', gErr);
     } catch (err) {
       console.error('Supabase score sync exception:', err);
     }
@@ -689,7 +530,6 @@ class DatabaseService {
     };
   }
 
-  // Get a user's detailed profile (progression, stats, streaks, trophies)
   public async getUserProfile(userId: string): Promise<User | null> {
     if (!userId) return null;
     const user = this.data.users.find(u => u.id === userId);
@@ -706,7 +546,6 @@ class DatabaseService {
     return null;
   }
 
-  // Save/Sync a user's progression profile (days played, streaks, level, stats, trophies)
   public async saveUserProfile(user: User, updates: Partial<User>): Promise<User> {
     const target = this.data.users.find(u => u.id === user.id);
     if (target) {

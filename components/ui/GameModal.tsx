@@ -816,26 +816,10 @@ export default function GameModal({
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                {statusMsg ? (
+                {statusMsg && (
                   <span className="flex items-center gap-1 text-[10px] text-portal-lime font-black uppercase animate-pulse">
                     <Check className="w-3 h-3 stroke-[2.5]" /> {statusMsg}
                   </span>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <StarRating
-                      gameId={game.id}
-                      gameTitle={game.title}
-                      gameCategory={game.category}
-                      thumbnailUrl={game.thumbnail_url}
-                      rating={game.rating || 0}
-                      ratingCount={game.rating_count || 0}
-                      userRating={userRating}
-                      size="xs"
-                      showCount={true}
-                      interactive={true}
-                      onRate={(val) => onRateGame?.(game.id, val)}
-                    />
-                  </div>
                 )}
               </div>
             </div>

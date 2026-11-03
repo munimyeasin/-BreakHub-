@@ -20,21 +20,9 @@ export interface Game {
   category: 'ACTION' | 'PUZZLE' | 'ARCADE' | 'STRATEGY' | 'CARD';
   thumbnail_url: string;
   description: string;
-  play_count: number;
-  rating?: number;
-  rating_count?: number;
   hype_count?: number;
   status?: 'active' | 'coming_soon' | 'hidden';
   featured?: boolean;
-}
-
-export interface Rating {
-  id: string;
-  game_id: string;
-  user_id: string;
-  rating: number;
-  created_at: string;
-  updated_at?: string;
 }
 
 export interface Score {
