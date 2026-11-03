@@ -2,25 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Root Theme Tokens - Default Dark Neo-Brutalist */
+/* Root Theme Tokens - Default Bright Cartoonish Neo-Brutalist */
 :root,
 html[data-theme="neo-dark"] {
-  --portal-bg: #0B0819;
-  --portal-surface: #130F26;
-  --portal-card: #1C1635;
+  --portal-bg: #1A1533;
+  --portal-surface: #241B47;
+  --portal-card: #2E2453;
   --portal-border: #000000;
   --portal-text: #FFFFFF;
-  --portal-text-muted: #94A3B8;
-  --portal-dot-color: rgba(255, 255, 255, 0.12);
-  --portal-grid-color: rgba(255, 255, 255, 0.05);
-  --portal-scrollbar-track: #0B0819;
-  --portal-scrollbar-thumb: #FFE600;
-  --background: #0B0819;
-  --foreground: #F8FAFC;
+  --portal-text-muted: #F8FAFC;
+  --portal-dot-color: rgba(255, 255, 255, 0.15);
+  --portal-grid-color: rgba(255, 255, 255, 0.08);
+  --portal-scrollbar-track: #1A1533;
+  --portal-scrollbar-thumb: #FF4081;
+  --background: #1A1533;
+  --foreground: #FFFFFF;
   color-scheme: dark;
 }
 
-/* Light Neo-Brutalist Tokens */
+/* Light Neo-Brutalist Tokens (Bright Cartoonish & Vibrant) */
 html[data-theme="neo-light"] {
   --portal-bg: #FFFDF0;
   --portal-surface: #FFFFFF;
@@ -31,7 +31,7 @@ html[data-theme="neo-light"] {
   --portal-dot-color: rgba(0, 0, 0, 0.12);
   --portal-grid-color: rgba(0, 0, 0, 0.06);
   --portal-scrollbar-track: #FFFDF0;
-  --portal-scrollbar-thumb: #FFE600;
+  --portal-scrollbar-thumb: #FF4081;
   --background: #FFFDF0;
   --foreground: #000000;
   color-scheme: light;
@@ -425,12 +425,48 @@ html[data-theme="vaporwave-80s"] {
   to { transform: scale(1); opacity: 1; }
 }
 
+@keyframes cartoonBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+}
+
+@keyframes cartoonPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.45); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 64, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-scaleIn {
   animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cartoonish Bright Hover Interactions */
+.cartoon-card {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+}
+.cartoon-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 6px 6px 0px #000000, 0 0 12px rgba(255, 64, 129, 0.4);
+}
+
+.cartoon-btn {
+  transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cartoon-btn:active {
+  transform: scale(0.94) translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.cartoon-pulse {
+  animation: cartoonPulse 2s infinite;
+}
+
+.cartoon-bounce {
+  animation: cartoonBounce 3s ease-in-out infinite;
 }
 
 .scrollbar-none::-webkit-scrollbar {

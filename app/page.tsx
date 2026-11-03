@@ -611,7 +611,7 @@ export default function ArcadePortalDashboard() {
   const avatarUrl = playerTag ? getAvatarUrl(playerTag) : null;
 
   return (
-    <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black">
+    <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black overflow-x-hidden box-border">
 
       {/* 1. STICKY APP HEADER */}
       <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
@@ -769,7 +769,7 @@ export default function ArcadePortalDashboard() {
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider border-2 border-black whitespace-nowrap transition-all shrink-0 ${
+                        className={`cartoon-btn flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider border-2 border-black whitespace-nowrap transition-all shrink-0 ${
                           isSelected ? `${cat.color} shadow-neo-sm translate-x-0.5 translate-y-0.5` : 'bg-portal-card text-slate-300 hover:text-white hover:bg-portal-surface shadow-neo-sm'
                         }`}
                       >

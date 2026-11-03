@@ -64,7 +64,7 @@ export default function GameCard({
           onPlay(game);
         }
       }}
-      className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:ring-2 focus-visible:ring-portal-cyan focus-visible:outline-none focus-visible:translate-x-0.5 focus-visible:translate-y-0.5 transition-all duration-200 select-none"
+      className="group relative flex flex-col bg-portal-card rounded-2xl border-3 border-black p-2.5 sm:p-3 cursor-pointer shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:ring-2 focus-visible:ring-portal-cyan focus-visible:outline-none focus-visible:translate-x-0.5 focus-visible:translate-y-0.5 transition-all duration-200 select-none cartoon-card overflow-hidden box-border"
     >
       {/* Thumbnail Container */}
       <div className="game-thumbnail-container relative aspect-square w-full rounded-xl overflow-hidden mb-2 border-2 border-black shadow-neo-sm">
