@@ -1610,7 +1610,7 @@ export default function BattleshipGame({ gameId, onGameOver }: BattleshipGamePro
   const enemyAliveCount = viewerPlayer === 'P1' ? p2AliveCount : p1AliveCount;
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans relative">
+    <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none text-white animate-fadeIn pb-4 font-sans relative overflow-x-hidden box-border px-1 sm:px-2">
       {/* 💥 Retro Neo-Brutalist Action Starburst Popup Badge */}
       {starburstEvent && (
         <ActionStarburstBadge
