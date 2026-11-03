@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-FFE600?style=for-the-badge&logoColor=black)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-00F0FF?style=for-the-badge&logo=vercel&logoColor=black)](https://breakhub.vercel.app/)
 
-A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next.js App Router, TypeScript, and a bespoke **Dark Retro Neo-Brutalism** design language. Featuring 15+ custom-engineered 2D Canvas and interactive mini-games, real-time procedural Web Audio sound synthesis, global and per-game competitive leaderboards, user rating systems, and instant zero-cache browser favicon synchronization.
+A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next.js App Router, TypeScript, and a bespoke **Dark Retro Neo-Brutalism** design language. Featuring 15+ custom-engineered 2D Canvas and interactive mini-games, real-time procedural Web Audio sound synthesis, global and per-game competitive leaderboards, user rating systems, and a fully featured **Secure Admin Dashboard**.
 
 ---
 
@@ -42,23 +42,24 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 - **Signature Styling**: Hard 0-blur 3D drop shadows (`#000000`), bold 3px–4px black borders, diagonal hazard accent stripes, and crisp monospace telemetry readouts.
 - **Micro-Interactions**: Hover elevation shifts (`translate(-3px, -3px)`), tactile active button depressions, and dynamic particle systems.
 
-### 2. 📱 Mobile-First Ergonomics & Controls
+### 2. 🛡️ Secure Admin Panel & Database Management (`/admin`)
+- **Full Database Control**: Real-time management of registered users, game catalogs, score subbmissions, and community wishlist requests.
+- **Moderation Tools**: Toggle game status (`Active`, `Coming Soon`, `Hidden`), update wishlist statuses (`Under Review`, `Planned`, `In Development`, `Released`), and moderate user accounts & scores.
+- **Dual-Mode Persistence**: Seamlessly backed by Supabase relational tables with robust fallback to atomic JSON file storage.
+
+### 3. 📱 Mobile-First Ergonomics & Controls
 - **Universal Input Matrix**: Unified support for touch swipe gestures, on-screen virtual d-pads/joysticks, mouse gestures, and keyboard bindings (`WASD`, Arrow keys, Space, Esc).
 - **Responsive Fluid Grid**: 3-column micro-grid on mobile viewports scaling up to 6 columns on high-resolution desktop displays.
 - **Instant Search & Category Filtering**: Real-time fuzzy title search, category pills (`ALL`, `ACTION`, `ARCADE`, `PUZZLE`, `STRATEGY`), and local storage favorites.
 
-### 3. 🔊 Synthesized Web Audio API Engine (`lib/audio.ts`)
+### 4. 🔊 Synthesized Web Audio API Engine (`lib/audio.ts`)
 - Zero external audio asset dependencies — all sound effects are generated procedurally via the browser's native **Web Audio API** oscillators and gain nodes.
 - Custom synthesizer profiles for laser beams, fruit slice impacts, explosion thuds, match-3 candy blasts, chord-clearing chimes, combo fanfare, and victory jingles.
 
-### 4. 🏆 Competitive Leaderboard & Rating Engine
+### 5. 🏆 Competitive Leaderboard & Rating Engine
 - **Global & Game Leaderboards**: Top 10 rankings per game and cumulative global championship leaderboards.
 - **Top 3 Podium Display**: Gold crown badge for 1st place, Silver badge for 2nd place, Bronze badge for 3rd place, with score verification.
 - **Interactive Ratings & Hype Counter**: 5-star player feedback modal and pre-release "Hype" voting system with local and server-side state persistence.
-
-### 5. ⚡ Zero-Cache Dynamic Favicon Manager (`components/ui/FaviconManager.tsx`)
-- Solves Chromium's stubborn SQLite origin favicon persistence by dynamically replacing DOM `<link rel="icon">` elements at runtime with raw **SVG Data URIs** (`data:image/svg+xml,...`).
-- Multi-format asset suite: High-DPI SVG vector, multi-resolution 16/32/48/64px binary `.ico`, 64px PNG raster, and 180px Apple Touch bookmark icon.
 
 ---
 
@@ -75,6 +76,10 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 ---
 
 ## 📡 API Specification
+
+### 🛡️ Admin
+- `GET /api/admin?secret={secret}` — Fetch full database statistics, users, games, scores, and requests.
+- `POST /api/admin` — Perform administrative moderation actions (update game status, update wishlist status, delete scores/users).
 
 ### 🎯 Games
 - `GET /api/games` — Fetch active, featured, and coming soon mini-games catalog.
@@ -102,8 +107,8 @@ A high-performance, mobile-first **HTML5 Mini-Game Portal** engineered with Next
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/munimyeasin/-StressBuster-.git
-cd -StressBuster-
+git clone https://github.com/munimyeasin/-BreakHub-.git
+cd -BreakHub-
 npm install
 ```
 
@@ -126,7 +131,9 @@ npm run start
 
 ```
 ├── app/
+│   ├── admin/               # Secure Admin Dashboard UI (/admin)
 │   ├── api/                 # Next.js App Router REST API endpoints
+│   │   ├── admin/           # Admin database stats & moderation actions
 │   │   ├── games/           # Game catalog, play counters, hype & ratings
 │   │   ├── leaderboard/     # High score ranking queries
 │   │   ├── scores/          # Score validation & submission
@@ -163,7 +170,7 @@ npm run start
 
 | Engineer | Role | Key Focus Areas |
 | :--- | :--- | :--- |
-| **Munim Yeasin** | **Creator & Full-Stack System Architect** | Next.js 16 App Router architecture, procedural Web Audio synthesizer, 18+ HTML5 Canvas game engines, database persistence, Neo-Brutalist design system, and gamification economy. |
+| **Munim Yeasin** | **Creator & Full-Stack System Architect** | Next.js 16 App Router architecture, procedural Web Audio synthesizer, 18+ HTML5 Canvas game engines, secure Admin Dashboard, database persistence, Neo-Brutalist design system, and gamification economy. |
 
 ---
 
