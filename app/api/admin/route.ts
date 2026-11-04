@@ -23,19 +23,14 @@ export async function GET(req: NextRequest) {
     const globalLeaderboard = await db.getGlobalLeaderboard(100);
 
     // Collect all scores and users
-    const scores = (db as any).data?.scores || [];
-    const users = (db as any).data?.users || [];
-    const ratings = (db as any).data?.ratings || [];
+    const data = db.getRawData();
+    const scores = data.scores || [];
+    const users = data.users || [];
+    const ratings = (data as any).ratings || [];
 
     return NextResponse.json({
       success: true,
-      stats: {
-        totalUsers: users.length,
-        totalGames: games.length,
-        totalScores: scores.length,
-        totalRequests: requests.length,
-        totalRatings: ratings.length,
-      },
+      stats: db.getAdminStats(),
       games,
       users,
       scores: scores.slice(-50).reverse(), // recent 50

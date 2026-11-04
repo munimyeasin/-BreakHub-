@@ -135,14 +135,32 @@ class DatabaseService {
       const tempFile = `${DB_FILE}.tmp`;
       fs.writeFileSync(tempFile, JSON.stringify(payload, null, 2), 'utf-8');
       fs.renameSync(tempFile, DB_FILE);
-    } catch {
+    } catch (err) {
       this.data = payload;
+      console.error('Save failed', err);
     }
+  }
+
+  private hasSeeded = false;
+
+  // Admin access
+  public getAdminStats() {
+    return {
+      totalUsers: this.data.users.length,
+      totalGames: this.data.games.length,
+      totalScores: this.data.scores.length,
+      totalRequests: this.data.game_requests?.length || 0,
+      totalRatings: (this.data as any).ratings?.length || 0,
+    };
+  }
+
+  public getRawData() {
+    return this.data;
   }
 
   // Games
   public async getGames(): Promise<Game[]> {
-    try {
+    if (!this.hasSeeded) {
       for (const ig of INITIAL_GAMES) {
         try {
           await supabase.from('games').upsert({
@@ -157,7 +175,10 @@ class DatabaseService {
           }, { onConflict: 'id' });
         } catch {}
       }
+      this.hasSeeded = true;
+    }
 
+    try {
       const { data, error } = await supabase.from('games').select('*');
       if (!error && data && data.length > 0) {
         this.data.games = data.map((g: any) => ({
@@ -168,16 +189,25 @@ class DatabaseService {
       }
     } catch {}
 
+    // Fallback to file; ensure INITIAL_GAMES entries are included
     try {
       if (fs.existsSync(DB_FILE)) {
         const content = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(content);
         if (parsed && Array.isArray(parsed.games)) {
+          const existingIds = new Set(parsed.games.map((g: any) => g.id || g.slug));
+          INITIAL_GAMES.forEach(ig => {
+            if (!existingIds.has(ig.id) && !existingIds.has(ig.slug)) {
+              parsed.games.push({ ...ig, id: ig.id });
+            }
+          });
           this.data.games = parsed.games;
-          return parsed.games;
+          return this.data.games;
         }
       }
     } catch {}
+
+    this.data.games = INITIAL_GAMES.map(ig => ({ ...ig, thumbnail_url: ig.thumbnail_url || '/thumbnails/cyber-fruit-merge.svg' }));
     return this.data.games;
   }
 
@@ -552,19 +582,19 @@ class DatabaseService {
 
   public async saveUserProfile(user: User, updates: Partial<User>): Promise<User> {
     const target = this.data.users.find(u => u.id === user.id);
+    const merged: User = { ...user, ...updates };
     if (target) {
-      Object.assign(target, updates);
+      Object.assign(target, merged);
     } else {
-      const merged = { ...user, ...updates };
       this.data.users.push(merged);
     }
     this.saveDatabase();
 
     try {
-      await supabase.from('users').upsert({ ...target || { ...user, ...updates }, ...updates });
+      await supabase.from('users').upsert(merged);
     } catch {}
 
-    return target || { ...user, ...updates };
+    return target || merged;
   }
 }
 
