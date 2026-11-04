@@ -702,8 +702,6 @@ export default function ArcadePortalDashboard() {
         </div>
       </header>
 
-      <ActivityTicker />
-
       <div className="flex w-full min-h-[calc(100vh-61px)]">
         <Sidebar
           isOpen={isSidebarOpen}
