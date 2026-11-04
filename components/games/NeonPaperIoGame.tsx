@@ -3,7 +3,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Play, RotateCcw, Volume2, VolumeX, Trophy, Skull, Crown, Zap, Shield } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import MobileGamepad from '@/components/ui/MobileGamepad';
 
 interface NeonPaperIoGameProps {
   gameId: string;
@@ -1026,14 +1025,6 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         )}
       </div>
 
-      {/* Switchable Joystick / Arrow D-Pad (Mobile / Touch) */}
-      <div className="mt-3 flex justify-center w-full sm:hidden">
-        <MobileGamepad
-          mode="4way"
-          onDirectionChange={(dir) => setPlayerDir(dir as Direction)}
-          label="STEER"
-        />
-      </div>
     </div>
   );
 }

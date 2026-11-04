@@ -19,7 +19,6 @@ import {
   ArrowRight
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import MobileGamepad from '@/components/ui/MobileGamepad';
 
 interface NeonSnakeGameProps {
   gameId: string;
@@ -673,11 +672,6 @@ export default function NeonSnakeGame({ onGameOver }: NeonSnakeGameProps) {
             )}
           </div>
         )}
-      </div>
-
-      {/* Switchable Joystick / Arrow D-Pad (Mobile / Touch) */}
-      <div className="mt-2 flex justify-center w-full sm:hidden">
-        <MobileGamepad mode="4way" onDirectionChange={handleDirectionChange} label="STEER" />
       </div>
 
       {/* Desktop Helper Bar */}

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Play, RotateCcw, Volume2, VolumeX, Grid3X3, Undo2, Trophy, Flame } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import MobileGamepad from '@/components/ui/MobileGamepad';
 
 interface Cyber2048GameProps {
   gameId: string;
@@ -497,14 +496,6 @@ export default function Cyber2048Game({ gameId, onGameOver }: Cyber2048GameProps
         )}
       </div>
 
-      {/* Switchable Joystick / Arrow D-Pad (Mobile / Touch) */}
-      <div className="mt-2.5 flex justify-center w-full sm:hidden">
-        <MobileGamepad
-          mode="4way"
-          onDirectionChange={(dir) => move(dir as any)}
-          label="SLIDE"
-        />
-      </div>
     </div>
   );
 }

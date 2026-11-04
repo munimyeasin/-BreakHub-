@@ -225,14 +225,14 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
   const WALL_LEFT = 20;
   const WALL_RIGHT = CANVAS_WIDTH - 20;
   const FLOOR_Y = CANVAS_HEIGHT - 20;
-  const DANGER_LINE_Y = 115;
+  const DANGER_LINE_Y = 130;
   const DROPPER_Y = 55;
   const GRAVITY = 0.35; // Higher gravity like real water balloon
-  const RESTITUTION = 0.08; // Low bounce — energy dissipates quickly like real water balloon
+  const RESTITUTION = 0.03; // Harder stacking: less bounce leaves less recovery space
   const DAMPING_X = 0.96; // Air resistance slows motion gradually
   const DAMPING_Y = 0.96;
   const DAMPING_ROT = 0.98;
-  const DANGER_MAX_TIME = 3.0; // seconds above line before game over
+  const DANGER_MAX_TIME = 2.4; // Shorter overflow grace period raises pressure
 
   // Game States
   const [score, setScore] = useState(0);
@@ -484,9 +484,9 @@ export default function CyberFruitMergeGame({ gameId = 'g_merge_25', onGameOver 
     nextDropperTierRef.current = nextRandom;
     setNextTier(nextRandom);
 
-    // Cooldown lock (350ms)
+    // Cooldown lock (300ms) — keeps the board filling a little faster
     canDropRef.current = false;
-    dropCooldownTimerRef.current = 22; // ~350ms at 60fps
+    dropCooldownTimerRef.current = 18; // ~300ms at 60fps
   }, [getRandomSpawnTier, playSynthSound]);
 
   // Reset / Start Game

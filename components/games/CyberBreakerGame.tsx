@@ -16,8 +16,6 @@ import {
   Trophy
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import MobileGamepad from '@/components/ui/MobileGamepad';
-import { JoystickMoveEvent } from '@/components/ui/VirtualJoystick';
 
 interface CyberBreakerGameProps {
   gameId: string;
@@ -229,7 +227,6 @@ export default function CyberBreakerGame({ onGameOver }: CyberBreakerGameProps) 
   const scoreRef = useRef(0);
   const livesRef = useRef(3);
   const comboRef = useRef(0);
-  const joystickAxisXRef = useRef(0);
   const onGameOverRef = useRef(onGameOver);
 
   const paddleRef = useRef({
@@ -262,14 +259,6 @@ export default function CyberBreakerGame({ onGameOver }: CyberBreakerGameProps) 
     if (soundEnabledRef.current) {
       breakerAudio.playSound(type);
     }
-  }, []);
-
-  const handleJoystickMove = useCallback((e: JoystickMoveEvent) => {
-    joystickAxisXRef.current = e.x;
-  }, []);
-
-  const handleJoystickRelease = useCallback(() => {
-    joystickAxisXRef.current = 0;
   }, []);
 
   // Initialize Bricks Grid with procedural power-up assignments
@@ -464,10 +453,6 @@ export default function CyberBreakerGame({ onGameOver }: CyberBreakerGameProps) 
     const loop = () => {
       const pad = paddleRef.current;
 
-      // Continuous Joystick Movement
-      if (Math.abs(joystickAxisXRef.current) > 0.05) {
-        pad.x = Math.max(0, Math.min(CANVAS_WIDTH - pad.width, pad.x + joystickAxisXRef.current * 8.5));
-      }
 
       // 1. UPDATE LASERS
       lasersRef.current.forEach((laser, lIdx) => {
@@ -927,24 +912,16 @@ export default function CyberBreakerGame({ onGameOver }: CyberBreakerGameProps) 
         )}
       </div>
 
-      {/* Mobile Horizontal Paddle Controller & Laser Trigger */}
-      <div className="mt-2 flex items-center justify-center gap-2 w-full sm:hidden">
-        <MobileGamepad
-          mode="horizontal"
-          onMove={handleJoystickMove}
-          onRelease={handleJoystickRelease}
-          label="PADDLE"
-        />
-
-        {paddleRef.current.hasLaser && isPlaying && (
+      {paddleRef.current.hasLaser && isPlaying && (
+        <div className="mt-2 flex justify-center w-full sm:hidden">
           <button
             onClick={fireLasers}
             className="px-4 py-3 rounded-xl bg-portal-pink text-white font-black text-xs uppercase shadow-glow-purple active:scale-90 transition-all flex items-center gap-1"
           >
             <Crosshair className="w-4 h-4" /> FIRE
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Desktop Helper Bar */}
       <div className="hidden md:flex w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] mt-1.5 items-center justify-between text-[9px] font-bold text-slate-400 bg-portal-card/80 px-3 py-1 rounded-xl border border-portal-border/60 shrink-0">

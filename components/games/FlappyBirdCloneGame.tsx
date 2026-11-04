@@ -479,61 +479,141 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         ctx.restore();
       }
 
-      // Render Bird (Cyber Plasma Drone)
+      // Render an original red battle-bird with chunky transforming-robot armor.
       const bx = W / 3;
       const by = birdRef.current.y;
       ctx.save();
       ctx.translate(bx, by);
       ctx.rotate(birdRef.current.angle);
 
-      // Bird Drop Shadow
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.beginPath();
-      ctx.ellipse(0, BIRD_R + 4, BIRD_R * 0.8, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, BIRD_R + 5, BIRD_R * 0.9, 4, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Main Cyber Sphere Body
-      const birdGrad = ctx.createRadialGradient(-4, -4, 2, 0, 0, BIRD_R);
-      birdGrad.addColorStop(0, "#00FFFF");
-      birdGrad.addColorStop(0.6, "#0088FF");
-      birdGrad.addColorStop(1, "#110044");
-      ctx.fillStyle = birdGrad;
+      const exhaustFlicker = 2 + Math.sin(tickRef.current * 0.45);
+      ctx.fillStyle = "#D62828";
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 2;
+      for (const featherY of [-6, 1, 8]) {
+        ctx.beginPath();
+        ctx.moveTo(-11, featherY);
+        ctx.lineTo(-25 - exhaustFlicker, featherY - 5);
+        ctx.lineTo(-17, featherY + 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      }
+      ctx.fillStyle = "#00F0FF";
+      ctx.globalAlpha = 0.9;
       ctx.beginPath();
-      ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2);
+      ctx.moveTo(-14, -3);
+      ctx.lineTo(-29 - exhaustFlicker, 0);
+      ctx.lineTo(-14, 3);
+      ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = "#000000";
+      ctx.globalAlpha = 1;
+
+      // Angry-bird silhouette: broad red body, sharp brow, and golden beak.
+      const bodyGrad = ctx.createRadialGradient(-7, -8, 2, 0, 0, BIRD_R + 4);
+      bodyGrad.addColorStop(0, "#FF5A36");
+      bodyGrad.addColorStop(0.55, "#D62828");
+      bodyGrad.addColorStop(1, "#68151E");
+      ctx.fillStyle = bodyGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, BIRD_R + 1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#111827";
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // Wing
+      // Blue shoulder wing and silver robot faceplate.
       ctx.save();
       ctx.rotate(birdRef.current.wingAngle);
-      ctx.fillStyle = "#FFE600";
+      ctx.fillStyle = "#1554A6";
       ctx.beginPath();
-      ctx.ellipse(-2, 4, 8, 5, 0.3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.restore();
-
-      // Glowing Visor Eye
-      ctx.fillStyle = "#FF0055";
-      ctx.beginPath();
-      ctx.arc(6, -3, 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "#FFFFFF";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Energy Jet Flame Exhaust at rear
-      ctx.fillStyle = "#00FFCC";
-      ctx.beginPath();
-      ctx.moveTo(-BIRD_R, -3);
-      ctx.lineTo(-BIRD_R - 10 - Math.random() * 6, 0);
-      ctx.lineTo(-BIRD_R, 3);
+      ctx.moveTo(-2, 1);
+      ctx.lineTo(-19, 6);
+      ctx.lineTo(-12, 15);
+      ctx.lineTo(4, 9);
       ctx.closePath();
       ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#48D9FF";
+      ctx.fillRect(-13, 7, 9, 2);
+      ctx.restore();
+
+      ctx.fillStyle = "#B9C7D0";
+      ctx.beginPath();
+      ctx.arc(2, 7, 9, 0.15, Math.PI - 0.15);
+      ctx.lineTo(-7, 3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#71808D";
+      ctx.fillRect(-4, 8, 12, 2);
+
+      // Helmet crest and heavy blue brow give the bird a robot commander profile.
+      ctx.fillStyle = "#D7E0E5";
+      ctx.beginPath();
+      ctx.moveTo(-9, -12);
+      ctx.lineTo(-5, -19);
+      ctx.lineTo(0, -13);
+      ctx.lineTo(6, -19);
+      ctx.lineTo(9, -7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#123F82";
+      ctx.beginPath();
+      ctx.moveTo(-14, -7);
+      ctx.lineTo(10, -10);
+      ctx.lineTo(14, -3);
+      ctx.lineTo(-10, -1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#C8FBFF";
+      ctx.shadowColor = "#00F0FF";
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.moveTo(1, -5);
+      ctx.lineTo(8, -7);
+      ctx.lineTo(7, -2);
+      ctx.lineTo(1, -1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = "#FFC928";
+      ctx.beginPath();
+      ctx.moveTo(11, 0);
+      ctx.lineTo(26, 4);
+      ctx.lineTo(11, 9);
+      ctx.lineTo(7, 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#FFF0A8";
+      ctx.fillRect(13, 3, 9, 1.5);
+
+      // Chest grille and glowing reactor core.
+      ctx.strokeStyle = "#8ADFFF";
+      ctx.lineWidth = 1;
+      for (let grilleY = 7; grilleY <= 10; grilleY += 3) {
+        ctx.beginPath();
+        ctx.moveTo(-5, grilleY);
+        ctx.lineTo(5, grilleY - 2);
+        ctx.stroke();
+      }
+      ctx.fillStyle = "#00F0FF";
+      ctx.shadowColor = "#00F0FF";
+      ctx.shadowBlur = 7;
+      ctx.beginPath();
+      ctx.arc(0, 4, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
 
       ctx.restore();
 
