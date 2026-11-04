@@ -14,7 +14,7 @@
       "days_played": 5,
       "longest_streak": 9,
       "level": 44,
-      "xp": 28895,
+      "xp": 29130,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -75,7 +75,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 427,
+        "totalGamesPlayed": 429,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -102,7 +102,7 @@
           "g_reflex_09",
           "g_knife_28"
         ],
-        "totalScoreAccumulated": 1725056,
+        "totalScoreAccumulated": 1736576,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -188,6 +188,12 @@
       "username": "Ruhana Begom",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana%20Begom",
       "created_at": "2026-11-03T07:39:07.38+00:00"
+    },
+    {
+      "id": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "username": "TestPlayer",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=TestPlayer",
+      "created_at": "2026-11-02T07:28:46.16088+00:00"
     }
   ],
   "games": [
@@ -197,7 +203,7 @@
       "title": "Neon Starfighter",
       "description": "Space arcade",
       "category": "ACTION",
-      "status": "active",
+      "status": "hidden",
       "image_url": "/thumbnails/neon-starfighter.svg",
       "game_url": null,
       "rating": 4.8,
@@ -588,13 +594,13 @@
       "title": "Neon Paper Grid",
       "description": "Conquer the arcade grid! Expand your neon territory, encircle massive zones, and slice enemy trails before they cut yours.",
       "category": "STRATEGY",
-      "status": "coming_soon",
+      "status": "active",
       "image_url": "/thumbnails/paper-io.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
-      "hype_count": 1,
+      "hype_count": 0,
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
@@ -698,6 +704,27 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 90,
       "created_at": "2026-11-04T10:20:21.603Z"
+    },
+    {
+      "id": "1a82194b-5b3e-4655-b582-58114d27d95c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2580,
+      "created_at": "2026-11-04T11:22:05.302Z"
+    },
+    {
+      "id": "3a2b81f4-c6df-4482-8616-66edb12f1a90",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6240,
+      "created_at": "2026-11-04T11:22:59.249Z"
+    },
+    {
+      "id": "e3dda368-15f3-4474-b04c-06f4501f2d8f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2700,
+      "created_at": "2026-11-04T11:23:18.280Z"
     }
   ],
   "ratings": [
@@ -766,5 +793,83 @@
   "deposits": [],
   "withdrawals": [],
   "transactions": [],
-  "adminLogs": []
+  "adminLogs": [
+    {
+      "id": "9aaeadf5-62d9-417f-8596-3f3efbaa9475",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:20:25.190Z"
+    },
+    {
+      "id": "2115d3ea-4b66-414c-b517-e4117502c7bf",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:14:55.019Z"
+    },
+    {
+      "id": "d84a9d62-6b55-470c-9ccd-ba183a552b4d",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:08:06.004Z"
+    },
+    {
+      "id": "2f6a754c-6ac3-4a0c-a11d-8ed9dacb3235",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:17:24.380Z"
+    },
+    {
+      "id": "47c97e66-614b-468b-a730-98202630c182",
+      "admin_id": "admin",
+      "action": "delete_tournament",
+      "target_id": "0e6e39ee-ff5f-4eb8-b90b-30374b70c3a3",
+      "created_at": "2026-11-04T12:17:07.887Z"
+    },
+    {
+      "id": "12a8616b-ca3e-465b-88b6-30fd1684b1d0",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:16:35.420Z"
+    },
+    {
+      "id": "b7ad9b0e-ae2b-4b1c-aeeb-8e83e4d90ffb",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:10:41.955Z"
+    },
+    {
+      "id": "c68867ba-b703-4f7b-8dd4-e897c050ec03",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:10:22.468Z"
+    },
+    {
+      "id": "c9d1ca95-1f89-4840-8321-ebda437b0673",
+      "admin_id": "admin",
+      "action": "add_admin",
+      "created_at": "2026-11-04T11:19:50.926Z"
+    },
+    {
+      "id": "77c307a8-6673-4835-beb1-b51cbcbb296d",
+      "admin_id": "admin",
+      "action": "create_tournament",
+      "created_at": "2026-11-04T10:50:46.098Z"
+    }
+  ],
+  "categories": [],
+  "admins": [
+    {
+      "id": "admin_prime",
+      "username": "munim",
+      "admin_role": "prime"
+    },
+    {
+      "id": "c38fa133-e335-43ed-95bf-94814c0507f4",
+      "username": "Tahida",
+      "admin_role": "standard"
+    }
+  ],
+  "banners": [],
+  "comments": [],
+  "feedback": []
 }
