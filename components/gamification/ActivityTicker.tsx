@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Radio, Sparkles, Flame, Trophy, Star, Zap } from 'lucide-react';
-import { gamification, GamificationState, getLevelInfo, TROPHIES } from '@/lib/gamification';
+import { gamification, getLevelInfo } from '@/lib/gamification';
 
 interface ActivityItem {
   id: string;
@@ -26,37 +26,19 @@ const DEFAULT_ACTIVITIES: ActivityItem[] = [
   },
   {
     id: '2',
-    icon: <Zap className="w-3.5 h-3.5 text-portal-cyan fill-portal-cyan" />,
-    user: 'CyberPilot_X',
-    action: 'ascended to Rank',
-    highlight: 'Grid Pilot (LVL 4)',
-    tag: 'LEVEL UP',
-    color: 'border-cyan-500/40 text-portal-cyan',
-  },
-  {
-    id: '3',
-    icon: <Trophy className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />,
-    user: 'NeonViper',
-    action: 'unlocked Holographic Trophy',
-    highlight: 'Night Owl Platinum',
-    tag: 'TROPHY',
-    color: 'border-amber-500/40 text-amber-300',
-  },
-  {
-    id: '4',
     icon: <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />,
     user: 'Nazmul',
     action: 'set new high score in',
-    highlight: 'Cyber Katana Slicer (3,450 pts)',
+    highlight: 'Cyber Katana Slicer',
     tag: 'RECORD',
     color: 'border-yellow-500/40 text-yellow-300',
   },
   {
-    id: '5',
+    id: '3',
     icon: <Sparkles className="w-3.5 h-3.5 text-purple-400" />,
     user: 'ArcadeRunner_9',
     action: 'claimed',
-    highlight: '3/3 Daily Master Bonus',
+    highlight: 'Daily Master Bonus',
     tag: 'QUESTS',
     color: 'border-purple-500/40 text-purple-300',
   },
@@ -130,29 +112,29 @@ export default function ActivityTicker() {
     <div
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative w-full overflow-hidden bg-portal-surface border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm overflow-x-hidden box-border"
+      className="relative w-full max-w-full overflow-hidden bg-portal-surface border-y-3 border-black py-2 px-3 sm:px-4 flex items-center justify-between text-[11px] select-none shadow-neo-sm box-border"
     >
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-black tracking-wider shadow-neo-sm">
-          <span className="w-2 h-2 rounded-full bg-black animate-ping" />
-          <Radio className="w-3 h-3 stroke-[2.5]" />
-          <span className="hidden xs:inline">LIVE FEED</span>
+        <div className="flex items-center gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-portal-pink border-2 border-black text-[10px] font-black uppercase text-black tracking-wider shadow-neo-sm">
+          <span className="w-2 h-2 rounded-full bg-black animate-ping shrink-0" />
+          <Radio className="w-3 h-3 stroke-[2.5] shrink-0" />
+          <span className="hidden xs:inline">LIVE</span>
         </div>
       </div>
 
       {/* Main Animated Ticker Strip */}
-      <div className="flex-1 mx-3 overflow-hidden flex items-center justify-center">
+      <div className="flex-1 mx-2 sm:mx-3 overflow-hidden min-w-0 flex items-center justify-center">
         <div
           key={current.id}
-          className="flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300 truncate"
+          className="flex items-center gap-1.5 sm:gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 truncate"
         >
           <span className="shrink-0">{current.icon}</span>
-          <span className="text-white font-black">{current.user}</span>
-          <span className="text-slate-300 font-bold hidden sm:inline">{current.action}</span>
-          <span className="font-black text-portal-yellow underline decoration-2 underline-offset-2">
+          <span className="text-white font-black truncate max-w-[90px] sm:max-w-none">{current.user}</span>
+          <span className="text-slate-300 font-bold hidden md:inline truncate">{current.action}</span>
+          <span className="font-black text-portal-yellow underline decoration-2 underline-offset-2 truncate">
             {current.highlight}
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-portal-yellow text-black border-2 border-black shadow-neo-sm shrink-0">
+          <span className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase bg-portal-yellow text-black border-2 border-black shadow-neo-sm shrink-0">
             {current.tag}
           </span>
         </div>
