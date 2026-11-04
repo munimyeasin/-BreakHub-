@@ -419,14 +419,14 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     ctx.arc(4, 4, outerR, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3D Extruded Side Facet (Dark Shaded)
+    // 3D Extruded Side Facet (Dark Shaded Outer Ring)
     const sideGrad = ctx.createLinearGradient(-outerR, -outerR, outerR, outerR);
     sideGrad.addColorStop(0, sideColor);
     sideGrad.addColorStop(1, '#000000');
     ctx.fillStyle = sideGrad;
     ctx.beginPath();
-    ctx.arc(outerR, outerR, outerR, 0, Math.PI * 2);
-    ctx.arc(innerR, innerR, innerR, Math.PI * 2, 0, true);
+    ctx.arc(0, 0, outerR, 0, Math.PI * 2);
+    ctx.arc(0, 0, innerR, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.fill();
     ctx.strokeStyle = '#000000';
@@ -650,17 +650,18 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
       ctx.restore();
 
       // 4. Render Stuck Katanas on Rotating Target Wheel
-      // Knives embed tip-INWARD at the exact contact point. After rotating the
-      // context to the contact angle and translating to the wheel surface, the
-      // blade's default tip-up orientation already points toward center, so no
-      // extra PI flip is applied. (The old rotate(Math.PI) pointed every stuck
-      // blade outward and flipped it 180 deg at embed time — the glitch.)
-      // Drawn AFTER the wheel so stuck blades render on top of the target.
+      // Knives embed tip-INWARD at the exact contact point. The blade's local
+      // frame points along -Y, so to sit at screen angle φ with the tip toward
+      // the wheel center we rotate by φ - π/2 and translate (0, wheelRadius):
+      //   position = center + R(φ-π/2)*(0,R) = center + R*(cos φ, sin φ)  ✓ bottom
+      //   tip dir  = R(φ-π/2)*(0,-1) = -(cos φ, sin φ) → toward center  ✓
+      // (The old rotate(Math.PI) + rotate(φ) + translate(0,R) mapped a bottom
+      // hit to the left edge of the wheel — the glitch.)
       stuckKnivesRef.current.forEach((stuck) => {
         const globalAngle = stuck.angle + wheelAngleRef.current;
         ctx.save();
         ctx.translate(wheelCenter.x, wheelCenter.y);
-        ctx.rotate(globalAngle);
+        ctx.rotate(globalAngle - Math.PI / 2);
         ctx.translate(0, wheelRadius);
         draw3DKatanaBlade(ctx, 0, 0, 0, 0.42, 1.0);
         ctx.restore();
