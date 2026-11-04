@@ -1,12 +1,6 @@
 {
   "users": [
     {
-      "id": "66ed0a76-712c-45f5-a7d3-635acec63743",
-      "username": "TestPlayer",
-      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=TestPlayer",
-      "created_at": "2026-11-02T07:28:46.16088+00:00"
-    },
-    {
       "id": "edb575e2-d634-46d6-8bcc-a4582c905a91",
       "username": "RandomUser_748",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=RandomUser",
@@ -20,7 +14,7 @@
       "days_played": 5,
       "longest_streak": 9,
       "level": 44,
-      "xp": 28660,
+      "xp": 28895,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -81,7 +75,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 425,
+        "totalGamesPlayed": 427,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -108,12 +102,12 @@
           "g_reflex_09",
           "g_knife_28"
         ],
-        "totalScoreAccumulated": 1718546,
+        "totalScoreAccumulated": 1725056,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
         "rouletteSpins": 2,
-        "questsCompletedCount": 11,
+        "questsCompletedCount": 12,
         "hypeCount": 0,
         "categoriesPlayed": [
           "ARCADE",
@@ -232,40 +226,6 @@
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
-      "id": "g_geometry_10",
-      "slug": "geometry-dash",
-      "title": "Neon Pulse Dash",
-      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/geometry-dash.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.742082+00:00",
-      "updated_at": "2026-11-02T09:23:08.742082+00:00",
-      "thumbnail_url": "/thumbnails/geometry-dash.svg"
-    },
-    {
-      "id": "g_breaker_08",
-      "slug": "cyber-breaker",
-      "title": "Cyber Brick Breaker",
-      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-breaker.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:09.064845+00:00",
-      "updated_at": "2026-11-02T09:23:09.064845+00:00",
-      "thumbnail_url": "/thumbnails/cyber-breaker.svg"
-    },
-    {
       "id": "g_knife_28",
       "slug": "knife-thrower",
       "title": "Knife Thrower",
@@ -317,21 +277,38 @@
       "thumbnail_url": "/thumbnails/quantum-xo.svg"
     },
     {
-      "id": "g_flip_02",
-      "slug": "memory-matrix",
-      "title": "Memory Matrix",
-      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
-      "category": "PUZZLE",
+      "id": "g_geometry_10",
+      "slug": "geometry-dash",
+      "title": "Neon Pulse Dash",
+      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
+      "category": "ACTION",
       "status": "active",
-      "image_url": "/thumbnails/memory-matrix.svg",
+      "image_url": "/thumbnails/geometry-dash.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.130256+00:00",
-      "updated_at": "2026-11-02T09:23:08.130256+00:00",
-      "thumbnail_url": "/thumbnails/memory-matrix.svg"
+      "created_at": "2026-11-02T09:23:08.742082+00:00",
+      "updated_at": "2026-11-02T09:23:08.742082+00:00",
+      "thumbnail_url": "/thumbnails/geometry-dash.svg"
+    },
+    {
+      "id": "g_breaker_08",
+      "slug": "cyber-breaker",
+      "title": "Cyber Brick Breaker",
+      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-breaker.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:09.064845+00:00",
+      "updated_at": "2026-11-02T09:23:09.064845+00:00",
+      "thumbnail_url": "/thumbnails/cyber-breaker.svg"
     },
     {
       "id": "g_merge_25",
@@ -402,6 +379,23 @@
       "thumbnail_url": "/thumbnails/quantum-2048.svg"
     },
     {
+      "id": "g_flip_02",
+      "slug": "memory-matrix",
+      "title": "Memory Matrix",
+      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/memory-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.130256+00:00",
+      "updated_at": "2026-11-02T09:23:08.130256+00:00",
+      "thumbnail_url": "/thumbnails/memory-matrix.svg"
+    },
+    {
       "id": "g_sweeper_16",
       "slug": "cyber-minesweeper",
       "title": "Quantum Minefield",
@@ -434,6 +428,23 @@
       "created_at": "2026-11-02T09:23:09.355793+00:00",
       "updated_at": "2026-11-02T09:23:09.355793+00:00",
       "thumbnail_url": "/thumbnails/chroma-reflex.svg"
+    },
+    {
+      "id": "g_flappy_27",
+      "slug": "cyber-flappy",
+      "title": "Neon Flappy Flyer",
+      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/flappy-bird.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.287411+00:00",
+      "updated_at": "2026-11-02T09:23:05.287411+00:00",
+      "thumbnail_url": "/thumbnails/flappy-bird.svg"
     },
     {
       "id": "g_slicer_11",
@@ -521,23 +532,6 @@
       "thumbnail_url": "/thumbnails/cyber-dash.svg"
     },
     {
-      "id": "g_flappy_27",
-      "slug": "cyber-flappy",
-      "title": "Neon Flappy Flyer",
-      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/flappy-bird.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.287411+00:00",
-      "updated_at": "2026-11-02T09:23:05.287411+00:00",
-      "thumbnail_url": "/thumbnails/flappy-bird.svg"
-    },
-    {
       "id": "g_missile_21",
       "slug": "neon-missile-defense",
       "title": "Neon Missile Defense",
@@ -594,13 +588,13 @@
       "title": "Neon Paper Grid",
       "description": "Conquer the arcade grid! Expand your neon territory, encircle massive zones, and slice enemy trails before they cut yours.",
       "category": "STRATEGY",
-      "status": "active",
+      "status": "coming_soon",
       "image_url": "/thumbnails/paper-io.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
-      "hype_count": 0,
+      "hype_count": 1,
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
@@ -683,6 +677,27 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 6090,
       "created_at": "2026-11-04T04:23:40.223Z"
+    },
+    {
+      "id": "a449e01c-f236-4733-bd19-3ff362810708",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6360,
+      "created_at": "2026-11-04T10:19:44.474Z"
+    },
+    {
+      "id": "e360f832-7e8a-4951-aac6-d77e92014d3d",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-04T10:20:18.710Z"
+    },
+    {
+      "id": "4ac0c4ac-4620-4e12-9f98-9614e58a1c7f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-04T10:20:21.603Z"
     }
   ],
   "ratings": [
@@ -737,5 +752,19 @@
       "status": "under_review",
       "created_at": "2026-09-22T08:15:00.000Z"
     }
-  ]
+  ],
+  "tournaments": [
+    {
+      "id": "tourn_1",
+      "name": "Cyber Blitz Championship",
+      "entry_fee": 10,
+      "prize_pool": 1000,
+      "start_date": "2026-11-10T18:00:00.000Z",
+      "status": "upcoming"
+    }
+  ],
+  "deposits": [],
+  "withdrawals": [],
+  "transactions": [],
+  "adminLogs": []
 }

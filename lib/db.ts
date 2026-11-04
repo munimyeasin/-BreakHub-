@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { User, Game, Score, LeaderboardEntry, GameRequest } from './types';
+import { User, Game, Score, LeaderboardEntry, GameRequest, Tournament, Deposit, Withdrawal, Transaction, AdminLog } from './types';
 import { INITIAL_GAMES } from './gamesData';
 import { censorText } from './censor';
 import { supabaseServer as supabase } from './supabaseServer';
@@ -13,6 +13,11 @@ interface DatabaseSchema {
   games: Game[];
   scores: Score[];
   game_requests?: GameRequest[];
+  tournaments: Tournament[];
+  deposits: Deposit[];
+  withdrawals: Withdrawal[];
+  transactions: Transaction[];
+  adminLogs: AdminLog[];
 }
 
 const IS_VERCEL = !!process.env.VERCEL;
@@ -58,6 +63,22 @@ const INITIAL_REQUESTS: GameRequest[] = [
   }
 ];
 
+const INITIAL_TOURNAMENTS: Tournament[] = [
+  {
+    id: 'tourn_1',
+    name: 'Cyber Blitz Championship',
+    entry_fee: 10,
+    prize_pool: 1000,
+    start_date: '2026-11-10T18:00:00.000Z',
+    status: 'upcoming'
+  }
+];
+
+const INITIAL_DEPOSITS: Deposit[] = [];
+const INITIAL_WITHDRAWALS: Withdrawal[] = [];
+const INITIAL_TRANSACTIONS: Transaction[] = [];
+const INITIAL_ADMIN_LOGS: AdminLog[] = [];
+
 class DatabaseService {
   private data: DatabaseSchema;
 
@@ -92,6 +113,13 @@ class DatabaseService {
           parsed.game_requests = INITIAL_REQUESTS;
           updated = true;
         }
+        if (!Array.isArray(parsed.tournaments)) { parsed.tournaments = INITIAL_TOURNAMENTS; updated = true; }
+        if (!Array.isArray(parsed.deposits)) { parsed.deposits = []; updated = true; }
+        if (!Array.isArray(parsed.withdrawals)) { parsed.withdrawals = []; updated = true; }
+        if (!Array.isArray(parsed.transactions)) { parsed.transactions = []; updated = true; }
+        if (!Array.isArray(parsed.adminLogs)) { parsed.adminLogs = []; updated = true; }
+        if (!Array.isArray(parsed.users)) { parsed.users = []; updated = true; }
+        if (!Array.isArray(parsed.scores)) { parsed.scores = []; updated = true; }
         INITIAL_GAMES.forEach(ig => {
           const existing = parsed.games.find((g: any) => g.id === ig.id || g.slug === ig.slug);
           if (!existing) {
@@ -111,6 +139,11 @@ class DatabaseService {
       games: INITIAL_GAMES,
       scores: INITIAL_SCORES,
       game_requests: INITIAL_REQUESTS,
+      tournaments: INITIAL_TOURNAMENTS,
+      deposits: INITIAL_DEPOSITS,
+      withdrawals: INITIAL_WITHDRAWALS,
+      transactions: INITIAL_TRANSACTIONS,
+      adminLogs: INITIAL_ADMIN_LOGS,
     };
     this.saveDatabase(initial);
     return initial;
@@ -122,6 +155,11 @@ class DatabaseService {
       games: INITIAL_GAMES,
       scores: [],
       game_requests: INITIAL_REQUESTS,
+      tournaments: INITIAL_TOURNAMENTS,
+      deposits: [],
+      withdrawals: [],
+      transactions: [],
+      adminLogs: [],
     };
     this.data = fresh;
     this.saveDatabase(fresh);
@@ -154,8 +192,70 @@ class DatabaseService {
     };
   }
 
-  public getRawData() {
+  public getRawData(): DatabaseSchema {
     return this.data;
+  }
+
+  public adminUpdateUserStatus(userId: string, status: User['status']): User {
+    const user = this.data.users.find(item => item.id === userId);
+    if (!user) throw new Error('User not found');
+    user.status = status;
+    this.saveDatabase();
+    return user;
+  }
+
+  public adminProcessDeposit(depositId: string, status: 'completed' | 'failed'): Deposit {
+    const deposit = this.data.deposits.find(item => item.id === depositId);
+    if (!deposit) throw new Error('Deposit not found');
+    if (deposit.status !== 'pending') throw new Error('Deposit already processed');
+    const user = this.data.users.find(item => item.id === deposit.user_id);
+    if (!user) throw new Error('User not found');
+    deposit.status = status;
+    if (status === 'completed') {
+      user.wallet_balance = (user.wallet_balance || 0) + deposit.amount;
+      this.data.transactions.push({ id: crypto.randomUUID(), user_id: user.id, type: 'deposit', amount: deposit.amount, created_at: new Date().toISOString() });
+    }
+    this.saveDatabase();
+    return deposit;
+  }
+
+  public adminProcessWithdrawal(withdrawalId: string, status: 'completed' | 'failed'): Withdrawal {
+    const withdrawal = this.data.withdrawals.find(item => item.id === withdrawalId);
+    if (!withdrawal) throw new Error('Withdrawal not found');
+    if (withdrawal.status !== 'pending') throw new Error('Withdrawal already processed');
+    const user = this.data.users.find(item => item.id === withdrawal.user_id);
+    if (!user) throw new Error('User not found');
+    if (status === 'completed' && (user.wallet_balance || 0) < withdrawal.amount) throw new Error('Insufficient wallet balance');
+    withdrawal.status = status;
+    if (status === 'completed') {
+      user.wallet_balance -= withdrawal.amount;
+      this.data.transactions.push({ id: crypto.randomUUID(), user_id: user.id, type: 'withdrawal', amount: withdrawal.amount, created_at: new Date().toISOString() });
+    }
+    this.saveDatabase();
+    return withdrawal;
+  }
+
+  public adminCreateTournament(input: Omit<Tournament, 'id' | 'status'> & { status?: Tournament['status'] }): Tournament {
+    if (!input.name.trim() || input.entry_fee < 0 || input.prize_pool < 0 || !input.start_date) throw new Error('Invalid tournament data');
+    const tournament: Tournament = { ...input, id: crypto.randomUUID(), status: input.status || 'upcoming' };
+    this.data.tournaments.push(tournament);
+    this.saveDatabase();
+    return tournament;
+  }
+
+  public adminDeleteTournament(tournamentId: string): void {
+    const exists = this.data.tournaments.some(item => item.id === tournamentId);
+    if (!exists) throw new Error('Tournament not found');
+    this.data.tournaments = this.data.tournaments.filter(item => item.id !== tournamentId);
+    this.saveDatabase();
+  }
+
+  public addAdminLog(adminId: string, action: string, targetId?: string): AdminLog {
+    const log: AdminLog = { id: crypto.randomUUID(), admin_id: adminId || 'admin', action, target_id: targetId, created_at: new Date().toISOString() };
+    this.data.adminLogs.unshift(log);
+    this.data.adminLogs = this.data.adminLogs.slice(0, 500);
+    this.saveDatabase();
+    return log;
   }
 
   // Games
@@ -257,7 +357,9 @@ class DatabaseService {
         id: crypto.randomUUID(),
         username: cleanName,
         avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(cleanName)}`,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        wallet_balance: 0,
+        status: 'active'
       };
       this.data.users.push(user);
       this.saveDatabase();

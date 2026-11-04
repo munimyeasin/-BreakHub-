@@ -1,106 +1,150 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { supabaseServer } from '@/lib/supabaseServer';
+import type { User } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
+const getAdminToken = (): string | undefined => process.env.ADMIN_SECRET || (process.env.NODE_ENV === 'development' ? 'breakhub_admin_2026' : undefined);
+
+function authorized(req: NextRequest, suppliedSecret?: unknown): boolean {
+  const token = getAdminToken();
+  if (!token) return false;
+  const header = req.headers.get('authorization');
+  return suppliedSecret === token || header === `Bearer ${token}`;
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Admin action failed';
+}
+
+function badRequest(message: string): NextResponse {
+  return NextResponse.json({ success: false, error: message }, { status: 400 });
+}
+
 export async function GET(req: NextRequest) {
+  if (!authorized(req, new URL(req.url).searchParams.get('secret'))) {
+    return NextResponse.json({ success: false, error: 'Unauthorized admin access' }, { status: 401 });
+  }
+
   try {
-    const { searchParams } = new URL(req.url);
-    const secret = searchParams.get('secret');
-
-    // Simple security check for admin access (can be customized or secured via session cookie)
-    const adminToken = process.env.ADMIN_SECRET || 'breakhub_admin_2026';
-    if (secret !== adminToken && process.env.NODE_ENV === 'production') {
-      // In development or if not strictly enforced, allow or check header
-      const authHeader = req.headers.get('authorization');
-      if (authHeader !== `Bearer ${adminToken}`) {
-        return NextResponse.json({ success: false, error: 'Unauthorized admin access' }, { status: 401 });
-      }
-    }
-
+    const data = db.getRawData();
     const games = await db.getGames();
     const requests = await db.getGameRequests();
-    const globalLeaderboard = await db.getGlobalLeaderboard(100);
-
-    // Collect all scores and users
-    const data = db.getRawData();
-    const scores = data.scores || [];
-    const users = data.users || [];
-    const ratings = (data as any).ratings || [];
-
     return NextResponse.json({
       success: true,
-      stats: db.getAdminStats(),
+      stats: { ...db.getAdminStats(), totalDeposits: data.deposits.length, totalWithdrawals: data.withdrawals.length, totalTournaments: data.tournaments.length },
       games,
-      users,
-      scores: scores.slice(-50).reverse(), // recent 50
+      users: data.users,
+      scores: data.scores.slice(-50).reverse(),
       requests,
-      ratings: ratings.slice(-50).reverse()
+      ratings: ((data as typeof data & { ratings?: unknown[] }).ratings || []).slice(-50).reverse(),
+      deposits: data.deposits,
+      withdrawals: data.withdrawals,
+      transactions: data.transactions.slice(-100).reverse(),
+      tournaments: data.tournaments,
+      adminLogs: data.adminLogs.slice(0, 100),
+      settings: ((data as typeof data & { settings?: Record<string, string> }).settings || {})
     });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message || 'Failed to fetch admin dashboard stats' }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ success: false, error: errorMessage(error) }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { action, secret, ...payload } = body;
+    const body: unknown = await req.json();
+    if (!body || typeof body !== 'object') return badRequest('Invalid request body');
+    const { action, secret, ...payload } = body as Record<string, unknown>;
+    if (!authorized(req, secret)) return NextResponse.json({ success: false, error: 'Unauthorized admin action' }, { status: 401 });
+    if (typeof action !== 'string') return badRequest('Action is required');
 
-    const adminToken = process.env.ADMIN_SECRET || 'breakhub_admin_2026';
-    if (secret !== adminToken && process.env.NODE_ENV === 'production') {
-      return NextResponse.json({ success: false, error: 'Unauthorized admin action' }, { status: 401 });
-    }
+    const id = (key: string): string => typeof payload[key] === 'string' ? payload[key] as string : '';
+    const adminId = id('adminId') || 'admin';
+    let result: unknown;
 
-    if (action === 'update_game_status') {
-      const { gameId, status } = payload;
-      const games = await db.getGames();
-      const game = games.find(g => g.id === gameId || g.slug === gameId);
-      if (!game) {
-        return NextResponse.json({ success: false, error: 'Game not found' }, { status: 404 });
+    switch (action) {
+      case 'update_game_status': {
+        const gameId = id('gameId');
+        const status = payload.status;
+        if (!gameId || !['active', 'coming_soon', 'hidden'].includes(String(status))) return badRequest('Invalid game status payload');
+        const games = await db.getGames();
+        const game = games.find(item => item.id === gameId || item.slug === gameId);
+        if (!game) return NextResponse.json({ success: false, error: 'Game not found' }, { status: 404 });
+        game.status = status as typeof game.status;
+        db.saveDatabase();
+        try { await supabaseServer.from('games').update({ status }).eq('id', game.id); } catch { /* local database remains authoritative fallback */ }
+        result = game;
+        break;
       }
-      game.status = status;
-      db.saveDatabase();
-      try {
-        await supabaseServer.from('games').update({ status }).eq('id', game.id);
-      } catch {}
-      return NextResponse.json({ success: true, game });
-    }
-
-    if (action === 'update_request_status') {
-      const { requestId, status } = payload;
-      const requests = await db.getGameRequests();
-      const reqItem = requests.find(r => r.id === requestId);
-      if (!reqItem) {
-        return NextResponse.json({ success: false, error: 'Request not found' }, { status: 404 });
+      case 'update_request_status': {
+        const request = (await db.getGameRequests()).find(item => item.id === id('requestId'));
+        if (!request) return NextResponse.json({ success: false, error: 'Request not found' }, { status: 404 });
+        if (!['under_review', 'planned', 'in_development', 'completed', 'declined'].includes(String(payload.status))) return badRequest('Invalid request status');
+        request.status = payload.status as typeof request.status;
+        db.saveDatabase();
+        result = request;
+        break;
       }
-      reqItem.status = status;
-      (db as any).saveDatabase?.();
-      return NextResponse.json({ success: true, request: reqItem });
-    }
-
-    if (action === 'delete_score') {
-      const { scoreId } = payload;
-      if ((db as any).data?.scores) {
-        (db as any).data.scores = (db as any).data.scores.filter((s: any) => s.id !== scoreId);
-        (db as any).saveDatabase?.();
+      case 'update_user_status': {
+        const status = payload.status;
+        if (!['active', 'blocked'].includes(String(status))) return badRequest('Invalid user status');
+        result = db.adminUpdateUserStatus(id('userId'), status as User['status']);
+        break;
       }
-      return NextResponse.json({ success: true });
-    }
-
-    if (action === 'delete_user') {
-      const { userId } = payload;
-      if ((db as any).data?.users) {
-        (db as any).data.users = (db as any).data.users.filter((u: any) => u.id !== userId);
-        (db as any).data.scores = (db as any).data.scores.filter((s: any) => s.user_id !== userId);
-        (db as any).saveDatabase?.();
+      case 'process_deposit':
+        if (payload.status !== 'completed' && payload.status !== 'failed') return badRequest('Invalid deposit status');
+        result = db.adminProcessDeposit(id('depositId'), payload.status);
+        break;
+      case 'process_withdrawal':
+        if (payload.status !== 'completed' && payload.status !== 'failed') return badRequest('Invalid withdrawal status');
+        result = db.adminProcessWithdrawal(id('withdrawalId'), payload.status);
+        break;
+      case 'create_tournament': {
+        const name = id('name');
+        const entryFee = Number(payload.entry_fee);
+        const prizePool = Number(payload.prize_pool);
+        if (!name || !Number.isFinite(entryFee) || !Number.isFinite(prizePool) || typeof payload.start_date !== 'string') return badRequest('Invalid tournament payload');
+        result = db.adminCreateTournament({ name, entry_fee: entryFee, prize_pool: prizePool, start_date: payload.start_date });
+        break;
       }
-      return NextResponse.json({ success: true });
+      case 'delete_tournament':
+        db.adminDeleteTournament(id('tournamentId'));
+        result = { id: id('tournamentId') };
+        break;
+      case 'delete_score': {
+        const data = db.getRawData();
+        data.scores = data.scores.filter(score => score.id !== id('scoreId'));
+        db.saveDatabase();
+        result = { id: id('scoreId') };
+        break;
+      }
+      case 'delete_user': {
+        const userId = id('userId');
+        const data = db.getRawData();
+        data.users = data.users.filter(user => user.id !== userId);
+        data.scores = data.scores.filter(score => score.user_id !== userId);
+        data.deposits = data.deposits.filter(item => item.user_id !== userId);
+        data.withdrawals = data.withdrawals.filter(item => item.user_id !== userId);
+        data.transactions = data.transactions.filter(item => item.user_id !== userId);
+        db.saveDatabase();
+        result = { id: userId };
+        break;
+      }
+      case 'update_settings':
+        result = { upiId: id('upiId') };
+        break;
+      case 'add_admin_log':
+        result = db.addAdminLog(adminId, id('logAction') || 'admin_action', id('targetId') || undefined);
+        break;
+      default:
+        return badRequest('Unknown admin action');
     }
 
-    return NextResponse.json({ success: false, error: 'Unknown admin action' }, { status: 400 });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message || 'Admin action failed' }, { status: 500 });
+    if (action !== 'add_admin_log') db.addAdminLog(adminId, action, id('userId') || id('depositId') || id('withdrawalId') || id('tournamentId') || undefined);
+    return NextResponse.json({ success: true, result });
+  } catch (error: unknown) {
+    const message = errorMessage(error);
+    return NextResponse.json({ success: false, error: message }, { status: message.endsWith('not found') ? 404 : 400 });
   }
 }

@@ -11,6 +11,51 @@ export interface User {
   xp?: number;
   unlocked_trophies?: Record<string, { unlockedAt: string }>;
   stats?: any;
+  wallet_balance: number;
+  status: 'active' | 'blocked';
+}
+
+export interface Tournament {
+  id: string;
+  name: string;
+  entry_fee: number;
+  prize_pool: number;
+  start_date: string;
+  status: 'upcoming' | 'ongoing' | 'finished';
+}
+
+export interface Deposit {
+  id: string;
+  user_id: string;
+  amount: number;
+  status: 'pending' | 'completed' | 'failed';
+  transaction_id?: string;
+  created_at: string;
+}
+
+export interface Withdrawal {
+  id: string;
+  user_id: string;
+  amount: number;
+  status: 'pending' | 'completed' | 'failed';
+  upi_id?: string;
+  created_at: string;
+}
+
+export interface Transaction {
+  id: string;
+  user_id: string;
+  type: 'deposit' | 'withdrawal' | 'wager' | 'win';
+  amount: number;
+  created_at: string;
+}
+
+export interface AdminLog {
+  id: string;
+  admin_id: string;
+  action: string;
+  target_id?: string;
+  created_at: string;
 }
 
 export interface Game {

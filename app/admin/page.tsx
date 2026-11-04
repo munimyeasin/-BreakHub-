@@ -1,6 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import FinanceTab from '@/components/admin/tabs/FinanceTab';
+import TournamentTab from '@/components/admin/tabs/TournamentTab';
+import LogsTab from '@/components/admin/tabs/LogsTab';
+import SettingsTab from '@/components/admin/tabs/SettingsTab';
 import {
   ShieldAlert,
   Users,
@@ -27,7 +31,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [data, setData] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'games' | 'users' | 'scores' | 'requests'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'games' | 'users' | 'scores' | 'requests' | 'finance' | 'tournaments' | 'logs' | 'settings'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -111,6 +115,14 @@ export default function AdminDashboardPage() {
       });
       if (res.ok) refreshData();
     } catch {}
+  };
+
+  const adminAction = async (action: string, payload: Record<string, unknown> = {}) => {
+    try {
+      const res = await fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, secret, ...payload }) });
+      if (!res.ok) throw new Error((await res.json()).error || 'Admin action failed');
+      await refreshData();
+    } catch (err: unknown) { setError(err instanceof Error ? err.message : 'Admin action failed'); }
   };
 
   const handleDeleteUser = async (userId: string) => {
@@ -233,6 +245,10 @@ export default function AdminDashboardPage() {
             { id: 'users', label: 'Users & Profiles', icon: Users, count: stats.totalUsers },
             { id: 'scores', label: 'Score Submissions', icon: Trophy, count: stats.totalScores },
             { id: 'requests', label: 'Game Wishlist', icon: FileText, count: stats.totalRequests },
+            { id: 'finance', label: 'Finance', icon: Zap, count: (stats.totalDeposits || 0) + (stats.totalWithdrawals || 0) },
+            { id: 'tournaments', label: 'Tournaments', icon: Trophy, count: stats.totalTournaments },
+            { id: 'logs', label: 'Admin Logs', icon: Activity, count: (data?.adminLogs || []).length },
+            { id: 'settings', label: 'Settings', icon: Layers, count: null },
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -480,6 +496,14 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         )}
+
+        {activeTab === 'finance' && <FinanceTab deposits={data?.deposits || []} withdrawals={data?.withdrawals || []} transactions={data?.transactions || []} users={users} onProcessDeposit={(id, status) => adminAction('process_deposit', { depositId: id, status })} onProcessWithdrawal={(id, status) => adminAction('process_withdrawal', { withdrawalId: id, status })} />}
+
+        {activeTab === 'tournaments' && <TournamentTab tournaments={data?.tournaments || []} onCreate={input => adminAction('create_tournament', { name: input.name, entry_fee: input.entry_fee, prize_pool: input.prize_pool, start_date: input.start_date })} onDelete={id => adminAction('delete_tournament', { tournamentId: id })} />}
+
+        {activeTab === 'logs' && <LogsTab logs={data?.adminLogs || []} />}
+
+        {activeTab === 'settings' && <SettingsTab initialUpi={data?.settings?.admin_upi_id} initialQrCode={data?.settings?.admin_qr_code} onSave={({ upiId }) => adminAction('update_settings', { upiId })} />}
 
         {/* REQUESTS TAB */}
         {activeTab === 'requests' && (
