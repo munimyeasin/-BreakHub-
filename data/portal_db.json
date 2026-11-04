@@ -16,7 +16,112 @@
       "id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "username": "munim",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=munim",
-      "created_at": "2026-11-02T08:49:14.026+00:00"
+      "created_at": "2026-11-02T08:49:14.026+00:00",
+      "days_played": 5,
+      "longest_streak": 9,
+      "level": 44,
+      "xp": 28660,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 425,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28"
+        ],
+        "totalScoreAccumulated": 1718546,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 2,
+        "questsCompletedCount": 11,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -35,6 +140,60 @@
       "username": "mik",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=mik",
       "created_at": "2026-11-02T14:10:39.682+00:00"
+    },
+    {
+      "id": "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "username": "Tahida begom",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Tahida%20begom",
+      "created_at": "2026-11-03T07:15:24.297+00:00"
+    },
+    {
+      "id": "dc88b11e-c2b8-4acd-bc77-dfb117f93d09",
+      "username": "Irom Don",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Irom%20Don",
+      "created_at": "2026-11-03T07:24:17.572+00:00"
+    },
+    {
+      "id": "f3fd9e94-eb00-47d3-ac58-ceab5b424b87",
+      "username": "Hkb",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Hkb",
+      "created_at": "2026-11-03T07:24:27.765+00:00"
+    },
+    {
+      "id": "00e09c54-396f-468a-8c20-9fc58a8a0556",
+      "username": "Ashraful",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ashraful",
+      "created_at": "2026-11-03T07:26:06.803+00:00"
+    },
+    {
+      "id": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "username": "MatrixRunner_96",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=MatrixRunner_96",
+      "created_at": "2026-11-03T07:26:57.557+00:00"
+    },
+    {
+      "id": "a62c5aa1-50ba-44e6-bbc8-26a607cff9e4",
+      "username": "Navanita Mazumder",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Navanita%20Mazumder",
+      "created_at": "2026-11-03T07:28:03.078+00:00"
+    },
+    {
+      "id": "46fca69a-5c24-448b-9a71-73b91b4fcd15",
+      "username": "Ruhana",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana",
+      "created_at": "2026-11-03T07:37:42.678+00:00"
+    },
+    {
+      "id": "fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "username": "rahul",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=rahul",
+      "created_at": "2026-11-03T07:37:58.475+00:00"
+    },
+    {
+      "id": "8a0ac084-0c6b-47bb-80ba-f904b89c0570",
+      "username": "Ruhana Begom",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana%20Begom",
+      "created_at": "2026-11-03T07:39:07.38+00:00"
     }
   ],
   "games": [
@@ -56,72 +215,72 @@
       "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
-      "id": "g_merge_25",
-      "slug": "cyber-fruit-merge",
-      "title": "Cyber Fruit Merge",
-      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "category": "PUZZLE",
+      "id": "g_chess_24",
+      "slug": "cyber-chess",
+      "title": "Quantum Cyber Chess",
+      "description": "Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
+      "category": "STRATEGY",
       "status": "active",
-      "image_url": "/thumbnails/cyber-fruit-merge.svg",
+      "image_url": "/thumbnails/cyber-chess.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T07:28:45.411749+00:00",
-      "updated_at": "2026-11-02T07:28:45.411749+00:00",
-      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
+      "created_at": "2026-11-02T09:23:06.098811+00:00",
+      "updated_at": "2026-11-02T09:23:06.098811+00:00",
+      "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
-      "id": "g_tap_04",
-      "slug": "hyper-tapper",
-      "title": "Hyper Tapper",
-      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
+      "id": "g_geometry_10",
+      "slug": "geometry-dash",
+      "title": "Neon Pulse Dash",
+      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
       "category": "ACTION",
       "status": "active",
-      "image_url": "/thumbnails/hyper-tapper.svg",
+      "image_url": "/thumbnails/geometry-dash.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.236062+00:00",
-      "updated_at": "2026-11-02T09:23:08.236062+00:00",
-      "thumbnail_url": "/thumbnails/hyper-tapper.svg"
+      "created_at": "2026-11-02T09:23:08.742082+00:00",
+      "updated_at": "2026-11-02T09:23:08.742082+00:00",
+      "thumbnail_url": "/thumbnails/geometry-dash.svg"
     },
     {
-      "id": "g_snake_01",
-      "slug": "neon-snake",
-      "title": "Neon Snake 2077",
-      "description": "Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
+      "id": "g_breaker_08",
+      "slug": "cyber-breaker",
+      "title": "Cyber Brick Breaker",
+      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
       "category": "ARCADE",
       "status": "active",
-      "image_url": "/thumbnails/neon-snake.svg",
+      "image_url": "/thumbnails/cyber-breaker.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.523372+00:00",
-      "updated_at": "2026-11-02T09:23:08.523372+00:00",
-      "thumbnail_url": "/thumbnails/neon-snake.svg"
+      "created_at": "2026-11-02T09:23:09.064845+00:00",
+      "updated_at": "2026-11-02T09:23:09.064845+00:00",
+      "thumbnail_url": "/thumbnails/cyber-breaker.svg"
     },
     {
-      "id": "g_flappy_27",
-      "slug": "cyber-flappy",
-      "title": "Neon Flappy Flyer",
-      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "category": "ARCADE",
+      "id": "g_knife_28",
+      "slug": "knife-thrower",
+      "title": "Knife Thrower",
+      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
+      "category": "ACTION",
       "status": "active",
-      "image_url": "/thumbnails/flappy-bird.svg",
+      "image_url": "/thumbnails/cyber-knife-thrower.svg",
       "game_url": null,
-      "rating": 0,
+      "rating": 4.5,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.287411+00:00",
-      "updated_at": "2026-11-02T09:23:05.287411+00:00",
-      "thumbnail_url": "/thumbnails/flappy-bird.svg"
+      "created_at": "2026-11-03T14:50:06.089069+00:00",
+      "updated_at": "2026-11-03T14:50:06.089069+00:00",
+      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
     },
     {
       "id": "g_candy_19",
@@ -158,21 +317,55 @@
       "thumbnail_url": "/thumbnails/quantum-xo.svg"
     },
     {
-      "id": "g_multi_xo_13",
-      "slug": "multidimension-xo",
-      "title": "Multidimension XO",
-      "description": "Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.",
-      "category": "STRATEGY",
+      "id": "g_flip_02",
+      "slug": "memory-matrix",
+      "title": "Memory Matrix",
+      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
+      "category": "PUZZLE",
       "status": "active",
-      "image_url": "/thumbnails/multidimension-xo.svg",
+      "image_url": "/thumbnails/memory-matrix.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.395726+00:00",
-      "updated_at": "2026-11-02T09:23:06.395726+00:00",
-      "thumbnail_url": "/thumbnails/multidimension-xo.svg"
+      "created_at": "2026-11-02T09:23:08.130256+00:00",
+      "updated_at": "2026-11-02T09:23:08.130256+00:00",
+      "thumbnail_url": "/thumbnails/memory-matrix.svg"
+    },
+    {
+      "id": "g_merge_25",
+      "slug": "cyber-fruit-merge",
+      "title": "Cyber Fruit Merge",
+      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-fruit-merge.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:28:45.411749+00:00",
+      "updated_at": "2026-11-02T07:28:45.411749+00:00",
+      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
+    },
+    {
+      "id": "g_tetris_20",
+      "slug": "tetra-matrix",
+      "title": "Tetra Matrix",
+      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/tetra-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.705429+00:00",
+      "updated_at": "2026-11-02T09:23:06.705429+00:00",
+      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
     },
     {
       "id": "g_maze_15",
@@ -209,74 +402,6 @@
       "thumbnail_url": "/thumbnails/quantum-2048.svg"
     },
     {
-      "id": "g_flip_02",
-      "slug": "memory-matrix",
-      "title": "Memory Matrix",
-      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
-      "category": "PUZZLE",
-      "status": "active",
-      "image_url": "/thumbnails/memory-matrix.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.130256+00:00",
-      "updated_at": "2026-11-02T09:23:08.130256+00:00",
-      "thumbnail_url": "/thumbnails/memory-matrix.svg"
-    },
-    {
-      "id": "g_action_06",
-      "slug": "cyber-dash",
-      "title": "Cyber Dash 2077",
-      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-dash.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.637098+00:00",
-      "updated_at": "2026-11-02T09:23:08.637098+00:00",
-      "thumbnail_url": "/thumbnails/cyber-dash.svg"
-    },
-    {
-      "id": "g_geometry_10",
-      "slug": "geometry-dash",
-      "title": "Neon Pulse Dash",
-      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/geometry-dash.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.742082+00:00",
-      "updated_at": "2026-11-02T09:23:08.742082+00:00",
-      "thumbnail_url": "/thumbnails/geometry-dash.svg"
-    },
-    {
-      "id": "g_battleship_18",
-      "slug": "retro-battleship",
-      "title": "Naval Grid Strike",
-      "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "category": "STRATEGY",
-      "status": "active",
-      "image_url": "/thumbnails/retro-battleship.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.674974+00:00",
-      "updated_at": "2026-11-02T09:23:05.674974+00:00",
-      "thumbnail_url": "/thumbnails/retro-battleship.svg"
-    },
-    {
       "id": "g_sweeper_16",
       "slug": "cyber-minesweeper",
       "title": "Quantum Minefield",
@@ -304,62 +429,11 @@
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
-      "play_count": 1,
+      "play_count": 0,
       "hype_count": 0,
       "created_at": "2026-11-02T09:23:09.355793+00:00",
       "updated_at": "2026-11-02T09:23:09.355793+00:00",
       "thumbnail_url": "/thumbnails/chroma-reflex.svg"
-    },
-    {
-      "id": "g_missile_21",
-      "slug": "neon-missile-defense",
-      "title": "Neon Missile Defense",
-      "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/neon-missile-defense.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.791051+00:00",
-      "updated_at": "2026-11-02T09:23:05.791051+00:00",
-      "thumbnail_url": "/thumbnails/neon-missile-defense.svg"
-    },
-    {
-      "id": "g_blackhole_17",
-      "slug": "black-hole",
-      "title": "Singularity Horizon",
-      "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
-      "category": "STRATEGY",
-      "status": "active",
-      "image_url": "/thumbnails/black-hole.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:07.123662+00:00",
-      "updated_at": "2026-11-02T09:23:07.123662+00:00",
-      "thumbnail_url": "/thumbnails/black-hole.svg"
-    },
-    {
-      "id": "g_breaker_08",
-      "slug": "cyber-breaker",
-      "title": "Cyber Brick Breaker",
-      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-breaker.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:09.064845+00:00",
-      "updated_at": "2026-11-02T09:23:09.064845+00:00",
-      "thumbnail_url": "/thumbnails/cyber-breaker.svg"
     },
     {
       "id": "g_slicer_11",
@@ -379,38 +453,140 @@
       "thumbnail_url": "/thumbnails/cyber-slicer.svg"
     },
     {
-      "id": "g_chess_24",
-      "slug": "cyber-chess",
-      "title": "Quantum Cyber Chess",
-      "description": "Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
+      "id": "g_battleship_18",
+      "slug": "retro-battleship",
+      "title": "Naval Grid Strike",
+      "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
       "category": "STRATEGY",
       "status": "active",
-      "image_url": "/thumbnails/cyber-chess.svg",
+      "image_url": "/thumbnails/retro-battleship.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.098811+00:00",
-      "updated_at": "2026-11-02T09:23:06.098811+00:00",
-      "thumbnail_url": "/thumbnails/cyber-chess.svg"
+      "created_at": "2026-11-02T09:23:05.674974+00:00",
+      "updated_at": "2026-11-02T09:23:05.674974+00:00",
+      "thumbnail_url": "/thumbnails/retro-battleship.svg"
     },
     {
-      "id": "g_tetris_20",
-      "slug": "tetra-matrix",
-      "title": "Tetra Matrix",
-      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "category": "PUZZLE",
+      "id": "g_blackhole_17",
+      "slug": "black-hole",
+      "title": "Singularity Horizon",
+      "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
+      "category": "STRATEGY",
       "status": "active",
-      "image_url": "/thumbnails/tetra-matrix.svg",
+      "image_url": "/thumbnails/black-hole.svg",
       "game_url": null,
       "rating": 0,
       "rating_count": 0,
       "play_count": 0,
       "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.705429+00:00",
-      "updated_at": "2026-11-02T09:23:06.705429+00:00",
-      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
+      "created_at": "2026-11-02T09:23:07.123662+00:00",
+      "updated_at": "2026-11-02T09:23:07.123662+00:00",
+      "thumbnail_url": "/thumbnails/black-hole.svg"
+    },
+    {
+      "id": "g_tap_04",
+      "slug": "hyper-tapper",
+      "title": "Hyper Tapper",
+      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/hyper-tapper.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.236062+00:00",
+      "updated_at": "2026-11-02T09:23:08.236062+00:00",
+      "thumbnail_url": "/thumbnails/hyper-tapper.svg"
+    },
+    {
+      "id": "g_action_06",
+      "slug": "cyber-dash",
+      "title": "Cyber Dash 2077",
+      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-dash.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.637098+00:00",
+      "updated_at": "2026-11-02T09:23:08.637098+00:00",
+      "thumbnail_url": "/thumbnails/cyber-dash.svg"
+    },
+    {
+      "id": "g_flappy_27",
+      "slug": "cyber-flappy",
+      "title": "Neon Flappy Flyer",
+      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/flappy-bird.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.287411+00:00",
+      "updated_at": "2026-11-02T09:23:05.287411+00:00",
+      "thumbnail_url": "/thumbnails/flappy-bird.svg"
+    },
+    {
+      "id": "g_missile_21",
+      "slug": "neon-missile-defense",
+      "title": "Neon Missile Defense",
+      "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-missile-defense.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.791051+00:00",
+      "updated_at": "2026-11-02T09:23:05.791051+00:00",
+      "thumbnail_url": "/thumbnails/neon-missile-defense.svg"
+    },
+    {
+      "id": "g_multi_xo_13",
+      "slug": "multidimension-xo",
+      "title": "Multidimension XO",
+      "description": "Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/multidimension-xo.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.395726+00:00",
+      "updated_at": "2026-11-02T09:23:06.395726+00:00",
+      "thumbnail_url": "/thumbnails/multidimension-xo.svg"
+    },
+    {
+      "id": "g_snake_01",
+      "slug": "neon-snake",
+      "title": "Neon Snake 2077",
+      "description": "Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-snake.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.523372+00:00",
+      "updated_at": "2026-11-02T09:23:08.523372+00:00",
+      "thumbnail_url": "/thumbnails/neon-snake.svg"
     },
     {
       "id": "g_paper_12",
@@ -428,22 +604,87 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
-    },
-    {
-      "id": "g_knife_28",
-      "slug": "cyber-knife-thrower",
-      "title": "Cyber Knife Thrower",
-      "category": "ACTION",
-      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg",
-      "description": "Neon knife throwing precision arcade challenge! Toss cyber blades into spinning target wheels, chain multi-knife sticks, and conquer progressive difficulty levels without blade collisions.",
-      "play_count": 0,
-      "rating": 0,
-      "rating_count": 0,
-      "status": "active",
-      "featured": true
     }
   ],
-  "scores": [],
+  "scores": [
+    {
+      "id": "516059f7-aea5-4a49-ac6b-cb5685ef00c1",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 420,
+      "created_at": "2026-11-03T16:11:33.929Z"
+    },
+    {
+      "id": "bb384548-3a68-4489-bfcd-613e4520b770",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 600,
+      "created_at": "2026-11-03T16:31:48.064Z"
+    },
+    {
+      "id": "8a70a480-d556-4138-9093-847e440acf64",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 100,
+      "created_at": "2026-11-03T16:31:55.357Z"
+    },
+    {
+      "id": "925ae2a5-5318-46d0-ad0c-864d53bc9342",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 100,
+      "created_at": "2026-11-03T16:32:07.649Z"
+    },
+    {
+      "id": "16023905-7e8b-4565-958f-e648c40ddde4",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:41:50.865Z"
+    },
+    {
+      "id": "a81f22dd-349a-4f1c-ab50-6513965d2aad",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:52:56.909Z"
+    },
+    {
+      "id": "519d4aba-b33a-49e3-aaf6-0f6d2969817a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:52:57.076Z"
+    },
+    {
+      "id": "9af446c4-4032-4de4-9076-43462d7157fe",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 660,
+      "created_at": "2026-11-04T04:20:42.641Z"
+    },
+    {
+      "id": "140362e5-27d1-4880-aea8-fc5784d9a1a0",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1500,
+      "created_at": "2026-11-04T04:21:00.175Z"
+    },
+    {
+      "id": "09f58371-7e1a-4b47-8cb5-d09a684214a9",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2610,
+      "created_at": "2026-11-04T04:21:19.728Z"
+    },
+    {
+      "id": "303b9bb7-0c55-4ec6-8b32-75ae4ce7f47b",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6090,
+      "created_at": "2026-11-04T04:23:40.223Z"
+    }
+  ],
   "ratings": [
     {
       "id": "003da321-6261-442c-b3f6-b858ab50a3bf",

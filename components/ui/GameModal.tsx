@@ -39,7 +39,7 @@ import NeonMissileDefenseGame from '@/components/games/NeonMissileDefenseGame';
 import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
 import FlappyBirdCloneGame from '@/components/games/FlappyBirdCloneGame';
-import CyberKnifeThrowerGame from '@/components/games/CyberKnifeThrowerGame';
+import KnifeThrowerGame from '@/components/games/KnifeThrowerGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -846,8 +846,8 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
-              {(game.id === 'g_knife_28' || game.slug === 'cyber-knife-thrower') && (
-                <CyberKnifeThrowerGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              {(game.id === 'g_knife_28' || game.slug === 'knife-thrower' || game.slug === 'cyber-knife-thrower') && (
+                <KnifeThrowerGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
               {(game.id === 'g_merge_25' || game.slug === 'cyber-fruit-merge' || game.slug === 'fruit-merge') && (
