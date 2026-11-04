@@ -123,7 +123,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
   const FLAP = -8.5;
   const GRAV = 0.36;
   const PIPE_SPEED = 2.5;
-  const PIPE_GAP = 165;
+  const STANDARD_PIPE_GAP = 165;
   const PIPE_WIDTH = 60;
   const BIRD_R = 17;
 
@@ -213,19 +213,21 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     triggerParticles(W / 3 - 10, birdRef.current.y + 5, '#00F0FF', 8);
   }, [started, startGame, playSound, W, FLAP]);
 
-  // Spawn pipes
+  // Spawn pipes with wider gap for the first 3 pipes (score < 3)
   useEffect(() => {
     if (!started || isOver) return;
     const id = setInterval(() => {
-      const minTop = 70;
-      const maxTop = H - PIPE_GAP - minTop - 90;
+      const currentScore = scoreRef.current;
+      const gap = currentScore < 3 ? 220 : STANDARD_PIPE_GAP;
+      const minTop = 60;
+      const maxTop = H - gap - minTop - 80;
       const top = Math.floor(Math.random() * (maxTop - minTop + 1)) + minTop;
       const colors = ['#00FFCC', '#00F0FF', '#FF0055', '#FFE600'];
       const color = colors[Math.floor(Math.random() * colors.length)];
-      pipesRef.current.push({ x: W, top, gap: PIPE_GAP, passed: false, color });
-    }, 1500);
+      pipesRef.current.push({ x: W, top, gap, passed: false, color });
+    }, 1600);
     return () => clearInterval(id);
-  }, [started, isOver, H, PIPE_GAP, W]);
+  }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
   // Game loop
   useEffect(() => {
@@ -434,26 +436,25 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         ctx.strokeRect(p.x - 4, bottomY, PIPE_WIDTH + 8, 22);
       }
 
-      // Ground Line & Animated Cyber Tread
-      ctx.fillStyle = "#FFDE59";
+      // Ground Floor Strip
+      ctx.fillStyle = "#1a0b36";
       ctx.fillRect(0, H - 24, W, 24);
-      ctx.fillStyle = "#05020f";
-      ctx.fillRect(0, H - 8, W, 8);
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 2.5;
-      ctx.strokeRect(0, H - 24, W, 24);
+      ctx.strokeStyle = "#00F0FF";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, H - 24);
+      ctx.lineTo(W, H - 24);
+      ctx.stroke();
 
-      // Animated scrolling hazard stripes on ground
-      ctx.fillStyle = "#000000";
-      const offset = (tickRef.current * 2) % 20;
-      for (let x = -20; x < W + 20; x += 20) {
+      // Ground Neon Grid Pattern
+      ctx.strokeStyle = "#FF0055";
+      ctx.lineWidth = 1.5;
+      const groundOffset = (tickRef.current * PIPE_SPEED) % 30;
+      for (let gx = -groundOffset; gx <= W; gx += 30) {
         ctx.beginPath();
-        ctx.moveTo(x + offset, H - 24);
-        ctx.lineTo(x + 10 + offset, H - 24);
-        ctx.lineTo(x + offset, H - 8);
-        ctx.lineTo(x - 10 + offset, H - 8);
-        ctx.closePath();
-        ctx.fill();
+        ctx.moveTo(gx, H - 24);
+        ctx.lineTo(gx - 10, H);
+        ctx.stroke();
       }
 
       // Render Particles
@@ -461,212 +462,160 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         ctx.save();
         ctx.globalAlpha = Math.max(0, pt.alpha);
         ctx.fillStyle = pt.color;
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillRect(pt.x, pt.y, pt.size, pt.size);
         ctx.restore();
       }
 
-      // Render Floating Text
+      // Render Floating Text Popups
       for (const ft of floatingTextRef.current) {
         ctx.save();
         ctx.globalAlpha = Math.max(0, ft.alpha);
-        ctx.font = "900 16px sans-serif";
+        ctx.font = '900 13px system-ui, sans-serif';
         ctx.fillStyle = ft.color;
-        ctx.strokeStyle = "#000000";
+        ctx.strokeStyle = '#000000';
         ctx.lineWidth = 3;
         ctx.strokeText(ft.text, ft.x, ft.y);
         ctx.fillText(ft.text, ft.x, ft.y);
         ctx.restore();
       }
 
-      // Cyber Jet Bird Render
-      const bdraw = birdRef.current;
+      // Render Bird (Cyber Plasma Drone)
+      const bx = W / 3;
+      const by = birdRef.current.y;
       ctx.save();
-      ctx.translate(W / 3, bdraw.y);
-      ctx.rotate(bdraw.angle);
+      ctx.translate(bx, by);
+      ctx.rotate(birdRef.current.angle);
 
-      // Thruster Flame Trail
-      if (started && !isOver) {
-        ctx.fillStyle = "#00F0FF";
-        ctx.beginPath();
-        ctx.moveTo(-BIRD_R, 0);
-        ctx.lineTo(-BIRD_R - 12 - Math.random() * 8, 0);
-        ctx.lineTo(-BIRD_R, 6);
-        ctx.closePath();
-        ctx.fill();
-      }
+      // Bird Drop Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.6)";
+      ctx.beginPath();
+      ctx.ellipse(0, BIRD_R + 4, BIRD_R * 0.8, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Bird Main Cyber Sphere Body
-      ctx.fillStyle = "#FFDE59";
+      // Main Cyber Sphere Body
+      const birdGrad = ctx.createRadialGradient(-4, -4, 2, 0, 0, BIRD_R);
+      birdGrad.addColorStop(0, "#00FFFF");
+      birdGrad.addColorStop(0.6, "#0088FF");
+      birdGrad.addColorStop(1, "#110044");
+      ctx.fillStyle = birdGrad;
       ctx.beginPath();
       ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // Wing (Animated flapping)
+      // Wing
       ctx.save();
-      ctx.rotate(bdraw.wingAngle);
+      ctx.rotate(birdRef.current.wingAngle);
       ctx.fillStyle = "#FFE600";
       ctx.beginPath();
-      ctx.ellipse(-4, 2, 9, 5, Math.PI / 4, 0, Math.PI * 2);
+      ctx.ellipse(-2, 4, 8, 5, 0.3, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = "#000000";
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
 
-      // Cyber Visor / Eye
-      ctx.fillStyle = "#00F0FF";
+      // Glowing Visor Eye
+      ctx.fillStyle = "#FF0055";
       ctx.beginPath();
-      ctx.ellipse(BIRD_R * 0.3, -BIRD_R * 0.1, BIRD_R * 0.45, BIRD_R * 0.35, 0, 0, Math.PI * 2);
+      ctx.arc(6, -3, 5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Visor Glow Specular Highlight
-      ctx.fillStyle = "#FFFFFF";
+      // Energy Jet Flame Exhaust at rear
+      ctx.fillStyle = "#00FFCC";
       ctx.beginPath();
-      ctx.arc(BIRD_R * 0.4, -BIRD_R * 0.2, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Beak
-      ctx.fillStyle = "#FF5500";
-      ctx.beginPath();
-      ctx.moveTo(BIRD_R - 2, 0);
-      ctx.lineTo(BIRD_R * 1.55, 4);
-      ctx.lineTo(BIRD_R - 2, 9);
+      ctx.moveTo(-BIRD_R, -3);
+      ctx.lineTo(-BIRD_R - 10 - Math.random() * 6, 0);
+      ctx.lineTo(-BIRD_R, 3);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 2;
-      ctx.stroke();
 
-      ctx.restore(); // Restore Bird Transform
-      ctx.restore(); // Restore Screen Shake Transform
+      ctx.restore();
 
+      // HUD Score Overlay on Canvas
+      if (started) {
+        ctx.save();
+        ctx.font = '900 36px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 5;
+        ctx.strokeText(String(score), W / 2, 60);
+        ctx.fillText(String(score), W / 2, 60);
+        ctx.restore();
+      }
+
+      ctx.restore();
       rafRef.current = requestAnimationFrame(loop);
     };
 
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [started, isOver, onGameOver, best, playSound, W, H]);
+  }, [started, isOver, H, W, best, onGameOver, onScoreUpdate, playSound, score]);
 
-  // Keyboard / touch
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.code === "Space" || e.code === "ArrowUp" || e.code === "ArrowDown") {
-        e.preventDefault();
-        flap();
-      }
-      if (e.code === "KeyR") reset();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [flap, reset]);
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    flap();
+  };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-full h-full flex-1 justify-center select-none p-2">
-      {/* HUD */}
-      <div className="w-full bg-portal-card border-3 border-black rounded-xl p-3 mb-3 shadow-neo flex items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="bg-portal-surface border-2 border-black rounded-lg px-3 py-1 shadow-neo-sm">
-            <div className="text-[10px] font-black text-portal-text-muted uppercase tracking-wider">SCORE</div>
-            <div className="text-xl font-black text-portal-cyan leading-none">{score}</div>
+    <div className="relative w-full max-w-[420px] mx-auto aspect-[420/620] bg-black border-4 border-black rounded-2xl overflow-hidden shadow-neo select-none touch-none flex flex-col items-center justify-center">
+      <canvas
+        ref={canvasRef}
+        onPointerDown={handlePointerDown}
+        className="w-full h-full cursor-pointer block"
+      />
+
+      {/* Start / Game Over Overlay */}
+      {(!started || isOver) && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 z-20 text-center animate-fadeIn">
+          <div className="w-16 h-16 rounded-2xl bg-portal-cyan border-3 border-black flex items-center justify-center shadow-neo mb-4">
+            <Zap className="w-8 h-8 text-black stroke-[3]" />
           </div>
-          <div className="bg-portal-surface border-2 border-black rounded-lg px-3 py-1 shadow-neo-sm">
-            <div className="text-[10px] font-black text-portal-text-muted uppercase tracking-wider flex items-center gap-1">
-              <Trophy className="w-3 h-3 text-portal-yellow" /> BEST
-            </div>
-            <div className="text-xl font-black text-portal-yellow leading-none">{best}</div>
-          </div>
-          {combo > 1 && (
-            <div className="bg-portal-yellow border-2 border-black rounded-lg px-2 py-1 shadow-neo-sm hidden sm:flex items-center gap-1 animate-bounce">
-              <Zap className="w-3 h-3 text-black" />
-              <div className="text-xs font-black text-black leading-none">{combo}x STREAK</div>
+
+          <h2 className="text-2xl font-black uppercase tracking-tight text-white mb-1">
+            {isOver ? "CRASH DETECTED" : "CYBER FLAP 2077"}
+          </h2>
+          <p className="text-xs font-bold text-portal-cyan mb-6">
+            {isOver ? `Final Score: ${score}` : "Tap or Press Space to Launch Drone"}
+          </p>
+
+          {isOver && (
+            <div className="bg-portal-surface border-3 border-black rounded-xl p-4 mb-6 w-full max-w-xs shadow-neo-sm space-y-2">
+              <div className="flex justify-between items-center text-xs font-black">
+                <span className="text-slate-400">SCORE</span>
+                <span className="text-portal-yellow text-sm">{score}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs font-black">
+                <span className="text-slate-400">BEST RECORD</span>
+                <span className="text-portal-cyan text-sm">{best}</span>
+              </div>
             </div>
           )}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setMuted((m) => !m)}
-            className="p-2 bg-portal-surface hover:bg-portal-yellow/30 text-portal-text rounded-lg border-2 border-black shadow-neo-sm font-black text-xs transition-transform active:translate-y-0.5"
-            title={muted ? "Unmute" : "Mute"}
-          >
-            {muted ? <VolumeX className="w-4 h-4 text-portal-pink" /> : <Volume2 className="w-4 h-4 text-portal-lime" />}
-          </button>
-          <button
-            onClick={reset}
-            className="p-2 bg-portal-yellow hover:bg-portal-yellow/90 text-black rounded-lg border-2 border-black shadow-neo-sm font-black text-xs transition-transform active:translate-y-0.5 flex items-center gap-1"
-            title="Restart"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
 
-      {/* Canvas Area */}
-      <div className="relative rounded-2xl overflow-hidden border-2 border-portal-border shadow-2xl bg-portal-bg touch-none w-auto h-[min(74vh,620px)] max-w-full aspect-[9/16] flex items-center justify-center shrink-0">
-        <canvas
-          ref={canvasRef}
-          width={W}
-          height={H}
-          className="w-full h-full block object-contain touch-none cursor-pointer"
-          onClick={() => flap()}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            flap();
-          }}
-        />
-
-        {!started && !isOver && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none p-4">
-            <div className="bg-portal-card/95 border-3 border-black rounded-2xl p-6 shadow-neo text-center backdrop-blur-md max-w-xs w-full space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-portal-yellow border-3 border-black shadow-neo mx-auto flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-black" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-black text-portal-yellow uppercase tracking-wider">NEON FLAPPY</h2>
-                <p className="text-[11px] font-bold text-portal-text-muted">Cyber-Arcade Vertical Flight</p>
-              </div>
-              <div className="bg-portal-surface p-2.5 rounded-xl border-2 border-black text-xs font-bold text-portal-cyan space-y-1">
-                <p>Space / Click / Tap to Flap</p>
-                <p className="text-[10px] text-portal-text-muted">Avoid Cyber Metallic Pipes</p>
-              </div>
-              <div className="text-[10px] font-black text-portal-yellow animate-pulse">
-                TAP ANYWHERE TO START
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={startGame}
+              className="px-6 py-3 bg-portal-cyan text-black font-black uppercase text-xs rounded-xl border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex items-center gap-2"
+            >
+              <RotateCcw className="w-4 h-4 stroke-[3]" />
+              {isOver ? "Play Again" : "Start Mission"}
+            </button>
+            <button
+              onClick={() => setMuted(!muted)}
+              className="p-3 bg-portal-card text-white rounded-xl border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+              title={muted ? "Unmute Audio" : "Mute Audio"}
+            >
+              {muted ? <VolumeX className="w-4 h-4 stroke-[2.5]" /> : <Volume2 className="w-4 h-4 stroke-[2.5]" />}
+            </button>
           </div>
-        )}
-
-        {isOver && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-black/85 backdrop-blur-md p-4">
-            <div className="bg-portal-card border-3 border-black rounded-2xl p-6 shadow-neo text-center max-w-xs w-full space-y-3">
-              <div className="text-3xl font-black text-portal-pink uppercase tracking-wider">CRASH!</div>
-              <div className="bg-portal-surface p-3 rounded-xl border-2 border-black">
-                <div className="text-[10px] font-black text-portal-text-muted uppercase">FINAL SCORE</div>
-                <div className="text-4xl font-black text-portal-cyan">{score}</div>
-                <div className="text-xs font-bold text-portal-yellow mt-1">BEST: {best}</div>
-              </div>
-              <button
-                onClick={reset}
-                className="w-full bg-portal-yellow hover:bg-portal-yellow/90 text-black border-3 border-black font-black text-sm py-2.5 rounded-xl shadow-neo transition-transform active:translate-y-0.5 flex items-center justify-center gap-2"
-              >
-                <RotateCcw className="w-4 h-4" /> PLAY AGAIN
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Control hint */}
-      <div className="w-full max-w-[420px] mt-2 text-center text-[10px] font-bold text-portal-text-muted">
-        Click canvas / Tap / Space to flap. R to restart.
-      </div>
+        </div>
+      )}
     </div>
   );
 }

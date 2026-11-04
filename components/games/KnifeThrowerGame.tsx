@@ -475,7 +475,8 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const wheelCenter = { x: CANVAS_WIDTH / 2, y: 185 };
     const wheelRadius = 85;
