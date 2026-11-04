@@ -42,8 +42,10 @@ export async function POST(req: NextRequest) {
     }
 
     const updates: any = {};
-    if (typeof days_played === 'number') updates.days_played = days_played;
-    if (typeof longest_streak === 'number') updates.longest_streak = longest_streak;
+    if (typeof days_played === 'number') updates.days_played = Math.max(0, days_played);
+    if (typeof longest_streak === 'number') updates.longest_streak = Math.max(0, longest_streak);
+    if (stats && typeof stats.totalGamesPlayed === 'number') updates.games_played = Math.max(0, stats.totalGamesPlayed);
+    if (stats && typeof stats.totalScoreAccumulated === 'number') updates.total_score = Math.max(0, stats.totalScoreAccumulated);
     if (typeof level === 'number') updates.level = level;
     if (typeof xp === 'number') updates.xp = xp;
     if (unlocked_trophies) updates.unlocked_trophies = unlocked_trophies;

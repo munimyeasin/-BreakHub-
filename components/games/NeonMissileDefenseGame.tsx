@@ -1589,46 +1589,137 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
 
         // ================= RENDERING PASS =================
 
-        // 11. Draw Hostile Missile Vapor Trails & Warheads
+        // 11. Draw Hostile Missiles: exhaust, stabilizers, body and metallic warhead
         enemiesRef.current.forEach((m) => {
-          ctx.strokeStyle = m.trailColor;
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.moveTo(m.startX, m.startY);
-          ctx.lineTo(m.currentX, m.currentY);
-          ctx.stroke();
+          const dx = m.targetX - m.currentX;
+          const dy = m.targetY - m.currentY;
+          const angle = Math.atan2(dy, dx);
+          const length = m.type === 'hypersonic' ? 18 : m.type === 'cruise' ? 22 : 16;
 
-          // Warhead Tip
-          ctx.fillStyle = m.color;
-          ctx.beginPath();
-          ctx.arc(m.currentX, m.currentY, 3.5, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        // 12. Draw Orbital Bomber Gunships
-        bombersRef.current.forEach((bomber) => {
           ctx.save();
-          ctx.translate(bomber.x, bomber.y);
+          ctx.translate(m.currentX, m.currentY);
+          ctx.rotate(angle);
 
-          // 3D Neo-Brutalist Hull
-          ctx.fillStyle = bomber.color;
-          ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 2.5;
-
+          ctx.strokeStyle = m.trailColor;
+          ctx.lineWidth = m.type === 'hypersonic' ? 5 : 3;
+          ctx.shadowColor = m.color;
+          ctx.shadowBlur = 10;
           ctx.beginPath();
-          ctx.moveTo(-bomber.width / 2, 0);
-          ctx.lineTo(0, -bomber.height / 2);
-          ctx.lineTo(bomber.width / 2, 0);
-          ctx.lineTo(bomber.width * 0.25, bomber.height / 2);
-          ctx.lineTo(-bomber.width * 0.25, bomber.height / 2);
+          ctx.moveTo(-length * 2.8, 0);
+          ctx.lineTo(-length * 0.45, 0);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          // Hot exhaust plume and engine nozzle
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.moveTo(-length * 0.4, 0);
+          ctx.lineTo(-length * 1.35, -3.5);
+          ctx.lineTo(-length * 1.15, 0);
+          ctx.lineTo(-length * 1.35, 3.5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = m.trailColor;
+          ctx.fillRect(-length * 0.55, -2.5, 5, 5);
+
+          // Cross fins give each threat a readable missile silhouette
+          ctx.fillStyle = '#172033';
+          ctx.strokeStyle = m.color;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(-length * 0.55, -2);
+          ctx.lineTo(-length * 0.9, -8);
+          ctx.lineTo(-length * 0.15, -3);
+          ctx.lineTo(-length * 0.15, 3);
+          ctx.lineTo(-length * 0.9, 8);
+          ctx.lineTo(-length * 0.55, 2);
           ctx.closePath();
           ctx.fill();
           ctx.stroke();
 
-          // Engine Thruster Glow
-          ctx.fillStyle = '#FF0055';
-          ctx.fillRect(-6, bomber.height / 2, 12, 4);
+          // Layered metallic body and pointed nose cone
+          const bodyGrad = ctx.createLinearGradient(0, -4, 0, 4);
+          bodyGrad.addColorStop(0, '#E2F7FF');
+          bodyGrad.addColorStop(0.32, m.color);
+          bodyGrad.addColorStop(0.72, '#364152');
+          bodyGrad.addColorStop(1, '#090D18');
+          ctx.fillStyle = bodyGrad;
+          ctx.strokeStyle = '#F8FAFC';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(-length * 0.62, -3.5);
+          ctx.lineTo(length * 0.48, -3.5);
+          ctx.lineTo(length, 0);
+          ctx.lineTo(length * 0.48, 3.5);
+          ctx.lineTo(-length * 0.62, 3.5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.globalAlpha = 0.7;
+          ctx.fillRect(-length * 0.3, -2.2, length * 0.65, 1.1);
+          ctx.globalAlpha = 1;
+          ctx.restore();
+        });
 
+        // 12. Draw Orbital Bomber Gunships with cockpit, wings and engine nacelles
+        bombersRef.current.forEach((bomber) => {
+          ctx.save();
+          ctx.translate(bomber.x, bomber.y);
+          const heading = bomber.vx >= 0 ? 1 : -1;
+          ctx.scale(heading, 1);
+
+          const hullGrad = ctx.createLinearGradient(0, -bomber.height / 2, 0, bomber.height / 2);
+          hullGrad.addColorStop(0, '#DCE7F0');
+          hullGrad.addColorStop(0.35, bomber.color);
+          hullGrad.addColorStop(1, '#26091D');
+          ctx.fillStyle = hullGrad;
+          ctx.strokeStyle = '#050711';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(-bomber.width / 2, 3);
+          ctx.lineTo(-bomber.width * 0.2, -bomber.height / 2);
+          ctx.lineTo(bomber.width * 0.32, -bomber.height * 0.36);
+          ctx.lineTo(bomber.width / 2, 0);
+          ctx.lineTo(bomber.width * 0.28, bomber.height / 2);
+          ctx.lineTo(-bomber.width * 0.34, bomber.height * 0.38);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Swept wings, weapon pods and cyan cockpit glass
+          ctx.fillStyle = '#172033';
+          ctx.strokeStyle = '#FF6B9A';
+          ctx.beginPath();
+          ctx.moveTo(-5, -2);
+          ctx.lineTo(-bomber.width * 0.55, -bomber.height * 0.95);
+          ctx.lineTo(bomber.width * 0.08, -bomber.height * 0.38);
+          ctx.lineTo(7, 0);
+          ctx.lineTo(bomber.width * 0.08, bomber.height * 0.38);
+          ctx.lineTo(-bomber.width * 0.55, bomber.height * 0.95);
+          ctx.lineTo(-5, 2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#00F0FF';
+          ctx.beginPath();
+          ctx.moveTo(bomber.width * 0.02, -5);
+          ctx.lineTo(bomber.width * 0.27, -2);
+          ctx.lineTo(bomber.width * 0.34, 0);
+          ctx.lineTo(bomber.width * 0.27, 2);
+          ctx.lineTo(bomber.width * 0.02, 5);
+          ctx.closePath();
+          ctx.fill();
+
+          for (const engineY of [-bomber.height * 0.32, bomber.height * 0.32]) {
+            ctx.fillStyle = '#0B1020';
+            ctx.fillRect(-bomber.width * 0.32, engineY - 3, 9, 6);
+            ctx.fillStyle = '#FF0055';
+            ctx.shadowColor = '#FF0055';
+            ctx.shadowBlur = 9;
+            ctx.fillRect(-bomber.width * 0.5, engineY - 2, 9, 4);
+            ctx.shadowBlur = 0;
+          }
           ctx.restore();
         });
 
@@ -1638,21 +1729,60 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           ctx.save();
           ctx.translate(boss.x, boss.y);
 
-          // Boss Hull
-          ctx.fillStyle = '#1A0B2E';
+          // Boss hull, swept armor wings and command cockpit
+          const bossGrad = ctx.createLinearGradient(0, -boss.height / 2, 0, boss.height / 2);
+          bossGrad.addColorStop(0, '#B8C7D6');
+          bossGrad.addColorStop(0.25, '#3B1D52');
+          bossGrad.addColorStop(0.7, '#1A0B2E');
+          bossGrad.addColorStop(1, '#070A14');
+          ctx.fillStyle = bossGrad;
           ctx.strokeStyle = '#FF00EA';
           ctx.lineWidth = 3.5;
 
           ctx.beginPath();
-          ctx.moveTo(-boss.width / 2, 0);
-          ctx.lineTo(-boss.width * 0.35, -boss.height / 2);
-          ctx.lineTo(boss.width * 0.35, -boss.height / 2);
+          ctx.moveTo(-boss.width / 2, 2);
+          ctx.lineTo(-boss.width * 0.32, -boss.height * 0.42);
+          ctx.lineTo(-boss.width * 0.08, -boss.height / 2);
+          ctx.lineTo(boss.width * 0.2, -boss.height * 0.42);
           ctx.lineTo(boss.width / 2, 0);
-          ctx.lineTo(boss.width * 0.25, boss.height / 2);
-          ctx.lineTo(-boss.width * 0.25, boss.height / 2);
+          ctx.lineTo(boss.width * 0.28, boss.height * 0.42);
+          ctx.lineTo(-boss.width * 0.28, boss.height * 0.42);
           ctx.closePath();
           ctx.fill();
           ctx.stroke();
+
+          ctx.fillStyle = '#0F172A';
+          ctx.strokeStyle = '#00F0FF';
+          ctx.beginPath();
+          ctx.moveTo(-boss.width * 0.42, 2);
+          ctx.lineTo(-boss.width * 0.7, boss.height * 0.7);
+          ctx.lineTo(-boss.width * 0.08, boss.height * 0.28);
+          ctx.lineTo(boss.width * 0.08, boss.height * 0.28);
+          ctx.lineTo(boss.width * 0.7, boss.height * 0.7);
+          ctx.lineTo(boss.width * 0.42, 2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#00F0FF';
+          ctx.beginPath();
+          ctx.moveTo(-boss.width * 0.12, -boss.height * 0.32);
+          ctx.lineTo(boss.width * 0.2, -boss.height * 0.22);
+          ctx.lineTo(boss.width * 0.25, 0);
+          ctx.lineTo(boss.width * 0.2, boss.height * 0.12);
+          ctx.lineTo(-boss.width * 0.12, boss.height * 0.2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Engine pods and hardpoint weapons
+          ctx.fillStyle = '#FF0055';
+          ctx.shadowColor = '#FF0055';
+          ctx.shadowBlur = 12;
+          ctx.fillRect(-boss.width * 0.34, boss.height * 0.18, 18, 5);
+          ctx.fillRect(boss.width * 0.17, boss.height * 0.18, 18, 5);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#FFE600';
+          ctx.fillRect(-boss.width * 0.28, -boss.height * 0.64, 7, 8);
+          ctx.fillRect(boss.width * 0.2, -boss.height * 0.64, 7, 8);
 
           // Boss Health Bar
           const barW = boss.width;
@@ -1854,23 +1984,41 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           const isSelected = selectedBattery === bat.id || (selectedBattery === 0 && bat.alive);
 
           if (bat.alive) {
-            // Pyramid Fort Base
-            ctx.fillStyle = selectedBattery === bat.id ? '#FFE600' : isSelected ? '#D97706' : '#94A3B8';
-            ctx.strokeStyle = '#000000';
+            // Armored battery foundation with layered metallic plating
+            const baseGrad = ctx.createLinearGradient(bat.x, bat.y - 22, bat.x, VIRTUAL_GROUND_Y);
+            baseGrad.addColorStop(0, selectedBattery === bat.id ? '#FFF3A3' : '#D8E3EA');
+            baseGrad.addColorStop(0.4, selectedBattery === bat.id ? '#FFE600' : isSelected ? '#D97706' : '#64748B');
+            baseGrad.addColorStop(1, '#111827');
+            ctx.fillStyle = baseGrad;
+            ctx.strokeStyle = '#020617';
             ctx.lineWidth = 3;
 
             ctx.beginPath();
-            ctx.moveTo(bat.x - 22, VIRTUAL_GROUND_Y);
-            ctx.lineTo(bat.x, bat.y - 12);
-            ctx.lineTo(bat.x + 22, VIRTUAL_GROUND_Y);
+            ctx.moveTo(bat.x - 25, VIRTUAL_GROUND_Y);
+            ctx.lineTo(bat.x - 17, bat.y - 10);
+            ctx.lineTo(bat.x - 9, bat.y - 21);
+            ctx.lineTo(bat.x + 9, bat.y - 21);
+            ctx.lineTo(bat.x + 17, bat.y - 10);
+            ctx.lineTo(bat.x + 25, VIRTUAL_GROUND_Y);
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.65)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(bat.x - 14, bat.y - 8, 28, 13);
 
-            // Turret Cannon Barrel
+            // Rotating turret ring, elevation mount and armored cannon barrel
+            ctx.fillStyle = '#0F172A';
+            ctx.strokeStyle = '#00F0FF';
+            ctx.beginPath();
+            ctx.ellipse(bat.x, bat.y - 21, 12, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
             ctx.fillStyle = selectedBattery === bat.id ? '#39FF14' : '#FFE600';
-            ctx.fillRect(bat.x - 4, bat.y - 20, 8, 12);
-            ctx.strokeRect(bat.x - 4, bat.y - 20, 8, 12);
+            ctx.fillRect(bat.x - 4, bat.y - 31, 8, 13);
+            ctx.fillRect(bat.x - 6, bat.y - 33, 12, 3);
+            ctx.strokeStyle = '#020617';
+            ctx.strokeRect(bat.x - 4, bat.y - 31, 8, 13);
 
             // Ammo Counter Badge
             ctx.fillStyle = '#000000';

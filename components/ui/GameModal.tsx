@@ -625,8 +625,8 @@ export default function GameModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: username.trim() || 'Player',
-          days_played: gs.streak.current || 1,
-          longest_streak: gs.streak.longest || 1,
+          days_played: gs.stats.totalGamesPlayed > 0 ? 1 : 0,
+          longest_streak: gs.streak.longest || 0,
           level: gs.level || 1,
           xp: gs.xp || 0,
           unlocked_trophies: gs.unlockedTrophies || {},

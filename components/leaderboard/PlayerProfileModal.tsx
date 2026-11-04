@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle, X } from 'lucide-react';
+import { Trophy, Flame, Zap, Star, Heart, Clock, Medal, Check, AlertCircle, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { getLevelInfo, TROPHIES, gamification } from '@/lib/gamification';
 import { GamificationState } from '@/lib/gamification';
@@ -27,6 +27,7 @@ interface PlayerProfileModalProps {
 export default function PlayerProfileModal({ userId, onClose }: PlayerProfileModalProps) {
   const [profile, setProfile] = useState<PlayerProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
   const { theme } = useTheme();
 
   // Fetch profile on mount
@@ -71,8 +72,8 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
             id: userId,
             username: userId,
             avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
-            days_played: localState.streak.current || 1,
-            longest_streak: localState.streak.longest || 1,
+            days_played: localState.stats.totalGamesPlayed > 0 ? 1 : 0,
+            longest_streak: localState.streak.longest || 0,
             level: localState.level || 1,
             total_score: localState.stats.totalScoreAccumulated || 0,
             games_played: localState.stats.totalGamesPlayed || 0,
@@ -87,8 +88,8 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
             id: userId,
             username: userId,
             avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${userId}`,
-            days_played: localState.streak.current || 1,
-            longest_streak: localState.streak.longest || 1,
+            days_played: localState.stats.totalGamesPlayed > 0 ? 1 : 0,
+            longest_streak: localState.streak.longest || 0,
             level: localState.level || 1,
             total_score: localState.stats.totalScoreAccumulated || 0,
             games_played: localState.stats.totalGamesPlayed || 0,
@@ -129,8 +130,8 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
   const totalUnlocked = profile.unlocked_trophies ? Object.keys(profile.unlocked_trophies).length : 0;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-fadeIn">
-      <div className="bg-portal-card border-4 border-black rounded-3xl p-8 sm:p-10 max-w-lg w-full shadow-neo-xl text-center relative overflow-y-auto animate-scaleIn">
+    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fadeIn">
+      <div className="bg-portal-card border-4 border-black rounded-3xl p-5 sm:p-8 max-w-lg w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] shadow-neo-xl text-center relative overflow-y-auto overscroll-contain animate-scaleIn">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -180,26 +181,34 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
           </div>
         </div>
 
-        {/* Unlocked Trophies / Achievements Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-8">
-          {profile?.unlocked_trophies && Object.entries(profile.unlocked_trophies).map(([id, val]) => {
-            const trophy = TROPHIES.find(t => t.id === id);
-            if (!trophy) return null;
-            const dateStr = typeof val === 'string' ? val : val?.unlockedAt || new Date().toISOString();
-            return (
-              <div
-                key={id}
-                className="bg-portal-surface border-2 border-black rounded-xl p-3 text-center shadow-neo-sm hover:bg-portal-pink/20 transition-all"
-              >
-                <div className="w-8 h-8 rounded-md mx-auto mb-2 text-xl flex items-center justify-center">
-                  {trophy.icon}
-                </div>
-                <div className="text-[10px] font-black text-white uppercase tracking-wider truncate">{trophy.title}</div>
-                <div className="text-[9px] text-portal-yellow font-mono mt-0.5">unlocked {new Date(dateStr).toLocaleDateString()}</div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Collapsible achievements */}
+        <section className="mb-6 rounded-2xl border-3 border-black bg-portal-surface text-left">
+          <button
+            type="button"
+            onClick={() => setIsAchievementsOpen(open => !open)}
+            aria-expanded={isAchievementsOpen}
+            className="flex w-full items-center justify-between gap-3 p-4 text-xs font-black uppercase tracking-wider text-white focus:outline-none focus:ring-2 focus:ring-portal-cyan"
+          >
+            <span className="flex items-center gap-2"><Trophy className="h-4 w-4 text-portal-yellow" />Achievements ({totalUnlocked})</span>
+            {isAchievementsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </button>
+          {isAchievementsOpen && (
+            <div className="grid grid-cols-2 gap-2 border-t-2 border-black p-3 sm:grid-cols-3">
+              {profile?.unlocked_trophies && Object.entries(profile.unlocked_trophies).map(([id, val]) => {
+                const trophy = TROPHIES.find(t => t.id === id);
+                if (!trophy) return null;
+                const dateStr = typeof val === 'string' ? val : val?.unlockedAt || new Date().toISOString();
+                return (
+                  <div key={id} className="rounded-xl border-2 border-black bg-portal-card p-3 text-center shadow-neo-sm">
+                    <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center text-xl">{trophy.icon}</div>
+                    <div className="truncate text-[10px] font-black uppercase tracking-wider text-white">{trophy.title}</div>
+                    <div className="mt-0.5 text-[9px] font-mono text-portal-yellow">unlocked {new Date(dateStr).toLocaleDateString()}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
 
         {/* Action Button */}
         <button
