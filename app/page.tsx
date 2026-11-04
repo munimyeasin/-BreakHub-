@@ -89,20 +89,16 @@ export default function ArcadePortalDashboard() {
 
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Gamification Synchronization on Client Mount & Event Updates
+  // Fetch games from /api/games on mount to respect live database statuses
   useEffect(() => {
-    try {
-      setGameState(gamification.getState());
-    } catch {}
-
-    const handleSync = (e: any) => {
-      setGameState(e?.detail || gamification.getState());
-    };
-
-    window.addEventListener('stressbuster_gamification_sync', handleSync as EventListener);
-    return () => {
-      window.removeEventListener('stressbuster_gamification_sync', handleSync as EventListener);
-    };
+    fetch('/api/games')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.success && Array.isArray(data.games)) {
+          setGames(data.games);
+        }
+      })
+      .catch(err => console.error('Failed to fetch games:', err));
   }, []);
 
   // Global Keyboard Shortcuts (⌘K, Ctrl+K, /, Escape)
