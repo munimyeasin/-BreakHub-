@@ -974,9 +974,25 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           screenShakeRef.current = Math.max(0, screenShakeRef.current - 0.65 * timeScale);
         }
 
-        // 1. Draw Deep Cyber Space Sky
-        ctx.fillStyle = isSlowMo ? '#040d1a' : '#060214';
+        // 1. Draw Starfighter-style deep space sky with animated energy lanes
+        const spaceGrad = ctx.createLinearGradient(0, 0, 0, VIRTUAL_HEIGHT);
+        spaceGrad.addColorStop(0, isSlowMo ? '#061b2b' : '#050018');
+        spaceGrad.addColorStop(0.55, '#12052d');
+        spaceGrad.addColorStop(1, '#24052b');
+        ctx.fillStyle = spaceGrad;
         ctx.fillRect(0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        ctx.save();
+        ctx.globalAlpha = isSlowMo ? 0.28 : 0.16;
+        ctx.strokeStyle = '#FF007F';
+        ctx.lineWidth = 2;
+        for (let lane = -2; lane < 12; lane += 1) {
+          const x = ((lane * 110 + radarAngleRef.current * 90) % (VIRTUAL_WIDTH + 180)) - 90;
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x - 180, VIRTUAL_GROUND_Y);
+          ctx.stroke();
+        }
+        ctx.restore();
 
         // Radar Scanning Sweep Arcs & Radial Sector Grid (matching thumbnail)
         radarAngleRef.current = (radarAngleRef.current + 0.015 * timeScale) % (Math.PI * 2);
@@ -1760,7 +1776,7 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
           ctx.restore();
         });
 
-        // 17. Draw Particles
+        // 17. Draw energetic blast particles with Starfighter-style glow
         for (let pIdx = particlesRef.current.length - 1; pIdx >= 0; pIdx--) {
           const pt = particlesRef.current[pIdx];
           pt.x += pt.vx * timeScale;
@@ -1773,10 +1789,13 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
             continue;
           }
 
+          ctx.save();
           ctx.fillStyle = pt.color;
           ctx.globalAlpha = pt.alpha;
-          ctx.fillRect(pt.x, pt.y, pt.size, pt.size);
-          ctx.globalAlpha = 1;
+          ctx.shadowColor = pt.color;
+          ctx.shadowBlur = 12;
+          ctx.fillRect(pt.x, pt.y, pt.size * 1.35, pt.size * 1.35);
+          ctx.restore();
         }
 
         // 18. Draw Ground Baseline & Cyber Skyline
