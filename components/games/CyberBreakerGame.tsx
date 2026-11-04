@@ -670,11 +670,21 @@ export default function CyberBreakerGame({ onGameOver }: CyberBreakerGameProps) 
       }
 
       // 4. RENDER FRAME
-      ctx.fillStyle = '#070512';
+      const dojoGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      dojoGrad.addColorStop(0, '#090014');
+      dojoGrad.addColorStop(0.5, '#260021');
+      dojoGrad.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoGrad;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      const dojoGlow = ctx.createRadialGradient(CANVAS_WIDTH / 2, 160, 10, CANVAS_WIDTH / 2, 160, 340);
+      dojoGlow.addColorStop(0, 'rgba(255, 0, 127, 0.16)');
+      dojoGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = dojoGlow;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // Cyber Grid Background
-      ctx.strokeStyle = '#150f33';
+      ctx.strokeStyle = '#3d1030';
       ctx.lineWidth = 1;
       for (let x = 0; x < CANVAS_WIDTH; x += 28) {
         ctx.beginPath();

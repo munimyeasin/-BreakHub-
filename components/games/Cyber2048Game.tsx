@@ -18,8 +18,8 @@ interface HistoryState {
 }
 
 const TILE_CONFIG: Record<number, { bg: string; text: string; border: string; glow?: string; scale?: string }> = {
-  2: { bg: 'bg-slate-900/90', text: 'text-slate-200', border: 'border-slate-700/60' },
-  4: { bg: 'bg-cyan-950/90', text: 'text-cyan-300', border: 'border-cyan-700/60', glow: 'shadow-[0_0_10px_rgba(6,182,212,0.2)]' },
+  2: { bg: 'bg-[#160b20]', text: 'text-slate-200', border: 'border-black' },
+  4: { bg: 'bg-[#063d4a]', text: 'text-cyan-200', border: 'border-black', glow: 'shadow-[4px_4px_0_#000,0_0_14px_rgba(0,240,255,0.35)]' },
   8: { bg: 'bg-blue-950/90', text: 'text-blue-300', border: 'border-blue-600/70', glow: 'shadow-[0_0_12px_rgba(59,130,246,0.3)]' },
   16: { bg: 'bg-indigo-950/90', text: 'text-indigo-300', border: 'border-indigo-500/80', glow: 'shadow-[0_0_14px_rgba(99,102,241,0.35)]' },
   32: { bg: 'bg-purple-950/90', text: 'text-purple-300', border: 'border-purple-500', glow: 'shadow-[0_0_16px_rgba(168,85,247,0.4)]' },

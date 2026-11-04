@@ -419,13 +419,25 @@ export default function NeonSnakeGame({ onGameOver }: NeonSnakeGameProps) {
 
       snakeRef.current = newSnake;
 
-      // 4. RENDER CANVAS
-      ctx.fillStyle = '#070512';
+      // 4. RENDER CANVAS — Katana Slicer dojo palette.
+      const dojoGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      dojoGrad.addColorStop(0, '#090014');
+      dojoGrad.addColorStop(0.5, '#260021');
+      dojoGrad.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoGrad;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      const dojoGlow = ctx.createRadialGradient(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, 10, CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35, CANVAS_WIDTH * 0.8);
+      dojoGlow.addColorStop(0, 'rgba(255, 0, 127, 0.15)');
+      dojoGlow.addColorStop(0.55, 'rgba(0, 240, 255, 0.06)');
+      dojoGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = dojoGlow;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // Grid background
-      ctx.strokeStyle = '#150f33';
+      ctx.strokeStyle = '#3d1030';
       ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       for (let x = 0; x <= CANVAS_WIDTH; x += GRID_SIZE) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -438,6 +450,7 @@ export default function NeonSnakeGame({ onGameOver }: NeonSnakeGameProps) {
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
 
       // Draw Portal Edges if in Portal Mode
       if (modeRef.current === 'portal') {

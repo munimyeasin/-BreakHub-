@@ -322,17 +322,25 @@ export default function CyberKnifeThrowerGame({ gameId, onGameOver }: CyberKnife
       // 3. Render Canvas
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // Background Cyber Gradient
-      const bgGrad = ctx.createLinearGradient(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      bgGrad.addColorStop(0, '#0a0014');
-      bgGrad.addColorStop(0.5, '#1b032d');
-      bgGrad.addColorStop(1, '#020008');
+      // Katana Slicer dojo: deep plum, hot neon, hard-edged grid.
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      bgGrad.addColorStop(0, '#090014');
+      bgGrad.addColorStop(0.48, '#260021');
+      bgGrad.addColorStop(1, '#08000d');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+      const dojoGlow = ctx.createRadialGradient(CANVAS_WIDTH / 2, 210, 20, CANVAS_WIDTH / 2, 210, 280);
+      dojoGlow.addColorStop(0, 'rgba(255, 0, 127, 0.18)');
+      dojoGlow.addColorStop(0.55, 'rgba(0, 240, 255, 0.07)');
+      dojoGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = dojoGlow;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
       // Cyber Grid Lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.14)';
       ctx.lineWidth = 1;
+      ctx.setLineDash([5, 5]);
       for (let x = 0; x < CANVAS_WIDTH; x += 40) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -345,6 +353,7 @@ export default function CyberKnifeThrowerGame({ gameId, onGameOver }: CyberKnife
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
 
       // Render Stuck Knives on Rotating Wheel
       stuckKnivesRef.current.forEach((stuck) => {

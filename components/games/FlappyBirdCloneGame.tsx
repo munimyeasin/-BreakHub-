@@ -356,12 +356,19 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         if (shakeRef.current < 0.5) shakeRef.current = 0;
       }
 
-      // Deep Cyber Space Background
+      // Deep dojo background — shared Katana Slicer palette.
       const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-      bgGrad.addColorStop(0, "#050212");
-      bgGrad.addColorStop(0.5, "#0d0628");
-      bgGrad.addColorStop(1, "#180738");
+      bgGrad.addColorStop(0, "#090014");
+      bgGrad.addColorStop(0.5, "#260021");
+      bgGrad.addColorStop(1, "#08000d");
       ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      const dojoGlow = ctx.createRadialGradient(W / 2, H * 0.34, 20, W / 2, H * 0.34, W * 0.9);
+      dojoGlow.addColorStop(0, "rgba(255, 0, 127, 0.16)");
+      dojoGlow.addColorStop(0.55, "rgba(0, 240, 255, 0.07)");
+      dojoGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = dojoGlow;
       ctx.fillRect(0, 0, W, H);
 
       // Parallax Stars

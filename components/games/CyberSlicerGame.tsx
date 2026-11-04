@@ -1372,7 +1372,11 @@ export default function CyberSlicerGame({ gameId, onGameOver }: CyberSlicerGameP
       }
 
       // Deep Cyber Dojo Background
-      ctx.fillStyle = '#18000F';
+      const dojoBase = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      dojoBase.addColorStop(0, '#090014');
+      dojoBase.addColorStop(0.5, '#260021');
+      dojoBase.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoBase;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // Ambient radial lighting

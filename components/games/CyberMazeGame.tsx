@@ -982,8 +982,12 @@ export default function CyberMazeGame({ gameId, onGameOver }: CyberMazeGameProps
       const width = canvas.width;
       const height = canvas.height;
 
-      // Clear Screen with Dark Cyberpunk Grid Background
-      ctx.fillStyle = '#060312';
+      // Clear Screen with the shared dark plum dojo gradient.
+      const dojoGrad = ctx.createLinearGradient(0, 0, 0, height);
+      dojoGrad.addColorStop(0, '#090014');
+      dojoGrad.addColorStop(0.5, '#260021');
+      dojoGrad.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoGrad;
       ctx.fillRect(0, 0, width, height);
 
       if (map.length === 0) {
