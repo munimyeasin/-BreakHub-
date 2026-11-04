@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { supabaseServer } from '@/lib/supabaseServer';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,8 +61,10 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, error: 'Game not found' }, { status: 404 });
       }
       game.status = status;
-      // save to db
-      (db as any).saveDatabase?.();
+      db.saveDatabase();
+      try {
+        await supabaseServer.from('games').update({ status }).eq('id', game.id);
+      } catch {}
       return NextResponse.json({ success: true, game });
     }
 

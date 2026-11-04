@@ -128,7 +128,7 @@ class DatabaseService {
     return fresh;
   }
 
-  private saveDatabase(dataToSave?: DatabaseSchema) {
+  public saveDatabase(dataToSave?: DatabaseSchema) {
     this.ensureDirectory();
     const payload = dataToSave || this.data;
     try {
