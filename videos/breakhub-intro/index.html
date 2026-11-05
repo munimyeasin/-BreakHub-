@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Break Hub Introduction</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #090b16; color: #f7f9ff; font-family: Arial, Helvetica, sans-serif; }
+    [data-composition-id] { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .slide-bg { position: absolute; inset: 0; background: radial-gradient(circle at 78% 22%, rgba(0,240,255,.18), transparent 28%), linear-gradient(135deg, #090b16 0%, #12132a 55%, #280b31 100%); }
+    .grid { position: absolute; inset: 0; opacity: .16; background-image: linear-gradient(rgba(0,240,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(0,240,255,.4) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 82%); }
+    .content { position: relative; z-index: 2; height: 100%; padding: 92px 120px; display: flex; flex-direction: column; justify-content: center; gap: 34px; }
+    .eyebrow { color: #00f0ff; font-size: 26px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2 { margin: 0; max-width: 1400px; font-size: 86px; line-height: 1.02; letter-spacing: -.04em; text-transform: uppercase; }
+    h2 { font-size: 70px; }
+    .accent { color: #ff3df5; }
+    .yellow { color: #ffe600; }
+    .cyan { color: #00f0ff; }
+    .copy { max-width: 1050px; color: #c9d0e5; font-size: 38px; line-height: 1.25; font-weight: 700; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1400px; }
+    .card { min-height: 220px; padding: 28px; border: 4px solid #05060b; border-radius: 24px; background: rgba(20,23,45,.92); box-shadow: 10px 10px 0 #05060b; }
+    .card strong { display: block; margin-bottom: 18px; color: #00f0ff; font-size: 34px; text-transform: uppercase; }
+    .card span { color: #d8def1; font-size: 27px; line-height: 1.22; font-weight: 700; }
+    .badge { display: inline-flex; width: fit-content; padding: 13px 20px; border: 3px solid #05060b; border-radius: 14px; background: #ffe600; color: #05060b; font-weight: 900; font-size: 24px; text-transform: uppercase; box-shadow: 6px 6px 0 #05060b; }
+    .orbit { position: absolute; right: 12%; top: 18%; width: 370px; height: 370px; border: 5px solid #00f0ff; border-radius: 50%; box-shadow: 0 0 35px rgba(0,240,255,.7), inset 0 0 35px rgba(255,61,245,.35); opacity: .8; }
+    .orbit:before, .orbit:after { content: ''; position: absolute; inset: 45px; border: 3px solid #ff3df5; border-radius: 50%; }
+    .orbit:after { inset: 115px; border-color: #ffe600; }
+    .stat { display: flex; align-items: baseline; gap: 18px; }
+    .stat b { color: #ffe600; font-size: 110px; line-height: 1; }
+    .stat span { color: #fff; font-size: 34px; font-weight: 900; text-transform: uppercase; }
+    @media (max-width: 900px) { .content { padding: 48px 34px; gap: 22px; } h1 { font-size: 54px; } h2 { font-size: 44px; } .copy { font-size: 25px; } .cards { grid-template-columns: 1fr; gap: 14px; } .card { min-height: auto; padding: 20px; } .card strong { font-size: 24px; margin-bottom: 8px; } .card span { font-size: 20px; } .orbit { right: -120px; top: 8%; width: 300px; height: 300px; opacity: .35; } .stat b { font-size: 72px; } .stat span { font-size: 23px; } }
+  </style>
+</head>
+<body>
+  <script type="application/hyperframes-slideshow+json">
+  {
+    "slides": [
+      { "sceneId": "welcome", "notes": "Open with Break Hub as the destination for quick cyber arcade breaks." },
+      { "sceneId": "arcade", "notes": "Emphasize variety: every session starts with a game that matches the player's mood.", "fragments": [8.5, 10.5] },
+      { "sceneId": "genres", "notes": "Walk through the genre lanes: action, puzzle, strategy, arcade, and cards." },
+      { "sceneId": "progression", "notes": "Explain that play is connected to scores, XP, streaks, trophies, and personal identity." },
+      { "sceneId": "community", "notes": "Close on the community loop: compete, request the next game, and return for the next break." }
+    ],
+    "slideSequences": []
+  }
+  </script>
+
+  <div data-composition-id="welcome" data-start="0" data-duration="8" data-label="Welcome to Break Hub" data-width="1920" data-height="1080">
+    <section class="clip" data-start="0" data-duration="8" data-track-index="1" style="position:absolute;inset:0">
+      <div class="slide-bg"></div><div class="grid"></div><div class="orbit"></div>
+      <div class="content"><div class="eyebrow">Your next break starts here</div><h1>Break Hub turns spare minutes into <span class="accent">play time.</span></h1><p class="copy">A neon arcade portal for fast games, big scores, and a reason to come back.</p><span class="badge">Play. Compete. Repeat.</span></div>
+    </section>
+  </div>
+
+  <div data-composition-id="arcade" data-start="8" data-duration="8" data-label="A whole arcade in one hub" data-width="1920" data-height="1080">
+    <section class="clip" data-start="8" data-duration="8" data-track-index="1" style="position:absolute;inset:0">
+      <div class="slide-bg"></div><div class="grid"></div><div class="content"><div class="eyebrow">Pick your challenge</div><h2>One hub. Dozens of ways to <span class="cyan">break away.</span></h2><div class="cards"><div class="card"><strong>Quick sessions</strong><span>Jump into a game when you have five minutes—or stay for a personal best.</span></div><div class="card"><strong>Fresh variety</strong><span>Switch from reflex action to puzzle focus without leaving the portal.</span></div><div class="card"><strong>Full-screen play</strong><span>Launch games into an immersive arcade view on desktop or mobile.</span></div></div></div>
+    </section>
+  </div>
+
+  <div data-composition-id="genres" data-start="16" data-duration="8" data-label="Find your play style" data-width="1920" data-height="1080">
+    <section class="clip" data-start="16" data-duration="8" data-track-index="1" style="position:absolute;inset:0">
+      <div class="slide-bg"></div><div class="grid"></div><div class="content"><div class="eyebrow">Genres & modes</div><h2>Choose the energy you want to <span class="yellow">feel.</span></h2><div class="cards"><div class="card"><strong>Action & arcade</strong><span>Fast reactions, sharp timing, and instant replay energy.</span></div><div class="card"><strong>Puzzles & cards</strong><span>Slow down, read the board, and outthink the next move.</span></div><div class="card"><strong>Strategy</strong><span>Build a plan, own the leaderboard, and make every move count.</span></div></div></div>
+    </section>
+  </div>
+
+  <div data-composition-id="progression" data-start="24" data-duration="8" data-label="Every game builds your profile" data-width="1920" data-height="1080">
+    <section class="clip" data-start="24" data-duration="8" data-track-index="1" style="position:absolute;inset:0">
+      <div class="slide-bg"></div><div class="grid"></div><div class="content"><div class="eyebrow">Your arcade identity</div><h2>Every run adds momentum to your <span class="accent">story.</span></h2><div class="stat"><b>XP</b><span>Level up through play</span></div><div class="stat"><b>🏆</b><span>Unlock trophies and streaks</span></div><div class="stat"><b>#1</b><span>Climb game-specific leaderboards</span></div></div>
+    </section>
+  </div>
+
+  <div data-composition-id="community" data-start="32" data-duration="8" data-label="The next game is shaped by players" data-width="1920" data-height="1080">
+    <section class="clip" data-start="32" data-duration="8" data-track-index="1" style="position:absolute;inset:0">
+      <div class="slide-bg"></div><div class="grid"></div><div class="orbit"></div><div class="content"><div class="eyebrow">Join the loop</div><h2>Play today. Shape what comes <span class="cyan">next.</span></h2><p class="copy">Compete with the community, save your favorites, request new games, and make Break Hub your default reset button.</p><span class="badge">Enter the arcade →</span></div>
+    </section>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    ['welcome','arcade','genres','progression','community'].forEach((id) => {
+      const tl = gsap.timeline({ paused: true });
+      const root = document.querySelector(`[data-composition-id="${id}"]`);
+      const content = root?.querySelector('.content');
+      if (content) tl.fromTo(content.children, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .65, stagger: .12, ease: 'power2.out' }, Number(root.dataset.start));
+      window.__timelines[id] = tl;
+    });
+  </script>
+</body>
+</html>

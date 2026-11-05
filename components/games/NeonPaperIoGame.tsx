@@ -784,12 +784,24 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
       }
 
       // ==================== RENDERING ====================
-      ctx.fillStyle = '#060913';
+      const dojoGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      dojoGrad.addColorStop(0, '#090014');
+      dojoGrad.addColorStop(0.5, '#260021');
+      dojoGrad.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoGrad;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      const dojoGlow = ctx.createRadialGradient(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 20, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, CANVAS_WIDTH * 0.9);
+      dojoGlow.addColorStop(0, 'rgba(255, 0, 127, 0.16)');
+      dojoGlow.addColorStop(0.55, 'rgba(0, 240, 255, 0.07)');
+      dojoGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = dojoGlow;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // 1. Draw Map Grid Lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.14)';
       ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       for (let x = 0; x <= CANVAS_WIDTH; x += CELL_SIZE * 5) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -802,6 +814,7 @@ export default function NeonPaperIoGame({ gameId, onGameOver }: NeonPaperIoGameP
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
 
       // 2. Draw Claimed Territories
       for (let y = 0; y < GRID_ROWS; y++) {

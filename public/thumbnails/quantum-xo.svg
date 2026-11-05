@@ -1,48 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <!-- Background Gradients -->
-    <linearGradient id="xoBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0b061c" />
-      <stop offset="50%" stop-color="#180c38" />
-      <stop offset="100%" stop-color="#050212" />
+    <linearGradient id="bgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18000F" />
+      <stop offset="50%" stop-color="#2A0518" />
+      <stop offset="100%" stop-color="#070014" />
     </linearGradient>
-    <linearGradient id="xoBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#FFF8E7" />
-      <stop offset="100%" stop-color="#F5EEFF" />
-    </linearGradient>
-
-    <!-- 3D "X" Cyan Palette -->
-    <linearGradient id="xFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7DF9FF" />
-      <stop offset="100%" stop-color="#00D0FF" />
-    </linearGradient>
-    <linearGradient id="xSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0080B3" />
-      <stop offset="100%" stop-color="#004D66" />
-    </linearGradient>
-
-    <!-- 3D "O" Magenta Palette -->
-    <linearGradient id="oFaceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF63C6" />
-      <stop offset="100%" stop-color="#FF007F" />
-    </linearGradient>
-    <linearGradient id="oSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#BA005C" />
-      <stop offset="100%" stop-color="#700037" />
-    </linearGradient>
-
-    <!-- 3D Mini Token Palettes -->
-    <linearGradient id="goldFace" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF570" />
-      <stop offset="100%" stop-color="#FFDE59" />
-    </linearGradient>
-    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF066" />
-      <stop offset="100%" stop-color="#FFE600" />
-    </linearGradient>
-
-    <!-- Neo-Brutalist Hard Drop Shadows -->
+    <radialGradient id="bgMagGlow" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="rgba(255,0,127,0.2)" />
+      <stop offset="40%" stop-color="rgba(0,240,255,0.1)" />
+      <stop offset="100%" stop-color="rgba(24,0,15,0)" />
+    </radialGradient>
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
@@ -52,40 +19,16 @@
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
-    <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FFE600" flood-opacity="0.85" />
-    </filter>
   </defs>
 
-  <style>
-    .theme-bg { fill: url(#xoBgDark); }
-    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
-    .theme-frame-bg { fill: #100624; stroke: #00F0FF; }
-    .theme-stage-grid { stroke: #26114A; }
-    .theme-slot-bg { fill: #180C33; stroke: #3B1C70; }
-    .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
-    .theme-badge-text { fill: #000000; }
-    .theme-tag-rect { fill: #FFE600; stroke: #000000; }
-    .theme-tag-text { fill: #000000; }
-
-    @media (prefers-color-scheme: light) {
-      .theme-bg { fill: url(#xoBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
-      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
-      .theme-stage-grid { stroke: #E2E8F0; }
-      .theme-slot-bg { fill: #F8FAFC; stroke: #CBD5E1; }
-      .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
-      .theme-badge-text { fill: #000000; }
-      .theme-tag-rect { fill: #FFE600; stroke: #000000; }
-      .theme-tag-text { fill: #000000; }
-    }
-  </style>
-
   <!-- Background Base Canvas -->
-  <rect width="400" height="400" class="theme-bg" />
+  <rect width="400" height="400" fill="url(#bgDark)" />
 
-  <!-- Retro Cyber Grid Backdrop -->
-  <g class="theme-grid-line" stroke-width="1.5">
+  <!-- Radial Magenta / Cyan Glow -->
+  <circle cx="200" cy="186" r="270" fill="url(#bgMagGlow)" />
+
+  <!-- White Cyber Dashed Grid -->
+  <g stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,3">
     <line x1="0" y1="50" x2="400" y2="50" />
     <line x1="0" y1="100" x2="400" y2="100" />
     <line x1="0" y1="150" x2="400" y2="150" />
@@ -102,97 +45,78 @@
     <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Neo Sparks & Radar Dots -->
-  <g fill="#FFE600">
-    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
-    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
-    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
-    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
-  </g>
-
   <!-- 3D MAIN ARCADE CONTAINER -->
   <g filter="url(#brutalShadowLg)">
-    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
+    <rect x="36" y="38" width="328" height="298" rx="22" fill="#140516" stroke="#FF007F" stroke-width="4" />
   </g>
 
-  <!-- Inner Playfield Matrix Stage -->
-  <rect x="48" y="48" width="304" height="278" rx="16" fill="#060212" stroke="#000000" stroke-width="2.5" />
+  <!-- Inner Playfield Void Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#08020B" stroke="#000000" stroke-width="2.5" />
 
-  <!-- 3x3 Tactile Recessed Grid Slots -->
-  <g class="theme-slot-bg" stroke-width="2">
-    <!-- Row 0 -->
-    <rect x="58" y="58" width="86" height="76" rx="12" />
-    <rect x="157" y="58" width="86" height="76" rx="12" />
-    <rect x="256" y="58" width="86" height="76" rx="12" />
-    <!-- Row 1 -->
-    <rect x="58" y="148" width="86" height="76" rx="12" />
-    <rect x="157" y="148" width="86" height="76" rx="12" />
-    <rect x="256" y="148" width="86" height="76" rx="12" />
-    <!-- Row 2 -->
-    <rect x="58" y="238" width="86" height="76" rx="12" />
-    <rect x="157" y="238" width="86" height="76" rx="12" />
-    <rect x="256" y="238" width="86" height="76" rx="12" />
+  <!-- Perspective Arena Grid Lines (Dashed Cyber Grid) -->
+  <g stroke="#3D1030" stroke-width="1.5" stroke-dasharray="4,3">
+    <line x1="48" y1="88" x2="352" y2="88" />
+    <line x1="48" y1="136" x2="352" y2="136" />
+    <line x1="48" y1="184" x2="352" y2="184" />
+    <line x1="48" y1="232" x2="352" y2="232" />
+    <line x1="48" y1="280" x2="352" y2="280" />
+    <line x1="96" y1="48" x2="96" y2="326" />
+    <line x1="148" y1="48" x2="148" y2="326" />
+    <line x1="200" y1="48" x2="200" y2="326" />
+    <line x1="252" y1="48" x2="252" y2="326" />
+    <line x1="304" y1="48" x2="304" y2="326" />
   </g>
 
-  <!-- Diagonal Victory Strike Laser Line (Row 0 Col 0 to Row 2 Col 2) -->
-  <g filter="url(#laserGlow)">
-    <line x1="80" y1="80" x2="320" y2="280" stroke="#FFE600" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="8,5" />
-    <circle cx="80" cy="80" r="5" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
-    <circle cx="320" cy="280" r="5" fill="#FFFFFF" stroke="#000000" stroke-width="2" />
-  </g>
-
-  <!-- Top-Left Mini 3D "X" Token (Slot 0,0) -->
+  <!-- Top-Left Mini 3D X Token (Slot 0,0) -->
   <g transform="translate(101, 96)" filter="url(#brutalShadowSm)">
     <g stroke="#000000" stroke-width="2.5">
-      <!-- 3D Extrusion Side -->
-      <line x1="-18" y1="-14" x2="22" y2="26" stroke="url(#xSideGrad)" stroke-width="12" stroke-linecap="round" />
-      <line x1="22" y1="-14" x2="-18" y2="26" stroke="url(#xSideGrad)" stroke-width="12" stroke-linecap="round" />
-      <!-- Top Face -->
-      <line x1="-20" y1="-18" x2="20" y2="22" stroke="url(#xFaceGrad)" stroke-width="8" stroke-linecap="round" />
-      <line x1="20" y1="-18" x2="-20" y2="22" stroke="url(#xFaceGrad)" stroke-width="8" stroke-linecap="round" />
+      <line x1="-18" y1="-14" x2="22" y2="26" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+      <line x1="22" y1="-14" x2="-18" y2="26" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+      <line x1="-20" y1="-18" x2="20" y2="22" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
+      <line x1="20" y1="-18" x2="-20" y2="22" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
     </g>
   </g>
 
-  <!-- Top-Right Mini 3D "O" Token (Slot 0,2) -->
+  <!-- Top-Right Mini 3D O Token (Slot 0,2) -->
   <g transform="translate(299, 96)" filter="url(#brutalShadowSm)">
     <g stroke="#000000" stroke-width="2.5">
-      <!-- 3D Extrusion Side -->
-      <circle cx="2" cy="4" r="22" fill="none" stroke="url(#oSideGrad)" stroke-width="10" />
-      <!-- Top Face -->
-      <circle cx="0" cy="0" r="22" fill="none" stroke="url(#oFaceGrad)" stroke-width="8" />
+      <circle cx="2" cy="4" r="22" fill="none" stroke="#BA005C" stroke-width="10" />
+      <circle cx="0" cy="0" r="22" fill="#FF63C6" />
+      <circle cx="0" cy="0" r="11" fill="#000000" opacity="0.7" />
     </g>
   </g>
 
-  <!-- Bottom-Left Mini 3D "O" Token (Slot 2,0) -->
+  <!-- Bottom-Left Mini 3D O Token (Slot 2,0) -->
   <g transform="translate(101, 276)" filter="url(#brutalShadowSm)">
     <g stroke="#000000" stroke-width="2.5">
-      <circle cx="2" cy="4" r="22" fill="none" stroke="url(#oSideGrad)" stroke-width="10" />
-      <circle cx="0" cy="0" r="22" fill="none" stroke="url(#oFaceGrad)" stroke-width="8" />
+      <circle cx="2" cy="4" r="22" fill="none" stroke="#BA005C" stroke-width="10" />
+      <circle cx="0" cy="0" r="22" fill="#FF63C6" />
+      <circle cx="0" cy="0" r="11" fill="#000000" opacity="0.7" />
     </g>
   </g>
 
-  <!-- Bottom-Right Mini 3D "X" Token (Slot 2,2) -->
+  <!-- Bottom-Right Mini 3D X Token (Slot 2,2) -->
   <g transform="translate(299, 276)" filter="url(#brutalShadowSm)">
     <g stroke="#000000" stroke-width="2.5">
-      <line x1="-18" y1="-14" x2="22" y2="26" stroke="url(#xSideGrad)" stroke-width="12" stroke-linecap="round" />
-      <line x1="22" y1="-14" x2="-18" y2="26" stroke="url(#xSideGrad)" stroke-width="12" stroke-linecap="round" />
-      <line x1="-20" y1="-18" x2="20" y2="22" stroke="url(#xFaceGrad)" stroke-width="8" stroke-linecap="round" />
-      <line x1="20" y1="-18" x2="-20" y2="22" stroke="url(#xFaceGrad)" stroke-width="8" stroke-linecap="round" />
+      <line x1="-18" y1="-14" x2="22" y2="26" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+      <line x1="22" y1="-14" x2="-18" y2="26" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+      <line x1="-20" y1="-18" x2="20" y2="22" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
+      <line x1="20" y1="-18" x2="-20" y2="22" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
     </g>
   </g>
 
-  <!-- 3D HERO TITAN "X" WARRIOR (Middle Left Slot: X=101, Y=186) -->
+  <!-- 3D Hero Titan X Warrior (Middle Left: X=101, Y=186) -->
   <g transform="translate(101, 186)" filter="url(#brutalShadowLg)">
     <g stroke="#000000" stroke-width="3.5">
-      <!-- 3D Extrusion Side -->
-      <line x1="-28" y1="-22" x2="32" y2="38" stroke="url(#xSideGrad)" stroke-width="20" stroke-linecap="round" />
-      <line x1="32" y1="-22" x2="-28" y2="38" stroke="url(#xSideGrad)" stroke-width="20" stroke-linecap="round" />
-      <!-- Main Face -->
-      <line x1="-30" y1="-28" x2="30" y2="32" stroke="url(#xFaceGrad)" stroke-width="14" stroke-linecap="round" />
-      <line x1="30" y1="-28" x2="-30" y2="32" stroke="url(#xFaceGrad)" stroke-width="14" stroke-linecap="round" />
+      <line x1="-28" y1="-22" x2="32" y2="38" stroke="#0080B3" stroke-width="20" stroke-linecap="round" />
+      <line x1="32" y1="-22" x2="-28" y2="38" stroke="#0080B3" stroke-width="20" stroke-linecap="round" />
+      <line x1="-30" y1="-28" x2="30" y2="32" stroke="#7DF9FF" stroke-width="14" stroke-linecap="round" />
+      <line x1="30" y1="-28" x2="-30" y2="32" stroke="#7DF9FF" stroke-width="14" stroke-linecap="round" />
+      <!-- Extruded side facets -->
+      <polygon points="-32,-28 -16,-34 0,-28 -14,-22 -32,-12" fill="#005B80" opacity="0.8" />
+      <polygon points="32,32 16,26 0,34 14,22 32,12" fill="#005B80" opacity="0.8" />
     </g>
-    <!-- Specular Highlight Spine -->
-    <line x1="-26" y1="-26" x2="26" y2="26" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+    <path d="M -26,-26 L -10,-30 L 16,12 L 10,18 Z" fill="#FFFFFF" opacity="0.85" />
     <!-- Cyber Visor Eyes -->
     <circle cx="-10" cy="2" r="3.5" fill="#000000" />
     <circle cx="10" cy="2" r="3.5" fill="#000000" />
@@ -200,51 +124,57 @@
     <circle cx="11.5" cy="0.5" r="1.5" fill="#FFFFFF" />
   </g>
 
-  <!-- 3D HERO TITAN "O" GUARDIAN (Middle Right Slot: X=299, Y=186) -->
+  <!-- 3D Hero Titan O Guardian (Middle Right: X=299, Y=186) -->
   <g transform="translate(299, 186)" filter="url(#brutalShadowLg)">
     <g stroke="#000000" stroke-width="3.5">
-      <!-- 3D Extrusion Side Ring -->
-      <circle cx="4" cy="6" r="32" fill="none" stroke="url(#oSideGrad)" stroke-width="18" />
-      <!-- Main Face Ring -->
-      <circle cx="0" cy="0" r="32" fill="none" stroke="url(#oFaceGrad)" stroke-width="14" />
+      <circle cx="4" cy="6" r="32" fill="none" stroke="#BA005C" stroke-width="18" />
+      <circle cx="0" cy="0" r="32" fill="#FF63C6" />
+      <circle cx="0" cy="0" r="16" fill="#000000" opacity="0.75" />
     </g>
-    <!-- Specular Arc Highlight -->
-    <path d="M -22,-20 A 28 28 0 0 1 20,-22" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.85" />
-    <!-- Cheerful Eyes -->
+    <path d="M -22,-20 A 28 28 0 0 1 20,-22" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" opacity="0.85" />
     <ellipse cx="-10" cy="2" rx="3.5" ry="5" fill="#000000" />
     <ellipse cx="10" cy="2" rx="3.5" ry="5" fill="#000000" />
     <circle cx="-8.5" cy="0.5" r="1.5" fill="#FFFFFF" />
     <circle cx="11.5" cy="0.5" r="1.5" fill="#FFFFFF" />
   </g>
 
-  <!-- CENTER QUANTUM CLASH MATRIX (Center Slot: X=200, Y=186) -->
+  <!-- Center Quantum Clash Matrix Node -->
   <g transform="translate(200, 186)" filter="url(#brutalShadow)">
-    <polygon points="0,-26 8,-8 26,-8 12,6 18,24 0,12 -18,24 -12,6 -26,-8 -8,-8" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+    <polygon points="0,-26 8,-8 26,-8 12,6 18,24 0,12 -18,24 -12,6 -26,-8 -8,-8" fill="#FFF066" stroke="#000000" stroke-width="2.5" />
     <circle cx="0" cy="2" r="5" fill="#000000" />
-    <circle cx="0" cy="2" r="2" fill="#00F0FF" />
+    <polygon points="0,-6 5,4 -5,4" fill="#FFE600" />
+    <circle cx="0" cy="2" r="2" fill="#FF007F" />
   </g>
 
-  <!-- ACTION POPUP COMBO BADGE: "QUANTUM STRIKE!" -->
-  <g transform="translate(200, 120)" filter="url(#brutalShadow)">
-    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+  <!-- Orbiting particles around center node -->
+  <g fill="#FFE600" opacity="0.6">
+    <circle cx="101" cy="96" r="1.3" />
+    <circle cx="299" cy="96" r="1.3" />
+    <circle cx="101" cy="276" r="1.3" />
+    <circle cx="299" cy="276" r="1.3" />
+  </g>
+
+  <!-- Action Popup Combo Badge: "QUANTUM STRIKE!" -->
+  <g transform="translate(200, 110)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="#FFF066" stroke="#000000" stroke-width="2.5" />
     <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="8.5" fill="#000000" text-anchor="middle" letter-spacing="0.5">
       QUANTUM STRIKE!
     </text>
   </g>
 
-  <!-- TOP TAG RIBBON: "TACTICAL 3X3 MATRIX" -->
+  <!-- Top Tag Ribbon: "TACTICAL 3X3 MATRIX" -->
   <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
-    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
-    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+    <rect x="-85" y="-12" width="170" height="24" rx="8" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4.5" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
       TACTICAL 3X3 MATRIX
     </text>
   </g>
 
-  <!-- BOTTOM TITLE MARQUEE: "QUANTUM XO" -->
+  <!-- Bottom Title Marquee: "QUANTUM XO" -->
   <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
-    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-125" y="-18" width="250" height="36" rx="12" fill="#FF007F" stroke="#000000" stroke-width="3.5" />
     <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
-    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+    <text x="0" y="6" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
       QUANTUM XO
     </text>
   </g>

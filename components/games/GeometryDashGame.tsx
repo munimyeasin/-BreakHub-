@@ -586,17 +586,25 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       const camX = cameraXRef.current;
 
-      // Dynamic Gradient Background based on level progress
-      const hueShift = Math.floor((p.worldX / TOTAL_LEVEL_LENGTH) * 160);
-      const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
-      bgGrad.addColorStop(0, `hsl(${220 + hueShift}, 60%, 8%)`);
-      bgGrad.addColorStop(1, `hsl(${260 + hueShift}, 70%, 14%)`);
-      ctx.fillStyle = bgGrad;
+      // Dynamic Gradient Background — Katana Slicer dojo palette
+      const dojoGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      dojoGrad.addColorStop(0, '#090014');
+      dojoGrad.addColorStop(0.5, '#260021');
+      dojoGrad.addColorStop(1, '#08000d');
+      ctx.fillStyle = dojoGrad;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      const dojoGlow = ctx.createRadialGradient(CANVAS_WIDTH / 2, GROUND_Y / 2, 20, CANVAS_WIDTH / 2, GROUND_Y / 2, CANVAS_WIDTH * 0.9);
+      dojoGlow.addColorStop(0, 'rgba(255, 0, 127, 0.16)');
+      dojoGlow.addColorStop(0.55, 'rgba(0, 240, 255, 0.07)');
+      dojoGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = dojoGlow;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       // Cyber Grid lines (Parallax)
-      ctx.strokeStyle = `hsla(${200 + hueShift}, 80%, 60%, 0.12)`;
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.14)';
       ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       const gridOffset = (camX * 0.4) % 40;
       for (let x = -gridOffset; x < CANVAS_WIDTH; x += 40) {
         ctx.beginPath();
@@ -610,6 +618,7 @@ export default function GeometryDashGame({ gameId, onGameOver }: GeometryDashGam
         ctx.lineTo(CANVAS_WIDTH, y);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
 
       // Ground Floor
       const groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, CANVAS_HEIGHT);

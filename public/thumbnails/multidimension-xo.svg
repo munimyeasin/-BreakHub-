@@ -1,59 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
-    <!-- Background Gradients -->
-    <linearGradient id="multiXoBgDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#020014" />
-      <stop offset="50%" stop-color="#0e0728" />
-      <stop offset="100%" stop-color="#001524" />
+    <linearGradient id="bgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18000F" />
+      <stop offset="50%" stop-color="#2A0518" />
+      <stop offset="100%" stop-color="#070014" />
     </linearGradient>
-    <linearGradient id="multiXoBgLight" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFDF0" />
-      <stop offset="50%" stop-color="#F5F3FF" />
-      <stop offset="100%" stop-color="#EDE9FE" />
+    <radialGradient id="bgMagGlow" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="rgba(255,0,127,0.2)" />
+      <stop offset="40%" stop-color="rgba(0,240,255,0.1)" />
+      <stop offset="100%" stop-color="rgba(24,0,15,0)" />
+    </radialGradient>
+    <linearGradient id="gridLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+      <stop offset="50%" stop-color="#3D1030" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
     </linearGradient>
-
-    <!-- 3D Cyan "X" Node Palettes -->
-    <linearGradient id="xoCyanFace" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7DF9FF" />
-      <stop offset="100%" stop-color="#00D0FF" />
-    </linearGradient>
-    <linearGradient id="xoCyanSide" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0099CC" />
-      <stop offset="100%" stop-color="#005B80" />
-    </linearGradient>
-
-    <!-- 3D Pink "O" Node Palettes -->
-    <linearGradient id="xoPinkFace" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF66CC" />
-      <stop offset="100%" stop-color="#FF007F" />
-    </linearGradient>
-    <linearGradient id="xoPinkSide" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#B8005A" />
-      <stop offset="100%" stop-color="#7A003C" />
-    </linearGradient>
-
-    <!-- 3D Yellow Macro Node -->
-    <linearGradient id="xoYellowFace" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF570" />
-      <stop offset="100%" stop-color="#FFDE59" />
-    </linearGradient>
-    <linearGradient id="xoYellowSide" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#D49B00" />
-      <stop offset="100%" stop-color="#8A6500" />
-    </linearGradient>
-
-    <!-- Quantum Laser Beam Warp -->
-    <linearGradient id="warpLaser" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE600" />
-      <stop offset="50%" stop-color="#00F0FF" />
-      <stop offset="100%" stop-color="#FF007F" />
-    </linearGradient>
-    <linearGradient id="badgeGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFF066" />
-      <stop offset="100%" stop-color="#FFE600" />
-    </linearGradient>
-
-    <!-- Neo-Brutalist Hard Drop Shadows -->
     <filter id="brutalShadow" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
@@ -63,42 +24,19 @@
     <filter id="brutalShadowSm" x="-10%" y="-10%" width="130%" height="130%">
       <feDropShadow dx="2.5" dy="2.5" stdDeviation="0" flood-color="#000000" flood-opacity="1" />
     </filter>
-    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00F0FF" flood-opacity="0.8" />
+    <filter id="xoGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FF007F" flood-opacity="0.8" />
     </filter>
   </defs>
 
-  <style>
-    .theme-bg { fill: url(#multiXoBgDark); }
-    .theme-grid-line { stroke: #FFFFFF; stroke-opacity: 0.12; }
-    .theme-frame-bg { fill: #0B0620; stroke: #FFE600; }
-    .theme-stage-grid { stroke: #26164A; }
-    .theme-sector-card { fill: #070314; stroke: #3A2375; }
-    .theme-active-sector { fill: #160B3B; stroke: #FFE600; }
-    .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
-    .theme-badge-text { fill: #000000; }
-    .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
-    .theme-tag-text { fill: #000000; }
-
-    @media (prefers-color-scheme: light) {
-      .theme-bg { fill: url(#multiXoBgLight); }
-      .theme-grid-line { stroke: #000000; stroke-opacity: 0.08; }
-      .theme-frame-bg { fill: #FFFFFF; stroke: #000000; }
-      .theme-stage-grid { stroke: #E2E8F0; }
-      .theme-sector-card { fill: #F8FAFC; stroke: #CBD5E1; }
-      .theme-active-sector { fill: #FEF9C3; stroke: #EAB308; }
-      .theme-badge-rect { fill: #00F0FF; stroke: #000000; }
-      .theme-badge-text { fill: #000000; }
-      .theme-tag-rect { fill: #FFDE59; stroke: #000000; }
-      .theme-tag-text { fill: #000000; }
-    }
-  </style>
-
   <!-- Background Base Canvas -->
-  <rect width="400" height="400" class="theme-bg" />
+  <rect width="400" height="400" fill="url(#bgDark)" />
 
-  <!-- Retro Cyber Grid Backdrop -->
-  <g class="theme-grid-line" stroke-width="1.5">
+  <!-- Radial Magenta / Cyan Glow -->
+  <circle cx="200" cy="190" r="270" fill="url(#bgMagGlow)" />
+
+  <!-- White Cyber Dashed Grid -->
+  <g stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,3">
     <line x1="0" y1="50" x2="400" y2="50" />
     <line x1="0" y1="100" x2="400" y2="100" />
     <line x1="0" y1="150" x2="400" y2="150" />
@@ -115,124 +53,126 @@
     <line x1="350" y1="0" x2="350" y2="400" />
   </g>
 
-  <!-- Neo Sparks & Floating Quanta -->
-  <g fill="#FFDE59">
-    <polygon points="40,46 42,54 50,56 42,58 40,66 38,58 30,56 38,54" />
-    <polygon points="360,40 362,48 370,50 362,52 360,60 358,52 350,50 358,48" />
-    <polygon points="365,300 367,306 373,308 367,310 365,316 363,310 357,308 363,306" />
-    <polygon points="34,310 36,316 42,318 36,320 34,326 32,320 26,318 32,316" />
-  </g>
-
   <!-- 3D MAIN ARCADE CONTAINER -->
   <g filter="url(#brutalShadowLg)">
-    <rect x="36" y="38" width="328" height="298" rx="22" class="theme-frame-bg" stroke-width="4" />
+    <rect x="36" y="38" width="328" height="298" rx="22" fill="#140516" stroke="#FF007F" stroke-width="4" />
   </g>
 
-  <!-- Inner Playfield Matrix Stage -->
-  <rect x="48" y="48" width="304" height="278" rx="16" fill="#04010C" stroke="#000000" stroke-width="2.5" />
+  <!-- Inner Playfield Void Stage -->
+  <rect x="48" y="48" width="304" height="278" rx="16" fill="#08020B" stroke="#000000" stroke-width="2.5" />
 
-  <!-- 3X3 NESTED MACRO BOARD LAYOUT -->
-  <!-- 9 Sector Blocks (Isometric Matrix Perspective) -->
-  <g stroke-width="2">
-    <!-- Row 1: S0, S1, S2 -->
-    <rect x="62" y="60" width="80" height="74" rx="8" class="theme-sector-card" />
-    <rect x="160" y="60" width="80" height="74" rx="8" class="theme-sector-card" />
-    <rect x="258" y="60" width="80" height="74" rx="8" class="theme-sector-card" />
-
-    <!-- Row 2: S3, S4 (Active Playable Golden Sector!), S5 -->
-    <rect x="62" y="146" width="80" height="74" rx="8" class="theme-sector-card" />
-    <rect x="160" y="146" width="80" height="74" rx="8" class="theme-active-sector" stroke-width="3" />
-    <rect x="258" y="146" width="80" height="74" rx="8" class="theme-sector-card" />
-
-    <!-- Row 3: S6, S7, S8 -->
-    <rect x="62" y="232" width="80" height="74" rx="8" class="theme-sector-card" />
-    <rect x="160" y="232" width="80" height="74" rx="8" class="theme-sector-card" />
-    <rect x="258" y="232" width="80" height="74" rx="8" class="theme-sector-card" />
+  <!-- Perspective Arena Grid Lines (Dashed Cyber Grid) -->
+  <g stroke="#3D1030" stroke-width="1.5" stroke-dasharray="4,3">
+    <line x1="48" y1="88" x2="352" y2="88" />
+    <line x1="48" y1="136" x2="352" y2="136" />
+    <line x1="48" y1="184" x2="352" y2="184" />
+    <line x1="48" y1="232" x2="352" y2="232" />
+    <line x1="48" y1="280" x2="352" y2="280" />
+    <line x1="96" y1="48" x2="96" y2="326" />
+    <line x1="148" y1="48" x2="148" y2="326" />
+    <line x1="200" y1="48" x2="200" y2="326" />
+    <line x1="252" y1="48" x2="252" y2="326" />
+    <line x1="304" y1="48" x2="304" y2="326" />
   </g>
 
-  <!-- Mini Grid Lines Inside Sectors -->
-  <g stroke="#372363" stroke-width="1.2" stroke-dasharray="2,2">
-    <!-- Center Active Sector 4 Internal 3x3 Grid -->
-    <line x1="186" y1="150" x2="186" y2="216" />
-    <line x1="214" y1="150" x2="214" y2="216" />
-    <line x1="164" y1="170" x2="236" y2="170" />
-    <line x1="164" y1="196" x2="236" y2="196" />
-  </g>
-
-  <!-- MACRO CAPTURED SECTORS (Giant Semi-Transparent Watermarks) -->
-  <!-- Top-Left S0 Captured by 'X' -->
-  <g stroke="#00F0FF" stroke-width="5" opacity="0.85" stroke-linecap="round">
-    <line x1="76" y1="74" x2="128" y2="120" />
-    <line x1="128" y1="74" x2="76" y2="120" />
-  </g>
-  <!-- Top-Right S2 Captured by 'O' -->
-  <g stroke="#FF007F" stroke-width="5" opacity="0.85">
-    <circle cx="298" cy="97" r="24" fill="none" />
-  </g>
-
-  <!-- QUANTUM WARP LASER BEAM (Routing from S0 -> Center S4 -> S8) -->
-  <g filter="url(#neonGlow)">
-    <path d="M 102,97 Q 160,183 200,183 T 298,269" stroke="url(#warpLaser)" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="8,4" />
-  </g>
-
-  <!-- 3D HERO EXTRUDED FLOATING "X" NODE (Bottom Left Forefront: X=95, Y=255) -->
-  <g transform="translate(100, 258) rotate(-12)" filter="url(#brutalShadowLg)">
-    <g stroke="#000000" stroke-width="2.5">
-      <!-- 3D Extrusion Sides -->
-      <polygon points="-24,-24 -18,-30 -8,-20 -14,-14" fill="url(#xoCyanSide)" />
-      <polygon points="14,14 20,8 30,18 24,24" fill="url(#xoCyanSide)" />
-      <polygon points="-24,24 -18,18 -8,28 -14,34" fill="url(#xoCyanSide)" />
-      <polygon points="14,-14 20,-20 30,-10 24,-4" fill="url(#xoCyanSide)" />
-      <!-- Main 3D Cross Bars Face -->
-      <polygon points="-20,-28 -28,-20 20,28 28,20" fill="url(#xoCyanFace)" />
-      <polygon points="20,-28 28,-20 -20,28 -28,20" fill="url(#xoCyanFace)" />
+  <!-- Nested 3D cyan/magenta X/O Grid Node Ring (Macro outer boundary) -->
+  <g filter="url(#brutalShadowLg)">
+    <!-- Outer macro sector ring: 3D extruded diamond nodes on a circle -->
+    <g stroke="#3D1030" stroke-width="1.2" stroke-dasharray="3,4">
+      <polygon points="70,70 100,100 130,70 100,130" fill="#0A0212" stroke="#FF007F" stroke-width="1.5" />
+      <polygon points="170,70 200,100 230,70 200,130" fill="#0A0212" stroke="#FFE600" stroke-width="1.5" />
+      <polygon points="270,70 300,100 330,70 300,130" fill="#0A0212" stroke="#00F0FF" stroke-width="1.5" />
     </g>
-    <!-- Specular Highlight -->
-    <path d="M -22,-18 L -16,-24 L 20,12 L 14,18 Z" fill="#FFFFFF" opacity="0.75" />
-  </g>
 
-  <!-- 3D HERO EXTRUDED FLOATING "O" TORUS NODE (Center-Right Forefront: X=295, Y=265) -->
-  <g transform="translate(295, 265) rotate(10)" filter="url(#brutalShadowLg)">
-    <g stroke="#000000" stroke-width="2.5">
-      <!-- 3D Torus Extrusion Depth -->
-      <ellipse cx="4" cy="6" rx="28" ry="24" fill="url(#xoPinkSide)" />
-      <!-- Main Torus Face -->
-      <ellipse cx="0" cy="0" rx="28" ry="24" fill="url(#xoPinkFace)" />
-      <!-- Torus Inner Hole -->
-      <ellipse cx="0" cy="0" rx="14" ry="12" fill="#04010C" stroke="#000000" stroke-width="2" />
+    <!-- 3D Hero Cyan X Node (Top-Left Macro Sector) -->
+    <g transform="translate(100, 100)" filter="url(#brutalShadow)">
+      <g stroke="#000000" stroke-width="2.5">
+        <line x1="-24,-24" x2="24,24" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+        <line x1="24,-24" x2="-24,24" stroke="#0080B3" stroke-width="12" stroke-linecap="round" />
+        <line x1="-20,-20" x2="20,20" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
+        <line x1="20,-20" x2="-20,20" stroke="#7DF9FF" stroke-width="8" stroke-linecap="round" />
+        <!-- Extruded side facets -->
+        <polygon points="-24,-24 -12,-30 0,-22 -12,-16 -24,-8" fill="#005B80" opacity="0.8" />
+        <polygon points="24,24 12,30 0,22 12,16 24,8" fill="#005B80" opacity="0.8" />
+        <polygon points="24,-24 12,-30 0,-22 12,-16 24,-8" fill="#005B80" opacity="0.8" />
+        <polygon points="-24,24 -12,30 0,22 -12,16 -24,8" fill="#005B80" opacity="0.8" />
+      </g>
+      <path d="M -16,-14 L -8,-20 L 16,8 L 8,16 Z" fill="#FFFFFF" opacity="0.8" />
     </g>
-    <!-- Specular Crescent Reflection -->
-    <path d="M -18,-14 A 24 20 0 0 1 18,-14 A 18 15 0 0 0 -18,-14 Z" fill="#FFFFFF" opacity="0.75" />
+
+    <!-- 3D Hero Magenta O Node (Top-Right Macro Sector) -->
+    <g transform="translate(300, 100)" filter="url(#brutalShadow)">
+      <g stroke="#000000" stroke-width="2.5">
+        <ellipse cx="3" cy="5" rx="22" ry="20" fill="#BA005C" opacity="0.8" stroke="#000000" stroke-width="2.5" />
+        <ellipse cx="0" cy="0" rx="22" ry="20" fill="#FF63C6" />
+        <ellipse cx="0" cy="0" rx="11" ry="9" fill="#000000" opacity="0.7" />
+        <ellipse cx="0" cy="0" rx="22" ry="20" fill="none" stroke="#BA005C" stroke-width="2.5" opacity="0.8" />
+      </g>
+      <path d="M -14,-10 A 16 14 0 0 1 14,-10 A 10 8 0 0 0 -14,-10 Z" fill="#FFFFFF" opacity="0.8" />
+    </g>
+
+    <!-- Nested inner X/O node ring (center area) -->
+    <g filter="url(#xoGlow)">
+      <!-- Cyan X center -->
+      <g transform="translate(150, 150)" filter="url(#brutalShadow)">
+        <g stroke="#000000" stroke-width="2.5">
+          <line x1="-18,-18" x2="18,18" stroke="#0080B3" stroke-width="10" stroke-linecap="round" />
+          <line x1="18,-18" x2="-18,18" stroke="#0080B3" stroke-width="10" stroke-linecap="round" />
+          <line x1="-15,-15" x2="15,15" stroke="#7DF9FF" stroke-width="7" stroke-linecap="round" />
+          <line x1="15,-15" x2="-15,15" stroke="#7DF9FF" stroke-width="7" stroke-linecap="round" />
+        </g>
+        <path d="M -12,-11 L -6,-15 L 10,10 L 6,16 Z" fill="#FFFFFF" opacity="0.85" />
+      </g>
+
+      <!-- Magenta O inner ring -->
+      <g transform="translate(250, 150)" filter="url(#brutalShadow)">
+        <g stroke="#000000" stroke-width="2.5">
+          <circle cx="2" cy="4" r="16" fill="none" stroke="#BA005C" stroke-width="9" />
+          <circle cx="0" cy="0" r="16" fill="#FF63C6" />
+          <circle cx="0" cy="0" r="8" fill="#000000" opacity="0.7" />
+        </g>
+        <path d="M -11,-9 A 12 10 0 0 1 11,-9 A 7 5 0 0 0 -11,-9 Z" fill="#FFFFFF" opacity="0.8" />
+      </g>
+
+      <!-- Gold center node badge -->
+      <g transform="translate(200, 190)" filter="url(#brutalShadowSm)">
+        <circle cx="0" cy="0" r="14" fill="url(#xoBgDark)" stroke="#000000" stroke-width="2" />
+        <circle cx="0" cy="0" r="10" fill="#000000" />
+        <polygon points="0,-6 5,4 -5,4" fill="#FFE600" />
+      </g>
+    </g>
+
+    <!-- Orbit particles along ring -->
+    <g fill="#FFE600" opacity="0.6">
+      <circle cx="100" cy="100" r="1.4" />
+      <circle cx="300" cy="100" r="1.4" />
+      <circle cx="150" cy="150" r="1.2" />
+      <circle cx="250" cy="150" r="1.2" />
+      <circle cx="200" cy="190" r="1.5" />
+    </g>
   </g>
 
-  <!-- 3D ACTIVE SECTOR CENTRAL GOLDEN PIN BADGE -->
-  <g transform="translate(200, 183)" filter="url(#brutalShadow)">
-    <circle cx="0" cy="0" r="14" fill="url(#xoYellowFace)" stroke="#000000" stroke-width="2.5" />
-    <circle cx="0" cy="0" r="10" fill="#000000" />
-    <polygon points="0,-6 5,4 -5,4" fill="#FFE600" />
-  </g>
-
-  <!-- ACTION POPUP COMBO BADGE: "QUANTUM WARP!" -->
-  <g transform="translate(200, 120)" filter="url(#brutalShadow)">
-    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="url(#badgeGold)" stroke="#000000" stroke-width="2.5" />
+  <!-- Action Popup Combo Badge: "QUANTUM WARP!" -->
+  <g transform="translate(200, 110)" filter="url(#brutalShadow)">
+    <polygon points="0,-22 8,-8 24,-14 16,-1 30,10 14,14 18,28 4,20 -4,28 -2,14 -18,18 -12,4 -28,-2 -14,-10 -20,-24 -6,-16" fill="#FFF066" stroke="#000000" stroke-width="2.5" />
     <text x="0" y="4" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="8.5" fill="#000000" text-anchor="middle" letter-spacing="0.5">
       QUANTUM WARP!
     </text>
   </g>
 
-  <!-- TOP TAG RIBBON: "TACTICAL 9X9 MATRIX" -->
+  <!-- Top Tag Ribbon: "TACTICAL 9X9 MATRIX // NESTED" -->
   <g transform="translate(200, 32)" filter="url(#brutalShadowSm)">
-    <rect x="-85" y="-12" width="170" height="24" rx="8" class="theme-tag-rect" stroke-width="2.5" />
-    <text x="0" y="4.5" class="theme-tag-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
-      ULTIMATE 9X9 // NESTED
+    <rect x="-85" y="-12" width="170" height="24" rx="8" fill="#FF007F" stroke="#000000" stroke-width="2.5" />
+    <text x="0" y="4.5" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="10.5" text-anchor="middle" letter-spacing="1.2">
+      TACTICAL 9X9 MATRIX
     </text>
   </g>
 
-  <!-- BOTTOM TITLE MARQUEE: "MULTIDIMENSION XO" -->
+  <!-- Bottom Title Marquee: "MULTIDIMENSION XO" -->
   <g transform="translate(200, 360)" filter="url(#brutalShadowLg)">
-    <rect x="-125" y="-18" width="250" height="36" rx="12" class="theme-badge-rect" stroke-width="3.5" />
+    <rect x="-125" y="-18" width="250" height="36" rx="12" fill="#FF007F" stroke="#000000" stroke-width="3.5" />
     <rect x="-120" y="-14" width="240" height="28" rx="8" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.3" />
-    <text x="0" y="6" class="theme-badge-text" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
+    <text x="0" y="6" font-family="'Impact', 'Arial Black', sans-serif" font-weight="900" font-size="15" text-anchor="middle" letter-spacing="1.5">
       MULTIDIMENSION XO
     </text>
   </g>

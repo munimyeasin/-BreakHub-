@@ -324,9 +324,9 @@ export default function CyberKnifeThrowerGame({ gameId, onGameOver }: CyberKnife
 
       // Katana Slicer dojo: deep plum, hot neon, hard-edged grid.
       const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
-      bgGrad.addColorStop(0, '#090014');
-      bgGrad.addColorStop(0.48, '#260021');
-      bgGrad.addColorStop(1, '#08000d');
+      bgGrad.addColorStop(0, '#18000F');
+      bgGrad.addColorStop(0.5, '#2A0518');
+      bgGrad.addColorStop(1, '#070014');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 

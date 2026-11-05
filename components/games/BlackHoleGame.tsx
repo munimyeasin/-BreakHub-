@@ -752,8 +752,8 @@ export default function BlackHoleGame({ gameId, onGameOver }: BlackHoleGameProps
 
       {/* The 21-Node Interactive Triangular Arena */}
       <div className="relative w-auto h-[min(64vh,480px)] max-w-full aspect-[1/0.92] bg-portal-surface border-2 border-portal-border rounded-2xl p-2.5 shadow-2xl overflow-hidden flex items-center justify-center shrink-0">
-        {/* Background Atmospheric Radial Grid Glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#1e1442_0%,#090518_85%)] pointer-events-none" />
+        {/* Background Atmospheric Radial Glow (katana) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,0,127,0.18)_0%,rgba(0,240,255,0.10)_45%,#070014_100%)] pointer-events-none" />
 
         {/* SVG Wireframe Connecting Lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">

@@ -11,10 +11,10 @@
       "username": "munim",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=munim",
       "created_at": "2026-11-02T08:49:14.026+00:00",
-      "days_played": 5,
+      "days_played": 1,
       "longest_streak": 9,
-      "level": 44,
-      "xp": 29130,
+      "level": 46,
+      "xp": 30390,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -75,7 +75,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 429,
+        "totalGamesPlayed": 457,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -102,7 +102,7 @@
           "g_reflex_09",
           "g_knife_28"
         ],
-        "totalScoreAccumulated": 1736576,
+        "totalScoreAccumulated": 1758241,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -115,7 +115,9 @@
           "STRATEGY",
           "PUZZLE"
         ]
-      }
+      },
+      "games_played": 457,
+      "total_score": 1758241
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -194,6 +196,12 @@
       "username": "TestPlayer",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=TestPlayer",
       "created_at": "2026-11-02T07:28:46.16088+00:00"
+    },
+    {
+      "id": "4dea7902-e56a-4234-8af2-19b51f1379c3",
+      "username": "Jonathan",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Jonathan",
+      "created_at": "2026-11-04T14:12:17.896+00:00"
     }
   ],
   "games": [
@@ -203,7 +211,7 @@
       "title": "Neon Starfighter",
       "description": "Space arcade",
       "category": "ACTION",
-      "status": "hidden",
+      "status": "active",
       "image_url": "/thumbnails/neon-starfighter.svg",
       "game_url": null,
       "rating": 4.8,
@@ -604,6 +612,16 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
+    },
+    {
+      "id": "g_shooter_07",
+      "slug": "starfighter",
+      "title": "Starfighter",
+      "category": "ARCADE",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg",
+      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "status": "active",
+      "featured": true
     }
   ],
   "scores": [
@@ -725,6 +743,118 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 2700,
       "created_at": "2026-11-04T11:23:18.280Z"
+    },
+    {
+      "id": "943ba3d5-377c-48ba-ae36-a8f8b04a85cd",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-04T17:51:47.864Z"
+    },
+    {
+      "id": "1e0275ea-b6a3-4d13-a5f1-3ec575203042",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1560,
+      "created_at": "2026-11-04T17:52:02.984Z"
+    },
+    {
+      "id": "0e9f882c-994a-4033-9462-4f684417455c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1560,
+      "created_at": "2026-11-04T17:52:03.079Z"
+    },
+    {
+      "id": "bcf53911-50be-47a3-8d87-64d709cb7c67",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6182,
+      "created_at": "2026-11-05T04:07:05.345Z"
+    },
+    {
+      "id": "1942cde2-5bc1-4bdc-b1f2-49e05cc19abb",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-05T04:07:23.163Z"
+    },
+    {
+      "id": "f53d01c2-1017-4855-87ee-f917a897b25e",
+      "game_id": "g_ttt_03",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-05T04:09:31.374Z"
+    },
+    {
+      "id": "c03b34c1-a795-4050-9a55-ced0b9e3e054",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1043,
+      "created_at": "2026-11-05T04:35:09.135Z"
+    },
+    {
+      "id": "c0209ef5-5363-4f96-8bcf-7a60d28e0ccf",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1281,
+      "created_at": "2026-11-05T04:35:15.919Z"
+    },
+    {
+      "id": "9fc43c46-12ec-4ce8-8618-79823a29f48e",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 417,
+      "created_at": "2026-11-05T04:43:23.753Z"
+    },
+    {
+      "id": "c8f45fe0-9dcb-4634-a023-ef7a04403a3d",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 541,
+      "created_at": "2026-11-05T04:43:29.385Z"
+    },
+    {
+      "id": "4df7bb0d-dcf6-41f4-8a3c-6d70c5cb5a8a",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 478,
+      "created_at": "2026-11-05T04:50:52.358Z"
+    },
+    {
+      "id": "bf872c9c-3f1a-4beb-b5b2-be5be179a8cf",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1797,
+      "created_at": "2026-11-05T04:52:03.857Z"
+    },
+    {
+      "id": "8d186c4b-5119-4121-a000-ca34a0801824",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2042,
+      "created_at": "2026-11-05T04:52:14.697Z"
+    },
+    {
+      "id": "6f91c086-86ca-4249-8d9a-1bcd039a063d",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 116,
+      "created_at": "2026-11-05T04:52:16.641Z"
+    },
+    {
+      "id": "36c24036-1973-43c4-8e7a-362d9b69dba5",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 115,
+      "created_at": "2026-11-05T04:54:44.914Z"
+    },
+    {
+      "id": "0bd08a94-fbf0-4e5b-b4c0-62a50624ed4c",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4233,
+      "created_at": "2026-11-05T04:55:10.515Z"
     }
   ],
   "ratings": [

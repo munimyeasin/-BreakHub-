@@ -1427,7 +1427,7 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
       </div>
 
       {/* Main 9:16 Portrait Canvas Frame - Viewport Scaled */}
-      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-[#0c0418] rounded-2xl border-2 border-portal-border p-2.5 shadow-2xl flex flex-col items-center justify-between overflow-hidden shrink-0">
+      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-gradient-to-b from-[#090014] via-[#260021] to-[#08000d] rounded-2xl border-2 border-[#3d1030] p-2.5 shadow-[0_8px_32px_rgba(255,0,127,0.2)] flex flex-col items-center justify-between overflow-hidden shrink-0">
         {/* Particle Canvas Overlay */}
         <canvas
           ref={canvasRef}

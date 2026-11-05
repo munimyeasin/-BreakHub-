@@ -318,7 +318,18 @@ export default function ArcadePortalDashboard() {
     isUsernameModalOpen,
   ]);
 
-  // 3. Browser History Back / Forward Navigation Listener
+  // 4. Beforeunload site exit confirmation when on portal home
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!activeGame && !comingSoonGame && !isLeaderboardOpen && !isQuestsModalOpen && !isTrophiesModalOpen && !isRouletteModalOpen && !isGameRequestModalOpen && !isThemeSelectorOpen && !isUsernameModalOpen) {
+        e.preventDefault();
+        e.returnValue = 'Are you sure you want to exit Break Hub?';
+        return 'Are you sure you want to exit Break Hub?';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [activeGame, comingSoonGame, isLeaderboardOpen, isQuestsModalOpen, isTrophiesModalOpen, isRouletteModalOpen, isGameRequestModalOpen, isThemeSelectorOpen, isUsernameModalOpen]);
   useEffect(() => {
     const handlePopState = () => {
       if (typeof window === 'undefined') return;
@@ -502,6 +513,9 @@ export default function ArcadePortalDashboard() {
   };
 
   const launchGameSession = (game: Game) => {
+    try {
+      window.history.pushState({ modalOpen: true }, '');
+    } catch {}
     setActiveGame(game);
   };
 

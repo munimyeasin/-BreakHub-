@@ -61,13 +61,33 @@ export default function PlayerProfileModal({ userId, onClose }: PlayerProfileMod
     const fetchProfileData = async () => {
       setIsLoading(true);
       try {
+        const localState = gamification.getState();
+        // Sync local stats to server first
+        await fetch('/api/user/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: userId,
+            level: localState.level,
+            xp: localState.xp,
+            stats: localState.stats,
+            unlocked_trophies: localState.unlockedTrophies
+          })
+        }).catch(() => {});
+
         const res = await fetch(`/api/user/profile?userId=${encodeURIComponent(userId)}`);
         const data = await res.json();
         if (active && res.ok && data.profile) {
-          setProfile(data.profile);
+          const serverProfile = data.profile;
+          // Merge local real stats with server profile
+          if (localState.stats.totalGamesPlayed >= 0) {
+            serverProfile.games_played = Math.max(serverProfile.games_played || 0, localState.stats.totalGamesPlayed);
+            serverProfile.total_score = Math.max(serverProfile.total_score || 0, localState.stats.totalScoreAccumulated);
+            serverProfile.level = Math.max(serverProfile.level || 1, localState.level);
+            serverProfile.xp = Math.max(serverProfile.xp || 0, localState.xp);
+          }
+          setProfile(serverProfile);
         } else if (active) {
-          // Fallback to local gamification state if remote user not found
-          const localState = gamification.getState();
           setProfile({
             id: userId,
             username: userId,
