@@ -686,28 +686,6 @@ export default function ArcadePortalDashboard() {
               >
                 {isDark ? <Moon className="w-3.5 h-3.5 stroke-[2.5]" /> : <Sun className="w-3.5 h-3.5 stroke-[2.5]" />}
               </button>
-
-              {/* Day Streak & Mute restored to original header */}
-              <div
-                onClick={() => setIsQuestsModalOpen(true)}
-                className="group relative flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none font-black"
-                title="View Daily Quests"
-              >
-                <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black fill-black" />
-                <span className="text-[11px] sm:text-xs font-black text-black">Streak</span>
-              </div>
-
-              <button
-                onClick={() => {
-                  const nextMute = !audio.getMuted();
-                  audio.setMuted(nextMute);
-                  window.dispatchEvent(new CustomEvent('stressbuster_audio_mute_sync', { detail: nextMute }));
-                }}
-                className="p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm bg-portal-cyan text-black"
-                title="Toggle Sound"
-              >
-                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-              </button>
             </div>
           </div>
         </div>
