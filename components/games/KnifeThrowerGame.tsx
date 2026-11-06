@@ -447,16 +447,7 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     ctx.lineWidth = 2.8;
     ctx.stroke();
 
-    // Specular Reflection Highlight
-    ctx.fillStyle = specColor;
-    ctx.globalAlpha = 0.85;
-    ctx.beginPath();
-    ctx.moveTo(-outerR + 4, -outerR + 4);
-    ctx.lineTo(outerR - 4, -outerR + 4);
-    ctx.lineTo(outerR - 10, -outerR + 10);
-    ctx.lineTo(-outerR + 4, -outerR + 10);
-    ctx.closePath();
-    ctx.fill();
+    // Specular Reflection Highlight removed to eliminate white triangular/pyramid streak artifacts
     ctx.globalAlpha = 1;
 
     // Neo Circuit Center Node
