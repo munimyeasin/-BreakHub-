@@ -37,22 +37,22 @@ html[data-theme="neo-light"] {
   color-scheme: light;
 }
 
-/* Tidwell Modern / Midnight Coral Design System (Deep Navy, Cream, Coral Glow) */
+/* Tidwell Modern / Midnight Coral Design System (Deep Navy, Cream, Selective Coral Accents) */
 html[data-theme="midnight-coral"] {
   --portal-bg: #14213D;
-  --portal-surface: rgba(20, 33, 61, 0.82);
-  --portal-card: rgba(27, 42, 74, 0.78);
-  --portal-border: rgba(244, 237, 224, 0.16);
+  --portal-surface: rgba(20, 33, 61, 0.85);
+  --portal-card: rgba(27, 42, 74, 0.72);
+  --portal-border: rgba(244, 237, 224, 0.14);
   --portal-text: #F4EDED;
-  --portal-text-muted: rgba(244, 237, 237, 0.72);
-  --portal-cyan: #FF6B58;
-  --portal-yellow: #FF7B68;
-  --portal-pink: #FF523B;
-  --portal-lime: #FFA294;
-  --portal-purple: #FF6B58;
-  --portal-orange: #FF6B58;
-  --portal-dot-color: rgba(255, 107, 88, 0.18);
-  --portal-grid-color: rgba(255, 107, 88, 0.08);
+  --portal-text-muted: rgba(244, 237, 237, 0.7);
+  --portal-cyan: #FF6B58;        /* Vibrant Coral Accent for Primary CTA & Highlight */
+  --portal-yellow: #F4EDED;      /* Crisp Cream for Secondary Elements & Badges */
+  --portal-pink: #FF8575;        /* Soft Coral Rose */
+  --portal-lime: #34D399;        /* Clean Emerald for Status & Operational Badges */
+  --portal-purple: #7C8BA1;      /* Refined Muted Slate Navy */
+  --portal-orange: #FF6B58;      /* Coral Accent */
+  --portal-dot-color: rgba(255, 107, 88, 0.12);
+  --portal-grid-color: rgba(244, 237, 224, 0.05);
   --portal-scrollbar-track: #14213D;
   --portal-scrollbar-thumb: #FF6B58;
   --background: #14213D;
@@ -150,36 +150,47 @@ html[data-theme="midnight-coral"] .cartoon-card {
   background-color: rgba(27, 42, 74, 0.72) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
-  border: 1.5px solid rgba(244, 237, 224, 0.16) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36), 0 0 25px -8px rgba(255, 107, 88, 0.2) !important;
+  border: 1px solid rgba(244, 237, 224, 0.14) !important;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
 html[data-theme="midnight-coral"] .bg-portal-card:hover,
 html[data-theme="midnight-coral"] .cartoon-card:hover {
-  border-color: rgba(255, 107, 88, 0.6) !important;
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45), 0 0 35px -5px rgba(255, 107, 88, 0.35) !important;
+  border-color: rgba(255, 107, 88, 0.45) !important;
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.35), 0 0 20px -5px rgba(255, 107, 88, 0.25) !important;
 }
 
 html[data-theme="midnight-coral"] .shadow-neo,
 html[data-theme="midnight-coral"] .shadow-neo-sm,
 html[data-theme="midnight-coral"] .shadow-neo-lg {
-  box-shadow: 0 4px 20px -2px rgba(255, 107, 88, 0.25), 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* Glowing Coral CTA Buttons for Tidwell Modern */
-html[data-theme="midnight-coral"] button.bg-portal-yellow,
+/* Primary Coral CTA Button (Selective Accent) */
 html[data-theme="midnight-coral"] button.bg-portal-cyan,
 html[data-theme="midnight-coral"] .bg-coral-glow {
   background-color: #FF6B58 !important;
   color: #14213D !important;
   border-color: #FF6B58 !important;
-  box-shadow: 0 0 30px -5px rgba(255, 107, 88, 0.45) !important;
+  box-shadow: 0 0 25px -5px rgba(255, 107, 88, 0.4) !important;
 }
 
-html[data-theme="midnight-coral"] button.bg-portal-yellow:hover,
 html[data-theme="midnight-coral"] button.bg-portal-cyan:hover {
   background-color: #FF7B68 !important;
-  box-shadow: 0 0 40px -2px rgba(255, 107, 88, 0.65) !important;
+  box-shadow: 0 0 35px -3px rgba(255, 107, 88, 0.55) !important;
+}
+
+/* Secondary Cream Button & Badges */
+html[data-theme="midnight-coral"] button.bg-portal-yellow {
+  background-color: #F4EDED !important;
+  color: #14213D !important;
+  border-color: rgba(244, 237, 224, 0.3) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+html[data-theme="midnight-coral"] button.bg-portal-yellow:hover {
+  background-color: #FFFFFF !important;
+  border-color: #F4EDED !important;
 }
 
 /* Neo-Brutalist Subtle Retro Dot Grid */
