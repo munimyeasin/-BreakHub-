@@ -355,34 +355,6 @@ export default function CyberKnifeThrowerGame({ gameId, onGameOver }: CyberKnife
       }
       ctx.setLineDash([]);
 
-      // Render Stuck Knives on Rotating Wheel
-      stuckKnivesRef.current.forEach((stuck) => {
-        const globalAngle = stuck.angle + wheelAngleRef.current;
-        ctx.save();
-        ctx.translate(wheelCenter.x, wheelCenter.y);
-        ctx.rotate(globalAngle);
-        // Draw knife pointing outward from wheel center
-        ctx.fillStyle = '#cbd5e1';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2.5;
-
-        ctx.beginPath();
-        ctx.moveTo(-5, wheelRadius);
-        ctx.lineTo(5, wheelRadius);
-        ctx.lineTo(4, wheelRadius + 50);
-        ctx.lineTo(0, wheelRadius + 65);
-        ctx.lineTo(-4, wheelRadius + 50);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        // Knife handle
-        ctx.fillStyle = '#1e293b';
-        ctx.fillRect(-7, wheelRadius + 40, 14, 18);
-        ctx.strokeRect(-7, wheelRadius + 40, 14, 18);
-        ctx.restore();
-      });
-
       // Render Rotating Central Wheel
       ctx.save();
       ctx.translate(wheelCenter.x, wheelCenter.y);
@@ -419,6 +391,34 @@ export default function CyberKnifeThrowerGame({ gameId, onGameOver }: CyberKnife
       ctx.stroke();
 
       ctx.restore();
+
+      // Render Stuck Knives on Rotating Wheel (Drawn AFTER wheel core so they layer correctly)
+      stuckKnivesRef.current.forEach((stuck) => {
+        const globalAngle = stuck.angle + wheelAngleRef.current;
+        ctx.save();
+        ctx.translate(wheelCenter.x, wheelCenter.y);
+        ctx.rotate(globalAngle);
+        // Draw knife pointing outward from wheel center
+        ctx.fillStyle = '#cbd5e1';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+
+        ctx.beginPath();
+        ctx.moveTo(-5, wheelRadius);
+        ctx.lineTo(5, wheelRadius);
+        ctx.lineTo(4, wheelRadius + 50);
+        ctx.lineTo(0, wheelRadius + 65);
+        ctx.lineTo(-4, wheelRadius + 50);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Knife handle
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(-7, wheelRadius + 40, 14, 18);
+        ctx.strokeRect(-7, wheelRadius + 40, 14, 18);
+        ctx.restore();
+      });
 
       // Render Flying Knife
       if (flyingKnifeRef.current) {
