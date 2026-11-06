@@ -37,20 +37,20 @@ html[data-theme="neo-light"] {
   color-scheme: light;
 }
 
-/* Midnight Coral Theme Tokens (Deep Navy, Cream, Coral) */
+/* Tidwell Design System (Midnight Coral Theme) */
 html[data-theme="midnight-coral"] {
   --portal-bg: #14213D;
   --portal-surface: #1D2D50;
   --portal-card: #273c68;
   --portal-border: #000000;
-  --portal-text: #F4EDEO;
+  --portal-text: #F4EDED;
   --portal-text-muted: #D1D9E6;
-  --portal-dot-color: rgba(244, 237, 234, 0.15);
-  --portal-grid-color: rgba(244, 237, 234, 0.08);
+  --portal-dot-color: rgba(244, 237, 237, 0.15);
+  --portal-grid-color: rgba(244, 237, 237, 0.08);
   --portal-scrollbar-track: #14213D;
-  --portal-scrollbar-thumb: #FF6B58;
+  --portal-scrollbar-thumb: #FF6B5B;
   --background: #14213D;
-  --foreground: #F4EDEO;
+  --foreground: #F4EDED;
   color-scheme: dark;
 }
 html[data-theme="cyberpunk-neon"] {
