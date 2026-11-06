@@ -692,7 +692,7 @@ export default function ArcadePortalDashboard() {
               {playerTag ? (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm"
+                  className="hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm"
                 >
                   {avatarUrl && <img src={avatarUrl} alt="Avatar" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black" />}
                   <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
@@ -701,7 +701,7 @@ export default function ArcadePortalDashboard() {
               ) : (
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm"
+                  className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm"
                 >
                   <User className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span className="hidden sm:inline">Set Handle</span>
@@ -809,6 +809,33 @@ export default function ArcadePortalDashboard() {
             </>
           )}
         </main>
+      </div>
+
+      {/* FLOATING LEVEL & XP PROGRESS BADGE ON BOTTOM RIGHT */}
+      <div className="fixed bottom-4 right-4 z-40 hidden md:flex items-center gap-2 p-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <PlayerXpBadge
+          onOpenQuests={() => setIsQuestsModalOpen(true)}
+          onOpenTrophies={() => setIsTrophiesModalOpen(true)}
+        />
+        {playerTag ? (
+          <button
+            onClick={() => setIsUsernameModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm"
+            title={`Player: ${playerTag}`}
+          >
+            {avatarUrl && <img src={avatarUrl} alt="Avatar" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black" />}
+            <span className="text-portal-cyan group-hover:text-black font-black max-w-[90px] truncate">{playerTag}</span>
+            <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
+          </button>
+        ) : (
+          <button
+            onClick={() => setIsUsernameModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-portal-cyan text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm"
+          >
+            <User className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Handle</span>
+          </button>
+        )}
       </div>
 
       <UsernamePromptModal
