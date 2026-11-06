@@ -13,8 +13,8 @@
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
       "longest_streak": 9,
-      "level": 47,
-      "xp": 31740,
+      "level": 48,
+      "xp": 32230,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 474,
+        "totalGamesPlayed": 484,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -104,14 +104,15 @@
           "g_blackhole_17",
           "g_reflex_09",
           "g_knife_28",
-          "g_snake_01"
+          "g_snake_01",
+          "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1801224,
+        "totalScoreAccumulated": 1808604,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
         "rouletteSpins": 3,
-        "questsCompletedCount": 14,
+        "questsCompletedCount": 16,
         "hypeCount": 0,
         "categoriesPlayed": [
           "ARCADE",
@@ -120,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 474,
-      "total_score": 1801224
+      "games_played": 484,
+      "total_score": 1808604
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -252,23 +253,6 @@
   ],
   "games": [
     {
-      "id": "g_starfighter_1",
-      "slug": "neon-starfighter",
-      "title": "Neon Starfighter",
-      "description": "Space arcade",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/neon-starfighter.svg",
-      "game_url": null,
-      "rating": 4.8,
-      "rating_count": 5,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T07:29:20.903992+00:00",
-      "updated_at": "2026-11-02T07:29:20.903992+00:00",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
-    },
-    {
       "id": "g_chess_24",
       "slug": "matrix-chess",
       "title": "Matrix Chess",
@@ -284,6 +268,23 @@
       "created_at": "2026-11-02T09:23:06.098811+00:00",
       "updated_at": "2026-11-02T09:23:06.098811+00:00",
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
+    },
+    {
+      "id": "g_starfighter_1",
+      "slug": "neon-starfighter",
+      "title": "Neon Starfighter",
+      "description": "Space arcade",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.8,
+      "rating_count": 5,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:29:20.903992+00:00",
+      "updated_at": "2026-11-02T07:29:20.903992+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
       "id": "g_knife_28",
@@ -388,23 +389,6 @@
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
     },
     {
-      "id": "g_shooter_07",
-      "slug": "starfighter",
-      "title": "Starfighter",
-      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/neon-starfighter.svg",
-      "game_url": null,
-      "rating": 4.5,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-05T05:03:12.84575+00:00",
-      "updated_at": "2026-11-05T05:03:12.84575+00:00",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
-    },
-    {
       "id": "g_tetris_20",
       "slug": "tetra-matrix",
       "title": "Tetra Matrix",
@@ -420,6 +404,23 @@
       "created_at": "2026-11-02T09:23:06.705429+00:00",
       "updated_at": "2026-11-02T09:23:06.705429+00:00",
       "thumbnail_url": "/thumbnails/tetra-matrix.svg"
+    },
+    {
+      "id": "g_shooter_07",
+      "slug": "starfighter",
+      "title": "Starfighter",
+      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-05T05:03:12.84575+00:00",
+      "updated_at": "2026-11-05T05:03:12.84575+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
       "id": "g_maze_15",
@@ -507,40 +508,6 @@
       "thumbnail_url": "/thumbnails/chroma-reflex.svg"
     },
     {
-      "id": "g_flappy_27",
-      "slug": "flappy-flyer",
-      "title": "Flappy Flyer",
-      "description": "Arcade vertical flight challenge! Tap to flap a plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/flappy-bird.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.287411+00:00",
-      "updated_at": "2026-11-02T09:23:05.287411+00:00",
-      "thumbnail_url": "/thumbnails/flappy-bird.svg"
-    },
-    {
-      "id": "g_slicer_11",
-      "slug": "katana-slicer",
-      "title": "Katana Slicer",
-      "description": "Katana Blade Slicing! Slash flying targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-slicer.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.545199+00:00",
-      "updated_at": "2026-11-02T09:23:05.545199+00:00",
-      "thumbnail_url": "/thumbnails/cyber-slicer.svg"
-    },
-    {
       "id": "g_battleship_18",
       "slug": "naval-grid-strike",
       "title": "Naval Grid Strike",
@@ -558,6 +525,23 @@
       "thumbnail_url": "/thumbnails/retro-battleship.svg"
     },
     {
+      "id": "g_flappy_27",
+      "slug": "flappy-flyer",
+      "title": "Flappy Flyer",
+      "description": "Arcade vertical flight challenge! Tap to flap a plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/flappy-bird.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.287411+00:00",
+      "updated_at": "2026-11-02T09:23:05.287411+00:00",
+      "thumbnail_url": "/thumbnails/flappy-bird.svg"
+    },
+    {
       "id": "g_blackhole_17",
       "slug": "singularity-horizon",
       "title": "Singularity Horizon",
@@ -573,6 +557,23 @@
       "created_at": "2026-11-02T09:23:07.123662+00:00",
       "updated_at": "2026-11-02T09:23:07.123662+00:00",
       "thumbnail_url": "/thumbnails/black-hole.svg"
+    },
+    {
+      "id": "g_slicer_11",
+      "slug": "katana-slicer",
+      "title": "Katana Slicer",
+      "description": "Katana Blade Slicing! Slash flying targets, chain multi-slice combos, and dodge explosive plasma bombs.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-slicer.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.545199+00:00",
+      "updated_at": "2026-11-02T09:23:05.545199+00:00",
+      "thumbnail_url": "/thumbnails/cyber-slicer.svg"
     },
     {
       "id": "g_tap_04",
@@ -985,6 +986,27 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 16800,
       "created_at": "2026-11-06T18:39:07.633Z"
+    },
+    {
+      "id": "679c4db7-fa9d-4172-a18b-48176bc95189",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-06T21:29:08.001Z"
+    },
+    {
+      "id": "6f214c33-e9b9-428b-9e4a-2583de201b25",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2760,
+      "created_at": "2026-11-06T21:29:33.057Z"
+    },
+    {
+      "id": "ad96d895-5b47-4272-a850-1d18693532f7",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4530,
+      "created_at": "2026-11-06T21:31:09.737Z"
     }
   ],
   "ratings": [
