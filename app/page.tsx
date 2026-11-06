@@ -727,7 +727,7 @@ export default function ArcadePortalDashboard() {
           </div>
         </div>
 
-          {/* MOBILE 2-ROW HEADER (< md) */}
+        {/* MOBILE 2-ROW HEADER (< md) */}
           <div className="flex md:hidden flex-col gap-2 w-full">
             {/* FIRST LAYER: Genres Button + BreakHub Logo + Game Search Bar */}
             <div className="flex items-center gap-1.5 sm:gap-2 w-full">
