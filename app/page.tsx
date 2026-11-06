@@ -654,7 +654,7 @@ export default function ArcadePortalDashboard() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 flex-1 max-w-lg mx-4">
+            <div className="flex items-center gap-2 flex-1 max-w-2xl mx-2 sm:mx-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <input
