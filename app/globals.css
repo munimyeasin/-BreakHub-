@@ -37,7 +37,22 @@ html[data-theme="neo-light"] {
   color-scheme: light;
 }
 
-/* Cyberpunk Neon 2077 Tokens (High Voltage Holographic Matrix) */
+/* Midnight Coral Theme Tokens (Deep Navy, Cream, Coral) */
+html[data-theme="midnight-coral"] {
+  --portal-bg: #14213D;
+  --portal-surface: #1D2D50;
+  --portal-card: #273c68;
+  --portal-border: #000000;
+  --portal-text: #F4EDEO;
+  --portal-text-muted: #D1D9E6;
+  --portal-dot-color: rgba(244, 237, 234, 0.15);
+  --portal-grid-color: rgba(244, 237, 234, 0.08);
+  --portal-scrollbar-track: #14213D;
+  --portal-scrollbar-thumb: #FF6B58;
+  --background: #14213D;
+  --foreground: #F4EDEO;
+  color-scheme: dark;
+}
 html[data-theme="cyberpunk-neon"] {
   --portal-bg: #050814;
   --portal-surface: #0B132B;

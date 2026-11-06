@@ -1,6 +1,7 @@
 export type ThemeId =
   | 'neo-dark'
-  | 'neo-light';
+  | 'neo-light'
+  | 'midnight-coral';
 
 export interface ThemeDefinition {
   id: ThemeId;
@@ -45,23 +46,23 @@ export const THEMES_REGISTRY: ThemeDefinition[] = [
     },
   },
   {
-    id: 'neo-light',
-    name: 'Light Neo-Brutalist',
-    label: 'Light Mode',
-    tagline: 'Retro Vintage Paper Canvas',
-    description: 'Warm cream paper ground, crisp white panels, bold pitch-black borders, tactile drop shadows, and high-contrast retro arcade typography.',
-    badge: 'RETRO',
-    isDark: false,
+    id: 'midnight-coral',
+    name: 'Midnight Coral',
+    label: 'Navy Theme',
+    tagline: 'Deep Navy & Coral Luxury',
+    description: 'A modern, high-end dark mode incorporating deep navy background (#14213D), cream typography (#F4EDEO), and vibrant coral accents (#FF6B58).',
+    badge: 'MODERN',
+    isDark: true,
     status: 'active',
-    icon: 'Sun',
+    icon: 'Sparkles',
     previewColors: {
-      bg: '#FFFDF0',
-      surface: '#FFFFFF',
-      card: '#FFF8E7',
-      accent: '#FFE600',
-      accentSecondary: '#FF4081',
+      bg: '#14213D',
+      surface: '#1D2D50',
+      card: '#273c68',
+      accent: '#FF6B58',
+      accentSecondary: '#F4EDEO',
       border: '#000000',
-      text: '#000000',
+      text: '#F4EDEO',
     },
   },
 ];

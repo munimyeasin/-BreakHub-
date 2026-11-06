@@ -1,0 +1,376 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e5]:
+        - generic [ref=f2e6]:
+          - generic [ref=f2e7]:
+            - button "GENRES" [ref=f2e8] [cursor=pointer]
+            - generic [ref=f2e17] [cursor=pointer]:
+              - generic [ref=f2e18]: BREAKHUB
+              - generic [ref=f2e19]: PORTAL
+          - generic [ref=f2e20]:
+            - textbox "Search games, genres, puzzles... (/ or ⌘K)" [ref=f2e22]
+            - button "Ranks" [ref=f2e23] [cursor=pointer]
+          - button "Toggle Theme" [ref=f2e32] [cursor=pointer]
+        - generic [ref=f2e35]:
+          - generic [ref=f2e36]:
+            - 'generic "Active Play Streak: 1 day. Click to view Daily Quests." [ref=f2e37] [cursor=pointer]': 1d
+            - 'generic "Player Level 1: Novice Netrunner (0/100 XP). Click to open Trophy Room." [ref=f2e43] [cursor=pointer]':
+              - generic [ref=f2e44]: LVL 1
+              - generic [ref=f2e49]:
+                - generic [ref=f2e50]: Novice Netrunner
+                - generic [ref=f2e51]: 0%
+            - button "Daily Quests" [ref=f2e54] [cursor=pointer]
+            - button "Trophy Vault" [ref=f2e59] [cursor=pointer]
+            - button "Toggle Sound" [ref=f2e66] [cursor=pointer]
+          - button "Set Handle" [ref=f2e71] [cursor=pointer]
+    - generic [ref=f2e76]:
+      - complementary [ref=f2e77]:
+        - generic [ref=f2e78]:
+          - generic [ref=f2e79]:
+            - generic [ref=f2e80]:
+              - generic [ref=f2e81]: EXPLORE
+              - generic [ref=f2e85]: 24 Games
+            - generic [ref=f2e86]:
+              - button "All Games" [ref=f2e87] [cursor=pointer]
+              - button "Favorites 0" [ref=f2e94] [cursor=pointer]:
+                - generic [ref=f2e95]: Favorites
+                - generic [ref=f2e99]: "0"
+              - button "Hall of Fame" [ref=f2e100] [cursor=pointer]
+              - button "About Project 24 Games" [ref=f2e111] [cursor=pointer]:
+                - generic [ref=f2e112]: About Project
+                - generic [ref=f2e116]: 24 Games
+              - button "About Developer Creator" [ref=f2e117] [cursor=pointer]:
+                - generic [ref=f2e118]: About Developer
+                - generic [ref=f2e125]: Creator
+          - generic [ref=f2e126]:
+            - generic [ref=f2e127]:
+              - generic [ref=f2e128]: QUESTS & REWARDS
+              - generic [ref=f2e133]: LIVE
+            - generic [ref=f2e134]:
+              - button "Daily Quests 3/day" [ref=f2e135] [cursor=pointer]:
+                - generic [ref=f2e136]: Daily Quests
+                - generic [ref=f2e142]: 3/day
+              - button "Trophy Vault" [ref=f2e143] [cursor=pointer]
+              - button "Game Roulette RANDOM" [ref=f2e151] [cursor=pointer]:
+                - generic [ref=f2e152]: Game Roulette
+                - generic [ref=f2e157]: RANDOM
+              - button "Request a Game WISHLIST" [ref=f2e158] [cursor=pointer]:
+                - generic [ref=f2e159]: Request a Game
+                - generic [ref=f2e163]: WISHLIST
+          - generic [ref=f2e164]:
+            - generic [ref=f2e165]:
+              - generic [ref=f2e166]: GENRES & MODES
+              - generic [ref=f2e169]: Filter
+            - generic [ref=f2e170]:
+              - button "All Genres 24" [ref=f2e171] [cursor=pointer]:
+                - generic [ref=f2e172]: All Genres
+                - generic [ref=f2e177]: "24"
+              - button "Upcoming / Soon" [ref=f2e178] [cursor=pointer]
+              - button "Arcade Classics 4" [ref=f2e184] [cursor=pointer]:
+                - generic [ref=f2e185]: Arcade Classics
+                - generic [ref=f2e189]: "4"
+              - button "Action & Rush 6" [ref=f2e190] [cursor=pointer]:
+                - generic [ref=f2e191]: Action & Rush
+                - generic [ref=f2e195]: "6"
+              - button "Neural Puzzles 7" [ref=f2e196] [cursor=pointer]:
+                - generic [ref=f2e197]: Neural Puzzles
+                - generic [ref=f2e201]: "7"
+              - button "Tactical Strategy 7" [ref=f2e202] [cursor=pointer]:
+                - generic [ref=f2e203]: Tactical Strategy
+                - generic [ref=f2e208]: "7"
+              - button "Card & Memory" [ref=f2e209] [cursor=pointer]
+          - generic [ref=f2e216]:
+            - generic [ref=f2e217]:
+              - generic [ref=f2e218]: THEME & DESIGN
+              - generic [ref=f2e225]: Neo-Brutal
+            - generic [ref=f2e226]:
+              - generic [ref=f2e227]:
+                - button "Dark" [ref=f2e228] [cursor=pointer]
+                - button "Light" [ref=f2e232] [cursor=pointer]
+              - button "Design Engine Lab 5 THEMES" [ref=f2e240] [cursor=pointer]:
+                - generic [ref=f2e241]: Design Engine Lab
+                - generic [ref=f2e246]: 5 THEMES
+        - generic "Edit Player Handle" [ref=f2e248] [cursor=pointer]:
+          - generic [ref=f2e253]:
+            - paragraph [ref=f2e254]: Player Tag
+            - paragraph [ref=f2e255]: Set Gamer Tag
+      - main [ref=f2e259]:
+        - generic [ref=f2e260]:
+          - button "All Games 24" [ref=f2e261] [cursor=pointer]:
+            - generic [ref=f2e265]: All Games
+            - generic [ref=f2e266]: "24"
+          - button "Arcade 4" [ref=f2e267] [cursor=pointer]:
+            - generic [ref=f2e270]: Arcade
+            - generic [ref=f2e271]: "4"
+          - button "Action 6" [ref=f2e272] [cursor=pointer]:
+            - generic [ref=f2e275]: Action
+            - generic [ref=f2e276]: "6"
+          - button "Puzzles 7" [ref=f2e277] [cursor=pointer]:
+            - generic [ref=f2e280]: Puzzles
+            - generic [ref=f2e281]: "7"
+          - button "Strategy 7" [ref=f2e282] [cursor=pointer]:
+            - generic [ref=f2e286]: Strategy
+            - generic [ref=f2e287]: "7"
+          - button "Cards 0" [ref=f2e288] [cursor=pointer]:
+            - generic [ref=f2e293]: Cards
+            - generic [ref=f2e294]: "0"
+          - button "Coming Soon 0" [ref=f2e295] [cursor=pointer]:
+            - generic [ref=f2e299]: Coming Soon
+            - generic [ref=f2e300]: "0"
+        - generic [ref=f2e301]:
+          - button "Play Knife Thrower - ACTION retro arcade game" [ref=f2e302] [cursor=pointer]:
+            - generic [ref=f2e303]:
+              - img "Knife Thrower - ACTION retro arcade mini-game thumbnail" [ref=f2e304]
+              - generic [ref=f2e305]: FEATURED
+              - button "Add to favorites" [ref=f2e310]
+              - button "View Top Scores" [ref=f2e313]
+            - generic [ref=f2e320]:
+              - generic [ref=f2e321]:
+                - generic [ref=f2e322]: ACTION
+                - heading "Knife Thrower" [level=3] [ref=f2e324]
+              - button "Leaderboard" [ref=f2e327]
+          - button "Play Fruit Merge - PUZZLE retro arcade game" [ref=f2e335] [cursor=pointer]:
+            - generic [ref=f2e336]:
+              - img "Fruit Merge - PUZZLE retro arcade mini-game thumbnail" [ref=f2e337]
+              - generic [ref=f2e338]: FEATURED
+              - button "Add to favorites" [ref=f2e343]
+              - button "View Top Scores" [ref=f2e346]
+            - generic [ref=f2e353]:
+              - generic [ref=f2e354]:
+                - generic [ref=f2e355]: PUZZLE
+                - heading "Fruit Merge" [level=3] [ref=f2e357]
+              - button "Leaderboard" [ref=f2e360]
+          - button "Play Flappy Flyer - ARCADE retro arcade game" [ref=f2e368] [cursor=pointer]:
+            - generic [ref=f2e369]:
+              - img "Flappy Flyer - ARCADE retro arcade mini-game thumbnail" [ref=f2e370]
+              - generic [ref=f2e371]: FEATURED
+              - button "Add to favorites" [ref=f2e376]
+              - button "View Top Scores" [ref=f2e379]
+            - generic [ref=f2e386]:
+              - generic [ref=f2e387]:
+                - generic [ref=f2e388]: ARCADE
+                - heading "Flappy Flyer" [level=3] [ref=f2e390]
+              - button "Leaderboard" [ref=f2e393]
+          - button "Play Starfighter - ARCADE retro arcade game" [ref=f2e401] [cursor=pointer]:
+            - generic [ref=f2e402]:
+              - img "Starfighter - ARCADE retro arcade mini-game thumbnail" [ref=f2e403]
+              - generic [ref=f2e404]: FEATURED
+              - button "Add to favorites" [ref=f2e409]
+              - button "View Top Scores" [ref=f2e412]
+            - generic [ref=f2e419]:
+              - generic [ref=f2e420]:
+                - generic [ref=f2e421]: ARCADE
+                - heading "Starfighter" [level=3] [ref=f2e423]
+              - button "Leaderboard" [ref=f2e426]
+          - button "Play Katana Slicer - ACTION retro arcade game" [ref=f2e434] [cursor=pointer]:
+            - generic [ref=f2e435]:
+              - img "Katana Slicer - ACTION retro arcade mini-game thumbnail" [ref=f2e436]
+              - generic [ref=f2e437]: FEATURED
+              - button "Add to favorites" [ref=f2e442]
+              - button "View Top Scores" [ref=f2e445]
+            - generic [ref=f2e452]:
+              - generic [ref=f2e453]:
+                - generic [ref=f2e454]: ACTION
+                - heading "Katana Slicer" [level=3] [ref=f2e456]
+              - button "Leaderboard" [ref=f2e459]
+          - button "Play Naval Grid Strike - STRATEGY retro arcade game" [ref=f2e467] [cursor=pointer]:
+            - generic [ref=f2e468]:
+              - img "Naval Grid Strike - STRATEGY retro arcade mini-game thumbnail" [ref=f2e469]
+              - generic [ref=f2e470]: FEATURED
+              - button "Add to favorites" [ref=f2e475]
+              - button "View Top Scores" [ref=f2e478]
+            - generic [ref=f2e485]:
+              - generic [ref=f2e486]:
+                - generic [ref=f2e487]: STRATEGY
+                - heading "Naval Grid Strike" [level=3] [ref=f2e489]
+              - button "Leaderboard" [ref=f2e492]
+          - button "Play Missile Defense - ACTION retro arcade game" [ref=f2e500] [cursor=pointer]:
+            - generic [ref=f2e501]:
+              - img "Missile Defense - ACTION retro arcade mini-game thumbnail" [ref=f2e502]
+              - generic [ref=f2e503]: FEATURED
+              - button "Add to favorites" [ref=f2e508]
+              - button "View Top Scores" [ref=f2e511]
+            - generic [ref=f2e518]:
+              - generic [ref=f2e519]:
+                - generic [ref=f2e520]: ACTION
+                - heading "Missile Defense" [level=3] [ref=f2e522]
+              - button "Leaderboard" [ref=f2e525]
+          - button "Play Matrix Chess - STRATEGY retro arcade game" [ref=f2e533] [cursor=pointer]:
+            - generic [ref=f2e534]:
+              - img "Matrix Chess - STRATEGY retro arcade mini-game thumbnail" [ref=f2e535]
+              - generic [ref=f2e536]: FEATURED
+              - button "Add to favorites" [ref=f2e541]
+              - button "View Top Scores" [ref=f2e544]
+            - generic [ref=f2e551]:
+              - generic [ref=f2e552]:
+                - generic [ref=f2e553]: STRATEGY
+                - heading "Matrix Chess" [level=3] [ref=f2e555]
+              - button "Leaderboard" [ref=f2e558]
+          - button "Play Multidimension XO - STRATEGY retro arcade game" [ref=f2e566] [cursor=pointer]:
+            - generic [ref=f2e567]:
+              - img "Multidimension XO - STRATEGY retro arcade mini-game thumbnail" [ref=f2e568]
+              - generic [ref=f2e569]: FEATURED
+              - button "Add to favorites" [ref=f2e574]
+              - button "View Top Scores" [ref=f2e577]
+            - generic [ref=f2e584]:
+              - generic [ref=f2e585]:
+                - generic [ref=f2e586]: STRATEGY
+                - heading "Multidimension XO" [level=3] [ref=f2e588]
+              - button "Leaderboard" [ref=f2e591]
+          - button "Play Tetra Matrix - PUZZLE retro arcade game" [ref=f2e599] [cursor=pointer]:
+            - generic [ref=f2e600]:
+              - img "Tetra Matrix - PUZZLE retro arcade mini-game thumbnail" [ref=f2e601]
+              - generic [ref=f2e602]: FEATURED
+              - button "Add to favorites" [ref=f2e607]
+              - button "View Top Scores" [ref=f2e610]
+            - generic [ref=f2e617]:
+              - generic [ref=f2e618]:
+                - generic [ref=f2e619]: PUZZLE
+                - heading "Tetra Matrix" [level=3] [ref=f2e621]
+              - button "Leaderboard" [ref=f2e624]
+          - button "Play Candy Blast - PUZZLE retro arcade game" [ref=f2e632] [cursor=pointer]:
+            - generic [ref=f2e633]:
+              - img "Candy Blast - PUZZLE retro arcade mini-game thumbnail" [ref=f2e634]
+              - generic [ref=f2e635]: FEATURED
+              - button "Add to favorites" [ref=f2e640]
+              - button "View Top Scores" [ref=f2e643]
+            - generic [ref=f2e650]:
+              - generic [ref=f2e651]:
+                - generic [ref=f2e652]: PUZZLE
+                - heading "Candy Blast" [level=3] [ref=f2e654]
+              - button "Leaderboard" [ref=f2e657]
+          - button "Play Singularity Horizon - STRATEGY retro arcade game" [ref=f2e665] [cursor=pointer]:
+            - generic [ref=f2e666]:
+              - img "Singularity Horizon - STRATEGY retro arcade mini-game thumbnail" [ref=f2e667]
+              - generic [ref=f2e668]: FEATURED
+              - button "Add to favorites" [ref=f2e673]
+              - button "View Top Scores" [ref=f2e676]
+            - generic [ref=f2e683]:
+              - generic [ref=f2e684]:
+                - generic [ref=f2e685]: STRATEGY
+                - heading "Singularity Horizon" [level=3] [ref=f2e687]
+              - button "Leaderboard" [ref=f2e690]
+          - button "Play Minefield - PUZZLE retro arcade game" [ref=f2e698] [cursor=pointer]:
+            - generic [ref=f2e699]:
+              - img "Minefield - PUZZLE retro arcade mini-game thumbnail" [ref=f2e700]
+              - generic [ref=f2e701]: FEATURED
+              - button "Add to favorites" [ref=f2e706]
+              - button "View Top Scores" [ref=f2e709]
+            - generic [ref=f2e716]:
+              - generic [ref=f2e717]:
+                - generic [ref=f2e718]: PUZZLE
+                - heading "Minefield" [level=3] [ref=f2e720]
+              - button "Leaderboard" [ref=f2e723]
+          - button "Play Labyrinth Escape - PUZZLE retro arcade game" [ref=f2e731] [cursor=pointer]:
+            - generic [ref=f2e732]:
+              - img "Labyrinth Escape - PUZZLE retro arcade mini-game thumbnail" [ref=f2e733]
+              - generic [ref=f2e734]: FEATURED
+              - button "Add to favorites" [ref=f2e739]
+              - button "View Top Scores" [ref=f2e742]
+            - generic [ref=f2e749]:
+              - generic [ref=f2e750]:
+                - generic [ref=f2e751]: PUZZLE
+                - heading "Labyrinth Escape" [level=3] [ref=f2e753]
+              - button "Leaderboard" [ref=f2e756]
+          - button "Play Quantum XO - STRATEGY retro arcade game" [ref=f2e764] [cursor=pointer]:
+            - generic [ref=f2e765]:
+              - img "Quantum XO - STRATEGY retro arcade mini-game thumbnail" [ref=f2e766]
+              - button "Add to favorites" [ref=f2e767]
+              - button "View Top Scores" [ref=f2e770]
+            - generic [ref=f2e777]:
+              - generic [ref=f2e778]:
+                - generic [ref=f2e779]: STRATEGY
+                - heading "Quantum XO" [level=3] [ref=f2e781]
+              - button "Leaderboard" [ref=f2e784]
+          - button "Play 2048 - PUZZLE retro arcade game" [ref=f2e792] [cursor=pointer]:
+            - generic [ref=f2e793]:
+              - img "2048 - PUZZLE retro arcade mini-game thumbnail" [ref=f2e794]
+              - button "Add to favorites" [ref=f2e795]
+              - button "View Top Scores" [ref=f2e798]
+            - generic [ref=f2e805]:
+              - generic [ref=f2e806]:
+                - generic [ref=f2e807]: PUZZLE
+                - heading "2048" [level=3] [ref=f2e809]
+              - button "Leaderboard" [ref=f2e812]
+          - button "Play Memory Matrix - PUZZLE retro arcade game" [ref=f2e820] [cursor=pointer]:
+            - generic [ref=f2e821]:
+              - img "Memory Matrix - PUZZLE retro arcade mini-game thumbnail" [ref=f2e822]
+              - button "Add to favorites" [ref=f2e823]
+              - button "View Top Scores" [ref=f2e826]
+            - generic [ref=f2e833]:
+              - generic [ref=f2e834]:
+                - generic [ref=f2e835]: PUZZLE
+                - heading "Memory Matrix" [level=3] [ref=f2e837]
+              - button "Leaderboard" [ref=f2e840]
+          - button "Play Hyper Tapper - ACTION retro arcade game" [ref=f2e848] [cursor=pointer]:
+            - generic [ref=f2e849]:
+              - img "Hyper Tapper - ACTION retro arcade mini-game thumbnail" [ref=f2e850]
+              - button "Add to favorites" [ref=f2e851]
+              - button "View Top Scores" [ref=f2e854]
+            - generic [ref=f2e861]:
+              - generic [ref=f2e862]:
+                - generic [ref=f2e863]: ACTION
+                - heading "Hyper Tapper" [level=3] [ref=f2e865]
+              - button "Leaderboard" [ref=f2e868]
+          - button "Play Snake 2077 - ARCADE retro arcade game" [ref=f2e876] [cursor=pointer]:
+            - generic [ref=f2e877]:
+              - img "Snake 2077 - ARCADE retro arcade mini-game thumbnail" [ref=f2e878]
+              - button "Add to favorites" [ref=f2e879]
+              - button "View Top Scores" [ref=f2e882]
+            - generic [ref=f2e889]:
+              - generic [ref=f2e890]:
+                - generic [ref=f2e891]: ARCADE
+                - heading "Snake 2077" [level=3] [ref=f2e893]
+              - button "Leaderboard" [ref=f2e896]
+          - button "Play Dash 2077 - ACTION retro arcade game" [ref=f2e904] [cursor=pointer]:
+            - generic [ref=f2e905]:
+              - img "Dash 2077 - ACTION retro arcade mini-game thumbnail" [ref=f2e906]
+              - button "Add to favorites" [ref=f2e907]
+              - button "View Top Scores" [ref=f2e910]
+            - generic [ref=f2e917]:
+              - generic [ref=f2e918]:
+                - generic [ref=f2e919]: ACTION
+                - heading "Dash 2077" [level=3] [ref=f2e921]
+              - button "Leaderboard" [ref=f2e924]
+          - button "Play Pulse Dash - ACTION retro arcade game" [ref=f2e932] [cursor=pointer]:
+            - generic [ref=f2e933]:
+              - img "Pulse Dash - ACTION retro arcade mini-game thumbnail" [ref=f2e934]
+              - button "Add to favorites" [ref=f2e935]
+              - button "View Top Scores" [ref=f2e938]
+            - generic [ref=f2e945]:
+              - generic [ref=f2e946]:
+                - generic [ref=f2e947]: ACTION
+                - heading "Pulse Dash" [level=3] [ref=f2e949]
+              - button "Leaderboard" [ref=f2e952]
+          - button "Play Brick Breaker - ARCADE retro arcade game" [ref=f2e960] [cursor=pointer]:
+            - generic [ref=f2e961]:
+              - img "Brick Breaker - ARCADE retro arcade mini-game thumbnail" [ref=f2e962]
+              - button "Add to favorites" [ref=f2e963]
+              - button "View Top Scores" [ref=f2e966]
+            - generic [ref=f2e973]:
+              - generic [ref=f2e974]:
+                - generic [ref=f2e975]: ARCADE
+                - heading "Brick Breaker" [level=3] [ref=f2e977]
+              - button "Leaderboard" [ref=f2e980]
+          - button "Play Chroma Reflex - STRATEGY retro arcade game" [ref=f2e988] [cursor=pointer]:
+            - generic [ref=f2e989]:
+              - img "Chroma Reflex - STRATEGY retro arcade mini-game thumbnail" [ref=f2e990]
+              - button "Add to favorites" [ref=f2e991]
+              - button "View Top Scores" [ref=f2e994]
+            - generic [ref=f2e1001]:
+              - generic [ref=f2e1002]:
+                - generic [ref=f2e1003]: STRATEGY
+                - heading "Chroma Reflex" [level=3] [ref=f2e1005]
+              - button "Leaderboard" [ref=f2e1008]
+          - button "Play Paper Grid - STRATEGY retro arcade game" [ref=f2e1016] [cursor=pointer]:
+            - generic [ref=f2e1017]:
+              - img "Paper Grid - STRATEGY retro arcade mini-game thumbnail" [ref=f2e1018]
+              - button "Add to favorites" [ref=f2e1019]
+              - button "View Top Scores" [ref=f2e1022]
+            - generic [ref=f2e1029]:
+              - generic [ref=f2e1030]:
+                - generic [ref=f2e1031]: STRATEGY
+                - heading "Paper Grid" [level=3] [ref=f2e1033]
+              - button "Leaderboard" [ref=f2e1036]
+  - button "Open Next.js Dev Tools" [ref=f2e1049] [cursor=pointer]

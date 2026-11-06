@@ -96,9 +96,9 @@ export default function PlayerXpBadge({
         </div>
 
         {/* XP Mini Bar */}
-        <div className="hidden xs:flex flex-col gap-0.5 w-14 sm:w-20">
+        <div className="flex flex-col gap-0.5 w-12 sm:w-20">
           <div className="flex justify-between items-center text-[8px] font-black text-slate-300 leading-none">
-            <span className="truncate max-w-[45px] text-white">{levelInfo.title}</span>
+            <span className="truncate max-w-[35px] sm:max-w-[45px] text-white">{levelInfo.title}</span>
             <span>{Math.round(levelInfo.progressPercent)}%</span>
           </div>
           <div className="w-full h-2 bg-black rounded-md overflow-hidden border border-black">

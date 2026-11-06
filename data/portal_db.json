@@ -13,8 +13,8 @@
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
       "longest_streak": 9,
-      "level": 46,
-      "xp": 30390,
+      "level": 47,
+      "xp": 31740,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -72,10 +72,13 @@
         },
         "perfectionist": {
           "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
         }
       },
       "stats": {
-        "totalGamesPlayed": 457,
+        "totalGamesPlayed": 474,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -100,14 +103,15 @@
           "g_multi_xo_13",
           "g_blackhole_17",
           "g_reflex_09",
-          "g_knife_28"
+          "g_knife_28",
+          "g_snake_01"
         ],
-        "totalScoreAccumulated": 1758241,
+        "totalScoreAccumulated": 1801224,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
-        "rouletteSpins": 2,
-        "questsCompletedCount": 12,
+        "rouletteSpins": 3,
+        "questsCompletedCount": 14,
         "hypeCount": 0,
         "categoriesPlayed": [
           "ARCADE",
@@ -116,8 +120,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 457,
-      "total_score": 1758241
+      "games_played": 474,
+      "total_score": 1801224
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -202,6 +206,48 @@
       "username": "Jonathan",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Jonathan",
       "created_at": "2026-11-04T14:12:17.896+00:00"
+    },
+    {
+      "id": "25bd5ed3-b9da-478b-8609-f68b539009c2",
+      "username": "LB",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=LB",
+      "created_at": "2026-11-05T10:49:53.798+00:00"
+    },
+    {
+      "id": "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "username": "Mashh__",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Mashh__",
+      "created_at": "2026-11-05T10:53:45.221+00:00"
+    },
+    {
+      "id": "6c0d14ff-d17c-482a-835b-b4c94eb56e5a",
+      "username": "Fahim Ahmed",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Fahim%20Ahmed",
+      "created_at": "2026-11-05T14:19:33.376+00:00"
+    },
+    {
+      "id": "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "username": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "created_at": "2026-11-06T09:36:06.12+00:00"
+    },
+    {
+      "id": "b069ebdb-9484-43f3-8086-f8dce9b874a5",
+      "username": "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "created_at": "2026-11-06T09:38:40.268+00:00"
+    },
+    {
+      "id": "b3b8dae3-f91d-449b-97de-50f2be4d4700",
+      "username": "fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "created_at": "2026-11-06T09:38:49.053+00:00"
+    },
+    {
+      "id": "eea5369d-e865-4f7e-b5a3-8b212612561c",
+      "username": "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "created_at": "2026-11-06T11:34:12.431+00:00"
     }
   ],
   "games": [
@@ -224,9 +270,9 @@
     },
     {
       "id": "g_chess_24",
-      "slug": "cyber-chess",
-      "title": "Quantum Cyber Chess",
-      "description": "Neo-Brutalist 8x8 Cyber Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
+      "slug": "matrix-chess",
+      "title": "Matrix Chess",
+      "description": "Neo-Brutalist 8x8 Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
       "category": "STRATEGY",
       "status": "active",
       "image_url": "/thumbnails/cyber-chess.svg",
@@ -258,9 +304,9 @@
     },
     {
       "id": "g_candy_19",
-      "slug": "retro-candy-crush",
-      "title": "Neon Candy Blast",
-      "description": "Cyber Match-3 Puzzle Arcade! Align 3+ neon candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
+      "slug": "candy-blast",
+      "title": "Candy Blast",
+      "description": "Match-3 Puzzle Arcade! Align 3+ candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
       "category": "PUZZLE",
       "status": "active",
       "image_url": "/thumbnails/retro-candy-crush.svg",
@@ -292,9 +338,9 @@
     },
     {
       "id": "g_geometry_10",
-      "slug": "geometry-dash",
-      "title": "Neon Pulse Dash",
-      "description": "Rhythm cube runner! Jump over neon spikes, launch off jump pads, and collect secret coins.",
+      "slug": "pulse-dash",
+      "title": "Pulse Dash",
+      "description": "Rhythm cube runner! Jump over spikes, launch off jump pads, and collect secret coins.",
       "category": "ACTION",
       "status": "active",
       "image_url": "/thumbnails/geometry-dash.svg",
@@ -309,9 +355,9 @@
     },
     {
       "id": "g_breaker_08",
-      "slug": "cyber-breaker",
-      "title": "Cyber Brick Breaker",
-      "description": "Hyper-responsive neon brick breaker with neon ball dynamics and particle explosions.",
+      "slug": "brick-breaker",
+      "title": "Brick Breaker",
+      "description": "Hyper-responsive brick breaker with ball dynamics and particle explosions.",
       "category": "ARCADE",
       "status": "active",
       "image_url": "/thumbnails/cyber-breaker.svg",
@@ -326,9 +372,9 @@
     },
     {
       "id": "g_merge_25",
-      "slug": "cyber-fruit-merge",
-      "title": "Cyber Fruit Merge",
-      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop cyber fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
+      "slug": "fruit-merge",
+      "title": "Fruit Merge",
+      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
       "category": "PUZZLE",
       "status": "active",
       "image_url": "/thumbnails/cyber-fruit-merge.svg",
@@ -340,6 +386,23 @@
       "created_at": "2026-11-02T07:28:45.411749+00:00",
       "updated_at": "2026-11-02T07:28:45.411749+00:00",
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
+    },
+    {
+      "id": "g_shooter_07",
+      "slug": "starfighter",
+      "title": "Starfighter",
+      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-05T05:03:12.84575+00:00",
+      "updated_at": "2026-11-05T05:03:12.84575+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
       "id": "g_tetris_20",
@@ -360,8 +423,8 @@
     },
     {
       "id": "g_maze_15",
-      "slug": "cyber-maze",
-      "title": "Cyber Labyrinth Escape",
+      "slug": "labyrinth-escape",
+      "title": "Labyrinth Escape",
       "description": "10-Level Neural Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.",
       "category": "PUZZLE",
       "status": "active",
@@ -378,8 +441,8 @@
     {
       "id": "g_card_05",
       "slug": "quantum-2048",
-      "title": "Quantum 2048",
-      "description": "Cyber-arcade sliding block merger. Combine identical energy nodes to forge the 2048 core.",
+      "title": "2048",
+      "description": "Sliding block merger. Combine identical energy nodes to forge the 2048 core.",
       "category": "PUZZLE",
       "status": "active",
       "image_url": "/thumbnails/quantum-2048.svg",
@@ -411,9 +474,9 @@
     },
     {
       "id": "g_sweeper_16",
-      "slug": "cyber-minesweeper",
-      "title": "Quantum Minefield",
-      "description": "Procedural Neo-Brutalist Quantum Minefield! Disarm randomized quantum mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
+      "slug": "minefield",
+      "title": "Minefield",
+      "description": "Procedural Neo-Brutalist Minefield! Disarm randomized mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
       "category": "PUZZLE",
       "status": "active",
       "image_url": "/thumbnails/cyber-minesweeper.svg",
@@ -445,9 +508,9 @@
     },
     {
       "id": "g_flappy_27",
-      "slug": "cyber-flappy",
-      "title": "Neon Flappy Flyer",
-      "description": "Cyber-arcade vertical flight challenge! Tap to flap a neon plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
+      "slug": "flappy-flyer",
+      "title": "Flappy Flyer",
+      "description": "Arcade vertical flight challenge! Tap to flap a plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
       "category": "ARCADE",
       "status": "active",
       "image_url": "/thumbnails/flappy-bird.svg",
@@ -462,9 +525,9 @@
     },
     {
       "id": "g_slicer_11",
-      "slug": "cyber-slicer",
-      "title": "Cyber Katana Slicer",
-      "description": "Neon Katana Blade Slicing! Slash flying cyber targets, chain multi-slice combos, and dodge explosive plasma bombs.",
+      "slug": "katana-slicer",
+      "title": "Katana Slicer",
+      "description": "Katana Blade Slicing! Slash flying targets, chain multi-slice combos, and dodge explosive plasma bombs.",
       "category": "ACTION",
       "status": "active",
       "image_url": "/thumbnails/cyber-slicer.svg",
@@ -479,7 +542,7 @@
     },
     {
       "id": "g_battleship_18",
-      "slug": "retro-battleship",
+      "slug": "naval-grid-strike",
       "title": "Naval Grid Strike",
       "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
       "category": "STRATEGY",
@@ -496,7 +559,7 @@
     },
     {
       "id": "g_blackhole_17",
-      "slug": "black-hole",
+      "slug": "singularity-horizon",
       "title": "Singularity Horizon",
       "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
       "category": "STRATEGY",
@@ -530,8 +593,8 @@
     },
     {
       "id": "g_action_06",
-      "slug": "cyber-dash",
-      "title": "Cyber Dash 2077",
+      "slug": "dash",
+      "title": "Dash 2077",
       "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
       "category": "ACTION",
       "status": "active",
@@ -547,9 +610,9 @@
     },
     {
       "id": "g_missile_21",
-      "slug": "neon-missile-defense",
-      "title": "Neon Missile Defense",
-      "description": "Cyber Command Flak Defense! Defend 6 Cyber Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
+      "slug": "missile-defense",
+      "title": "Missile Defense",
+      "description": "Command Flak Defense! Defend 6 Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
       "category": "ACTION",
       "status": "active",
       "image_url": "/thumbnails/neon-missile-defense.svg",
@@ -581,9 +644,9 @@
     },
     {
       "id": "g_snake_01",
-      "slug": "neon-snake",
-      "title": "Neon Snake 2077",
-      "description": "Cyber-arcade canvas snake with hyper-speed combos, neon trails, and responsive swipe controls.",
+      "slug": "snake",
+      "title": "Snake 2077",
+      "description": "Canvas snake with hyper-speed combos, trails, and responsive swipe controls.",
       "category": "ARCADE",
       "status": "active",
       "image_url": "/thumbnails/neon-snake.svg",
@@ -598,9 +661,9 @@
     },
     {
       "id": "g_paper_12",
-      "slug": "paper-io",
-      "title": "Neon Paper Grid",
-      "description": "Conquer the arcade grid! Expand your neon territory, encircle massive zones, and slice enemy trails before they cut yours.",
+      "slug": "paper-grid",
+      "title": "Paper Grid",
+      "description": "Conquer the arcade grid! Expand your territory, encircle massive zones, and slice enemy trails before they cut yours.",
       "category": "STRATEGY",
       "status": "active",
       "image_url": "/thumbnails/paper-io.svg",
@@ -612,16 +675,6 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
-    },
-    {
-      "id": "g_shooter_07",
-      "slug": "starfighter",
-      "title": "Starfighter",
-      "category": "ARCADE",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg",
-      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "status": "active",
-      "featured": true
     }
   ],
   "scores": [
@@ -855,6 +908,83 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 4233,
       "created_at": "2026-11-05T04:55:10.515Z"
+    },
+    {
+      "id": "90db9663-9df9-46bd-befd-bcc461229912",
+      "game_id": "g_snake_01",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6508,
+      "created_at": "2026-11-06T18:03:30.571Z"
+    },
+    {
+      "id": "5839ecbc-6635-4416-b91c-a86f1d033f13",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 650,
+      "created_at": "2026-11-06T18:19:12.970Z"
+    },
+    {
+      "id": "9a5c83d1-bc95-4d48-bff9-66e113bfdb81",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:20:30.042Z"
+    },
+    {
+      "id": "00d02dd9-32be-4417-a094-2c86f83e1848",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:21:50.250Z"
+    },
+    {
+      "id": "faba07de-0bc9-4c0b-adee-c4c7935548c3",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:22:25.348Z"
+    },
+    {
+      "id": "dd51396c-d1f3-4bd1-befc-95b7bff85103",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2530,
+      "created_at": "2026-11-06T18:25:09.619Z"
+    },
+    {
+      "id": "72544b0a-a39c-4d77-bc2f-521d1c808ceb",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2530,
+      "created_at": "2026-11-06T18:25:09.741Z"
+    },
+    {
+      "id": "5f437997-3d5e-4b31-8798-8081490ba8b0",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:47.190Z"
+    },
+    {
+      "id": "3480714c-e495-4225-a03f-49b40c3f5fb1",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:48.019Z"
+    },
+    {
+      "id": "6d4bf1d3-5ebb-45a1-9cc6-0c2fe87d7c71",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:53.273Z"
+    },
+    {
+      "id": "64b8c9d8-aa5d-4bb4-b3c7-20fdc7050160",
+      "game_id": "g_battleship_18",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 16800,
+      "created_at": "2026-11-06T18:39:07.633Z"
     }
   ],
   "ratings": [
@@ -924,6 +1054,18 @@
   "withdrawals": [],
   "transactions": [],
   "adminLogs": [
+    {
+      "id": "3586dbcd-393e-4306-b89f-cd0dd37f6c25",
+      "admin_id": "admin",
+      "action": "save_game",
+      "created_at": "2026-11-06T17:54:38.591Z"
+    },
+    {
+      "id": "6c05dbe3-bcd1-4439-a2eb-e12e6eafa396",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-06T17:54:02.913Z"
+    },
     {
       "id": "9aaeadf5-62d9-417f-8596-3f3efbaa9475",
       "admin_id": "admin",
