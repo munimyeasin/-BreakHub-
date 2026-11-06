@@ -668,10 +668,10 @@ export default function ArcadePortalDashboard() {
               </div>
               <button
                 onClick={() => handleOpenLeaderboard('global')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-portal-yellow text-black font-black text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all shrink-0"
+                className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all shrink-0"
               >
                 <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Ranks</span>
+                <span className="hidden xs:inline">Ranks</span>
               </button>
             </div>
 
