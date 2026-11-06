@@ -25,13 +25,13 @@ const config: Config = {
           border: 'var(--portal-border)',
           text: 'var(--portal-text)',
           'text-muted': 'var(--portal-text-muted)',
-          cyan: '#00F0FF',        // Electric Cyan
-          yellow: '#FFE600',      // Electric Cyber Yellow
-          pink: '#FF4081',        // Hot Neo Pink
-          lime: '#A3E635',        // Punchy Acid Lime
-          purple: '#C084FC',      // Vivid Lilac / Purple
-          orange: '#FF6B00',      // Safety Orange
-          neon: '#9D00FF',        // Neon Violet
+          cyan: 'var(--portal-cyan, #00F0FF)',        // Electric Cyan
+          yellow: 'var(--portal-yellow, #FFE600)',    // Electric Cyber Yellow
+          pink: 'var(--portal-pink, #FF4081)',        // Hot Neo Pink
+          lime: 'var(--portal-lime, #A3E635)',        // Punchy Acid Lime
+          purple: 'var(--portal-purple, #C084FC)',    // Vivid Lilac / Purple
+          orange: 'var(--portal-orange, #FF6B00)',    // Safety Orange
+          neon: 'var(--portal-neon, #9D00FF)',        // Neon Violet
           gold: '#FFD700',        // 1st place gold
           silver: '#E2E8F0',      // 2nd place silver
           bronze: '#CD7F32',      // 3rd place bronze
