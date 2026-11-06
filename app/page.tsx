@@ -660,10 +660,10 @@ export default function ArcadePortalDashboard() {
                 <input
                   ref={desktopSearchInputRef}
                   type="text"
-                  placeholder="Search games, genres, puzzles... (/ or ⌘K)"
+                  placeholder="Search games..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-16 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all"
+                  className="w-full pl-9 sm:pl-10 pr-10 sm:pr-16 py-1.5 sm:py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all"
                 />
               </div>
               <button
