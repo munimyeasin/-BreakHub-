@@ -621,18 +621,17 @@ export default function ArcadePortalDashboard() {
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
-                className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
+                className={`relative group flex items-center justify-center p-2 rounded-xl font-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
                   isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
                 }`}
+                title={isSidebarOpen ? 'Close Menu' : 'Open Menu'}
+                aria-label="Toggle Menu"
               >
-                <div className="flex items-center gap-1.5 z-10">
-                  {isSidebarOpen ? (
-                    <X className="w-4 h-4 stroke-[2.5]" />
-                  ) : (
-                    <SlidersHorizontal className="w-4 h-4 stroke-[2.5] group-hover:rotate-180 transition-transform duration-300" />
-                  )}
-                  <span>{isSidebarOpen ? 'CLOSE' : 'GENRES'}</span>
-                </div>
+                {isSidebarOpen ? (
+                  <X className="w-4 h-4 stroke-[2.5]" />
+                ) : (
+                  <SlidersHorizontal className="w-4 h-4 stroke-[2.5] group-hover:rotate-180 transition-transform duration-300" />
+                )}
               </button>
 
               <div
@@ -646,9 +645,6 @@ export default function ArcadePortalDashboard() {
                   <div className="flex items-center gap-1.5">
                     <span className="font-black text-sm sm:text-base tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
                       BREAK<span className="text-portal-cyan">HUB</span>
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase rounded-md bg-portal-pink text-black border border-black shadow-neo-sm">
-                      PORTAL
                     </span>
                   </div>
                   <p className="text-[9px] sm:text-[10px] text-portal-yellow font-black uppercase tracking-wider hidden xs:block">
