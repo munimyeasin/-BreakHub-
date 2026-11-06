@@ -512,13 +512,6 @@ export default function ArcadePortalDashboard() {
     } catch {}
   };
 
-  const handleSearchChange = (val: string) => {
-    setSearchQuery(val);
-    if (val.trim() && (activeTab === 'about-project' || activeTab === 'about-devs')) {
-      setActiveTab('all');
-    }
-  };
-
   const launchGameSession = (game: Game) => {
     try {
       window.history.pushState({ modalOpen: true }, '');
@@ -618,18 +611,16 @@ export default function ArcadePortalDashboard() {
     <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black overflow-x-hidden box-border">
 
       {/* 1. STICKY APP HEADER */}
-      <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-2.5 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
+      <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
         <div className="max-w-7xl mx-auto flex flex-col gap-2">
 
-          {/* DESKTOP SINGLE ROW (md and above) */}
-          <div className="hidden md:flex items-center justify-between gap-2.5 sm:gap-3">
+          <div className="flex items-center justify-between gap-2.5 sm:gap-3">
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <button
                 onClick={() => setIsSidebarOpen(prev => !prev)}
                 className={`relative group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
                   isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
                 }`}
-                aria-label="Toggle Genres Menu"
               >
                 <div className="flex items-center gap-1.5 z-10">
                   {isSidebarOpen ? (
@@ -664,7 +655,7 @@ export default function ArcadePortalDashboard() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 flex-1 max-w-lg mx-4">
+            <div className="hidden md:flex items-center gap-2 flex-1 max-w-lg mx-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <input
@@ -672,18 +663,9 @@ export default function ArcadePortalDashboard() {
                   type="text"
                   placeholder="Search games, genres, puzzles... (/ or ⌘K)"
                   value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-16 py-2 bg-portal-card border-2 border-black rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all"
                 />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-white"
-                    aria-label="Clear search"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
               </div>
               <button
                 onClick={() => handleOpenLeaderboard('global')}
@@ -698,8 +680,6 @@ export default function ArcadePortalDashboard() {
               <button
                 onClick={toggleTheme}
                 className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border-2 border-black font-black text-xs uppercase tracking-wider shadow-neo-sm bg-portal-yellow text-black hover:bg-portal-cyan transition-all"
-                title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                aria-label="Toggle Theme"
               >
                 {isDark ? <Moon className="w-3.5 h-3.5 stroke-[2.5]" /> : <Sun className="w-3.5 h-3.5 stroke-[2.5]" />}
               </button>
@@ -713,7 +693,6 @@ export default function ArcadePortalDashboard() {
                 <button
                   onClick={() => setIsUsernameModalOpen(true)}
                   className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-xs uppercase shadow-neo-sm"
-                  title={`Player: ${playerTag}`}
                 >
                   {avatarUrl && <img src={avatarUrl} alt="Avatar" className="w-5 h-5 rounded-full object-cover bg-slate-800 border border-black" />}
                   <span className="text-portal-cyan group-hover:text-black font-black max-w-[80px] sm:max-w-[110px] truncate">{playerTag}</span>
@@ -726,117 +705,6 @@ export default function ArcadePortalDashboard() {
                 >
                   <User className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span className="hidden sm:inline">Set Handle</span>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* MOBILE 2-ROW HEADER (< md) */}
-          <div className="flex md:hidden flex-col gap-2 w-full">
-            {/* FIRST LAYER: Genres Button + BreakHub Logo + Game Search Bar */}
-            <div className="flex items-center gap-1.5 sm:gap-2 w-full">
-              <button
-                onClick={() => setIsSidebarOpen(prev => !prev)}
-                className={`relative group flex items-center gap-1 px-2 py-1.5 rounded-xl font-black text-[11px] uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all shrink-0 ${
-                  isSidebarOpen ? 'bg-portal-pink text-black' : 'bg-portal-yellow text-black'
-                }`}
-                aria-label="Toggle Genres Menu"
-              >
-                <div className="flex items-center gap-1">
-                  {isSidebarOpen ? (
-                    <X className="w-3.5 h-3.5 stroke-[2.5]" />
-                  ) : (
-                    <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2.5]" />
-                  )}
-                  <span>{isSidebarOpen ? 'CLOSE' : 'GENRES'}</span>
-                </div>
-              </button>
-
-              <div
-                className="flex items-center gap-1.5 cursor-pointer group shrink-0"
-                onClick={() => { setActiveTab('all'); setSelectedCategory('ALL'); setSearchQuery(''); }}
-                title="Break Hub Home"
-              >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-portal-cyan border-2 border-black flex items-center justify-center shadow-neo-sm group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
-                  <Gamepad2 className="w-4 h-4 text-black stroke-[2.5]" />
-                </div>
-                <div className="hidden xs:block">
-                  <span className="font-black text-xs sm:text-sm tracking-tight uppercase text-white group-hover:text-portal-cyan transition-colors">
-                    BREAK<span className="text-portal-cyan">HUB</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Game Search Bar in First Layer */}
-              <div className="relative flex-1 min-w-[100px]">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
-                <input
-                  ref={mobileSearchInputRef}
-                  type="text"
-                  placeholder="Search games..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full pl-8 pr-7 py-1.5 bg-portal-card border-2 border-black rounded-xl text-xs text-white placeholder-slate-400 font-bold focus:outline-none focus:border-portal-cyan shadow-neo-sm transition-all"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-white"
-                    aria-label="Clear search"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* SECOND LAYER (Brought down so features never get hidden): Light/Dark Switch, Daily Quest, Level, Mute, Ranks, Name */}
-            <div className="flex items-center justify-between gap-1 w-full pt-1.5 border-t border-black/20">
-              {/* Light / Dark Switch */}
-              <button
-                onClick={toggleTheme}
-                className="flex items-center justify-center p-1.5 rounded-xl border-2 border-black font-black text-xs shadow-neo-sm bg-portal-yellow text-black hover:bg-portal-cyan transition-all shrink-0"
-                title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-                aria-label="Toggle Theme"
-              >
-                {isDark ? <Moon className="w-3.5 h-3.5 stroke-[2.5]" /> : <Sun className="w-3.5 h-3.5 stroke-[2.5]" />}
-              </button>
-
-              {/* Daily Quest, Level, and Mute */}
-              <PlayerXpBadge
-                onOpenQuests={() => setIsQuestsModalOpen(true)}
-                onOpenTrophies={() => setIsTrophiesModalOpen(true)}
-              />
-
-              {/* Ranks Shortcut */}
-              <button
-                onClick={() => handleOpenLeaderboard('global')}
-                className="flex items-center gap-1 p-1.5 xs:px-2.5 xs:py-1.5 rounded-xl bg-portal-yellow text-black font-black text-[11px] uppercase tracking-wider border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all shrink-0"
-                title="Global Leaderboard"
-                aria-label="Leaderboard Ranks"
-              >
-                <Trophy className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span className="hidden xs:inline">Ranks</span>
-              </button>
-
-              {/* Player Name / Handle */}
-              {playerTag ? (
-                <button
-                  onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1 px-1.5 sm:px-2 py-1.5 rounded-xl bg-portal-card border-2 border-black hover:bg-portal-yellow text-slate-200 hover:text-black font-black text-[11px] uppercase shadow-neo-sm shrink-0 max-w-[90px] xs:max-w-[120px]"
-                  title={`Player: ${playerTag}. Click to edit.`}
-                >
-                  {avatarUrl && <img src={avatarUrl} alt="Avatar" className="w-4 h-4 rounded-full object-cover bg-slate-800 border border-black shrink-0" />}
-                  <span className="text-portal-cyan group-hover:text-black font-black truncate text-[11px]">{playerTag}</span>
-                  <Edit3 className="w-3 h-3 text-slate-400 shrink-0" />
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsUsernameModalOpen(true)}
-                  className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-portal-cyan text-black font-black text-[11px] uppercase tracking-wider border-2 border-black shadow-neo-sm shrink-0"
-                >
-                  <User className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Handle</span>
                 </button>
               )}
             </div>
