@@ -684,10 +684,12 @@ export default function ArcadePortalDashboard() {
                 {isDark ? <Moon className="w-3.5 h-3.5 stroke-[2.5]" /> : <Sun className="w-3.5 h-3.5 stroke-[2.5]" />}
               </button>
 
-              <PlayerXpBadge
-                onOpenQuests={() => setIsQuestsModalOpen(true)}
-                onOpenTrophies={() => setIsTrophiesModalOpen(true)}
-              />
+              <div className="hidden md:block">
+                <PlayerXpBadge
+                  onOpenQuests={() => setIsQuestsModalOpen(true)}
+                  onOpenTrophies={() => setIsTrophiesModalOpen(true)}
+                />
+              </div>
 
               {playerTag ? (
                 <button
