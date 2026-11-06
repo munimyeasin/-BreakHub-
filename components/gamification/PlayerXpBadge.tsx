@@ -29,9 +29,15 @@ export default function PlayerXpBadge({
       setState(e.detail || gamification.getState());
     };
 
+    const handleMuteSync = (e: CustomEvent<boolean>) => {
+      setIsMuted(e.detail ?? audio.getMuted());
+    };
+
     window.addEventListener('stressbuster_gamification_sync' as any, handleSync);
+    window.addEventListener('stressbuster_audio_mute_sync' as any, handleMuteSync);
     return () => {
       window.removeEventListener('stressbuster_gamification_sync' as any, handleSync);
+      window.removeEventListener('stressbuster_audio_mute_sync' as any, handleMuteSync);
     };
   }, []);
 
@@ -40,6 +46,7 @@ export default function PlayerXpBadge({
     const nextMute = !isMuted;
     audio.setMuted(nextMute);
     setIsMuted(nextMute);
+    window.dispatchEvent(new CustomEvent('stressbuster_audio_mute_sync', { detail: nextMute }));
     if (!nextMute) {
       audio.playXpGainSound();
     }
@@ -52,10 +59,10 @@ export default function PlayerXpBadge({
 
   return (
     <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 overflow-x-hidden box-border">
-      {/* 1. Daily Streak Pill */}
+      {/* 1. Daily Streak / Quests Pill */}
       <div
         onClick={onOpenQuests}
-        className="group relative flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none font-black"
+        className="group relative flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-portal-yellow text-black border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none font-black"
         title={`Active Play Streak: ${state.streak.current} ${state.streak.current === 1 ? 'day' : 'days'}. Click to view Daily Quests.`}
       >
         <span className="relative flex items-center justify-center">
@@ -65,6 +72,11 @@ export default function PlayerXpBadge({
         <span className="text-[11px] sm:text-xs font-black text-black tracking-tight">
           {state.streak.current}d
         </span>
+        {completedUnclaimedQuests > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-portal-pink text-[9px] font-black text-black border border-black shadow-neo-sm animate-bounce">
+            {completedUnclaimedQuests}
+          </span>
+        )}
       </div>
 
       {/* 2. Level & XP Progress Interactive Card */}
@@ -72,7 +84,7 @@ export default function PlayerXpBadge({
         onClick={onOpenTrophies}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none"
+        className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 cursor-pointer transition-all active:translate-x-1 active:translate-y-1 active:shadow-none shrink-0 select-none"
         title={`Player Level ${levelInfo.level}: ${levelInfo.title} (${levelInfo.xpIntoCurrentLevel}/${levelInfo.xpNeededForNextLevel} XP). Click to open Trophy Room.`}
       >
         {/* Level Tag */}
@@ -139,7 +151,7 @@ export default function PlayerXpBadge({
       {/* 5. Audio Synthesizer Mute/Unmute Toggle */}
       <button
         onClick={toggleMute}
-        className={`p-2 rounded-xl border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
+        className={`p-1.5 sm:p-2 rounded-xl border-2 border-black shadow-neo-sm transition-all hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none ${
           isMuted
             ? 'bg-portal-card text-slate-500 hover:text-slate-200'
             : 'bg-portal-cyan text-black'
