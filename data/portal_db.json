@@ -13,8 +13,8 @@
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
       "longest_streak": 9,
-      "level": 49,
-      "xp": 34125,
+      "level": 50,
+      "xp": 34305,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 532,
+        "totalGamesPlayed": 534,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,7 +107,7 @@
           "g_snake_01",
           "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1859118,
+        "totalScoreAccumulated": 1860635,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -121,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 532,
-      "total_score": 1859118
+      "games_played": 534,
+      "total_score": 1860635
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -743,23 +743,6 @@
   ],
   "games": [
     {
-      "id": "g_starfighter_1",
-      "slug": "neon-starfighter",
-      "title": "Neon Starfighter",
-      "description": "Space arcade",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/neon-starfighter.svg",
-      "game_url": null,
-      "rating": 4.8,
-      "rating_count": 5,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T07:29:20.903992+00:00",
-      "updated_at": "2026-11-02T07:29:20.903992+00:00",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
-    },
-    {
       "id": "g_chess_24",
       "slug": "matrix-chess",
       "title": "Matrix Chess",
@@ -775,6 +758,23 @@
       "created_at": "2026-11-02T09:23:06.098811+00:00",
       "updated_at": "2026-11-02T09:23:06.098811+00:00",
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
+    },
+    {
+      "id": "g_starfighter_1",
+      "slug": "neon-starfighter",
+      "title": "Neon Starfighter",
+      "description": "Space arcade",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.8,
+      "rating_count": 5,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:29:20.903992+00:00",
+      "updated_at": "2026-11-02T07:29:20.903992+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
       "id": "g_knife_28",
@@ -1651,6 +1651,48 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 150,
       "created_at": "2026-11-07T14:46:39.388Z"
+    },
+    {
+      "id": "1b089803-9390-4f54-a35e-ec2513be60db",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1500,
+      "created_at": "2026-11-07T14:50:17.870Z"
+    },
+    {
+      "id": "d4633762-c8b6-4e8c-a4d5-71cbb9882762",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3,
+      "created_at": "2026-11-07T14:55:09.460Z"
+    },
+    {
+      "id": "38da1306-cbc4-4778-980e-77cd6ac90040",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:55:21.219Z"
+    },
+    {
+      "id": "c2311b89-ea47-4806-8588-3ed229d4498b",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2,
+      "created_at": "2026-11-07T14:55:31.041Z"
+    },
+    {
+      "id": "a7b2b8e5-76c9-4e1a-acb2-27ac5f13cac8",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:55:41.475Z"
+    },
+    {
+      "id": "50fb9d4e-0497-41e4-8ccc-3f800ad0f510",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:59:53.226Z"
     }
   ],
   "ratings": [

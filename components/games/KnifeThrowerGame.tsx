@@ -188,6 +188,7 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
 
   const initLevel = (lvl: number) => {
     setLevel(lvl);
+    targetPiecesRef.current = null;
     let knivesCount = 7 + Math.floor((lvl - 1) * 1.5);
     if (lvl % 5 === 0) {
       knivesCount = 12 + Math.floor(lvl / 2);
