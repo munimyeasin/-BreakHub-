@@ -14,7 +14,7 @@
       "days_played": 1,
       "longest_streak": 9,
       "level": 49,
-      "xp": 33635,
+      "xp": 33830,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 524,
+        "totalGamesPlayed": 526,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,7 +107,7 @@
           "g_snake_01",
           "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1839468,
+        "totalScoreAccumulated": 1846308,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -121,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 524,
-      "total_score": 1839468
+      "games_played": 526,
+      "total_score": 1846308
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -777,23 +777,6 @@
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
-      "id": "g_knife_28",
-      "slug": "knife-thrower",
-      "title": "Knife Thrower",
-      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-knife-thrower.svg",
-      "game_url": null,
-      "rating": 4.5,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-03T14:50:06.089069+00:00",
-      "updated_at": "2026-11-03T14:50:06.089069+00:00",
-      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
-    },
-    {
       "id": "g_candy_19",
       "slug": "candy-blast",
       "title": "Candy Blast",
@@ -860,6 +843,23 @@
       "created_at": "2026-11-02T09:23:09.064845+00:00",
       "updated_at": "2026-11-02T09:23:09.064845+00:00",
       "thumbnail_url": "/thumbnails/cyber-breaker.svg"
+    },
+    {
+      "id": "g_knife_28",
+      "slug": "knife-thrower",
+      "title": "Knife Thrower",
+      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-knife-thrower.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-03T14:50:06.089069+00:00",
+      "updated_at": "2026-11-03T14:50:06.089069+00:00",
+      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
     },
     {
       "id": "g_merge_25",
@@ -1574,6 +1574,48 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 6090,
       "created_at": "2026-11-07T14:32:06.487Z"
+    },
+    {
+      "id": "74c5799c-1368-40a9-b0ab-14a87e175bfa",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-07T14:35:37.776Z"
+    },
+    {
+      "id": "a1ba38c1-e0e0-404e-a799-7397939ab437",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-07T14:39:48.725Z"
+    },
+    {
+      "id": "312fde9d-34ce-442e-a59f-83b540a14370",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 210,
+      "created_at": "2026-11-07T14:40:19.054Z"
+    },
+    {
+      "id": "6fe2bcd7-0ae1-4dd0-8aa9-becdca6f2610",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-07T14:43:58.170Z"
+    },
+    {
+      "id": "2b43ff09-1757-404e-a15f-babe804717e3",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6180,
+      "created_at": "2026-11-07T14:44:33.916Z"
+    },
+    {
+      "id": "b5950039-9d78-4e73-812b-e85c3d6d305f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-07T14:44:49.838Z"
     }
   ],
   "ratings": [

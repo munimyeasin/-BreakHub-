@@ -74,6 +74,7 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
   const wheelAngleRef = useRef(0);
   const wheelSpeedRef = useRef(0.022);
   const wheelWobbleRef = useRef(0);
+  const targetPiecesRef = useRef<{ x: number; y: number; vx: number; vy: number; rot: number; vRot: number; color: string }[] | null>(null);
   const stuckKnivesRef = useRef<StuckKnife[]>([]);
   const flyingKnifeRef = useRef<FlyingKnife | null>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -551,6 +552,23 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
               setDisplayScore(scoreRef.current);
               addFloatingText(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, `STAGE ${level} CLEARED! +${bonus}`, '#FFE600');
               confetti({ particleCount: 90, spread: 100, origin: { y: 0.5 } });
+
+              // Shatter target into pieces immediately on stage clear
+              targetPiecesRef.current = [];
+              const numPieces = 10;
+              const isBossLevel = level % 5 === 0;
+              for (let i = 0; i < numPieces; i++) {
+                const angle = (i / numPieces) * Math.PI * 2;
+                targetPiecesRef.current.push({
+                  x: wheelCenter.x + Math.cos(angle) * 35,
+                  y: wheelCenter.y + Math.sin(angle) * 35,
+                  vx: Math.cos(angle) * (5 + Math.random() * 6),
+                  vy: Math.sin(angle) * (5 + Math.random() * 6) - 3,
+                  rot: angle,
+                  vRot: (Math.random() - 0.5) * 0.25,
+                  color: isBossLevel ? '#FF0055' : '#00F0FF'
+                });
+              }
 
               setTimeout(() => {
                 const nextLevel = level + 1;
