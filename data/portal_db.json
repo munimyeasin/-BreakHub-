@@ -14,7 +14,7 @@
       "days_played": 1,
       "longest_streak": 9,
       "level": 49,
-      "xp": 33830,
+      "xp": 34125,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 526,
+        "totalGamesPlayed": 532,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,7 +107,7 @@
           "g_snake_01",
           "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1846308,
+        "totalScoreAccumulated": 1859118,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -121,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 526,
-      "total_score": 1846308
+      "games_played": 532,
+      "total_score": 1859118
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -777,6 +777,23 @@
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
+      "id": "g_knife_28",
+      "slug": "knife-thrower",
+      "title": "Knife Thrower",
+      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-knife-thrower.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-03T14:50:06.089069+00:00",
+      "updated_at": "2026-11-03T14:50:06.089069+00:00",
+      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
+    },
+    {
       "id": "g_candy_19",
       "slug": "candy-blast",
       "title": "Candy Blast",
@@ -843,23 +860,6 @@
       "created_at": "2026-11-02T09:23:09.064845+00:00",
       "updated_at": "2026-11-02T09:23:09.064845+00:00",
       "thumbnail_url": "/thumbnails/cyber-breaker.svg"
-    },
-    {
-      "id": "g_knife_28",
-      "slug": "knife-thrower",
-      "title": "Knife Thrower",
-      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-knife-thrower.svg",
-      "game_url": null,
-      "rating": 4.5,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-03T14:50:06.089069+00:00",
-      "updated_at": "2026-11-03T14:50:06.089069+00:00",
-      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
     },
     {
       "id": "g_merge_25",
@@ -1616,6 +1616,41 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 30,
       "created_at": "2026-11-07T14:44:49.838Z"
+    },
+    {
+      "id": "91f2cc74-9d53-4d55-87c1-5861890c0a4c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-07T14:45:30.001Z"
+    },
+    {
+      "id": "e6525c88-d37e-4c22-ba9b-d8ad3abfeed8",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6210,
+      "created_at": "2026-11-07T14:45:56.830Z"
+    },
+    {
+      "id": "c0b4eaf4-965f-496a-8d19-84bce7612990",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6330,
+      "created_at": "2026-11-07T14:46:01.331Z"
+    },
+    {
+      "id": "964afdc1-8c03-4e1f-a0d1-425028bac93b",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-07T14:46:36.031Z"
+    },
+    {
+      "id": "c817b88c-3a22-4e6c-9469-da4f89c0f7cb",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-07T14:46:39.388Z"
     }
   ],
   "ratings": [

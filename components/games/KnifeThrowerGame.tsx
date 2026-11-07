@@ -618,47 +618,66 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
       ctx.setLineDash([]);
 
       // 4. Render Rotating 3D Extruded Cyber Target Wheel (Cyber Slicer style)
-      // Each ring is drawn as a 3D extruded band: drop shadow, dark shaded
-      // side facet, glossy front face, and a hard black outline — matching the
-      // look of the slicing cubes in CyberSlicerGame.tsx.
-      ctx.save();
-      ctx.translate(wheelCenter.x + wheelWobbleRef.current, wheelCenter.y);
-      ctx.rotate(wheelAngleRef.current);
+      // If targetPiecesRef is active, render shattering pieces instead of the intact wheel
+      if (targetPiecesRef.current) {
+        targetPiecesRef.current.forEach((piece) => {
+          piece.x += piece.vx;
+          piece.y += piece.vy;
+          piece.vy += 0.45; // gravity
+          piece.rot += piece.vRot;
 
-      const isBossStage = level % 5 === 0;
-      const faceColor = isBossStage ? '#FF0055' : '#00F0FF';
-      const sideColor = isBossStage ? '#BA005C' : '#006699';
+          ctx.save();
+          ctx.translate(piece.x, piece.y);
+          ctx.rotate(piece.rot);
+          ctx.fillStyle = piece.color;
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, 24, 0, Math.PI);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        });
+      } else {
+        ctx.save();
+        ctx.translate(wheelCenter.x + wheelWobbleRef.current, wheelCenter.y);
+        ctx.rotate(wheelAngleRef.current);
 
-      // Outer rim ring (largest band)
-      drawExtrudedBand(ctx, wheelRadius, wheelRadius * 0.82, faceColor, sideColor);
+        const isBossStage = level % 5 === 0;
+        const faceColor = isBossStage ? '#FF0055' : '#00F0FF';
+        const sideColor = isBossStage ? '#BA005C' : '#006699';
 
-      // Concentric inner rings stepping down to the hub
-      for (let r = wheelRadius * 0.8; r > 22; r -= 16) {
-        const inner = Math.max(4, r - 14);
-        drawExtrudedBand(ctx, r, inner, faceColor, sideColor);
+        // Outer rim ring (largest band)
+        drawExtrudedBand(ctx, wheelRadius, wheelRadius * 0.82, faceColor, sideColor);
+
+        // Concentric inner rings stepping down to the hub
+        for (let r = wheelRadius * 0.8; r > 22; r -= 16) {
+          const inner = Math.max(4, r - 14);
+          drawExtrudedBand(ctx, r, inner, faceColor, sideColor);
+        }
+
+        // Central Neo Hub Node
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(3, 3, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFE600';
+        ctx.beginPath();
+        ctx.arc(0, 0, 26, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Hub circuit node dot
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
       }
-
-      // Central Neo Hub Node
-      ctx.fillStyle = '#000000';
-      ctx.beginPath();
-      ctx.arc(3, 3, 26, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#FFE600';
-      ctx.beginPath();
-      ctx.arc(0, 0, 26, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 4;
-      ctx.stroke();
-
-      // Hub circuit node dot
-      ctx.fillStyle = '#000000';
-      ctx.beginPath();
-      ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.restore();
 
       // 4. Render Stuck Katanas on Rotating Target Wheel
       // Knives embed tip-INWARD at the exact contact point. The blade's local
@@ -679,6 +698,7 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
       });
 
       // Boss Health HUD Bar
+      const isBossStage = level % 5 === 0;
       if (isBossStage) {
         const barWidth = 190;
         const barHeight = 16;
