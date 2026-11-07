@@ -229,13 +229,15 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     return () => clearInterval(id);
   }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
-  // Initialize canvas DPR scaling once on mount
+  // Initialize canvas backing store and CSS size explicitly for mobile high-DPI crispness
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = window.devicePixelRatio || 1;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
   }, [W, H]);
 
   // Game loop
@@ -675,7 +677,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       <canvas
         ref={canvasRef}
         onPointerDown={handlePointerDown}
-        className="w-full h-full cursor-pointer block"
+        style={{ width: '100%', height: '100%', display: 'block', touchAction: 'none' }}
       />
 
       {/* Start / Game Over Overlay */}
