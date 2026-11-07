@@ -795,7 +795,7 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="w-full max-w-[480px] h-[75dvh] max-h-[640px] object-contain border-4 border-black rounded-2xl shadow-neo-lg bg-[#18000F]"
+          className="w-full max-w-[480px] h-[86dvh] max-h-[720px] object-contain border-4 border-black rounded-2xl shadow-neo-lg bg-[#18000F]"
         />
 
         {/* Start Overlay */}

@@ -7,13 +7,7 @@ import { Gamepad2, Heart } from 'lucide-react';
 
 interface GameGridProps {
   games: Game[];
-  favorites: string[];
-  hypedGames?: string[];
-  userRatings?: Record<string, number>;
   isFavoritesTab?: boolean;
-  onToggleFavorite: (gameId: string, e: React.MouseEvent) => void;
-  onToggleHype?: (gameId: string, e: React.MouseEvent) => void;
-  onRateGame?: (gameId: string, rating: number) => Promise<void> | void;
   onPlayGame: (game: Game) => void;
   onViewLeaderboard: (gameId: string, e: React.MouseEvent) => void;
   onResetFilters?: () => void;
@@ -21,13 +15,7 @@ interface GameGridProps {
 
 export default function GameGrid({
   games,
-  favorites,
-  hypedGames = [],
-  userRatings = {},
   isFavoritesTab = false,
-  onToggleFavorite,
-  onToggleHype,
-  onRateGame,
   onPlayGame,
   onViewLeaderboard,
   onResetFilters
@@ -80,12 +68,12 @@ export default function GameGrid({
         <GameCard
           key={game.id}
           game={game}
-          isFavorite={favorites.includes(game.id)}
-          isHyped={hypedGames.includes(game.id)}
-          userRating={userRatings[game.id] || userRatings[game.slug] || null}
-          onToggleFavorite={onToggleFavorite}
-          onToggleHype={onToggleHype}
-          onRateGame={onRateGame}
+          isFavorite={false}
+          isHyped={false}
+          userRating={null}
+          onToggleFavorite={() => {}}
+          onToggleHype={() => {}}
+          onRateGame={() => {}}
           onPlay={onPlayGame}
           onViewLeaderboard={onViewLeaderboard}
         />

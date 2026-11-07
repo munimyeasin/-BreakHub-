@@ -13,8 +13,8 @@
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
       "longest_streak": 9,
-      "level": 48,
-      "xp": 32230,
+      "level": 49,
+      "xp": 33355,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 484,
+        "totalGamesPlayed": 518,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,11 +107,11 @@
           "g_snake_01",
           "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1808604,
+        "totalScoreAccumulated": 1831678,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
-        "rouletteSpins": 3,
+        "rouletteSpins": 6,
         "questsCompletedCount": 16,
         "hypeCount": 0,
         "categoriesPlayed": [
@@ -121,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 484,
-      "total_score": 1808604
+      "games_played": 518,
+      "total_score": 1831678
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -249,26 +249,487 @@
       "username": "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
       "created_at": "2026-11-06T11:34:12.431+00:00"
+    },
+    {
+      "id": "b93a1f45-dcb2-4a18-8db2-78802e836966",
+      "username": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=66ed0a76-712c-45f5-a7d3-635acec63743",
+      "created_at": "2026-11-06T21:59:17.195+00:00"
+    },
+    {
+      "id": "d59a636b-f3ca-4369-b474-b7be7946ca9d",
+      "username": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "created_at": "2026-11-07T07:15:56.403Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 514,
+      "total_score": 1830234,
+      "level": 48,
+      "xp": 33120,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 514,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1830234,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 3,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "bfb4fcba-934e-4f0c-bf7f-132b207928bd",
+      "username": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "created_at": "2026-11-07T07:15:56.411Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 514,
+      "total_score": 1830234,
+      "level": 48,
+      "xp": 33120,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 514,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1830234,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 3,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "07bf3446-aa01-4890-9e2c-2bb3d227816b",
+      "username": "a67b1ff4-ca26-47d0-8b92-401016806545",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
+      "created_at": "2026-11-07T12:16:08.457Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 518,
+      "total_score": 1831678,
+      "level": 49,
+      "xp": 33355,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 518,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1831678,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 6,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "4d1632dd-f126-4bf4-8633-7b62df48805c",
+      "username": "a67b1ff4-ca26-47d0-8b92-401016806545",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
+      "created_at": "2026-11-07T12:16:08.463Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 518,
+      "total_score": 1831678,
+      "level": 49,
+      "xp": 33355,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 518,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1831678,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 6,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
     }
   ],
   "games": [
-    {
-      "id": "g_chess_24",
-      "slug": "matrix-chess",
-      "title": "Matrix Chess",
-      "description": "Neo-Brutalist 8x8 Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
-      "category": "STRATEGY",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-chess.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.098811+00:00",
-      "updated_at": "2026-11-02T09:23:06.098811+00:00",
-      "thumbnail_url": "/thumbnails/cyber-chess.svg"
-    },
     {
       "id": "g_starfighter_1",
       "slug": "neon-starfighter",
@@ -285,6 +746,23 @@
       "created_at": "2026-11-02T07:29:20.903992+00:00",
       "updated_at": "2026-11-02T07:29:20.903992+00:00",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
+      "id": "g_chess_24",
+      "slug": "matrix-chess",
+      "title": "Matrix Chess",
+      "description": "Neo-Brutalist 8x8 Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-chess.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.098811+00:00",
+      "updated_at": "2026-11-02T09:23:06.098811+00:00",
+      "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
       "id": "g_knife_28",
@@ -389,23 +867,6 @@
       "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
     },
     {
-      "id": "g_tetris_20",
-      "slug": "tetra-matrix",
-      "title": "Tetra Matrix",
-      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "category": "PUZZLE",
-      "status": "active",
-      "image_url": "/thumbnails/tetra-matrix.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.705429+00:00",
-      "updated_at": "2026-11-02T09:23:06.705429+00:00",
-      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
-    },
-    {
       "id": "g_shooter_07",
       "slug": "starfighter",
       "title": "Starfighter",
@@ -421,6 +882,23 @@
       "created_at": "2026-11-05T05:03:12.84575+00:00",
       "updated_at": "2026-11-05T05:03:12.84575+00:00",
       "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
+      "id": "g_tetris_20",
+      "slug": "tetra-matrix",
+      "title": "Tetra Matrix",
+      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/tetra-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.705429+00:00",
+      "updated_at": "2026-11-02T09:23:06.705429+00:00",
+      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
     },
     {
       "id": "g_maze_15",
@@ -508,23 +986,6 @@
       "thumbnail_url": "/thumbnails/chroma-reflex.svg"
     },
     {
-      "id": "g_battleship_18",
-      "slug": "naval-grid-strike",
-      "title": "Naval Grid Strike",
-      "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
-      "category": "STRATEGY",
-      "status": "active",
-      "image_url": "/thumbnails/retro-battleship.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:05.674974+00:00",
-      "updated_at": "2026-11-02T09:23:05.674974+00:00",
-      "thumbnail_url": "/thumbnails/retro-battleship.svg"
-    },
-    {
       "id": "g_flappy_27",
       "slug": "flappy-flyer",
       "title": "Flappy Flyer",
@@ -542,23 +1003,6 @@
       "thumbnail_url": "/thumbnails/flappy-bird.svg"
     },
     {
-      "id": "g_blackhole_17",
-      "slug": "singularity-horizon",
-      "title": "Singularity Horizon",
-      "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
-      "category": "STRATEGY",
-      "status": "active",
-      "image_url": "/thumbnails/black-hole.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:07.123662+00:00",
-      "updated_at": "2026-11-02T09:23:07.123662+00:00",
-      "thumbnail_url": "/thumbnails/black-hole.svg"
-    },
-    {
       "id": "g_slicer_11",
       "slug": "katana-slicer",
       "title": "Katana Slicer",
@@ -574,6 +1018,40 @@
       "created_at": "2026-11-02T09:23:05.545199+00:00",
       "updated_at": "2026-11-02T09:23:05.545199+00:00",
       "thumbnail_url": "/thumbnails/cyber-slicer.svg"
+    },
+    {
+      "id": "g_battleship_18",
+      "slug": "naval-grid-strike",
+      "title": "Naval Grid Strike",
+      "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/retro-battleship.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.674974+00:00",
+      "updated_at": "2026-11-02T09:23:05.674974+00:00",
+      "thumbnail_url": "/thumbnails/retro-battleship.svg"
+    },
+    {
+      "id": "g_blackhole_17",
+      "slug": "singularity-horizon",
+      "title": "Singularity Horizon",
+      "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/black-hole.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:07.123662+00:00",
+      "updated_at": "2026-11-02T09:23:07.123662+00:00",
+      "thumbnail_url": "/thumbnails/black-hole.svg"
     },
     {
       "id": "g_tap_04",
@@ -1007,6 +1485,62 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 4530,
       "created_at": "2026-11-06T21:31:09.737Z"
+    },
+    {
+      "id": "3fe2aaac-5cf8-4a46-a646-2880dab9cf08",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2760,
+      "created_at": "2026-11-06T21:44:23.108Z"
+    },
+    {
+      "id": "6eaecd3e-f95f-44eb-aacf-67e0bd3ecac7",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-06T21:44:40.232Z"
+    },
+    {
+      "id": "ab5df9ac-c570-4385-a553-930182755bf8",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-06T21:45:48.905Z"
+    },
+    {
+      "id": "72f628a9-a492-409e-9f55-64c4f8f2a069",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6150,
+      "created_at": "2026-11-06T22:01:24.389Z"
+    },
+    {
+      "id": "b9311fdb-eee6-4b69-a4c3-e1f9ee84c9a9",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6180,
+      "created_at": "2026-11-06T22:06:41.533Z"
+    },
+    {
+      "id": "8efba15f-7017-4108-a28b-f76813c7d71d",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6390,
+      "created_at": "2026-11-06T22:28:21.717Z"
+    },
+    {
+      "id": "4835b6d5-7f4f-4e5c-bd10-cc827b91168f",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T07:19:49.511Z"
+    },
+    {
+      "id": "8f11ea0f-36f7-4006-8d3f-30038ee88c7a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1440,
+      "created_at": "2026-11-07T07:20:36.444Z"
     }
   ],
   "ratings": [

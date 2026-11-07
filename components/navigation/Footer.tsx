@@ -22,7 +22,7 @@ export default function Footer({
   };
 
   return (
-    <footer className="mt-16 bg-portal-card border-t-4 border-black text-slate-100 relative overflow-hidden">
+    <footer className="mt-16 bg-portal-card/80 backdrop-blur-md border-t-4 border-black text-slate-100 relative overflow-hidden">
       {/* Top Accent Stripe */}
       <div className="h-2 w-full bg-gradient-to-r from-portal-yellow via-portal-pink to-portal-cyan" />
 

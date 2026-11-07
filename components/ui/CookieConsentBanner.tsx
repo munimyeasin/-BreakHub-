@@ -18,15 +18,12 @@ export default function CookieConsentBanner() {
   const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) {
-        // Small delay before showing so page loads cleanly
-        const timer = setTimeout(() => setIsVisible(true), 1200);
-        return () => clearTimeout(timer);
-      }
-    } catch {
-      // Ignore storage errors in private modes
+    // Only show if user hasn't made a choice before
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) {
+      // Small delay before showing so page loads cleanly
+      const timer = setTimeout(() => setIsVisible(true), 1200);
+      return () => clearTimeout(timer);
     }
   }, []);
 

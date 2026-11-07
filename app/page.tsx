@@ -764,11 +764,7 @@ export default function ArcadePortalDashboard() {
               ) : (
                 <GameGrid
                   games={filteredGames}
-                  favorites={favorites}
-                  hypedGames={hypedGames}
                   isFavoritesTab={activeTab === 'favorites'}
-                  onToggleFavorite={toggleFavorite}
-                  onToggleHype={handleToggleHype}
                   onPlayGame={(game) => handleLaunchGame(game)}
                   onViewLeaderboard={(gameId, e) => {
                     e.stopPropagation();

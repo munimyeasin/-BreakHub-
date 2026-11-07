@@ -229,6 +229,15 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     return () => clearInterval(id);
   }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
+  // Initialize canvas DPR scaling once on mount
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+  }, [W, H]);
+
   // Game loop
   useEffect(() => {
     const loop = () => {
@@ -243,10 +252,8 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         return;
       }
 
-      // DPR scaling for HiDPI displays
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
+      ctx.save();
       ctx.scale(dpr, dpr);
 
       if (started && !isOver) {
@@ -643,12 +650,25 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
 
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [started, isOver, H, W, best, onGameOver, onScoreUpdate, playSound, score]);
+  }, [started, isOver, H, W, onGameOver, onScoreUpdate, playSound]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
     e.preventDefault();
     flap();
   };
+
+  // Spacebar flaps (same action as tap). Global so it works before the canvas
+  // is focused; preventDefault stops the page from scrolling on Space.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        flap();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [flap]);
 
   return (
     <div className="relative w-full max-w-[420px] mx-auto aspect-[420/620] bg-black border-4 border-black rounded-2xl overflow-hidden shadow-neo select-none touch-none flex flex-col items-center justify-center">
