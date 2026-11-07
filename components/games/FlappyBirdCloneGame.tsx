@@ -229,15 +229,15 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     return () => clearInterval(id);
   }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
-  // Initialize canvas backing store and CSS size explicitly for mobile high-DPI crispness
+  // Initialize canvas backing store and CSS size explicitly for mobile high-DPI crispness without splitting
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = `${W}px`;
-    canvas.style.height = `${H}px`;
+    const displayWidth = canvas.clientWidth || W;
+    const displayHeight = canvas.clientHeight || H;
+    canvas.width = Math.round(displayWidth * dpr);
+    canvas.height = Math.round(displayHeight * dpr);
   }, [W, H]);
 
   // Game loop
@@ -255,8 +255,14 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       }
 
       const dpr = window.devicePixelRatio || 1;
+      const renderW = canvas.clientWidth || W;
+      const renderH = canvas.clientHeight || H;
+      const scaleX = renderW / W;
+      const scaleY = renderH / H;
+
       ctx.save();
-      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, renderW, renderH);
+      ctx.scale(dpr * scaleX, dpr * scaleY);
 
       if (started && !isOver) {
         tickRef.current += 1;
@@ -678,7 +684,9 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       <canvas
         ref={canvasRef}
         onPointerDown={handlePointerDown}
-        style={{ width: '100%', height: '100%', display: 'block', touchAction: 'none' }}
+        width={W}
+        height={H}
+        style={{ width: '100%', height: '100%', display: 'block', touchAction: 'none', objectFit: 'contain' }}
       />
 
       {/* Start / Game Over Overlay */}
