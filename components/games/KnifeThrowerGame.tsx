@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Play, RotateCcw, Volume2, VolumeX, Target, Trophy, Flame } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -46,15 +46,17 @@ interface FloatingText {
   life: number;
 }
 
-export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGameProps) {
+export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeThrowerGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDead, setIsDead] = useState(false);
   const [displayScore, setDisplayScore] = useState(0);
   const [level, setLevel] = useState(1);
-  const [knivesLeft, setKnivesLeft] = useState(7);
+  const [, setKnivesLeft] = useState(7);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  void _gameId;
 
   const soundEnabledRef = useRef(true);
   const onGameOverRef = useRef(onGameOver);
@@ -208,7 +210,8 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     }
 
     const baseSpeed = 0.02 + (lvl * 0.0035);
-    wheelSpeedRef.current = lvl % 2 === 0 ? -baseSpeed : baseSpeed;
+    const randomDirection = Math.random() < 0.5 ? 1 : -1;
+    wheelSpeedRef.current = (lvl % 2 === 0 ? -baseSpeed : baseSpeed) * randomDirection;
   };
 
   const startGame = () => {
@@ -410,8 +413,7 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     outerR: number,
     innerR: number,
     faceColor: string,
-    sideColor: string,
-    specColor: string
+    sideColor: string
   ) => {
     // Hard Drop Shadow
     ctx.fillStyle = '#000000';
@@ -470,7 +472,7 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const wheelCenter = { x: CANVAS_WIDTH / 2, y: 185 };
-    const wheelRadius = 85;
+    const wheelRadius = 102;
 
     const render = () => {
       // 1. Wheel Rotation & Wobble
@@ -608,15 +610,14 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
       const isBossStage = level % 5 === 0;
       const faceColor = isBossStage ? '#FF0055' : '#00F0FF';
       const sideColor = isBossStage ? '#BA005C' : '#006699';
-      const specColor = isBossStage ? '#FFE4E6' : '#E0FFFF';
 
       // Outer rim ring (largest band)
-      drawExtrudedBand(ctx, wheelRadius, wheelRadius * 0.82, faceColor, sideColor, specColor);
+      drawExtrudedBand(ctx, wheelRadius, wheelRadius * 0.82, faceColor, sideColor);
 
       // Concentric inner rings stepping down to the hub
       for (let r = wheelRadius * 0.8; r > 22; r -= 16) {
         const inner = Math.max(4, r - 14);
-        drawExtrudedBand(ctx, r, inner, faceColor, sideColor, specColor);
+        drawExtrudedBand(ctx, r, inner, faceColor, sideColor);
       }
 
       // Central Neo Hub Node
@@ -835,16 +836,32 @@ export default function KnifeThrowerGame({ gameId, onGameOver }: KnifeThrowerGam
             <p className="text-xs text-slate-300 font-bold mb-4">
               Final Score: <span className="text-portal-yellow font-black">{displayScore} PTS</span> (Stage {level})
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-2 w-full max-w-xs">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDead(false);
+                  setIsPlaying(true);
+                  flyingKnifeRef.current = null;
+                  particlesRef.current = [];
+                  floatingTextsRef.current = [];
+                  isTransitioningRef.current = false;
+                  initLevel(level);
+                }}
+                className="w-full py-3 rounded-2xl bg-portal-cyan text-black text-xs font-black uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4 stroke-[2.5]" />
+                Restart Stage {level}
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   startGame();
                 }}
-                className="px-6 py-3 rounded-2xl bg-portal-cyan text-black text-xs font-black uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-2"
+                className="w-full py-3 rounded-2xl bg-portal-pink text-white text-xs font-black uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
               >
                 <RotateCcw className="w-4 h-4 stroke-[2.5]" />
-                Try Again
+                Restart from Stage 1
               </button>
             </div>
           </div>

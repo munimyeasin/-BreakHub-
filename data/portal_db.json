@@ -14,7 +14,7 @@
       "days_played": 1,
       "longest_streak": 9,
       "level": 49,
-      "xp": 33355,
+      "xp": 33635,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 518,
+        "totalGamesPlayed": 524,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,7 +107,7 @@
           "g_snake_01",
           "g_starfighter_1"
         ],
-        "totalScoreAccumulated": 1831678,
+        "totalScoreAccumulated": 1839468,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -121,8 +121,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 518,
-      "total_score": 1831678
+      "games_played": 524,
+      "total_score": 1839468
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -727,6 +727,18 @@
           "PUZZLE"
         ]
       }
+    },
+    {
+      "id": "93907019-03f7-458f-a6fe-526f4d66ca18",
+      "username": "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "created_at": "2026-11-07T03:13:09.472+00:00"
+    },
+    {
+      "id": "31e86d43-a51b-45da-b0f9-40824df2dbad",
+      "username": "Nizufa",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Nizufa",
+      "created_at": "2026-11-07T13:38:02.831+00:00"
     }
   ],
   "games": [
@@ -1541,6 +1553,27 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 1440,
       "created_at": "2026-11-07T07:20:36.444Z"
+    },
+    {
+      "id": "3fe6c842-80f9-4b94-ae55-5bd488c09ff9",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1400,
+      "created_at": "2026-11-07T13:55:11.336Z"
+    },
+    {
+      "id": "3ee40f3c-4ccb-4dff-bcce-5dbbaa2e7d1c",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 300,
+      "created_at": "2026-11-07T13:55:42.215Z"
+    },
+    {
+      "id": "7a6905f2-9647-400d-8e65-49ee8f8f0be1",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6090,
+      "created_at": "2026-11-07T14:32:06.487Z"
     }
   ],
   "ratings": [
