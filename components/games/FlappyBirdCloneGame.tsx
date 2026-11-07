@@ -355,6 +355,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
 
       // --- RENDER SECTION ---
       ctx.save();
+      ctx.clearRect(0, 0, W, H);
 
       // Screen Shake
       if (shakeRef.current > 0) {
