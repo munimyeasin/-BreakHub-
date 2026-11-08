@@ -75,6 +75,7 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
   const wheelSpeedRef = useRef(0.022);
   const wheelWobbleRef = useRef(0);
   const targetPiecesRef = useRef<{ x: number; y: number; vx: number; vy: number; rot: number; vRot: number; color: string }[] | null>(null);
+  const fallingKnivesRef = useRef<{ x: number; y: number; vx: number; vy: number; rot: number; vRot: number }[] | null>(null);
   const stuckKnivesRef = useRef<StuckKnife[]>([]);
   const flyingKnifeRef = useRef<FlyingKnife | null>(null);
   const particlesRef = useRef<Particle[]>([]);
@@ -189,6 +190,7 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
   const initLevel = (lvl: number) => {
     setLevel(lvl);
     targetPiecesRef.current = null;
+    fallingKnivesRef.current = null;
     let knivesCount = 7 + Math.floor((lvl - 1) * 1.5);
     if (lvl % 5 === 0) {
       knivesCount = 12 + Math.floor(lvl / 2);
@@ -556,6 +558,22 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
 
               // Shatter target into pieces immediately on stage clear
               targetPiecesRef.current = [];
+              fallingKnivesRef.current = [];
+              stuckKnivesRef.current.forEach((stuck) => {
+                const globalAngle = stuck.angle + wheelAngleRef.current;
+                const kx = wheelCenter.x + Math.cos(globalAngle) * wheelRadius;
+                const ky = wheelCenter.y + Math.sin(globalAngle) * wheelRadius;
+                fallingKnivesRef.current!.push({
+                  x: kx,
+                  y: ky,
+                  vx: Math.cos(globalAngle) * (4 + Math.random() * 4),
+                  vy: Math.sin(globalAngle) * (4 + Math.random() * 4) - 2,
+                  rot: globalAngle - Math.PI / 2,
+                  vRot: (Math.random() - 0.5) * 0.35
+                });
+              });
+              stuckKnivesRef.current = [];
+
               const numPieces = 10;
               const isBossLevel = level % 5 === 0;
               for (let i = 0; i < numPieces; i++) {
@@ -698,6 +716,18 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
         ctx.restore();
       });
 
+      // Render falling debris knives
+      if (fallingKnivesRef.current) {
+        fallingKnivesRef.current.forEach((fk) => {
+          fk.x += fk.vx;
+          fk.y += fk.vy;
+          fk.vy += 0.45; // gravity
+          fk.rot += fk.vRot;
+
+          draw3DKatanaBlade(ctx, fk.x, fk.y, fk.rot, 0.42, 1.0);
+        });
+      }
+
       // Boss Health HUD Bar
       const isBossStage = level % 5 === 0;
       if (isBossStage) {
@@ -732,7 +762,9 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
 
       // 7. Render Ready Katana Stung at Bottom Launcher
       if (!isTransitioningRef.current && flyingKnifeRef.current === null && knivesRemainingRef.current > 0) {
-        draw3DKatanaBlade(ctx, CANVAS_WIDTH / 2, 570, 0, 0.52, 1.0);
+        // If target is shattering during transition, make the ready knife fall down with gravity
+        const fallOffsetY = targetPiecesRef.current && targetPiecesRef.current.length > 0 ? 120 : 0;
+        draw3DKatanaBlade(ctx, CANVAS_WIDTH / 2, 570 + fallOffsetY, targetPiecesRef.current && targetPiecesRef.current.length > 0 ? 0.2 : 0, 0.52, targetPiecesRef.current && targetPiecesRef.current.length > 0 ? 0.0 : 1.0);
       }
 
       // 8. Particles & Floating Text
@@ -775,10 +807,10 @@ export default function KnifeThrowerGame({ gameId: _gameId, onGameOver }: KnifeT
       ctx.save();
       ctx.fillStyle = '#ffffff';
       ctx.font = '900 11px monospace';
-      ctx.fillText(`BLADES READY:`, 24, 625);
+      ctx.fillText(`X${knivesRemainingRef.current} BLADE LEFT`, 24, 625);
 
       for (let i = 0; i < knivesRemainingRef.current; i++) {
-        const kx = 135 + i * 16;
+        const kx = 155 + i * 16;
         const ky = 621;
         ctx.fillStyle = '#00F0FF';
         ctx.fillRect(kx, ky - 10, 4, 15);
