@@ -42,13 +42,16 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
-function CardBack({ label = 'CARDS' }: { label?: string }) {
+function CardBack({ label = 'UNO' }: { label?: string }) {
   return (
-    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-[#252a34] border-2 border-black shadow-sm flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
-      <div className="w-full h-full rounded bg-[#1b1f28] border border-white/15 flex items-center justify-center p-0.5">
-        <span className="text-[7px] sm:text-[8px] font-black text-white uppercase tracking-tighter text-center leading-tight">
-          {label}
-        </span>
+    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-xl bg-[#111622] border-2 border-black shadow-md flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
+      <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/10 pointer-events-none" />
+      <div className="w-full h-full rounded-lg bg-[#181d29] border border-white/20 flex flex-col items-center justify-center p-0.5 relative">
+        <div className="w-6 h-9 sm:w-7 sm:h-11 rounded-md bg-rose-600 border border-black/80 flex items-center justify-center transform -rotate-12 shadow-sm">
+          <span className="text-[7px] sm:text-[8px] font-black text-yellow-300 uppercase tracking-tighter transform rotate-12 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)]">
+            {label}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -69,45 +72,62 @@ function GameCard({ card, onClick, playable }: { card: Card; onClick?: () => voi
     : '★';
 
   const textColorClass = card.color === 'yellow'
-    ? 'text-amber-500'
+    ? 'text-amber-900'
     : card.color === 'red'
     ? 'text-[#e53935]'
     : card.color === 'blue'
     ? 'text-[#1e88e5]'
     : card.color === 'green'
     ? 'text-[#43a047]'
-    : 'text-purple-600';
+    : 'text-purple-700';
+
+  const isWild = card.color === 'wild';
 
   return (
     <div
       onClick={onClick}
-      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-3xl border-4 border-black p-2 flex flex-col justify-between relative shadow-neo-sm transition-all duration-200 cursor-pointer overflow-hidden ${colorObj.bg} ${
+      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-3xl border-4 border-black p-2 flex flex-col justify-between relative shadow-neo-sm transition-all duration-200 cursor-pointer overflow-hidden ${
+        isWild ? 'bg-gradient-to-br from-red-600 via-blue-600 to-amber-400' : colorObj.bg
+      } ${
         playable ? 'ring-4 ring-amber-400 hover:-translate-y-4 animate-pulse' : 'hover:-translate-y-2'
       }`}
       style={{
         boxShadow: '4px 4px 0px #000000',
       }}
     >
+      {/* Glossy Plastic Finish Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-black/30 pointer-events-none" />
+
       {/* Crisp White Inner Border Outline */}
       <div className="absolute inset-1.5 border-2 border-white/80 rounded-2xl pointer-events-none" />
 
       {/* Top-Left Corner Index Marker */}
-      <div className="relative z-10 text-white font-black text-xs sm:text-sm drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-        {card.type === 'number' ? card.value : card.type[0].toUpperCase()}
+      <div className="relative z-10 text-white font-black text-xs sm:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+        {card.type === 'number' ? card.value : card.type === 'wild_draw_four' ? '+4' : card.type === 'draw_two' ? '+2' : card.type[0].toUpperCase()}
       </div>
 
       {/* Classic Tilted White Oval / Pill in Center */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-14 h-20 sm:w-18 sm:h-26 bg-white rounded-[50%] border-2 border-black transform -rotate-12 flex items-center justify-center shadow-inner">
-          <span className={`text-2xl sm:text-4xl font-black ${textColorClass} transform rotate-12 drop-shadow-sm`}>
-            {symbol}
-          </span>
+        <div className={`w-14 h-20 sm:w-18 sm:h-26 bg-white rounded-[50%] border-3 border-black transform -rotate-12 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.15),0_4px_8px_rgba(0,0,0,0.3)] ${isWild ? 'overflow-hidden' : ''}`}>
+          {isWild ? (
+            <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 opacity-90">
+              <div className="bg-[#e53935]" />
+              <div className="bg-[#1e88e5]" />
+              <div className="bg-[#43a047]" />
+              <div className="bg-[#fdd835]" />
+            </div>
+          ) : null}
+          <div className="relative z-10 flex items-center justify-center">
+            <span className={`text-2xl sm:text-4xl font-black ${isWild ? 'text-black drop-shadow-[0_2px_2px_rgba(255,255,255,0.9)]' : textColorClass} transform rotate-12 drop-shadow-sm`}>
+              {symbol}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Bottom-Right Corner Index Marker */}
-      <div className="relative z-10 text-white font-black text-xs sm:text-sm self-end rotate-180 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-        {card.type === 'number' ? card.value : card.type[0].toUpperCase()}
+      <div className="relative z-10 text-white font-black text-xs sm:text-sm self-end rotate-180 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+        {card.type === 'number' ? card.value : card.type === 'wild_draw_four' ? '+4' : card.type === 'draw_two' ? '+2' : card.type[0].toUpperCase()}
       </div>
     </div>
   );
