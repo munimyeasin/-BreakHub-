@@ -35,7 +35,7 @@ export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: 
   // When data finishes loading or minimum time elapses, complete to 100%
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
-    if (!isLoadingData && progress < 100) {
+    if (!isLoadingData && progress >= 95) {
       setProgress(100);
       timer = setTimeout(() => {
         setIsFadingOut(true);
