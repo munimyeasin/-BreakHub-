@@ -14,7 +14,7 @@
       "days_played": 1,
       "longest_streak": 9,
       "level": 51,
-      "xp": 36110,
+      "xp": 36220,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 556,
+        "totalGamesPlayed": 560,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -109,7 +109,7 @@
           "g_candy_19",
           "g_dungeon_29"
         ],
-        "totalScoreAccumulated": 1936848,
+        "totalScoreAccumulated": 1937248,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
@@ -123,8 +123,8 @@
           "PUZZLE"
         ]
       },
-      "games_played": 556,
-      "total_score": 1936848
+      "games_played": 560,
+      "total_score": 1937248
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -786,23 +786,6 @@
       "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
-      "id": "g_dungeon_29",
-      "slug": "dungeon-slice",
-      "title": "Dungeon Slice",
-      "description": "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
-      "category": "ACTION",
-      "status": "coming_soon",
-      "image_url": "/thumbnails/dungeon-slice.svg",
-      "game_url": null,
-      "rating": 4.5,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 34,
-      "created_at": "2026-11-08T08:19:52.325024+00:00",
-      "updated_at": "2026-11-08T08:19:52.325024+00:00",
-      "thumbnail_url": "/thumbnails/dungeon-slice.svg"
-    },
-    {
       "id": "g_chess_24",
       "slug": "matrix-chess",
       "title": "Matrix Chess",
@@ -818,6 +801,23 @@
       "created_at": "2026-11-02T09:23:06.098811+00:00",
       "updated_at": "2026-11-02T09:23:06.098811+00:00",
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
+    },
+    {
+      "id": "g_dungeon_29",
+      "slug": "dungeon-slice",
+      "title": "Dungeon Slice",
+      "description": "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
+      "category": "ACTION",
+      "status": "coming_soon",
+      "image_url": "/thumbnails/dungeon-slice.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 35,
+      "created_at": "2026-11-08T08:19:52.325024+00:00",
+      "updated_at": "2026-11-08T08:19:52.325024+00:00",
+      "thumbnail_url": "/thumbnails/dungeon-slice.svg"
     },
     {
       "id": "g_knife_28",

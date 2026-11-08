@@ -39,6 +39,23 @@ export interface EnemyBullet {
   color: string;
   glowColor: string;
   isSpread?: boolean;
+  isTracking?: boolean;
+}
+
+export interface Boss {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  vx: number;
+  vy: number;
+  hp: number;
+  maxHp: number;
+  shield: number;
+  maxShield: number;
+  attackTimer: number;
+  attackPattern: number;
+  entryAnim: number;
 }
 
 export const DIFFICULTY_CONFIGS: Record<StarfighterDifficulty, {
@@ -370,6 +387,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   });
 
   const enemiesRef = useRef<Enemy[]>([]);
+  const enemyBulletsRef = useRef<EnemyBullet[]>([]);
+  const bossRef = useRef<Boss | null>(null);
+  const [bossWarning, setBossWarning] = useState<string | null>(null);
+  const lastBossScoreSpawnRef = useRef(0);
   const meteorsRef = useRef<Meteor[]>([]);
   const blackHolesRef = useRef<BlackHole[]>([]);
   const powerupsRef = useRef<Powerup[]>([]);
@@ -725,6 +746,10 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       pendingDeltaX: 0,
     };
     enemiesRef.current = [];
+    enemyBulletsRef.current = [];
+    bossRef.current = null;
+    setBossWarning(null);
+    lastBossScoreSpawnRef.current = 0;
     meteorsRef.current = [];
     blackHolesRef.current = [];
     powerupsRef.current = [];
@@ -826,15 +851,21 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
     if (p.tripleShotTimer > 0) {
       bulletsRef.current.push(
-        { x: p.x + 4, y: p.y - 2, vx: -7, vy: -50, color: '#39FF14' },
-        { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -55, color: '#00F0FF' },
-        { x: p.x + p.width - 8, y: p.y - 2, vx: 7, vy: -38, color: '#39FF14' }
+        { x: p.x + 2, y: p.y - 2, vx: -8, vy: -42, color: '#39FF14' },
+        { x: p.x + 8, y: p.y - 4, vx: -3, vy: -48, color: '#39FF14' },
+        { x: p.x + p.width / 2 - 2, y: p.y - 8, vx: 0, vy: -52, color: '#00F0FF' },
+        { x: p.x + p.width - 8, y: p.y - 4, vx: 3, vy: -48, color: '#39FF14' },
+        { x: p.x + p.width - 2, y: p.y - 2, vx: 8, vy: -42, color: '#39FF14' }
       );
       playSfxRef.current('spread');
     } else {
+      // Quad laser fire from 4 X-wing wingtips
+      const isHyp = p.hyperTimer > 0;
       bulletsRef.current.push(
-        { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -55 : -48, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
-        { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -55 : -48, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+        { x: p.x + 2, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + 10, y: p.y - 4, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + p.width - 10, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+        { x: p.x + p.width - 2, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
       );
       playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
     }
@@ -1333,25 +1364,27 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       p.x = Math.max(0, Math.min(curW - p.width, p.x));
       p.y = playerBaseY;
 
-      // DUAL WINGTIP HIGH-VELOCITY 3X PLASMA LASER FIRING ENGINE (Matching neon-starfighter.svg)
-      const fireIntervalMs = p.hyperTimer > 0 ? 55 : p.tripleShotTimer > 0 ? 75 : 90;
+      // QUAD LASER CANNON FIRING ENGINE (Luke's X-wing)
+      const fireIntervalMs = p.hyperTimer > 0 ? 50 : p.tripleShotTimer > 0 ? 70 : 85;
       if (timestamp - lastShotTimeRef.current >= fireIntervalMs) {
         lastShotTimeRef.current = timestamp;
 
         if (p.tripleShotTimer > 0) {
-          // 3-Way Spread High-Speed Plasma Cannons
           bulletsRef.current.push(
-            { x: p.x + 4, y: p.y - 2, vx: -7, vy: -38, color: '#39FF14' },
-            { x: p.x + p.width / 2 - 2, y: p.y - 6, vx: 0, vy: -42, color: '#00F0FF' },
-            { x: p.x + p.width - 8, y: p.y - 2, vx: 7, vy: -38, color: '#39FF14' }
+            { x: p.x + 2, y: p.y - 2, vx: -8, vy: -42, color: '#39FF14' },
+            { x: p.x + 8, y: p.y - 4, vx: -3, vy: -48, color: '#39FF14' },
+            { x: p.x + p.width / 2 - 2, y: p.y - 8, vx: 0, vy: -52, color: '#00F0FF' },
+            { x: p.x + p.width - 8, y: p.y - 4, vx: 3, vy: -48, color: '#39FF14' },
+            { x: p.x + p.width - 2, y: p.y - 2, vx: 8, vy: -42, color: '#39FF14' }
           );
           playSfxRef.current('spread');
         } else {
-          // Dual Wingtip High-Speed Synchronized Plasma Beams (from outer yellow wingtip rails)
           const isHyp = p.hyperTimer > 0;
           bulletsRef.current.push(
-            { x: p.x + 3, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
-            { x: p.x + p.width - 7, y: p.y - 2, vx: 0, vy: isHyp ? -44 : -38, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
+            { x: p.x + 2, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+            { x: p.x + 10, y: p.y - 4, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+            { x: p.x + p.width - 10, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp },
+            { x: p.x + p.width - 2, y: p.y - 2, vx: 0, vy: isHyp ? -52 : -46, color: isHyp ? '#FFE600' : '#00F0FF', isHyper: isHyp }
           );
           playSfxRef.current(isHyp ? 'hyper_laser' : 'laser');
         }
@@ -1498,6 +1531,181 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
 
         if (pow.y > curH + 30) powerupsRef.current.splice(i, 1);
+      }
+
+      // SPAWN CAPITAL SHIP BOSS (Every 3000 score milestones)
+      if (scoreRef.current >= lastBossScoreSpawnRef.current + 3000 && !bossRef.current) {
+        lastBossScoreSpawnRef.current = scoreRef.current;
+        bossRef.current = {
+          x: curW / 2 - 110,
+          y: -130,
+          width: 220,
+          height: 105,
+          vx: 1.8,
+          vy: 1.2,
+          hp: 120,
+          maxHp: 120,
+          shield: 60,
+          maxShield: 60,
+          attackTimer: 0,
+          attackPattern: 0,
+          entryAnim: 0,
+        };
+        setBossWarning('⚠️ CAPITAL SHIP DETECTED: VADER COMMAND ⚠️');
+        screenShakeRef.current = 18;
+        playSfxRef.current('nuke');
+        addShockwave(curW / 2, curH / 3, '#FF0055', 100);
+        setTimeout(() => setBossWarning(null), 4500);
+      }
+
+      // UPDATE ENEMY & BOSS BULLETS
+      for (let i = enemyBulletsRef.current.length - 1; i >= 0; i--) {
+        const eb = enemyBulletsRef.current[i];
+        eb.x += eb.vx * timeScale;
+        eb.y += eb.vy * timeScale;
+
+        const distToPlayer = Math.hypot((p.x + p.width / 2) - eb.x, (p.y + p.height / 2) - eb.y);
+        if (distToPlayer < p.width * 0.45 + eb.radius) {
+          enemyBulletsRef.current.splice(i, 1);
+          if (p.hasShield) {
+            p.hasShield = false;
+            playSfxRef.current('shield_hit');
+            screenShakeRef.current = 12;
+            addActionBadge(p.x + p.width / 2, p.y, 'SHIELD BROKEN!');
+          } else {
+            handlePlayerDeath();
+            cancelAnimationFrame(animId);
+            return;
+          }
+          continue;
+        }
+
+        if (eb.y > curH + 40 || eb.x < -40 || eb.x > curW + 40) {
+          enemyBulletsRef.current.splice(i, 1);
+        }
+      }
+
+      // UPDATE CAPITAL SHIP BOSS
+      if (bossRef.current) {
+        const boss = bossRef.current;
+        if (boss.entryAnim < 1) {
+          boss.y += (80 - boss.y) * 0.05 * timeScale;
+          boss.entryAnim += 0.02 * timeScale;
+        } else {
+          boss.x += boss.vx * timeScale;
+          if (boss.x <= 20 || boss.x >= curW - boss.width - 20) {
+            boss.vx *= -1;
+          }
+        }
+
+        boss.attackTimer += timeScale;
+        if (boss.attackTimer > 75) {
+          boss.attackTimer = 0;
+          boss.attackPattern = (boss.attackPattern + 1) % 3;
+          const bx = boss.x + boss.width / 2;
+          const by = boss.y + boss.height;
+
+          if (boss.attackPattern === 0) {
+            for (let k = -2; k <= 2; k++) {
+              enemyBulletsRef.current.push({
+                x: bx,
+                y: by,
+                vx: k * 2.2,
+                vy: 4.5,
+                radius: 5,
+                color: '#FF0055',
+                glowColor: '#FF0055',
+                isSpread: true,
+              });
+            }
+            playSfxRef.current('laser');
+          } else if (boss.attackPattern === 1) {
+            const dx = (p.x + p.width / 2) - bx;
+            const dist = Math.hypot(dx, 1);
+            enemyBulletsRef.current.push({
+              x: bx,
+              y: by,
+              vx: (dx / dist) * 3.5,
+              vy: 3.8,
+              radius: 9,
+              color: '#9D00FF',
+              glowColor: '#FF00EA',
+              isTracking: true,
+            });
+            playSfxRef.current('powerup');
+          } else {
+            for (let k = -1.5; k <= 1.5; k += 1) {
+              enemyBulletsRef.current.push({
+                x: bx + k * 35,
+                y: by,
+                vx: k * 0.8,
+                vy: 6.2,
+                radius: 4,
+                color: '#FFE600',
+                glowColor: '#FFE600',
+              });
+            }
+            playSfxRef.current('laser');
+          }
+        }
+
+        // Check collision with player bullets
+        for (let j = bulletsRef.current.length - 1; j >= 0; j--) {
+          const b = bulletsRef.current[j];
+          if (
+            b.x >= boss.x &&
+            b.x <= boss.x + boss.width &&
+            b.y >= boss.y &&
+            b.y <= boss.y + boss.height
+          ) {
+            bulletsRef.current.splice(j, 1);
+            if (boss.shield > 0) {
+              boss.shield -= 1;
+              playSfxRef.current('shield_hit');
+            } else {
+              boss.hp -= 1;
+            }
+            if (particlesRef.current.length < 50) {
+              particlesRef.current.push({
+                x: b.x,
+                y: b.y,
+                vx: (Math.random() - 0.5) * 4,
+                vy: (Math.random() - 0.5) * 4,
+                alpha: 1,
+                color: '#FFE600',
+                size: 2.5,
+                life: 0,
+                maxLife: 12,
+              });
+            }
+
+            if (boss.hp <= 0) {
+              playSfxRef.current('boom');
+              screenShakeRef.current = 24;
+              addShockwave(boss.x + boss.width / 2, boss.y + boss.height / 2, '#FF0055', 150);
+              scoreRef.current += 3500;
+              confetti({ particleCount: 80, spread: 90 });
+              addActionBadge(curW / 2, curH / 2, '⭐ CAPITAL SHIP DESTROYED! +3500 ⭐');
+              bossRef.current = null;
+              powerupsRef.current.push({
+                x: curW / 2 - 30,
+                y: curH / 3,
+                type: 'nuke',
+                vy: 2.0,
+                radius: 14,
+                pulse: 0,
+              });
+              powerupsRef.current.push({
+                x: curW / 2 + 30,
+                y: curH / 3,
+                type: 'hyper',
+                vy: 2.0,
+                radius: 14,
+                pulse: 0,
+              });
+            }
+          }
+        }
       }
 
       // UPDATE BLACK HOLES
@@ -2136,262 +2344,207 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
+      // 8.5 Capital Ship Boss (Star Destroyer / Darth Vader Command Ship style)
+      if (bossRef.current) {
+        const boss = bossRef.current;
+        ctx.save();
+        ctx.translate(boss.x + boss.width / 2, boss.y + boss.height / 2);
+
+        // Hard Drop Shadow
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.moveTo(0 + 5, -boss.height / 2 - 5);
+        ctx.lineTo(-boss.width / 2 - 5, boss.height / 2 + 5);
+        ctx.lineTo(boss.width / 2 + 5, boss.height / 2 + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        // Wedge Hull
+        ctx.fillStyle = '#1E1548';
+        ctx.beginPath();
+        ctx.moveTo(0, -boss.height / 2);
+        ctx.lineTo(-boss.width / 2, boss.height / 2);
+        ctx.lineTo(boss.width / 2, boss.height / 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3.5;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        // Command Superstructure Bridge & Details
+        ctx.fillStyle = '#381E54';
+        ctx.fillRect(-25, -15, 50, 30);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-25, -15, 50, 30);
+
+        // Glowing Engine Thrusters at Rear
+        ctx.fillStyle = '#FF0055';
+        ctx.fillRect(-60, boss.height / 2 - 4, 30, 8);
+        ctx.fillRect(30, boss.height / 2 - 4, 30, 8);
+        ctx.fillStyle = '#FFE600';
+        ctx.fillRect(-50, boss.height / 2 - 2, 10, 4);
+        ctx.fillRect(40, boss.height / 2 - 2, 10, 4);
+
+        // Shield Aura Glow
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.arc(0, 0, boss.width * 0.55, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.restore();
+
+        // Boss Health & Shield Bar UI on Canvas
+        ctx.save();
+        const barW = 240;
+        const barH = 12;
+        const barX = (curW - barW) / 2;
+        const barY = 16;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(barX - 2, barY - 2, barW + 4, barH + 4);
+        ctx.fillStyle = '#220F38';
+        ctx.fillRect(barX, barY, barW, barH);
+
+        const hpRatio = Math.max(0, boss.hp / boss.maxHp);
+        ctx.fillStyle = '#FF0055';
+        ctx.fillRect(barX, barY, barW * hpRatio, barH);
+
+        if (boss.shield > 0) {
+          const shieldRatio = Math.max(0, boss.shield / boss.maxShield);
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.55)';
+          ctx.fillRect(barX, barY, barW * shieldRatio, barH);
+        }
+
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(barX, barY, barW, barH);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 10px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`VADER COMMAND SHIP • HP: ${boss.hp}/${boss.maxHp}`, curW / 2, barY - 5);
+        ctx.restore();
+      }
+
+      // 9.5 Enemy & Boss Projectiles
+      enemyBulletsRef.current.forEach((eb) => {
+        ctx.save();
+        ctx.fillStyle = eb.color;
+        ctx.beginPath();
+        ctx.arc(eb.x, eb.y, eb.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      });
+
       // ==========================================
-      // 10. 3D HERO NEON STARFIGHTER INTERCEPTOR
-      // (Directly translated from neon-starfighter.svg)
+      // 10. LUKE'S T-65 X-WING STARFIGHTER
       // ==========================================
       const cx = p.x + p.width / 2;
       const cy = p.y + p.height / 2;
 
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.rotate(p.roll); // Dynamic Banking Roll Tilt
+      ctx.rotate(p.roll); // Banking tilt
 
       const isHyp = p.hyperTimer > 0;
       const isTrip = p.tripleShotTimer > 0;
-
-      // 10.1 Thruster Exhaust Jet Flames (3-Nozzle Engine Cluster)
       const flameOffset = Math.sin(timestamp * 0.04) * 4;
       const flameColor = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
 
-      // Center Main High-Energy Thruster
+      // 4 Engine Exhaust Nozzles
       ctx.fillStyle = flameColor;
-      ctx.beginPath();
-      ctx.moveTo(-5, 14);
-      ctx.lineTo(0, 32 + flameOffset);
-      ctx.lineTo(5, 14);
-      ctx.closePath();
-      ctx.fill();
+      ctx.fillRect(-14, 14, 6, 16 + flameOffset);
+      ctx.fillRect(-6, 14, 6, 20 + flameOffset);
+      ctx.fillRect(2, 14, 6, 20 + flameOffset);
+      ctx.fillRect(10, 14, 6, 16 + flameOffset);
 
-      // White-Hot Inner Core Flame
-      ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath();
-      ctx.moveTo(-2.5, 14);
-      ctx.lineTo(0, 22 + flameOffset * 0.5);
-      ctx.lineTo(2.5, 14);
-      ctx.closePath();
-      ctx.fill();
-
-      // Left & Right Auxiliary Wingtip Thrusters
-      ctx.fillStyle = flameColor;
-      ctx.beginPath();
-      ctx.moveTo(-18, 10);
-      ctx.lineTo(-16, 20 + flameOffset * 0.7);
-      ctx.lineTo(-14, 10);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(14, 10);
-      ctx.lineTo(16, 20 + flameOffset * 0.7);
-      ctx.lineTo(18, 10);
-      ctx.closePath();
-      ctx.fill();
-
-      // 10.2 Hard Offset Drop Shadow (Neo-Brutalism)
+      // Hard Drop Shadow
       ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.moveTo(0 + 4, -22 + 4);
-      ctx.lineTo(-24 + 4, 8 + 4);
-      ctx.lineTo(-21 + 4, 16 + 4);
-      ctx.lineTo(-7 + 4, 18 + 4);
-      ctx.lineTo(0 + 4, 6 + 4);
-      ctx.lineTo(7 + 4, 18 + 4);
-      ctx.lineTo(21 + 4, 16 + 4);
-      ctx.lineTo(24 + 4, 8 + 4);
+      ctx.moveTo(0 + 4, -26 + 4);
+      ctx.lineTo(-26 + 4, 12 + 4);
+      ctx.lineTo(26 + 4, 12 + 4);
       ctx.closePath();
       ctx.fill();
 
-      // 10.3 3D Extruded Hull Facets (Dark Cyan Side Plates from SVG: #0369A1 / #0C4A6E)
-      ctx.fillStyle = isHyp ? '#D49B00' : '#0369A1';
-      // Left Fuselage Side Depth
-      ctx.beginPath();
-      ctx.moveTo(-23, 6);
-      ctx.lineTo(-26, 12);
-      ctx.lineTo(-7, 20);
-      ctx.lineTo(-7, 16);
-      ctx.closePath();
-      ctx.fill();
+      // X-Wing Open S-Foils (Wings in X Attack Position)
+      ctx.fillStyle = isHyp ? '#FFE600' : '#FFFFFF';
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2.5;
-      ctx.stroke();
 
-      // Right Fuselage Side Depth
+      // Top-Left Wing
       ctx.beginPath();
-      ctx.moveTo(23, 6);
-      ctx.lineTo(26, 12);
-      ctx.lineTo(7, 20);
-      ctx.lineTo(7, 16);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      // Center Under-Belly Depth
-      ctx.fillStyle = isHyp ? '#805D00' : '#0C4A6E';
-      ctx.beginPath();
-      ctx.moveTo(-7, 16);
-      ctx.lineTo(-7, 20);
-      ctx.lineTo(7, 20);
-      ctx.lineTo(7, 16);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      // 10.4 Main Swept Wings & Hull (Vibrant Cyan Armor Plates: #00F0FF)
-      ctx.fillStyle = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2.8;
-      ctx.lineJoin = 'round';
-
-      // Left Swept Wing
-      ctx.beginPath();
-      ctx.moveTo(0, -16);
-      ctx.lineTo(-23, 6);
-      ctx.lineTo(-21, 15);
-      ctx.lineTo(-7, 16);
+      ctx.moveTo(0, -12);
+      ctx.lineTo(-24, -4);
+      ctx.lineTo(-22, 10);
       ctx.lineTo(0, 4);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Right Swept Wing
+      // Top-Right Wing
       ctx.beginPath();
-      ctx.moveTo(0, -16);
-      ctx.lineTo(23, 6);
-      ctx.lineTo(21, 15);
-      ctx.lineTo(7, 16);
+      ctx.moveTo(0, -12);
+      ctx.lineTo(24, -4);
+      ctx.lineTo(22, 10);
       ctx.lineTo(0, 4);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // 10.5 Neon Yellow Wingtip Rails & Laser Cannon Barrels (#FFF570 / #FFE600)
+      // Quad Laser Cannons on Wingtips
       ctx.fillStyle = '#FFE600';
-      // Left Wingtip Rail
+      ctx.fillRect(-27, -8, 5, 6);
+      ctx.strokeRect(-27, -8, 5, 6);
+      ctx.fillRect(22, -8, 5, 6);
+      ctx.strokeRect(22, -8, 5, 6);
+
+      // Fuselage Center Body
+      ctx.fillStyle = '#38BDF8';
       ctx.beginPath();
-      ctx.moveTo(-23, 6);
-      ctx.lineTo(-27, 8);
-      ctx.lineTo(-21, 15);
+      ctx.moveTo(0, -26);
+      ctx.lineTo(-6, -6);
+      ctx.lineTo(-6, 16);
+      ctx.lineTo(6, 16);
+      ctx.lineTo(6, -6);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Right Wingtip Rail
-      ctx.beginPath();
-      ctx.moveTo(23, 6);
-      ctx.lineTo(27, 8);
-      ctx.lineTo(21, 15);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Wing Spoiler Ridges
-      ctx.beginPath();
-      ctx.moveTo(-8, -2);
-      ctx.lineTo(-16, 6);
-      ctx.lineTo(-13, 9);
-      ctx.lineTo(-6, 2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(8, -2);
-      ctx.lineTo(16, 6);
-      ctx.lineTo(13, 9);
-      ctx.lineTo(6, 2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // 10.6 Forward Nose Cone & Fuselage Spine
-      ctx.fillStyle = isHyp ? '#FFF570' : '#38BDF8';
-      ctx.beginPath();
-      ctx.moveTo(0, -24);
-      ctx.lineTo(-6, -4);
-      ctx.lineTo(0, 10);
-      ctx.lineTo(6, -4);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // 10.7 Glowing 3D Cockpit Canopy (Neon Magenta with Specular Glint)
-      ctx.fillStyle = '#FF70D9';
-      ctx.beginPath();
-      ctx.moveTo(0, -14);
-      ctx.lineTo(-4, -3);
-      ctx.lineTo(0, 3);
-      ctx.closePath();
-      ctx.fill();
-
+      // Cockpit Canopy
       ctx.fillStyle = '#FF007F';
       ctx.beginPath();
-      ctx.moveTo(0, -14);
-      ctx.lineTo(4, -3);
-      ctx.lineTo(0, 3);
+      ctx.moveTo(0, -16);
+      ctx.lineTo(-4, -4);
+      ctx.lineTo(0, 4);
+      ctx.lineTo(4, -4);
       ctx.closePath();
       ctx.fill();
-
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, -14);
-      ctx.lineTo(-4, -3);
-      ctx.lineTo(0, 3);
-      ctx.lineTo(4, -3);
-      ctx.closePath();
       ctx.stroke();
 
-      // Cockpit Specular Glint Highlight
-      ctx.fillStyle = '#FFFFFF';
+      // R2 Astromech Droid Socket (behind cockpit)
+      ctx.fillStyle = '#00F0FF';
       ctx.beginPath();
-      ctx.moveTo(-1, -12);
-      ctx.lineTo(-3, -4);
-      ctx.lineTo(-1, -4);
-      ctx.closePath();
+      ctx.arc(0, 7, 3, 0, Math.PI * 2);
       ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
-      // Wing Lead Edge Gloss Highlight
-      ctx.fillStyle = '#FFFFFF';
-      ctx.globalAlpha = 0.65;
-      ctx.beginPath();
-      ctx.moveTo(0, -16);
-      ctx.lineTo(-20, 5);
-      ctx.lineTo(-14, 3);
-      ctx.lineTo(0, -10);
-      ctx.closePath();
-      ctx.fill();
-      ctx.globalAlpha = 1;
-
-      // 10.8 Energy Shield Bubble
+      // Energy Shield Bubble
       if (p.hasShield) {
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 4.5;
-        ctx.beginPath();
-        ctx.arc(2, 2, 32, 0, Math.PI * 2);
-        ctx.stroke();
-
         ctx.strokeStyle = '#00F0FF';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, 0, 32, 0, Math.PI * 2);
+        ctx.arc(0, 0, 34, 0, Math.PI * 2);
         ctx.stroke();
-
-        // 4 Floating Energy Shield Nodes
-        const nodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
-        nodes.forEach((ang) => {
-          const nx = Math.cos(ang + timestamp * 0.003) * 32;
-          const ny = Math.sin(ang + timestamp * 0.003) * 32;
-          ctx.fillStyle = '#FF007F';
-          ctx.fillRect(nx - 3, ny - 3, 6, 6);
-          ctx.strokeStyle = '#000000';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(nx - 3, ny - 3, 6, 6);
-        });
       }
 
       ctx.restore();
@@ -2485,6 +2638,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
             : 'aspect-[9/16] w-full max-w-md max-h-[75vh]'
         } ${isFullscreen ? (isDesktop ? 'max-h-[78vh] sm:max-h-[82vh] w-auto h-full max-w-full' : 'max-h-[82vh] w-full h-auto') : ''}`}
       >
+        {/* Boss Entry Warning Alert Banner */}
+        {bossWarning && (
+          <div className="absolute top-4 inset-x-4 z-20 bg-portal-pink text-white px-4 py-3 rounded-2xl border-3 border-black shadow-neo-lg text-center font-black animate-pulse flex items-center justify-center gap-2">
+            <AlertTriangle className="w-6 h-6 stroke-[2.5]" />
+            <span className="text-sm md:text-base uppercase tracking-wider">{bossWarning}</span>
+          </div>
+        )}
+
         <canvas
           ref={canvasRef}
           width={isDesktop ? DESKTOP_WIDTH : MOBILE_WIDTH}
