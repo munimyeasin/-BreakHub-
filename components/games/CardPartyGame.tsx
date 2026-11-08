@@ -81,7 +81,7 @@ function GameCard({ card, onClick, playable }: { card: Card; onClick?: () => voi
   return (
     <div
       onClick={onClick}
-      className={`w-18 h-28 sm:w-22 sm:h-34 rounded-3xl border-4 border-black p-2 flex flex-col justify-between relative shadow-neo-sm transition-all duration-200 cursor-pointer ${colorObj.bg} ${
+      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-3xl border-4 border-black p-2 flex flex-col justify-between relative shadow-neo-sm transition-all duration-200 cursor-pointer overflow-hidden ${colorObj.bg} ${
         playable ? 'ring-4 ring-amber-400 hover:-translate-y-4 animate-pulse' : 'hover:-translate-y-2'
       }`}
       style={{
@@ -89,18 +89,20 @@ function GameCard({ card, onClick, playable }: { card: Card; onClick?: () => voi
       }}
     >
       {/* Crisp White Inner Border Outline */}
-      <div className="absolute inset-1.5 border-2 border-white/90 rounded-2xl pointer-events-none" />
+      <div className="absolute inset-1.5 border-2 border-white/80 rounded-2xl pointer-events-none" />
 
       {/* Top-Left Corner Index Marker */}
       <div className="relative z-10 text-white font-black text-xs sm:text-sm drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
         {card.type === 'number' ? card.value : card.type[0].toUpperCase()}
       </div>
 
-      {/* Central White Window Container */}
-      <div className="relative z-10 w-10 h-14 sm:w-13 sm:h-18 bg-white rounded-2xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
-        <span className={`text-2xl sm:text-3xl font-black ${textColorClass} drop-shadow-sm`}>
-          {symbol}
-        </span>
+      {/* Classic Tilted White Oval / Pill in Center */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-14 h-20 sm:w-18 sm:h-26 bg-white rounded-[50%] border-2 border-black transform -rotate-12 flex items-center justify-center shadow-inner">
+          <span className={`text-2xl sm:text-4xl font-black ${textColorClass} transform rotate-12 drop-shadow-sm`}>
+            {symbol}
+          </span>
+        </div>
       </div>
 
       {/* Bottom-Right Corner Index Marker */}
