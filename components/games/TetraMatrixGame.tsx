@@ -29,7 +29,7 @@ const ROWS = 20;
 const TOTAL_ROWS = ROWS;
 const CANVAS_WIDTH = 380;
 const CANVAS_HEIGHT = 580;
-const BLOCK_SIZE = 28; // 10 * 28 = 280px playfield width
+const BLOCK_SIZE = 28;
 
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 
@@ -149,6 +149,7 @@ interface FloatingText {
 
 export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [grid, setGrid] = useState<GridCell[][]>(() => Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null)));
   const [currentPiece, setCurrentPiece] = useState<ActivePiece | null>(null);
@@ -597,10 +598,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     startNewGame();
   }, [startNewGame]);
 
-  // Keyboard controls
+  // Keyboard controls with proper preventDefault & focus protection
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+        e.preventDefault();
+      }
       if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) {
         if (e.key === 'r' || e.key === 'R') startNewGame();
         return;
@@ -762,7 +765,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   }, [getGhostY]);
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100">
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      onClick={() => containerRef.current?.focus()}
+      className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100 outline-none"
+    >
       {/* Top HUD */}
       <div className="w-[380px] flex items-center justify-between bg-portal-surface/90 px-3 py-2 rounded-xl border-2 border-black mb-2 shadow-neo-sm">
         <div className="flex items-center gap-2">
@@ -775,6 +783,8 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           <span className="text-xs font-black text-white">{lines} LINES</span>
         </div>
         <button
+          type="button"
+          onFocus={e => e.currentTarget.blur()}
           onClick={() => setSoundEnabled(!soundEnabled)}
           className="p-1.5 rounded-lg bg-portal-card text-slate-300 hover:text-white border border-black"
         >
@@ -791,19 +801,59 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           className="cursor-default"
         />
 
-        {/* Floating Side Info & Mobile Touch Controls */}
+        {/* Floating Side Info & Touch Controls with type="button" and focus blur */}
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-2 bg-portal-surface/90 rounded-xl border-2 border-black shadow-neo-sm">
           <div className="flex items-center gap-2">
-            <button onClick={() => holdCurrentPiece()} className="px-3 py-1.5 rounded-lg bg-portal-pink text-black font-black text-xs border-2 border-black shadow-sm">
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => holdCurrentPiece()}
+              className="px-3 py-1.5 rounded-lg bg-portal-pink text-black font-black text-xs border-2 border-black shadow-sm"
+            >
               HOLD [C]
             </button>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={() => moveHorizontal(-1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">←</button>
-            <button onClick={() => rotatePiece(1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">⟳</button>
-            <button onClick={() => softDrop()} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">↓</button>
-            <button onClick={() => moveHorizontal(1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">→</button>
-            <button onClick={() => hardDrop()} className="w-12 h-10 rounded-lg bg-portal-yellow text-black font-black border-2 border-black flex items-center justify-center">DROP</button>
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => moveHorizontal(-1)}
+              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => rotatePiece(1)}
+              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+            >
+              ⟳
+            </button>
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => softDrop()}
+              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => moveHorizontal(1)}
+              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+            >
+              →
+            </button>
+            <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
+              onClick={() => hardDrop()}
+              className="w-12 h-10 rounded-lg bg-portal-yellow text-black font-black border-2 border-black flex items-center justify-center"
+            >
+              DROP
+            </button>
           </div>
         </div>
 
@@ -816,6 +866,8 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             <h3 className="text-2xl font-black text-white">Game Over</h3>
             <div className="text-3xl font-black text-portal-yellow">{score.toLocaleString()} PTS</div>
             <button
+              type="button"
+              onFocus={e => e.currentTarget.blur()}
               onClick={() => startNewGame()}
               className="py-3 px-8 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm active:scale-95 transition-all"
             >
