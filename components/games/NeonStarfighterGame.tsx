@@ -2344,7 +2344,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // 8.5 Capital Ship Boss (Star Destroyer / Darth Vader Command Ship style)
+      // 8.5 Capital Ship Boss (Star Destroyer / Darth Vader Command Ship style - ULTRA COOL)
       if (bossRef.current) {
         const boss = bossRef.current;
         ctx.save();
@@ -2353,14 +2353,14 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         // Hard Drop Shadow
         ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.moveTo(0 + 5, -boss.height / 2 - 5);
-        ctx.lineTo(-boss.width / 2 - 5, boss.height / 2 + 5);
-        ctx.lineTo(boss.width / 2 + 5, boss.height / 2 + 5);
+        ctx.moveTo(0 + 6, -boss.height / 2 - 6);
+        ctx.lineTo(-boss.width / 2 - 6, boss.height / 2 + 6);
+        ctx.lineTo(boss.width / 2 + 6, boss.height / 2 + 6);
         ctx.closePath();
         ctx.fill();
 
-        // Wedge Hull
-        ctx.fillStyle = '#1E1548';
+        // Main Wedge Hull (Dark Metallic Indigo / Neo-Brutalist)
+        ctx.fillStyle = '#181035';
         ctx.beginPath();
         ctx.moveTo(0, -boss.height / 2);
         ctx.lineTo(-boss.width / 2, boss.height / 2);
@@ -2368,31 +2368,59 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.closePath();
         ctx.fill();
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 3.5;
+        ctx.lineWidth = 4;
         ctx.lineJoin = 'round';
         ctx.stroke();
 
-        // Command Superstructure Bridge & Details
-        ctx.fillStyle = '#381E54';
-        ctx.fillRect(-25, -15, 50, 30);
+        // Armored Trench Lines & Plating
+        ctx.strokeStyle = '#FF0055';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -boss.height / 2 + 10);
+        ctx.lineTo(0, boss.height / 2 - 10);
+        ctx.stroke();
+
+        // Command Superstructure Bridge Tower (Darth Vader Command Style)
+        ctx.fillStyle = '#2D1B4E';
+        ctx.fillRect(-32, -22, 64, 40);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(-32, -22, 64, 40);
+
+        // Twin Bridge Tower Sensor Domes (Glowing Red)
+        ctx.fillStyle = '#FF0055';
+        ctx.beginPath();
+        ctx.arc(-16, -6, 5, 0, Math.PI * 2);
+        ctx.arc(16, -6, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Glowing Engine Thruster Blocks at Rear (Pulsing Plasma)
+        const enginePulse = Math.sin(timestamp * 0.08) * 3;
+        ctx.fillStyle = '#FF0055';
+        ctx.fillRect(-75, boss.height / 2 - 6, 38, 12 + enginePulse);
+        ctx.fillRect(37, boss.height / 2 - 6, 38, 12 + enginePulse);
+        ctx.fillStyle = '#FFE600';
+        ctx.fillRect(-65, boss.height / 2 - 3, 18, 6);
+        ctx.fillRect(47, boss.height / 2 - 3, 18, 6);
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
-        ctx.strokeRect(-25, -15, 50, 30);
+        ctx.strokeRect(-75, boss.height / 2 - 6, 38, 12 + enginePulse);
+        ctx.strokeRect(37, boss.height / 2 - 6, 38, 12 + enginePulse);
 
-        // Glowing Engine Thrusters at Rear
-        ctx.fillStyle = '#FF0055';
-        ctx.fillRect(-60, boss.height / 2 - 4, 30, 8);
-        ctx.fillRect(30, boss.height / 2 - 4, 30, 8);
-        ctx.fillStyle = '#FFE600';
-        ctx.fillRect(-50, boss.height / 2 - 2, 10, 4);
-        ctx.fillRect(40, boss.height / 2 - 2, 10, 4);
-
-        // Shield Aura Glow
+        // Dual Pulsing Energy Shield Aura
         ctx.strokeStyle = '#00F0FF';
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 3;
         ctx.setLineDash([6, 4]);
         ctx.beginPath();
-        ctx.arc(0, 0, boss.width * 0.55, 0, Math.PI * 2);
+        ctx.arc(0, 0, boss.width * 0.62, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = '#FF00EA';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, boss.width * 0.68, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -2400,13 +2428,13 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
         // Boss Health & Shield Bar UI on Canvas
         ctx.save();
-        const barW = 240;
-        const barH = 12;
+        const barW = 280;
+        const barH = 14;
         const barX = (curW - barW) / 2;
-        const barY = 16;
+        const barY = 18;
         ctx.fillStyle = '#000000';
         ctx.fillRect(barX - 2, barY - 2, barW + 4, barH + 4);
-        ctx.fillStyle = '#220F38';
+        ctx.fillStyle = '#100824';
         ctx.fillRect(barX, barY, barW, barH);
 
         const hpRatio = Math.max(0, boss.hp / boss.maxHp);
@@ -2415,18 +2443,18 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
         if (boss.shield > 0) {
           const shieldRatio = Math.max(0, boss.shield / boss.maxShield);
-          ctx.fillStyle = 'rgba(0, 240, 255, 0.55)';
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.65)';
           ctx.fillRect(barX, barY, barW * shieldRatio, barH);
         }
 
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.strokeRect(barX, barY, barW, barH);
 
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = '900 10px system-ui, sans-serif';
+        ctx.font = '900 11px system-ui, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`VADER COMMAND SHIP • HP: ${boss.hp}/${boss.maxHp}`, curW / 2, barY - 5);
+        ctx.fillText(`⚡ CAPITAL SHIP: VADER COMMAND • HP: ${boss.hp}/${boss.maxHp} ⚡`, curW / 2, barY - 6);
         ctx.restore();
       }
 
@@ -2444,7 +2472,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       });
 
       // ==========================================
-      // 10. LUKE'S T-65 X-WING STARFIGHTER
+      // 10. LUKE'S T-65 X-WING STARFIGHTER (ULTRA-DETAILED)
       // ==========================================
       const cx = p.x + p.width / 2;
       const cy = p.y + p.height / 2;
@@ -2455,96 +2483,163 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       const isHyp = p.hyperTimer > 0;
       const isTrip = p.tripleShotTimer > 0;
-      const flameOffset = Math.sin(timestamp * 0.04) * 4;
+      const flameOffset = Math.sin(timestamp * 0.05) * 5;
       const flameColor = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
 
-      // 4 Engine Exhaust Nozzles
+      // 4 Multi-Nozzle Afterburner Exhaust Plumes
       ctx.fillStyle = flameColor;
-      ctx.fillRect(-14, 14, 6, 16 + flameOffset);
-      ctx.fillRect(-6, 14, 6, 20 + flameOffset);
-      ctx.fillRect(2, 14, 6, 20 + flameOffset);
-      ctx.fillRect(10, 14, 6, 16 + flameOffset);
+      ctx.fillRect(-16, 16, 6, 22 + flameOffset);
+      ctx.fillRect(-6, 16, 6, 28 + flameOffset);
+      ctx.fillRect(2, 16, 6, 28 + flameOffset);
+      ctx.fillRect(10, 16, 6, 22 + flameOffset);
+
+      // White-hot inner core flames
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(-14, 16, 2, 12 + flameOffset * 0.5);
+      ctx.fillRect(-4, 16, 2, 16 + flameOffset * 0.5);
+      ctx.fillRect(4, 16, 2, 16 + flameOffset * 0.5);
+      ctx.fillRect(12, 16, 2, 12 + flameOffset * 0.5);
 
       // Hard Drop Shadow
       ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.moveTo(0 + 4, -26 + 4);
-      ctx.lineTo(-26 + 4, 12 + 4);
-      ctx.lineTo(26 + 4, 12 + 4);
+      ctx.moveTo(0 + 4, -30 + 4);
+      ctx.lineTo(-32 + 4, 14 + 4);
+      ctx.lineTo(32 + 4, 14 + 4);
       ctx.closePath();
       ctx.fill();
 
-      // X-Wing Open S-Foils (Wings in X Attack Position)
-      ctx.fillStyle = isHyp ? '#FFE600' : '#FFFFFF';
+      // X-Wing Open S-Foils (4 Wings in Attack Position)
+      ctx.fillStyle = isHyp ? '#FFE600' : '#F1F5F9';
       ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.8;
+      ctx.lineJoin = 'round';
 
-      // Top-Left Wing
-      ctx.beginPath();
-      ctx.moveTo(0, -12);
-      ctx.lineTo(-24, -4);
-      ctx.lineTo(-22, 10);
-      ctx.lineTo(0, 4);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Top-Right Wing
-      ctx.beginPath();
-      ctx.moveTo(0, -12);
-      ctx.lineTo(24, -4);
-      ctx.lineTo(22, 10);
-      ctx.lineTo(0, 4);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Quad Laser Cannons on Wingtips
-      ctx.fillStyle = '#FFE600';
-      ctx.fillRect(-27, -8, 5, 6);
-      ctx.strokeRect(-27, -8, 5, 6);
-      ctx.fillRect(22, -8, 5, 6);
-      ctx.strokeRect(22, -8, 5, 6);
-
-      // Fuselage Center Body
-      ctx.fillStyle = '#38BDF8';
-      ctx.beginPath();
-      ctx.moveTo(0, -26);
-      ctx.lineTo(-6, -6);
-      ctx.lineTo(-6, 16);
-      ctx.lineTo(6, 16);
-      ctx.lineTo(6, -6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Cockpit Canopy
-      ctx.fillStyle = '#FF007F';
+      // Top-Left Wing Panel
       ctx.beginPath();
       ctx.moveTo(0, -16);
-      ctx.lineTo(-4, -4);
-      ctx.lineTo(0, 4);
-      ctx.lineTo(4, -4);
+      ctx.lineTo(-28, -6);
+      ctx.lineTo(-26, 12);
+      ctx.lineTo(0, 6);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // R2 Astromech Droid Socket (behind cockpit)
+      // Top-Right Wing Panel
+      ctx.beginPath();
+      ctx.moveTo(0, -16);
+      ctx.lineTo(28, -6);
+      ctx.lineTo(26, 12);
+      ctx.lineTo(0, 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Red Squadron Wing Stripes (Luke's Red Five markings)
+      ctx.fillStyle = '#FF0055';
+      ctx.fillRect(-22, -2, 16, 3);
+      ctx.fillRect(6, -2, 16, 3);
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(-22, -2, 16, 3);
+      ctx.strokeRect(6, -2, 16, 3);
+
+      // Quad Laser Cannons Mounted on Wingtips (Glowing Plasma Tips)
+      ctx.fillStyle = '#FFE600';
+      ctx.fillRect(-32, -10, 6, 8);
+      ctx.strokeRect(-32, -10, 6, 8);
+      ctx.fillRect(26, -10, 6, 8);
+      ctx.strokeRect(26, -10, 6, 8);
+
+      // Laser Cannon Glow Tips
+      ctx.fillStyle = '#00F0FF';
+      ctx.fillRect(-30, -13, 2, 4);
+      ctx.fillRect(28, -13, 2, 4);
+
+      // Fuselage Center Body Spine
+      ctx.fillStyle = '#38BDF8';
+      ctx.beginPath();
+      ctx.moveTo(0, -32);
+      ctx.lineTo(-7, -8);
+      ctx.lineTo(-7, 18);
+      ctx.lineTo(7, 18);
+      ctx.lineTo(7, -8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Cockpit Canopy (Sleek Glass Gradient with Pilot Silhouette)
+      ctx.fillStyle = '#FF00EA';
+      ctx.beginPath();
+      ctx.moveTo(0, -20);
+      ctx.lineTo(-5, -6);
+      ctx.lineTo(0, 5);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#FF007F';
+      ctx.beginPath();
+      ctx.moveTo(0, -20);
+      ctx.lineTo(5, -6);
+      ctx.lineTo(0, 5);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, -20);
+      ctx.lineTo(-5, -6);
+      ctx.lineTo(0, 5);
+      ctx.lineTo(5, -6);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Glass Glint Highlight
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.moveTo(-1, -16);
+      ctx.lineTo(-3, -8);
+      ctx.lineTo(-1, -8);
+      ctx.closePath();
+      ctx.fill();
+
+      // R2 Astromech Droid Dome (Behind Cockpit)
       ctx.fillStyle = '#00F0FF';
       ctx.beginPath();
-      ctx.arc(0, 7, 3, 0, Math.PI * 2);
+      ctx.arc(0, 9, 3.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 1.5;
       ctx.stroke();
+      ctx.fillStyle = '#FF0055';
+      ctx.fillRect(-1, 8, 2, 2);
 
-      // Energy Shield Bubble
+      // Energy Shield Bubble (Pulsing Neo Cyan)
       if (p.hasShield) {
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(0, 0, 38, 0, Math.PI * 2);
+        ctx.stroke();
+
         ctx.strokeStyle = '#00F0FF';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, 0, 34, 0, Math.PI * 2);
+        ctx.arc(0, 0, 38, 0, Math.PI * 2);
         ctx.stroke();
+
+        // 4 Rotating Energy Shield Nodes
+        const nodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+        nodes.forEach((ang) => {
+          const nx = Math.cos(ang + timestamp * 0.004) * 38;
+          const ny = Math.sin(ang + timestamp * 0.004) * 38;
+          ctx.fillStyle = '#FFE600';
+          ctx.fillRect(nx - 3.5, ny - 3.5, 7, 7);
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(nx - 3.5, ny - 3.5, 7, 7);
+        });
       }
 
       ctx.restore();
