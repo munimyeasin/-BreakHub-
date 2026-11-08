@@ -42,11 +42,13 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
-function CardBack({ label = 'CARDS', horizontal = true }: { label?: string; horizontal?: boolean }) {
+function CardBack({ label = 'CARDS' }: { label?: string }) {
   return (
-    <div className={`rounded-lg bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-2 border-black flex items-center justify-center shadow-sm relative overflow-hidden shrink-0 ${horizontal ? 'w-7 h-11' : 'w-10 h-7'}`}>
-      <div className="absolute inset-0.5 border border-dashed border-white/25 rounded flex items-center justify-center">
-        <span className="text-[7px] font-black text-amber-400 uppercase tracking-tighter">{label}</span>
+    <div className="w-7 h-10 sm:w-8 sm:h-12 rounded-md bg-[#252a34] border-2 border-black shadow-sm flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
+      <div className="w-full h-full rounded bg-[#1b1f28] border border-white/15 flex items-center justify-center p-0.5">
+        <span className="text-[6px] sm:text-[7px] font-black text-white uppercase tracking-tighter text-center leading-none">
+          {label}
+        </span>
       </div>
     </div>
   );
@@ -509,7 +511,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {gameState === 'playing' && (
         <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-2 px-2">
 
-          {/* TOP AI OPPONENT: LEA (Bold Name at perimeter top, fanned horizontal cards below) */}
+          {/* TOP AI OPPONENT: LEA (Bold Name at perimeter top, fanned vertical cards below) */}
           {(() => {
             const lea = players.find(p => p.id === 'lea')!;
             const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
@@ -520,10 +522,10 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   <span className="text-xs font-black uppercase tracking-wider">{lea.name}</span>
                   <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{lea.cards.length}</span>
                 </div>
-                {/* Horizontal Fanned Row */}
-                <div className="flex -space-x-3.5 mt-1.5">
+                {/* Horizontal Fanned Row of Vertical Cards */}
+                <div className="flex -space-x-3 mt-1.5">
                   {lea.cards.map((_, i) => (
-                    <CardBack key={i} label="CARDS" horizontal={true} />
+                    <CardBack key={i} label="CARDS" />
                   ))}
                 </div>
               </div>
@@ -545,9 +547,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{marie.cards.length}</span>
                   </div>
                   {/* Vertical Stacked Cards */}
-                  <div className="flex flex-col -space-y-6">
+                  <div className="flex flex-col -space-y-8">
                     {marie.cards.map((_, i) => (
-                      <CardBack key={i} label="COLOR" horizontal={false} />
+                      <CardBack key={i} label="COLOR" />
                     ))}
                   </div>
                 </div>
@@ -653,9 +655,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{kate.cards.length}</span>
                   </div>
                   {/* Vertical Stacked Cards */}
-                  <div className="flex flex-col -space-y-6">
+                  <div className="flex flex-col -space-y-8">
                     {kate.cards.map((_, i) => (
-                      <CardBack key={i} label="CARDS" horizontal={false} />
+                      <CardBack key={i} label="CARDS" />
                     ))}
                   </div>
                 </div>
