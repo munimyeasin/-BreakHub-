@@ -568,14 +568,13 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                       </div>
                     ))}
                   </div>
-                  <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-lg mb-0.5">{marie.avatar}</span>
-                    <div className="flex flex-col items-center leading-none my-1">
+                  <div className={`flex flex-col items-center p-1 font-bold ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white'}`}>
+                    <div className="flex flex-col items-center leading-tight my-1">
                       {marie.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                        <span key={idx} className="text-[10px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{marie.cards.length}</span>
+                    <span className="px-1.5 py-0.2 bg-black/50 rounded text-[9px] font-black mt-1">{marie.cards.length}</span>
                   </div>
                 </div>
               );
@@ -588,10 +587,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 const lea = players.find(p => p.id === 'lea')!;
                 const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
                 return (
-                  <div className={`mb-1 px-3 py-0.5 rounded-xl border-2 border-black flex items-center gap-1.5 shadow-sm ${isTurn ? 'bg-amber-400 text-black animate-bounce font-bold' : 'bg-[#5c3a21] text-amber-100'}`}>
-                    <span className="text-xs">{lea.avatar}</span>
+                  <div className={`mb-1 px-3 py-0.5 font-bold flex items-center gap-1.5 shadow-sm scale-90 sm:scale-100 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-amber-100'}`}>
                     <span className="text-[11px] font-black uppercase tracking-wider">{lea.name}</span>
-                    <span className="bg-black/40 px-1.5 py-0.2 rounded text-[9px]">{lea.cards.length}</span>
+                    <span className="bg-black/50 px-1.5 py-0.2 rounded text-[9px]">{lea.cards.length}</span>
                   </div>
                 );
               })()}
@@ -687,14 +685,13 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
                 <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-lg mb-0.5">{kate.avatar}</span>
-                    <div className="flex flex-col items-center leading-none my-1">
+                  <div className={`flex flex-col items-center justify-center p-1.5 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
+                    <div className="flex flex-col items-center leading-tight">
                       {kate.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                        <span key={idx} className="text-[10px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{kate.cards.length}</span>
+                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1.5">{kate.cards.length}</span>
                   </div>
                   <div className="flex flex-col -space-y-8 relative py-2">
                     {kate.cards.map((_, i) => (
