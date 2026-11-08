@@ -42,6 +42,16 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
+function CardBack({ label = 'CARDS', horizontal = true }: { label?: string; horizontal?: boolean }) {
+  return (
+    <div className={`rounded-lg bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-2 border-black flex items-center justify-center shadow-sm relative overflow-hidden shrink-0 ${horizontal ? 'w-7 h-11' : 'w-10 h-7'}`}>
+      <div className="absolute inset-0.5 border border-dashed border-white/25 rounded flex items-center justify-center">
+        <span className="text-[7px] font-black text-amber-400 uppercase tracking-tighter">{label}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }: CardPartyProps) {
   const [gameState, setGameState] = useState<'menu' | 'playing' | 'gameover'>('menu');
   const [deck, setDeck] = useState<Card[]>([]);
@@ -499,21 +509,21 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {gameState === 'playing' && (
         <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-2 px-2">
 
-          {/* TOP AI OPPONENT: LEA (Fanned horizontally at top) */}
+          {/* TOP AI OPPONENT: LEA (Bold Name at perimeter top, fanned horizontal cards below) */}
           {(() => {
             const lea = players.find(p => p.id === 'lea')!;
             const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
             return (
               <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
-                <div className={`flex items-center gap-2 px-3 py-1 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                <div className={`flex items-center gap-2 px-3.5 py-1 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
                   <span className="text-base">{lea.avatar}</span>
                   <span className="text-xs font-black uppercase tracking-wider">{lea.name}</span>
-                  <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{lea.cards.length} cards</span>
+                  <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{lea.cards.length}</span>
                 </div>
                 {/* Horizontal Fanned Row */}
-                <div className="flex -space-x-3 mt-1.5">
+                <div className="flex -space-x-3.5 mt-1.5">
                   {lea.cards.map((_, i) => (
-                    <div key={i} className="w-6 h-10 sm:w-7 sm:h-12 rounded-lg bg-gradient-to-br from-indigo-950 to-slate-950 border-2 border-black shadow-sm transform -rotate-1" />
+                    <CardBack key={i} label="CARDS" horizontal={true} />
                   ))}
                 </div>
               </div>
@@ -523,21 +533,21 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           {/* MIDDLE ROW: LEFT AI (Marie) + CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
           <div className="w-full flex items-center justify-between my-auto py-1 px-2 sm:px-6">
 
-            {/* LEFT AI OPPONENT: MARIE (Stacked vertically along left edge) */}
+            {/* LEFT AI OPPONENT: MARIE (Bold Name near left perimeter, vertical stack along left edge) */}
             {(() => {
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
                 <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black mb-2 ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black mb-2 ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
                     <span className="text-xl mb-0.5">{marie.avatar}</span>
                     <span className="text-[10px] font-black uppercase">{marie.name}</span>
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{marie.cards.length}</span>
                   </div>
                   {/* Vertical Stacked Cards */}
-                  <div className="flex flex-col -space-y-7">
+                  <div className="flex flex-col -space-y-6">
                     {marie.cards.map((_, i) => (
-                      <div key={i} className="w-10 h-7 sm:w-12 sm:h-8 rounded-md bg-gradient-to-br from-indigo-950 to-slate-950 border-2 border-black shadow-sm transform -rotate-6" />
+                      <CardBack key={i} label="COLOR" horizontal={false} />
                     ))}
                   </div>
                 </div>
@@ -563,7 +573,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   onClick={() => {
                     if (turnIndex === 0 && !aiThinking && !isDealing) handlePlayerDraw();
                   }}
-                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-950 border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
+                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
                   title="Click to Draw"
                 >
                   <div className="absolute inset-1.5 border-2 border-dashed border-white/30 rounded-xl flex flex-col items-center justify-center p-1 text-center">
@@ -631,21 +641,21 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </div>
             </div>
 
-            {/* RIGHT AI OPPONENT: KATE (Stacked vertically along right edge) */}
+            {/* RIGHT AI OPPONENT: KATE (Bold Name near right perimeter, vertical stack along right edge) */}
             {(() => {
               const kate = players.find(p => p.id === 'kate')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
                 <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black mb-2 ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black mb-2 ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
                     <span className="text-xl mb-0.5">{kate.avatar}</span>
                     <span className="text-[10px] font-black uppercase">{kate.name}</span>
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{kate.cards.length}</span>
                   </div>
                   {/* Vertical Stacked Cards */}
-                  <div className="flex flex-col -space-y-7">
+                  <div className="flex flex-col -space-y-6">
                     {kate.cards.map((_, i) => (
-                      <div key={i} className="w-10 h-7 sm:w-12 sm:h-8 rounded-md bg-gradient-to-br from-indigo-950 to-slate-950 border-2 border-black shadow-sm transform rotate-6" />
+                      <CardBack key={i} label="CARDS" horizontal={false} />
                     ))}
                   </div>
                 </div>
