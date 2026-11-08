@@ -2477,7 +2477,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
       });
 
       // ==========================================
-      // 10. LUKE'S T-65 X-WING STARFIGHTER (ULTRA-DETAILED)
+      // 10. HYBRID T-65 X-WING / ARCADE NEON STARFIGHTER
       // ==========================================
       const cx = p.x + p.width / 2;
       const cy = p.y + p.height / 2;
@@ -2493,157 +2493,180 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
       // 4 Multi-Nozzle Afterburner Exhaust Plumes
       ctx.fillStyle = flameColor;
-      ctx.fillRect(-16, 16, 6, 22 + flameOffset);
-      ctx.fillRect(-6, 16, 6, 28 + flameOffset);
-      ctx.fillRect(2, 16, 6, 28 + flameOffset);
-      ctx.fillRect(10, 16, 6, 22 + flameOffset);
+      ctx.fillRect(-14, 14, 6, 20 + flameOffset);
+      ctx.fillRect(-5, 14, 5, 26 + flameOffset);
+      ctx.fillRect(2, 14, 5, 26 + flameOffset);
+      ctx.fillRect(9, 14, 6, 20 + flameOffset);
 
       // White-hot inner core flames
       ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(-14, 16, 2, 12 + flameOffset * 0.5);
-      ctx.fillRect(-4, 16, 2, 16 + flameOffset * 0.5);
-      ctx.fillRect(4, 16, 2, 16 + flameOffset * 0.5);
-      ctx.fillRect(12, 16, 2, 12 + flameOffset * 0.5);
+      ctx.fillRect(-12, 14, 2, 12 + flameOffset * 0.5);
+      ctx.fillRect(-3, 14, 2, 16 + flameOffset * 0.5);
+      ctx.fillRect(3, 14, 2, 16 + flameOffset * 0.5);
+      ctx.fillRect(11, 14, 2, 12 + flameOffset * 0.5);
 
       // Hard Drop Shadow
       ctx.fillStyle = '#000000';
       ctx.beginPath();
-      ctx.moveTo(0 + 4, -30 + 4);
-      ctx.lineTo(-32 + 4, 14 + 4);
-      ctx.lineTo(32 + 4, 14 + 4);
+      ctx.moveTo(0 + 4, -28 + 4);
+      ctx.lineTo(-28 + 4, 12 + 4);
+      ctx.lineTo(28 + 4, 12 + 4);
       ctx.closePath();
       ctx.fill();
 
-      // X-Wing Open S-Foils (4 Wings in Attack Position)
-      ctx.fillStyle = isHyp ? '#FFE600' : '#F1F5F9';
+      // 3D Extruded Hull Side Facets (Classic Arcade Cyan Depth: #0369A1)
+      ctx.fillStyle = isHyp ? '#D49B00' : '#0369A1';
+      ctx.beginPath();
+      ctx.moveTo(-26, 6);
+      ctx.lineTo(-28, 12);
+      ctx.lineTo(-8, 18);
+      ctx.lineTo(-8, 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(26, 6);
+      ctx.lineTo(28, 12);
+      ctx.lineTo(8, 18);
+      ctx.lineTo(8, 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Hybrid Swept S-Foils (Vibrant Cyan Armor Plates: #00F0FF fused with X-Wing geometry)
+      ctx.fillStyle = isHyp ? '#FFE600' : isTrip ? '#39FF14' : '#00F0FF';
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2.8;
       ctx.lineJoin = 'round';
 
-      // Top-Left Wing Panel
+      // Left Hybrid Wing
       ctx.beginPath();
-      ctx.moveTo(0, -16);
-      ctx.lineTo(-28, -6);
-      ctx.lineTo(-26, 12);
-      ctx.lineTo(0, 6);
+      ctx.moveTo(0, -22);
+      ctx.lineTo(-28, -2);
+      ctx.lineTo(-24, 12);
+      ctx.lineTo(-8, 14);
+      ctx.lineTo(0, 4);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Top-Right Wing Panel
+      // Right Hybrid Wing
       ctx.beginPath();
-      ctx.moveTo(0, -16);
-      ctx.lineTo(28, -6);
-      ctx.lineTo(26, 12);
-      ctx.lineTo(0, 6);
+      ctx.moveTo(0, -22);
+      ctx.lineTo(28, -2);
+      ctx.lineTo(24, 12);
+      ctx.lineTo(8, 14);
+      ctx.lineTo(0, 4);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Red Squadron Wing Stripes (Luke's Red Five markings)
+      // Red Five Squadron Attack Stripes
       ctx.fillStyle = '#FF0055';
-      ctx.fillRect(-22, -2, 16, 3);
-      ctx.fillRect(6, -2, 16, 3);
+      ctx.fillRect(-20, -2, 14, 3);
+      ctx.fillRect(6, -2, 14, 3);
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 1.2;
-      ctx.strokeRect(-22, -2, 16, 3);
-      ctx.strokeRect(6, -2, 16, 3);
+      ctx.strokeRect(-20, -2, 14, 3);
+      ctx.strokeRect(6, -2, 14, 3);
 
-      // Quad Laser Cannons Mounted on Wingtips (Glowing Plasma Tips)
+      // Neon Yellow Wingtip Rails & Quad Laser Cannons
       ctx.fillStyle = '#FFE600';
-      ctx.fillRect(-32, -10, 6, 8);
-      ctx.strokeRect(-32, -10, 6, 8);
-      ctx.fillRect(26, -10, 6, 8);
-      ctx.strokeRect(26, -10, 6, 8);
+      ctx.fillRect(-31, -6, 6, 8);
+      ctx.strokeRect(-31, -6, 6, 8);
+      ctx.fillRect(25, -6, 6, 8);
+      ctx.strokeRect(25, -6, 6, 8);
 
-      // Laser Cannon Glow Tips
+      // Laser Tip Plasma Glow
       ctx.fillStyle = '#00F0FF';
-      ctx.fillRect(-30, -13, 2, 4);
-      ctx.fillRect(28, -13, 2, 4);
+      ctx.fillRect(-29, -9, 2, 4);
+      ctx.fillRect(27, -9, 2, 4);
 
-      // Fuselage Center Body Spine
-      ctx.fillStyle = '#38BDF8';
+      // Forward Nose Cone & Center Fuselage Spine (Arcade Deep Blue #38BDF8)
+      ctx.fillStyle = isHyp ? '#FFF570' : '#38BDF8';
       ctx.beginPath();
-      ctx.moveTo(0, -32);
-      ctx.lineTo(-7, -8);
-      ctx.lineTo(-7, 18);
-      ctx.lineTo(7, 18);
-      ctx.lineTo(7, -8);
+      ctx.moveTo(0, -28);
+      ctx.lineTo(-6, -6);
+      ctx.lineTo(0, 10);
+      ctx.lineTo(6, -6);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Cockpit Canopy (Sleek Glass Gradient with Pilot Silhouette)
-      ctx.fillStyle = '#FF00EA';
+      // Glowing Cockpit Canopy (Neon Magenta #FF007F with White Glint)
+      ctx.fillStyle = '#FF70D9';
       ctx.beginPath();
-      ctx.moveTo(0, -20);
-      ctx.lineTo(-5, -6);
-      ctx.lineTo(0, 5);
+      ctx.moveTo(0, -16);
+      ctx.lineTo(-4, -4);
+      ctx.lineTo(0, 3);
       ctx.closePath();
       ctx.fill();
 
       ctx.fillStyle = '#FF007F';
       ctx.beginPath();
-      ctx.moveTo(0, -20);
-      ctx.lineTo(5, -6);
-      ctx.lineTo(0, 5);
+      ctx.moveTo(0, -16);
+      ctx.lineTo(4, -4);
+      ctx.lineTo(0, 3);
       ctx.closePath();
       ctx.fill();
 
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(0, -20);
-      ctx.lineTo(-5, -6);
-      ctx.lineTo(0, 5);
-      ctx.lineTo(5, -6);
+      ctx.moveTo(0, -16);
+      ctx.lineTo(-4, -4);
+      ctx.lineTo(0, 3);
+      ctx.lineTo(4, -4);
       ctx.closePath();
       ctx.stroke();
 
-      // Glass Glint Highlight
+      // Cockpit Specular Glint
       ctx.fillStyle = '#FFFFFF';
       ctx.beginPath();
-      ctx.moveTo(-1, -16);
-      ctx.lineTo(-3, -8);
-      ctx.lineTo(-1, -8);
+      ctx.moveTo(-1, -13);
+      ctx.lineTo(-3, -6);
+      ctx.lineTo(-1, -6);
       ctx.closePath();
       ctx.fill();
 
-      // R2 Astromech Droid Dome (Behind Cockpit)
+      // R2 Astromech Droid Socket (Behind cockpit)
       ctx.fillStyle = '#00F0FF';
       ctx.beginPath();
-      ctx.arc(0, 9, 3.5, 0, Math.PI * 2);
+      ctx.arc(0, 7, 3, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 1.5;
+      ctx.lineWidth = 1.2;
       ctx.stroke();
       ctx.fillStyle = '#FF0055';
-      ctx.fillRect(-1, 8, 2, 2);
+      ctx.fillRect(-1, 6, 2, 2);
 
-      // Energy Shield Bubble (Pulsing Neo Cyan)
+      // Energy Shield Bubble
       if (p.hasShield) {
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 4.5;
         ctx.beginPath();
-        ctx.arc(0, 0, 38, 0, Math.PI * 2);
+        ctx.arc(2, 2, 36, 0, Math.PI * 2);
         ctx.stroke();
 
         ctx.strokeStyle = '#00F0FF';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, 0, 38, 0, Math.PI * 2);
+        ctx.arc(0, 0, 36, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 4 Rotating Energy Shield Nodes
+        // 4 Rotating Shield Nodes
         const nodes = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
         nodes.forEach((ang) => {
-          const nx = Math.cos(ang + timestamp * 0.004) * 38;
-          const ny = Math.sin(ang + timestamp * 0.004) * 38;
-          ctx.fillStyle = '#FFE600';
-          ctx.fillRect(nx - 3.5, ny - 3.5, 7, 7);
+          const nx = Math.cos(ang + timestamp * 0.004) * 36;
+          const ny = Math.sin(ang + timestamp * 0.004) * 36;
+          ctx.fillStyle = '#FF007F';
+          ctx.fillRect(nx - 3, ny - 3, 6, 6);
           ctx.strokeStyle = '#000000';
           ctx.lineWidth = 1.5;
-          ctx.strokeRect(nx - 3.5, ny - 3.5, 7, 7);
+          ctx.strokeRect(nx - 3, ny - 3, 6, 6);
         });
       }
 
