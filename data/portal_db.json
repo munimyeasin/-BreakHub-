@@ -1,2044 +1,2066 @@
-﻿{
-    "users":  [
-                  {
-                      "id":  "edb575e2-d634-46d6-8bcc-a4582c905a91",
-                      "username":  "RandomUser_748",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=RandomUser",
-                      "created_at":  "2026-11-02T07:29:18.547+00:00"
-                  },
-                  {
-                      "id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                      "username":  "munim",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=munim",
-                      "created_at":  "2026-11-02T08:49:14.026+00:00",
-                      "days_played":  1,
-                      "longest_streak":  9,
-                      "level":  51,
-                      "xp":  35720,
-                      "unlocked_trophies":  {
-                                                "score_hunter":  {
-                                                                     "unlockedAt":  "2026-09-13T11:08:30.093Z"
-                                                                 },
-                                                "score_titan":  {
-                                                                    "unlockedAt":  "2026-09-13T11:08:30.098Z"
-                                                                },
-                                                "neon_initiate":  {
-                                                                      "unlockedAt":  "2026-09-14T11:13:30.603Z"
-                                                                  },
-                                                "cyber_elite":  {
-                                                                    "unlockedAt":  "2026-09-14T11:16:46.125Z"
-                                                                },
-                                                "cyber_legend":  {
-                                                                     "unlockedAt":  "2026-09-18T10:38:40.445Z"
-                                                                 },
-                                                "wheel_spinner":  {
-                                                                      "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                  },
-                                                "tetra_architect":  {
-                                                                        "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                    },
-                                                "multiverse_overlord":  {
-                                                                            "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                        },
-                                                "the_critic":  {
-                                                                   "unlockedAt":  "2026-09-24T09:13:38.582Z"
-                                                               },
-                                                "first_boot":  {
-                                                                   "unlockedAt":  "2026-09-26T09:51:25.167Z"
-                                                               },
-                                                "grid_explorer":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.382Z"
-                                                                  },
-                                                "tactical_mind":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.384Z"
-                                                                  },
-                                                "omnipresent":  {
-                                                                    "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                },
-                                                "genre_master":  {
-                                                                     "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                 },
-                                                "daily_devotee":  {
-                                                                      "unlockedAt":  "2026-09-27T18:58:37.530Z"
-                                                                  },
-                                                "catalog_conqueror":  {
-                                                                          "unlockedAt":  "2026-09-30T06:54:31.254Z"
-                                                                      },
-                                                "mission_specialist":  {
-                                                                           "unlockedAt":  "2026-09-30T09:29:42.152Z"
-                                                                       },
-                                                "flame_keeper":  {
-                                                                     "unlockedAt":  "2026-10-02T05:19:24.300Z"
-                                                                 },
-                                                "perfectionist":  {
-                                                                      "unlockedAt":  "2026-10-31T12:19:03.030Z"
-                                                                  },
-                                                "high_roller":  {
-                                                                    "unlockedAt":  "2026-11-06T10:59:09.110Z"
-                                                                }
-                                            },
-                      "stats":  {
-                                    "totalGamesPlayed":  554,
-                                    "uniqueGamesPlayed":  [
-                                                              "g_shooter_07",
-                                                              "g_missile_21",
-                                                              "g_pinball_23",
-                                                              "g_ttt_03",
-                                                              "g_outrun_22",
-                                                              "g_slicer_11",
-                                                              "g_chess_24",
-                                                              "g_card_05",
-                                                              "g_maze_15",
-                                                              "g_battleship_18",
-                                                              "g_merge_25",
-                                                              "g_aviator_26",
-                                                              "g_flappy_27",
-                                                              "g_tetris_20",
-                                                              "g_action_06",
-                                                              "g_geometry_10",
-                                                              "g_sweeper_16",
-                                                              "g_flip_02",
-                                                              "g_tap_04",
-                                                              "g_paper_12",
-                                                              "g_multi_xo_13",
-                                                              "g_blackhole_17",
-                                                              "g_reflex_09",
-                                                              "g_knife_28",
-                                                              "g_snake_01",
-                                                              "g_starfighter_1",
-                                                              "g_candy_19",
-                                                              "g_dungeon_29"
-                                                          ],
-                                    "totalScoreAccumulated":  1922448,
-                                    "highestSingleScore":  173115,
-                                    "gamesRated":  2,
-                                    "favoritesCount":  0,
-                                    "rouletteSpins":  6,
-                                    "questsCompletedCount":  16,
-                                    "hypeCount":  0,
-                                    "categoriesPlayed":  [
-                                                             "ARCADE",
-                                                             "ACTION",
-                                                             "STRATEGY",
-                                                             "PUZZLE"
-                                                         ]
-                                },
-                      "games_played":  554,
-                      "total_score":  1922448
-                  },
-                  {
-                      "id":  "a67b1ff4-ca26-47d0-8b92-401016806545",
-                      "username":  "******",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=******",
-                      "created_at":  "2026-11-02T09:12:20.635+00:00"
-                  },
-                  {
-                      "id":  "d404b2c4-a546-4bc7-89ca-2712cddfe112",
-                      "username":  "Ra",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Ra",
-                      "created_at":  "2026-11-02T09:41:37.174+00:00"
-                  },
-                  {
-                      "id":  "058e8a62-3e69-4336-bdba-eff52d45dba8",
-                      "username":  "mik",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=mik",
-                      "created_at":  "2026-11-02T14:10:39.682+00:00"
-                  },
-                  {
-                      "id":  "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
-                      "username":  "Tahida begom",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Tahida%20begom",
-                      "created_at":  "2026-11-03T07:15:24.297+00:00"
-                  },
-                  {
-                      "id":  "dc88b11e-c2b8-4acd-bc77-dfb117f93d09",
-                      "username":  "Irom Don",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Irom%20Don",
-                      "created_at":  "2026-11-03T07:24:17.572+00:00"
-                  },
-                  {
-                      "id":  "f3fd9e94-eb00-47d3-ac58-ceab5b424b87",
-                      "username":  "Hkb",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Hkb",
-                      "created_at":  "2026-11-03T07:24:27.765+00:00"
-                  },
-                  {
-                      "id":  "00e09c54-396f-468a-8c20-9fc58a8a0556",
-                      "username":  "Ashraful",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Ashraful",
-                      "created_at":  "2026-11-03T07:26:06.803+00:00"
-                  },
-                  {
-                      "id":  "e60f91ca-8d0d-4b18-8408-759f119ab480",
-                      "username":  "MatrixRunner_96",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=MatrixRunner_96",
-                      "created_at":  "2026-11-03T07:26:57.557+00:00"
-                  },
-                  {
-                      "id":  "a62c5aa1-50ba-44e6-bbc8-26a607cff9e4",
-                      "username":  "Navanita Mazumder",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Navanita%20Mazumder",
-                      "created_at":  "2026-11-03T07:28:03.078+00:00"
-                  },
-                  {
-                      "id":  "46fca69a-5c24-448b-9a71-73b91b4fcd15",
-                      "username":  "Ruhana",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana",
-                      "created_at":  "2026-11-03T07:37:42.678+00:00"
-                  },
-                  {
-                      "id":  "fb6285ce-f82a-4d25-b7da-42e962814c53",
-                      "username":  "rahul",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=rahul",
-                      "created_at":  "2026-11-03T07:37:58.475+00:00"
-                  },
-                  {
-                      "id":  "8a0ac084-0c6b-47bb-80ba-f904b89c0570",
-                      "username":  "Ruhana Begom",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana%20Begom",
-                      "created_at":  "2026-11-03T07:39:07.38+00:00"
-                  },
-                  {
-                      "id":  "66ed0a76-712c-45f5-a7d3-635acec63743",
-                      "username":  "TestPlayer",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=TestPlayer",
-                      "created_at":  "2026-11-02T07:28:46.16088+00:00"
-                  },
-                  {
-                      "id":  "4dea7902-e56a-4234-8af2-19b51f1379c3",
-                      "username":  "Jonathan",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Jonathan",
-                      "created_at":  "2026-11-04T14:12:17.896+00:00"
-                  },
-                  {
-                      "id":  "25bd5ed3-b9da-478b-8609-f68b539009c2",
-                      "username":  "LB",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=LB",
-                      "created_at":  "2026-11-05T10:49:53.798+00:00"
-                  },
-                  {
-                      "id":  "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
-                      "username":  "Mashh__",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Mashh__",
-                      "created_at":  "2026-11-05T10:53:45.221+00:00"
-                  },
-                  {
-                      "id":  "6c0d14ff-d17c-482a-835b-b4c94eb56e5a",
-                      "username":  "Fahim Ahmed",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Fahim%20Ahmed",
-                      "created_at":  "2026-11-05T14:19:33.376+00:00"
-                  },
-                  {
-                      "id":  "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
-                      "username":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                      "created_at":  "2026-11-06T09:36:06.12+00:00"
-                  },
-                  {
-                      "id":  "b069ebdb-9484-43f3-8086-f8dce9b874a5",
-                      "username":  "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=1596da39-1b26-44e5-84d7-dfb7a87b88ec",
-                      "created_at":  "2026-11-06T09:38:40.268+00:00"
-                  },
-                  {
-                      "id":  "b3b8dae3-f91d-449b-97de-50f2be4d4700",
-                      "username":  "fb6285ce-f82a-4d25-b7da-42e962814c53",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=fb6285ce-f82a-4d25-b7da-42e962814c53",
-                      "created_at":  "2026-11-06T09:38:49.053+00:00"
-                  },
-                  {
-                      "id":  "eea5369d-e865-4f7e-b5a3-8b212612561c",
-                      "username":  "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
-                      "created_at":  "2026-11-06T11:34:12.431+00:00"
-                  },
-                  {
-                      "id":  "b93a1f45-dcb2-4a18-8db2-78802e836966",
-                      "username":  "66ed0a76-712c-45f5-a7d3-635acec63743",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=66ed0a76-712c-45f5-a7d3-635acec63743",
-                      "created_at":  "2026-11-06T21:59:17.195+00:00"
-                  },
-                  {
-                      "id":  "d59a636b-f3ca-4369-b474-b7be7946ca9d",
-                      "username":  "e60f91ca-8d0d-4b18-8408-759f119ab480",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
-                      "created_at":  "2026-11-07T07:15:56.403Z",
-                      "wallet_balance":  0,
-                      "status":  "active",
-                      "games_played":  514,
-                      "total_score":  1830234,
-                      "level":  48,
-                      "xp":  33120,
-                      "unlocked_trophies":  {
-                                                "score_hunter":  {
-                                                                     "unlockedAt":  "2026-09-13T11:08:30.093Z"
-                                                                 },
-                                                "score_titan":  {
-                                                                    "unlockedAt":  "2026-09-13T11:08:30.098Z"
-                                                                },
-                                                "neon_initiate":  {
-                                                                      "unlockedAt":  "2026-09-14T11:13:30.603Z"
-                                                                  },
-                                                "cyber_elite":  {
-                                                                    "unlockedAt":  "2026-09-14T11:16:46.125Z"
-                                                                },
-                                                "cyber_legend":  {
-                                                                     "unlockedAt":  "2026-09-18T10:38:40.445Z"
-                                                                 },
-                                                "wheel_spinner":  {
-                                                                      "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                  },
-                                                "tetra_architect":  {
-                                                                        "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                    },
-                                                "multiverse_overlord":  {
-                                                                            "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                        },
-                                                "the_critic":  {
-                                                                   "unlockedAt":  "2026-09-24T09:13:38.582Z"
-                                                               },
-                                                "first_boot":  {
-                                                                   "unlockedAt":  "2026-09-26T09:51:25.167Z"
-                                                               },
-                                                "grid_explorer":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.382Z"
-                                                                  },
-                                                "tactical_mind":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.384Z"
-                                                                  },
-                                                "omnipresent":  {
-                                                                    "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                },
-                                                "genre_master":  {
-                                                                     "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                 },
-                                                "daily_devotee":  {
-                                                                      "unlockedAt":  "2026-09-27T18:58:37.530Z"
-                                                                  },
-                                                "catalog_conqueror":  {
-                                                                          "unlockedAt":  "2026-09-30T06:54:31.254Z"
-                                                                      },
-                                                "mission_specialist":  {
-                                                                           "unlockedAt":  "2026-09-30T09:29:42.152Z"
-                                                                       },
-                                                "flame_keeper":  {
-                                                                     "unlockedAt":  "2026-10-02T05:19:24.300Z"
-                                                                 },
-                                                "perfectionist":  {
-                                                                      "unlockedAt":  "2026-10-31T12:19:03.030Z"
-                                                                  },
-                                                "high_roller":  {
-                                                                    "unlockedAt":  "2026-11-06T10:59:09.110Z"
-                                                                }
-                                            },
-                      "stats":  {
-                                    "totalGamesPlayed":  514,
-                                    "uniqueGamesPlayed":  [
-                                                              "g_shooter_07",
-                                                              "g_missile_21",
-                                                              "g_pinball_23",
-                                                              "g_ttt_03",
-                                                              "g_outrun_22",
-                                                              "g_slicer_11",
-                                                              "g_chess_24",
-                                                              "g_card_05",
-                                                              "g_maze_15",
-                                                              "g_battleship_18",
-                                                              "g_merge_25",
-                                                              "g_aviator_26",
-                                                              "g_flappy_27",
-                                                              "g_tetris_20",
-                                                              "g_action_06",
-                                                              "g_geometry_10",
-                                                              "g_sweeper_16",
-                                                              "g_flip_02",
-                                                              "g_tap_04",
-                                                              "g_paper_12",
-                                                              "g_multi_xo_13",
-                                                              "g_blackhole_17",
-                                                              "g_reflex_09",
-                                                              "g_knife_28",
-                                                              "g_snake_01",
-                                                              "g_starfighter_1"
-                                                          ],
-                                    "totalScoreAccumulated":  1830234,
-                                    "highestSingleScore":  173115,
-                                    "gamesRated":  2,
-                                    "favoritesCount":  0,
-                                    "rouletteSpins":  3,
-                                    "questsCompletedCount":  16,
-                                    "hypeCount":  0,
-                                    "categoriesPlayed":  [
-                                                             "ARCADE",
-                                                             "ACTION",
-                                                             "STRATEGY",
-                                                             "PUZZLE"
-                                                         ]
-                                }
-                  },
-                  {
-                      "id":  "bfb4fcba-934e-4f0c-bf7f-132b207928bd",
-                      "username":  "e60f91ca-8d0d-4b18-8408-759f119ab480",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
-                      "created_at":  "2026-11-07T07:15:56.411Z",
-                      "wallet_balance":  0,
-                      "status":  "active",
-                      "games_played":  514,
-                      "total_score":  1830234,
-                      "level":  48,
-                      "xp":  33120,
-                      "unlocked_trophies":  {
-                                                "score_hunter":  {
-                                                                     "unlockedAt":  "2026-09-13T11:08:30.093Z"
-                                                                 },
-                                                "score_titan":  {
-                                                                    "unlockedAt":  "2026-09-13T11:08:30.098Z"
-                                                                },
-                                                "neon_initiate":  {
-                                                                      "unlockedAt":  "2026-09-14T11:13:30.603Z"
-                                                                  },
-                                                "cyber_elite":  {
-                                                                    "unlockedAt":  "2026-09-14T11:16:46.125Z"
-                                                                },
-                                                "cyber_legend":  {
-                                                                     "unlockedAt":  "2026-09-18T10:38:40.445Z"
-                                                                 },
-                                                "wheel_spinner":  {
-                                                                      "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                  },
-                                                "tetra_architect":  {
-                                                                        "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                    },
-                                                "multiverse_overlord":  {
-                                                                            "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                        },
-                                                "the_critic":  {
-                                                                   "unlockedAt":  "2026-09-24T09:13:38.582Z"
-                                                               },
-                                                "first_boot":  {
-                                                                   "unlockedAt":  "2026-09-26T09:51:25.167Z"
-                                                               },
-                                                "grid_explorer":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.382Z"
-                                                                  },
-                                                "tactical_mind":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.384Z"
-                                                                  },
-                                                "omnipresent":  {
-                                                                    "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                },
-                                                "genre_master":  {
-                                                                     "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                 },
-                                                "daily_devotee":  {
-                                                                      "unlockedAt":  "2026-09-27T18:58:37.530Z"
-                                                                  },
-                                                "catalog_conqueror":  {
-                                                                          "unlockedAt":  "2026-09-30T06:54:31.254Z"
-                                                                      },
-                                                "mission_specialist":  {
-                                                                           "unlockedAt":  "2026-09-30T09:29:42.152Z"
-                                                                       },
-                                                "flame_keeper":  {
-                                                                     "unlockedAt":  "2026-10-02T05:19:24.300Z"
-                                                                 },
-                                                "perfectionist":  {
-                                                                      "unlockedAt":  "2026-10-31T12:19:03.030Z"
-                                                                  },
-                                                "high_roller":  {
-                                                                    "unlockedAt":  "2026-11-06T10:59:09.110Z"
-                                                                }
-                                            },
-                      "stats":  {
-                                    "totalGamesPlayed":  514,
-                                    "uniqueGamesPlayed":  [
-                                                              "g_shooter_07",
-                                                              "g_missile_21",
-                                                              "g_pinball_23",
-                                                              "g_ttt_03",
-                                                              "g_outrun_22",
-                                                              "g_slicer_11",
-                                                              "g_chess_24",
-                                                              "g_card_05",
-                                                              "g_maze_15",
-                                                              "g_battleship_18",
-                                                              "g_merge_25",
-                                                              "g_aviator_26",
-                                                              "g_flappy_27",
-                                                              "g_tetris_20",
-                                                              "g_action_06",
-                                                              "g_geometry_10",
-                                                              "g_sweeper_16",
-                                                              "g_flip_02",
-                                                              "g_tap_04",
-                                                              "g_paper_12",
-                                                              "g_multi_xo_13",
-                                                              "g_blackhole_17",
-                                                              "g_reflex_09",
-                                                              "g_knife_28",
-                                                              "g_snake_01",
-                                                              "g_starfighter_1"
-                                                          ],
-                                    "totalScoreAccumulated":  1830234,
-                                    "highestSingleScore":  173115,
-                                    "gamesRated":  2,
-                                    "favoritesCount":  0,
-                                    "rouletteSpins":  3,
-                                    "questsCompletedCount":  16,
-                                    "hypeCount":  0,
-                                    "categoriesPlayed":  [
-                                                             "ARCADE",
-                                                             "ACTION",
-                                                             "STRATEGY",
-                                                             "PUZZLE"
-                                                         ]
-                                }
-                  },
-                  {
-                      "id":  "07bf3446-aa01-4890-9e2c-2bb3d227816b",
-                      "username":  "a67b1ff4-ca26-47d0-8b92-401016806545",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
-                      "created_at":  "2026-11-07T12:16:08.457Z",
-                      "wallet_balance":  0,
-                      "status":  "active",
-                      "games_played":  518,
-                      "total_score":  1831678,
-                      "level":  49,
-                      "xp":  33355,
-                      "unlocked_trophies":  {
-                                                "score_hunter":  {
-                                                                     "unlockedAt":  "2026-09-13T11:08:30.093Z"
-                                                                 },
-                                                "score_titan":  {
-                                                                    "unlockedAt":  "2026-09-13T11:08:30.098Z"
-                                                                },
-                                                "neon_initiate":  {
-                                                                      "unlockedAt":  "2026-09-14T11:13:30.603Z"
-                                                                  },
-                                                "cyber_elite":  {
-                                                                    "unlockedAt":  "2026-09-14T11:16:46.125Z"
-                                                                },
-                                                "cyber_legend":  {
-                                                                     "unlockedAt":  "2026-09-18T10:38:40.445Z"
-                                                                 },
-                                                "wheel_spinner":  {
-                                                                      "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                  },
-                                                "tetra_architect":  {
-                                                                        "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                    },
-                                                "multiverse_overlord":  {
-                                                                            "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                        },
-                                                "the_critic":  {
-                                                                   "unlockedAt":  "2026-09-24T09:13:38.582Z"
-                                                               },
-                                                "first_boot":  {
-                                                                   "unlockedAt":  "2026-09-26T09:51:25.167Z"
-                                                               },
-                                                "grid_explorer":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.382Z"
-                                                                  },
-                                                "tactical_mind":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.384Z"
-                                                                  },
-                                                "omnipresent":  {
-                                                                    "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                },
-                                                "genre_master":  {
-                                                                     "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                 },
-                                                "daily_devotee":  {
-                                                                      "unlockedAt":  "2026-09-27T18:58:37.530Z"
-                                                                  },
-                                                "catalog_conqueror":  {
-                                                                          "unlockedAt":  "2026-09-30T06:54:31.254Z"
-                                                                      },
-                                                "mission_specialist":  {
-                                                                           "unlockedAt":  "2026-09-30T09:29:42.152Z"
-                                                                       },
-                                                "flame_keeper":  {
-                                                                     "unlockedAt":  "2026-10-02T05:19:24.300Z"
-                                                                 },
-                                                "perfectionist":  {
-                                                                      "unlockedAt":  "2026-10-31T12:19:03.030Z"
-                                                                  },
-                                                "high_roller":  {
-                                                                    "unlockedAt":  "2026-11-06T10:59:09.110Z"
-                                                                }
-                                            },
-                      "stats":  {
-                                    "totalGamesPlayed":  518,
-                                    "uniqueGamesPlayed":  [
-                                                              "g_shooter_07",
-                                                              "g_missile_21",
-                                                              "g_pinball_23",
-                                                              "g_ttt_03",
-                                                              "g_outrun_22",
-                                                              "g_slicer_11",
-                                                              "g_chess_24",
-                                                              "g_card_05",
-                                                              "g_maze_15",
-                                                              "g_battleship_18",
-                                                              "g_merge_25",
-                                                              "g_aviator_26",
-                                                              "g_flappy_27",
-                                                              "g_tetris_20",
-                                                              "g_action_06",
-                                                              "g_geometry_10",
-                                                              "g_sweeper_16",
-                                                              "g_flip_02",
-                                                              "g_tap_04",
-                                                              "g_paper_12",
-                                                              "g_multi_xo_13",
-                                                              "g_blackhole_17",
-                                                              "g_reflex_09",
-                                                              "g_knife_28",
-                                                              "g_snake_01",
-                                                              "g_starfighter_1"
-                                                          ],
-                                    "totalScoreAccumulated":  1831678,
-                                    "highestSingleScore":  173115,
-                                    "gamesRated":  2,
-                                    "favoritesCount":  0,
-                                    "rouletteSpins":  6,
-                                    "questsCompletedCount":  16,
-                                    "hypeCount":  0,
-                                    "categoriesPlayed":  [
-                                                             "ARCADE",
-                                                             "ACTION",
-                                                             "STRATEGY",
-                                                             "PUZZLE"
-                                                         ]
-                                }
-                  },
-                  {
-                      "id":  "4d1632dd-f126-4bf4-8633-7b62df48805c",
-                      "username":  "a67b1ff4-ca26-47d0-8b92-401016806545",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
-                      "created_at":  "2026-11-07T12:16:08.463Z",
-                      "wallet_balance":  0,
-                      "status":  "active",
-                      "games_played":  518,
-                      "total_score":  1831678,
-                      "level":  49,
-                      "xp":  33355,
-                      "unlocked_trophies":  {
-                                                "score_hunter":  {
-                                                                     "unlockedAt":  "2026-09-13T11:08:30.093Z"
-                                                                 },
-                                                "score_titan":  {
-                                                                    "unlockedAt":  "2026-09-13T11:08:30.098Z"
-                                                                },
-                                                "neon_initiate":  {
-                                                                      "unlockedAt":  "2026-09-14T11:13:30.603Z"
-                                                                  },
-                                                "cyber_elite":  {
-                                                                    "unlockedAt":  "2026-09-14T11:16:46.125Z"
-                                                                },
-                                                "cyber_legend":  {
-                                                                     "unlockedAt":  "2026-09-18T10:38:40.445Z"
-                                                                 },
-                                                "wheel_spinner":  {
-                                                                      "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                  },
-                                                "tetra_architect":  {
-                                                                        "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                    },
-                                                "multiverse_overlord":  {
-                                                                            "unlockedAt":  "2026-09-19T14:22:44.995Z"
-                                                                        },
-                                                "the_critic":  {
-                                                                   "unlockedAt":  "2026-09-24T09:13:38.582Z"
-                                                               },
-                                                "first_boot":  {
-                                                                   "unlockedAt":  "2026-09-26T09:51:25.167Z"
-                                                               },
-                                                "grid_explorer":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.382Z"
-                                                                  },
-                                                "tactical_mind":  {
-                                                                      "unlockedAt":  "2026-09-26T17:00:54.384Z"
-                                                                  },
-                                                "omnipresent":  {
-                                                                    "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                },
-                                                "genre_master":  {
-                                                                     "unlockedAt":  "2026-09-27T08:13:24.852Z"
-                                                                 },
-                                                "daily_devotee":  {
-                                                                      "unlockedAt":  "2026-09-27T18:58:37.530Z"
-                                                                  },
-                                                "catalog_conqueror":  {
-                                                                          "unlockedAt":  "2026-09-30T06:54:31.254Z"
-                                                                      },
-                                                "mission_specialist":  {
-                                                                           "unlockedAt":  "2026-09-30T09:29:42.152Z"
-                                                                       },
-                                                "flame_keeper":  {
-                                                                     "unlockedAt":  "2026-10-02T05:19:24.300Z"
-                                                                 },
-                                                "perfectionist":  {
-                                                                      "unlockedAt":  "2026-10-31T12:19:03.030Z"
-                                                                  },
-                                                "high_roller":  {
-                                                                    "unlockedAt":  "2026-11-06T10:59:09.110Z"
-                                                                }
-                                            },
-                      "stats":  {
-                                    "totalGamesPlayed":  518,
-                                    "uniqueGamesPlayed":  [
-                                                              "g_shooter_07",
-                                                              "g_missile_21",
-                                                              "g_pinball_23",
-                                                              "g_ttt_03",
-                                                              "g_outrun_22",
-                                                              "g_slicer_11",
-                                                              "g_chess_24",
-                                                              "g_card_05",
-                                                              "g_maze_15",
-                                                              "g_battleship_18",
-                                                              "g_merge_25",
-                                                              "g_aviator_26",
-                                                              "g_flappy_27",
-                                                              "g_tetris_20",
-                                                              "g_action_06",
-                                                              "g_geometry_10",
-                                                              "g_sweeper_16",
-                                                              "g_flip_02",
-                                                              "g_tap_04",
-                                                              "g_paper_12",
-                                                              "g_multi_xo_13",
-                                                              "g_blackhole_17",
-                                                              "g_reflex_09",
-                                                              "g_knife_28",
-                                                              "g_snake_01",
-                                                              "g_starfighter_1"
-                                                          ],
-                                    "totalScoreAccumulated":  1831678,
-                                    "highestSingleScore":  173115,
-                                    "gamesRated":  2,
-                                    "favoritesCount":  0,
-                                    "rouletteSpins":  6,
-                                    "questsCompletedCount":  16,
-                                    "hypeCount":  0,
-                                    "categoriesPlayed":  [
-                                                             "ARCADE",
-                                                             "ACTION",
-                                                             "STRATEGY",
-                                                             "PUZZLE"
-                                                         ]
-                                }
-                  },
-                  {
-                      "id":  "93907019-03f7-458f-a6fe-526f4d66ca18",
-                      "username":  "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
-                      "created_at":  "2026-11-07T03:13:09.472+00:00"
-                  },
-                  {
-                      "id":  "31e86d43-a51b-45da-b0f9-40824df2dbad",
-                      "username":  "Nizufa",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Nizufa",
-                      "created_at":  "2026-11-07T13:38:02.831+00:00"
-                  },
-                  {
-                      "id":  "f3f8d637-cd97-48bc-a904-8a949c5cfe20",
-                      "username":  "Mujhe",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=Mujhe",
-                      "created_at":  "2026-11-07T15:13:46.459+00:00"
-                  },
-                  {
-                      "id":  "98192368-f437-4be3-88e1-ecffa4f128e3",
-                      "username":  "31e86d43-a51b-45da-b0f9-40824df2dbad",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=31e86d43-a51b-45da-b0f9-40824df2dbad",
-                      "created_at":  "2026-11-07T16:40:44.58+00:00"
-                  },
-                  {
-                      "id":  "4b36eca2-8114-488a-9845-307a80e3a9b0",
-                      "username":  "4dea7902-e56a-4234-8af2-19b51f1379c3",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=4dea7902-e56a-4234-8af2-19b51f1379c3",
-                      "created_at":  "2026-11-07T17:36:26.96+00:00"
-                  },
-                  {
-                      "id":  "eda564fa-beda-4dcd-be29-ea30c0d1ba9a",
-                      "username":  "rm -rf",
-                      "avatar_url":  "https://api.dicebear.com/7.x/bottts/svg?seed=rm%20-rf",
-                      "created_at":  "2026-11-07T17:38:23.305+00:00"
-                  }
-              ],
-    "games":  [
-                  {
-                      "id":  "g_starfighter_1",
-                      "slug":  "neon-starfighter",
-                      "title":  "Neon Starfighter",
-                      "description":  "Space arcade",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/neon-starfighter.svg",
-                      "game_url":  null,
-                      "rating":  4.8,
-                      "rating_count":  5,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T07:29:20.903992+00:00",
-                      "updated_at":  "2026-11-02T07:29:20.903992+00:00",
-                      "thumbnail_url":  "/thumbnails/neon-starfighter.svg"
-                  },
-                  {
-                      "id":  "g_dungeon_29",
-                      "slug":  "dungeon-slice",
-                      "title":  "Dungeon Slice",
-                      "description":  "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
-                      "category":  "ACTION",
-                      "status":  "coming_soon",
-                      "image_url":  "/thumbnails/cyber-slicer.svg",
-                      "game_url":  null,
-                      "rating":  4.5,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  34,
-                      "created_at":  "2026-11-08T08:19:52.325024+00:00",
-                      "updated_at":  "2026-11-08T08:19:52.325024+00:00",
-                      "thumbnail_url":  "/thumbnails/dungeon-slice.svg"
-                  },
-                  {
-                      "id":  "g_chess_24",
-                      "slug":  "matrix-chess",
-                      "title":  "Matrix Chess",
-                      "description":  "Neo-Brutalist 8x8 Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass \u0026 Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-chess.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:06.098811+00:00",
-                      "updated_at":  "2026-11-02T09:23:06.098811+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-chess.svg"
-                  },
-                  {
-                      "id":  "g_knife_28",
-                      "slug":  "knife-thrower",
-                      "title":  "Knife Thrower",
-                      "description":  "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-knife-thrower.svg",
-                      "game_url":  null,
-                      "rating":  4.5,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-03T14:50:06.089069+00:00",
-                      "updated_at":  "2026-11-03T14:50:06.089069+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-knife-thrower.svg"
-                  },
-                  {
-                      "id":  "g_candy_19",
-                      "slug":  "candy-blast",
-                      "title":  "Candy Blast",
-                      "description":  "Match-3 Puzzle Arcade! Align 3+ candies, craft Striped Lasers \u0026 Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/retro-candy-crush.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:06.989485+00:00",
-                      "updated_at":  "2026-11-02T09:23:06.989485+00:00",
-                      "thumbnail_url":  "/thumbnails/retro-candy-crush.svg"
-                  },
-                  {
-                      "id":  "g_ttt_03",
-                      "slug":  "quantum-xo",
-                      "title":  "Quantum XO",
-                      "description":  "Futuristic 3x3 tactical showdown against Overthinker Final Boss.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/quantum-xo.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:07.647623+00:00",
-                      "updated_at":  "2026-11-02T09:23:07.647623+00:00",
-                      "thumbnail_url":  "/thumbnails/quantum-xo.svg"
-                  },
-                  {
-                      "id":  "g_geometry_10",
-                      "slug":  "pulse-dash",
-                      "title":  "Pulse Dash",
-                      "description":  "Rhythm cube runner! Jump over spikes, launch off jump pads, and collect secret coins.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/geometry-dash.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.742082+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.742082+00:00",
-                      "thumbnail_url":  "/thumbnails/geometry-dash.svg"
-                  },
-                  {
-                      "id":  "g_breaker_08",
-                      "slug":  "brick-breaker",
-                      "title":  "Brick Breaker",
-                      "description":  "Hyper-responsive brick breaker with ball dynamics and particle explosions.",
-                      "category":  "ARCADE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-breaker.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:09.064845+00:00",
-                      "updated_at":  "2026-11-02T09:23:09.064845+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-breaker.svg"
-                  },
-                  {
-                      "id":  "g_merge_25",
-                      "slug":  "fruit-merge",
-                      "title":  "Fruit Merge",
-                      "description":  "Neo-Brutalist 2D Physics Fruit Merge \u0026 Suika Fusion! Aim tactical dropper laser, drop fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-fruit-merge.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T07:28:45.411749+00:00",
-                      "updated_at":  "2026-11-02T07:28:45.411749+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-fruit-merge.svg"
-                  },
-                  {
-                      "id":  "g_shooter_07",
-                      "slug":  "starfighter",
-                      "title":  "Starfighter",
-                      "description":  "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-                      "category":  "ARCADE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/neon-starfighter.svg",
-                      "game_url":  null,
-                      "rating":  4.5,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-05T05:03:12.84575+00:00",
-                      "updated_at":  "2026-11-05T05:03:12.84575+00:00",
-                      "thumbnail_url":  "/thumbnails/neon-starfighter.svg"
-                  },
-                  {
-                      "id":  "g_tetris_20",
-                      "slug":  "tetra-matrix",
-                      "title":  "Tetra Matrix",
-                      "description":  "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/tetra-matrix.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:06.705429+00:00",
-                      "updated_at":  "2026-11-02T09:23:06.705429+00:00",
-                      "thumbnail_url":  "/thumbnails/tetra-matrix.svg"
-                  },
-                  {
-                      "id":  "g_maze_15",
-                      "slug":  "labyrinth-escape",
-                      "title":  "Labyrinth Escape",
-                      "description":  "10-Level Neural Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-maze.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:07.353713+00:00",
-                      "updated_at":  "2026-11-02T09:23:07.353713+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-maze.svg"
-                  },
-                  {
-                      "id":  "g_card_05",
-                      "slug":  "quantum-2048",
-                      "title":  "2048",
-                      "description":  "Sliding block merger. Combine identical energy nodes to forge the 2048 core.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/quantum-2048.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.011133+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.011133+00:00",
-                      "thumbnail_url":  "/thumbnails/quantum-2048.svg"
-                  },
-                  {
-                      "id":  "g_flip_02",
-                      "slug":  "memory-matrix",
-                      "title":  "Memory Matrix",
-                      "description":  "Fast-paced neural memory card matching grid with multiplier streaks.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/memory-matrix.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.130256+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.130256+00:00",
-                      "thumbnail_url":  "/thumbnails/memory-matrix.svg"
-                  },
-                  {
-                      "id":  "g_sweeper_16",
-                      "slug":  "minefield",
-                      "title":  "Minefield",
-                      "description":  "Procedural Neo-Brutalist Minefield! Disarm randomized mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
-                      "category":  "PUZZLE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-minesweeper.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:07.231611+00:00",
-                      "updated_at":  "2026-11-02T09:23:07.231611+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-minesweeper.svg"
-                  },
-                  {
-                      "id":  "g_reflex_09",
-                      "slug":  "chroma-reflex",
-                      "title":  "Chroma Reflex",
-                      "description":  "Color-quadrant chromatic memory sequence \u0026 audio tone reflex test.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/chroma-reflex.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:09.355793+00:00",
-                      "updated_at":  "2026-11-02T09:23:09.355793+00:00",
-                      "thumbnail_url":  "/thumbnails/chroma-reflex.svg"
-                  },
-                  {
-                      "id":  "g_flappy_27",
-                      "slug":  "flappy-flyer",
-                      "title":  "Flappy Flyer",
-                      "description":  "Arcade vertical flight challenge! Tap to flap a plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
-                      "category":  "ARCADE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/flappy-bird.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:05.287411+00:00",
-                      "updated_at":  "2026-11-02T09:23:05.287411+00:00",
-                      "thumbnail_url":  "/thumbnails/flappy-bird.svg"
-                  },
-                  {
-                      "id":  "g_slicer_11",
-                      "slug":  "katana-slicer",
-                      "title":  "Katana Slicer",
-                      "description":  "Katana Blade Slicing! Slash flying targets, chain multi-slice combos, and dodge explosive plasma bombs.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-slicer.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:05.545199+00:00",
-                      "updated_at":  "2026-11-02T09:23:05.545199+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-slicer.svg"
-                  },
-                  {
-                      "id":  "g_battleship_18",
-                      "slug":  "naval-grid-strike",
-                      "title":  "Naval Grid Strike",
-                      "description":  "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass \u0026 Play.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/retro-battleship.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:05.674974+00:00",
-                      "updated_at":  "2026-11-02T09:23:05.674974+00:00",
-                      "thumbnail_url":  "/thumbnails/retro-battleship.svg"
-                  },
-                  {
-                      "id":  "g_blackhole_17",
-                      "slug":  "singularity-horizon",
-                      "title":  "Singularity Horizon",
-                      "description":  "David Galeâ€™s Singularity Horizon tactical 2-player \u0026 AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/black-hole.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:07.123662+00:00",
-                      "updated_at":  "2026-11-02T09:23:07.123662+00:00",
-                      "thumbnail_url":  "/thumbnails/black-hole.svg"
-                  },
-                  {
-                      "id":  "g_tap_04",
-                      "slug":  "hyper-tapper",
-                      "title":  "Hyper Tapper",
-                      "description":  "Precision reaction-time clicker testing ultra-high APM speeds.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/hyper-tapper.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.236062+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.236062+00:00",
-                      "thumbnail_url":  "/thumbnails/hyper-tapper.svg"
-                  },
-                  {
-                      "id":  "g_action_06",
-                      "slug":  "dash",
-                      "title":  "Dash 2077",
-                      "description":  "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/cyber-dash.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.637098+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.637098+00:00",
-                      "thumbnail_url":  "/thumbnails/cyber-dash.svg"
-                  },
-                  {
-                      "id":  "g_missile_21",
-                      "slug":  "missile-defense",
-                      "title":  "Missile Defense",
-                      "description":  "Command Flak Defense! Defend 6 Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
-                      "category":  "ACTION",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/neon-missile-defense.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:05.791051+00:00",
-                      "updated_at":  "2026-11-02T09:23:05.791051+00:00",
-                      "thumbnail_url":  "/thumbnails/neon-missile-defense.svg"
-                  },
-                  {
-                      "id":  "g_multi_xo_13",
-                      "slug":  "multidimension-xo",
-                      "title":  "Multidimension XO",
-                      "description":  "Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/multidimension-xo.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:06.395726+00:00",
-                      "updated_at":  "2026-11-02T09:23:06.395726+00:00",
-                      "thumbnail_url":  "/thumbnails/multidimension-xo.svg"
-                  },
-                  {
-                      "id":  "g_snake_01",
-                      "slug":  "snake",
-                      "title":  "Snake 2077",
-                      "description":  "Canvas snake with hyper-speed combos, trails, and responsive swipe controls.",
-                      "category":  "ARCADE",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/neon-snake.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:08.523372+00:00",
-                      "updated_at":  "2026-11-02T09:23:08.523372+00:00",
-                      "thumbnail_url":  "/thumbnails/neon-snake.svg"
-                  },
-                  {
-                      "id":  "g_paper_12",
-                      "slug":  "paper-grid",
-                      "title":  "Paper Grid",
-                      "description":  "Conquer the arcade grid! Expand your territory, encircle massive zones, and slice enemy trails before they cut yours.",
-                      "category":  "STRATEGY",
-                      "status":  "active",
-                      "image_url":  "/thumbnails/paper-io.svg",
-                      "game_url":  null,
-                      "rating":  0,
-                      "rating_count":  0,
-                      "play_count":  0,
-                      "hype_count":  0,
-                      "created_at":  "2026-11-02T09:23:09.478926+00:00",
-                      "updated_at":  "2026-11-02T09:23:09.478926+00:00",
-                      "thumbnail_url":  "/thumbnails/paper-io.svg"
-                  }
-              ],
-    "scores":  [
-                   {
-                       "id":  "516059f7-aea5-4a49-ac6b-cb5685ef00c1",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  420,
-                       "created_at":  "2026-11-03T16:11:33.929Z"
-                   },
-                   {
-                       "id":  "bb384548-3a68-4489-bfcd-613e4520b770",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  600,
-                       "created_at":  "2026-11-03T16:31:48.064Z"
-                   },
-                   {
-                       "id":  "8a70a480-d556-4138-9093-847e440acf64",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  100,
-                       "created_at":  "2026-11-03T16:31:55.357Z"
-                   },
-                   {
-                       "id":  "925ae2a5-5318-46d0-ad0c-864d53bc9342",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  100,
-                       "created_at":  "2026-11-03T16:32:07.649Z"
-                   },
-                   {
-                       "id":  "16023905-7e8b-4565-958f-e648c40ddde4",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  180,
-                       "created_at":  "2026-11-03T16:41:50.865Z"
-                   },
-                   {
-                       "id":  "a81f22dd-349a-4f1c-ab50-6513965d2aad",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  180,
-                       "created_at":  "2026-11-03T16:52:56.909Z"
-                   },
-                   {
-                       "id":  "519d4aba-b33a-49e3-aaf6-0f6d2969817a",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  180,
-                       "created_at":  "2026-11-03T16:52:57.076Z"
-                   },
-                   {
-                       "id":  "9af446c4-4032-4de4-9076-43462d7157fe",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  660,
-                       "created_at":  "2026-11-04T04:20:42.641Z"
-                   },
-                   {
-                       "id":  "140362e5-27d1-4880-aea8-fc5784d9a1a0",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1500,
-                       "created_at":  "2026-11-04T04:21:00.175Z"
-                   },
-                   {
-                       "id":  "09f58371-7e1a-4b47-8cb5-d09a684214a9",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2610,
-                       "created_at":  "2026-11-04T04:21:19.728Z"
-                   },
-                   {
-                       "id":  "303b9bb7-0c55-4ec6-8b32-75ae4ce7f47b",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6090,
-                       "created_at":  "2026-11-04T04:23:40.223Z"
-                   },
-                   {
-                       "id":  "a449e01c-f236-4733-bd19-3ff362810708",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6360,
-                       "created_at":  "2026-11-04T10:19:44.474Z"
-                   },
-                   {
-                       "id":  "e360f832-7e8a-4951-aac6-d77e92014d3d",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  60,
-                       "created_at":  "2026-11-04T10:20:18.710Z"
-                   },
-                   {
-                       "id":  "4ac0c4ac-4620-4e12-9f98-9614e58a1c7f",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-04T10:20:21.603Z"
-                   },
-                   {
-                       "id":  "1a82194b-5b3e-4655-b582-58114d27d95c",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2580,
-                       "created_at":  "2026-11-04T11:22:05.302Z"
-                   },
-                   {
-                       "id":  "3a2b81f4-c6df-4482-8616-66edb12f1a90",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6240,
-                       "created_at":  "2026-11-04T11:22:59.249Z"
-                   },
-                   {
-                       "id":  "e3dda368-15f3-4474-b04c-06f4501f2d8f",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2700,
-                       "created_at":  "2026-11-04T11:23:18.280Z"
-                   },
-                   {
-                       "id":  "943ba3d5-377c-48ba-ae36-a8f8b04a85cd",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  60,
-                       "created_at":  "2026-11-04T17:51:47.864Z"
-                   },
-                   {
-                       "id":  "1e0275ea-b6a3-4d13-a5f1-3ec575203042",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1560,
-                       "created_at":  "2026-11-04T17:52:02.984Z"
-                   },
-                   {
-                       "id":  "0e9f882c-994a-4033-9462-4f684417455c",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1560,
-                       "created_at":  "2026-11-04T17:52:03.079Z"
-                   },
-                   {
-                       "id":  "bcf53911-50be-47a3-8d87-64d709cb7c67",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6182,
-                       "created_at":  "2026-11-05T04:07:05.345Z"
-                   },
-                   {
-                       "id":  "1942cde2-5bc1-4bdc-b1f2-49e05cc19abb",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-05T04:07:23.163Z"
-                   },
-                   {
-                       "id":  "f53d01c2-1017-4855-87ee-f917a897b25e",
-                       "game_id":  "g_ttt_03",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  150,
-                       "created_at":  "2026-11-05T04:09:31.374Z"
-                   },
-                   {
-                       "id":  "c03b34c1-a795-4050-9a55-ced0b9e3e054",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1043,
-                       "created_at":  "2026-11-05T04:35:09.135Z"
-                   },
-                   {
-                       "id":  "c0209ef5-5363-4f96-8bcf-7a60d28e0ccf",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1281,
-                       "created_at":  "2026-11-05T04:35:15.919Z"
-                   },
-                   {
-                       "id":  "9fc43c46-12ec-4ce8-8618-79823a29f48e",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  417,
-                       "created_at":  "2026-11-05T04:43:23.753Z"
-                   },
-                   {
-                       "id":  "c8f45fe0-9dcb-4634-a023-ef7a04403a3d",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  541,
-                       "created_at":  "2026-11-05T04:43:29.385Z"
-                   },
-                   {
-                       "id":  "4df7bb0d-dcf6-41f4-8a3c-6d70c5cb5a8a",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  478,
-                       "created_at":  "2026-11-05T04:50:52.358Z"
-                   },
-                   {
-                       "id":  "bf872c9c-3f1a-4beb-b5b2-be5be179a8cf",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1797,
-                       "created_at":  "2026-11-05T04:52:03.857Z"
-                   },
-                   {
-                       "id":  "8d186c4b-5119-4121-a000-ca34a0801824",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2042,
-                       "created_at":  "2026-11-05T04:52:14.697Z"
-                   },
-                   {
-                       "id":  "6f91c086-86ca-4249-8d9a-1bcd039a063d",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  116,
-                       "created_at":  "2026-11-05T04:52:16.641Z"
-                   },
-                   {
-                       "id":  "36c24036-1973-43c4-8e7a-362d9b69dba5",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  115,
-                       "created_at":  "2026-11-05T04:54:44.914Z"
-                   },
-                   {
-                       "id":  "0bd08a94-fbf0-4e5b-b4c0-62a50624ed4c",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4233,
-                       "created_at":  "2026-11-05T04:55:10.515Z"
-                   },
-                   {
-                       "id":  "90db9663-9df9-46bd-befd-bcc461229912",
-                       "game_id":  "g_snake_01",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6508,
-                       "created_at":  "2026-11-06T18:03:30.571Z"
-                   },
-                   {
-                       "id":  "5839ecbc-6635-4416-b91c-a86f1d033f13",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  650,
-                       "created_at":  "2026-11-06T18:19:12.970Z"
-                   },
-                   {
-                       "id":  "9a5c83d1-bc95-4d48-bff9-66e113bfdb81",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  900,
-                       "created_at":  "2026-11-06T18:20:30.042Z"
-                   },
-                   {
-                       "id":  "00d02dd9-32be-4417-a094-2c86f83e1848",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  900,
-                       "created_at":  "2026-11-06T18:21:50.250Z"
-                   },
-                   {
-                       "id":  "faba07de-0bc9-4c0b-adee-c4c7935548c3",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  900,
-                       "created_at":  "2026-11-06T18:22:25.348Z"
-                   },
-                   {
-                       "id":  "dd51396c-d1f3-4bd1-befc-95b7bff85103",
-                       "game_id":  "g_paper_12",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2530,
-                       "created_at":  "2026-11-06T18:25:09.619Z"
-                   },
-                   {
-                       "id":  "72544b0a-a39c-4d77-bc2f-521d1c808ceb",
-                       "game_id":  "g_paper_12",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2530,
-                       "created_at":  "2026-11-06T18:25:09.741Z"
-                   },
-                   {
-                       "id":  "5f437997-3d5e-4b31-8798-8081490ba8b0",
-                       "game_id":  "g_paper_12",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  3105,
-                       "created_at":  "2026-11-06T18:25:47.190Z"
-                   },
-                   {
-                       "id":  "3480714c-e495-4225-a03f-49b40c3f5fb1",
-                       "game_id":  "g_paper_12",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  3105,
-                       "created_at":  "2026-11-06T18:25:48.019Z"
-                   },
-                   {
-                       "id":  "6d4bf1d3-5ebb-45a1-9cc6-0c2fe87d7c71",
-                       "game_id":  "g_paper_12",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  3105,
-                       "created_at":  "2026-11-06T18:25:53.273Z"
-                   },
-                   {
-                       "id":  "64b8c9d8-aa5d-4bb4-b3c7-20fdc7050160",
-                       "game_id":  "g_battleship_18",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  16800,
-                       "created_at":  "2026-11-06T18:39:07.633Z"
-                   },
-                   {
-                       "id":  "679c4db7-fa9d-4172-a18b-48176bc95189",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-06T21:29:08.001Z"
-                   },
-                   {
-                       "id":  "6f214c33-e9b9-428b-9e4a-2583de201b25",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2760,
-                       "created_at":  "2026-11-06T21:29:33.057Z"
-                   },
-                   {
-                       "id":  "ad96d895-5b47-4272-a850-1d18693532f7",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4530,
-                       "created_at":  "2026-11-06T21:31:09.737Z"
-                   },
-                   {
-                       "id":  "3fe2aaac-5cf8-4a46-a646-2880dab9cf08",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2760,
-                       "created_at":  "2026-11-06T21:44:23.108Z"
-                   },
-                   {
-                       "id":  "6eaecd3e-f95f-44eb-aacf-67e0bd3ecac7",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-06T21:44:40.232Z"
-                   },
-                   {
-                       "id":  "ab5df9ac-c570-4385-a553-930182755bf8",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  60,
-                       "created_at":  "2026-11-06T21:45:48.905Z"
-                   },
-                   {
-                       "id":  "72f628a9-a492-409e-9f55-64c4f8f2a069",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6150,
-                       "created_at":  "2026-11-06T22:01:24.389Z"
-                   },
-                   {
-                       "id":  "b9311fdb-eee6-4b69-a4c3-e1f9ee84c9a9",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6180,
-                       "created_at":  "2026-11-06T22:06:41.533Z"
-                   },
-                   {
-                       "id":  "8efba15f-7017-4108-a28b-f76813c7d71d",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6390,
-                       "created_at":  "2026-11-06T22:28:21.717Z"
-                   },
-                   {
-                       "id":  "4835b6d5-7f4f-4e5c-bd10-cc827b91168f",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4,
-                       "created_at":  "2026-11-07T07:19:49.511Z"
-                   },
-                   {
-                       "id":  "8f11ea0f-36f7-4006-8d3f-30038ee88c7a",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1440,
-                       "created_at":  "2026-11-07T07:20:36.444Z"
-                   },
-                   {
-                       "id":  "3fe6c842-80f9-4b94-ae55-5bd488c09ff9",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1400,
-                       "created_at":  "2026-11-07T13:55:11.336Z"
-                   },
-                   {
-                       "id":  "3ee40f3c-4ccb-4dff-bcce-5dbbaa2e7d1c",
-                       "game_id":  "g_geometry_10",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  300,
-                       "created_at":  "2026-11-07T13:55:42.215Z"
-                   },
-                   {
-                       "id":  "7a6905f2-9647-400d-8e65-49ee8f8f0be1",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6090,
-                       "created_at":  "2026-11-07T14:32:06.487Z"
-                   },
-                   {
-                       "id":  "74c5799c-1368-40a9-b0ab-14a87e175bfa",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  150,
-                       "created_at":  "2026-11-07T14:35:37.776Z"
-                   },
-                   {
-                       "id":  "a1ba38c1-e0e0-404e-a799-7397939ab437",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  180,
-                       "created_at":  "2026-11-07T14:39:48.725Z"
-                   },
-                   {
-                       "id":  "312fde9d-34ce-442e-a59f-83b540a14370",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  210,
-                       "created_at":  "2026-11-07T14:40:19.054Z"
-                   },
-                   {
-                       "id":  "6fe2bcd7-0ae1-4dd0-8aa9-becdca6f2610",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-07T14:43:58.170Z"
-                   },
-                   {
-                       "id":  "2b43ff09-1757-404e-a15f-babe804717e3",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6180,
-                       "created_at":  "2026-11-07T14:44:33.916Z"
-                   },
-                   {
-                       "id":  "b5950039-9d78-4e73-812b-e85c3d6d305f",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  30,
-                       "created_at":  "2026-11-07T14:44:49.838Z"
-                   },
-                   {
-                       "id":  "91f2cc74-9d53-4d55-87c1-5861890c0a4c",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  90,
-                       "created_at":  "2026-11-07T14:45:30.001Z"
-                   },
-                   {
-                       "id":  "e6525c88-d37e-4c22-ba9b-d8ad3abfeed8",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6210,
-                       "created_at":  "2026-11-07T14:45:56.830Z"
-                   },
-                   {
-                       "id":  "c0b4eaf4-965f-496a-8d19-84bce7612990",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6330,
-                       "created_at":  "2026-11-07T14:46:01.331Z"
-                   },
-                   {
-                       "id":  "964afdc1-8c03-4e1f-a0d1-425028bac93b",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  30,
-                       "created_at":  "2026-11-07T14:46:36.031Z"
-                   },
-                   {
-                       "id":  "c817b88c-3a22-4e6c-9469-da4f89c0f7cb",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  150,
-                       "created_at":  "2026-11-07T14:46:39.388Z"
-                   },
-                   {
-                       "id":  "1b089803-9390-4f54-a35e-ec2513be60db",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1500,
-                       "created_at":  "2026-11-07T14:50:17.870Z"
-                   },
-                   {
-                       "id":  "d4633762-c8b6-4e8c-a4d5-71cbb9882762",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  3,
-                       "created_at":  "2026-11-07T14:55:09.460Z"
-                   },
-                   {
-                       "id":  "38da1306-cbc4-4778-980e-77cd6ac90040",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4,
-                       "created_at":  "2026-11-07T14:55:21.219Z"
-                   },
-                   {
-                       "id":  "c2311b89-ea47-4806-8588-3ed229d4498b",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2,
-                       "created_at":  "2026-11-07T14:55:31.041Z"
-                   },
-                   {
-                       "id":  "a7b2b8e5-76c9-4e1a-acb2-27ac5f13cac8",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4,
-                       "created_at":  "2026-11-07T14:55:41.475Z"
-                   },
-                   {
-                       "id":  "50fb9d4e-0497-41e4-8ccc-3f800ad0f510",
-                       "game_id":  "g_flappy_27",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  4,
-                       "created_at":  "2026-11-07T14:59:53.226Z"
-                   },
-                   {
-                       "id":  "06a64840-e7a0-470a-af5e-70e7997c3a1a",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2520,
-                       "created_at":  "2026-11-08T07:12:54.987Z"
-                   },
-                   {
-                       "id":  "465b9342-40c9-47ea-bc85-5ea44befe6df",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2580,
-                       "created_at":  "2026-11-08T07:12:59.132Z"
-                   },
-                   {
-                       "id":  "25f5743f-93c8-478b-b78e-694e731a5c73",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2790,
-                       "created_at":  "2026-11-08T07:13:06.761Z"
-                   },
-                   {
-                       "id":  "8111e9e7-52a8-4791-84fc-b84c6e713591",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6570,
-                       "created_at":  "2026-11-08T07:13:25.511Z"
-                   },
-                   {
-                       "id":  "5ec219a1-8445-45fc-bd0c-73c373b4b9ac",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6660,
-                       "created_at":  "2026-11-08T07:13:39.296Z"
-                   },
-                   {
-                       "id":  "ff6b82fc-9f70-4269-945f-c44e49ae8ab3",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6750,
-                       "created_at":  "2026-11-08T07:13:44.325Z"
-                   },
-                   {
-                       "id":  "e3182ebb-ff7e-4aee-9a41-17a48386b405",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6750,
-                       "created_at":  "2026-11-08T07:16:09.579Z"
-                   },
-                   {
-                       "id":  "97805b51-ae0b-426f-b524-6133ebb751a6",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6840,
-                       "created_at":  "2026-11-08T07:16:11.800Z"
-                   },
-                   {
-                       "id":  "f86c8d4e-3880-4675-b1c3-7119e8e772f7",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  30,
-                       "created_at":  "2026-11-08T07:16:15.281Z"
-                   },
-                   {
-                       "id":  "434193f6-3387-43f4-b716-beab16e5bd14",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6180,
-                       "created_at":  "2026-11-08T07:16:47.907Z"
-                   },
-                   {
-                       "id":  "889a6b98-e16e-4fd2-ab6a-9505bacbe803",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  6420,
-                       "created_at":  "2026-11-08T07:17:20.756Z"
-                   },
-                   {
-                       "id":  "915f765d-686f-4fac-afad-04da978dc58a",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1350,
-                       "created_at":  "2026-11-08T07:52:39.682Z"
-                   },
-                   {
-                       "id":  "cefaee41-8001-4e9e-a059-68fce175b82a",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1350,
-                       "created_at":  "2026-11-08T07:52:40.165Z"
-                   },
-                   {
-                       "id":  "45bc1e90-e79c-4ff1-a31c-ad9fc70f1a13",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  1350,
-                       "created_at":  "2026-11-08T07:52:40.186Z"
-                   },
-                   {
-                       "id":  "50ddff33-0c90-459d-b4de-b5324624da17",
-                       "game_id":  "g_knife_28",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  30,
-                       "created_at":  "2026-11-08T08:11:13.943Z"
-                   },
-                   {
-                       "id":  "6e05f5fc-9b7f-4bdd-b787-d154040825eb",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  421,
-                       "created_at":  "2026-11-08T08:23:42.638Z"
-                   },
-                   {
-                       "id":  "8e1a3fef-a529-40e0-b6ac-283f02cfacf7",
-                       "game_id":  "g_action_06",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  2272,
-                       "created_at":  "2026-11-08T08:23:57.418Z"
-                   },
-                   {
-                       "id":  "aa8c744d-9f67-4bb8-969d-5c9a67088a42",
-                       "game_id":  "g_dungeon_29",
-                       "user_id":  "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
-                       "score":  950,
-                       "created_at":  "2026-11-08T08:27:49.538Z"
-                   }
-               ],
-    "ratings":  [
-                    {
-                        "id":  "003da321-6261-442c-b3f6-b858ab50a3bf",
-                        "game_id":  "g_merge_25",
-                        "user_id":  "66ed0a76-712c-45f5-a7d3-635acec63743",
-                        "rating":  5,
-                        "created_at":  "2026-11-02T07:28:46.623567+00:00",
-                        "updated_at":  "2026-11-02T07:28:44.897+00:00"
-                    },
-                    {
-                        "id":  "1df64ac4-6554-4c1c-8594-144347d77058",
-                        "game_id":  "g_starfighter_1",
-                        "user_id":  "edb575e2-d634-46d6-8bcc-a4582c905a91",
-                        "rating":  5,
-                        "created_at":  "2026-11-02T07:29:21.302976+00:00",
-                        "updated_at":  "2026-11-02T07:29:19.598+00:00"
-                    }
-                ],
-    "game_requests":  [
-                          {
-                              "id":  "req_cyber_chess",
-                              "title":  "Neon Cyber Chess 3D",
-                              "genre":  "STRATEGY",
-                              "description":  "Holographic cyber chess with neon piece skins, timed blitz clocks, and adaptive heuristic chess engine AI.",
-                              "requested_by":  "GrandmasterNeon",
-                              "upvotes":  42,
-                              "upvoted_by":  [
-
-                                             ],
-                              "status":  "in_development",
-                              "created_at":  "2026-09-20T10:00:00.000Z"
-                          },
-                          {
-                              "id":  "req_rhythm_blade",
-                              "title":  "Synthwave Rhythm Matrix",
-                              "genre":  "ACTION",
-                              "description":  "Cyberpunk rhythm game matching synthwave BPM beat drops with dynamic laser trail combos.",
-                              "requested_by":  "AudioViper",
-                              "upvotes":  35,
-                              "upvoted_by":  [
-
-                                             ],
-                              "status":  "planned",
-                              "created_at":  "2026-09-21T14:30:00.000Z"
-                          },
-                          {
-                              "id":  "req_cyber_tower",
-                              "title":  "Neon Tower Defense: Core Breach",
-                              "genre":  "STRATEGY",
-                              "description":  "Grid-based tactical defense with EMP turrets, plasma railguns, and waves of rogue virus crawler swarms.",
-                              "requested_by":  "SectorDefender",
-                              "upvotes":  28,
-                              "upvoted_by":  [
-
-                                             ],
-                              "status":  "under_review",
-                              "created_at":  "2026-09-22T08:15:00.000Z"
-                          }
-                      ],
-    "tournaments":  [
-                        {
-                            "id":  "tourn_1",
-                            "name":  "Cyber Blitz Championship",
-                            "entry_fee":  10,
-                            "prize_pool":  1000,
-                            "start_date":  "2026-11-10T18:00:00.000Z",
-                            "status":  "upcoming"
-                        }
-                    ],
-    "deposits":  [
-
-                 ],
-    "withdrawals":  [
-
-                    ],
-    "transactions":  [
-
-                     ],
-    "adminLogs":  [
-                      {
-                          "id":  "3586dbcd-393e-4306-b89f-cd0dd37f6c25",
-                          "admin_id":  "admin",
-                          "action":  "save_game",
-                          "created_at":  "2026-11-06T17:54:38.591Z"
-                      },
-                      {
-                          "id":  "6c05dbe3-bcd1-4439-a2eb-e12e6eafa396",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-06T17:54:02.913Z"
-                      },
-                      {
-                          "id":  "9aaeadf5-62d9-417f-8596-3f3efbaa9475",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T13:20:25.190Z"
-                      },
-                      {
-                          "id":  "2115d3ea-4b66-414c-b517-e4117502c7bf",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T13:14:55.019Z"
-                      },
-                      {
-                          "id":  "d84a9d62-6b55-470c-9ccd-ba183a552b4d",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T13:08:06.004Z"
-                      },
-                      {
-                          "id":  "2f6a754c-6ac3-4a0c-a11d-8ed9dacb3235",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T12:17:24.380Z"
-                      },
-                      {
-                          "id":  "47c97e66-614b-468b-a730-98202630c182",
-                          "admin_id":  "admin",
-                          "action":  "delete_tournament",
-                          "target_id":  "0e6e39ee-ff5f-4eb8-b90b-30374b70c3a3",
-                          "created_at":  "2026-11-04T12:17:07.887Z"
-                      },
-                      {
-                          "id":  "12a8616b-ca3e-465b-88b6-30fd1684b1d0",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T12:16:35.420Z"
-                      },
-                      {
-                          "id":  "b7ad9b0e-ae2b-4b1c-aeeb-8e83e4d90ffb",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T12:10:41.955Z"
-                      },
-                      {
-                          "id":  "c68867ba-b703-4f7b-8dd4-e897c050ec03",
-                          "admin_id":  "admin",
-                          "action":  "update_game_status",
-                          "created_at":  "2026-11-04T12:10:22.468Z"
-                      },
-                      {
-                          "id":  "c9d1ca95-1f89-4840-8321-ebda437b0673",
-                          "admin_id":  "admin",
-                          "action":  "add_admin",
-                          "created_at":  "2026-11-04T11:19:50.926Z"
-                      },
-                      {
-                          "id":  "77c307a8-6673-4835-beb1-b51cbcbb296d",
-                          "admin_id":  "admin",
-                          "action":  "create_tournament",
-                          "created_at":  "2026-11-04T10:50:46.098Z"
-                      }
-                  ],
-    "categories":  [
-
-                   ],
-    "admins":  [
-                   {
-                       "id":  "admin_prime",
-                       "username":  "munim",
-                       "admin_role":  "prime"
-                   },
-                   {
-                       "id":  "c38fa133-e335-43ed-95bf-94814c0507f4",
-                       "username":  "Tahida",
-                       "admin_role":  "standard"
-                   }
-               ],
-    "banners":  [
-
-                ],
-    "comments":  [
-
-                 ],
-    "feedback":  [
-
-                 ]
+{
+  "users": [
+    {
+      "id": "edb575e2-d634-46d6-8bcc-a4582c905a91",
+      "username": "RandomUser_748",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=RandomUser",
+      "created_at": "2026-11-02T07:29:18.547+00:00"
+    },
+    {
+      "id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "username": "munim",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=munim",
+      "created_at": "2026-11-02T08:49:14.026+00:00",
+      "days_played": 1,
+      "longest_streak": 9,
+      "level": 51,
+      "xp": 36110,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 556,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1",
+          "g_candy_19",
+          "g_dungeon_29"
+        ],
+        "totalScoreAccumulated": 1936848,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 6,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      },
+      "games_played": 556,
+      "total_score": 1936848
+    },
+    {
+      "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
+      "username": "******",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=******",
+      "created_at": "2026-11-02T09:12:20.635+00:00"
+    },
+    {
+      "id": "d404b2c4-a546-4bc7-89ca-2712cddfe112",
+      "username": "Ra",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ra",
+      "created_at": "2026-11-02T09:41:37.174+00:00"
+    },
+    {
+      "id": "058e8a62-3e69-4336-bdba-eff52d45dba8",
+      "username": "mik",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=mik",
+      "created_at": "2026-11-02T14:10:39.682+00:00"
+    },
+    {
+      "id": "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "username": "Tahida begom",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Tahida%20begom",
+      "created_at": "2026-11-03T07:15:24.297+00:00"
+    },
+    {
+      "id": "dc88b11e-c2b8-4acd-bc77-dfb117f93d09",
+      "username": "Irom Don",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Irom%20Don",
+      "created_at": "2026-11-03T07:24:17.572+00:00"
+    },
+    {
+      "id": "f3fd9e94-eb00-47d3-ac58-ceab5b424b87",
+      "username": "Hkb",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Hkb",
+      "created_at": "2026-11-03T07:24:27.765+00:00"
+    },
+    {
+      "id": "00e09c54-396f-468a-8c20-9fc58a8a0556",
+      "username": "Ashraful",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ashraful",
+      "created_at": "2026-11-03T07:26:06.803+00:00"
+    },
+    {
+      "id": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "username": "MatrixRunner_96",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=MatrixRunner_96",
+      "created_at": "2026-11-03T07:26:57.557+00:00"
+    },
+    {
+      "id": "a62c5aa1-50ba-44e6-bbc8-26a607cff9e4",
+      "username": "Navanita Mazumder",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Navanita%20Mazumder",
+      "created_at": "2026-11-03T07:28:03.078+00:00"
+    },
+    {
+      "id": "46fca69a-5c24-448b-9a71-73b91b4fcd15",
+      "username": "Ruhana",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana",
+      "created_at": "2026-11-03T07:37:42.678+00:00"
+    },
+    {
+      "id": "fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "username": "rahul",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=rahul",
+      "created_at": "2026-11-03T07:37:58.475+00:00"
+    },
+    {
+      "id": "8a0ac084-0c6b-47bb-80ba-f904b89c0570",
+      "username": "Ruhana Begom",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Ruhana%20Begom",
+      "created_at": "2026-11-03T07:39:07.38+00:00"
+    },
+    {
+      "id": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "username": "TestPlayer",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=TestPlayer",
+      "created_at": "2026-11-02T07:28:46.16088+00:00"
+    },
+    {
+      "id": "4dea7902-e56a-4234-8af2-19b51f1379c3",
+      "username": "Jonathan",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Jonathan",
+      "created_at": "2026-11-04T14:12:17.896+00:00"
+    },
+    {
+      "id": "25bd5ed3-b9da-478b-8609-f68b539009c2",
+      "username": "LB",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=LB",
+      "created_at": "2026-11-05T10:49:53.798+00:00"
+    },
+    {
+      "id": "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "username": "Mashh__",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Mashh__",
+      "created_at": "2026-11-05T10:53:45.221+00:00"
+    },
+    {
+      "id": "6c0d14ff-d17c-482a-835b-b4c94eb56e5a",
+      "username": "Fahim Ahmed",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Fahim%20Ahmed",
+      "created_at": "2026-11-05T14:19:33.376+00:00"
+    },
+    {
+      "id": "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "username": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "created_at": "2026-11-06T09:36:06.12+00:00"
+    },
+    {
+      "id": "b069ebdb-9484-43f3-8086-f8dce9b874a5",
+      "username": "1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=1596da39-1b26-44e5-84d7-dfb7a87b88ec",
+      "created_at": "2026-11-06T09:38:40.268+00:00"
+    },
+    {
+      "id": "b3b8dae3-f91d-449b-97de-50f2be4d4700",
+      "username": "fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=fb6285ce-f82a-4d25-b7da-42e962814c53",
+      "created_at": "2026-11-06T09:38:49.053+00:00"
+    },
+    {
+      "id": "eea5369d-e865-4f7e-b5a3-8b212612561c",
+      "username": "2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=2c6b87c3-5c00-4b11-a835-7d66d00e74c2",
+      "created_at": "2026-11-06T11:34:12.431+00:00"
+    },
+    {
+      "id": "b93a1f45-dcb2-4a18-8db2-78802e836966",
+      "username": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=66ed0a76-712c-45f5-a7d3-635acec63743",
+      "created_at": "2026-11-06T21:59:17.195+00:00"
+    },
+    {
+      "id": "d59a636b-f3ca-4369-b474-b7be7946ca9d",
+      "username": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "created_at": "2026-11-07T07:15:56.403Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 514,
+      "total_score": 1830234,
+      "level": 48,
+      "xp": 33120,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 514,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1830234,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 3,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "bfb4fcba-934e-4f0c-bf7f-132b207928bd",
+      "username": "e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=e60f91ca-8d0d-4b18-8408-759f119ab480",
+      "created_at": "2026-11-07T07:15:56.411Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 514,
+      "total_score": 1830234,
+      "level": 48,
+      "xp": 33120,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 514,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1830234,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 3,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "07bf3446-aa01-4890-9e2c-2bb3d227816b",
+      "username": "a67b1ff4-ca26-47d0-8b92-401016806545",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
+      "created_at": "2026-11-07T12:16:08.457Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 518,
+      "total_score": 1831678,
+      "level": 49,
+      "xp": 33355,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 518,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1831678,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 6,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "4d1632dd-f126-4bf4-8633-7b62df48805c",
+      "username": "a67b1ff4-ca26-47d0-8b92-401016806545",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=a67b1ff4-ca26-47d0-8b92-401016806545",
+      "created_at": "2026-11-07T12:16:08.463Z",
+      "wallet_balance": 0,
+      "status": "active",
+      "games_played": 518,
+      "total_score": 1831678,
+      "level": 49,
+      "xp": 33355,
+      "unlocked_trophies": {
+        "score_hunter": {
+          "unlockedAt": "2026-09-13T11:08:30.093Z"
+        },
+        "score_titan": {
+          "unlockedAt": "2026-09-13T11:08:30.098Z"
+        },
+        "neon_initiate": {
+          "unlockedAt": "2026-09-14T11:13:30.603Z"
+        },
+        "cyber_elite": {
+          "unlockedAt": "2026-09-14T11:16:46.125Z"
+        },
+        "cyber_legend": {
+          "unlockedAt": "2026-09-18T10:38:40.445Z"
+        },
+        "wheel_spinner": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "tetra_architect": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "multiverse_overlord": {
+          "unlockedAt": "2026-09-19T14:22:44.995Z"
+        },
+        "the_critic": {
+          "unlockedAt": "2026-09-24T09:13:38.582Z"
+        },
+        "first_boot": {
+          "unlockedAt": "2026-09-26T09:51:25.167Z"
+        },
+        "grid_explorer": {
+          "unlockedAt": "2026-09-26T17:00:54.382Z"
+        },
+        "tactical_mind": {
+          "unlockedAt": "2026-09-26T17:00:54.384Z"
+        },
+        "omnipresent": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "genre_master": {
+          "unlockedAt": "2026-09-27T08:13:24.852Z"
+        },
+        "daily_devotee": {
+          "unlockedAt": "2026-09-27T18:58:37.530Z"
+        },
+        "catalog_conqueror": {
+          "unlockedAt": "2026-09-30T06:54:31.254Z"
+        },
+        "mission_specialist": {
+          "unlockedAt": "2026-09-30T09:29:42.152Z"
+        },
+        "flame_keeper": {
+          "unlockedAt": "2026-10-02T05:19:24.300Z"
+        },
+        "perfectionist": {
+          "unlockedAt": "2026-10-31T12:19:03.030Z"
+        },
+        "high_roller": {
+          "unlockedAt": "2026-11-06T10:59:09.110Z"
+        }
+      },
+      "stats": {
+        "totalGamesPlayed": 518,
+        "uniqueGamesPlayed": [
+          "g_shooter_07",
+          "g_missile_21",
+          "g_pinball_23",
+          "g_ttt_03",
+          "g_outrun_22",
+          "g_slicer_11",
+          "g_chess_24",
+          "g_card_05",
+          "g_maze_15",
+          "g_battleship_18",
+          "g_merge_25",
+          "g_aviator_26",
+          "g_flappy_27",
+          "g_tetris_20",
+          "g_action_06",
+          "g_geometry_10",
+          "g_sweeper_16",
+          "g_flip_02",
+          "g_tap_04",
+          "g_paper_12",
+          "g_multi_xo_13",
+          "g_blackhole_17",
+          "g_reflex_09",
+          "g_knife_28",
+          "g_snake_01",
+          "g_starfighter_1"
+        ],
+        "totalScoreAccumulated": 1831678,
+        "highestSingleScore": 173115,
+        "gamesRated": 2,
+        "favoritesCount": 0,
+        "rouletteSpins": 6,
+        "questsCompletedCount": 16,
+        "hypeCount": 0,
+        "categoriesPlayed": [
+          "ARCADE",
+          "ACTION",
+          "STRATEGY",
+          "PUZZLE"
+        ]
+      }
+    },
+    {
+      "id": "93907019-03f7-458f-a6fe-526f4d66ca18",
+      "username": "9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=9a530a15-c2dc-4643-91f9-1eeeac61a4bf",
+      "created_at": "2026-11-07T03:13:09.472+00:00"
+    },
+    {
+      "id": "31e86d43-a51b-45da-b0f9-40824df2dbad",
+      "username": "Nizufa",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Nizufa",
+      "created_at": "2026-11-07T13:38:02.831+00:00"
+    },
+    {
+      "id": "f3f8d637-cd97-48bc-a904-8a949c5cfe20",
+      "username": "Mujhe",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Mujhe",
+      "created_at": "2026-11-07T15:13:46.459+00:00"
+    },
+    {
+      "id": "98192368-f437-4be3-88e1-ecffa4f128e3",
+      "username": "31e86d43-a51b-45da-b0f9-40824df2dbad",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=31e86d43-a51b-45da-b0f9-40824df2dbad",
+      "created_at": "2026-11-07T16:40:44.58+00:00"
+    },
+    {
+      "id": "4b36eca2-8114-488a-9845-307a80e3a9b0",
+      "username": "4dea7902-e56a-4234-8af2-19b51f1379c3",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=4dea7902-e56a-4234-8af2-19b51f1379c3",
+      "created_at": "2026-11-07T17:36:26.96+00:00"
+    },
+    {
+      "id": "eda564fa-beda-4dcd-be29-ea30c0d1ba9a",
+      "username": "rm -rf",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=rm%20-rf",
+      "created_at": "2026-11-07T17:38:23.305+00:00"
+    }
+  ],
+  "games": [
+    {
+      "id": "g_starfighter_1",
+      "slug": "neon-starfighter",
+      "title": "Neon Starfighter",
+      "description": "Space arcade",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.8,
+      "rating_count": 5,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:29:20.903992+00:00",
+      "updated_at": "2026-11-02T07:29:20.903992+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
+      "id": "g_dungeon_29",
+      "slug": "dungeon-slice",
+      "title": "Dungeon Slice",
+      "description": "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
+      "category": "ACTION",
+      "status": "coming_soon",
+      "image_url": "/thumbnails/dungeon-slice.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 34,
+      "created_at": "2026-11-08T08:19:52.325024+00:00",
+      "updated_at": "2026-11-08T08:19:52.325024+00:00",
+      "thumbnail_url": "/thumbnails/dungeon-slice.svg"
+    },
+    {
+      "id": "g_chess_24",
+      "slug": "matrix-chess",
+      "title": "Matrix Chess",
+      "description": "Neo-Brutalist 8x8 Matrix Chess! Battle Novice, Tactician, and Grandmaster Cortex AI or 2P Pass & Play with full legal moves, castling, en passant, promotion, and Blitz/Rapid clocks.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-chess.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.098811+00:00",
+      "updated_at": "2026-11-02T09:23:06.098811+00:00",
+      "thumbnail_url": "/thumbnails/cyber-chess.svg"
+    },
+    {
+      "id": "g_knife_28",
+      "slug": "knife-thrower",
+      "title": "Knife Thrower",
+      "description": "3D realistic knife throwing arcade challenge! Toss blades into spinning targets, battle multi-HP boss stages, and conquer progressive difficulty levels without blade collisions.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-knife-thrower.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-03T14:50:06.089069+00:00",
+      "updated_at": "2026-11-03T14:50:06.089069+00:00",
+      "thumbnail_url": "/thumbnails/cyber-knife-thrower.svg"
+    },
+    {
+      "id": "g_candy_19",
+      "slug": "candy-blast",
+      "title": "Candy Blast",
+      "description": "Match-3 Puzzle Arcade! Align 3+ candies, craft Striped Lasers & Disco Color Bombs, trigger dual-special fusion combos, and conquer 15 Campaign Quest levels or 60s Timed Rush.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/retro-candy-crush.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.989485+00:00",
+      "updated_at": "2026-11-02T09:23:06.989485+00:00",
+      "thumbnail_url": "/thumbnails/retro-candy-crush.svg"
+    },
+    {
+      "id": "g_ttt_03",
+      "slug": "quantum-xo",
+      "title": "Quantum XO",
+      "description": "Futuristic 3x3 tactical showdown against Overthinker Final Boss.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/quantum-xo.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:07.647623+00:00",
+      "updated_at": "2026-11-02T09:23:07.647623+00:00",
+      "thumbnail_url": "/thumbnails/quantum-xo.svg"
+    },
+    {
+      "id": "g_geometry_10",
+      "slug": "pulse-dash",
+      "title": "Pulse Dash",
+      "description": "Rhythm cube runner! Jump over spikes, launch off jump pads, and collect secret coins.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/geometry-dash.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.742082+00:00",
+      "updated_at": "2026-11-02T09:23:08.742082+00:00",
+      "thumbnail_url": "/thumbnails/geometry-dash.svg"
+    },
+    {
+      "id": "g_breaker_08",
+      "slug": "brick-breaker",
+      "title": "Brick Breaker",
+      "description": "Hyper-responsive brick breaker with ball dynamics and particle explosions.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-breaker.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:09.064845+00:00",
+      "updated_at": "2026-11-02T09:23:09.064845+00:00",
+      "thumbnail_url": "/thumbnails/cyber-breaker.svg"
+    },
+    {
+      "id": "g_merge_25",
+      "slug": "fruit-merge",
+      "title": "Fruit Merge",
+      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-fruit-merge.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:28:45.411749+00:00",
+      "updated_at": "2026-11-02T07:28:45.411749+00:00",
+      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
+    },
+    {
+      "id": "g_shooter_07",
+      "slug": "starfighter",
+      "title": "Starfighter",
+      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-05T05:03:12.84575+00:00",
+      "updated_at": "2026-11-05T05:03:12.84575+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
+      "id": "g_tetris_20",
+      "slug": "tetra-matrix",
+      "title": "Tetra Matrix",
+      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/tetra-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.705429+00:00",
+      "updated_at": "2026-11-02T09:23:06.705429+00:00",
+      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
+    },
+    {
+      "id": "g_maze_15",
+      "slug": "labyrinth-escape",
+      "title": "Labyrinth Escape",
+      "description": "10-Level Neural Labyrinth Infiltration! Breach high-density neural mazes with 1-minute countdown timers, laser security gates, keycards, and teleporters.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-maze.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:07.353713+00:00",
+      "updated_at": "2026-11-02T09:23:07.353713+00:00",
+      "thumbnail_url": "/thumbnails/cyber-maze.svg"
+    },
+    {
+      "id": "g_card_05",
+      "slug": "quantum-2048",
+      "title": "2048",
+      "description": "Sliding block merger. Combine identical energy nodes to forge the 2048 core.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/quantum-2048.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.011133+00:00",
+      "updated_at": "2026-11-02T09:23:08.011133+00:00",
+      "thumbnail_url": "/thumbnails/quantum-2048.svg"
+    },
+    {
+      "id": "g_flip_02",
+      "slug": "memory-matrix",
+      "title": "Memory Matrix",
+      "description": "Fast-paced neural memory card matching grid with multiplier streaks.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/memory-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.130256+00:00",
+      "updated_at": "2026-11-02T09:23:08.130256+00:00",
+      "thumbnail_url": "/thumbnails/memory-matrix.svg"
+    },
+    {
+      "id": "g_sweeper_16",
+      "slug": "minefield",
+      "title": "Minefield",
+      "description": "Procedural Neo-Brutalist Minefield! Disarm randomized mines with guaranteed safe first clicks, chord clearing, and dynamic difficulty sectors.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-minesweeper.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:07.231611+00:00",
+      "updated_at": "2026-11-02T09:23:07.231611+00:00",
+      "thumbnail_url": "/thumbnails/cyber-minesweeper.svg"
+    },
+    {
+      "id": "g_reflex_09",
+      "slug": "chroma-reflex",
+      "title": "Chroma Reflex",
+      "description": "Color-quadrant chromatic memory sequence & audio tone reflex test.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/chroma-reflex.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:09.355793+00:00",
+      "updated_at": "2026-11-02T09:23:09.355793+00:00",
+      "thumbnail_url": "/thumbnails/chroma-reflex.svg"
+    },
+    {
+      "id": "g_flappy_27",
+      "slug": "flappy-flyer",
+      "title": "Flappy Flyer",
+      "description": "Arcade vertical flight challenge! Tap to flap a plasma bird through glowing pipe corridors, dodge storm clouds, and chase the endurance leaderboard.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/flappy-bird.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.287411+00:00",
+      "updated_at": "2026-11-02T09:23:05.287411+00:00",
+      "thumbnail_url": "/thumbnails/flappy-bird.svg"
+    },
+    {
+      "id": "g_slicer_11",
+      "slug": "katana-slicer",
+      "title": "Katana Slicer",
+      "description": "Katana Blade Slicing! Slash flying targets, chain multi-slice combos, and dodge explosive plasma bombs.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-slicer.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.545199+00:00",
+      "updated_at": "2026-11-02T09:23:05.545199+00:00",
+      "thumbnail_url": "/thumbnails/cyber-slicer.svg"
+    },
+    {
+      "id": "g_battleship_18",
+      "slug": "naval-grid-strike",
+      "title": "Naval Grid Strike",
+      "description": "Tactical 2D Naval Grid Combat! Deploy 5 heavy warships, calibrate tactical radar sonar scans, and execute artillery strikes against Cadet, Commander, and Admiral AI or 2P Pass & Play.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/retro-battleship.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.674974+00:00",
+      "updated_at": "2026-11-02T09:23:05.674974+00:00",
+      "thumbnail_url": "/thumbnails/retro-battleship.svg"
+    },
+    {
+      "id": "g_blackhole_17",
+      "slug": "singularity-horizon",
+      "title": "Singularity Horizon",
+      "description": "David Gale’s Singularity Horizon tactical 2-player & AI singularity board game! Sequence numbers 1 to 10 across 21 triangular nodes, predict the collapsing event horizon, and sink your rival.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/black-hole.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:07.123662+00:00",
+      "updated_at": "2026-11-02T09:23:07.123662+00:00",
+      "thumbnail_url": "/thumbnails/black-hole.svg"
+    },
+    {
+      "id": "g_tap_04",
+      "slug": "hyper-tapper",
+      "title": "Hyper Tapper",
+      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/hyper-tapper.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.236062+00:00",
+      "updated_at": "2026-11-02T09:23:08.236062+00:00",
+      "thumbnail_url": "/thumbnails/hyper-tapper.svg"
+    },
+    {
+      "id": "g_action_06",
+      "slug": "dash",
+      "title": "Dash 2077",
+      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-dash.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.637098+00:00",
+      "updated_at": "2026-11-02T09:23:08.637098+00:00",
+      "thumbnail_url": "/thumbnails/cyber-dash.svg"
+    },
+    {
+      "id": "g_missile_21",
+      "slug": "missile-defense",
+      "title": "Missile Defense",
+      "description": "Command Flak Defense! Defend 6 Megacores from ballistic warheads, MIRV cluster bombs, and hypersonic rockets with cascading chain-reaction flak shockwaves.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/neon-missile-defense.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:05.791051+00:00",
+      "updated_at": "2026-11-02T09:23:05.791051+00:00",
+      "thumbnail_url": "/thumbnails/neon-missile-defense.svg"
+    },
+    {
+      "id": "g_multi_xo_13",
+      "slug": "multidimension-xo",
+      "title": "Multidimension XO",
+      "description": "Ultimate 9-field nested Tic-Tac-Toe! Win local 3x3 grids to capture giant macro-nodes and defeat Overthinker Final Boss.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/multidimension-xo.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.395726+00:00",
+      "updated_at": "2026-11-02T09:23:06.395726+00:00",
+      "thumbnail_url": "/thumbnails/multidimension-xo.svg"
+    },
+    {
+      "id": "g_snake_01",
+      "slug": "snake",
+      "title": "Snake 2077",
+      "description": "Canvas snake with hyper-speed combos, trails, and responsive swipe controls.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-snake.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.523372+00:00",
+      "updated_at": "2026-11-02T09:23:08.523372+00:00",
+      "thumbnail_url": "/thumbnails/neon-snake.svg"
+    },
+    {
+      "id": "g_paper_12",
+      "slug": "paper-grid",
+      "title": "Paper Grid",
+      "description": "Conquer the arcade grid! Expand your territory, encircle massive zones, and slice enemy trails before they cut yours.",
+      "category": "STRATEGY",
+      "status": "active",
+      "image_url": "/thumbnails/paper-io.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:09.478926+00:00",
+      "updated_at": "2026-11-02T09:23:09.478926+00:00",
+      "thumbnail_url": "/thumbnails/paper-io.svg"
+    }
+  ],
+  "scores": [
+    {
+      "id": "516059f7-aea5-4a49-ac6b-cb5685ef00c1",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 420,
+      "created_at": "2026-11-03T16:11:33.929Z"
+    },
+    {
+      "id": "bb384548-3a68-4489-bfcd-613e4520b770",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 600,
+      "created_at": "2026-11-03T16:31:48.064Z"
+    },
+    {
+      "id": "8a70a480-d556-4138-9093-847e440acf64",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 100,
+      "created_at": "2026-11-03T16:31:55.357Z"
+    },
+    {
+      "id": "925ae2a5-5318-46d0-ad0c-864d53bc9342",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 100,
+      "created_at": "2026-11-03T16:32:07.649Z"
+    },
+    {
+      "id": "16023905-7e8b-4565-958f-e648c40ddde4",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:41:50.865Z"
+    },
+    {
+      "id": "a81f22dd-349a-4f1c-ab50-6513965d2aad",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:52:56.909Z"
+    },
+    {
+      "id": "519d4aba-b33a-49e3-aaf6-0f6d2969817a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-03T16:52:57.076Z"
+    },
+    {
+      "id": "9af446c4-4032-4de4-9076-43462d7157fe",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 660,
+      "created_at": "2026-11-04T04:20:42.641Z"
+    },
+    {
+      "id": "140362e5-27d1-4880-aea8-fc5784d9a1a0",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1500,
+      "created_at": "2026-11-04T04:21:00.175Z"
+    },
+    {
+      "id": "09f58371-7e1a-4b47-8cb5-d09a684214a9",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2610,
+      "created_at": "2026-11-04T04:21:19.728Z"
+    },
+    {
+      "id": "303b9bb7-0c55-4ec6-8b32-75ae4ce7f47b",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6090,
+      "created_at": "2026-11-04T04:23:40.223Z"
+    },
+    {
+      "id": "a449e01c-f236-4733-bd19-3ff362810708",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6360,
+      "created_at": "2026-11-04T10:19:44.474Z"
+    },
+    {
+      "id": "e360f832-7e8a-4951-aac6-d77e92014d3d",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-04T10:20:18.710Z"
+    },
+    {
+      "id": "4ac0c4ac-4620-4e12-9f98-9614e58a1c7f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-04T10:20:21.603Z"
+    },
+    {
+      "id": "1a82194b-5b3e-4655-b582-58114d27d95c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2580,
+      "created_at": "2026-11-04T11:22:05.302Z"
+    },
+    {
+      "id": "3a2b81f4-c6df-4482-8616-66edb12f1a90",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6240,
+      "created_at": "2026-11-04T11:22:59.249Z"
+    },
+    {
+      "id": "e3dda368-15f3-4474-b04c-06f4501f2d8f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2700,
+      "created_at": "2026-11-04T11:23:18.280Z"
+    },
+    {
+      "id": "943ba3d5-377c-48ba-ae36-a8f8b04a85cd",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-04T17:51:47.864Z"
+    },
+    {
+      "id": "1e0275ea-b6a3-4d13-a5f1-3ec575203042",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1560,
+      "created_at": "2026-11-04T17:52:02.984Z"
+    },
+    {
+      "id": "0e9f882c-994a-4033-9462-4f684417455c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1560,
+      "created_at": "2026-11-04T17:52:03.079Z"
+    },
+    {
+      "id": "bcf53911-50be-47a3-8d87-64d709cb7c67",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6182,
+      "created_at": "2026-11-05T04:07:05.345Z"
+    },
+    {
+      "id": "1942cde2-5bc1-4bdc-b1f2-49e05cc19abb",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-05T04:07:23.163Z"
+    },
+    {
+      "id": "f53d01c2-1017-4855-87ee-f917a897b25e",
+      "game_id": "g_ttt_03",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-05T04:09:31.374Z"
+    },
+    {
+      "id": "c03b34c1-a795-4050-9a55-ced0b9e3e054",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1043,
+      "created_at": "2026-11-05T04:35:09.135Z"
+    },
+    {
+      "id": "c0209ef5-5363-4f96-8bcf-7a60d28e0ccf",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1281,
+      "created_at": "2026-11-05T04:35:15.919Z"
+    },
+    {
+      "id": "9fc43c46-12ec-4ce8-8618-79823a29f48e",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 417,
+      "created_at": "2026-11-05T04:43:23.753Z"
+    },
+    {
+      "id": "c8f45fe0-9dcb-4634-a023-ef7a04403a3d",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 541,
+      "created_at": "2026-11-05T04:43:29.385Z"
+    },
+    {
+      "id": "4df7bb0d-dcf6-41f4-8a3c-6d70c5cb5a8a",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 478,
+      "created_at": "2026-11-05T04:50:52.358Z"
+    },
+    {
+      "id": "bf872c9c-3f1a-4beb-b5b2-be5be179a8cf",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1797,
+      "created_at": "2026-11-05T04:52:03.857Z"
+    },
+    {
+      "id": "8d186c4b-5119-4121-a000-ca34a0801824",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2042,
+      "created_at": "2026-11-05T04:52:14.697Z"
+    },
+    {
+      "id": "6f91c086-86ca-4249-8d9a-1bcd039a063d",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 116,
+      "created_at": "2026-11-05T04:52:16.641Z"
+    },
+    {
+      "id": "36c24036-1973-43c4-8e7a-362d9b69dba5",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 115,
+      "created_at": "2026-11-05T04:54:44.914Z"
+    },
+    {
+      "id": "0bd08a94-fbf0-4e5b-b4c0-62a50624ed4c",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4233,
+      "created_at": "2026-11-05T04:55:10.515Z"
+    },
+    {
+      "id": "90db9663-9df9-46bd-befd-bcc461229912",
+      "game_id": "g_snake_01",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6508,
+      "created_at": "2026-11-06T18:03:30.571Z"
+    },
+    {
+      "id": "5839ecbc-6635-4416-b91c-a86f1d033f13",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 650,
+      "created_at": "2026-11-06T18:19:12.970Z"
+    },
+    {
+      "id": "9a5c83d1-bc95-4d48-bff9-66e113bfdb81",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:20:30.042Z"
+    },
+    {
+      "id": "00d02dd9-32be-4417-a094-2c86f83e1848",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:21:50.250Z"
+    },
+    {
+      "id": "faba07de-0bc9-4c0b-adee-c4c7935548c3",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-06T18:22:25.348Z"
+    },
+    {
+      "id": "dd51396c-d1f3-4bd1-befc-95b7bff85103",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2530,
+      "created_at": "2026-11-06T18:25:09.619Z"
+    },
+    {
+      "id": "72544b0a-a39c-4d77-bc2f-521d1c808ceb",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2530,
+      "created_at": "2026-11-06T18:25:09.741Z"
+    },
+    {
+      "id": "5f437997-3d5e-4b31-8798-8081490ba8b0",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:47.190Z"
+    },
+    {
+      "id": "3480714c-e495-4225-a03f-49b40c3f5fb1",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:48.019Z"
+    },
+    {
+      "id": "6d4bf1d3-5ebb-45a1-9cc6-0c2fe87d7c71",
+      "game_id": "g_paper_12",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3105,
+      "created_at": "2026-11-06T18:25:53.273Z"
+    },
+    {
+      "id": "64b8c9d8-aa5d-4bb4-b3c7-20fdc7050160",
+      "game_id": "g_battleship_18",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 16800,
+      "created_at": "2026-11-06T18:39:07.633Z"
+    },
+    {
+      "id": "679c4db7-fa9d-4172-a18b-48176bc95189",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-06T21:29:08.001Z"
+    },
+    {
+      "id": "6f214c33-e9b9-428b-9e4a-2583de201b25",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2760,
+      "created_at": "2026-11-06T21:29:33.057Z"
+    },
+    {
+      "id": "ad96d895-5b47-4272-a850-1d18693532f7",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4530,
+      "created_at": "2026-11-06T21:31:09.737Z"
+    },
+    {
+      "id": "3fe2aaac-5cf8-4a46-a646-2880dab9cf08",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2760,
+      "created_at": "2026-11-06T21:44:23.108Z"
+    },
+    {
+      "id": "6eaecd3e-f95f-44eb-aacf-67e0bd3ecac7",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-06T21:44:40.232Z"
+    },
+    {
+      "id": "ab5df9ac-c570-4385-a553-930182755bf8",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 60,
+      "created_at": "2026-11-06T21:45:48.905Z"
+    },
+    {
+      "id": "72f628a9-a492-409e-9f55-64c4f8f2a069",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6150,
+      "created_at": "2026-11-06T22:01:24.389Z"
+    },
+    {
+      "id": "b9311fdb-eee6-4b69-a4c3-e1f9ee84c9a9",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6180,
+      "created_at": "2026-11-06T22:06:41.533Z"
+    },
+    {
+      "id": "8efba15f-7017-4108-a28b-f76813c7d71d",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6390,
+      "created_at": "2026-11-06T22:28:21.717Z"
+    },
+    {
+      "id": "4835b6d5-7f4f-4e5c-bd10-cc827b91168f",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T07:19:49.511Z"
+    },
+    {
+      "id": "8f11ea0f-36f7-4006-8d3f-30038ee88c7a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1440,
+      "created_at": "2026-11-07T07:20:36.444Z"
+    },
+    {
+      "id": "3fe6c842-80f9-4b94-ae55-5bd488c09ff9",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1400,
+      "created_at": "2026-11-07T13:55:11.336Z"
+    },
+    {
+      "id": "3ee40f3c-4ccb-4dff-bcce-5dbbaa2e7d1c",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 300,
+      "created_at": "2026-11-07T13:55:42.215Z"
+    },
+    {
+      "id": "7a6905f2-9647-400d-8e65-49ee8f8f0be1",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6090,
+      "created_at": "2026-11-07T14:32:06.487Z"
+    },
+    {
+      "id": "74c5799c-1368-40a9-b0ab-14a87e175bfa",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-07T14:35:37.776Z"
+    },
+    {
+      "id": "a1ba38c1-e0e0-404e-a799-7397939ab437",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 180,
+      "created_at": "2026-11-07T14:39:48.725Z"
+    },
+    {
+      "id": "312fde9d-34ce-442e-a59f-83b540a14370",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 210,
+      "created_at": "2026-11-07T14:40:19.054Z"
+    },
+    {
+      "id": "6fe2bcd7-0ae1-4dd0-8aa9-becdca6f2610",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-07T14:43:58.170Z"
+    },
+    {
+      "id": "2b43ff09-1757-404e-a15f-babe804717e3",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6180,
+      "created_at": "2026-11-07T14:44:33.916Z"
+    },
+    {
+      "id": "b5950039-9d78-4e73-812b-e85c3d6d305f",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-07T14:44:49.838Z"
+    },
+    {
+      "id": "91f2cc74-9d53-4d55-87c1-5861890c0a4c",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 90,
+      "created_at": "2026-11-07T14:45:30.001Z"
+    },
+    {
+      "id": "e6525c88-d37e-4c22-ba9b-d8ad3abfeed8",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6210,
+      "created_at": "2026-11-07T14:45:56.830Z"
+    },
+    {
+      "id": "c0b4eaf4-965f-496a-8d19-84bce7612990",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6330,
+      "created_at": "2026-11-07T14:46:01.331Z"
+    },
+    {
+      "id": "964afdc1-8c03-4e1f-a0d1-425028bac93b",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-07T14:46:36.031Z"
+    },
+    {
+      "id": "c817b88c-3a22-4e6c-9469-da4f89c0f7cb",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 150,
+      "created_at": "2026-11-07T14:46:39.388Z"
+    },
+    {
+      "id": "1b089803-9390-4f54-a35e-ec2513be60db",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1500,
+      "created_at": "2026-11-07T14:50:17.870Z"
+    },
+    {
+      "id": "d4633762-c8b6-4e8c-a4d5-71cbb9882762",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3,
+      "created_at": "2026-11-07T14:55:09.460Z"
+    },
+    {
+      "id": "38da1306-cbc4-4778-980e-77cd6ac90040",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:55:21.219Z"
+    },
+    {
+      "id": "c2311b89-ea47-4806-8588-3ed229d4498b",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2,
+      "created_at": "2026-11-07T14:55:31.041Z"
+    },
+    {
+      "id": "a7b2b8e5-76c9-4e1a-acb2-27ac5f13cac8",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:55:41.475Z"
+    },
+    {
+      "id": "50fb9d4e-0497-41e4-8ccc-3f800ad0f510",
+      "game_id": "g_flappy_27",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 4,
+      "created_at": "2026-11-07T14:59:53.226Z"
+    },
+    {
+      "id": "06a64840-e7a0-470a-af5e-70e7997c3a1a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2520,
+      "created_at": "2026-11-08T07:12:54.987Z"
+    },
+    {
+      "id": "465b9342-40c9-47ea-bc85-5ea44befe6df",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2580,
+      "created_at": "2026-11-08T07:12:59.132Z"
+    },
+    {
+      "id": "25f5743f-93c8-478b-b78e-694e731a5c73",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2790,
+      "created_at": "2026-11-08T07:13:06.761Z"
+    },
+    {
+      "id": "8111e9e7-52a8-4791-84fc-b84c6e713591",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6570,
+      "created_at": "2026-11-08T07:13:25.511Z"
+    },
+    {
+      "id": "5ec219a1-8445-45fc-bd0c-73c373b4b9ac",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6660,
+      "created_at": "2026-11-08T07:13:39.296Z"
+    },
+    {
+      "id": "ff6b82fc-9f70-4269-945f-c44e49ae8ab3",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6750,
+      "created_at": "2026-11-08T07:13:44.325Z"
+    },
+    {
+      "id": "e3182ebb-ff7e-4aee-9a41-17a48386b405",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6750,
+      "created_at": "2026-11-08T07:16:09.579Z"
+    },
+    {
+      "id": "97805b51-ae0b-426f-b524-6133ebb751a6",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6840,
+      "created_at": "2026-11-08T07:16:11.800Z"
+    },
+    {
+      "id": "f86c8d4e-3880-4675-b1c3-7119e8e772f7",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-08T07:16:15.281Z"
+    },
+    {
+      "id": "434193f6-3387-43f4-b716-beab16e5bd14",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6180,
+      "created_at": "2026-11-08T07:16:47.907Z"
+    },
+    {
+      "id": "889a6b98-e16e-4fd2-ab6a-9505bacbe803",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 6420,
+      "created_at": "2026-11-08T07:17:20.756Z"
+    },
+    {
+      "id": "915f765d-686f-4fac-afad-04da978dc58a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1350,
+      "created_at": "2026-11-08T07:52:39.682Z"
+    },
+    {
+      "id": "cefaee41-8001-4e9e-a059-68fce175b82a",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1350,
+      "created_at": "2026-11-08T07:52:40.165Z"
+    },
+    {
+      "id": "45bc1e90-e79c-4ff1-a31c-ad9fc70f1a13",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1350,
+      "created_at": "2026-11-08T07:52:40.186Z"
+    },
+    {
+      "id": "50ddff33-0c90-459d-b4de-b5324624da17",
+      "game_id": "g_knife_28",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 30,
+      "created_at": "2026-11-08T08:11:13.943Z"
+    },
+    {
+      "id": "6e05f5fc-9b7f-4bdd-b787-d154040825eb",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 421,
+      "created_at": "2026-11-08T08:23:42.638Z"
+    },
+    {
+      "id": "8e1a3fef-a529-40e0-b6ac-283f02cfacf7",
+      "game_id": "g_action_06",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2272,
+      "created_at": "2026-11-08T08:23:57.418Z"
+    },
+    {
+      "id": "aa8c744d-9f67-4bb8-969d-5c9a67088a42",
+      "game_id": "g_dungeon_29",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 950,
+      "created_at": "2026-11-08T08:27:49.538Z"
+    },
+    {
+      "id": "755a3a68-1024-4ebd-9c83-4068011d7d31",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 2350,
+      "created_at": "2026-11-08T08:32:34.673Z"
+    },
+    {
+      "id": "a4de523e-0596-4bdd-ba47-f666a921bf5a",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-08T08:32:40.924Z"
+    },
+    {
+      "id": "5b707482-841b-4066-8741-1a01fdb1e9ab",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1550,
+      "created_at": "2026-11-08T08:32:47.327Z"
+    },
+    {
+      "id": "43bca1b9-e13d-466a-bf6b-39dcdaa584b9",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 900,
+      "created_at": "2026-11-08T08:32:51.954Z"
+    },
+    {
+      "id": "44b2cfd7-1e10-481a-aff1-1282a482e3f5",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 1700,
+      "created_at": "2026-11-08T08:33:00.467Z"
+    },
+    {
+      "id": "72c7df05-02eb-473b-8e88-cd026097acd3",
+      "game_id": "g_geometry_10",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 7000,
+      "created_at": "2026-11-08T08:33:22.901Z"
+    }
+  ],
+  "ratings": [
+    {
+      "id": "003da321-6261-442c-b3f6-b858ab50a3bf",
+      "game_id": "g_merge_25",
+      "user_id": "66ed0a76-712c-45f5-a7d3-635acec63743",
+      "rating": 5,
+      "created_at": "2026-11-02T07:28:46.623567+00:00",
+      "updated_at": "2026-11-02T07:28:44.897+00:00"
+    },
+    {
+      "id": "1df64ac4-6554-4c1c-8594-144347d77058",
+      "game_id": "g_starfighter_1",
+      "user_id": "edb575e2-d634-46d6-8bcc-a4582c905a91",
+      "rating": 5,
+      "created_at": "2026-11-02T07:29:21.302976+00:00",
+      "updated_at": "2026-11-02T07:29:19.598+00:00"
+    }
+  ],
+  "game_requests": [
+    {
+      "id": "req_cyber_chess",
+      "title": "Neon Cyber Chess 3D",
+      "genre": "STRATEGY",
+      "description": "Holographic cyber chess with neon piece skins, timed blitz clocks, and adaptive heuristic chess engine AI.",
+      "requested_by": "GrandmasterNeon",
+      "upvotes": 42,
+      "upvoted_by": [],
+      "status": "in_development",
+      "created_at": "2026-09-20T10:00:00.000Z"
+    },
+    {
+      "id": "req_rhythm_blade",
+      "title": "Synthwave Rhythm Matrix",
+      "genre": "ACTION",
+      "description": "Cyberpunk rhythm game matching synthwave BPM beat drops with dynamic laser trail combos.",
+      "requested_by": "AudioViper",
+      "upvotes": 35,
+      "upvoted_by": [],
+      "status": "planned",
+      "created_at": "2026-09-21T14:30:00.000Z"
+    },
+    {
+      "id": "req_cyber_tower",
+      "title": "Neon Tower Defense: Core Breach",
+      "genre": "STRATEGY",
+      "description": "Grid-based tactical defense with EMP turrets, plasma railguns, and waves of rogue virus crawler swarms.",
+      "requested_by": "SectorDefender",
+      "upvotes": 28,
+      "upvoted_by": [],
+      "status": "under_review",
+      "created_at": "2026-09-22T08:15:00.000Z"
+    }
+  ],
+  "tournaments": [
+    {
+      "id": "tourn_1",
+      "name": "Cyber Blitz Championship",
+      "entry_fee": 10,
+      "prize_pool": 1000,
+      "start_date": "2026-11-10T18:00:00.000Z",
+      "status": "upcoming"
+    }
+  ],
+  "deposits": [],
+  "withdrawals": [],
+  "transactions": [],
+  "adminLogs": [
+    {
+      "id": "3586dbcd-393e-4306-b89f-cd0dd37f6c25",
+      "admin_id": "admin",
+      "action": "save_game",
+      "created_at": "2026-11-06T17:54:38.591Z"
+    },
+    {
+      "id": "6c05dbe3-bcd1-4439-a2eb-e12e6eafa396",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-06T17:54:02.913Z"
+    },
+    {
+      "id": "9aaeadf5-62d9-417f-8596-3f3efbaa9475",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:20:25.190Z"
+    },
+    {
+      "id": "2115d3ea-4b66-414c-b517-e4117502c7bf",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:14:55.019Z"
+    },
+    {
+      "id": "d84a9d62-6b55-470c-9ccd-ba183a552b4d",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T13:08:06.004Z"
+    },
+    {
+      "id": "2f6a754c-6ac3-4a0c-a11d-8ed9dacb3235",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:17:24.380Z"
+    },
+    {
+      "id": "47c97e66-614b-468b-a730-98202630c182",
+      "admin_id": "admin",
+      "action": "delete_tournament",
+      "target_id": "0e6e39ee-ff5f-4eb8-b90b-30374b70c3a3",
+      "created_at": "2026-11-04T12:17:07.887Z"
+    },
+    {
+      "id": "12a8616b-ca3e-465b-88b6-30fd1684b1d0",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:16:35.420Z"
+    },
+    {
+      "id": "b7ad9b0e-ae2b-4b1c-aeeb-8e83e4d90ffb",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:10:41.955Z"
+    },
+    {
+      "id": "c68867ba-b703-4f7b-8dd4-e897c050ec03",
+      "admin_id": "admin",
+      "action": "update_game_status",
+      "created_at": "2026-11-04T12:10:22.468Z"
+    },
+    {
+      "id": "c9d1ca95-1f89-4840-8321-ebda437b0673",
+      "admin_id": "admin",
+      "action": "add_admin",
+      "created_at": "2026-11-04T11:19:50.926Z"
+    },
+    {
+      "id": "77c307a8-6673-4835-beb1-b51cbcbb296d",
+      "admin_id": "admin",
+      "action": "create_tournament",
+      "created_at": "2026-11-04T10:50:46.098Z"
+    }
+  ],
+  "categories": [],
+  "admins": [
+    {
+      "id": "admin_prime",
+      "username": "munim",
+      "admin_role": "prime"
+    },
+    {
+      "id": "c38fa133-e335-43ed-95bf-94814c0507f4",
+      "username": "Tahida",
+      "admin_role": "standard"
+    }
+  ],
+  "banners": [],
+  "comments": [],
+  "feedback": []
 }
