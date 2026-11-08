@@ -328,6 +328,13 @@ const LEVEL_SPEEDS = [
   800, 720, 630, 540, 450, 360, 280, 210, 150, 110, 80, 70, 60, 50, 40
 ];
 
+// Lock Delay (ms after piece can't descend — gives player reaction window)
+const LOCK_DELAY_MS = 500;
+// Combo Window (ms for consecutive line clears to count as combos)
+const COMBO_TIMEOUT_MS = 30000;
+// Line Clear Values per Level (G17 standard Tetris scoring)
+const SCORING = { SINGLE: 100, DOUBLE: 300, TRIPLE: 500, TETRIS: 800, TSPIN: 1200 };
+
 interface ActivePiece {
   type: TetrominoType;
   rotation: number;
@@ -665,6 +672,27 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const holdPieceRef = useRef<TetrominoType | null>(holdPiece);
   holdPieceRef.current = holdPiece;
   const lockTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastActionWasRotateRef = useRef<boolean>(false);
+
+  // T-Spin Corner Check (Guideline SRS)
+  const isTSpinCheck = useCallback((piece: ActivePiece, currentGrid: GridCell[][]): boolean => {
+    if (piece.type !== 'T') return false;
+    const corners = [
+      { x: piece.x, y: piece.y },
+      { x: piece.x + 2, y: piece.y },
+      { x: piece.x, y: piece.y + 2 },
+      { x: piece.x + 2, y: piece.y + 2 }
+    ];
+    let filledCorners = 0;
+    for (const corner of corners) {
+      if (corner.x < 0 || corner.x >= COLS || corner.y < 0 || corner.y >= TOTAL_ROWS) {
+        filledCorners++;
+      } else if (currentGrid[corner.y] && currentGrid[corner.y][corner.x] !== null) {
+        filledCorners++;
+      }
+    }
+    return filledCorners >= 3;
+  }, []);
 
   // Load High Score on Mount
   useEffect(() => {
@@ -781,9 +809,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     [getNextPieceFromBag, isValidPosition, onGameOver, playTetraSound, highScore]
   );
 
-  // Clear completed rows, award points & starburst popups
+  // Clear completed rows, award points, T-Spins, B2B bonuses, combos & starburst popups
   const clearLines = useCallback(
-    (newGrid: GridCell[][]) => {
+    (newGrid: GridCell[][], lockedPiece?: ActivePiece) => {
       const fullRowIndices: number[] = [];
 
       for (let r = 0; r < TOTAL_ROWS; r++) {
@@ -792,7 +820,62 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         }
       }
 
-      if (fullRowIndices.length === 0) {
+      const linesCleared = fullRowIndices.length;
+      const curLevel = levelRef.current;
+      const isTSpin = lockedPiece ? isTSpinCheck(lockedPiece, gridRef.current) && lastActionWasRotateRef.current : false;
+
+      let basePoints = 0;
+      let calloutText = '';
+      let calloutGrad: 'gold' | 'cyan' | 'pink' = 'cyan';
+      let isDifficultClear = false;
+
+      if (isTSpin) {
+        isDifficultClear = true;
+        if (linesCleared === 0) {
+          basePoints = 400 * curLevel;
+          calloutText = 'T-SPIN ZERO!';
+          calloutGrad = 'pink';
+          playTetraSound('single');
+        } else if (linesCleared === 1) {
+          basePoints = 800 * curLevel;
+          calloutText = 'T-SPIN SINGLE!';
+          calloutGrad = 'gold';
+          playTetraSound('double');
+        } else if (linesCleared === 2) {
+          basePoints = 1200 * curLevel;
+          calloutText = 'T-SPIN DOUBLE!';
+          calloutGrad = 'gold';
+          playTetraSound('tetra');
+        } else if (linesCleared === 3) {
+          basePoints = 1600 * curLevel;
+          calloutText = 'T-SPIN TRIPLE!';
+          calloutGrad = 'gold';
+          playTetraSound('tetra');
+        }
+      } else if (linesCleared === 4) {
+        isDifficultClear = true;
+        basePoints = 800 * curLevel;
+        calloutText = backToBackRef.current ? 'B2B TETRA!' : '4X TETRIS!';
+        calloutGrad = 'gold';
+        playTetraSound('tetra');
+      } else if (linesCleared === 3) {
+        basePoints = 500 * curLevel;
+        calloutText = 'TRIPLE CLEAR!';
+        calloutGrad = 'pink';
+        playTetraSound('triple');
+      } else if (linesCleared === 2) {
+        basePoints = 300 * curLevel;
+        calloutText = 'DOUBLE CLEAR!';
+        calloutGrad = 'cyan';
+        playTetraSound('double');
+      } else if (linesCleared === 1) {
+        basePoints = 100 * curLevel;
+        calloutText = 'SINGLE CLEAR';
+        calloutGrad = 'cyan';
+        playTetraSound('single');
+      }
+
+      if (fullRowIndices.length === 0 && !isTSpin) {
         setCombo(0);
         comboRef.current = 0;
         setGrid(newGrid);
@@ -801,31 +884,44 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
 
-      // Flash Row & Laser Wave Beam FX
-      setFlashRows(fullRowIndices);
-
-      const linesCleared = fullRowIndices.length;
-      const curLevel = levelRef.current;
-      const isTetra = linesCleared === 4;
-      const isB2B = isTetra && backToBackRef.current;
-
-      // Scoring System: Single=100, Double=300, Triple=500, Tetra=800
-      let basePoints = 0;
-      if (linesCleared === 1) basePoints = 100 * curLevel;
-      else if (linesCleared === 2) basePoints = 300 * curLevel;
-      else if (linesCleared === 3) basePoints = 500 * curLevel;
-      else if (linesCleared === 4) basePoints = 800 * curLevel;
-
+      const isB2B = isDifficultClear && backToBackRef.current;
       if (isB2B) {
         basePoints = Math.floor(basePoints * 1.5);
       }
 
-      const curCombo = comboRef.current + 1;
-      setCombo(curCombo);
-      comboRef.current = curCombo;
+      if (isDifficultClear) {
+        setBackToBack(true);
+        backToBackRef.current = true;
+      } else if (linesCleared > 0) {
+        setBackToBack(false);
+        backToBackRef.current = false;
+      }
 
-      const comboBonus = (curCombo - 1) * 50 * curLevel;
+      const curCombo = comboRef.current + (linesCleared > 0 ? 1 : 0);
+      if (linesCleared > 0) {
+        setCombo(curCombo);
+        comboRef.current = curCombo;
+      }
+
+      const comboBonus = linesCleared > 0 ? (curCombo - 1) * 50 * curLevel : 0;
       const totalPoints = basePoints + comboBonus;
+
+      if (linesCleared > 0) {
+        setFlashRows(fullRowIndices);
+        setScreenShake(true);
+        setTimeout(() => setScreenShake(false), 300);
+        if (linesCleared === 4 || isTSpin) {
+          try {
+            confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+          } catch {}
+        }
+        setCallout({
+          text: isB2B ? `B2B ${calloutText}` : calloutText,
+          subtext: isB2B ? `+1.5X MULTIPLIER (+${totalPoints} PTS)` : `+${totalPoints} PTS`,
+          grad: calloutGrad,
+          id: Date.now()
+        });
+      }
 
       const updatedScore = scoreRef.current + totalPoints;
       const updatedLines = linesRef.current + linesCleared;
@@ -842,44 +938,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         playTetraSound('levelUp');
       }
 
-      if (isTetra) {
-        setBackToBack(true);
-        backToBackRef.current = true;
-        setScreenShake(true);
-        setTimeout(() => setScreenShake(false), 300);
-        playTetraSound('tetra');
-
-        try {
-          confetti({
-            particleCount: 60,
-            spread: 80,
-            origin: { y: 0.6 }
-          });
-        } catch {}
-
-        setCallout({
-          text: isB2B ? 'B2B TETRA!' : '4X TETRIS!',
-          subtext: isB2B ? '+1.5X MULTIPLIER' : '+800 PTS',
-          grad: 'gold',
-          id: Date.now()
-        });
-      } else {
-        if (linesCleared === 3) {
-          playTetraSound('triple');
-          setCallout({ text: 'TRIPLE CLEAR!', subtext: '+500 PTS', grad: 'pink', id: Date.now() });
-        } else if (linesCleared === 2) {
-          playTetraSound('double');
-          setCallout({ text: 'DOUBLE CLEAR!', subtext: '+300 PTS', grad: 'cyan', id: Date.now() });
-        } else {
-          playTetraSound('single');
-          setCallout({ text: 'SINGLE CLEAR', subtext: '+100 PTS', grad: 'cyan', id: Date.now() });
-        }
-        setBackToBack(false);
-        backToBackRef.current = false;
-      }
-
       setTimeout(() => {
-        // Collapse cleared rows
         const remainingRows = newGrid.filter((_, idx) => !fullRowIndices.includes(idx));
         const emptyRowsNeeded = TOTAL_ROWS - remainingRows.length;
         const collapsedGrid = [
@@ -891,9 +950,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         setGrid(collapsedGrid);
         gridRef.current = collapsedGrid;
         spawnPiece();
-      }, 180);
+      }, linesCleared > 0 ? 180 : 0);
     },
-    [spawnPiece, playTetraSound]
+    [spawnPiece, playTetraSound, isTSpinCheck]
   );
 
   // Lock active piece into grid
@@ -925,7 +984,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
       setCurrentPiece(null);
       currentPieceRef.current = null;
-      clearLines(newGrid);
+      clearLines(newGrid, pieceToLock);
     },
     [clearLines]
   );
@@ -941,7 +1000,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       if (isValidPosition(newPiece)) {
         setCurrentPiece(newPiece);
         currentPieceRef.current = newPiece;
+        lastActionWasRotateRef.current = false;
         playTetraSound('move');
+        if (lockTimerRef.current) {
+          clearTimeout(lockTimerRef.current);
+          lockTimerRef.current = null;
+        }
       }
     },
     [isValidPosition, playTetraSound]
@@ -958,14 +1022,10 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       const oldRotation = piece.rotation;
       const newRotation = (oldRotation + dir + shapesCount) % shapesCount;
 
-      // Select kick table index: transition from oldRotation to newRotation
-      // For clockwise (dir=1): transition index is oldRotation (0->1 is index 0, 1->2 is index 1, etc.)
-      // For counter-clockwise (dir=-1): transition index is newRotation (3->2 is index 2, etc.)
       const kickTableIndex = dir === 1 ? oldRotation : newRotation;
       const pieceKicks = WALL_KICK_TABLE[piece.type];
       const kicks = (pieceKicks && pieceKicks[kickTableIndex]) || [[0, 0]];
 
-      // Try wall kicks
       for (const [offsetX, offsetY] of kicks) {
         const kickPiece: ActivePiece = {
           ...piece,
@@ -977,7 +1037,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         if (isValidPosition(kickPiece)) {
           setCurrentPiece(kickPiece);
           currentPieceRef.current = kickPiece;
+          lastActionWasRotateRef.current = true;
           playTetraSound('rotate');
+          if (lockTimerRef.current) {
+            clearTimeout(lockTimerRef.current);
+            lockTimerRef.current = null;
+          }
           return;
         }
       }
@@ -995,6 +1060,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     if (isValidPosition(newPiece)) {
       setCurrentPiece(newPiece);
       currentPieceRef.current = newPiece;
+      lastActionWasRotateRef.current = false;
       setScore(prev => prev + 1);
       scoreRef.current += 1;
       playTetraSound('softDrop');
@@ -1017,7 +1083,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       setScore(prev => prev + dropDistance * 2);
       scoreRef.current += dropDistance * 2;
 
-      // Trigger Laser Speed Trail Animation
       setLaserTrailCol({ x: piece.x, startY: piece.y, endY: ghostY });
       setTimeout(() => setLaserTrailCol(null), 150);
     }
@@ -1106,7 +1171,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     playTetraSound('rotate');
   }, [getNextPieceFromBag, playTetraSound]);
 
-  // Game Gravity Tick Loop
+  // Game Gravity Tick Loop with Lock Delay
   useEffect(() => {
     if (!isPlaying || isPaused || isGameOver) return;
 
@@ -1119,8 +1184,19 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       if (isValidPosition(nextPiece, gridRef.current)) {
         setCurrentPiece(nextPiece);
         currentPieceRef.current = nextPiece;
+        if (lockTimerRef.current) {
+          clearTimeout(lockTimerRef.current);
+          lockTimerRef.current = null;
+        }
       } else {
-        lockPiece(piece);
+        // Piece cannot move down — start lock delay timer if not already started
+        if (!lockTimerRef.current) {
+          lockTimerRef.current = setTimeout(() => {
+            if (currentPieceRef.current) {
+              lockPiece(currentPieceRef.current);
+            }
+          }, LOCK_DELAY_MS);
+        }
       }
     }, currentSpeed);
 
