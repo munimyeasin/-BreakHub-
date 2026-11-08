@@ -281,18 +281,47 @@ export const TETROMINOES: Record<TetrominoType, PolyominoStyle> = {
 
 const PIECE_TYPES: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
 
-// Super Rotation System (SRS) Wall Kick Offset Matrices
-const WALL_KICK_OFFSETS = [
-  [0, 0],
-  [-1, 0],
-  [1, 0],
-  [0, -1],
-  [-1, -1],
-  [1, -1],
-  [-2, 0],
-  [2, 0],
-  [0, 1]
-];
+// Per-piece SRS Wall Kick Tables indexed 0..3 by rotation transition (0→1, 1→2, 2→3, 3→0).
+// Source: canonical SRS spec for J, L, S, Z (identical kicks); T and I differ per transition.
+const WALL_KICK_TABLE: Record<TetrominoType, [number, number][][]> = {
+  I: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1], [-2, 0], [2, 0]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]]
+  ],
+  T: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0]],
+    [[0, 0], [-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1], [-2, 0], [2, 0]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+  ],
+  O: [[[0, 0]]],
+  J: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+  ],
+  L: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+  ],
+  S: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+  ],
+  Z: [
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
+    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
+    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+  ]
+};
 
 // Level Speed Timing (ms per gravity tick)
 const LEVEL_SPEEDS = [
@@ -658,7 +687,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     return bagRef.current.pop()!;
   }, []);
 
-  // Collision detection helper
+  // Collision detection helper (allows negative y during top-spawn/rotation above matrix roof)
   const isValidPosition = useCallback(
     (piece: ActivePiece, currentGrid: GridCell[][] = gridRef.current): boolean => {
       const shape = TETROMINOES[piece.type].shapes[piece.rotation];
@@ -668,12 +697,12 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
             const gridX = piece.x + c;
             const gridY = piece.y + r;
 
-            // Check boundary bounds
+            // Check horizontal & bottom boundary bounds
             if (gridX < 0 || gridX >= COLS || gridY >= TOTAL_ROWS) {
               return false;
             }
 
-            // Check locked blocks
+            // Check locked blocks (only when inside or below the visible matrix roof)
             if (gridY >= 0 && currentGrid[gridY][gridX] !== null) {
               return false;
             }
@@ -926,10 +955,18 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       if (!piece) return;
 
       const shapesCount = TETROMINOES[piece.type].shapes.length;
-      const newRotation = (piece.rotation + dir + shapesCount) % shapesCount;
+      const oldRotation = piece.rotation;
+      const newRotation = (oldRotation + dir + shapesCount) % shapesCount;
+
+      // Select kick table index: transition from oldRotation to newRotation
+      // For clockwise (dir=1): transition index is oldRotation (0->1 is index 0, 1->2 is index 1, etc.)
+      // For counter-clockwise (dir=-1): transition index is newRotation (3->2 is index 2, etc.)
+      const kickTableIndex = dir === 1 ? oldRotation : newRotation;
+      const pieceKicks = WALL_KICK_TABLE[piece.type];
+      const kicks = (pieceKicks && pieceKicks[kickTableIndex]) || [[0, 0]];
 
       // Try wall kicks
-      for (const [offsetX, offsetY] of WALL_KICK_OFFSETS) {
+      for (const [offsetX, offsetY] of kicks) {
         const kickPiece: ActivePiece = {
           ...piece,
           rotation: newRotation,
