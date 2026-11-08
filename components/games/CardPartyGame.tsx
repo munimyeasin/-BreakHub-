@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, ArrowRight, Shield, Zap, RefreshCw } from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, RefreshCw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 type CardColor = 'red' | 'blue' | 'green' | 'yellow' | 'wild';
@@ -56,14 +56,12 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   const [direction, setDirection] = useState<1 | -1>(1); // 1 = clockwise, -1 = counter-clockwise
   const [activeColor, setActiveColor] = useState<CardColor>('red');
   const [winner, setWinner] = useState<Player | null>(null);
-  const [statusMessage, setStatusMessage] = useState('Welcome to Card Party!');
+  const [statusMessage, setStatusMessage] = useState('Your turn! Match color or number.');
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [pendingWildCard, setPendingWildCard] = useState<Card | null>(null);
   const [muted, setMuted] = useState(false);
   const [aiThinking, setAiThinking] = useState(false);
   const [isDealing, setIsDealing] = useState(false);
-
-  // Flying Card Animation State for dealing, drawing, and playing
   const [flyingCard, setFlyingCard] = useState<{
     id: string;
     card: Card;
@@ -71,7 +69,6 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     isFaceUp: boolean;
   } | null>(null);
 
-  // Sound Synthesizer via Web Audio API
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const playSfx = useCallback((type: 'draw' | 'play' | 'wild' | 'win' | 'error' | 'deal') => {
@@ -175,9 +172,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     const updatedPlayers = players.map(p => ({ ...p, cards: [] as Card[] }));
 
     setIsDealing(true);
-    setStatusMessage('Dealing cards around the table with arcing motion...');
+    setStatusMessage('Dealing cards...');
 
-    // Deal 7 cards sequentially with realistic arcing glide animation
     let cardIdx = 0;
     const dealInterval = setInterval(() => {
       if (cardIdx < 7) {
@@ -215,9 +211,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         setDirection(1);
         setWinner(null);
         setGameState('playing');
-        setStatusMessage('Your turn! Match color or number, or play a Wild.');
+        setStatusMessage('Your turn!');
       }
-    }, 220);
+    }, 180);
   };
 
   const isCardPlayable = (card: Card): boolean => {
@@ -252,7 +248,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         drawn.push(card);
         if (playerIdx === 0) {
           setFlyingCard({ id: card.id, card, type: 'draw', isFaceUp: true });
-          setTimeout(() => setFlyingCard(null), 400);
+          setTimeout(() => setFlyingCard(null), 350);
         }
       }
     }
@@ -264,7 +260,6 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor) => {
     const player = players[playerIndex];
 
-    // Trigger Play Card Animation (flying from hand to discard pile with scale & rotation)
     setFlyingCard({
       id: card.id,
       card,
@@ -290,12 +285,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       return;
     }
 
-    // Stacked discard pile with randomized tilt and offset
     const placedCard: Card = {
       ...card,
-      rotation: Math.floor(Math.random() * 24) - 12,
-      offsetX: Math.floor(Math.random() * 12) - 6,
-      offsetY: Math.floor(Math.random() * 10) - 5,
+      rotation: Math.floor(Math.random() * 20) - 10,
+      offsetX: Math.floor(Math.random() * 10) - 5,
+      offsetY: Math.floor(Math.random() * 8) - 4,
     };
 
     const newDiscard = [...discardPile, placedCard];
@@ -310,24 +304,24 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
     if (card.type === 'skip') {
       skipNext = true;
-      setStatusMessage(`${player.name} played SKIP! 🚫`);
+      setStatusMessage(`${player.name} skipped!`);
     } else if (card.type === 'reverse') {
       const newDir = (direction * -1) as 1 | -1;
       setDirection(newDir);
       step = newDir;
-      setStatusMessage(`${player.name} played REVERSE! 🔄 Direction flipped.`);
+      setStatusMessage(`${player.name} reversed direction!`);
     } else if (card.type === 'draw_two') {
       cardsToDraw = 2;
       skipNext = true;
-      setStatusMessage(`${player.name} played DRAW TWO (+2)! ⚡`);
+      setStatusMessage(`${player.name} played +2!`);
     } else if (card.type === 'wild_draw_four') {
       cardsToDraw = 4;
       skipNext = true;
-      setStatusMessage(`${player.name} played WILD DRAW FOUR (+4) & chose ${nextColor.toUpperCase()}! 🌈`);
+      setStatusMessage(`${player.name} played +4 (${nextColor.toUpperCase()})!`);
     } else if (card.type === 'wild') {
-      setStatusMessage(`${player.name} played WILD & chose ${nextColor.toUpperCase()}! 🌈`);
+      setStatusMessage(`${player.name} played Wild (${nextColor.toUpperCase()})!`);
     } else {
-      setStatusMessage(`${player.name} played ${card.color.toUpperCase()} ${card.type === 'number' ? card.value : String(card.type).toUpperCase()}`);
+      setStatusMessage(`${player.name} played.`);
     }
 
     let nextTurn = (playerIndex + step + updatedPlayers.length) % updatedPlayers.length;
@@ -348,7 +342,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
     if (!isCardPlayable(card)) {
       playSfx('error');
-      setStatusMessage(`Cannot play this card. Match color or number!`);
+      setStatusMessage(`Cannot play this card.`);
       return;
     }
 
@@ -373,7 +367,6 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     setTurnIndex((turnIndex + direction + players.length) % players.length);
   };
 
-  // AI Turn Logic with polished delays & smooth animations
   useEffect(() => {
     if (gameState !== 'playing' || winner || isDealing || flyingCard) return;
     const currentPlayer = players[turnIndex];
@@ -405,7 +398,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           if (drawn.length > 0) {
             currentPlayer.cards.push(...drawn);
             setPlayers([...players]);
-            setStatusMessage(`${currentPlayer.name} drew a card.`);
+            setStatusMessage(`${currentPlayer.name} drew.`);
             if (isCardPlayable(drawn[0]) && Math.random() > 0.3) {
               setTimeout(() => {
                 let chosenColor: CardColor = 'red';
@@ -413,7 +406,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   chosenColor = COLORS[Math.floor(Math.random() * COLORS.length)];
                 }
                 playCard(turnIndex, drawn[0], chosenColor);
-              }, 450);
+              }, 400);
               setAiThinking(false);
               return;
             }
@@ -421,28 +414,26 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           setTurnIndex((turnIndex + direction + players.length) % players.length);
         }
         setAiThinking(false);
-      }, 950);
+      }, 900);
 
       return () => clearTimeout(timer);
     }
   }, [turnIndex, gameState, players, winner, direction, isDealing, flyingCard]);
 
-  const topDiscard = discardPile[discardPile.length - 1];
-
   return (
-    <div className="w-full h-full min-h-[660px] flex flex-col items-center justify-between bg-[#100b08] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
-      {/* Warm Leather Felt Texture Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#241710_1px,transparent_1px)] [background-size:24px_24px] opacity-80 pointer-events-none" />
+    <div className="w-full h-full min-h-[660px] flex flex-col items-center justify-between bg-[#22130b] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
+      {/* Warm Brown Felt Texture Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(#3b2416_1px,transparent_1px)] [background-size:24px_24px] opacity-90 pointer-events-none" />
 
       {/* Flying Card Animation Overlay */}
       {flyingCard && (
         <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
-          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-3 border-black shadow-neo-lg flex flex-col justify-between p-2 ${
+          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-4 border-black shadow-neo-lg flex flex-col justify-between p-2.5 bg-white ${
             COLOR_CLASSES[flyingCard.card.color].bg
           } ${flyingCard.type === 'deal' ? 'animate-card-deal' : 'animate-card-play'}`}>
-            <div className="flex justify-between items-start text-white text-[11px] font-black">
+            <div className="flex justify-between items-start text-white text-[12px] font-black">
               <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
-              <span>{flyingCard.card.color === 'wild' ? '🌈' : flyingCard.card.color[0].toUpperCase()}</span>
+              <span>{flyingCard.card.color === 'wild' ? '🌈' : ''}</span>
             </div>
             <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
               <span className={`text-xl sm:text-2xl font-black ${flyingCard.card.color === 'yellow' ? 'text-amber-950' : flyingCard.card.color === 'red' ? 'text-rose-600' : flyingCard.card.color === 'blue' ? 'text-cyan-600' : flyingCard.card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
@@ -459,38 +450,28 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   : '★'}
               </span>
             </div>
-            <div className="text-[8px] font-black text-white uppercase text-center truncate">
-              {flyingCard.card.type.replace('_', ' ')}
+            <div className="text-[9px] font-black text-white text-right">
+              {flyingCard.card.color[0]?.toUpperCase()}
             </div>
           </div>
         </div>
       )}
 
-      {/* Top HUD Header */}
-      <div className="w-full flex items-center justify-between bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl px-4 py-2.5 relative z-20 shadow-neo-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-xs sm:text-sm font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-amber-400 animate-spin" /> CARD PARTY
-          </span>
-          <span className="hidden sm:inline px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-[10px] uppercase border border-black shadow-sm">
-            UNO
-          </span>
-          <span className="px-2.5 py-0.5 rounded-lg bg-indigo-900 text-amber-300 font-black text-[10px] uppercase border border-black shadow-sm flex items-center gap-1">
-            <RefreshCw className={`w-3 h-3 ${direction === 1 ? '' : 'rotate-180'} transition-transform`} /> {direction === 1 ? 'Clockwise' : 'Counter'}
-          </span>
+      {/* Top Header Bar (Mute & Title) */}
+      <div className="w-full flex items-center justify-between px-2 relative z-20">
+        <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border-2 border-black shadow-sm">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span className="text-xs font-black text-amber-300 uppercase tracking-wider">CARD PARTY</span>
         </div>
-        <div className="text-xs sm:text-sm font-black text-white bg-black/95 px-4 py-1.5 rounded-xl border-2 border-white/20 shadow-inner animate-fadeIn">
+        <div className="text-xs font-black text-amber-200 bg-black/70 px-3 py-1.5 rounded-xl border-2 border-black shadow-sm">
           {statusMessage}
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setMuted(!muted)}
-            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all active:scale-95"
-            title={muted ? 'Unmute Audio' : 'Mute Audio'}
-          >
-            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          </button>
-        </div>
+        <button
+          onClick={() => setMuted(!muted)}
+          className="p-2 rounded-xl bg-black/70 text-white border-2 border-black shadow-sm hover:bg-black/90 active:scale-95 transition-all"
+        >
+          {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+        </button>
       </div>
 
       {/* Main Menu State */}
@@ -503,7 +484,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             Card Party
           </h2>
           <p className="text-sm sm:text-base text-amber-200/80 max-w-md mb-8 font-medium">
-            Classic UNO round-table showdown against Lea (Top), Marie (Left), and Kate (Right). Featuring tactile sticker cards, arcing deal animations, and dynamic directional turn flow!
+            Classic UNO round-table showdown against Lea (Top), Marie (Left), and Kate (Right).
           </p>
           <button
             onClick={startNewGame}
@@ -514,25 +495,25 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
-      {/* Playing State: Warm Brown Circular Felt Table with Flow Rim */}
+      {/* Playing State: Clean Circular Table with 4 Curved Directional Arrows */}
       {gameState === 'playing' && (
-        <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-3 px-2">
+        <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-2 px-2">
 
           {/* TOP AI OPPONENT: LEA */}
           {(() => {
             const lea = players.find(p => p.id === 'lea')!;
             const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
             return (
-              <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-110' : ''}`}>
-                <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border-2 border-black transition-all ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
-                  <span className="text-xl">{lea.avatar}</span>
+              <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                  <span className="text-lg">{lea.avatar}</span>
                   <span className="text-xs font-black uppercase">{lea.name}</span>
-                  <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black">{lea.cards.length} cards</span>
+                  <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{lea.cards.length}</span>
                 </div>
                 {/* Stacked Card Backs */}
-                <div className="flex -space-x-3.5 mt-1.5">
+                <div className="flex -space-x-3 mt-1">
                   {lea.cards.map((_, i) => (
-                    <div key={i} className="w-7 h-11 rounded-lg bg-gradient-to-br from-indigo-950 to-slate-950 border border-black shadow-sm transform hover:-translate-y-1 transition-transform" />
+                    <div key={i} className="w-6 h-10 rounded-md bg-gradient-to-br from-indigo-950 to-slate-950 border-2 border-black shadow-sm" />
                   ))}
                 </div>
               </div>
@@ -540,55 +521,53 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           })()}
 
           {/* MIDDLE ROW: LEFT AI (Marie) + CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
-          <div className="w-full flex items-center justify-between my-auto py-2">
+          <div className="w-full flex items-center justify-between my-auto py-1 px-4">
 
             {/* LEFT AI OPPONENT: MARIE */}
             {(() => {
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
-                <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-110' : ''}`}>
-                  <div className={`flex flex-col items-center p-2.5 rounded-2xl border-2 border-black transition-all ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
-                    <span className="text-2xl mb-1">{marie.avatar}</span>
-                    <span className="text-[11px] font-black uppercase">{marie.name}</span>
-                    <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black mt-0.5">{marie.cards.length} cards</span>
+                <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
+                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                    <span className="text-xl mb-0.5">{marie.avatar}</span>
+                    <span className="text-[10px] font-black uppercase">{marie.name}</span>
+                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{marie.cards.length}</span>
                   </div>
                 </div>
               );
             })()}
 
-            {/* WARM BROWN CIRCULAR FELT TABLE WITH PULSING TURN RIM & DIRECTIONAL ARROWS */}
-            <div className={`relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1b2a1e] border-8 border-[#3b2416] shadow-[inset_0_15px_35px_rgba(0,0,0,0.85),0_15px_35px_rgba(0,0,0,0.6)] flex items-center justify-center transition-all duration-500`}>
+            {/* CIRCULAR FELT TABLE WITH 4 CURVED DIRECTIONAL ARROWS */}
+            <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1e2f23] border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_15px_30px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
-              {/* Glowing Pulsing Animated Turn Direction Rim with Chevrons */}
-              <div className={`absolute inset-3 rounded-full border-3 border-dashed border-amber-400/80 pointer-events-none shadow-[0_0_25px_rgba(245,158,11,0.5)] ${direction === 1 ? 'animate-[spin_16s_linear_infinite]' : 'animate-[spin_16s_linear_infinite_reverse]'}`}>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-amber-300 text-xs font-black">
-                  {direction === 1 ? '▶' : '◀'}
-                </div>
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 text-amber-300 text-xs font-black">
-                  {direction === 1 ? '▶' : '◀'}
-                </div>
+              {/* 4 Curved Directional Turn Arrows (Clockwise / Counter) */}
+              <div className={`absolute inset-4 rounded-full border-4 border-dashed border-amber-400/70 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.3)] ${direction === 1 ? 'animate-[spin_18s_linear_infinite]' : 'animate-[spin_18s_linear_infinite_reverse]'}`}>
+                <div className="absolute top-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black">➔</div>
+                <div className="absolute right-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black">➔</div>
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black">➔</div>
+                <div className="absolute left-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black">➔</div>
               </div>
 
-              {/* Central Piles (Draw Deck + Fanned Discard Stack) */}
-              <div className="flex items-center justify-center gap-6 relative z-10">
+              {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
+              <div className="flex items-center justify-center gap-5 relative z-10">
 
                 {/* Draw Pile ("CARD PARTY") */}
                 <div
                   onClick={() => {
                     if (turnIndex === 0 && !aiThinking && !isDealing) handlePlayerDraw();
                   }}
-                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-950 border-3 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
-                  title="Click to Draw Card"
+                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-950 border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
+                  title="Click to Draw"
                 >
-                  <div className="absolute inset-1 border-2 border-dashed border-white/25 rounded-xl flex flex-col items-center justify-center p-1 text-center">
-                    <span className="text-xs font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
+                  <div className="absolute inset-1.5 border-2 border-dashed border-white/30 rounded-xl flex flex-col items-center justify-center p-1 text-center">
+                    <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
                     <span className="text-2xl my-1 group-hover:scale-110 transition-transform">🎴</span>
-                    <span className="text-[9px] font-black text-white uppercase">({deck.length})</span>
+                    <span className="text-[9px] font-black text-white">({deck.length})</span>
                   </div>
                 </div>
 
-                {/* Discard Pile with Fanned Stacking & Smooth Snap Animation */}
+                {/* Discard Pile with Randomized Rotations & Offsets */}
                 <div className="relative w-20 h-28 sm:w-24 sm:h-34">
                   {discardPile.map((card, idx) => {
                     const isTop = idx === discardPile.length - 1;
@@ -603,16 +582,16 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                           transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
                           zIndex: idx,
                         }}
-                        className={`absolute inset-0 rounded-2xl border-3 border-black flex flex-col justify-between p-2 transition-all duration-300 ${
+                        className={`absolute inset-0 rounded-2xl border-4 border-black flex flex-col justify-between p-2.5 shadow-neo-sm ${
                           COLOR_CLASSES[card.color].bg
-                        } ${isTop ? 'shadow-neo-lg scale-105 animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
+                        } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                       >
                         <div className="flex justify-between items-start text-white text-[11px] font-black">
                           <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
-                          <span>{card.color === 'wild' ? '🌈' : card.color[0].toUpperCase()}</span>
+                          <span>{card.color === 'wild' ? '🌈' : ''}</span>
                         </div>
 
-                        {/* Distinct White Inner Window */}
+                        {/* Distinct White Inner Box */}
                         <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
                           <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
                             {card.type === 'number'
@@ -629,8 +608,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                           </span>
                         </div>
 
-                        <div className="text-[8px] font-black text-white uppercase text-center truncate">
-                          {card.type.replace('_', ' ')}
+                        <div className="text-[9px] font-black text-white text-right">
+                          {card.color[0]?.toUpperCase()}
                         </div>
                       </div>
                     );
@@ -638,11 +617,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 </div>
               </div>
 
-              {/* Active Color Indicator Badge */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-xl bg-black/90 border-2 border-black text-white text-[10px] font-black uppercase flex items-center gap-1.5 shadow-neo-sm animate-fadeIn">
-                <span>Active:</span>
+              {/* Active Color Badge on Table */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-lg bg-black/90 border-2 border-black text-white text-[10px] font-black uppercase flex items-center gap-1.5 shadow-sm">
+                <span>Color:</span>
                 <span className={`w-3.5 h-3.5 rounded-full border border-black ${COLOR_CLASSES[activeColor].bg}`} />
-                <span className="uppercase text-amber-300 font-black">{activeColor}</span>
+                <span className="text-amber-300">{activeColor}</span>
               </div>
             </div>
 
@@ -651,11 +630,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const kate = players.find(p => p.id === 'kate')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
-                <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-110' : ''}`}>
-                  <div className={`flex flex-col items-center p-2.5 rounded-2xl border-2 border-black transition-all ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
-                    <span className="text-2xl mb-1">{kate.avatar}</span>
-                    <span className="text-[11px] font-black uppercase">{kate.name}</span>
-                    <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black mt-0.5">{kate.cards.length} cards</span>
+                <div className={`flex flex-col items-center transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
+                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/85 text-white'}`}>
+                    <span className="text-xl mb-0.5">{kate.avatar}</span>
+                    <span className="text-[10px] font-black uppercase">{kate.name}</span>
+                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{kate.cards.length}</span>
                   </div>
                 </div>
               );
@@ -664,47 +643,47 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           </div>
 
           {/* BOTTOM PLAYER HAND (YOU) */}
-          <div className="w-full bg-black/90 backdrop-blur-md border-3 border-black rounded-2xl p-3 flex flex-col items-center shadow-neo-lg">
-            <div className="w-full flex justify-between items-center mb-2 px-1">
+          <div className="w-full bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl p-2.5 flex flex-col items-center shadow-neo-lg">
+            <div className="w-full flex justify-between items-center mb-1.5 px-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-black text-white uppercase flex items-center gap-1.5">
-                  <User className="w-4 h-4 text-cyan-400" /> Your Hand ({players[0].cards.length})
+                <span className="text-xs font-black text-white uppercase flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-cyan-400" /> Your Hand ({players[0].cards.length})
                 </span>
                 {turnIndex === 0 && (
-                  <span className="px-2.5 py-0.5 rounded-lg bg-amber-400 text-black text-[10px] font-black uppercase animate-pulse border border-black shadow-sm">
-                    YOUR TURN!
+                  <span className="px-2 py-0.5 rounded bg-amber-400 text-black text-[9px] font-black uppercase animate-pulse border border-black">
+                    YOUR TURN
                   </span>
                 )}
               </div>
               <button
                 onClick={handlePlayerDraw}
                 disabled={turnIndex !== 0 || aiThinking || isDealing || !!flyingCard}
-                className="px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black uppercase border-2 border-black shadow-neo-sm active:scale-95 disabled:opacity-55 transition-all"
+                className="px-3 py-1 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black uppercase border-2 border-black shadow-sm active:scale-95 disabled:opacity-50 transition-all"
               >
                 Draw Card (+1)
               </button>
             </div>
 
-            {/* Scrollable Hand Cards with White Inner Window & Corner Index */}
-            <div className="w-full flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 px-1 custom-scrollbar">
+            {/* Scrollable Hand Cards with White Inner Window */}
+            <div className="w-full flex items-center gap-2 overflow-x-auto pb-1.5 pt-1 px-1 custom-scrollbar">
               {players[0].cards.map(card => {
                 const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
                 return (
                   <div
                     key={card.id}
                     onClick={() => handlePlayerCardClick(card)}
-                    className={`w-18 h-26 sm:w-20 sm:h-30 rounded-2xl border-3 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-200 cursor-pointer ${
+                    className={`w-16 h-24 sm:w-20 sm:h-30 rounded-2xl border-4 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-200 cursor-pointer ${
                       COLOR_CLASSES[card.color].bg
-                    } ${playable ? 'hover:-translate-y-4 hover:shadow-neo-lg ring-4 ring-amber-400 animate-pulse' : 'opacity-75'}`}
+                    } ${playable ? 'hover:-translate-y-3 hover:shadow-neo-lg ring-4 ring-amber-400 animate-pulse' : 'opacity-75'}`}
                   >
                     <div className="flex justify-between items-start text-white text-[10px] font-black">
                       <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
-                      <span className="text-[8px] opacity-80">{card.color[0].toUpperCase()}</span>
+                      <span>{card.color === 'wild' ? '🌈' : ''}</span>
                     </div>
 
                     {/* White Inner Window */}
-                    <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
-                      <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                    <div className="w-9 h-11 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                      <span className={`text-lg sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
                         {card.type === 'number'
                           ? card.value
                           : card.type === 'skip'
@@ -719,8 +698,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                       </span>
                     </div>
 
-                    <div className="text-[8px] font-black text-white uppercase text-center truncate">
-                      {card.type.replace('_', ' ')}
+                    <div className="text-[9px] font-black text-white text-right">
+                      {card.color[0]?.toUpperCase()}
                     </div>
                   </div>
                 );
@@ -730,11 +709,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
-      {/* Wild Color Picker Modal with Smooth Scale-Up Animation */}
+      {/* Wild Color Picker Modal */}
       {showColorPicker && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md animate-fadeIn p-4">
           <div className="bg-[#14100e] border-4 border-black rounded-3xl p-6 shadow-neo-lg max-w-sm w-full text-center animate-modal-pop">
-            <h3 className="text-lg font-black text-white uppercase mb-4">Choose Active Color</h3>
+            <h3 className="text-lg font-black text-white uppercase mb-4">Choose Color</h3>
             <div className="grid grid-cols-2 gap-4">
               {(['red', 'blue', 'green', 'yellow'] as CardColor[]).map(col => (
                 <button
@@ -758,7 +737,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
-      {/* Victory Modal with Bounce Animation */}
+      {/* Victory Modal */}
       {gameState === 'gameover' && winner && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md animate-fadeIn p-4">
           <div className="bg-[#14100e] border-4 border-black rounded-3xl p-8 shadow-neo-lg max-w-md w-full text-center animate-modal-pop">
