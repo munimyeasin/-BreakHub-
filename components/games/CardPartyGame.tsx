@@ -599,7 +599,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 );
               })()}
 
-              <div className="relative w-[220px] h-[160px] sm:w-[380px] sm:h-[380px] rounded-[50%] sm:rounded-full bg-[#52b788] border-5 sm:border-7 border-black shadow-[6px_6px_0px_#000] flex items-center justify-center">
+              <div className="relative w-[220px] h-[210px] sm:w-[380px] sm:h-[440px] rounded-[50%] sm:rounded-full bg-[#52b788] border-5 sm:border-7 border-black shadow-[6px_6px_0px_#000] flex items-center justify-center">
 
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
@@ -635,7 +635,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
                             zIndex: idx,
                           }}
-                          className={`absolute inset-0 rounded-2xl border-3 border-black flex flex-col justify-between p-2 shadow-neo-sm ${
+                          className={`absolute inset-0 rounded-2xl border-2 border-black flex flex-col justify-between p-2 shadow-neo-sm ${
                             COLOR_CLASSES[card.color].bg
                           } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                         >
@@ -749,20 +749,20 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                       style={{
                         transform: `rotate(${rot}deg)`,
                       }}
-                      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-2xl border-4 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-300 cursor-pointer origin-bottom ${
+                      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-2xl border-2 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-300 cursor-pointer origin-bottom ${
                         COLOR_CLASSES[card.color].bg
                       } hover:-translate-y-8 hover:scale-110 hover:rotate-0 hover:z-40 shadow-neo-sm ${
                         playable ? 'ring-4 ring-amber-400 animate-pulse' : 'opacity-90'
                       }`}
                     >
-                      <div className="flex justify-between items-start text-white text-[10px] font-black">
+                      <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">
                         <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
                         <span>{card.color === 'wild' ? '🌈' : ''}</span>
                       </div>
 
                       {/* White Inner Box */}
                       <div className="w-10 h-12 sm:w-13 sm:h-16 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
-                        <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                        <span className={`text-xl sm:text-2xl font-black drop-shadow-[0_1.5px_0_rgba(0,0,0,1)] ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
                           {card.type === 'number'
                             ? card.value
                             : card.type === 'skip'
