@@ -14,12 +14,13 @@ export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: 
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Guaranteed robust timer: quickly progress through loading and automatically finish
-    // within 800ms max so it never gets stuck under any circumstance.
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
+        // If data is still loading, pause at 90% until isLoadingData becomes false
+        if (prev >= 90) {
+          if (isLoadingData) {
+            return 90;
+          }
           return 100;
         }
         return prev + 25;
@@ -27,9 +28,16 @@ export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: 
     }, 120);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isLoadingData]);
 
-  // Trigger completion once progress hits 100% and data is done
+  // When isLoadingData turns false, if progress was waiting at 90, advance to 100
+  useEffect(() => {
+    if (!isLoadingData && progress >= 90 && progress < 100) {
+      setProgress(100);
+    }
+  }, [isLoadingData, progress]);
+
+  // Trigger completion once progress hits 100%
   useEffect(() => {
     if (progress >= 100) {
       const timer = setTimeout(() => {
@@ -69,7 +77,7 @@ export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: 
         </h1>
         <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-portal-yellow bg-portal-surface px-4 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
           <Zap className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          <span>{progress < 100 ? `Loading Arcade Assets (${progress}%)` : 'Ready!'}</span>
+          <span>{progress < 100 ? `Loading Arcade Assets & Components (${progress}%)` : 'Ready!'}</span>
         </div>
       </div>
     </div>
