@@ -2344,7 +2344,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         }
       }
 
-      // 8.5 Capital Ship Boss (Star Destroyer / Darth Vader Command Ship style - ULTRA COOL)
+      // 8.5 Capital Ship Boss (Star Destroyer / Vader Command Ship - ULTRA GLOWING & DETAILED)
       if (bossRef.current) {
         const boss = bossRef.current;
         ctx.save();
@@ -2353,74 +2353,79 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         // Hard Drop Shadow
         ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.moveTo(0 + 6, -boss.height / 2 - 6);
-        ctx.lineTo(-boss.width / 2 - 6, boss.height / 2 + 6);
-        ctx.lineTo(boss.width / 2 + 6, boss.height / 2 + 6);
+        ctx.moveTo(0 + 8, -boss.height / 2 - 8);
+        ctx.lineTo(-boss.width / 2 - 8, boss.height / 2 + 8);
+        ctx.lineTo(boss.width / 2 + 8, boss.height / 2 + 8);
         ctx.closePath();
         ctx.fill();
 
-        // Main Wedge Hull (Dark Metallic Indigo / Neo-Brutalist)
-        ctx.fillStyle = '#181035';
+        // Main Imperial Wedge Hull (Dark Metallic Obsidian with Neon Crimson Accents)
+        ctx.fillStyle = '#0A0612';
         ctx.beginPath();
         ctx.moveTo(0, -boss.height / 2);
         ctx.lineTo(-boss.width / 2, boss.height / 2);
         ctx.lineTo(boss.width / 2, boss.height / 2);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#FF0055';
+        ctx.lineWidth = 4.5;
         ctx.lineJoin = 'round';
         ctx.stroke();
 
-        // Armored Trench Lines & Plating
-        ctx.strokeStyle = '#FF0055';
-        ctx.lineWidth = 2;
+        // Inner Armored Hull Plates & Glowing Energy Trench
+        ctx.fillStyle = '#1A103C';
         ctx.beginPath();
-        ctx.moveTo(0, -boss.height / 2 + 10);
-        ctx.lineTo(0, boss.height / 2 - 10);
+        ctx.moveTo(0, -boss.height / 2 + 15);
+        ctx.lineTo(-boss.width / 2 + 30, boss.height / 2 - 15);
+        ctx.lineTo(boss.width / 2 - 30, boss.height / 2 - 15);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Command Superstructure Bridge Tower (Darth Vader Command Style)
-        ctx.fillStyle = '#2D1B4E';
-        ctx.fillRect(-32, -22, 64, 40);
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2.5;
-        ctx.strokeRect(-32, -22, 64, 40);
+        // Superstructure Command Tower (Darth Vader Command Citadel)
+        ctx.fillStyle = '#220F38';
+        ctx.fillRect(-38, -28, 76, 52);
+        ctx.strokeStyle = '#FF0055';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-38, -28, 76, 52);
 
-        // Twin Bridge Tower Sensor Domes (Glowing Red)
+        // Glowing Dual Superlaser Command Eyes
+        const eyePulse = Math.sin(timestamp * 0.01) * 2 + 6;
         ctx.fillStyle = '#FF0055';
         ctx.beginPath();
-        ctx.arc(-16, -6, 5, 0, Math.PI * 2);
-        ctx.arc(16, -6, 5, 0, Math.PI * 2);
+        ctx.arc(-20, -10, eyePulse, 0, Math.PI * 2);
+        ctx.arc(20, -10, eyePulse, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Glowing Engine Thruster Blocks at Rear (Pulsing Plasma)
-        const enginePulse = Math.sin(timestamp * 0.08) * 3;
+        // Rear Engine Thruster Array (Massive Pulsing Plasma Afterburners)
+        const enginePulse = Math.sin(timestamp * 0.08) * 4;
         ctx.fillStyle = '#FF0055';
-        ctx.fillRect(-75, boss.height / 2 - 6, 38, 12 + enginePulse);
-        ctx.fillRect(37, boss.height / 2 - 6, 38, 12 + enginePulse);
+        ctx.fillRect(-85, boss.height / 2 - 8, 45, 16 + enginePulse);
+        ctx.fillRect(40, boss.height / 2 - 8, 45, 16 + enginePulse);
         ctx.fillStyle = '#FFE600';
-        ctx.fillRect(-65, boss.height / 2 - 3, 18, 6);
-        ctx.fillRect(47, boss.height / 2 - 3, 18, 6);
+        ctx.fillRect(-72, boss.height / 2 - 4, 20, 8);
+        ctx.fillRect(52, boss.height / 2 - 4, 20, 8);
         ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-75, boss.height / 2 - 6, 38, 12 + enginePulse);
-        ctx.strokeRect(37, boss.height / 2 - 6, 38, 12 + enginePulse);
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(-85, boss.height / 2 - 8, 45, 16 + enginePulse);
+        ctx.strokeRect(40, boss.height / 2 - 8, 45, 16 + enginePulse);
 
-        // Dual Pulsing Energy Shield Aura
-        ctx.strokeStyle = '#00F0FF';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([6, 4]);
+        // Triple Layer Energized Shield Dome Aura
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.85)';
+        ctx.lineWidth = 3.5;
+        ctx.setLineDash([8, 6]);
         ctx.beginPath();
         ctx.arc(0, 0, boss.width * 0.62, 0, Math.PI * 2);
         ctx.stroke();
         ctx.strokeStyle = '#FF00EA';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
-        ctx.arc(0, 0, boss.width * 0.68, 0, Math.PI * 2);
+        ctx.arc(0, 0, boss.width * 0.70, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
 
@@ -2443,7 +2448,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
 
         if (boss.shield > 0) {
           const shieldRatio = Math.max(0, boss.shield / boss.maxShield);
-          ctx.fillStyle = 'rgba(0, 240, 255, 0.65)';
+          ctx.fillStyle = 'rgba(0, 240, 255, 0.75)';
           ctx.fillRect(barX, barY, barW * shieldRatio, barH);
         }
 
@@ -2454,7 +2459,7 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
         ctx.fillStyle = '#FFFFFF';
         ctx.font = '900 11px system-ui, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(`⚡ CAPITAL SHIP: VADER COMMAND • HP: ${boss.hp}/${boss.maxHp} ⚡`, curW / 2, barY - 6);
+        ctx.fillText(`⚡ VADER COMMAND CAPITAL SHIP • HP: ${boss.hp}/${boss.maxHp} ⚡`, curW / 2, barY - 6);
         ctx.restore();
       }
 
