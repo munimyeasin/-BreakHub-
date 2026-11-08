@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, ArrowRight, Shield, Zap } from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, ArrowRight, Shield, Zap, RefreshCw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 type CardColor = 'red' | 'blue' | 'green' | 'yellow' | 'wild';
@@ -61,17 +61,15 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   const [pendingWildCard, setPendingWildCard] = useState<Card | null>(null);
   const [muted, setMuted] = useState(false);
   const [aiThinking, setAiThinking] = useState(false);
+  const [isDealing, setIsDealing] = useState(false);
 
-  // Animation States for flying cards
+  // Flying Card Animation State for dealing, drawing, and playing
   const [flyingCard, setFlyingCard] = useState<{
     id: string;
     card: Card;
-    from: { x: number; y: number };
-    to: { x: number; y: number };
+    type: 'deal' | 'draw' | 'play';
     isFaceUp: boolean;
   } | null>(null);
-
-  const [isDealing, setIsDealing] = useState(false);
 
   // Sound Synthesizer via Web Audio API
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -93,15 +91,15 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
       const now = ctx.currentTime;
       if (type === 'draw' || type === 'deal') {
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(480, now + 0.1);
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(500, now + 0.1);
         gain.gain.setValueAtTime(0.12, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
         osc.start(now);
         osc.stop(now + 0.1);
       } else if (type === 'play') {
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(780, now + 0.12);
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.12);
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
         osc.start(now);
@@ -109,7 +107,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       } else if (type === 'wild') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(400, now);
-        osc.frequency.linearRampToValueAtTime(880, now + 0.25);
+        osc.frequency.linearRampToValueAtTime(900, now + 0.25);
         gain.gain.setValueAtTime(0.25, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
         osc.start(now);
@@ -177,15 +175,19 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     const updatedPlayers = players.map(p => ({ ...p, cards: [] as Card[] }));
 
     setIsDealing(true);
-    setStatusMessage('Dealing cards around the table...');
+    setStatusMessage('Dealing cards around the table with arcing motion...');
 
-    // Deal 7 cards sequentially with realistic dealing animation effect
+    // Deal 7 cards sequentially with realistic arcing glide animation
     let cardIdx = 0;
     const dealInterval = setInterval(() => {
       if (cardIdx < 7) {
-        updatedPlayers.forEach(p => {
+        updatedPlayers.forEach((p, pIdx) => {
           if (freshDeck.length > 0) {
-            p.cards.push(freshDeck.pop()!);
+            const card = freshDeck.pop()!;
+            p.cards.push(card);
+            if (pIdx === 0) {
+              setFlyingCard({ id: card.id, card, type: 'deal', isFaceUp: true });
+            }
           }
         });
         setPlayers([...updatedPlayers]);
@@ -194,6 +196,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       } else {
         clearInterval(dealInterval);
         setIsDealing(false);
+        setFlyingCard(null);
 
         let topCard = freshDeck.pop()!;
         while (topCard.type !== 'number' && freshDeck.length > 0) {
@@ -214,7 +217,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         setGameState('playing');
         setStatusMessage('Your turn! Match color or number, or play a Wild.');
       }
-    }, 180);
+    }, 220);
   };
 
   const isCardPlayable = (card: Card): boolean => {
@@ -245,7 +248,12 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     const drawn: Card[] = [];
     for (let i = 0; i < count; i++) {
       if (currentDeck.length > 0) {
-        drawn.push(currentDeck.pop()!);
+        const card = currentDeck.pop()!;
+        drawn.push(card);
+        if (playerIdx === 0) {
+          setFlyingCard({ id: card.id, card, type: 'draw', isFaceUp: true });
+          setTimeout(() => setFlyingCard(null), 400);
+        }
       }
     }
     setDeck(currentDeck);
@@ -255,6 +263,16 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
   const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor) => {
     const player = players[playerIndex];
+
+    // Trigger Play Card Animation (flying from hand to discard pile with scale & rotation)
+    setFlyingCard({
+      id: card.id,
+      card,
+      type: 'play',
+      isFaceUp: true,
+    });
+    setTimeout(() => setFlyingCard(null), 350);
+
     const updatedCards = player.cards.filter(c => c.id !== card.id);
     const updatedPlayers = [...players];
     updatedPlayers[playerIndex] = { ...player, cards: updatedCards };
@@ -275,9 +293,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     // Stacked discard pile with randomized tilt and offset
     const placedCard: Card = {
       ...card,
-      rotation: Math.floor(Math.random() * 20) - 10,
-      offsetX: Math.floor(Math.random() * 10) - 5,
-      offsetY: Math.floor(Math.random() * 8) - 4,
+      rotation: Math.floor(Math.random() * 24) - 12,
+      offsetX: Math.floor(Math.random() * 12) - 6,
+      offsetY: Math.floor(Math.random() * 10) - 5,
     };
 
     const newDiscard = [...discardPile, placedCard];
@@ -297,7 +315,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       const newDir = (direction * -1) as 1 | -1;
       setDirection(newDir);
       step = newDir;
-      setStatusMessage(`${player.name} played REVERSE! 🔄 Flow flipped.`);
+      setStatusMessage(`${player.name} played REVERSE! 🔄 Direction flipped.`);
     } else if (card.type === 'draw_two') {
       cardsToDraw = 2;
       skipNext = true;
@@ -326,7 +344,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   };
 
   const handlePlayerCardClick = (card: Card) => {
-    if (turnIndex !== 0 || aiThinking || isDealing) return;
+    if (turnIndex !== 0 || aiThinking || isDealing || flyingCard) return;
 
     if (!isCardPlayable(card)) {
       playSfx('error');
@@ -344,7 +362,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   };
 
   const handlePlayerDraw = () => {
-    if (turnIndex !== 0 || aiThinking || isDealing) return;
+    if (turnIndex !== 0 || aiThinking || isDealing || flyingCard) return;
     const drawn = drawCards(0, 1);
     if (drawn.length > 0) {
       const updatedPlayers = [...players];
@@ -357,7 +375,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
   // AI Turn Logic with polished delays & smooth animations
   useEffect(() => {
-    if (gameState !== 'playing' || winner || isDealing) return;
+    if (gameState !== 'playing' || winner || isDealing || flyingCard) return;
     const currentPlayer = players[turnIndex];
 
     if (currentPlayer.isAI) {
@@ -403,11 +421,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           setTurnIndex((turnIndex + direction + players.length) % players.length);
         }
         setAiThinking(false);
-      }, 900);
+      }, 950);
 
       return () => clearTimeout(timer);
     }
-  }, [turnIndex, gameState, players, winner, direction, isDealing]);
+  }, [turnIndex, gameState, players, winner, direction, isDealing, flyingCard]);
 
   const topDiscard = discardPile[discardPile.length - 1];
 
@@ -415,6 +433,38 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     <div className="w-full h-full min-h-[660px] flex flex-col items-center justify-between bg-[#100b08] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
       {/* Warm Leather Felt Texture Background */}
       <div className="absolute inset-0 bg-[radial-gradient(#241710_1px,transparent_1px)] [background-size:24px_24px] opacity-80 pointer-events-none" />
+
+      {/* Flying Card Animation Overlay */}
+      {flyingCard && (
+        <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
+          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-3 border-black shadow-neo-lg flex flex-col justify-between p-2 ${
+            COLOR_CLASSES[flyingCard.card.color].bg
+          } ${flyingCard.type === 'deal' ? 'animate-card-deal' : 'animate-card-play'}`}>
+            <div className="flex justify-between items-start text-white text-[11px] font-black">
+              <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
+              <span>{flyingCard.card.color === 'wild' ? '🌈' : flyingCard.card.color[0].toUpperCase()}</span>
+            </div>
+            <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+              <span className={`text-xl sm:text-2xl font-black ${flyingCard.card.color === 'yellow' ? 'text-amber-950' : flyingCard.card.color === 'red' ? 'text-rose-600' : flyingCard.card.color === 'blue' ? 'text-cyan-600' : flyingCard.card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                {flyingCard.card.type === 'number'
+                  ? flyingCard.card.value
+                  : flyingCard.card.type === 'skip'
+                  ? '🚫'
+                  : flyingCard.card.type === 'reverse'
+                  ? '🔄'
+                  : flyingCard.card.type === 'draw_two'
+                  ? '+2'
+                  : flyingCard.card.type === 'wild_draw_four'
+                  ? '+4'
+                  : '★'}
+              </span>
+            </div>
+            <div className="text-[8px] font-black text-white uppercase text-center truncate">
+              {flyingCard.card.type.replace('_', ' ')}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Top HUD Header */}
       <div className="w-full flex items-center justify-between bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl px-4 py-2.5 relative z-20 shadow-neo-sm">
@@ -424,6 +474,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           </span>
           <span className="hidden sm:inline px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-[10px] uppercase border border-black shadow-sm">
             UNO
+          </span>
+          <span className="px-2.5 py-0.5 rounded-lg bg-indigo-900 text-amber-300 font-black text-[10px] uppercase border border-black shadow-sm flex items-center gap-1">
+            <RefreshCw className={`w-3 h-3 ${direction === 1 ? '' : 'rotate-180'} transition-transform`} /> {direction === 1 ? 'Clockwise' : 'Counter'}
           </span>
         </div>
         <div className="text-xs sm:text-sm font-black text-white bg-black/95 px-4 py-1.5 rounded-xl border-2 border-white/20 shadow-inner animate-fadeIn">
@@ -461,7 +514,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
-      {/* Playing State: Warm Brown Circular Felt Table with Animated Flow Rim */}
+      {/* Playing State: Warm Brown Circular Felt Table with Flow Rim */}
       {gameState === 'playing' && (
         <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-3 px-2">
 
@@ -504,11 +557,18 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               );
             })()}
 
-            {/* WARM BROWN CIRCULAR FELT TABLE WITH PULSING TURN RIM */}
+            {/* WARM BROWN CIRCULAR FELT TABLE WITH PULSING TURN RIM & DIRECTIONAL ARROWS */}
             <div className={`relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1b2a1e] border-8 border-[#3b2416] shadow-[inset_0_15px_35px_rgba(0,0,0,0.85),0_15px_35px_rgba(0,0,0,0.6)] flex items-center justify-center transition-all duration-500`}>
 
-              {/* Glowing Pulsing Animated Turn Direction Rim */}
-              <div className={`absolute inset-3 rounded-full border-3 border-dashed border-amber-400/70 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.4)] ${direction === 1 ? 'animate-[spin_20s_linear_infinite]' : 'animate-[spin_20s_linear_infinite_reverse]'}`} />
+              {/* Glowing Pulsing Animated Turn Direction Rim with Chevrons */}
+              <div className={`absolute inset-3 rounded-full border-3 border-dashed border-amber-400/80 pointer-events-none shadow-[0_0_25px_rgba(245,158,11,0.5)] ${direction === 1 ? 'animate-[spin_16s_linear_infinite]' : 'animate-[spin_16s_linear_infinite_reverse]'}`}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-amber-300 text-xs font-black">
+                  {direction === 1 ? '▶' : '◀'}
+                </div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-2 text-amber-300 text-xs font-black">
+                  {direction === 1 ? '▶' : '◀'}
+                </div>
+              </div>
 
               {/* Central Piles (Draw Deck + Fanned Discard Stack) */}
               <div className="flex items-center justify-center gap-6 relative z-10">
@@ -545,7 +605,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                         }}
                         className={`absolute inset-0 rounded-2xl border-3 border-black flex flex-col justify-between p-2 transition-all duration-300 ${
                           COLOR_CLASSES[card.color].bg
-                        } ${isTop ? 'shadow-neo-lg scale-105 animate-[fadeIn_0.2s_ease-out]' : 'opacity-90 pointer-events-none'}`}
+                        } ${isTop ? 'shadow-neo-lg scale-105 animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                       >
                         <div className="flex justify-between items-start text-white text-[11px] font-black">
                           <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
@@ -618,7 +678,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </div>
               <button
                 onClick={handlePlayerDraw}
-                disabled={turnIndex !== 0 || aiThinking || isDealing}
+                disabled={turnIndex !== 0 || aiThinking || isDealing || !!flyingCard}
                 className="px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black uppercase border-2 border-black shadow-neo-sm active:scale-95 disabled:opacity-55 transition-all"
               >
                 Draw Card (+1)
@@ -628,14 +688,14 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             {/* Scrollable Hand Cards with White Inner Window & Corner Index */}
             <div className="w-full flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 px-1 custom-scrollbar">
               {players[0].cards.map(card => {
-                const playable = turnIndex === 0 && !aiThinking && !isDealing && isCardPlayable(card);
+                const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
                 return (
                   <div
                     key={card.id}
                     onClick={() => handlePlayerCardClick(card)}
                     className={`w-18 h-26 sm:w-20 sm:h-30 rounded-2xl border-3 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-200 cursor-pointer ${
                       COLOR_CLASSES[card.color].bg
-                    } ${playable ? 'hover:-translate-y-4 hover:shadow-neo-lg ring-4 ring-amber-400 animate-pulse' : 'opacity-70 grayscale-[15%]'}`}
+                    } ${playable ? 'hover:-translate-y-4 hover:shadow-neo-lg ring-4 ring-amber-400 animate-pulse' : 'opacity-75'}`}
                   >
                     <div className="flex justify-between items-start text-white text-[10px] font-black">
                       <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
@@ -673,7 +733,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {/* Wild Color Picker Modal with Smooth Scale-Up Animation */}
       {showColorPicker && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md animate-fadeIn p-4">
-          <div className="bg-[#14100e] border-4 border-black rounded-3xl p-6 shadow-neo-lg max-w-sm w-full text-center animate-[scaleUp_0.25s_ease-out]">
+          <div className="bg-[#14100e] border-4 border-black rounded-3xl p-6 shadow-neo-lg max-w-sm w-full text-center animate-modal-pop">
             <h3 className="text-lg font-black text-white uppercase mb-4">Choose Active Color</h3>
             <div className="grid grid-cols-2 gap-4">
               {(['red', 'blue', 'green', 'yellow'] as CardColor[]).map(col => (
@@ -701,7 +761,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {/* Victory Modal with Bounce Animation */}
       {gameState === 'gameover' && winner && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md animate-fadeIn p-4">
-          <div className="bg-[#14100e] border-4 border-black rounded-3xl p-8 shadow-neo-lg max-w-md w-full text-center animate-[scaleUp_0.3s_ease-out]">
+          <div className="bg-[#14100e] border-4 border-black rounded-3xl p-8 shadow-neo-lg max-w-md w-full text-center animate-modal-pop">
             <div className="w-20 h-20 rounded-2xl bg-amber-400 border-4 border-black shadow-neo-md mx-auto flex items-center justify-center text-4xl mb-4 animate-bounce">
               🏆
             </div>
