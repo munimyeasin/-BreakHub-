@@ -552,15 +552,15 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             );
           })()}
 
-          {/* MIDDLE ROW: LEFT AI (Marie) + OVAL/CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
-          <div className="w-full flex items-center justify-between my-auto py-1 px-0.5 sm:px-3">
+          {/* MIDDLE ROW: LEFT AI (Marie) + LARGER OVAL FELT TABLE + RIGHT AI (Kate) */}
+          <div className="w-full flex items-center justify-between my-auto py-1 px-1 sm:px-6 gap-2 sm:gap-6 overflow-x-hidden">
 
             {/* LEFT AI OPPONENT: MARIE */}
             {(() => {
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
-                <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
+                <div className={`flex items-center gap-3 transition-transform duration-300 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
                   <div className="flex flex-col -space-y-8 relative py-2">
                     {marie.cards.map((_, i) => (
                       <div key={i} className="transform -rotate-3">
@@ -568,57 +568,55 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                       </div>
                     ))}
                   </div>
-                  <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-lg mb-0.5">{marie.avatar}</span>
-                    <div className="flex flex-col items-center leading-none my-1">
+                  <div className={`flex flex-col items-center justify-center ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
+                    <div className="flex items-center justify-center space-x-0.5 my-3 transform -rotate-90">
                       {marie.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                        <span key={idx} className="text-[11px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{marie.cards.length}</span>
+                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1">{marie.cards.length}</span>
                   </div>
                 </div>
               );
             })()}
 
-            {/* OVAL FELT TABLE (Oval on mobile, Circular on desktop) WITH 4 CURVED DIRECTIONAL ARROWS & LEA BADGE + YOU TAB */}
+            {/* LARGER OVAL FELT TABLE */}
             <div className="relative flex flex-col items-center shrink-0">
               {/* Lea Name Badge sitting right above the table rim */}
               {(() => {
                 const lea = players.find(p => p.id === 'lea')!;
                 const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
                 return (
-                  <div className={`mb-1 px-3 py-0.5 rounded-xl border-2 border-black flex items-center gap-1.5 shadow-sm ${isTurn ? 'bg-amber-400 text-black animate-bounce font-bold' : 'bg-[#5c3a21] text-amber-100'}`}>
+                  <div className={`mb-1 px-3 py-0.5 rounded-xl border-2 border-black flex items-center gap-1.5 shadow-sm scale-90 sm:scale-100 ${isTurn ? 'bg-amber-400 text-black animate-bounce font-black' : 'bg-[#5c3a21] text-amber-100 font-bold'}`}>
                     <span className="text-xs">{lea.avatar}</span>
-                    <span className="text-[11px] font-black uppercase tracking-wider">{lea.name}</span>
-                    <span className="bg-black/40 px-1.5 py-0.2 rounded text-[9px]">{lea.cards.length}</span>
+                    <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider">{lea.name}</span>
+                    <span className="bg-black/40 px-1.5 py-0.2 rounded text-[9px] sm:text-[10px]">{lea.cards.length}</span>
                   </div>
                 );
               })()}
 
-              <div className="relative w-[200px] h-[150px] sm:w-[360px] sm:h-[360px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-5 sm:border-7 border-[#3b2416] shadow-[inset_0_15px_30px_rgba(0,0,0,0.85),0_10px_20px_rgba(0,0,0,0.6)] flex items-center justify-center">
-
+              <div className="relative w-[260px] h-[190px] sm:w-[480px] sm:h-[460px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-6 sm:border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_12px_24px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
-                <div className="flex items-center justify-center gap-4 relative z-10">
+                <div className="flex items-center justify-center gap-6 relative z-10">
 
                   {/* Draw Pile ("CARD PARTY") */}
                   <div
                     onClick={() => {
                       if (turnIndex === 0 && !aiThinking && !isDealing) handlePlayerDraw();
                     }}
-                    className="w-14 h-20 sm:w-20 sm:h-32 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-3 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
+                    className="w-18 h-24 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-3 sm:border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
                     title="Click to Draw"
                   >
-                    <div className="absolute inset-1 border-2 border-dashed border-white/30 rounded-xl flex flex-col items-center justify-center p-1 text-center">
-                      <span className="text-[7px] sm:text-[10px] font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
-                      <span className="text-lg sm:text-2xl my-0.5 group-hover:scale-110 transition-transform">🎴</span>
-                      <span className="text-[7px] sm:text-[9px] font-black text-white">({deck.length})</span>
+                    <div className="absolute inset-1.5 border-2 border-dashed border-white/30 rounded-xl flex flex-col items-center justify-center p-1 text-center">
+                      <span className="text-[8px] sm:text-[10px] font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
+                      <span className="text-xl sm:text-2xl my-1 group-hover:scale-110 transition-transform">🎴</span>
+                      <span className="text-[8px] sm:text-[9px] font-black text-white">({deck.length})</span>
                     </div>
                   </div>
 
                   {/* Discard Pile with Randomized Rotations & Offsets */}
-                  <div className="relative w-14 h-20 sm:w-20 sm:h-32">
+                  <div className="relative w-18 h-24 sm:w-24 sm:h-34">
                     {discardPile.map((card, idx) => {
                       const isTop = idx === discardPile.length - 1;
                       const rot = card.rotation || 0;
@@ -632,18 +630,18 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
                             zIndex: idx,
                           }}
-                          className={`absolute inset-0 rounded-2xl border-3 border-black flex flex-col justify-between p-2 shadow-neo-sm ${
+                          className={`absolute inset-0 rounded-2xl border-3 sm:border-4 border-black flex flex-col justify-between p-2.5 shadow-neo-sm ${
                             COLOR_CLASSES[card.color].bg
                           } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                         >
-                          <div className="flex justify-between items-start text-white text-[9px] font-black">
+                          <div className="flex justify-between items-start text-white text-[10px] sm:text-[11px] font-black">
                             <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
                             <span>{card.color === 'wild' ? '🌈' : ''}</span>
                           </div>
 
                           {/* Distinct White Inner Box */}
-                          <div className="w-8 h-10 sm:w-10 sm:h-13 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
-                            <span className={`text-base sm:text-xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                          <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                            <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
                               {card.type === 'number'
                                 ? card.value
                                 : card.type === 'skip'
@@ -658,7 +656,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             </span>
                           </div>
 
-                          <div className="text-[7px] font-black text-white text-right">
+                          <div className="text-[8px] sm:text-[9px] font-black text-white text-right">
                             {card.color[0]?.toUpperCase()}
                           </div>
                         </div>
@@ -668,15 +666,15 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 </div>
 
                 {/* Active Color Badge on Table */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-lg bg-black/90 border-2 border-black text-white text-[9px] font-black uppercase flex items-center gap-1 shadow-sm">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-lg bg-black/90 border-2 border-black text-white text-[10px] font-black uppercase flex items-center gap-1.5 shadow-sm">
                   <span>Color:</span>
-                  <span className={`w-2.5 h-2.5 rounded-full border border-black ${COLOR_CLASSES[activeColor].bg}`} />
+                  <span className={`w-3.5 h-3.5 rounded-full border border-black ${COLOR_CLASSES[activeColor].bg}`} />
                   <span className="text-amber-300">{activeColor}</span>
                 </div>
               </div>
 
               {/* Bottom Protruding "YOU" Tab on Table */}
-              <div className={`mt-[-3px] px-4 py-0.5 rounded-b-xl border-3 border-t-0 border-black font-black uppercase text-[10px] sm:text-xs shadow-md tracking-wider ${turnIndex === 0 ? 'bg-amber-400 text-black animate-bounce' : 'bg-[#a0522d] text-amber-100'}`}>
+              <div className={`mt-[-4px] px-8 py-1 rounded-b-2xl border-3 border-t-0 border-black font-black uppercase text-xs shadow-md tracking-wider ${turnIndex === 0 ? 'bg-amber-400 text-black animate-bounce' : 'bg-[#a0522d] text-amber-100'}`}>
                 YOU
               </div>
             </div>
@@ -686,15 +684,14 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const kate = players.find(p => p.id === 'kate')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
-                <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-lg mb-0.5">{kate.avatar}</span>
-                    <div className="flex flex-col items-center leading-none my-1">
+                <div className={`flex items-center gap-3 transition-transform duration-300 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
+                  <div className={`flex flex-col items-center justify-center ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
+                    <div className="flex items-center justify-center space-x-0.5 my-3 transform rotate-90">
                       {kate.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                        <span key={idx} className="text-[11px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{kate.cards.length}</span>
+                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1">{kate.cards.length}</span>
                   </div>
                   <div className="flex flex-col -space-y-8 relative py-2">
                     {kate.cards.map((_, i) => (
@@ -708,7 +705,6 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             })()}
 
           </div>
-
 
           {/* BOTTOM PLAYER HAND (FANNED & OVERLAPPING) */}
           <div className="w-full bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl p-2.5 flex flex-col items-center shadow-neo-lg">
