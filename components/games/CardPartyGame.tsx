@@ -552,7 +552,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             );
           })()}
 
-          {/* MIDDLE ROW: LEFT AI (Marie) + LARGER OVAL FELT TABLE + RIGHT AI (Kate) */}
+          {/* MIDDLE ROW: LEFT AI (Marie) + FELT TABLE + RIGHT AI (Kate) */}
           <div className="w-full flex items-center justify-between my-auto py-1 px-1 sm:px-6 gap-2 sm:gap-6 overflow-x-hidden">
 
             {/* LEFT AI OPPONENT: MARIE */}
@@ -560,7 +560,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
-                <div className={`flex items-center gap-3 transition-transform duration-300 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
+                <div className={`flex items-center gap-2 transition-transform duration-300 scale-90 sm:scale-100 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
                   <div className="flex flex-col -space-y-8 relative py-2">
                     {marie.cards.map((_, i) => (
                       <div key={i} className="transform -rotate-3">
@@ -568,19 +568,19 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                       </div>
                     ))}
                   </div>
-                  <div className={`flex flex-col items-center justify-center ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
-                    <div className="flex items-center justify-center space-x-0.5 my-3 transform -rotate-90">
+                  <div className={`flex flex-col items-center justify-center p-1.5 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
+                    <div className="flex flex-col items-center leading-tight">
                       {marie.name.split('').map((char, idx) => (
                         <span key={idx} className="text-[11px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1">{marie.cards.length}</span>
+                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1.5">{marie.cards.length}</span>
                   </div>
                 </div>
               );
             })()}
 
-            {/* LARGER OVAL FELT TABLE */}
+            {/* FELT TABLE */}
             <div className="relative flex flex-col items-center shrink-0">
               {/* Lea Name Badge sitting right above the table rim */}
               {(() => {
@@ -595,7 +595,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 );
               })()}
 
-              <div className="relative w-[260px] h-[190px] sm:w-[480px] sm:h-[460px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-6 sm:border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_12px_24px_rgba(0,0,0,0.6)] flex items-center justify-center">
+              <div className="relative w-[220px] h-[160px] sm:w-[380px] sm:h-[380px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-6 sm:border-8 border-[#3b2416] shadow-[inset_0_15px_30px_rgba(0,0,0,0.85),0_10px_20px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
                 <div className="flex items-center justify-center gap-6 relative z-10">
@@ -684,14 +684,14 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const kate = players.find(p => p.id === 'kate')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
-                <div className={`flex items-center gap-3 transition-transform duration-300 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center justify-center ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
-                    <div className="flex items-center justify-center space-x-0.5 my-3 transform rotate-90">
+                <div className={`flex items-center gap-2 transition-transform duration-300 scale-90 sm:scale-100 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
+                  <div className={`flex flex-col items-center justify-center p-1.5 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
+                    <div className="flex flex-col items-center leading-tight">
                       {kate.name.split('').map((char, idx) => (
                         <span key={idx} className="text-[11px] font-black uppercase">{char}</span>
                       ))}
                     </div>
-                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1">{kate.cards.length}</span>
+                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1.5">{kate.cards.length}</span>
                   </div>
                   <div className="flex flex-col -space-y-8 relative py-2">
                     {kate.cards.map((_, i) => (
