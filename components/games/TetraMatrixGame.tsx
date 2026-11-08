@@ -24,316 +24,98 @@ interface TetraMatrixGameProps {
   onGameOver: (finalScore: number) => void;
 }
 
-// 10 Columns x 20 Visible Rows Matrix
 const COLS = 10;
 const ROWS = 20;
 const TOTAL_ROWS = ROWS;
+const CANVAS_WIDTH = 380;
+const CANVAS_HEIGHT = 580;
+const BLOCK_SIZE = 28; // 10 * 28 = 280px playfield width
 
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 
-export interface PolyominoStyle {
-  type: TetrominoType;
-  name: string;
-  faceGrad: string;
-  faceStart: string;
-  faceEnd: string;
-  sideGrad: string;
-  sideStart: string;
-  sideEnd: string;
-  glowColor: string;
-  shapes: number[][][]; // 4 rotation states
-}
-
-// 3D Polyomino Palettes exactly matching public/thumbnails/tetra-matrix.svg
-export const TETROMINOES: Record<TetrominoType, PolyominoStyle> = {
-  I: {
-    type: 'I',
-    name: 'CYAN I-BAR',
-    faceGrad: 'from-[#7DF9FF] to-[#00D0FF]',
-    faceStart: '#7DF9FF',
-    faceEnd: '#00D0FF',
-    sideGrad: 'from-[#0099CC] to-[#006699]',
-    sideStart: '#0099CC',
-    sideEnd: '#006699',
-    glowColor: 'rgba(0, 240, 255, 0.75)',
-    shapes: [
-      [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0]
-      ]
-    ]
-  },
-  O: {
-    type: 'O',
-    name: 'YELLOW O-BOX',
-    faceGrad: 'from-[#FFF570] to-[#FFDE59]',
-    faceStart: '#FFF570',
-    faceEnd: '#FFDE59',
-    sideGrad: 'from-[#D49B00] to-[#A67800]',
-    sideStart: '#D49B00',
-    sideEnd: '#A67800',
-    glowColor: 'rgba(255, 222, 89, 0.75)',
-    shapes: [
-      [
-        [1, 1],
-        [1, 1]
-      ],
-      [
-        [1, 1],
-        [1, 1]
-      ],
-      [
-        [1, 1],
-        [1, 1]
-      ],
-      [
-        [1, 1],
-        [1, 1]
-      ]
-    ]
-  },
-  T: {
-    type: 'T',
-    name: 'PINK T-CROSS',
-    faceGrad: 'from-[#FF63C6] to-[#FF007F]',
-    faceStart: '#FF63C6',
-    faceEnd: '#FF007F',
-    sideGrad: 'from-[#BA005C] to-[#8A0044]',
-    sideStart: '#BA005C',
-    sideEnd: '#8A0044',
-    glowColor: 'rgba(255, 0, 127, 0.75)',
-    shapes: [
-      [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0]
-      ],
-      [
-        [0, 1, 0],
-        [0, 1, 1],
-        [0, 1, 0]
-      ],
-      [
-        [0, 0, 0],
-        [1, 1, 1],
-        [0, 1, 0]
-      ],
-      [
-        [0, 1, 0],
-        [1, 1, 0],
-        [0, 1, 0]
-      ]
-    ]
-  },
-  S: {
-    type: 'S',
-    name: 'LIME S-WAVE',
-    faceGrad: 'from-[#7BFF9E] to-[#00FF66]',
-    faceStart: '#7BFF9E',
-    faceEnd: '#00FF66',
-    sideGrad: 'from-[#00B84A] to-[#008033]',
-    sideStart: '#00B84A',
-    sideEnd: '#008033',
-    glowColor: 'rgba(0, 255, 102, 0.75)',
-    shapes: [
-      [
-        [0, 1, 1],
-        [1, 1, 0],
-        [0, 0, 0]
-      ],
-      [
-        [0, 1, 0],
-        [0, 1, 1],
-        [0, 0, 1]
-      ],
-      [
-        [0, 0, 0],
-        [0, 1, 1],
-        [1, 1, 0]
-      ],
-      [
-        [1, 0, 0],
-        [1, 1, 0],
-        [0, 1, 0]
-      ]
-    ]
-  },
-  Z: {
-    type: 'Z',
-    name: 'ROSE Z-WAVE',
-    faceGrad: 'from-[#FF6B8B] to-[#FF1A4B]',
-    faceStart: '#FF6B8B',
-    faceEnd: '#FF1A4B',
-    sideGrad: 'from-[#C2002B] to-[#8A001E]',
-    sideStart: '#C2002B',
-    sideEnd: '#8A001E',
-    glowColor: 'rgba(255, 26, 75, 0.75)',
-    shapes: [
-      [
-        [1, 1, 0],
-        [0, 1, 1],
-        [0, 0, 0]
-      ],
-      [
-        [0, 0, 1],
-        [0, 1, 1],
-        [0, 1, 0]
-      ],
-      [
-        [0, 0, 0],
-        [1, 1, 0],
-        [0, 1, 1]
-      ],
-      [
-        [0, 1, 0],
-        [1, 1, 0],
-        [1, 0, 0]
-      ]
-    ]
-  },
-  J: {
-    type: 'J',
-    name: 'ROYAL J-HOOK',
-    faceGrad: 'from-[#60A5FA] to-[#2563EB]',
-    faceStart: '#60A5FA',
-    faceEnd: '#2563EB',
-    sideGrad: 'from-[#1D4ED8] to-[#1E3A8A]',
-    sideStart: '#1D4ED8',
-    sideEnd: '#1E3A8A',
-    glowColor: 'rgba(37, 99, 235, 0.75)',
-    shapes: [
-      [
-        [1, 0, 0],
-        [1, 1, 1],
-        [0, 0, 0]
-      ],
-      [
-        [0, 1, 1],
-        [0, 1, 0],
-        [0, 1, 0]
-      ],
-      [
-        [0, 0, 0],
-        [1, 1, 1],
-        [0, 0, 1]
-      ],
-      [
-        [0, 1, 0],
-        [0, 1, 0],
-        [1, 1, 0]
-      ]
-    ]
-  },
-  L: {
-    type: 'L',
-    name: 'ORANGE L-HOOK',
-    faceGrad: 'from-[#FFBD59] to-[#FF8800]',
-    faceStart: '#FFBD59',
-    faceEnd: '#FF8800',
-    sideGrad: 'from-[#C25A00] to-[#8F3F00]',
-    sideStart: '#C25A00',
-    sideEnd: '#8F3F00',
-    glowColor: 'rgba(255, 136, 0, 0.75)',
-    shapes: [
-      [
-        [0, 0, 1],
-        [1, 1, 1],
-        [0, 0, 0]
-      ],
-      [
-        [0, 1, 0],
-        [0, 1, 0],
-        [0, 1, 1]
-      ],
-      [
-        [0, 0, 0],
-        [1, 1, 1],
-        [1, 0, 0]
-      ],
-      [
-        [1, 1, 0],
-        [0, 1, 0],
-        [0, 1, 0]
-      ]
-    ]
-  }
+export const TETROMINOES: Record<TetrominoType, { name: string; color: string; glow: string; shapes: number[][][] }> = {
+  I: { name: 'CYAN I-BAR', color: '#00F0FF', glow: 'rgba(0,240,255,0.8)', shapes: [
+    [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+    [[0,0,1,0],[0,0,1,0],[0,0,1,0],[0,0,1,0]],
+    [[0,0,0,0],[0,0,0,0],[1,1,1,1],[0,0,0,0]],
+    [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]
+  ]},
+  O: { name: 'YELLOW O-BOX', color: '#FFE600', glow: 'rgba(255,230,0,0.8)', shapes: [[[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]]] },
+  T: { name: 'PINK T-CROSS', color: '#FF007F', glow: 'rgba(255,0,127,0.8)', shapes: [
+    [[0,1,0],[1,1,1],[0,0,0]],
+    [[0,1,0],[0,1,1],[0,1,0]],
+    [[0,0,0],[1,1,1],[0,1,0]],
+    [[0,1,0],[1,1,0],[0,1,0]]
+  ]},
+  S: { name: 'LIME S-WAVE', color: '#00FF66', glow: 'rgba(0,255,102,0.8)', shapes: [
+    [[0,1,1],[1,1,0],[0,0,0]],
+    [[0,1,0],[0,1,1],[0,0,1]],
+    [[0,0,0],[0,1,1],[1,1,0]],
+    [[1,0,0],[1,1,0],[0,1,0]]
+  ]},
+  Z: { name: 'ROSE Z-WAVE', color: '#FF1A4B', glow: 'rgba(255,26,75,0.8)', shapes: [
+    [[1,1,0],[0,1,1],[0,0,0]],
+    [[0,0,1],[0,1,1],[0,1,0]],
+    [[0,0,0],[1,1,0],[0,1,1]],
+    [[0,1,0],[1,1,0],[1,0,0]]
+  ]},
+  J: { name: 'ROYAL J-HOOK', color: '#2563EB', glow: 'rgba(37,99,235,0.8)', shapes: [
+    [[1,0,0],[1,1,1],[0,0,0]],
+    [[0,1,1],[0,1,0],[0,1,0]],
+    [[0,0,0],[1,1,1],[0,0,1]],
+    [[0,1,0],[0,1,0],[1,1,0]]
+  ]},
+  L: { name: 'ORANGE L-HOOK', color: '#FF8800', glow: 'rgba(255,136,0,0.8)', shapes: [
+    [[0,0,1],[1,1,1],[0,0,0]],
+    [[0,1,0],[0,1,0],[0,1,1]],
+    [[0,0,0],[1,1,1],[1,0,0]],
+    [[1,1,0],[0,1,0],[0,1,0]]
+  ]}
 };
 
 const PIECE_TYPES: TetrominoType[] = ['I', 'O', 'T', 'S', 'Z', 'J', 'L'];
-
-// Per-piece SRS Wall Kick Tables indexed 0..3 by rotation transition (0→1, 1→2, 2→3, 3→0).
-// Source: canonical SRS spec for J, L, S, Z (identical kicks); T and I differ per transition.
 const WALL_KICK_TABLE: Record<TetrominoType, [number, number][][]> = {
   I: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1], [-2, 0], [2, 0]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,0],[1,0],[0,1],[-1,1],[1,1],[-2,0],[2,0]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]]
   ],
   T: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0]],
-    [[0, 0], [-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1], [-2, 0], [2, 0]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0]],
+    [[0,0],[-1,0],[1,0],[0,1],[-1,1],[1,1],[-2,0],[2,0]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[1,1],[-1,1],[2,0],[-2,0],[0,-1],[1,-1],[-1,-1]]
   ],
-  O: [[[0, 0]]],
+  O: [[[0,0]]],
   J: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,-1],[1,-1],[-2,0],[2,0],[0,1],[-1,1],[1,1]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[1,1],[-1,1],[2,0],[-2,0],[0,-1],[1,-1],[-1,-1]]
   ],
   L: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,-1],[1,-1],[-2,0],[2,0],[0,1],[-1,1],[1,1]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[1,1],[-1,1],[2,0],[-2,0],[0,-1],[1,-1],[-1,-1]]
   ],
   S: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,-1],[1,-1],[-2,0],[2,0],[0,1],[-1,1],[1,1]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[1,1],[-1,1],[2,0],[-2,0],[0,-1],[1,-1],[-1,-1]]
   ],
   Z: [
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1], [-1, 1], [1, 1]],
-    [[0, 0], [-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [-2, 0], [2, 0], [0, 1]],
-    [[0, 0], [1, 1], [-1, 1], [2, 0], [-2, 0], [0, -1], [1, -1], [-1, -1]]
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[-1,-1],[1,-1],[-2,0],[2,0],[0,1],[-1,1],[1,1]],
+    [[0,0],[-1,0],[1,0],[0,-1],[-1,-1],[1,-1],[-2,0],[2,0],[0,1]],
+    [[0,0],[1,1],[-1,1],[2,0],[-2,0],[0,-1],[1,-1],[-1,-1]]
   ]
 };
 
-// Level Speed Timing (ms per gravity tick)
-const LEVEL_SPEEDS = [
-  800, 720, 630, 540, 450, 360, 280, 210, 150, 110, 80, 70, 60, 50, 40
-];
-
-// Lock Delay (ms after piece can't descend — gives player reaction window)
+const LEVEL_SPEEDS = [800, 720, 630, 540, 450, 360, 280, 210, 150, 110, 80, 70, 60, 50, 40];
 const LOCK_DELAY_MS = 500;
-// Combo Window (ms for consecutive line clears to count as combos)
-const COMBO_TIMEOUT_MS = 30000;
-// Line Clear Values per Level (G17 standard Tetris scoring)
-const SCORING = { SINGLE: 100, DOUBLE: 300, TRIPLE: 500, TETRIS: 800, TSPIN: 1200 };
 
 interface ActivePiece {
   type: TetrominoType;
@@ -342,128 +124,33 @@ interface ActivePiece {
   y: number;
 }
 
-type GridCell = {
-  type: TetrominoType;
-} | null;
+type GridCell = { type: TetrominoType } | null;
 
-// ==========================================
-// 3D Neo-Brutalist Extruded Polyomino Block
-// ==========================================
-interface TetraBlockProps {
-  type: TetrominoType;
-  sizeClass?: string;
-  isGhost?: boolean;
-  isFlashing?: boolean;
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  color: string;
+  size: number;
+  life: number;
+  maxLife: number;
 }
 
-const TetraBlock: React.FC<TetraBlockProps> = React.memo(({ type, sizeClass = 'w-full h-full', isGhost = false, isFlashing = false }) => {
-  const def = TETROMINOES[type];
-
-  if (isFlashing) {
-    return (
-      <div className={`relative ${sizeClass} rounded-[3px] bg-white border-2 border-yellow-300 shadow-[0_0_15px_#FFF] animate-pulse`} />
-    );
-  }
-
-  if (isGhost) {
-    return (
-      <div
-        className={`relative ${sizeClass} rounded-[3px] border-2 border-dashed border-[#00F0FF] bg-[#00F0FF]/15 shadow-[0_0_8px_rgba(0,240,255,0.4)] flex items-center justify-center`}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-[#00F0FF]/40 animate-ping" />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`relative ${sizeClass} rounded-[3px] sm:rounded-[4px] border-[1.5px] sm:border-2 border-black overflow-hidden shadow-[inset_0_1px_2px_rgba(255,255,255,0.6),inset_0_-2px_2px_rgba(0,0,0,0.35)]`}
-      style={{
-        background: `linear-gradient(135deg, ${def.faceStart} 0%, ${def.faceEnd} 100%)`
-      }}
-    >
-      {/* 3D Top-Left High-Gloss Triangular Specular Highlight (from thumbnail) */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        viewBox="0 0 30 30"
-        preserveAspectRatio="none"
-      >
-        {/* Specular Triangle */}
-        <polygon points="2,2 24,2 2,24" fill="#FFFFFF" opacity="0.75" />
-        {/* Top Edge Bevel Line */}
-        <line x1="2" y1="2" x2="28" y2="2" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.9" />
-        {/* Bottom-Right 3D Extrusion Shadow Bevel */}
-        <polygon points="28,4 28,28 4,28" fill="#000000" opacity="0.22" />
-        <line x1="2" y1="28" x2="28" y2="28" stroke="#000000" strokeWidth="1.5" opacity="0.4" />
-        <line x1="28" y1="2" x2="28" y2="28" stroke="#000000" strokeWidth="1.5" opacity="0.4" />
-      </svg>
-    </div>
-  );
-});
-TetraBlock.displayName = 'TetraBlock';
-
-// ==========================================
-// 16-Point Neo-Brutalist Starburst Action Badge
-// ==========================================
-interface StarburstBadgeProps {
+interface FloatingText {
+  id?: string;
+  x: number;
+  y: number;
   text: string;
-  subtext?: string;
-  colorGrad?: 'gold' | 'cyan' | 'pink';
+  color: string;
+  alpha: number;
+  vy: number;
 }
 
-const StarburstBadge: React.FC<StarburstBadgeProps> = React.memo(({ text, subtext, colorGrad = 'gold' }) => {
-  const gradColors = {
-    gold: { start: '#FFF066', end: '#FFE600', text: '#000000' },
-    cyan: { start: '#7DF9FF', end: '#00D0FF', text: '#000000' },
-    pink: { start: '#FF63C6', end: '#FF007F', text: '#FFFFFF' }
-  }[colorGrad];
-
-  return (
-    <div className="relative inline-flex items-center justify-center animate-bounce select-none pointer-events-none">
-      <svg
-        viewBox="-35 -35 70 70"
-        className="w-28 h-28 sm:w-36 sm:h-36 drop-shadow-[3px_3px_0px_#000000]"
-      >
-        <defs>
-          <linearGradient id={`starburst-${colorGrad}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={gradColors.start} />
-            <stop offset="100%" stopColor={gradColors.end} />
-          </linearGradient>
-        </defs>
-        {/* 16-Point Starburst Polygon from tetra-matrix.svg */}
-        <polygon
-          points="0,-30 11,-11 32,-19 22,-1 40,14 19,19 24,38 5,27 -5,38 -3,19 -24,24 -16,5 -38,-3 -19,-14 -27,-32 -8,-22"
-          fill={`url(#starburst-${colorGrad})`}
-          stroke="#000000"
-          strokeWidth="3"
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
-        <span
-          className="font-black text-xs sm:text-sm uppercase tracking-tight leading-none drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]"
-          style={{ color: gradColors.text }}
-        >
-          {text}
-        </span>
-        {subtext && (
-          <span className="text-[9px] sm:text-[10px] font-black uppercase text-black bg-white px-1 py-0.2 rounded border border-black mt-1 shadow-sm">
-            {subtext}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-});
-StarburstBadge.displayName = 'StarburstBadge';
-
-// ==========================================
-// Main TetraMatrixGame Component
-// ==========================================
 export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameProps) {
-  // Game Board State
-  const [grid, setGrid] = useState<GridCell[][]>(() =>
-    Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null))
-  );
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const [grid, setGrid] = useState<GridCell[][]>(() => Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null)));
   const [currentPiece, setCurrentPiece] = useState<ActivePiece | null>(null);
   const [holdPiece, setHoldPiece] = useState<TetrominoType | null>(null);
   const [canHold, setCanHold] = useState<boolean>(true);
@@ -474,176 +161,13 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const [combo, setCombo] = useState<number>(0);
   const [backToBack, setBackToBack] = useState<boolean>(false);
   const [highScore, setHighScore] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [flashRows, setFlashRows] = useState<number[]>([]);
-  const [laserTrailCol, setLaserTrailCol] = useState<{ x: number; startY: number; endY: number } | null>(null);
-  const [callout, setCallout] = useState<{ text: string; subtext?: string; grad: 'gold' | 'cyan' | 'pink'; id: number } | null>(null);
-  const [screenShake, setScreenShake] = useState<boolean>(false);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Web Audio API Synthesizer
-  const audioCtxRef = useRef<AudioContext | null>(null);
-
-  const getAudioContext = useCallback(() => {
-    if (typeof window === 'undefined') return null;
-    if (!audioCtxRef.current) {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioContextClass) {
-        audioCtxRef.current = new AudioContextClass();
-      }
-    }
-    if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume().catch(() => {});
-    }
-    return audioCtxRef.current;
-  }, []);
-
-  const playTetraSound = useCallback(
-    (type: 'move' | 'rotate' | 'softDrop' | 'hardDrop' | 'hold' | 'single' | 'double' | 'triple' | 'tetra' | 'levelUp' | 'gameOver') => {
-      if (!soundEnabled) return;
-      try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
-        const now = ctx.currentTime;
-
-        if (type === 'move') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(260, now);
-          osc.frequency.exponentialRampToValueAtTime(130, now + 0.04);
-          gain.gain.setValueAtTime(0.06, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.04);
-        } else if (type === 'rotate') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(440, now);
-          osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
-          gain.gain.setValueAtTime(0.09, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.06);
-        } else if (type === 'softDrop') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(180, now);
-          osc.frequency.exponentialRampToValueAtTime(90, now + 0.03);
-          gain.gain.setValueAtTime(0.04, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.03);
-        } else if (type === 'hardDrop') {
-          // Sub-Bass Heavy Detonation
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(160, now);
-          osc.frequency.exponentialRampToValueAtTime(35, now + 0.16);
-          gain.gain.setValueAtTime(0.28, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.16);
-        } else if (type === 'hold') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(620, now);
-          osc.frequency.linearRampToValueAtTime(380, now + 0.08);
-          gain.gain.setValueAtTime(0.1, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now);
-          osc.stop(now + 0.08);
-        } else if (type === 'single' || type === 'double') {
-          [523.25, 659.25].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.05);
-            gain.gain.setValueAtTime(0.12, now + idx * 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.18);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now + idx * 0.05);
-            osc.stop(now + idx * 0.05 + 0.18);
-          });
-        } else if (type === 'triple') {
-          [523.25, 659.25, 783.99].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-            gain.gain.setValueAtTime(0.15, now + idx * 0.06);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now + idx * 0.06);
-            osc.stop(now + idx * 0.06 + 0.22);
-          });
-        } else if (type === 'tetra') {
-          // Quad-Clear Fanfare
-          [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-            gain.gain.setValueAtTime(0.22, now + idx * 0.06);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now + idx * 0.06);
-            osc.stop(now + idx * 0.06 + 0.35);
-          });
-        } else if (type === 'levelUp') {
-          [440, 554.37, 659.25, 880].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-            gain.gain.setValueAtTime(0.15, now + idx * 0.07);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.25);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now + idx * 0.07);
-            osc.stop(now + idx * 0.07 + 0.25);
-          });
-        } else if (type === 'gameOver') {
-          [320, 270, 210, 140].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.09);
-            gain.gain.setValueAtTime(0.16, now + idx * 0.09);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.3);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now + idx * 0.09);
-            osc.stop(now + idx * 0.09 + 0.3);
-          });
-        }
-      } catch {}
-    },
-    [soundEnabled, getAudioContext]
-  );
-
-  // Synchronized Reference Pointers
+  // Refs for 60fps loop
   const gridRef = useRef<GridCell[][]>(grid);
   gridRef.current = grid;
   const currentPieceRef = useRef<ActivePiece | null>(currentPiece);
@@ -651,477 +175,369 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const bagRef = useRef<TetrominoType[]>([]);
   const nextQueueRef = useRef<TetrominoType[]>(nextQueue);
   nextQueueRef.current = nextQueue;
-  const isPlayingRef = useRef<boolean>(isPlaying);
+  const isPlayingRef = useRef(isPlaying);
   isPlayingRef.current = isPlaying;
-  const isPausedRef = useRef<boolean>(isPaused);
+  const isPausedRef = useRef(isPaused);
   isPausedRef.current = isPaused;
-  const isGameOverRef = useRef<boolean>(isGameOver);
+  const isGameOverRef = useRef(isGameOver);
   isGameOverRef.current = isGameOver;
-  const scoreRef = useRef<number>(score);
+  const scoreRef = useRef(score);
   scoreRef.current = score;
-  const linesRef = useRef<number>(lines);
+  const linesRef = useRef(lines);
   linesRef.current = lines;
-  const levelRef = useRef<number>(level);
+  const levelRef = useRef(level);
   levelRef.current = level;
-  const comboRef = useRef<number>(combo);
+  const comboRef = useRef(combo);
   comboRef.current = combo;
-  const backToBackRef = useRef<boolean>(backToBack);
+  const backToBackRef = useRef(backToBack);
   backToBackRef.current = backToBack;
-  const canHoldRef = useRef<boolean>(canHold);
+  const canHoldRef = useRef(canHold);
   canHoldRef.current = canHold;
-  const holdPieceRef = useRef<TetrominoType | null>(holdPiece);
+  const holdPieceRef = useRef(holdPiece);
   holdPieceRef.current = holdPiece;
+
+  const particlesRef = useRef<Particle[]>([]);
+  const floatingTextsRef = useRef<FloatingText[]>([]);
   const lockTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const lastActionWasRotateRef = useRef<boolean>(false);
+  const lastActionWasRotateRef = useRef(false);
 
-  // T-Spin Corner Check (Guideline SRS)
-  const isTSpinCheck = useCallback((piece: ActivePiece, currentGrid: GridCell[][]): boolean => {
-    if (piece.type !== 'T') return false;
-    const corners = [
-      { x: piece.x, y: piece.y },
-      { x: piece.x + 2, y: piece.y },
-      { x: piece.x, y: piece.y + 2 },
-      { x: piece.x + 2, y: piece.y + 2 }
-    ];
-    let filledCorners = 0;
-    for (const corner of corners) {
-      if (corner.x < 0 || corner.x >= COLS || corner.y < 0 || corner.y >= TOTAL_ROWS) {
-        filledCorners++;
-      } else if (currentGrid[corner.y] && currentGrid[corner.y][corner.x] !== null) {
-        filledCorners++;
-      }
-    }
-    return filledCorners >= 3;
-  }, []);
-
-  // Load High Score on Mount
+  // Load High Score
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('stressbuster_tetra_matrix_highscore');
+      const saved = localStorage.getItem('breakhub_tetra_highscore');
       if (saved) setHighScore(parseInt(saved, 10) || 0);
     } catch {}
   }, []);
 
-  // Standard 7-Bag Randomizer generator
-  const getNextPieceFromBag = useCallback((): TetrominoType => {
-    if (bagRef.current.length === 0) {
-      const newBag = [...PIECE_TYPES];
-      for (let i = newBag.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newBag[i], newBag[j]] = [newBag[j], newBag[i]];
+  // Audio Synth
+  const playSound = useCallback((type: 'move' | 'rotate' | 'drop' | 'clear' | 'tetra' | 'over' | 'hold') => {
+    if (!soundEnabled || typeof window === 'undefined') return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'move') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.04);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      } else if (type === 'rotate') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.linearRampToValueAtTime(880, now + 0.06);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      } else if (type === 'drop') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.linearRampToValueAtTime(30, now + 0.15);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'tetra') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.frequency.setValueAtTime(f, now + i * 0.06);
+          g.gain.setValueAtTime(0.2, now + i * 0.06);
+          g.gain.linearRampToValueAtTime(0.01, now + i * 0.06 + 0.2);
+          o.start(now + i * 0.06);
+          o.stop(now + i * 0.06 + 0.2);
+        });
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(500, now);
+        osc.frequency.linearRampToValueAtTime(300, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
       }
-      bagRef.current = newBag;
+    } catch {}
+  }, [soundEnabled]);
+
+  const spawnParticles = (x: number, y: number, color: string, count = 12) => {
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 4;
+      particlesRef.current.push({
+        x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        color, size: 3 + Math.random() * 3, life: 0, maxLife: 20 + Math.random() * 10
+      });
+    }
+  };
+
+  const addFloatingText = (x: number, y: number, text: string, color = '#FFE600') => {
+    floatingTextsRef.current.push({ x, y, text, color, alpha: 1, vy: -1.2 });
+  };
+
+  // 7-Bag
+  const getNextPiece = useCallback((): TetrominoType => {
+    if (bagRef.current.length === 0) {
+      const bag = [...PIECE_TYPES];
+      for (let i = bag.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      bagRef.current = bag;
     }
     return bagRef.current.pop()!;
   }, []);
 
-  // Collision detection helper (allows negative y during top-spawn/rotation above matrix roof)
-  const isValidPosition = useCallback(
-    (piece: ActivePiece, currentGrid: GridCell[][] = gridRef.current): boolean => {
-      const shape = TETROMINOES[piece.type].shapes[piece.rotation];
-      for (let r = 0; r < shape.length; r++) {
-        for (let c = 0; c < shape[r].length; c++) {
-          if (shape[r][c] !== 0) {
-            const gridX = piece.x + c;
-            const gridY = piece.y + r;
+  const isValidPosition = useCallback((piece: ActivePiece, currentGrid: GridCell[][] = gridRef.current): boolean => {
+    const shape = TETROMINOES[piece.type].shapes[piece.rotation];
+    for (let r = 0; r < shape.length; r++) {
+      for (let c = 0; c < shape[r].length; c++) {
+        if (shape[r][c] !== 0) {
+          const gx = piece.x + c;
+          const gy = piece.y + r;
+          if (gx < 0 || gx >= COLS || gy >= TOTAL_ROWS) return false;
+          if (gy >= 0 && currentGrid[gy][gx] !== null) return false;
+        }
+      }
+    }
+    return true;
+  }, []);
 
-            // Check horizontal & bottom boundary bounds
-            if (gridX < 0 || gridX >= COLS || gridY >= TOTAL_ROWS) {
-              return false;
-            }
+  const getGhostY = useCallback((piece: ActivePiece | null): number => {
+    if (!piece) return 0;
+    let gy = piece.y;
+    while (isValidPosition({ ...piece, y: gy + 1 })) gy++;
+    return gy;
+  }, [isValidPosition]);
 
-            // Check locked blocks (only when inside or below the visible matrix roof)
-            if (gridY >= 0 && currentGrid[gridY][gridX] !== null) {
-              return false;
-            }
+  const spawnPiece = useCallback((type?: TetrominoType) => {
+    let t = type;
+    let queue = [...nextQueueRef.current];
+    if (!t) {
+      t = queue.shift() || getNextPiece();
+      while (queue.length < 3) queue.push(getNextPiece());
+      setNextQueue(queue);
+      nextQueueRef.current = queue;
+    }
+
+    const shape = TETROMINOES[t].shapes[0];
+    const startX = Math.floor((COLS - shape[0].length) / 2);
+    const startY = t === 'I' ? -1 : 0;
+    const newPiece: ActivePiece = { type: t, rotation: 0, x: startX, y: startY };
+
+    if (!isValidPosition(newPiece, gridRef.current)) {
+      setIsGameOver(true);
+      isGameOverRef.current = true;
+      setIsPlaying(false);
+      isPlayingRef.current = false;
+      playSound('over');
+      const final = scoreRef.current;
+      onGameOver(final);
+      if (final > highScore) {
+        setHighScore(final);
+        try { localStorage.setItem('breakhub_tetra_highscore', String(final)); } catch {}
+      }
+      return;
+    }
+
+    setCurrentPiece(newPiece);
+    currentPieceRef.current = newPiece;
+    setCanHold(true);
+    canHoldRef.current = true;
+  }, [getNextPiece, isValidPosition, onGameOver, playSound, highScore]);
+
+  // Clear Lines
+  const clearLines = useCallback((newGrid: GridCell[][]) => {
+    const fullRows: number[] = [];
+    for (let r = 0; r < TOTAL_ROWS; r++) {
+      if (newGrid[r].every(cell => cell !== null)) fullRows.push(r);
+    }
+
+    const linesCleared = fullRows.length;
+    if (linesCleared === 0) {
+      setCombo(0);
+      comboRef.current = 0;
+      setGrid(newGrid);
+      gridRef.current = newGrid;
+      spawnPiece();
+      return;
+    }
+
+    const curLevel = levelRef.current;
+    let basePts = 0;
+    let label = '';
+    if (linesCleared === 1) { basePts = 100 * curLevel; label = 'SINGLE'; }
+    else if (linesCleared === 2) { basePts = 300 * curLevel; label = 'DOUBLE'; }
+    else if (linesCleared === 3) { basePts = 500 * curLevel; label = 'TRIPLE'; }
+    else if (linesCleared === 4) { basePts = 800 * curLevel; label = 'TETRIS!'; }
+
+    const curCombo = comboRef.current + 1;
+    setCombo(curCombo);
+    comboRef.current = curCombo;
+
+    const totalPts = basePts + (curCombo - 1) * 50 * curLevel;
+    const newScore = scoreRef.current + totalPts;
+    const newLines = linesRef.current + linesCleared;
+    const newLevel = Math.floor(newLines / 10) + 1;
+
+    setScore(newScore);
+    scoreRef.current = newScore;
+    setLines(newLines);
+    linesRef.current = newLines;
+    setLevel(newLevel);
+    levelRef.current = newLevel;
+
+    if (linesCleared === 4) {
+      playSound('tetra');
+      try { confetti({ particleCount: 100, spread: 90 }); } catch {}
+      addFloatingText(CANVAS_WIDTH / 2, 200, 'TETRIS!', '#00F0FF');
+    } else {
+      playSound('clear');
+      addFloatingText(CANVAS_WIDTH / 2, 200, label, '#FFE600');
+    }
+
+    setTimeout(() => {
+      const rem = newGrid.filter((_, idx) => !fullRows.includes(idx));
+      const empty = TOTAL_ROWS - rem.length;
+      const collapsed = [...Array.from({ length: empty }, () => Array(COLS).fill(null)), ...rem];
+      setGrid(collapsed);
+      gridRef.current = collapsed;
+      spawnPiece();
+    }, 200);
+  }, [spawnPiece, playSound]);
+
+  const lockPiece = useCallback((piece: ActivePiece = currentPieceRef.current!) => {
+    if (!piece) return;
+    if (lockTimerRef.current) {
+      clearTimeout(lockTimerRef.current);
+      lockTimerRef.current = null;
+    }
+
+    const shape = TETROMINOES[piece.type].shapes[piece.rotation];
+    const grid = gridRef.current.map(row => [...row]);
+
+    for (let r = 0; r < shape.length; r++) {
+      for (let c = 0; c < shape[r].length; c++) {
+        if (shape[r][c] !== 0) {
+          const gx = piece.x + c;
+          const gy = piece.y + r;
+          if (gy >= 0 && gy < TOTAL_ROWS && gx >= 0 && gx < COLS) {
+            grid[gy][gx] = { type: piece.type };
           }
         }
       }
-      return true;
-    },
-    []
-  );
+    }
 
-  // Ghost Piece Landing Raycast Projection
-  const getGhostY = useCallback(
-    (piece: ActivePiece | null, currentGrid: GridCell[][] = gridRef.current): number => {
-      if (!piece) return 0;
-      let ghostY = piece.y;
-      while (isValidPosition({ ...piece, y: ghostY + 1 }, currentGrid)) {
-        ghostY++;
-      }
-      return ghostY;
-    },
-    [isValidPosition]
-  );
+    setCurrentPiece(null);
+    currentPieceRef.current = null;
+    clearLines(grid);
+  }, [clearLines]);
 
-  // Spawn a new Tetromino from 7-Bag
-  const spawnPiece = useCallback(
-    (type?: TetrominoType) => {
-      let pieceType = type;
-      let newQueue = [...nextQueueRef.current];
-
-      if (!pieceType) {
-        pieceType = newQueue.shift() || getNextPieceFromBag();
-        while (newQueue.length < 3) {
-          newQueue.push(getNextPieceFromBag());
-        }
-        setNextQueue(newQueue);
-        nextQueueRef.current = newQueue;
-      }
-
-      const shape = TETROMINOES[pieceType].shapes[0];
-      const startX = Math.floor((COLS - shape[0].length) / 2);
-      const startY = pieceType === 'I' ? -1 : 0;
-
-      const newPiece: ActivePiece = {
-        type: pieceType,
-        rotation: 0,
-        x: startX,
-        y: startY
-      };
-
-      if (!isValidPosition(newPiece, gridRef.current)) {
-        // Matrix Breach - Game Over!
-        setIsGameOver(true);
-        isGameOverRef.current = true;
-        setIsPlaying(false);
-        isPlayingRef.current = false;
-        playTetraSound('gameOver');
-        const final = scoreRef.current;
-        if (final > 0) {
-          onGameOver(final);
-          if (final > highScore) {
-            setHighScore(final);
-            try {
-              localStorage.setItem('stressbuster_tetra_matrix_highscore', String(final));
-            } catch {}
-          }
-        }
-        return;
-      }
-
-      setCurrentPiece(newPiece);
-      currentPieceRef.current = newPiece;
-      setCanHold(true);
-      canHoldRef.current = true;
-    },
-    [getNextPieceFromBag, isValidPosition, onGameOver, playTetraSound, highScore]
-  );
-
-  // Clear completed rows, award points, T-Spins, B2B bonuses, combos & starburst popups
-  const clearLines = useCallback(
-    (newGrid: GridCell[][], lockedPiece?: ActivePiece) => {
-      const fullRowIndices: number[] = [];
-
-      for (let r = 0; r < TOTAL_ROWS; r++) {
-        if (newGrid[r].every(cell => cell !== null)) {
-          fullRowIndices.push(r);
-        }
-      }
-
-      const linesCleared = fullRowIndices.length;
-      const curLevel = levelRef.current;
-      const isTSpin = lockedPiece ? isTSpinCheck(lockedPiece, gridRef.current) && lastActionWasRotateRef.current : false;
-
-      let basePoints = 0;
-      let calloutText = '';
-      let calloutGrad: 'gold' | 'cyan' | 'pink' = 'cyan';
-      let isDifficultClear = false;
-
-      if (isTSpin) {
-        isDifficultClear = true;
-        if (linesCleared === 0) {
-          basePoints = 400 * curLevel;
-          calloutText = 'T-SPIN ZERO!';
-          calloutGrad = 'pink';
-          playTetraSound('single');
-        } else if (linesCleared === 1) {
-          basePoints = 800 * curLevel;
-          calloutText = 'T-SPIN SINGLE!';
-          calloutGrad = 'gold';
-          playTetraSound('double');
-        } else if (linesCleared === 2) {
-          basePoints = 1200 * curLevel;
-          calloutText = 'T-SPIN DOUBLE!';
-          calloutGrad = 'gold';
-          playTetraSound('tetra');
-        } else if (linesCleared === 3) {
-          basePoints = 1600 * curLevel;
-          calloutText = 'T-SPIN TRIPLE!';
-          calloutGrad = 'gold';
-          playTetraSound('tetra');
-        }
-      } else if (linesCleared === 4) {
-        isDifficultClear = true;
-        basePoints = 800 * curLevel;
-        calloutText = backToBackRef.current ? 'B2B TETRA!' : '4X TETRIS!';
-        calloutGrad = 'gold';
-        playTetraSound('tetra');
-      } else if (linesCleared === 3) {
-        basePoints = 500 * curLevel;
-        calloutText = 'TRIPLE CLEAR!';
-        calloutGrad = 'pink';
-        playTetraSound('triple');
-      } else if (linesCleared === 2) {
-        basePoints = 300 * curLevel;
-        calloutText = 'DOUBLE CLEAR!';
-        calloutGrad = 'cyan';
-        playTetraSound('double');
-      } else if (linesCleared === 1) {
-        basePoints = 100 * curLevel;
-        calloutText = 'SINGLE CLEAR';
-        calloutGrad = 'cyan';
-        playTetraSound('single');
-      }
-
-      if (fullRowIndices.length === 0 && !isTSpin) {
-        setCombo(0);
-        comboRef.current = 0;
-        setGrid(newGrid);
-        gridRef.current = newGrid;
-        spawnPiece();
-        return;
-      }
-
-      const isB2B = isDifficultClear && backToBackRef.current;
-      if (isB2B) {
-        basePoints = Math.floor(basePoints * 1.5);
-      }
-
-      if (isDifficultClear) {
-        setBackToBack(true);
-        backToBackRef.current = true;
-      } else if (linesCleared > 0) {
-        setBackToBack(false);
-        backToBackRef.current = false;
-      }
-
-      const curCombo = comboRef.current + (linesCleared > 0 ? 1 : 0);
-      if (linesCleared > 0) {
-        setCombo(curCombo);
-        comboRef.current = curCombo;
-      }
-
-      const comboBonus = linesCleared > 0 ? (curCombo - 1) * 50 * curLevel : 0;
-      const totalPoints = basePoints + comboBonus;
-
-      if (linesCleared > 0) {
-        setFlashRows(fullRowIndices);
-        setScreenShake(true);
-        setTimeout(() => setScreenShake(false), 300);
-        if (linesCleared === 4 || isTSpin) {
-          try {
-            confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
-          } catch {}
-        }
-        setCallout({
-          text: isB2B ? `B2B ${calloutText}` : calloutText,
-          subtext: isB2B ? `+1.5X MULTIPLIER (+${totalPoints} PTS)` : `+${totalPoints} PTS`,
-          grad: calloutGrad,
-          id: Date.now()
-        });
-      }
-
-      const updatedScore = scoreRef.current + totalPoints;
-      const updatedLines = linesRef.current + linesCleared;
-      const newLevel = Math.floor(updatedLines / 10) + 1;
-
-      setScore(updatedScore);
-      scoreRef.current = updatedScore;
-      setLines(updatedLines);
-      linesRef.current = updatedLines;
-
-      if (newLevel > curLevel) {
-        setLevel(newLevel);
-        levelRef.current = newLevel;
-        playTetraSound('levelUp');
-      }
-
-      setTimeout(() => {
-        const remainingRows = newGrid.filter((_, idx) => !fullRowIndices.includes(idx));
-        const emptyRowsNeeded = TOTAL_ROWS - remainingRows.length;
-        const collapsedGrid = [
-          ...Array.from({ length: emptyRowsNeeded }, () => Array(COLS).fill(null)),
-          ...remainingRows
-        ];
-
-        setFlashRows([]);
-        setGrid(collapsedGrid);
-        gridRef.current = collapsedGrid;
-        spawnPiece();
-      }, linesCleared > 0 ? 180 : 0);
-    },
-    [spawnPiece, playTetraSound, isTSpinCheck]
-  );
-
-  // Lock active piece into grid
-  const lockPiece = useCallback(
-    (pieceToLock: ActivePiece = currentPieceRef.current!) => {
-      if (!pieceToLock) return;
-
+  const moveHorizontal = (dir: -1 | 1) => {
+    if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
+    const p = currentPieceRef.current;
+    if (!p) return;
+    const next = { ...p, x: p.x + dir };
+    if (isValidPosition(next)) {
+      setCurrentPiece(next);
+      currentPieceRef.current = next;
+      playSound('move');
       if (lockTimerRef.current) {
         clearTimeout(lockTimerRef.current);
         lockTimerRef.current = null;
       }
+    }
+  };
 
-      const shape = TETROMINOES[pieceToLock.type].shapes[pieceToLock.rotation];
-      const newGrid = gridRef.current.map(row => [...row]);
+  const rotatePiece = (dir: 1 | -1 = 1) => {
+    if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
+    const p = currentPieceRef.current;
+    if (!p) return;
 
-      for (let r = 0; r < shape.length; r++) {
-        for (let c = 0; c < shape[r].length; c++) {
-          if (shape[r][c] !== 0) {
-            const gridX = pieceToLock.x + c;
-            const gridY = pieceToLock.y + r;
-            if (gridY >= 0 && gridY < TOTAL_ROWS && gridX >= 0 && gridX < COLS) {
-              newGrid[gridY][gridX] = {
-                type: pieceToLock.type
-              };
-            }
-          }
-        }
-      }
+    const count = TETROMINOES[p.type].shapes.length;
+    const oldRot = p.rotation;
+    const newRot = (oldRot + dir + count) % count;
+    const kickIdx = dir === 1 ? oldRot : newRot;
+    const kicks = WALL_KICK_TABLE[p.type][kickIdx] || [[0, 0]];
 
-      setCurrentPiece(null);
-      currentPieceRef.current = null;
-      clearLines(newGrid, pieceToLock);
-    },
-    [clearLines]
-  );
-
-  // Move Piece Left or Right
-  const moveHorizontal = useCallback(
-    (dir: -1 | 1) => {
-      if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
-      const piece = currentPieceRef.current;
-      if (!piece) return;
-
-      const newPiece: ActivePiece = { ...piece, x: piece.x + dir };
-      if (isValidPosition(newPiece)) {
-        setCurrentPiece(newPiece);
-        currentPieceRef.current = newPiece;
-        lastActionWasRotateRef.current = false;
-        playTetraSound('move');
+    for (const [ox, oy] of kicks) {
+      const testP = { ...p, rotation: newRot, x: p.x + ox, y: p.y + oy };
+      if (isValidPosition(testP)) {
+        setCurrentPiece(testP);
+        currentPieceRef.current = testP;
+        playSound('rotate');
         if (lockTimerRef.current) {
           clearTimeout(lockTimerRef.current);
           lockTimerRef.current = null;
         }
+        return;
       }
-    },
-    [isValidPosition, playTetraSound]
-  );
+    }
+  };
 
-  // Rotate Piece Clockwise / Counter-Clockwise with SRS Wall Kicks
-  const rotatePiece = useCallback(
-    (dir: 1 | -1 = 1) => {
-      if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
-      const piece = currentPieceRef.current;
-      if (!piece) return;
-
-      const shapesCount = TETROMINOES[piece.type].shapes.length;
-      const oldRotation = piece.rotation;
-      const newRotation = (oldRotation + dir + shapesCount) % shapesCount;
-
-      const kickTableIndex = dir === 1 ? oldRotation : newRotation;
-      const pieceKicks = WALL_KICK_TABLE[piece.type];
-      const kicks = (pieceKicks && pieceKicks[kickTableIndex]) || [[0, 0]];
-
-      for (const [offsetX, offsetY] of kicks) {
-        const kickPiece: ActivePiece = {
-          ...piece,
-          rotation: newRotation,
-          x: piece.x + offsetX,
-          y: piece.y + offsetY
-        };
-
-        if (isValidPosition(kickPiece)) {
-          setCurrentPiece(kickPiece);
-          currentPieceRef.current = kickPiece;
-          lastActionWasRotateRef.current = true;
-          playTetraSound('rotate');
-          if (lockTimerRef.current) {
-            clearTimeout(lockTimerRef.current);
-            lockTimerRef.current = null;
-          }
-          return;
-        }
-      }
-    },
-    [isValidPosition, playTetraSound]
-  );
-
-  // Soft Drop
-  const softDrop = useCallback(() => {
+  const softDrop = () => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
-    const piece = currentPieceRef.current;
-    if (!piece) return;
-
-    const newPiece: ActivePiece = { ...piece, y: piece.y + 1 };
-    if (isValidPosition(newPiece)) {
-      setCurrentPiece(newPiece);
-      currentPieceRef.current = newPiece;
-      lastActionWasRotateRef.current = false;
-      setScore(prev => prev + 1);
+    const p = currentPieceRef.current;
+    if (!p) return;
+    const next = { ...p, y: p.y + 1 };
+    if (isValidPosition(next)) {
+      setCurrentPiece(next);
+      currentPieceRef.current = next;
+      setScore(s => s + 1);
       scoreRef.current += 1;
-      playTetraSound('softDrop');
+      playSound('move');
     } else {
-      lockPiece(piece);
+      lockPiece(p);
     }
-  }, [isValidPosition, lockPiece, playTetraSound]);
+  };
 
-  // Hard Drop Slam with Laser Speed Trail
-  const hardDrop = useCallback(() => {
+  const hardDrop = () => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
-    const piece = currentPieceRef.current;
-    if (!piece) return;
+    const p = currentPieceRef.current;
+    if (!p) return;
+    const gy = getGhostY(p);
+    const dist = gy - p.y;
+    const dropped = { ...p, y: gy };
 
-    const ghostY = getGhostY(piece);
-    const dropDistance = ghostY - piece.y;
-    const droppedPiece: ActivePiece = { ...piece, y: ghostY };
-
-    if (dropDistance > 0) {
-      setScore(prev => prev + dropDistance * 2);
-      scoreRef.current += dropDistance * 2;
-
-      setLaserTrailCol({ x: piece.x, startY: piece.y, endY: ghostY });
-      setTimeout(() => setLaserTrailCol(null), 150);
+    if (dist > 0) {
+      setScore(s => s + dist * 2);
+      scoreRef.current += dist * 2;
     }
+    playSound('drop');
+    lockPiece(dropped);
+  };
 
-    playTetraSound('hardDrop');
-    setScreenShake(true);
-    setTimeout(() => setScreenShake(false), 150);
+  const holdCurrentPiece = () => {
+    if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current || !canHoldRef.current) return;
+    const p = currentPieceRef.current;
+    if (!p) return;
 
-    lockPiece(droppedPiece);
-  }, [getGhostY, lockPiece, playTetraSound]);
-
-  // Hold Piece Vault Swap
-  const holdCurrentPiece = useCallback(() => {
-    if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
-    if (!canHoldRef.current) return;
-    const piece = currentPieceRef.current;
-    if (!piece) return;
-
-    playTetraSound('hold');
-    const currentType = piece.type;
+    playSound('hold');
+    const curType = p.type;
     const prevHold = holdPieceRef.current;
-
-    setHoldPiece(currentType);
-    holdPieceRef.current = currentType;
+    setHoldPiece(curType);
+    holdPieceRef.current = curType;
     setCanHold(false);
     canHoldRef.current = false;
 
-    if (prevHold) {
-      spawnPiece(prevHold);
-    } else {
-      spawnPiece();
-    }
-  }, [spawnPiece, playTetraSound]);
+    if (prevHold) spawnPiece(prevHold);
+    else spawnPiece();
+  };
 
-  // Start / Restart Game
   const startNewGame = useCallback(() => {
-    const emptyGrid = Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null));
-    setGrid(emptyGrid);
-    gridRef.current = emptyGrid;
+    const empty = Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null));
+    setGrid(empty);
+    gridRef.current = empty;
     bagRef.current = [];
     setHoldPiece(null);
     holdPieceRef.current = null;
@@ -1143,824 +559,270 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     isPausedRef.current = false;
     setIsPlaying(true);
     isPlayingRef.current = true;
-    setCallout(null);
 
-    // Initial 3-piece Next Queue
-    const initialQueue = [getNextPieceFromBag(), getNextPieceFromBag(), getNextPieceFromBag()];
-    setNextQueue(initialQueue);
-    nextQueueRef.current = initialQueue;
+    const q = [getNextPiece(), getNextPiece(), getNextPiece()];
+    setNextQueue(q);
+    nextQueueRef.current = q;
+    spawnPiece();
+  }, [getNextPiece, spawnPiece]);
 
-    // Spawn first piece
-    const firstPieceType = initialQueue.shift() || getNextPieceFromBag();
-    initialQueue.push(getNextPieceFromBag());
-    setNextQueue(initialQueue);
-    nextQueueRef.current = initialQueue;
-
-    const shape = TETROMINOES[firstPieceType].shapes[0];
-    const startX = Math.floor((COLS - shape[0].length) / 2);
-    const startY = firstPieceType === 'I' ? -1 : 0;
-    const newPiece: ActivePiece = {
-      type: firstPieceType,
-      rotation: 0,
-      x: startX,
-      y: startY
-    };
-    setCurrentPiece(newPiece);
-    currentPieceRef.current = newPiece;
-
-    playTetraSound('rotate');
-  }, [getNextPieceFromBag, playTetraSound]);
-
-  // Game Gravity Tick Loop with Lock Delay
+  // Gravity Loop
   useEffect(() => {
     if (!isPlaying || isPaused || isGameOver) return;
-
-    const currentSpeed = LEVEL_SPEEDS[Math.min(level - 1, LEVEL_SPEEDS.length - 1)];
-    const interval = setInterval(() => {
-      const piece = currentPieceRef.current;
-      if (!piece) return;
-
-      const nextPiece: ActivePiece = { ...piece, y: piece.y + 1 };
-      if (isValidPosition(nextPiece, gridRef.current)) {
-        setCurrentPiece(nextPiece);
-        currentPieceRef.current = nextPiece;
+    const speed = LEVEL_SPEEDS[Math.min(level - 1, LEVEL_SPEEDS.length - 1)];
+    const timer = setInterval(() => {
+      const p = currentPieceRef.current;
+      if (!p) return;
+      const next = { ...p, y: p.y + 1 };
+      if (isValidPosition(next, gridRef.current)) {
+        setCurrentPiece(next);
+        currentPieceRef.current = next;
         if (lockTimerRef.current) {
           clearTimeout(lockTimerRef.current);
           lockTimerRef.current = null;
         }
       } else {
-        // Piece cannot move down — start lock delay timer if not already started
         if (!lockTimerRef.current) {
           lockTimerRef.current = setTimeout(() => {
-            if (currentPieceRef.current) {
-              lockPiece(currentPieceRef.current);
-            }
+            if (currentPieceRef.current) lockPiece(currentPieceRef.current);
           }, LOCK_DELAY_MS);
         }
       }
-    }, currentSpeed);
-
-    return () => clearInterval(interval);
+    }, speed);
+    return () => clearInterval(timer);
   }, [isPlaying, isPaused, isGameOver, level, isValidPosition, lockPiece]);
 
-  // Synchronized Handlers in Refs
-  const moveHorizontalRef = useRef(moveHorizontal);
-  moveHorizontalRef.current = moveHorizontal;
-  const rotatePieceRef = useRef(rotatePiece);
-  rotatePieceRef.current = rotatePiece;
-  const softDropRef = useRef(softDrop);
-  softDropRef.current = softDrop;
-  const hardDropRef = useRef(hardDrop);
-  hardDropRef.current = hardDrop;
-  const holdCurrentPieceRef = useRef(holdCurrentPiece);
-  holdCurrentPieceRef.current = holdCurrentPiece;
-  const startNewGameRef = useRef(startNewGame);
-  startNewGameRef.current = startNewGame;
-
   // Auto-start on mount
-  const hasStartedRef = useRef(false);
   useEffect(() => {
-    if (!hasStartedRef.current) {
-      hasStartedRef.current = true;
-      startNewGameRef.current();
-    }
-    containerRef.current?.focus();
-  }, []);
+    startNewGame();
+  }, [startNewGame]);
 
-  // Keyboard Capture Listener
+  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        (e.target as HTMLElement)?.isContentEditable
-      ) {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
+      if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) {
+        if (e.key === 'r' || e.key === 'R') startNewGame();
         return;
       }
+      if (e.key === 'ArrowLeft' || e.key === 'a') moveHorizontal(-1);
+      if (e.key === 'ArrowRight' || e.key === 'd') moveHorizontal(1);
+      if (e.key === 'ArrowDown' || e.key === 's') softDrop();
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'x') rotatePiece(1);
+      if (e.key === 'z') rotatePiece(-1);
+      if (e.key === ' ') hardDrop();
+      if (e.key === 'c' || e.key === 'Shift') holdCurrentPiece();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [startNewGame]);
 
-      const key = e.key;
-      const code = e.code;
+  // 60fps HTML5 Canvas Render Loop
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-      const isGameControlKey =
-        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Spacebar'].includes(key) ||
-        ['w', 'a', 's', 'd', 'z', 'x', 'c', 'h', 'j', 'k', 'p', 'r', 'q', 'e', 'W', 'A', 'S', 'D', 'Z', 'X', 'C', 'H', 'J', 'K', 'P', 'R', 'Q', 'E'].includes(key) ||
-        [
-          'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space',
-          'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyX', 'KeyZ', 'KeyC', 'KeyH', 'KeyP', 'KeyR', 'KeyK', 'KeyJ', 'KeyQ', 'KeyE',
-          'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight',
-          'Numpad8', 'Numpad2', 'Numpad4', 'Numpad6', 'Numpad5', 'Numpad0', 'Numpad3', 'Numpad7', 'Enter', 'NumpadEnter'
-        ].includes(code);
+    let active = true;
+    const render = () => {
+      if (!active) return;
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      if (isGameControlKey) {
-        e.preventDefault();
-        e.stopPropagation();
+      // Background Gradient
+      const bg = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      bg.addColorStop(0, '#090014');
+      bg.addColorStop(0.5, '#1B0033');
+      bg.addColorStop(1, '#08000D');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // Cyber Grid
+      ctx.strokeStyle = '#2A1C54';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < CANVAS_WIDTH; x += BLOCK_SIZE) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, CANVAS_HEIGHT); ctx.stroke();
+      }
+      for (let y = 0; y < CANVAS_HEIGHT; y += BLOCK_SIZE) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(CANVAS_WIDTH, y); ctx.stroke();
       }
 
-      // 1. Restart
-      if (
-        key === 'r' || key === 'R' || code === 'KeyR' ||
-        (isGameOverRef.current && (key === 'Enter' || code === 'Enter' || code === 'NumpadEnter' || key === ' ' || code === 'Space'))
-      ) {
-        startNewGameRef.current();
-        return;
-      }
+      // Playfield Border Frame
+      const boardX = (CANVAS_WIDTH - COLS * BLOCK_SIZE) / 2;
+      const boardY = 20;
+      ctx.fillStyle = 'rgba(4, 2, 14, 0.85)';
+      ctx.fillRect(boardX, boardY, COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE);
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(boardX, boardY, COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE);
 
-      // 2. Pause / Resume
-      if (key === 'p' || key === 'P' || code === 'KeyP') {
-        if (isPlayingRef.current && !isGameOverRef.current) {
-          setIsPaused(prev => !prev);
+      // Render Locked Grid
+      const grid = gridRef.current;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = grid[r][c];
+          if (cell) {
+            const def = TETROMINOES[cell.type];
+            const bx = boardX + c * BLOCK_SIZE;
+            const by = boardY + r * BLOCK_SIZE;
+            ctx.fillStyle = def.color;
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(bx + 1, by + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2, 4);
+            ctx.fill();
+            ctx.stroke();
+          }
         }
-        return;
       }
 
-      // 3. Start from splash
-      if (!isPlayingRef.current) {
-        if (
-          key === ' ' || key === 'Enter' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowDown' || key === 'ArrowUp' ||
-          code === 'Space' || code === 'Enter' || code === 'KeyW' || code === 'KeyA' || code === 'KeyS' || code === 'KeyD'
-        ) {
-          startNewGameRef.current();
+      // Render Ghost Piece
+      const cp = currentPieceRef.current;
+      if (cp) {
+        const gy = getGhostY(cp);
+        const shape = TETROMINOES[cp.type].shapes[cp.rotation];
+        const def = TETROMINOES[cp.type];
+        for (let r = 0; r < shape.length; r++) {
+          for (let c = 0; c < shape[r].length; c++) {
+            if (shape[r][c] !== 0) {
+              const gx = cp.x + c;
+              const gRow = gy + r;
+              if (gRow >= 0 && gRow < ROWS) {
+                const bx = boardX + gx * BLOCK_SIZE;
+                const by = boardY + gRow * BLOCK_SIZE;
+                ctx.strokeStyle = def.color;
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.strokeRect(bx + 2, by + 2, BLOCK_SIZE - 4, BLOCK_SIZE - 4);
+                ctx.setLineDash([]);
+              }
+            }
+          }
         }
-        return;
-      }
 
-      // 4. Resume if paused
-      if (isPausedRef.current) {
-        if (
-          key === ' ' || key === 'Enter' || key === 'p' || key === 'P' ||
-          code === 'Space' || code === 'Enter' || code === 'KeyP'
-        ) {
-          setIsPaused(false);
+        // Render Active Piece
+        for (let r = 0; r < shape.length; r++) {
+          for (let c = 0; c < shape[r].length; c++) {
+            if (shape[r][c] !== 0) {
+              const gx = cp.x + c;
+              const gRow = cp.y + r;
+              if (gRow >= 0 && gRow < ROWS) {
+                const bx = boardX + gx * BLOCK_SIZE;
+                const by = boardY + gRow * BLOCK_SIZE;
+                ctx.fillStyle = def.color;
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(bx + 1, by + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2, 4);
+                ctx.fill();
+                ctx.stroke();
+
+                // Specular highlight
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.beginPath();
+                ctx.roundRect(bx + 3, by + 3, BLOCK_SIZE - 10, 6, 2);
+                ctx.fill();
+              }
+            }
+          }
         }
-        return;
       }
 
-      if (isGameOverRef.current) return;
-
-      // 5. Left Movement
-      if (
-        key === 'ArrowLeft' || key === 'a' || key === 'A' ||
-        code === 'ArrowLeft' || code === 'KeyA' || code === 'Numpad4'
-      ) {
-        moveHorizontalRef.current(-1);
-        return;
+      // Render Particles
+      const parts = particlesRef.current;
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life++;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+        if (p.life >= p.maxLife) parts.splice(i, 1);
       }
 
-      // 6. Right Movement
-      if (
-        key === 'ArrowRight' || key === 'd' || key === 'D' ||
-        code === 'ArrowRight' || code === 'KeyD' || code === 'Numpad6'
-      ) {
-        moveHorizontalRef.current(1);
-        return;
+      // Floating Texts
+      const fts = floatingTextsRef.current;
+      for (let i = fts.length - 1; i >= 0; i--) {
+        const ft = fts[i];
+        ft.y += ft.vy; ft.alpha -= 0.02;
+        ctx.fillStyle = ft.color;
+        ctx.globalAlpha = Math.max(0, ft.alpha);
+        ctx.font = 'bold 20px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.globalAlpha = 1;
+        if (ft.alpha <= 0) fts.splice(i, 1);
       }
 
-      // 7. Soft Drop
-      if (
-        key === 'ArrowDown' || key === 's' || key === 'S' ||
-        code === 'ArrowDown' || code === 'KeyS' || code === 'Numpad2'
-      ) {
-        softDropRef.current();
-        return;
-      }
-
-      // 8. Rotate Clockwise
-      if (
-        key === 'ArrowUp' || key === 'w' || key === 'W' || key === 'x' || key === 'X' || key === 'k' || key === 'K' || key === 'e' || key === 'E' ||
-        code === 'ArrowUp' || code === 'KeyW' || code === 'KeyX' || code === 'KeyK' || code === 'KeyE' || code === 'Numpad8' || code === 'Numpad5'
-      ) {
-        rotatePieceRef.current(1);
-        return;
-      }
-
-      // 9. Rotate Counter-Clockwise
-      if (
-        key === 'z' || key === 'Z' || key === 'j' || key === 'J' || key === 'q' || key === 'Q' || key === 'Control' ||
-        code === 'KeyZ' || code === 'KeyJ' || code === 'KeyQ' || code === 'ControlLeft' || code === 'ControlRight' || code === 'Numpad3' || code === 'Numpad7'
-      ) {
-        rotatePieceRef.current(-1);
-        return;
-      }
-
-      // 10. Hard Drop Slam
-      if (key === ' ' || key === 'Spacebar' || code === 'Space' || code === 'Numpad0') {
-        if (!e.repeat) {
-          hardDropRef.current();
-        }
-        return;
-      }
-
-      // 11. Hold Piece
-      if (
-        key === 'c' || key === 'C' || key === 'Shift' || key === 'h' || key === 'H' ||
-        code === 'KeyC' || code === 'ShiftLeft' || code === 'ShiftRight' || code === 'KeyH'
-      ) {
-        if (!e.repeat) {
-          holdCurrentPieceRef.current();
-        }
-        return;
-      }
+      requestAnimationFrame(render);
     };
 
-    window.addEventListener('keydown', handleKeyDown, true);
-    return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, []);
-
-  // Ghost Piece Calculation
-  const ghostY = currentPiece ? getGhostY(currentPiece) : 0;
-  const currentShape = currentPiece ? TETROMINOES[currentPiece.type].shapes[currentPiece.rotation] : null;
+    render();
+    return () => { active = false; };
+  }, [getGhostY]);
 
   return (
-    <div
-      ref={containerRef}
-      tabIndex={0}
-      onClick={() => containerRef.current?.focus()}
-      className={`w-full max-w-4xl mx-auto flex flex-col items-center select-none outline-none ${
-        screenShake ? 'animate-bounce' : ''
-      }`}
-    >
-      {/* Top Retro-Arcade Header Marquee Ribbon */}
-      <div className="w-full flex items-center justify-between gap-1.5 sm:gap-2 p-1.5 sm:p-2.5 mb-1.5 sm:mb-2 rounded-2xl bg-portal-surface border-3 border-black shadow-neo-sm">
-        {/* Left: Game Title Badge & Mode */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 rounded-xl bg-gradient-to-r from-[#FFF570] to-[#FFDE59] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-2 border-black shadow-neo-sm">
-            <Zap className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-black stroke-[2.5]" />
-            <span>TETRA MATRIX</span>
-          </div>
-          <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] font-black text-portal-cyan uppercase">
-            SRS // 7-BAG
-          </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-portal-card border-2 border-black text-[10px] sm:text-[11px] font-black text-portal-yellow uppercase">
-            LVL {level}
-          </span>
-          {backToBack && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-portal-pink border-2 border-black text-[9px] sm:text-[10px] font-black text-white uppercase animate-pulse">
-              <Flame className="w-2.5 h-2.5 fill-white" /> B2B
-            </span>
-          )}
+    <div className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100">
+      {/* Top HUD */}
+      <div className="w-[380px] flex items-center justify-between bg-portal-surface/90 px-3 py-2 rounded-xl border-2 border-black mb-2 shadow-neo-sm">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-portal-cyan" />
+          <span className="text-xs font-black text-portal-neon">LVL {level}</span>
+          <span className="text-sm font-black text-portal-yellow">{score.toLocaleString()} PTS</span>
         </div>
-
-        {/* Right: Audio & Reset Quick Buttons */}
-        <div className="flex items-center gap-1 sm:gap-1.5">
-          <button
-            type="button"
-            onFocus={e => e.currentTarget.blur()}
-            onClick={() => setSoundEnabled(prev => !prev)}
-            className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
-            title={soundEnabled ? 'Mute SFX' : 'Enable SFX'}
-          >
-            {soundEnabled ? <Volume2 className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> : <VolumeX className="w-3.5 sm:w-4 h-3.5 sm:h-4" />}
-          </button>
-          {isPlaying && !isGameOver && (
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => setIsPaused(prev => !prev)}
-              className="p-1 sm:p-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm transition-all"
-              title={isPaused ? 'Resume Game' : 'Pause Game'}
-            >
-              {isPaused ? <Play className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> : <Pause className="w-3.5 sm:w-4 h-3.5 sm:h-4" />}
-            </button>
-          )}
-          <button
-            type="button"
-            onFocus={e => e.currentTarget.blur()}
-            onClick={() => startNewGameRef.current()}
-            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl bg-portal-card hover:bg-portal-yellow text-slate-200 hover:text-black border-2 border-black shadow-neo-sm font-black text-[10px] sm:text-xs uppercase transition-all"
-          >
-            <RotateCcw className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-            <span className="hidden xs:inline">RESET</span>
-          </button>
+        <div className="flex items-center gap-2 bg-black/50 px-2.5 py-1 rounded-lg border border-portal-border">
+          <Zap className="w-3.5 h-3.5 text-portal-gold" />
+          <span className="text-xs font-black text-white">{lines} LINES</span>
         </div>
+        <button
+          onClick={() => setSoundEnabled(!soundEnabled)}
+          className="p-1.5 rounded-lg bg-portal-card text-slate-300 hover:text-white border border-black"
+        >
+          {soundEnabled ? <Volume2 className="w-4 h-4 text-portal-cyan" /> : <VolumeX className="w-4 h-4" />}
+        </button>
       </div>
 
-      {/* Main Arcade Layout: Mobile Flanking Wings (< md), 3-Column on Desktop (md+) */}
-      <div className="w-full flex items-center md:items-start justify-center gap-1.5 sm:gap-3 md:gap-4 lg:gap-6">
-        {/* Mobile Left Wing (< md): 3D HOLD Vault + Score */}
-        <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
-          {/* Mobile Tap-to-Hold Card */}
-          <button
-            type="button"
-            onFocus={e => e.currentTarget.blur()}
-            onPointerDown={e => {
-              e.preventDefault();
-              holdCurrentPieceRef.current();
-            }}
-            className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex flex-col items-center active:scale-95 transition-transform touch-none"
-            title="Tap to Hold Piece"
-          >
-            <div className="flex items-center justify-between w-full">
-              <span className="text-[8px] min-[380px]:text-[9px] font-black text-portal-pink uppercase flex items-center gap-0.5">
-                <Layers className="w-2.5 h-2.5" /> HOLD
-              </span>
-              <span className="text-[7px] font-mono text-black bg-portal-yellow px-1 rounded border border-black font-black">
-                TAP
-              </span>
-            </div>
-            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-[#04020E] border-2 border-black flex items-center justify-center mt-1 overflow-hidden relative">
-              {/* Subtle Matrix Stage Grid */}
-              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:6px_6px] opacity-40 pointer-events-none" />
-              {holdPiece ? (
-                <div
-                  className="grid gap-0.5 p-0.5 relative z-10"
-                  style={{
-                    gridTemplateColumns: `repeat(${TETROMINOES[holdPiece].shapes[0][0].length}, minmax(0, 1fr))`
-                  }}
-                >
-                  {TETROMINOES[holdPiece].shapes[0].map((row, rIdx) =>
-                    row.map((val, cIdx) => (
-                      <div key={`m-hold-${rIdx}-${cIdx}`} className="w-2.5 h-2.5 min-[380px]:w-3 min-[380px]:h-3 flex items-center justify-center">
-                        {val ? <TetraBlock type={holdPiece} /> : <div className="w-full h-full opacity-0" />}
-                      </div>
-                    ))
-                  )}
-                </div>
-              ) : (
-                <span className="text-[8px] text-slate-500 font-bold uppercase z-10">VAULT</span>
-              )}
-            </div>
-          </button>
+      {/* Main 60fps HTML5 Canvas Playfield */}
+      <div className="relative w-[400px] h-[620px] bg-[#08000D] rounded-3xl border-4 border-black shadow-[8px_8px_0px_#000] flex flex-col items-center justify-center overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+          className="cursor-default"
+        />
 
-          {/* Mobile Score Card */}
-          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-center">
-            <span className="text-[7px] min-[380px]:text-[8px] font-black text-slate-400 uppercase block">SCORE</span>
-            <p className="text-xs min-[380px]:text-sm font-black text-portal-yellow truncate leading-tight mt-0.5">
-              {score.toLocaleString()}
-            </p>
+        {/* Floating Side Info & Mobile Touch Controls */}
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-2 bg-portal-surface/90 rounded-xl border-2 border-black shadow-neo-sm">
+          <div className="flex items-center gap-2">
+            <button onClick={() => holdCurrentPiece()} className="px-3 py-1.5 rounded-lg bg-portal-pink text-black font-black text-xs border-2 border-black shadow-sm">
+              HOLD [C]
+            </button>
           </div>
-
-          {/* Mobile Best High Score */}
-          <div className="w-full p-1 rounded-xl bg-portal-card border border-black text-center">
-            <span className="text-[7px] font-black text-slate-400 uppercase block">BEST</span>
-            <p className="text-[9px] min-[380px]:text-[10px] font-black text-portal-cyan truncate leading-tight">
-              {highScore.toLocaleString()}
-            </p>
+          <div className="flex items-center gap-1">
+            <button onClick={() => moveHorizontal(-1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">←</button>
+            <button onClick={() => rotatePiece(1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">⟳</button>
+            <button onClick={() => softDrop()} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">↓</button>
+            <button onClick={() => moveHorizontal(1)} className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center">→</button>
+            <button onClick={() => hardDrop()} className="w-12 h-10 rounded-lg bg-portal-yellow text-black font-black border-2 border-black flex items-center justify-center">DROP</button>
           </div>
         </div>
 
-        {/* Desktop Left Column (md+): 3D HOLD Vault & Tactical Stats */}
-        <div className="hidden md:flex md:w-44 lg:w-48 flex-col gap-3">
-          {/* Hold Piece Vault Card */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo flex flex-col items-center">
-            <div className="flex items-center justify-between w-full mb-1.5">
-              <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
-                <Layers className="w-3.5 h-3.5 text-portal-pink" /> HOLD VAULT
-              </span>
-              <span className="text-[9px] font-mono text-black bg-portal-yellow px-1.5 py-0.5 rounded border border-black font-black">
-                [C]
-              </span>
-            </div>
-            <div className="w-24 h-24 rounded-xl bg-[#04020E] border-2 border-black flex items-center justify-center relative overflow-hidden shadow-inner">
-              {/* Matrix Stage Grid Backdrop */}
-              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:8px_8px] opacity-50 pointer-events-none" />
-              {holdPiece ? (
-                <div
-                  className="grid gap-1 p-1 relative z-10"
-                  style={{
-                    gridTemplateColumns: `repeat(${TETROMINOES[holdPiece].shapes[0][0].length}, minmax(0, 1fr))`
-                  }}
-                >
-                  {TETROMINOES[holdPiece].shapes[0].map((row, rIdx) =>
-                    row.map((val, cIdx) => (
-                      <div key={`hold-${rIdx}-${cIdx}`} className="w-5 h-5 flex items-center justify-center">
-                        {val ? <TetraBlock type={holdPiece} /> : <div className="w-full h-full opacity-0" />}
-                      </div>
-                    ))
-                  )}
-                </div>
-              ) : (
-                <span className="text-[10px] text-slate-500 font-bold uppercase z-10">VAULT EMPTY</span>
-              )}
-            </div>
-          </div>
-
-          {/* Tactical Stats Deck */}
-          <div className="p-3.5 rounded-2xl bg-portal-surface border-3 border-black shadow-neo space-y-2.5">
-            <div>
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">SCORE</span>
-              <p className="text-2xl font-black text-portal-yellow tracking-tight leading-tight">
-                {score.toLocaleString()}
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t-2 border-black/30">
-              <div>
-                <span className="text-[9px] font-black text-slate-400 uppercase">LINES</span>
-                <p className="text-base font-black text-white">{lines}</p>
-              </div>
-              <div>
-                <span className="text-[9px] font-black text-slate-400 uppercase">LEVEL</span>
-                <p className="text-base font-black text-portal-lime">LVL {level}</p>
-              </div>
-            </div>
-            <div className="pt-2 border-t-2 border-black/30">
-              <span className="text-[9px] font-black text-slate-400 uppercase">BEST RECORD</span>
-              <p className="text-sm font-black text-portal-cyan">{highScore.toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Center Column: 3D Neo-Brutalist 10x20 Arcade Matrix Playfield */}
-        <div className="relative flex flex-col items-center">
-          {/* 16-Point Starburst Action Callout Overlay */}
-          {callout && (
-            <div className="absolute -top-10 z-40 pointer-events-none">
-              <StarburstBadge text={callout.text} subtext={callout.subtext} colorGrad={callout.grad} />
-            </div>
-          )}
-
-          {/* Neo-Brutalist Outer Arcade Container (From Thumbnail: theme-frame-bg with 4px border & brutal shadow) */}
-          <div className="relative p-1.5 sm:p-2 md:p-3 rounded-2xl sm:rounded-3xl bg-[#0B081E] border-3 sm:border-4 border-[#FFE600] shadow-[5px_5px_0px_#000000]">
-            {/* Playfield Inner Stage (From Thumbnail: #04020E with 2.5px border) */}
-            <div
-              className="grid gap-[1px] sm:gap-[1.5px] md:gap-[2px] bg-[#04020E] p-1 rounded-xl sm:rounded-2xl border-2 border-black overflow-hidden relative shadow-inner"
-              style={{
-                gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-                width: 'clamp(150px, 44vw, 280px)',
-                height: 'clamp(300px, 88vw, 560px)',
-                maxHeight: 'calc(100dvh - 270px)'
-              }}
-            >
-              {/* Perspective Floor Cyber Grid Lines (From Thumbnail: theme-stage-grid #2A1C54) */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#2A1C54_1px,transparent_1px),linear-gradient(to_bottom,#2A1C54_1px,transparent_1px)] bg-[size:10%_5%] opacity-40 pointer-events-none" />
-
-              {/* Ambient Laser Scanline */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00F0FF]/10 to-transparent h-16 animate-pulse pointer-events-none" />
-
-              {/* Hard Drop Laser Speed Trail FX (From Thumbnail: linearGradient #laserTrail) */}
-              {laserTrailCol && (
-                <div
-                  className="absolute z-20 pointer-events-none transition-opacity duration-150"
-                  style={{
-                    left: `${(laserTrailCol.x / COLS) * 100}%`,
-                    width: `${(1 / COLS) * 100}%`,
-                    top: `${(Math.max(0, laserTrailCol.startY) / TOTAL_ROWS) * 100}%`,
-                    height: `${((laserTrailCol.endY - Math.max(0, laserTrailCol.startY) + 1) / TOTAL_ROWS) * 100}%`
-                  }}
-                >
-                  <div className="w-full h-full bg-gradient-to-b from-transparent via-[#00F0FF]/50 to-[#00F0FF] flex items-center justify-center">
-                    <div className="w-0.5 h-full border-l border-dashed border-white opacity-80" />
-                  </div>
-                </div>
-              )}
-
-              {/* Line Clear Horizontal Energy Laser Waves (From Thumbnail: #cyanGlow + #00F0FF wave) */}
-              {flashRows.map(rowIdx => (
-                <div
-                  key={`laser-wave-${rowIdx}`}
-                  className="absolute left-0 right-0 z-30 pointer-events-none flex items-center justify-center shadow-[0_0_20px_#00F0FF]"
-                  style={{
-                    top: `${(rowIdx / TOTAL_ROWS) * 100}%`,
-                    height: `${(1 / TOTAL_ROWS) * 100}%`
-                  }}
-                >
-                  <div className="w-full h-full bg-[#00F0FF] opacity-90 flex items-center">
-                    <div className="w-full h-1 bg-white shadow-[0_0_10px_#FFF]" />
-                  </div>
-                </div>
-              ))}
-
-              {/* 10x20 Matrix Grid Cells with 3D Extruded Polyomino Rendering */}
-              {grid.map((row, actualY) => {
-                const isFlashing = flashRows.includes(actualY);
-
-                return row.map((cell, cIdx) => {
-                  // Active Falling Piece Cell Check
-                  let isActiveCell = false;
-                  let activePieceType: TetrominoType | null = null;
-
-                  if (currentPiece && currentShape) {
-                    const pieceR = actualY - currentPiece.y;
-                    const pieceC = cIdx - currentPiece.x;
-                    if (
-                      pieceR >= 0 &&
-                      pieceR < currentShape.length &&
-                      pieceC >= 0 &&
-                      pieceC < currentShape[pieceR].length &&
-                      currentShape[pieceR][pieceC] !== 0
-                    ) {
-                      isActiveCell = true;
-                      activePieceType = currentPiece.type;
-                    }
-                  }
-
-                  // Ghost Wireframe Cell Check
-                  let isGhostCell = false;
-                  let ghostPieceType: TetrominoType | null = null;
-                  if (!isActiveCell && currentPiece && currentShape) {
-                    const ghostR = actualY - ghostY;
-                    const ghostC = cIdx - currentPiece.x;
-                    if (
-                      ghostR >= 0 &&
-                      ghostR < currentShape.length &&
-                      ghostC >= 0 &&
-                      ghostC < currentShape[ghostR].length &&
-                      currentShape[ghostR][ghostC] !== 0
-                    ) {
-                      isGhostCell = true;
-                      ghostPieceType = currentPiece.type;
-                    }
-                  }
-
-                  return (
-                    <div
-                      key={`cell-${actualY}-${cIdx}`}
-                      className="relative w-full h-full flex items-center justify-center"
-                    >
-                      {isActiveCell && activePieceType ? (
-                        <TetraBlock type={activePieceType} isFlashing={isFlashing} />
-                      ) : isGhostCell && ghostPieceType ? (
-                        <TetraBlock type={ghostPieceType} isGhost={true} />
-                      ) : cell ? (
-                        <TetraBlock type={cell.type} isFlashing={isFlashing} />
-                      ) : (
-                        <div className="w-full h-full rounded-[2px] bg-slate-950/40 border border-slate-900/30" />
-                      )}
-                    </div>
-                  );
-                });
-              })}
-
-              {/* In-Game Splash Screen Overlay */}
-              {!isPlaying && !isGameOver && (
-                <div className="absolute inset-0 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-3 sm:p-4 text-center z-30">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#FFF570] to-[#FFDE59] border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
-                    <Zap className="w-6 h-6 sm:w-8 sm:h-8 fill-black stroke-[2.5]" />
-                  </div>
-                  <h2 className="text-base sm:text-xl font-black text-white uppercase tracking-tight mb-1">
-                    TETRA MATRIX
-                  </h2>
-                  <p className="text-[10px] sm:text-xs text-slate-300 font-medium mb-3 sm:mb-4 max-w-[160px] sm:max-w-[210px] leading-tight">
-                    Align 3D polyominoes, drop SRS quads, and chain multi-line combos!
-                  </p>
-                  <button
-                    type="button"
-                    onFocus={e => e.currentTarget.blur()}
-                    onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[140px] sm:max-w-[190px] py-2 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7DF9FF] to-[#00D0FF] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all"
-                  >
-                    START MATRIX
-                  </button>
-                </div>
-              )}
-
-              {/* Pause Overlay */}
-              {isPaused && !isGameOver && (
-                <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-3 sm:p-4 text-center z-30">
-                  <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-2 sm:mb-3">
-                    <Pause className="w-6 h-6 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
-                  </div>
-                  <h3 className="text-sm sm:text-lg font-black text-white uppercase mb-2 sm:mb-3">PAUSED</h3>
-                  <button
-                    type="button"
-                    onFocus={e => e.currentTarget.blur()}
-                    onClick={() => setIsPaused(false)}
-                    className="py-1.5 sm:py-2 px-5 rounded-xl bg-portal-yellow text-black font-black text-[11px] sm:text-xs uppercase border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-                  >
-                    RESUME
-                  </button>
-                </div>
-              )}
-
-              {/* Matrix Breach / Game Over Overlay */}
-              {isGameOver && (
-                <div className="absolute inset-0 bg-black/92 backdrop-blur-sm flex flex-col items-center justify-center p-2.5 sm:p-4 text-center z-30 animate-fadeIn">
-                  <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-portal-pink border-3 border-black shadow-neo flex items-center justify-center mb-1.5 sm:mb-2">
-                    <Trophy className="w-6 h-6 sm:w-7 sm:h-7 fill-black stroke-[2.5]" />
-                  </div>
-                  <h2 className="text-sm sm:text-xl font-black text-portal-pink uppercase tracking-tight mb-0.5">
-                    MATRIX BREACH
-                  </h2>
-                  <p className="text-[9px] sm:text-[11px] text-slate-300 font-bold uppercase mb-2">GAME OVER</p>
-                  <div className="w-full max-w-[140px] sm:max-w-[200px] p-2 sm:p-2.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm mb-2.5 sm:mb-3">
-                    <span className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">FINAL SCORE</span>
-                    <p className="text-base sm:text-2xl font-black text-portal-yellow">{score.toLocaleString()}</p>
-                    <span className="text-[9px] sm:text-[10px] font-black text-portal-cyan">{lines} Lines Cleared</span>
-                  </div>
-                  <button
-                    type="button"
-                    onFocus={e => e.currentTarget.blur()}
-                    onClick={() => startNewGameRef.current()}
-                    className="w-full max-w-[140px] sm:max-w-[200px] py-2 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#7DF9FF] to-[#00D0FF] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider border-3 border-black shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-                  >
-                    RETRY MATRIX
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop Right Column (md+): 3D NEXT 3-Piece Queue & Controls Guide */}
-        <div className="hidden md:flex md:w-44 lg:w-48 flex-col gap-3">
-          {/* Next 3-Piece Preview Queue Card */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo flex flex-col items-center">
-            <div className="flex items-center justify-between w-full mb-1.5">
-              <span className="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-portal-cyan" /> NEXT QUEUE
-              </span>
-            </div>
-            <div className="w-full flex flex-col items-center justify-around gap-2 p-2 rounded-xl bg-[#04020E] border-2 border-black shadow-inner">
-              {nextQueue.slice(0, 3).map((nextType, qIdx) => (
-                <div
-                  key={`next-${qIdx}`}
-                  className="w-16 h-14 flex items-center justify-center p-0.5 relative"
-                >
-                  <div
-                    className="grid gap-1 relative z-10"
-                    style={{
-                      gridTemplateColumns: `repeat(${TETROMINOES[nextType].shapes[0][0].length}, minmax(0, 1fr))`
-                    }}
-                  >
-                    {TETROMINOES[nextType].shapes[0].map((row, rIdx) =>
-                      row.map((val, cIdx) => (
-                        <div key={`next-q-${qIdx}-${rIdx}-${cIdx}`} className="w-3.5 h-3.5 flex items-center justify-center">
-                          {val ? <TetraBlock type={nextType} /> : <div className="w-full h-full opacity-0" />}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop Controls Cheat Sheet */}
-          <div className="p-3 rounded-2xl bg-portal-surface border-3 border-black shadow-neo space-y-1.5 text-[10px] font-bold">
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block mb-1">
-              CONTROLS MAP
+        {/* Game Over / Pause Overlays */}
+        {isGameOver && (
+          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-40 space-y-3">
+            <span className="px-3 py-1 rounded-full text-xs font-black uppercase bg-rose-500 text-white border-2 border-black">
+              MATRIX BREACH
             </span>
-            <div className="flex items-center justify-between text-slate-300">
-              <span>MOVE</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-card border border-black rounded text-[9px] font-mono font-black text-white">← → / A D</kbd>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span>ROTATE</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-card border border-black rounded text-[9px] font-mono font-black text-white">↑ / W / Z</kbd>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span>SOFT DROP</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-card border border-black rounded text-[9px] font-mono font-black text-white">↓ / S</kbd>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span>HARD DROP</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-yellow text-black border border-black rounded text-[9px] font-mono font-black">SPACE</kbd>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span>HOLD</span>
-              <kbd className="px-1.5 py-0.5 bg-portal-card border border-black rounded text-[9px] font-mono font-black text-white">C / SHIFT</kbd>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Right Wing (< md): Mini Next Preview + Lines Cleared */}
-        <div className="flex md:hidden flex-col items-center gap-1.5 w-[68px] min-[380px]:w-[78px] shrink-0">
-          {/* Mini Next Preview Card */}
-          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm flex flex-col items-center">
-            <div className="flex items-center justify-between w-full">
-              <span className="text-[8px] min-[380px]:text-[9px] font-black text-portal-cyan uppercase flex items-center gap-0.5">
-                <Sparkles className="w-2.5 h-2.5" /> NEXT
-              </span>
-            </div>
-            <div className="w-11 h-11 min-[380px]:w-13 min-[380px]:h-13 rounded-lg bg-[#04020E] border-2 border-black flex items-center justify-center mt-1 overflow-hidden relative">
-              <div className="absolute inset-0 bg-[radial-gradient(#2A1C54_1px,transparent_1px)] [background-size:6px_6px] opacity-40 pointer-events-none" />
-              {nextQueue[0] ? (
-                <div
-                  className="grid gap-0.5 p-0.5 relative z-10"
-                  style={{
-                    gridTemplateColumns: `repeat(${TETROMINOES[nextQueue[0]].shapes[0][0].length}, minmax(0, 1fr))`
-                  }}
-                >
-                  {TETROMINOES[nextQueue[0]].shapes[0].map((row, rIdx) =>
-                    row.map((val, cIdx) => (
-                      <div key={`m-next-${rIdx}-${cIdx}`} className="w-2.5 h-2.5 min-[380px]:w-3 min-[380px]:h-3 flex items-center justify-center">
-                        {val ? <TetraBlock type={nextQueue[0]} /> : <div className="w-full h-full opacity-0" />}
-                      </div>
-                    ))
-                  )}
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          {/* Mini Lines Cleared Card */}
-          <div className="w-full p-1.5 rounded-xl bg-portal-surface border-2 border-black shadow-neo-sm text-center">
-            <span className="text-[7px] min-[380px]:text-[8px] font-black text-slate-400 uppercase block">LINES</span>
-            <p className="text-xs min-[380px]:text-sm font-black text-white leading-tight mt-0.5">
-              {lines}
-            </p>
-          </div>
-
-          {/* Mini Level Card */}
-          <div className="w-full p-1 rounded-xl bg-portal-card border border-black text-center">
-            <span className="text-[7px] font-black text-slate-400 uppercase block">LEVEL</span>
-            <p className="text-[9px] min-[380px]:text-[10px] font-black text-portal-lime leading-tight">
-              LVL {level}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Touch Controller (Visible on Phones & Tablets, md:hidden) */}
-      <div className="w-full max-w-[420px] mt-1.5 sm:mt-2 p-1.5 rounded-2xl bg-portal-surface border-3 border-black shadow-neo md:hidden select-none touch-none">
-        <div className="grid grid-cols-2 gap-1.5">
-          {/* Left Sub-Pad: Movement & Soft Drop (Left Hand) */}
-          <div className="flex flex-col gap-1 bg-black/40 p-1 rounded-xl border border-black">
-            <div className="grid grid-cols-3 gap-1">
-              <button
-                type="button"
-                onFocus={e => e.currentTarget.blur()}
-                onPointerDown={e => {
-                  e.preventDefault();
-                  moveHorizontalRef.current(-1);
-                }}
-                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
-                aria-label="Move left"
-              >
-                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-              </button>
-              <button
-                type="button"
-                onFocus={e => e.currentTarget.blur()}
-                onPointerDown={e => {
-                  e.preventDefault();
-                  softDropRef.current();
-                }}
-                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
-                aria-label="Soft drop"
-              >
-                <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-              </button>
-              <button
-                type="button"
-                onFocus={e => e.currentTarget.blur()}
-                onPointerDown={e => {
-                  e.preventDefault();
-                  moveHorizontalRef.current(1);
-                }}
-                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex items-center justify-center font-black shadow-neo-sm active:scale-95 transition-transform touch-none"
-                aria-label="Move right"
-              >
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-              </button>
-            </div>
+            <h3 className="text-2xl font-black text-white">Game Over</h3>
+            <div className="text-3xl font-black text-portal-yellow">{score.toLocaleString()} PTS</div>
             <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onPointerDown={e => {
-                e.preventDefault();
-                holdCurrentPieceRef.current();
-              }}
-              className="h-7 sm:h-8 rounded-lg bg-portal-pink active:bg-white text-black font-black text-[9px] sm:text-[10px] border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
+              onClick={() => startNewGame()}
+              className="py-3 px-8 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm active:scale-95 transition-all"
             >
-              <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
-              <span>HOLD PIECE</span>
+              RETRY MATRIX
             </button>
           </div>
-
-          {/* Right Sub-Pad: Rotations & Hard Drop Slam (Right Hand) */}
-          <div className="flex flex-col gap-1 bg-black/40 p-1 rounded-xl border border-black">
-            <div className="grid grid-cols-2 gap-1">
-              <button
-                type="button"
-                onFocus={e => e.currentTarget.blur()}
-                onPointerDown={e => {
-                  e.preventDefault();
-                  rotatePieceRef.current(-1);
-                }}
-                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-cyan text-white active:text-black border-2 border-black flex flex-col items-center justify-center font-black text-[8px] sm:text-[9px] shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
-                aria-label="Rotate Counter-Clockwise"
-              >
-                <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-                <span>⟲ ROTATE</span>
-              </button>
-              <button
-                type="button"
-                onFocus={e => e.currentTarget.blur()}
-                onPointerDown={e => {
-                  e.preventDefault();
-                  rotatePieceRef.current(1);
-                }}
-                className="h-10 sm:h-11 rounded-lg bg-portal-card active:bg-portal-yellow text-white active:text-black border-2 border-black flex flex-col items-center justify-center font-black text-[8px] sm:text-[9px] shadow-neo-sm active:scale-95 transition-transform uppercase touch-none"
-                aria-label="Rotate Clockwise"
-              >
-                <RotateCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-                <span>ROTATE ⟳</span>
-              </button>
-            </div>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onPointerDown={e => {
-                e.preventDefault();
-                hardDropRef.current();
-              }}
-              className="h-7 sm:h-8 rounded-lg bg-gradient-to-r from-[#FFF570] to-[#FFDE59] active:bg-white text-black font-black text-[10px] sm:text-xs border-2 border-black flex items-center justify-center gap-1 shadow-neo-sm active:scale-95 transition-transform uppercase tracking-wider touch-none"
-            >
-              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black stroke-[2.5]" />
-              <span>HARD DROP SLAM</span>
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
