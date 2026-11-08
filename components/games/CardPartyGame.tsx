@@ -42,92 +42,13 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
-function CardBack({ label = 'UNO' }: { label?: string }) {
+function CardBack({ label = 'CARDS' }: { label?: string }) {
   return (
-    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-xl bg-[#111622] border-2 border-black shadow-md flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
-      <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/10 pointer-events-none" />
-      <div className="w-full h-full rounded-lg bg-[#181d29] border border-white/20 flex flex-col items-center justify-center p-0.5 relative">
-        <div className="w-6 h-9 sm:w-7 sm:h-11 rounded-md bg-rose-600 border border-black/80 flex items-center justify-center transform -rotate-12 shadow-sm">
-          <span className="text-[7px] sm:text-[8px] font-black text-yellow-300 uppercase tracking-tighter transform rotate-12 drop-shadow-[0_1px_1px_rgba(0,0,0,0.9)]">
-            {label}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function GameCard({ card, onClick, playable }: { card: Card; onClick?: () => void; playable?: boolean }) {
-  const colorObj = COLOR_CLASSES[card.color];
-  const symbol = card.type === 'number'
-    ? card.value
-    : card.type === 'skip'
-    ? '🚫'
-    : card.type === 'reverse'
-    ? '🔄'
-    : card.type === 'draw_two'
-    ? '+2'
-    : card.type === 'wild_draw_four'
-    ? '+4'
-    : '★';
-
-  const textColorClass = card.color === 'yellow'
-    ? 'text-amber-900'
-    : card.color === 'red'
-    ? 'text-[#e53935]'
-    : card.color === 'blue'
-    ? 'text-[#1e88e5]'
-    : card.color === 'green'
-    ? 'text-[#43a047]'
-    : 'text-purple-700';
-
-  const isWild = card.color === 'wild';
-
-  return (
-    <div
-      onClick={onClick}
-      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-3xl border-4 border-black p-2 flex flex-col justify-between relative shadow-neo-sm transition-all duration-200 cursor-pointer overflow-hidden ${
-        isWild ? 'bg-gradient-to-br from-red-600 via-blue-600 to-amber-400' : colorObj.bg
-      } ${
-        playable ? 'ring-4 ring-amber-400 hover:-translate-y-4 animate-pulse' : 'hover:-translate-y-2'
-      }`}
-      style={{
-        boxShadow: '4px 4px 0px #000000',
-      }}
-    >
-      {/* Glossy Plastic Finish Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-black/30 pointer-events-none" />
-
-      {/* Crisp White Inner Border Outline */}
-      <div className="absolute inset-1.5 border-2 border-white/80 rounded-2xl pointer-events-none" />
-
-      {/* Top-Left Corner Index Marker */}
-      <div className="relative z-10 text-white font-black text-xs sm:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-        {card.type === 'number' ? card.value : card.type === 'wild_draw_four' ? '+4' : card.type === 'draw_two' ? '+2' : card.type[0].toUpperCase()}
-      </div>
-
-      {/* Classic Tilted White Oval / Pill in Center */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className={`w-14 h-20 sm:w-18 sm:h-26 bg-white rounded-[50%] border-3 border-black transform -rotate-12 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.15),0_4px_8px_rgba(0,0,0,0.3)] ${isWild ? 'overflow-hidden' : ''}`}>
-          {isWild ? (
-            <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 opacity-90">
-              <div className="bg-[#e53935]" />
-              <div className="bg-[#1e88e5]" />
-              <div className="bg-[#43a047]" />
-              <div className="bg-[#fdd835]" />
-            </div>
-          ) : null}
-          <div className="relative z-10 flex items-center justify-center">
-            <span className={`text-2xl sm:text-4xl font-black ${isWild ? 'text-black drop-shadow-[0_2px_2px_rgba(255,255,255,0.9)]' : textColorClass} transform rotate-12 drop-shadow-sm`}>
-              {symbol}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom-Right Corner Index Marker */}
-      <div className="relative z-10 text-white font-black text-xs sm:text-sm self-end rotate-180 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-        {card.type === 'number' ? card.value : card.type === 'wild_draw_four' ? '+4' : card.type === 'draw_two' ? '+2' : card.type[0].toUpperCase()}
+    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-[#252a34] border-2 border-black shadow-sm flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
+      <div className="w-full h-full rounded bg-[#1b1f28] border border-white/15 flex items-center justify-center p-0.5">
+        <span className="text-[7px] sm:text-[8px] font-black text-white uppercase tracking-tighter text-center leading-tight">
+          {label}
+        </span>
       </div>
     </div>
   );
@@ -519,8 +440,31 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {/* Flying Card Animation Overlay */}
       {flyingCard && (
         <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
-          <div className={`${flyingCard.type === 'deal' ? 'animate-card-deal' : 'animate-card-play'}`}>
-            <GameCard card={flyingCard.card} />
+          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-4 border-black shadow-neo-lg flex flex-col justify-between p-2.5 bg-white ${
+            COLOR_CLASSES[flyingCard.card.color].bg
+          } ${flyingCard.type === 'deal' ? 'animate-card-deal' : 'animate-card-play'}`}>
+            <div className="flex justify-between items-start text-white text-[12px] font-black">
+              <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
+              <span>{flyingCard.card.color === 'wild' ? '🌈' : ''}</span>
+            </div>
+            <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+              <span className={`text-xl sm:text-2xl font-black ${flyingCard.card.color === 'yellow' ? 'text-amber-950' : flyingCard.card.color === 'red' ? 'text-rose-600' : flyingCard.card.color === 'blue' ? 'text-cyan-600' : flyingCard.card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                {flyingCard.card.type === 'number'
+                  ? flyingCard.card.value
+                  : flyingCard.card.type === 'skip'
+                  ? '🚫'
+                  : flyingCard.card.type === 'reverse'
+                  ? '🔄'
+                  : flyingCard.card.type === 'draw_two'
+                  ? '+2'
+                  : flyingCard.card.type === 'wild_draw_four'
+                  ? '+4'
+                  : '★'}
+              </span>
+            </div>
+            <div className="text-[9px] font-black text-white text-right">
+              {flyingCard.card.color[0]?.toUpperCase()}
+            </div>
           </div>
         </div>
       )}
@@ -644,19 +588,18 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   onClick={() => {
                     if (turnIndex === 0 && !aiThinking && !isDealing) handlePlayerDraw();
                   }}
-                  className="w-18 h-26 sm:w-22 sm:h-32 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
-                  style={{ boxShadow: '4px 4px 0px #000000' }}
+                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-4 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
                   title="Click to Draw"
                 >
-                  <div className="absolute inset-1.5 border-2 border-dashed border-white/30 rounded-2xl flex flex-col items-center justify-center p-1 text-center">
-                    <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
+                  <div className="absolute inset-1.5 border-2 border-dashed border-white/30 rounded-xl flex flex-col items-center justify-center p-1 text-center">
+                    <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
                     <span className="text-2xl my-1 group-hover:scale-110 transition-transform">🎴</span>
                     <span className="text-[9px] font-black text-white">({deck.length})</span>
                   </div>
                 </div>
 
                 {/* Discard Pile with Randomized Rotations & Offsets */}
-                <div className="relative w-18 h-26 sm:w-22 sm:h-32">
+                <div className="relative w-20 h-28 sm:w-24 sm:h-34">
                   {discardPile.map((card, idx) => {
                     const isTop = idx === discardPile.length - 1;
                     const rot = card.rotation || 0;
@@ -670,9 +613,35 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                           transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
                           zIndex: idx,
                         }}
-                        className={`absolute inset-0 ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
+                        className={`absolute inset-0 rounded-2xl border-4 border-black flex flex-col justify-between p-2.5 shadow-neo-sm ${
+                          COLOR_CLASSES[card.color].bg
+                        } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                       >
-                        <GameCard card={card} />
+                        <div className="flex justify-between items-start text-white text-[11px] font-black">
+                          <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                          <span>{card.color === 'wild' ? '🌈' : ''}</span>
+                        </div>
+
+                        {/* Distinct White Inner Box */}
+                        <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                          <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                            {card.type === 'number'
+                              ? card.value
+                              : card.type === 'skip'
+                              ? '🚫'
+                              : card.type === 'reverse'
+                              ? '🔄'
+                              : card.type === 'draw_two'
+                              ? '+2'
+                              : card.type === 'wild_draw_four'
+                              ? '+4'
+                              : '★'}
+                          </span>
+                        </div>
+
+                        <div className="text-[9px] font-black text-white text-right">
+                          {card.color[0]?.toUpperCase()}
+                        </div>
                       </div>
                     );
                   })}
@@ -736,7 +705,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
             {/* Fanned Overlapping Horizontal Hand Layout */}
             <div className="w-full flex items-center justify-center overflow-x-auto pb-3 pt-2 px-2 custom-scrollbar">
-              <div className="flex items-center -space-x-10 sm:-space-x-14 hover:space-x-2 transition-all duration-300 py-2">
+              <div className="flex items-center -space-x-8 sm:-space-x-12 hover:space-x-1 transition-all duration-300 py-2">
                 {players[0].cards.map((card, idx, arr) => {
                   const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
                   const total = arr.length;
@@ -745,16 +714,41 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   return (
                     <div
                       key={card.id}
+                      onClick={() => handlePlayerCardClick(card)}
                       style={{
                         transform: `rotate(${rot}deg)`,
                       }}
-                      className="transform origin-bottom transition-all duration-300 hover:-translate-y-8 hover:scale-110 hover:rotate-0 hover:z-40"
+                      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-2xl border-4 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-300 cursor-pointer origin-bottom ${
+                        COLOR_CLASSES[card.color].bg
+                      } hover:-translate-y-8 hover:scale-110 hover:rotate-0 hover:z-40 shadow-neo-sm ${
+                        playable ? 'ring-4 ring-amber-400 animate-pulse' : 'opacity-90'
+                      }`}
                     >
-                      <GameCard
-                        card={card}
-                        playable={playable}
-                        onClick={() => handlePlayerCardClick(card)}
-                      />
+                      <div className="flex justify-between items-start text-white text-[10px] font-black">
+                        <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                        <span>{card.color === 'wild' ? '🌈' : ''}</span>
+                      </div>
+
+                      {/* White Inner Box */}
+                      <div className="w-10 h-12 sm:w-13 sm:h-16 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                        <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                          {card.type === 'number'
+                            ? card.value
+                            : card.type === 'skip'
+                            ? '🚫'
+                            : card.type === 'reverse'
+                            ? '🔄'
+                            : card.type === 'draw_two'
+                            ? '+2'
+                            : card.type === 'wild_draw_four'
+                            ? '+4'
+                            : '★'}
+                        </span>
+                      </div>
+
+                      <div className="text-[9px] font-black text-white text-right">
+                        {card.color[0]?.toUpperCase()}
+                      </div>
                     </div>
                   );
                 })}
