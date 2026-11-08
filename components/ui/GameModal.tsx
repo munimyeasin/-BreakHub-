@@ -913,7 +913,7 @@ export default function GameModal({
                 <CyberSlicerGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
-              {(game.id === 'g_shooter_07' || game.slug === 'neon-starfighter') && (
+              {(game.id === 'g_shooter_07' || game.slug === 'starfighter' || game.slug === 'neon-starfighter') && (
                 <NeonStarfighterGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
 
