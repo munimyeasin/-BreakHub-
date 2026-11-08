@@ -45,6 +45,7 @@ import { gamification, GamificationState, LevelInfo, getDefaultState } from '@/l
 import { Game } from '@/lib/types';
 import { INITIAL_GAMES } from '@/lib/gamesData';
 import { getAvatarUrl } from '@/lib/avatar';
+import YouTubeStyleLoader from '@/components/ui/YouTubeStyleLoader';
 
 const QUICK_CATEGORIES = [
   { id: 'ALL', label: 'All Games', icon: Sparkles, color: 'bg-portal-cyan text-black' },
@@ -66,6 +67,7 @@ export default function ArcadePortalDashboard() {
   const [hypedGames, setHypedGames] = useState<string[]>([]);
   const [userRatings, setUserRatings] = useState<Record<string, number>>({});
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isLoadingScreen, setIsLoadingScreen] = useState(true);
 
   // Search input refs for global shortcut focus
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
@@ -612,6 +614,7 @@ export default function ArcadePortalDashboard() {
 
   return (
     <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black overflow-x-hidden box-border">
+      {isLoadingScreen && <YouTubeStyleLoader onLoaded={() => setIsLoadingScreen(false)} />}
 
       {/* 1. STICKY APP HEADER */}
       <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">
