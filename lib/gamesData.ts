@@ -6,9 +6,10 @@ export const INITIAL_GAMES: Game[] = [
     slug: 'dungeon-slice',
     title: 'Dungeon Slice',
     category: 'ACTION',
-    thumbnail_url: '/thumbnails/cyber-slicer.svg',
+    thumbnail_url: '/thumbnails/dungeon-slice.svg',
     description: 'Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.',
-    status: 'active',
+    status: 'coming_soon',
+    hype_count: 34,
     featured: true
   },
   {
