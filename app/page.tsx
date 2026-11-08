@@ -93,6 +93,7 @@ export default function ArcadePortalDashboard() {
   const [gameState, setGameState] = useState<GamificationState>(() => getDefaultState());
 
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isApiLoading, setIsApiLoading] = useState(true);
 
   // Fetch games from /api/games on mount to respect live database statuses
   useEffect(() => {
@@ -103,7 +104,8 @@ export default function ArcadePortalDashboard() {
           setGames(data.games);
         }
       })
-      .catch(err => console.error('Failed to fetch games:', err));
+      .catch(err => console.error('Failed to fetch games:', err))
+      .finally(() => setIsApiLoading(false));
   }, []);
 
   // Global Keyboard Shortcuts (⌘K, Ctrl+K, /, Escape)
@@ -614,7 +616,12 @@ export default function ArcadePortalDashboard() {
 
   return (
     <div className="min-h-screen bg-portal-bg text-slate-100 font-sans antialiased selection:bg-portal-cyan selection:text-black overflow-x-hidden box-border">
-      {isLoadingScreen && <YouTubeStyleLoader onLoaded={() => setIsLoadingScreen(false)} />}
+      {isLoadingScreen && (
+        <YouTubeStyleLoader
+          isLoadingData={isApiLoading}
+          onLoaded={() => setIsLoadingScreen(false)}
+        />
+      )}
 
       {/* 1. STICKY APP HEADER */}
       <header className="sticky top-0 z-30 bg-portal-surface border-b-3 sm:border-b-4 border-black px-3 sm:px-6 py-2 sm:py-2.5 select-none shadow-neo-sm">

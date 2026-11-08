@@ -3,37 +3,51 @@
 import React, { useState, useEffect } from 'react';
 import { Gamepad2, Zap } from 'lucide-react';
 
-export default function YouTubeStyleLoader({ onLoaded }: { onLoaded?: () => void }) {
-  const [progress, setProgress] = useState(0);
+interface YouTubeStyleLoaderProps {
+  onLoaded?: () => void;
+  isLoadingData?: boolean;
+}
+
+export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: YouTubeStyleLoaderProps) {
+  const [progress, setProgress] = useState(10);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Quick, smooth YouTube style progress bar simulation
-    // Finishes within 600-800ms so it never ruins user experience.
-    let current = 0;
-    const interval = setInterval(() => {
-      current += Math.floor(Math.random() * 25) + 15;
-      if (current >= 100) {
-        current = 100;
-        setProgress(100);
-        clearInterval(interval);
+    let timer: NodeJS.Timeout;
 
-        // Brief pause at 100% before fade out
-        setTimeout(() => {
-          setIsFadingOut(true);
-          setTimeout(() => {
-            setIsComplete(true);
-            onLoaded?.();
-          }, 300);
-        }, 200);
-      } else {
-        setProgress(current);
-      }
-    }, 80);
+    // Smooth progress simulation that pauses slightly while waiting for real assets/API,
+    // then rushes to 100% once ready.
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (isLoadingData) {
+          // Slow down around 75% if data/assets are still loading
+          if (prev >= 75) return 75;
+        }
+        if (prev >= 95) {
+          return 95;
+        }
+        return prev + Math.floor(Math.random() * 15) + 5;
+      });
+    }, 60);
 
     return () => clearInterval(interval);
-  }, [onLoaded]);
+  }, [isLoadingData]);
+
+  // When data finishes loading or minimum time elapses, complete to 100%
+  useEffect(() => {
+    if (!isLoadingData && progress < 100) {
+      setProgress(100);
+      timer = setTimeout(() => {
+        setIsFadingOut(true);
+        setTimeout(() => {
+          setIsComplete(true);
+          onLoaded?.();
+        }, 300);
+      }, 200);
+    }
+    return () => clearTimeout(timer);
+  }, [isLoadingData, progress, onLoaded]);
 
   if (isComplete) return null;
 
@@ -43,7 +57,7 @@ export default function YouTubeStyleLoader({ onLoaded }: { onLoaded?: () => void
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      {/* YouTube-style red / cyber-cyan loading bar at top of viewport */}
+      {/* YouTube-style cyber-cyan/pink loading bar at top of viewport */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-black/40 overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-portal-cyan via-portal-pink to-portal-yellow transition-all duration-150 ease-out shadow-[0_0_12px_#00F0FF]"
@@ -60,7 +74,7 @@ export default function YouTubeStyleLoader({ onLoaded }: { onLoaded?: () => void
         </h1>
         <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-portal-yellow bg-portal-surface px-4 py-1.5 rounded-xl border-2 border-black shadow-neo-sm">
           <Zap className="w-3.5 h-3.5 text-portal-cyan stroke-[2.5]" />
-          <span>Loading Arcade Assets ({progress}%)</span>
+          <span>{progress < 100 ? `Loading Arcade Assets (${progress}%)` : 'Ready!'}</span>
         </div>
       </div>
     </div>
