@@ -241,5 +241,15 @@ export const INITIAL_GAMES: Game[] = [
     thumbnail_url: '/thumbnails/paper-io.svg',
     description: 'Conquer the arcade grid! Expand your territory, encircle massive zones, and slice enemy trails before they cut yours.',
     status: 'active'
+  },
+  {
+    id: 'g_cardparty_30',
+    slug: 'card-party',
+    title: 'Card Party',
+    category: 'CARD',
+    thumbnail_url: '/thumbnails/quantum-xo.svg',
+    description: 'Classic UNO-inspired card showdown! Match colors and numbers, unleash Skip, Reverse, Draw Two (+2), Wild, and Wild Draw Four (+4) against AI opponents Lea, Marie, and Kate.',
+    status: 'active',
+    featured: true
   }
 ];
