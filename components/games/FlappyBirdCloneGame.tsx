@@ -229,15 +229,26 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     return () => clearInterval(id);
   }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
-  // Initialize canvas backing store and CSS size explicitly for mobile high-DPI crispness without splitting
+  // Initialize canvas backing store and scale/resize handling for high DPR mobile viewports
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1;
-    const displayWidth = canvas.clientWidth || W;
-    const displayHeight = canvas.clientHeight || H;
-    canvas.width = Math.round(displayWidth * dpr);
-    canvas.height = Math.round(displayHeight * dpr);
+
+    const handleResize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const displayWidth = canvas.clientWidth || W;
+      const displayHeight = canvas.clientHeight || H;
+      canvas.width = Math.round(displayWidth * dpr);
+      canvas.height = Math.round(displayHeight * dpr);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
   }, [W, H]);
 
   // Game loop
@@ -261,7 +272,8 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       const scaleY = renderH / H;
 
       ctx.save();
-      ctx.clearRect(0, 0, renderW, renderH);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.scale(dpr * scaleX, dpr * scaleY);
 
       if (started && !isOver) {
@@ -684,8 +696,6 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       <canvas
         ref={canvasRef}
         onPointerDown={handlePointerDown}
-        width={W}
-        height={H}
         style={{ width: '100%', height: '100%', display: 'block', touchAction: 'none', objectFit: 'contain' }}
       />
 
