@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, ArrowRight, Shield, Zap, RefreshCw } from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, User, Play, ArrowRight, Shield, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 type CardColor = 'red' | 'blue' | 'green' | 'yellow' | 'wild';
@@ -11,7 +11,10 @@ interface Card {
   id: string;
   color: CardColor;
   type: CardType;
-  value?: number; // 0-9 for number cards
+  value?: number;
+  rotation?: number; // randomized tilt for discard stack
+  offsetX?: number;
+  offsetY?: number;
 }
 
 interface Player {
@@ -31,12 +34,12 @@ interface CardPartyProps {
 
 const COLORS: CardColor[] = ['red', 'blue', 'green', 'yellow'];
 
-const COLOR_CLASSES: Record<CardColor, { bg: string; border: string; text: string; glow: string; hex: string }> = {
-  red: { bg: 'bg-[#e53935]', border: 'border-black', text: 'text-white', glow: 'shadow-[0_0_15px_rgba(229,57,53,0.5)]', hex: '#e53935' },
-  blue: { bg: 'bg-[#1e88e5]', border: 'border-black', text: 'text-white', glow: 'shadow-[0_0_15px_rgba(30,136,229,0.5)]', hex: '#1e88e5' },
-  green: { bg: 'bg-[#43a047]', border: 'border-black', text: 'text-white', glow: 'shadow-[0_0_15px_rgba(67,160,71,0.5)]', hex: '#43a047' },
-  yellow: { bg: 'bg-[#fdd835]', border: 'border-black', text: 'text-black', glow: 'shadow-[0_0_15px_rgba(253,216,53,0.5)]', hex: '#fdd835' },
-  wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', border: 'border-black', text: 'text-white', glow: 'shadow-[0_0_20px_rgba(168,85,247,0.6)]', hex: '#8e24aa' },
+const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }> = {
+  red: { bg: 'bg-[#e53935]', text: 'text-rose-600', hex: '#e53935' },
+  blue: { bg: 'bg-[#1e88e5]', text: 'text-cyan-600', hex: '#1e88e5' },
+  green: { bg: 'bg-[#43a047]', text: 'text-emerald-600', hex: '#43a047' },
+  yellow: { bg: 'bg-[#fdd835]', text: 'text-amber-950', hex: '#fdd835' },
+  wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
 export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }: CardPartyProps) {
@@ -58,6 +61,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   const [pendingWildCard, setPendingWildCard] = useState<Card | null>(null);
   const [muted, setMuted] = useState(false);
   const [aiThinking, setAiThinking] = useState(false);
+  const [animatingCard, setAnimatingCard] = useState<{ type: 'deal' | 'draw' | 'play'; from: string; to: string } | null>(null);
 
   // Sound Synthesizer via Web Audio API
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -128,7 +132,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     } catch {}
   }, [muted]);
 
-  // Generate Full 108-Card UNO Deck
+  // Generate Full 108-Card UNO Deck with random offsets for discard stack
   const generateDeck = (): Card[] => {
     const newDeck: Card[] = [];
     let idCounter = 1;
@@ -150,6 +154,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       newDeck.push({ id: `card_${idCounter++}`, color: 'wild', type: 'wild_draw_four' });
     }
 
+    // Shuffle Deck
     for (let i = newDeck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
@@ -176,6 +181,10 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       freshDeck.unshift(topCard);
       topCard = freshDeck.pop()!;
     }
+
+    topCard.rotation = 0;
+    topCard.offsetX = 0;
+    topCard.offsetY = 0;
 
     setDeck(freshDeck);
     setDiscardPile([topCard]);
@@ -237,13 +246,21 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       setWinner(player);
       setGameState('gameover');
       playSfx('win');
-      confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
-      const finalScore = player.isAI ? 500 : 2500;
+      confetti({ particleCount: 180, spread: 100, origin: { y: 0.5 } });
+      const finalScore = player.isAI ? 500 : 3000;
       onGameOver?.(finalScore);
       return;
     }
 
-    const newDiscard = [...discardPile, card];
+    // Assign slight random tilt and offset for stacked discard pile realism
+    const placedCard: Card = {
+      ...card,
+      rotation: Math.floor(Math.random() * 16) - 8, // -8deg to +8deg
+      offsetX: Math.floor(Math.random() * 8) - 4,
+      offsetY: Math.floor(Math.random() * 6) - 3,
+    };
+
+    const newDiscard = [...discardPile, placedCard];
     setDiscardPile(newDiscard);
 
     let nextColor = card.color === 'wild' ? (chosenColor || 'red') : card.color;
@@ -260,7 +277,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       const newDir = (direction * -1) as 1 | -1;
       setDirection(newDir);
       step = newDir;
-      setStatusMessage(`${player.name} played REVERSE! Direction flipped.`);
+      setStatusMessage(`${player.name} played REVERSE! Turn flow flipped.`);
     } else if (card.type === 'draw_two') {
       cardsToDraw = 2;
       skipNext = true;
@@ -318,7 +335,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     setTurnIndex((turnIndex + direction + players.length) % players.length);
   };
 
-  // AI Turn Logic
+  // AI Turn Logic with smoother delays
   useEffect(() => {
     if (gameState !== 'playing' || winner) return;
     const currentPlayer = players[turnIndex];
@@ -358,7 +375,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   chosenColor = COLORS[Math.floor(Math.random() * COLORS.length)];
                 }
                 playCard(turnIndex, drawn[0], chosenColor);
-              }, 500);
+              }, 400);
               setAiThinking(false);
               return;
             }
@@ -366,27 +383,25 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           setTurnIndex((turnIndex + direction + players.length) % players.length);
         }
         setAiThinking(false);
-      }, 1000);
+      }, 900);
 
       return () => clearTimeout(timer);
     }
   }, [turnIndex, gameState, players, winner, direction]);
 
-  const topDiscard = discardPile[discardPile.length - 1];
-
   return (
-    <div className="w-full h-full min-h-[620px] flex flex-col items-center justify-between bg-[#14100e] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
-      {/* Felt Table Texture Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#261c16_1px,transparent_1px)] [background-size:28px_28px] opacity-70 pointer-events-none" />
+    <div className="w-full h-full min-h-[640px] flex flex-col items-center justify-between bg-[#120d0a] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
+      {/* Warm Leather Felt Texture Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(#2c1e16_1px,transparent_1px)] [background-size:24px_24px] opacity-75 pointer-events-none" />
 
-      {/* Top HUD Bar */}
-      <div className="w-full flex items-center justify-between bg-black/75 backdrop-blur-md border-3 border-black rounded-2xl px-4 py-2.5 relative z-20 shadow-neo-sm">
+      {/* Top HUD Header */}
+      <div className="w-full flex items-center justify-between bg-black/80 backdrop-blur-md border-3 border-black rounded-2xl px-4 py-2.5 relative z-20 shadow-neo-sm">
         <div className="flex items-center gap-2">
           <span className="text-xs sm:text-sm font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-amber-400" /> CARD PARTY
           </span>
-          <span className="hidden sm:inline px-2 py-0.5 rounded-lg bg-cyan-500 text-black font-black text-[10px] uppercase border border-black">
-            UNO ROUND TABLE
+          <span className="hidden sm:inline px-2 py-0.5 rounded-lg bg-amber-500 text-black font-black text-[10px] uppercase border border-black">
+            UNO
           </span>
         </div>
         <div className="text-xs sm:text-sm font-black text-white bg-black/90 px-4 py-1.5 rounded-xl border-2 border-white/20 shadow-inner">
@@ -413,137 +428,152 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             Card Party
           </h2>
           <p className="text-sm sm:text-base text-amber-200/80 max-w-md mb-8 font-medium">
-            Classic UNO round-table showdown. Play against Lea (Top), Marie (Left), and Kate (Right) with wild cards and directional flow!
+            Classic UNO round-table showdown against Lea (Top), Marie (Left), and Kate (Right). Thick tactile cards, dynamic action stacks, and smooth circular flow!
           </p>
           <button
             onClick={startNewGame}
             className="px-8 py-4 rounded-2xl bg-amber-400 text-black font-black uppercase text-base border-4 border-black shadow-neo-lg hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center gap-3"
           >
-            <Play className="w-5 h-5 fill-current" /> Start Round Table
+            <Play className="w-5 h-5 fill-current" /> Start Card Party
           </button>
         </div>
       )}
 
-      {/* Playing State: Round Table Layout */}
+      {/* Playing State: Warm Brown Circular Felt Table */}
       {gameState === 'playing' && (
-        <div className="flex-1 w-full max-w-5xl flex flex-col justify-between items-center relative z-10 py-3 px-2">
+        <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-3 px-2">
 
-          {/* TOP AI: LEA */}
+          {/* TOP AI OPPONENT: LEA */}
           {(() => {
             const lea = players.find(p => p.id === 'lea')!;
             const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
             return (
               <div className={`flex flex-col items-center transition-all ${isTurn ? 'scale-105' : ''}`}>
-                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/80 text-white'}`}>
-                  <span className="text-lg">{lea.avatar}</span>
+                <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/85 text-white'}`}>
+                  <span className="text-xl">{lea.avatar}</span>
                   <span className="text-xs font-black uppercase">{lea.name}</span>
-                  <span className="px-1.5 py-0.5 bg-black/40 rounded text-[10px] font-black">{lea.cards.length} cards</span>
+                  <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black">{lea.cards.length} cards</span>
                 </div>
-                {/* AI Stacked Card Backs */}
-                <div className="flex -space-x-4 mt-1.5">
+                {/* Stacked Card Backs */}
+                <div className="flex -space-x-3.5 mt-1.5">
                   {lea.cards.map((_, i) => (
-                    <div key={i} className="w-8 h-12 rounded-lg bg-gradient-to-br from-indigo-900 to-slate-900 border border-black shadow-md transform hover:-translate-y-1 transition-transform" />
+                    <div key={i} className="w-7 h-11 rounded-lg bg-gradient-to-br from-indigo-950 to-slate-950 border border-black shadow-sm transform hover:-translate-y-1 transition-transform" />
                   ))}
                 </div>
               </div>
             );
           })()}
 
-          {/* MIDDLE ROW: LEFT AI (Marie) + CENTRAL TABLE FELT + RIGHT AI (Kate) */}
+          {/* MIDDLE ROW: LEFT AI (Marie) + CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
           <div className="w-full flex items-center justify-between my-auto py-2">
 
-            {/* LEFT AI: MARIE */}
+            {/* LEFT AI OPPONENT: MARIE */}
             {(() => {
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
                 <div className={`flex flex-col items-center transition-all ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/80 text-white'}`}>
+                  <div className={`flex flex-col items-center p-2.5 rounded-2xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/85 text-white'}`}>
                     <span className="text-2xl mb-1">{marie.avatar}</span>
                     <span className="text-[11px] font-black uppercase">{marie.name}</span>
-                    <span className="px-1.5 py-0.5 bg-black/40 rounded text-[10px] font-black mt-0.5">{marie.cards.length} cards</span>
+                    <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black mt-0.5">{marie.cards.length} cards</span>
                   </div>
                 </div>
               );
             })()}
 
-            {/* CENTRAL ROUND TABLE FELT CIRCLE */}
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-[#1b2a1e] border-6 border-[#362214] shadow-[inset_0_10px_25px_rgba(0,0,0,0.8),0_10px_30px_rgba(0,0,0,0.6)] flex items-center justify-center">
+            {/* WARM BROWN CIRCULAR FELT TABLE */}
+            <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1e2e1e] border-8 border-[#3b2416] shadow-[inset_0_15px_35px_rgba(0,0,0,0.85),0_15px_35px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
-              {/* Turned Direction Arrows Around Rim */}
-              <div className="absolute inset-2 rounded-full border-2 border-dashed border-amber-400/30 animate-[spin_20s_linear_infinite] pointer-events-none" />
+              {/* Circular Turn Direction Arrows along Rim */}
+              <div className={`absolute inset-3 rounded-full border-2 border-dashed border-amber-400/35 pointer-events-none ${direction === 1 ? 'animate-[spin_25s_linear_infinite]' : 'animate-[spin_25s_linear_infinite_reverse]'}`} />
 
-              {/* Center Piles Container */}
-              <div className="flex items-center justify-center gap-5 relative z-10">
+              {/* Central Piles (Draw Deck + Fanned Discard Stack) */}
+              <div className="flex items-center justify-center gap-6 relative z-10">
 
-                {/* Draw Pile */}
+                {/* Draw Pile ("CARD PARTY") */}
                 <div
                   onClick={() => {
                     if (turnIndex === 0 && !aiThinking) handlePlayerDraw();
                   }}
-                  className="w-20 h-28 sm:w-22 sm:h-32 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-950 border-3 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
+                  className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-950 border-3 border-black shadow-neo-md flex flex-col items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all relative group"
                   title="Click to Draw Card"
                 >
-                  <div className="absolute inset-1 border-2 border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center">
-                    <span className="text-2xl font-black text-amber-400 group-hover:scale-110 transition-transform">🎴</span>
-                    <span className="text-[9px] font-black text-white mt-1 uppercase tracking-wider">DRAW ({deck.length})</span>
+                  <div className="absolute inset-1 border-2 border-dashed border-white/25 rounded-xl flex flex-col items-center justify-center p-1 text-center">
+                    <span className="text-xs font-black text-amber-400 uppercase tracking-widest leading-tight">CARD PARTY</span>
+                    <span className="text-2xl my-1 group-hover:scale-110 transition-transform">🎴</span>
+                    <span className="text-[9px] font-black text-white uppercase">({deck.length})</span>
                   </div>
                 </div>
 
-                {/* Discard Pile Top Card (Exact Screenshot Style: White Inner Box + Thick Dark Border) */}
-                {topDiscard && (
-                  <div
-                    className={`w-20 h-28 sm:w-22 sm:h-32 rounded-2xl border-3 border-black shadow-neo-lg flex flex-col items-center justify-between p-2 transition-all relative ${
-                      COLOR_CLASSES[topDiscard.color].bg
-                    }`}
-                  >
-                    <div className="w-full flex justify-between items-start text-white text-xs font-black">
-                      <span>{topDiscard.type === 'number' ? topDiscard.value : topDiscard.type[0].toUpperCase()}</span>
-                      <span>{topDiscard.color === 'wild' ? '🌈' : topDiscard.color[0].toUpperCase()}</span>
-                    </div>
+                {/* Discard Pile with Fanned Stacking */}
+                <div className="relative w-20 h-28 sm:w-24 sm:h-34">
+                  {discardPile.map((card, idx) => {
+                    const isTop = idx === discardPile.length - 1;
+                    const rot = card.rotation || 0;
+                    const ox = card.offsetX || 0;
+                    const oy = card.offsetY || 0;
 
-                    {/* Distinct White Inner Symbol Box Matching Screenshot */}
-                    <div className="w-12 h-14 sm:w-14 sm:h-16 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto">
-                      <span className={`text-2xl sm:text-3xl font-black ${topDiscard.color === 'yellow' ? 'text-amber-950' : topDiscard.color === 'red' ? 'text-rose-600' : topDiscard.color === 'blue' ? 'text-cyan-600' : topDiscard.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
-                        {topDiscard.type === 'number'
-                          ? topDiscard.value
-                          : topDiscard.type === 'skip'
-                          ? '🚫'
-                          : topDiscard.type === 'reverse'
-                          ? '🔄'
-                          : topDiscard.type === 'draw_two'
-                          ? '+2'
-                          : topDiscard.type === 'wild_draw_four'
-                          ? '+4'
-                          : '★'}
-                      </span>
-                    </div>
+                    return (
+                      <div
+                        key={card.id}
+                        style={{
+                          transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
+                          zIndex: idx,
+                        }}
+                        className={`absolute inset-0 rounded-2xl border-3 border-black flex flex-col justify-between p-2 transition-all ${
+                          COLOR_CLASSES[card.color].bg
+                        } ${isTop ? 'shadow-neo-lg scale-105' : 'opacity-90 pointer-events-none'}`}
+                      >
+                        <div className="flex justify-between items-start text-white text-[11px] font-black">
+                          <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                          <span>{card.color === 'wild' ? '🌈' : card.color[0].toUpperCase()}</span>
+                        </div>
 
-                    <div className="w-full text-center text-[8px] font-black text-white uppercase tracking-wider">
-                      {topDiscard.type.replace('_', ' ')}
-                    </div>
-                  </div>
-                )}
+                        {/* Distinct White Inner Window */}
+                        <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                          <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                            {card.type === 'number'
+                              ? card.value
+                              : card.type === 'skip'
+                              ? '🚫'
+                              : card.type === 'reverse'
+                              ? '🔄'
+                              : card.type === 'draw_two'
+                              ? '+2'
+                              : card.type === 'wild_draw_four'
+                              ? '+4'
+                              : '★'}
+                          </span>
+                        </div>
+
+                        <div className="text-[8px] font-black text-white uppercase text-center truncate">
+                          {card.type.replace('_', ' ')}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Active Color Badge */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-xl bg-black/90 border-2 border-black text-white text-[10px] font-black uppercase flex items-center gap-1.5 shadow-neo-sm">
-                <span>Color:</span>
-                <span className={`w-3 h-3 rounded-full border border-black ${COLOR_CLASSES[activeColor].bg}`} />
-                <span className="uppercase text-amber-300">{activeColor}</span>
+              {/* Active Color Indicator Badge */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-xl bg-black/90 border-2 border-black text-white text-[10px] font-black uppercase flex items-center gap-1.5 shadow-neo-sm">
+                <span>Active:</span>
+                <span className={`w-3.5 h-3.5 rounded-full border border-black ${COLOR_CLASSES[activeColor].bg}`} />
+                <span className="uppercase text-amber-300 font-black">{activeColor}</span>
               </div>
             </div>
 
-            {/* RIGHT AI: KATE */}
+            {/* RIGHT AI OPPONENT: KATE */}
             {(() => {
               const kate = players.find(p => p.id === 'kate')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
                 <div className={`flex flex-col items-center transition-all ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/80 text-white'}`}>
+                  <div className={`flex flex-col items-center p-2.5 rounded-2xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-pulse' : 'bg-black/85 text-white'}`}>
                     <span className="text-2xl mb-1">{kate.avatar}</span>
                     <span className="text-[11px] font-black uppercase">{kate.name}</span>
-                    <span className="px-1.5 py-0.5 bg-black/40 rounded text-[10px] font-black mt-0.5">{kate.cards.length} cards</span>
+                    <span className="px-1.5 py-0.5 bg-black/50 rounded text-[10px] font-black mt-0.5">{kate.cards.length} cards</span>
                   </div>
                 </div>
               );
@@ -552,7 +582,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           </div>
 
           {/* BOTTOM PLAYER HAND (YOU) */}
-          <div className="w-full bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl p-3 flex flex-col items-center shadow-neo-md">
+          <div className="w-full bg-black/90 backdrop-blur-md border-3 border-black rounded-2xl p-3 flex flex-col items-center shadow-neo-lg">
             <div className="w-full flex justify-between items-center mb-2 px-1">
               <div className="flex items-center gap-2">
                 <span className="text-xs sm:text-sm font-black text-white uppercase flex items-center gap-1.5">
@@ -573,7 +603,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </button>
             </div>
 
-            {/* Scrollable Hand Cards with White Inner Symbol Box */}
+            {/* Scrollable Hand Cards with White Inner Window & Corner Index */}
             <div className="w-full flex items-center gap-2.5 overflow-x-auto pb-2 pt-1 px-1 custom-scrollbar">
               {players[0].cards.map(card => {
                 const playable = turnIndex === 0 && !aiThinking && isCardPlayable(card);
@@ -583,13 +613,14 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                     onClick={() => handlePlayerCardClick(card)}
                     className={`w-18 h-26 sm:w-20 sm:h-30 rounded-2xl border-3 border-black flex flex-col justify-between p-2 shrink-0 transition-all cursor-pointer ${
                       COLOR_CLASSES[card.color].bg
-                    } ${playable ? 'hover:-translate-y-4 hover:shadow-neo-lg ring-4 ring-amber-400' : 'opacity-65 grayscale-[20%]'}`}
+                    } ${playable ? 'hover:-translate-y-4 hover:shadow-neo-lg ring-4 ring-amber-400' : 'opacity-70 grayscale-[15%]'}`}
                   >
                     <div className="flex justify-between items-start text-white text-[10px] font-black">
                       <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                      <span className="text-[8px] opacity-80">{card.color[0].toUpperCase()}</span>
                     </div>
 
-                    {/* White Inner Box */}
+                    {/* White Inner Window */}
                     <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
                       <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
                         {card.type === 'number'
@@ -645,7 +676,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
-      {/* Victory / Game Over Modal */}
+      {/* Victory Modal */}
       {gameState === 'gameover' && winner && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md animate-fadeIn p-4">
           <div className="bg-[#14100e] border-4 border-black rounded-3xl p-8 shadow-neo-lg max-w-md w-full text-center">
