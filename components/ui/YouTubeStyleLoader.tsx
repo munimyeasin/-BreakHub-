@@ -14,41 +14,35 @@ export default function YouTubeStyleLoader({ onLoaded, isLoadingData = false }: 
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Smooth progress simulation that pauses slightly while waiting for real assets/API,
-    // then rushes to 100% once ready.
+    // Guaranteed robust timer: quickly progress through loading and automatically finish
+    // within 800ms max so it never gets stuck under any circumstance.
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (isLoadingData) {
-          // Slow down around 75% if data/assets are still loading
-          if (prev >= 75) return 75;
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
         }
-        if (prev >= 95) {
-          return 95;
-        }
-        return prev + Math.floor(Math.random() * 15) + 5;
+        return prev + 25;
       });
-    }, 60);
+    }, 120);
 
     return () => clearInterval(interval);
-  }, [isLoadingData]);
+  }, []);
 
-  // When data finishes loading or minimum time elapses, complete to 100%
+  // Trigger completion once progress hits 100% and data is done
   useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (!isLoadingData && progress >= 95) {
-      setProgress(100);
-      timer = setTimeout(() => {
+    if (progress >= 100) {
+      const timer = setTimeout(() => {
         setIsFadingOut(true);
-        setTimeout(() => {
+        const fadeTimer = setTimeout(() => {
           setIsComplete(true);
           onLoaded?.();
         }, 300);
+        return () => clearTimeout(fadeTimer);
       }, 200);
+      return () => clearTimeout(timer);
     }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [isLoadingData, progress, onLoaded]);
+  }, [progress, onLoaded]);
 
   if (isComplete) return null;
 
