@@ -474,6 +474,15 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         </div>
       )}
 
+      {/* Persistent Dev Warning Marquee Banner */}
+      <div className="w-full bg-[#e53935] text-white border-2 border-black rounded-lg overflow-hidden py-1 px-2 relative z-30 mb-1 shadow-sm">
+        <div className="overflow-hidden whitespace-nowrap">
+          <span className="animate-marquee text-[11px] font-black uppercase tracking-wider">
+            ⚠️ WARNING: This game is in development phase u may incounter bugs and glitches ⚠️
+          </span>
+        </div>
+      </div>
+
       {/* Top Header Bar (Back, Title / Status, Reload, Mute) */}
       <div className="w-full flex items-center justify-between px-2 relative z-20">
         <button

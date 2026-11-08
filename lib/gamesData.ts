@@ -247,7 +247,7 @@ export const INITIAL_GAMES: Game[] = [
     slug: 'card-party',
     title: 'Card Party',
     category: 'CARD',
-    thumbnail_url: '/thumbnails/quantum-xo.svg',
+    thumbnail_url: '/thumbnails/card-party.svg',
     description: 'Classic UNO-inspired card showdown! Match colors and numbers, unleash Skip, Reverse, Draw Two (+2), Wild, and Wild Draw Four (+4) against AI opponents Lea, Marie, and Kate.',
     status: 'active',
     featured: true
