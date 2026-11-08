@@ -2,6 +2,16 @@ import { Game } from './types';
 
 export const INITIAL_GAMES: Game[] = [
   {
+    id: 'g_dungeon_29',
+    slug: 'dungeon-slice',
+    title: 'Dungeon Slice',
+    category: 'ACTION',
+    thumbnail_url: '/thumbnails/cyber-slicer.svg',
+    description: 'Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.',
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_knife_28',
     slug: 'knife-thrower',
     title: 'Knife Thrower',

@@ -40,6 +40,7 @@ import CyberChessGame from '@/components/games/CyberChessGame';
 import CyberFruitMergeGame from '@/components/games/CyberFruitMergeGame';
 import FlappyBirdCloneGame from '@/components/games/FlappyBirdCloneGame';
 import KnifeThrowerGame from '@/components/games/KnifeThrowerGame';
+import DungeonSliceGame from '@/components/games/DungeonSliceGame';
 import { Game } from '@/lib/types';
 import { getAvatarUrl } from '@/lib/avatar';
 import StarRating from '@/components/ui/StarRating';
@@ -63,6 +64,16 @@ interface GameTacticalConfig {
 
 // Comprehensive PC Controls and Tactical Mission Intel Matrix
 const GAME_TACTICAL_MAP: Record<string, GameTacticalConfig> = {
+  g_dungeon_29: {
+    genreTag: 'ACTION // DUNGEON SLICE DEFENSE',
+    objective: 'Protect the glowing neon core at the center of the dungeon from creeping shadow creatures with fast knife/sword slash combos.',
+    scoring: 'Enemy slashes (50pts) + Boss vanquish (300pts) + Wave survival bonuses.',
+    proTip: 'Tap or swipe rapidly across enemies as they close in to clear waves before they breach the core!',
+    controls: [
+      { keys: ['Left Click', 'Tap', 'Drag'], label: 'SLASH SWEEP', desc: 'Destroy creeping shadow creatures' },
+      { keys: ['R'], label: 'RESTART', desc: 'Restart defense run' }
+    ]
+  },
   g_knife_28: {
     genreTag: 'ACTION // PRECISION KNIFE THROWER',
     objective: 'Throw cyber knives into the rotating target wheel. Stick all reserve knives without hitting any previously stuck knives to clear levels.',
@@ -854,6 +865,10 @@ export default function GameModal({
 
             {/* Game Dynamic Component */}
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+              {(game.id === 'g_dungeon_29' || game.slug === 'dungeon-slice') && (
+                <DungeonSliceGame gameId={game.id} onGameOver={handleScoreSubmit} />
+              )}
+
               {(game.id === 'g_knife_28' || game.slug === 'knife-thrower' || game.slug === 'cyber-knife-thrower') && (
                 <KnifeThrowerGame gameId={game.id} onGameOver={handleScoreSubmit} />
               )}
