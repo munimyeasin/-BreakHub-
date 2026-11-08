@@ -60,9 +60,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   const [discardPile, setDiscardPile] = useState<Card[]>([]);
   const [players, setPlayers] = useState<Player[]>([
     { id: 'player', name: 'You', isAI: false, avatar: '👤', cards: [], score: 0, position: 'bottom' },
-    { id: 'lea', name: 'Lea', isAI: true, avatar: '👩‍💻', cards: [], score: 0, position: 'top' },
-    { id: 'marie', name: 'Marie', isAI: true, avatar: '🤖', cards: [], score: 0, position: 'left' },
-    { id: 'kate', name: 'Kate', isAI: true, avatar: '⚡', cards: [], score: 0, position: 'right' },
+    { id: 'rosa', name: 'Rosa', isAI: true, avatar: '👩‍💻', cards: [], score: 0, position: 'top' },
+    { id: 'luke', name: 'Luke', isAI: true, avatar: '🤖', cards: [], score: 0, position: 'left' },
+    { id: 'anna', name: 'Anna', isAI: true, avatar: '⚡', cards: [], score: 0, position: 'right' },
   ]);
   const [turnIndex, setTurnIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1); // 1 = clockwise, -1 = counter-clockwise
@@ -511,16 +511,16 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {gameState === 'playing' && (
         <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-2 px-2">
 
-          {/* TOP AI OPPONENT: LEA (Fanned horizontally in a clean row across the top ABOVE her name) */}
+          {/* TOP AI OPPONENT: ROSA (Fanned horizontally in a clean row across the top ABOVE her name) */}
           {(() => {
-            const lea = players.find(p => p.id === 'lea')!;
-            const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
+            const rosa = players.find(p => p.id === 'rosa')!;
+            const isTurn = turnIndex === players.findIndex(p => p.id === 'rosa');
             return (
               <div className={`flex flex-col items-center gap-1 transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
                 {/* Horizontal Fanned Row Above Name */}
                 <div className="flex -space-x-4 mb-1">
-                  {lea.cards.map((_, i) => {
-                    const total = lea.cards.length;
+                  {rosa.cards.map((_, i) => {
+                    const total = rosa.cards.length;
                     const middle = (total - 1) / 2;
                     const rot = (i - middle) * 3.5;
                     return (
@@ -535,35 +535,35 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   })}
                 </div>
                 <div className={`flex items-center gap-2 px-3.5 py-1 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                  <span className="text-base">{lea.avatar}</span>
-                  <span className="text-xs font-black uppercase tracking-wider">{lea.name}</span>
-                  <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{lea.cards.length} cards</span>
+                  <span className="text-base">{rosa.avatar}</span>
+                  <span className="text-xs font-black uppercase tracking-wider">{rosa.name}</span>
+                  <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black">{rosa.cards.length} cards</span>
                 </div>
               </div>
             );
           })()}
 
-          {/* MIDDLE ROW: LEFT AI (Marie) + CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
+          {/* MIDDLE ROW: LEFT AI (Luke) + CIRCULAR FELT TABLE + RIGHT AI (Anna) */}
           <div className="w-full flex items-center justify-between my-auto py-1 px-2 sm:px-6">
 
-            {/* LEFT AI OPPONENT: MARIE (Neatly stacked vertically along left outer edge with offset) */}
+            {/* LEFT AI OPPONENT: LUKE (Neatly stacked vertically along left outer edge with offset) */}
             {(() => {
-              const marie = players.find(p => p.id === 'marie')!;
-              const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
+              const luke = players.find(p => p.id === 'luke')!;
+              const isTurn = turnIndex === players.findIndex(p => p.id === 'luke');
               return (
                 <div className={`flex items-center gap-2 transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
                   {/* Vertical Stacked Card Deck */}
                   <div className="flex flex-col -space-y-10 relative py-2">
-                    {marie.cards.map((_, i) => (
+                    {luke.cards.map((_, i) => (
                       <div key={i} className="transform -rotate-3">
                         <CardBack label="COLOR CARDS" />
                       </div>
                     ))}
                   </div>
                   <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-xl mb-0.5">{marie.avatar}</span>
-                    <span className="text-[10px] font-black uppercase">{marie.name}</span>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{marie.cards.length}</span>
+                    <span className="text-xl mb-0.5">{luke.avatar}</span>
+                    <span className="text-[10px] font-black uppercase">{luke.name}</span>
+                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{luke.cards.length}</span>
                   </div>
                 </div>
               );
@@ -572,12 +572,12 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             {/* CIRCULAR FELT TABLE WITH 4 CURVED DIRECTIONAL ARROWS */}
             <div className="relative w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] aspect-square shrink-0 rounded-full bg-[#1e2f23] border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_15px_30px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
-              {/* 4 Curved Directional Turn Arrows (Clockwise / Counter) */}
-              <div className={`absolute inset-4 rounded-full border-4 border-dashed border-amber-400/70 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.3)] ${direction === 1 ? 'animate-[spin_18s_linear_infinite]' : 'animate-[spin_18s_linear_infinite_reverse]'}`}>
-                <div className="absolute top-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black">➔</div>
-                <div className="absolute right-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black">➔</div>
-                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black">➔</div>
-                <div className="absolute left-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black">➔</div>
+              {/* 4 Minimalist Dark Curved Directional Turn Arrows */}
+              <div className={`absolute inset-4 rounded-full border-4 border-dashed border-amber-400/50 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.2)] ${direction === 1 ? 'animate-[spin_18s_linear_infinite]' : 'animate-[spin_18s_linear_infinite_reverse]'}`}>
+                <div className="absolute top-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black opacity-80">➔</div>
+                <div className="absolute right-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black opacity-80">➔</div>
+                <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-amber-300 text-sm font-black opacity-80">➔</div>
+                <div className="absolute left-1 top-1/2 -translate-y-1/2 text-amber-300 text-sm font-black opacity-80">➔</div>
               </div>
 
               {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
@@ -656,20 +656,20 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </div>
             </div>
 
-            {/* RIGHT AI OPPONENT: KATE (Neatly stacked vertically along right outer edge with offset) */}
+            {/* RIGHT AI OPPONENT: ANNA (Neatly stacked vertically along right outer edge with offset) */}
             {(() => {
-              const kate = players.find(p => p.id === 'kate')!;
-              const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
+              const anna = players.find(p => p.id === 'anna')!;
+              const isTurn = turnIndex === players.findIndex(p => p.id === 'anna');
               return (
                 <div className={`flex items-center gap-2 transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
                   <div className={`flex flex-col items-center p-2 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
-                    <span className="text-xl mb-0.5">{kate.avatar}</span>
-                    <span className="text-[10px] font-black uppercase">{kate.name}</span>
-                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{kate.cards.length}</span>
+                    <span className="text-xl mb-0.5">{anna.avatar}</span>
+                    <span className="text-[10px] font-black uppercase">{anna.name}</span>
+                    <span className="px-1.5 py-0.2 bg-black/40 rounded text-[10px] font-black mt-0.5">{anna.cards.length}</span>
                   </div>
                   {/* Vertical Stacked Card Deck */}
                   <div className="flex flex-col -space-y-10 relative py-2">
-                    {kate.cards.map((_, i) => (
+                    {anna.cards.map((_, i) => (
                       <div key={i} className="transform rotate-3">
                         <CardBack label="COLOR CARDS" />
                       </div>
