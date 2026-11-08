@@ -229,7 +229,7 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
     return () => clearInterval(id);
   }, [started, isOver, H, STANDARD_PIPE_GAP, W]);
 
-  // Initialize canvas backing store and scale/resize handling for high DPR mobile viewports
+  // Initialize canvas backing store with proper resize handling for mobile high-DPI
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -238,14 +238,22 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
       const dpr = window.devicePixelRatio || 1;
       const displayWidth = canvas.clientWidth || W;
       const displayHeight = canvas.clientHeight || H;
-      canvas.width = Math.round(displayWidth * dpr);
-      canvas.height = Math.round(displayHeight * dpr);
+      // Don't resize if display dimensions are still 0 (before initial paint)
+      if (displayWidth > 0 && displayHeight > 0) {
+        canvas.width = Math.round(displayWidth * dpr);
+        canvas.height = Math.round(displayHeight * dpr);
+      }
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    // Schedule initial resize for after first paint
+    const initialTimeout = setTimeout(() => {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+    }, 0);
+
     return () => {
+      clearTimeout(initialTimeout);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
