@@ -570,7 +570,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   </div>
                   <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
                     <span className="text-lg mb-0.5">{marie.avatar}</span>
-                    <span className="text-[9px] font-black uppercase">{marie.name}</span>
+                    <div className="flex flex-col items-center leading-none my-1">
+                      {marie.name.split('').map((char, idx) => (
+                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                      ))}
+                    </div>
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{marie.cards.length}</span>
                   </div>
                 </div>
@@ -685,7 +689,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
                   <div className={`flex flex-col items-center p-1.5 rounded-xl border-2 border-black ${isTurn ? 'bg-amber-400 text-black shadow-neo-md animate-bounce' : 'bg-black/90 text-white'}`}>
                     <span className="text-lg mb-0.5">{kate.avatar}</span>
-                    <span className="text-[9px] font-black uppercase">{kate.name}</span>
+                    <div className="flex flex-col items-center leading-none my-1">
+                      {kate.name.split('').map((char, idx) => (
+                        <span key={idx} className="text-[9px] font-black uppercase">{char}</span>
+                      ))}
+                    </div>
                     <span className="px-1.5 py-0.2 bg-black/40 rounded text-[9px] font-black mt-0.5">{kate.cards.length}</span>
                   </div>
                   <div className="flex flex-col -space-y-8 relative py-2">
