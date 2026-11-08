@@ -28,8 +28,8 @@ const COLS = 10;
 const ROWS = 20;
 const TOTAL_ROWS = ROWS;
 const CANVAS_WIDTH = 380;
-const CANVAS_HEIGHT = 580;
-const BLOCK_SIZE = 28;
+const CANVAS_HEIGHT = 520; // Reduced height to leave room for touch controls below canvas
+const BLOCK_SIZE = 24;
 
 export type TetrominoType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L';
 
@@ -160,7 +160,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const [lines, setLines] = useState<number>(0);
   const [level, setLevel] = useState<number>(1);
   const [combo, setCombo] = useState<number>(0);
-  const [backToBack, setBackToBack] = useState<boolean>(false);
   const [highScore, setHighScore] = useState<number>(0);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -168,7 +167,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
-  // Refs for 60fps loop
+  // Refs for 60fps loop & event listeners
   const gridRef = useRef<GridCell[][]>(grid);
   gridRef.current = grid;
   const currentPieceRef = useRef<ActivePiece | null>(currentPiece);
@@ -190,8 +189,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   levelRef.current = level;
   const comboRef = useRef(combo);
   comboRef.current = combo;
-  const backToBackRef = useRef(backToBack);
-  backToBackRef.current = backToBack;
   const canHoldRef = useRef(canHold);
   canHoldRef.current = canHold;
   const holdPieceRef = useRef(holdPiece);
@@ -200,7 +197,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
   const particlesRef = useRef<Particle[]>([]);
   const floatingTextsRef = useRef<FloatingText[]>([]);
   const lockTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const lastActionWasRotateRef = useRef(false);
 
   // Load High Score
   useEffect(() => {
@@ -270,17 +266,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       }
     } catch {}
   }, [soundEnabled]);
-
-  const spawnParticles = (x: number, y: number, color: string, count = 12) => {
-    for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 4;
-      particlesRef.current.push({
-        x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
-        color, size: 3 + Math.random() * 3, life: 0, maxLife: 20 + Math.random() * 10
-      });
-    }
-  };
 
   const addFloatingText = (x: number, y: number, text: string, color = '#FFE600') => {
     floatingTextsRef.current.push({ x, y, text, color, alpha: 1, vy: -1.2 });
@@ -444,7 +429,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     clearLines(grid);
   }, [clearLines]);
 
-  const moveHorizontal = (dir: -1 | 1) => {
+  const moveHorizontal = useCallback((dir: -1 | 1) => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const p = currentPieceRef.current;
     if (!p) return;
@@ -458,9 +443,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         lockTimerRef.current = null;
       }
     }
-  };
+  }, [isValidPosition, playSound]);
 
-  const rotatePiece = (dir: 1 | -1 = 1) => {
+  const rotatePiece = useCallback((dir: 1 | -1 = 1) => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const p = currentPieceRef.current;
     if (!p) return;
@@ -484,9 +469,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         return;
       }
     }
-  };
+  }, [isValidPosition, playSound]);
 
-  const softDrop = () => {
+  const softDrop = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const p = currentPieceRef.current;
     if (!p) return;
@@ -500,9 +485,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     } else {
       lockPiece(p);
     }
-  };
+  }, [isValidPosition, lockPiece, playSound]);
 
-  const hardDrop = () => {
+  const hardDrop = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) return;
     const p = currentPieceRef.current;
     if (!p) return;
@@ -516,9 +501,9 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     }
     playSound('drop');
     lockPiece(dropped);
-  };
+  }, [getGhostY, lockPiece, playSound]);
 
-  const holdCurrentPiece = () => {
+  const holdCurrentPiece = useCallback(() => {
     if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current || !canHoldRef.current) return;
     const p = currentPieceRef.current;
     if (!p) return;
@@ -533,7 +518,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
     if (prevHold) spawnPiece(prevHold);
     else spawnPiece();
-  };
+  }, [spawnPiece, playSound]);
 
   const startNewGame = useCallback(() => {
     const empty = Array.from({ length: TOTAL_ROWS }, () => Array(COLS).fill(null));
@@ -552,8 +537,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     levelRef.current = 1;
     setCombo(0);
     comboRef.current = 0;
-    setBackToBack(false);
-    backToBackRef.current = false;
     setIsGameOver(false);
     isGameOverRef.current = false;
     setIsPaused(false);
@@ -598,16 +581,22 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
     startNewGame();
   }, [startNewGame]);
 
-  // Keyboard controls with proper preventDefault & focus protection
+  // Keyboard controls bound securely with e.preventDefault()
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return;
+
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
+        e.stopPropagation();
       }
+
       if (!isPlayingRef.current || isPausedRef.current || isGameOverRef.current) {
         if (e.key === 'r' || e.key === 'R') startNewGame();
         return;
       }
+
       if (e.key === 'ArrowLeft' || e.key === 'a') moveHorizontal(-1);
       if (e.key === 'ArrowRight' || e.key === 'd') moveHorizontal(1);
       if (e.key === 'ArrowDown' || e.key === 's') softDrop();
@@ -616,9 +605,10 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       if (e.key === ' ') hardDrop();
       if (e.key === 'c' || e.key === 'Shift') holdCurrentPiece();
     };
-    window.addEventListener('keydown', handleKeyDown);
+
+    window.addEventListener('keydown', handleKeyDown, { passive: false });
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [startNewGame]);
+  }, [startNewGame, moveHorizontal, rotatePiece, softDrop, hardDrop, holdCurrentPiece]);
 
   // 60fps HTML5 Canvas Render Loop
   useEffect(() => {
@@ -652,8 +642,8 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
 
       // Playfield Border Frame
       const boardX = (CANVAS_WIDTH - COLS * BLOCK_SIZE) / 2;
-      const boardY = 20;
-      ctx.fillStyle = 'rgba(4, 2, 14, 0.85)';
+      const boardY = 15;
+      ctx.fillStyle = 'rgba(4, 2, 14, 0.9)';
       ctx.fillRect(boardX, boardY, COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE);
       ctx.strokeStyle = '#00F0FF';
       ctx.lineWidth = 3;
@@ -720,7 +710,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
                 ctx.fill();
                 ctx.stroke();
 
-                // Specular highlight
                 ctx.fillStyle = 'rgba(255,255,255,0.4)';
                 ctx.beginPath();
                 ctx.roundRect(bx + 3, by + 3, BLOCK_SIZE - 10, 6, 2);
@@ -731,18 +720,6 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         }
       }
 
-      // Render Particles
-      const parts = particlesRef.current;
-      for (let i = parts.length - 1; i >= 0; i--) {
-        const p = parts[i];
-        p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life++;
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-        ctx.globalAlpha = 1;
-        if (p.life >= p.maxLife) parts.splice(i, 1);
-      }
-
       // Floating Texts
       const fts = floatingTextsRef.current;
       for (let i = fts.length - 1; i >= 0; i--) {
@@ -750,7 +727,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
         ft.y += ft.vy; ft.alpha -= 0.02;
         ctx.fillStyle = ft.color;
         ctx.globalAlpha = Math.max(0, ft.alpha);
-        ctx.font = 'bold 20px monospace';
+        ctx.font = 'bold 18px monospace';
         ctx.textAlign = 'center';
         ctx.fillText(ft.text, ft.x, ft.y);
         ctx.globalAlpha = 1;
@@ -769,16 +746,16 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
       ref={containerRef}
       tabIndex={0}
       onClick={() => containerRef.current?.focus()}
-      className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100 outline-none"
+      className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100 outline-none p-2"
     >
       {/* Top HUD */}
-      <div className="w-[380px] flex items-center justify-between bg-portal-surface/90 px-3 py-2 rounded-xl border-2 border-black mb-2 shadow-neo-sm">
+      <div className="w-[380px] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border-2 border-black mb-1.5 shadow-neo-sm">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-portal-cyan" />
           <span className="text-xs font-black text-portal-neon">LVL {level}</span>
           <span className="text-sm font-black text-portal-yellow">{score.toLocaleString()} PTS</span>
         </div>
-        <div className="flex items-center gap-2 bg-black/50 px-2.5 py-1 rounded-lg border border-portal-border">
+        <div className="flex items-center gap-2 bg-black/50 px-2.5 py-0.5 rounded-lg border border-portal-border">
           <Zap className="w-3.5 h-3.5 text-portal-gold" />
           <span className="text-xs font-black text-white">{lines} LINES</span>
         </div>
@@ -786,39 +763,37 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
           type="button"
           onFocus={e => e.currentTarget.blur()}
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1.5 rounded-lg bg-portal-card text-slate-300 hover:text-white border border-black"
+          className="p-1 rounded-lg bg-portal-card text-slate-300 hover:text-white border border-black"
         >
           {soundEnabled ? <Volume2 className="w-4 h-4 text-portal-cyan" /> : <VolumeX className="w-4 h-4" />}
         </button>
       </div>
 
-      {/* Main 60fps HTML5 Canvas Playfield */}
-      <div className="relative w-[400px] h-[620px] bg-[#08000D] rounded-3xl border-4 border-black shadow-[8px_8px_0px_#000] flex flex-col items-center justify-center overflow-hidden">
+      {/* Main Playfield & Non-Overlapping Control Deck */}
+      <div className="flex flex-col items-center w-[380px] bg-[#08000D] rounded-2xl border-4 border-black shadow-[6px_6px_0px_#000] p-2">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="cursor-default"
+          className="cursor-default rounded-xl border-2 border-black bg-[#04020E]"
         />
 
-        {/* Floating Side Info & Touch Controls with type="button" and focus blur */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-2 bg-portal-surface/90 rounded-xl border-2 border-black shadow-neo-sm">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => holdCurrentPiece()}
-              className="px-3 py-1.5 rounded-lg bg-portal-pink text-black font-black text-xs border-2 border-black shadow-sm"
-            >
-              HOLD [C]
-            </button>
-          </div>
+        {/* Clean Non-Overlapping Bottom Touch & Action Bar */}
+        <div className="w-full flex items-center justify-between mt-2 pt-2 border-t-2 border-black/50 px-1">
+          <button
+            type="button"
+            onFocus={e => e.currentTarget.blur()}
+            onClick={() => holdCurrentPiece()}
+            className="px-3 py-2 rounded-xl bg-portal-pink text-black font-black text-xs border-2 border-black shadow-neo-sm active:scale-95 transition-transform"
+          >
+            HOLD [C]
+          </button>
           <div className="flex items-center gap-1">
             <button
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => moveHorizontal(-1)}
-              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+              className="w-9 h-9 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center active:scale-95 transition-transform"
             >
               ←
             </button>
@@ -826,7 +801,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => rotatePiece(1)}
-              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+              className="w-9 h-9 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center active:scale-95 transition-transform"
             >
               ⟳
             </button>
@@ -834,7 +809,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => softDrop()}
-              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+              className="w-9 h-9 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center active:scale-95 transition-transform"
             >
               ↓
             </button>
@@ -842,7 +817,7 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => moveHorizontal(1)}
-              className="w-10 h-10 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center"
+              className="w-9 h-9 rounded-lg bg-portal-card text-white font-black border-2 border-black flex items-center justify-center active:scale-95 transition-transform"
             >
               →
             </button>
@@ -850,32 +825,32 @@ export default function TetraMatrixGame({ gameId, onGameOver }: TetraMatrixGameP
               type="button"
               onFocus={e => e.currentTarget.blur()}
               onClick={() => hardDrop()}
-              className="w-12 h-10 rounded-lg bg-portal-yellow text-black font-black border-2 border-black flex items-center justify-center"
+              className="px-3 h-9 rounded-lg bg-portal-yellow text-black font-black text-xs border-2 border-black flex items-center justify-center active:scale-95 transition-transform"
             >
               DROP
             </button>
           </div>
         </div>
-
-        {/* Game Over / Pause Overlays */}
-        {isGameOver && (
-          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-40 space-y-3">
-            <span className="px-3 py-1 rounded-full text-xs font-black uppercase bg-rose-500 text-white border-2 border-black">
-              MATRIX BREACH
-            </span>
-            <h3 className="text-2xl font-black text-white">Game Over</h3>
-            <div className="text-3xl font-black text-portal-yellow">{score.toLocaleString()} PTS</div>
-            <button
-              type="button"
-              onFocus={e => e.currentTarget.blur()}
-              onClick={() => startNewGame()}
-              className="py-3 px-8 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm active:scale-95 transition-all"
-            >
-              RETRY MATRIX
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Game Over / Pause Overlays */}
+      {isGameOver && (
+        <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-40 space-y-3">
+          <span className="px-3 py-1 rounded-full text-xs font-black uppercase bg-rose-500 text-white border-2 border-black">
+            MATRIX BREACH
+          </span>
+          <h3 className="text-2xl font-black text-white">Game Over</h3>
+          <div className="text-3xl font-black text-portal-yellow">{score.toLocaleString()} PTS</div>
+          <button
+            type="button"
+            onFocus={e => e.currentTarget.blur()}
+            onClick={() => startNewGame()}
+            className="py-3 px-8 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm active:scale-95 transition-all"
+          >
+            RETRY MATRIX
+          </button>
+        </div>
+      )}
     </div>
   );
 }
