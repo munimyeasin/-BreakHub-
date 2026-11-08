@@ -642,9 +642,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
           </div>
 
-          {/* BOTTOM PLAYER HAND (YOU) */}
+          {/* BOTTOM PLAYER HAND (FANNED & OVERLAPPING) */}
           <div className="w-full bg-black/85 backdrop-blur-md border-3 border-black rounded-2xl p-2.5 flex flex-col items-center shadow-neo-lg">
-            <div className="w-full flex justify-between items-center mb-1.5 px-1">
+            <div className="w-full flex justify-between items-center mb-1 px-1">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-black text-white uppercase flex items-center gap-1">
                   <User className="w-3.5 h-3.5 text-cyan-400" /> Your Hand ({players[0].cards.length})
@@ -664,46 +664,56 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </button>
             </div>
 
-            {/* Scrollable Hand Cards with White Inner Window */}
-            <div className="w-full flex items-center gap-2 overflow-x-auto pb-1.5 pt-1 px-1 custom-scrollbar">
-              {players[0].cards.map(card => {
-                const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
-                return (
-                  <div
-                    key={card.id}
-                    onClick={() => handlePlayerCardClick(card)}
-                    className={`w-16 h-24 sm:w-20 sm:h-30 rounded-2xl border-4 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-200 cursor-pointer ${
-                      COLOR_CLASSES[card.color].bg
-                    } ${playable ? 'hover:-translate-y-3 hover:shadow-neo-lg ring-4 ring-amber-400 animate-pulse' : 'opacity-75'}`}
-                  >
-                    <div className="flex justify-between items-start text-white text-[10px] font-black">
-                      <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
-                      <span>{card.color === 'wild' ? '🌈' : ''}</span>
-                    </div>
+            {/* Fanned Overlapping Horizontal Hand Layout */}
+            <div className="w-full flex items-center justify-center overflow-x-auto pb-3 pt-2 px-2 custom-scrollbar">
+              <div className="flex items-center -space-x-8 sm:-space-x-12 hover:space-x-1 transition-all duration-300 py-2">
+                {players[0].cards.map((card, idx, arr) => {
+                  const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
+                  const total = arr.length;
+                  const middle = (total - 1) / 2;
+                  const rot = (idx - middle) * 3.5;
+                  return (
+                    <div
+                      key={card.id}
+                      onClick={() => handlePlayerCardClick(card)}
+                      style={{
+                        transform: `rotate(${rot}deg)`,
+                      }}
+                      className={`w-18 h-26 sm:w-22 sm:h-32 rounded-2xl border-4 border-black flex flex-col justify-between p-2 shrink-0 transition-all duration-300 cursor-pointer origin-bottom ${
+                        COLOR_CLASSES[card.color].bg
+                      } hover:-translate-y-8 hover:scale-110 hover:rotate-0 hover:z-40 shadow-neo-sm ${
+                        playable ? 'ring-4 ring-amber-400 animate-pulse' : 'opacity-90'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start text-white text-[10px] font-black">
+                        <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                        <span>{card.color === 'wild' ? '🌈' : ''}</span>
+                      </div>
 
-                    {/* White Inner Window */}
-                    <div className="w-9 h-11 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
-                      <span className={`text-lg sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
-                        {card.type === 'number'
-                          ? card.value
-                          : card.type === 'skip'
-                          ? '🚫'
-                          : card.type === 'reverse'
-                          ? '🔄'
-                          : card.type === 'draw_two'
-                          ? '+2'
-                          : card.type === 'wild_draw_four'
-                          ? '+4'
-                          : '★'}
-                      </span>
-                    </div>
+                      {/* White Inner Box */}
+                      <div className="w-10 h-12 sm:w-13 sm:h-16 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
+                        <span className={`text-xl sm:text-2xl font-black ${card.color === 'yellow' ? 'text-amber-950' : card.color === 'red' ? 'text-rose-600' : card.color === 'blue' ? 'text-cyan-600' : card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
+                          {card.type === 'number'
+                            ? card.value
+                            : card.type === 'skip'
+                            ? '🚫'
+                            : card.type === 'reverse'
+                            ? '🔄'
+                            : card.type === 'draw_two'
+                            ? '+2'
+                            : card.type === 'wild_draw_four'
+                            ? '+4'
+                            : '★'}
+                        </span>
+                      </div>
 
-                    <div className="text-[9px] font-black text-white text-right">
-                      {card.color[0]?.toUpperCase()}
+                      <div className="text-[9px] font-black text-white text-right">
+                        {card.color[0]?.toUpperCase()}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
