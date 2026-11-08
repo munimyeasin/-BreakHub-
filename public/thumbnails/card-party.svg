@@ -15,9 +15,9 @@
   <!-- Large UNO Text Overlay -->
   <text x="150" y="115" font-family="monospace" font-weight="900" font-size="48" fill="#fdd835" stroke="#000" stroke-width="6" text-anchor="middle" filter="drop-shadow(3px 3px 0px #000)">UNO</text>
 
-  <!-- UNDER DEV Badge -->
-  <g transform="translate(190, 155)">
-    <rect width="100" height="30" rx="8" fill="#e53935" stroke="#000" stroke-width="3" />
-    <text x="50" y="20" font-family="monospace" font-weight="900" font-size="12" fill="#fff" text-anchor="middle">UNDER DEV</text>
+  <!-- EARLY ACCESS Badge -->
+  <g transform="translate(170, 155)">
+    <rect width="120" height="30" rx="8" fill="#f59e0b" stroke="#000" stroke-width="3" />
+    <text x="60" y="20" font-family="monospace" font-weight="900" font-size="11" fill="#000" text-anchor="middle">EARLY ACCESS</text>
   </g>
 </svg>

@@ -9,7 +9,7 @@
 .animate-marquee {
   display: inline-block;
   white-space: nowrap;
-  animation: marquee 7s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
 /* Root Theme Tokens - Default Bright Cartoonish Neo-Brutalist */
