@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Play,
   RotateCcw,
@@ -9,29 +9,24 @@ import {
   Sparkles,
   Trophy,
   Flame,
-  Clock,
   Zap,
   Star,
-  Award,
   ChevronRight,
-  ShieldAlert,
-  HelpCircle,
-  Wand2,
   Hammer,
-  RefreshCw,
   Bomb
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
+const BOARD_SIZE = 8;
+const TILE_SIZE = 45; // 8 * 45 = 360px board width
 
 export interface CandyCrushGameProps {
   gameId: string;
   onGameOver: (finalScore: number) => void;
 }
 
-// 6 Neo-Retro Candy Types
 export type CandyType = 0 | 1 | 2 | 3 | 4 | 5;
 export type SpecialType = 'none' | 'striped_h' | 'striped_v' | 'wrapped' | 'color_bomb' | 'hazard';
 
@@ -39,7 +34,13 @@ export interface CandyItem {
   id: string;
   type: CandyType;
   special: SpecialType;
-  hazardCountdown?: number; // Twists: countdown timer on hazard candy
+  hazardCountdown?: number;
+  x: number; // pixel x for animation
+  y: number; // pixel y for animation
+  targetX: number;
+  targetY: number;
+  scale: number;
+  alpha: number;
 }
 
 export interface BoardCell {
@@ -47,16 +48,6 @@ export interface BoardCell {
   c: number;
   candy: CandyItem | null;
   jelly: number; // 0 = none, 1 = single, 2 = double jelly
-  portalTarget?: { r: number; c: number }; // Twists: portal teleporter link
-}
-
-export interface FloatingText {
-  id: string;
-  x: number;
-  y: number;
-  text: string;
-  color: string;
-  scale?: number;
 }
 
 export interface Particle {
@@ -70,52 +61,25 @@ export interface Particle {
   maxLife: number;
 }
 
-const CANDY_CONFIG = [
-  {
-    name: 'Ruby Heart',
-    color: '#FF4081',
-    bgGrad: 'from-pink-500 to-rose-600',
-    border: 'border-pink-300',
-    symbol: '❤️'
-  },
-  {
-    name: 'Lemon Drop',
-    color: '#FFE600',
-    bgGrad: 'from-yellow-400 to-amber-500',
-    border: 'border-yellow-200',
-    symbol: '⚡'
-  },
-  {
-    name: 'Cyan Diamond',
-    color: '#00F0FF',
-    bgGrad: 'from-cyan-400 to-blue-600',
-    border: 'border-cyan-200',
-    symbol: '💎'
-  },
-  {
-    name: 'Acid Lime',
-    color: '#A3E635',
-    bgGrad: 'from-lime-400 to-emerald-600',
-    border: 'border-lime-200',
-    symbol: '🍏'
-  },
-  {
-    name: 'Purple Orb',
-    color: '#C084FC',
-    bgGrad: 'from-purple-400 to-indigo-600',
-    border: 'border-purple-200',
-    symbol: '🔮'
-  },
-  {
-    name: 'Orange Blast',
-    color: '#FB923C',
-    bgGrad: 'from-orange-400 to-red-600',
-    border: 'border-orange-200',
-    symbol: '🔶'
-  }
+export interface FloatingText {
+  id?: string;
+  x: number;
+  y: number;
+  text: string;
+  color: string;
+  alpha: number;
+  vy: number;
+}
+
+const CANDY_METADATA = [
+  { name: 'Ruby Heart', color: '#FF4081', glow: '#FF007F', symbol: '❤️' },
+  { name: 'Lemon Drop', color: '#FFE600', glow: '#FFD700', symbol: '⚡' },
+  { name: 'Cyan Diamond', color: '#00F0FF', glow: '#00BFFF', symbol: '💎' },
+  { name: 'Acid Lime', color: '#A3E635', glow: '#00FF66', symbol: '🍏' },
+  { name: 'Purple Orb', color: '#C084FC', glow: '#9333EA', symbol: '🔮' },
+  { name: 'Orange Blast', color: '#FB923C', glow: '#FF6600', symbol: '🔶' }
 ];
 
-// Linear Campaign Levels with increasing twists
 export interface LevelConfig {
   level: number;
   name: string;
@@ -123,101 +87,82 @@ export interface LevelConfig {
   targetScore: number;
   targetJellies?: number;
   hasHazards?: boolean;
-  hasPortals?: boolean;
   stars: [number, number, number];
   description: string;
 }
 
 const CAMPAIGN_LEVELS: LevelConfig[] = [
-  { level: 1, name: 'Sugar Spark', moves: 20, targetScore: 3000, stars: [3000, 5000, 8000], description: 'Welcome to Break Hub Candy! Match 3 candies to score 3,000 points.' },
-  { level: 2, name: 'Neon Jelly Siege', moves: 22, targetScore: 5000, targetJellies: 10, stars: [5000, 8000, 12000], description: 'Shatter 10 glowing neon jellies beneath the tiles!' },
-  { level: 3, name: 'Glitch Hazard Outpost', moves: 22, targetScore: 7000, hasHazards: true, stars: [7000, 11000, 16000], description: 'TWIST: Glitch Hazard bombs appear! Match them before countdown hits 0!' },
-  { level: 4, name: 'Laser Striper Forge', moves: 20, targetScore: 9000, stars: [9000, 14000, 20000], description: 'Match 4 in a row to forge Laser Striped Candies that clear entire rows!' },
-  { level: 5, name: 'Wormhole Portal Grid', moves: 24, targetScore: 12000, hasPortals: true, stars: [12000, 18000, 26000], description: 'TWIST: Quantum wormholes teleport falling candies across the board!' },
-  { level: 6, name: 'Wrapped Bomb Blitz', moves: 22, targetScore: 15000, stars: [15000, 22000, 32000], description: 'Form T & L shapes for explosive Wrapped Bomb Candies!' },
-  { level: 7, name: 'Double Jelly Nightmare', moves: 25, targetScore: 18000, targetJellies: 16, hasHazards: true, stars: [18000, 26000, 38000], description: 'Clear double-layer jellies while evading unstable glitch hazards!' },
-  { level: 8, name: 'Color Bomb Disco', moves: 22, targetScore: 22000, stars: [22000, 32000, 48000], description: 'Align 5 in a row to unleash the ultimate Rainbow Color Bomb!' },
-  { level: 9, name: 'Quantum Portal Chaos', moves: 25, targetScore: 28000, hasPortals: true, hasHazards: true, stars: [28000, 42000, 60000], description: 'TWIST: Wormhole portals & glitch hazards combined! Pure arcade mastery.' },
-  { level: 10, name: 'Sugar Overlord Singularity', moves: 30, targetScore: 40000, targetJellies: 24, hasHazards: true, hasPortals: true, stars: [40000, 60000, 90000], description: 'Final Boss Level: Defeat the Sugar Singularity with all twists active!' }
+  { level: 1, name: 'Sugar Spark', moves: 22, targetScore: 3500, stars: [3500, 6000, 10000], description: 'Match 3 neo-candies to score 3,500 points!' },
+  { level: 2, name: 'Neon Jelly Siege', moves: 24, targetScore: 5500, targetJellies: 12, stars: [5500, 9000, 14000], description: 'Shatter 12 glowing neon jellies beneath the tiles!' },
+  { level: 3, name: 'Glitch Hazard Outpost', moves: 22, targetScore: 8000, hasHazards: true, stars: [8000, 13000, 19000], description: 'TWIST: Match glitch bombs before their countdown hits 0!' },
+  { level: 4, name: 'Laser Striper Forge', moves: 25, targetScore: 11000, stars: [11000, 17000, 25000], description: 'Match 4 in a row to forge Laser Striped Candies!' },
+  { level: 5, name: 'Sugar Overlord Singularity', moves: 30, targetScore: 25000, targetJellies: 20, hasHazards: true, stars: [25000, 40000, 65000], description: 'Final Boss Arena: Shatter 20 jellies & score 25,000 pts!' }
 ];
 
-const BOARD_SIZE = 8;
 let globalCandyCounter = 0;
-
-function createRandomCandy(excludeTypes: CandyType[] = []): CandyItem {
+function createCandy(type?: CandyType): CandyItem {
   globalCandyCounter++;
-  const available: CandyType[] = [0, 1, 2, 3, 4, 5].filter(t => !excludeTypes.includes(t as CandyType)) as CandyType[];
-  const type = available[Math.floor(Math.random() * available.length)] ?? 0;
+  const t = type !== undefined ? type : (Math.floor(Math.random() * 6) as CandyType);
   return {
     id: `candy_${globalCandyCounter}_${Date.now()}_${Math.random()}`,
-    type,
-    special: 'none'
+    type: t,
+    special: 'none',
+    x: 0,
+    y: 0,
+    targetX: 0,
+    targetY: 0,
+    scale: 1,
+    alpha: 1
   };
 }
 
 export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGameProps) {
-  const [currentLevelIdx, setCurrentLevelIdx] = useState<number>(0);
-  const [unlockedLevel, setUnlockedLevel] = useState<number>(0);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Campaign State
+  const [currentLevelIdx, setCurrentLevelIdx] = useState(0);
   const [levelStars, setLevelStars] = useState<Record<number, number>>({});
+  const [score, setScore] = useState(0);
+  const [movesLeft, setMovesLeft] = useState(22);
+  const [clearedJellies, setClearedJellies] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [sugarFever, setSugarFever] = useState(false);
 
-  const [board, setBoard] = useState<BoardCell[][]>([]);
-  const [score, setScore] = useState<number>(0);
-  const [movesLeft, setMovesLeft] = useState<number>(20);
-  const [comboMultiplier, setComboMultiplier] = useState<number>(1);
-  const [sugarFever, setSugarFever] = useState<boolean>(false);
+  // Game UI States
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLevelIntro, setIsLevelIntro] = useState(true);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isVictory, setIsVictory] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [activeBooster, setActiveBooster] = useState<'hammer' | 'color_bomb' | null>(null);
+  const [boosters, setBoosters] = useState({ hammer: 3, color_bomb: 2 });
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [isLevelIntro, setIsLevelIntro] = useState<boolean>(true);
-  const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const [isVictory, setIsVictory] = useState<boolean>(false);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-
-  const [clearedJellies, setClearedJellies] = useState<number>(0);
-  const [selectedPos, setSelectedPos] = useState<{ r: number; c: number } | null>(null);
-  const [activeBooster, setActiveBooster] = useState<'hammer' | 'color_bomb' | 'wrapped' | null>(null);
-  const [boosters, setBoosters] = useState<{ hammer: number; color_bomb: number; wrapped: number }>({ hammer: 3, color_bomb: 2, wrapped: 2 });
-
-  const [floatingTexts, setFloatingTexts] = useState<FloatingText[]>([]);
-  const [laserBeams, setLaserBeams] = useState<{ id: string; type: 'row' | 'col'; index: number }[]>([]);
-  const [hintPair, setHintPair] = useState<[{ r: number; c: number }, { r: number; c: number }] | null>(null);
-
-  const boardRef = useRef<HTMLDivElement>(null);
-  const touchStartRef = useRef<{ r: number; c: number; x: number; y: number } | null>(null);
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Board & Animation Refs (60fps Canvas Loop)
+  const boardRef = useRef<BoardCell[][]>([]);
+  const selectedRef = useRef<{ r: number; c: number } | null>(null);
   const particlesRef = useRef<Particle[]>([]);
-  const animFrameRef = useRef<number | null>(null);
+  const floatingTextsRef = useRef<FloatingText[]>([]);
+  const isProcessingRef = useRef(false);
+  const shakeRef = useRef(0);
 
-  // Load progress
+  // Load Stars
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const savedStars = localStorage.getItem('retro_candy_stars');
-        if (savedStars) setLevelStars(JSON.parse(savedStars));
-        const savedUnlock = localStorage.getItem('retro_candy_unlocked');
-        if (savedUnlock) setUnlockedLevel(parseInt(savedUnlock, 10));
-      } catch {}
-    }
+    try {
+      const saved = localStorage.getItem('breakhub_candy_stars');
+      if (saved) setLevelStars(JSON.parse(saved));
+    } catch {}
   }, []);
 
-  const saveProgress = (lvlIdx: number, stars: number) => {
-    const lvlNum = CAMPAIGN_LEVELS[lvlIdx].level;
+  const saveStars = (lvl: number, stars: number) => {
     setLevelStars(prev => {
-      const updated = { ...prev, [lvlNum]: Math.max(prev[lvlNum] || 0, stars) };
-      try { localStorage.setItem('retro_candy_stars', JSON.stringify(updated)); } catch {}
+      const updated = { ...prev, [lvl]: Math.max(prev[lvl] || 0, stars) };
+      try { localStorage.setItem('breakhub_candy_stars', JSON.stringify(updated)); } catch {}
       return updated;
     });
-
-    const nextIdx = lvlIdx + 1;
-    if (nextIdx > unlockedLevel && nextIdx < CAMPAIGN_LEVELS.length) {
-      setUnlockedLevel(nextIdx);
-      try { localStorage.setItem('retro_candy_unlocked', nextIdx.toString()); } catch {}
-    }
   };
 
-  // Sound synthesis
-  const playSfx = useCallback((type: 'swap' | 'pop' | 'laser' | 'bomb' | 'color_bomb' | 'combo' | 'sugar' | 'hammer' | 'reject', pitch = 1) => {
+  // Web Audio Synth
+  const playSound = useCallback((type: 'swap' | 'pop' | 'laser' | 'bomb' | 'win' | 'over' | 'hammer', pitch = 1) => {
     if (!soundEnabled || typeof window === 'undefined') return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -226,102 +171,140 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
       const now = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-
-      if (type === 'pop') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440 * pitch, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-      } else if (type === 'laser') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(1200, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.2);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-      } else if (type === 'bomb') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-      } else {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(500, now + 0.06);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-      }
-
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.3);
+
+      if (type === 'swap') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampType ? osc.frequency.exponentialRampToValueAtTime(500, now + 0.05) : osc.frequency.linearRampToValueAtTime(500, now + 0.05);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'pop') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400 * pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(800 * pitch, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'bomb') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'win') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.frequency.setValueAtTime(f, now + i * 0.08);
+          g.gain.setValueAtTime(0.2, now + i * 0.08);
+          g.gain.linearRampToValueAtTime(0.01, now + i * 0.08 + 0.2);
+          o.start(now + i * 0.08);
+          o.stop(now + i * 0.08 + 0.2);
+        });
+      } else if (type === 'over') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.linearRampToValueAtTime(90, now + 0.35);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.linearRampToValueAtTime(300, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
     } catch {}
   }, [soundEnabled]);
 
-  // Particle engine
-  const spawnParticles = (x: number, y: number, color: string, count = 10) => {
+  // Spawn Particle FX
+  const spawnParticles = (x: number, y: number, color: string, count = 15) => {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 4;
+      const speed = 2 + Math.random() * 5;
       particlesRef.current.push({
         x, y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         color,
-        size: 3 + Math.random() * 3,
+        size: 3 + Math.random() * 4,
         life: 0,
-        maxLife: 20 + Math.random() * 15
+        maxLife: 25 + Math.random() * 15
       });
     }
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = CANVAS_WIDTH * dpr;
-    canvas.height = CANVAS_HEIGHT * dpr;
-    ctx.scale(dpr, dpr);
-
-    let active = true;
-    const render = () => {
-      if (!active) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const parts = particlesRef.current;
-      for (let i = parts.length - 1; i >= 0; i--) {
-        const p = parts[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.15;
-        p.life++;
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        if (p.life >= p.maxLife) parts.splice(i, 1);
-      }
-      ctx.globalAlpha = 1;
-      animFrameRef.current = requestAnimationFrame(render);
-    };
-    render();
-    return () => {
-      active = false;
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, []);
-
   const addFloatingText = (x: number, y: number, text: string, color = '#FFE600') => {
-    const id = `f_${Date.now()}_${Math.random()}`;
-    setFloatingTexts(prev => [...prev, { id, x, y, text, color }]);
-    setTimeout(() => setFloatingTexts(prev => prev.filter(t => t.id !== id)), 1000);
+    floatingTextsRef.current.push({
+      x, y, text, color, alpha: 1, vy: -1.5
+    });
   };
 
-  // Find valid matches
+  // Board generation helper
+  const generateBoard = (cfg: LevelConfig): BoardCell[][] => {
+    const grid: BoardCell[][] = [];
+    const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+    const startY = 110;
+
+    for (let r = 0; r < BOARD_SIZE; r++) {
+      const row: BoardCell[] = [];
+      for (let c = 0; c < BOARD_SIZE; c++) {
+        let jelly = 0;
+        if (cfg.targetJellies && Math.random() < 0.4) {
+          jelly = Math.random() < 0.5 ? 2 : 1;
+        }
+
+        const candy = createCandy();
+        if (cfg.hasHazards && Math.random() < 0.08) {
+          candy.special = 'hazard';
+          candy.hazardCountdown = 5;
+        }
+
+        const px = startX + c * TILE_SIZE;
+        const py = startY + r * TILE_SIZE;
+        candy.x = px;
+        candy.y = py;
+        candy.targetX = px;
+        candy.targetY = py;
+
+        row.push({ r, c, candy, jelly });
+      }
+      grid.push(row);
+    }
+    return grid;
+  };
+
+  const startLevel = (idx: number) => {
+    setCurrentLevelIdx(idx);
+    const cfg = CAMPAIGN_LEVELS[idx];
+    boardRef.current = generateBoard(cfg);
+    setScore(0);
+    setMovesLeft(cfg.moves);
+    setClearedJellies(0);
+    setCombo(0);
+    setSugarFever(false);
+    selectedRef.current = null;
+    setIsGameOver(false);
+    setIsVictory(false);
+    setIsLevelIntro(false);
+    setIsPlaying(true);
+    isProcessingRef.current = false;
+  };
+
+  // Match finding logic
   const findMatches = (grid: BoardCell[][]) => {
     const matchMap: boolean[][] = Array(BOARD_SIZE).fill(false).map(() => Array(BOARD_SIZE).fill(false));
     const matchGroups: { cells: { r: number; c: number }[]; type: CandyType; isHorizontal: boolean }[] = [];
@@ -379,178 +362,37 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
     return { matches, matchGroups };
   };
 
-  const findPossibleMoves = (grid: BoardCell[][]) => {
-    const moves: [{ r: number; c: number }, { r: number; c: number }][] = [];
-    const dirs = [{ dr: 0, dc: 1 }, { dr: 1, dc: 0 }];
-    for (let r = 0; r < BOARD_SIZE; r++) {
-      for (let c = 0; c < BOARD_SIZE; c++) {
-        const c1 = grid[r][c]?.candy;
-        if (!c1) continue;
-        for (const { dr, dc } of dirs) {
-          const nr = r + dr, nc = c + dc;
-          if (nr < BOARD_SIZE && nc < BOARD_SIZE) {
-            const c2 = grid[nr][nc]?.candy;
-            if (!c2) continue;
-            if (c1.special === 'color_bomb' || c2.special === 'color_bomb') {
-              moves.push([{ r, c }, { r: nr, c: nc }]);
-              continue;
-            }
-            const cloned = grid.map(row => row.map(cell => ({ ...cell, candy: cell.candy ? { ...cell.candy } : null })));
-            const temp = cloned[r][c].candy;
-            cloned[r][c].candy = cloned[nr][nc].candy;
-            cloned[nr][nc].candy = temp;
-            if (findMatches(cloned).matches.length > 0) {
-              moves.push([{ r, c }, { r: nr, c: nc }]);
-            }
-          }
-        }
-      }
-    }
-    return moves;
-  };
-
-  const generateBoard = (cfg: LevelConfig): BoardCell[][] => {
-    const grid: BoardCell[][] = [];
-    for (let r = 0; r < BOARD_SIZE; r++) {
-      const row: BoardCell[] = [];
-      for (let c = 0; c < BOARD_SIZE; c++) {
-        let jelly = 0;
-        if (cfg.targetJellies && Math.random() < 0.35) {
-          jelly = Math.random() < 0.4 ? 2 : 1;
-        }
-
-        // Twists: Portals linking (e.g., top row to bottom row)
-        let portalTarget;
-        if (cfg.hasPortals && r === 0 && (c === 2 || c === 5)) {
-          portalTarget = { r: BOARD_SIZE - 1, c: c === 2 ? 5 : 2 };
-        }
-
-        const exclude: CandyType[] = [];
-        if (c >= 2 && row[c - 1]?.candy && row[c - 2]?.candy && row[c - 1].candy?.type === row[c - 2].candy?.type) {
-          exclude.push(row[c - 1].candy!.type);
-        }
-        if (r >= 2 && grid[r - 1]?.[c]?.candy && grid[r - 2]?.[c]?.candy && grid[r - 1][c].candy?.type === grid[r - 2][c].candy?.type) {
-          exclude.push(grid[r - 1][c].candy!.type);
-        }
-
-        // Twists: Hazard glitch candy chance
-        const isHazard = cfg.hasHazards && Math.random() < 0.08;
-        const candy = createRandomCandy(exclude);
-        if (isHazard) {
-          candy.special = 'hazard';
-          candy.hazardCountdown = 5;
-        }
-
-        row.push({ r, c, candy, jelly, portalTarget });
-      }
-      grid.push(row);
-    }
-
-    if (findPossibleMoves(grid).length === 0) return generateBoard(cfg);
-    return grid;
-  };
-
-  const startLevel = (idx: number) => {
-    setCurrentLevelIdx(idx);
-    const cfg = CAMPAIGN_LEVELS[idx];
-    const newBoard = generateBoard(cfg);
-    setBoard(newBoard);
-    setScore(0);
-    setMovesLeft(cfg.moves);
-    setClearedJellies(0);
-    setSugarFever(false);
-    setSelectedPos(null);
-    setIsGameOver(false);
-    setIsVictory(false);
-    setIsProcessing(false);
-    setIsLevelIntro(false);
-    setIsPlaying(true);
-    setLaserBeams([]);
-  };
-
-  const resetIdleHint = (currentBoard: BoardCell[][]) => {
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    setHintPair(null);
-    idleTimerRef.current = setTimeout(() => {
-      const moves = findPossibleMoves(currentBoard);
-      if (moves.length > 0) setHintPair(moves[0]);
-    }, 4500);
-  };
-
-  const triggerLaser = (type: 'row' | 'col', index: number) => {
-    const id = `l_${Date.now()}_${Math.random()}`;
-    setLaserBeams(prev => [...prev, { id, type, index }]);
-    playSfx('laser');
-    setTimeout(() => setLaserBeams(prev => prev.filter(b => b.id !== id)), 400);
-  };
-
-  const checkWinCondition = (currentScore: number, jellies: number) => {
-    const cfg = CAMPAIGN_LEVELS[currentLevelIdx];
-    const scoreOk = currentScore >= cfg.targetScore;
-    const jellyOk = cfg.targetJellies ? jellies >= cfg.targetJellies : true;
-    return scoreOk && jellyOk;
-  };
-
-  const processCascades = async (currentBoard: BoardCell[][], currentScore: number, combo = 1): Promise<void> => {
-    setIsProcessing(true);
-    const { matches, matchGroups } = findMatches(currentBoard);
+  // Cascades & Gravity loop
+  const processCascades = async (currentScore: number, comboCount = 1): Promise<void> => {
+    isProcessingRef.current = true;
+    const grid = boardRef.current;
+    const { matches, matchGroups } = findMatches(grid);
 
     if (matches.length === 0) {
-      // Check hazards countdown decrement
-      let hazardExploded = false;
-      const boardCopy = currentBoard.map(row => row.map(cell => ({ ...cell, candy: cell.candy ? { ...cell.candy } : null })));
+      isProcessingRef.current = false;
+      const cfg = CAMPAIGN_LEVELS[currentLevelIdx];
+      const scoreOk = currentScore >= cfg.targetScore;
+      const jellyOk = cfg.targetJellies ? clearedJellies >= cfg.targetJellies : true;
 
-      for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
-          const candy = boardCopy[r][c].candy;
-          if (candy && candy.special === 'hazard' && candy.hazardCountdown !== undefined) {
-            candy.hazardCountdown -= 1;
-            if (candy.hazardCountdown <= 0) {
-              hazardExploded = true;
-              boardCopy[r][c].candy = null; // Hazard exploded penalty!
-              playSfx('bomb');
-              addFloatingText(c * 42 + 21, r * 42 + 21, '💥 GLITCH EXPLOSION!', '#FF4081');
-            }
-          }
-        }
-      }
-
-      if (hazardExploded) {
-        setBoard([...boardCopy]);
-        await new Promise(r => setTimeout(r, 400));
-      }
-
-      // Check possible moves or reshuffle
-      if (findPossibleMoves(boardCopy).length === 0) {
-        addFloatingText(180, 240, '🔄 SHUFFLE!', '#00F0FF');
-        setBoard(generateBoard(CAMPAIGN_LEVELS[currentLevelIdx]));
-      }
-
-      setIsProcessing(false);
-      resetIdleHint(boardCopy);
-
-      const won = checkWinCondition(currentScore, clearedJellies);
-      if (won) {
+      if (scoreOk && jellyOk) {
         setIsPlaying(false);
         setIsVictory(true);
         setIsGameOver(true);
-        const cfg = CAMPAIGN_LEVELS[currentLevelIdx];
-        let stars = currentScore >= cfg.stars[2] ? 3 : currentScore >= cfg.stars[1] ? 2 : 1;
-        saveProgress(currentLevelIdx, stars);
-        confetti({ particleCount: 120, spread: 80 });
-        playSfx('sugar');
+        const stars = currentScore >= cfg.stars[2] ? 3 : currentScore >= cfg.stars[1] ? 2 : 1;
+        saveStars(currentLevelIdx, stars);
+        playSound('win');
+        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
         return;
       } else if (movesLeft <= 0) {
         setIsPlaying(false);
         setIsVictory(false);
         setIsGameOver(true);
-        playSfx('reject');
+        playSound('over');
         return;
       }
       return;
     }
 
-    const boardCopy = currentBoard.map(row => row.map(cell => ({ ...cell, candy: cell.candy ? { ...cell.candy } : null })));
     const cellsToClear: { r: number; c: number }[] = [...matches];
     let newlyClearedJellies = 0;
     const specialCreations: { r: number; c: number; special: SpecialType; type: CandyType }[] = [];
@@ -561,19 +403,15 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
       if (len >= 5) {
         specialCreations.push({ r: center.r, c: center.c, special: 'color_bomb', type: group.type });
       } else if (len === 4) {
-        const special: SpecialType = group.isHorizontal ? 'striped_v' : 'striped_h';
-        specialCreations.push({ r: center.r, c: center.c, special, type: group.type });
+        specialCreations.push({ r: center.r, c: center.c, special: group.isHorizontal ? 'striped_v' : 'striped_h', type: group.type });
       }
     });
 
     matches.forEach(({ r, c }) => {
-      const cell = boardCopy[r][c];
-      if (cell.candy && cell.candy.special === 'striped_h') {
-        triggerLaser('row', r);
-        for (let col = 0; col < BOARD_SIZE; col++) cellsToClear.push({ r, c: col });
-      } else if (cell.candy && cell.candy.special === 'striped_v') {
-        triggerLaser('col', c);
-        for (let row = 0; row < BOARD_SIZE; row++) cellsToClear.push({ r: row, c });
+      const cell = grid[r][c];
+      if (cell.candy) {
+        const meta = CANDY_METADATA[cell.candy.type];
+        spawnParticles(cell.candy.x + TILE_SIZE / 2, cell.candy.y + TILE_SIZE / 2, meta.color, 8);
       }
       if (cell.jelly > 0) {
         cell.jelly--;
@@ -581,314 +419,374 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
       }
     });
 
-    // Unique clear list
-    const uniqueMap = new Set<string>();
-    const finalClear: { r: number; c: number }[] = [];
-    cellsToClear.forEach(p => {
-      if (!uniqueMap.has(`${p.r}_${p.c}`)) {
-        uniqueMap.add(`${p.r}_${p.c}`);
-        finalClear.push(p);
-      }
-    });
-
-    finalClear.forEach(({ r, c }) => {
-      boardCopy[r][c].candy = null;
+    // Clear matched candies
+    matches.forEach(({ r, c }) => {
+      grid[r][c].candy = null;
     });
 
     specialCreations.forEach(({ r, c, special, type }) => {
-      boardCopy[r][c].candy = { id: `spec_${Date.now()}_${Math.random()}`, type, special };
+      const candy = createCandy(type);
+      candy.special = special;
+      candy.x = grid[r][c].c * TILE_SIZE + (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+      candy.y = grid[r][c].r * TILE_SIZE + 110;
+      candy.targetX = candy.x;
+      candy.targetY = candy.y;
+      grid[r][c].candy = candy;
     });
 
-    const feverMult = sugarFever ? 2 : 1;
-    const pts = finalClear.length * 50 * combo * feverMult;
-    const nextScore = currentScore + pts;
-
-    setScore(nextScore);
+    const pts = matches.length * 60 * comboCount * (sugarFever ? 2 : 1);
+    const updatedScore = currentScore + pts;
+    setScore(updatedScore);
     setClearedJellies(prev => prev + newlyClearedJellies);
-    setComboMultiplier(combo);
-    if (combo >= 3) setSugarFever(true);
+    setCombo(comboCount);
+    if (comboCount >= 3) setSugarFever(true);
 
-    playSfx('pop', combo);
-    setBoard([...boardCopy]);
-    await new Promise(r => setTimeout(r, 200));
+    playSound('pop', comboCount);
+    if (comboCount >= 2) {
+      const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+      addFloatingText(startX + 80, 250, `SWEET! x${comboCount}`, '#00F0FF');
+    }
 
-    // Gravity & Portal Drop
+    await new Promise(r => setTimeout(r, 220));
+
+    // Gravity Drop & Fill
+    const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+    const startY = 110;
+
     for (let c = 0; c < BOARD_SIZE; c++) {
       let emptyRow = BOARD_SIZE - 1;
       for (let r = BOARD_SIZE - 1; r >= 0; r--) {
-        if (boardCopy[r][c].candy !== null) {
+        if (grid[r][c].candy !== null) {
           if (r !== emptyRow) {
-            boardCopy[emptyRow][c].candy = boardCopy[r][c].candy;
-            boardCopy[r][c].candy = null;
+            grid[emptyRow][c].candy = grid[r][c].candy;
+            grid[r][c].candy = null;
           }
           emptyRow--;
         }
       }
       for (let r = emptyRow; r >= 0; r--) {
-        boardCopy[r][c].candy = createRandomCandy();
+        const newCandy = createCandy();
+        const tx = startX + c * TILE_SIZE;
+        const ty = startY + r * TILE_SIZE;
+        newCandy.x = tx;
+        newCandy.y = startY - 60; // Drop from above
+        newCandy.targetX = tx;
+        newCandy.targetY = ty;
+        grid[r][c].candy = newCandy;
       }
     }
 
-    setBoard([...boardCopy]);
-    await new Promise(r => setTimeout(r, 200));
-    await processCascades(boardCopy, nextScore, combo + 1);
+    await new Promise(r => setTimeout(r, 250));
+    await processCascades(updatedScore, comboCount + 1);
   };
 
-  const attemptSwap = async (p1: { r: number; c: number }, p2: { r: number; c: number }) => {
-    if (isProcessing || !isPlaying || isGameOver) return;
-    const dr = Math.abs(p1.r - p2.r);
-    const dc = Math.abs(p1.c - p2.c);
-    if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
-      const c1 = board[p1.r][p1.c].candy;
-      const c2 = board[p2.r][p2.c].candy;
-      if (!c1 || !c2) return;
+  // Click & Swap handling
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isPlaying || isGameOver || isProcessingRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = CANVAS_WIDTH / rect.width;
+    const scaleY = CANVAS_HEIGHT / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
-      setIsProcessing(true);
-      playSfx('swap');
-      const cloned = board.map(row => row.map(cell => ({ ...cell, candy: cell.candy ? { ...cell.candy } : null })));
-      cloned[p1.r][p1.c].candy = c2;
-      cloned[p2.r][p2.c].candy = c1;
-      setBoard([...cloned]);
+    const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+    const startY = 110;
 
-      const { matches } = findMatches(cloned);
-      if (matches.length > 0) {
-        setSelectedPos(null);
-        setMovesLeft(m => Math.max(0, m - 1));
-        await new Promise(r => setTimeout(r, 150));
-        await processCascades(cloned, score, 1);
-      } else {
-        playSfx('reject');
-        await new Promise(r => setTimeout(r, 200));
-        setBoard([...board]);
-        setIsProcessing(false);
-      }
-    }
-  };
+    if (x < startX || x > startX + BOARD_SIZE * TILE_SIZE || y < startY || y > startY + BOARD_SIZE * TILE_SIZE) return;
 
-  const handleCellClick = (r: number, c: number) => {
-    if (isProcessing || !isPlaying || isGameOver) return;
-    if (activeBooster) {
-      const cloned = board.map(row => row.map(cell => ({ ...cell, candy: cell.candy ? { ...cell.candy } : null })));
-      if (activeBooster === 'hammer') {
-        playSfx('hammer');
-        cloned[r][c].candy = null;
-        if (cloned[r][c].jelly > 0) cloned[r][c].jelly = 0;
-      } else if (activeBooster === 'color_bomb') {
-        playSfx('color_bomb');
-        cloned[r][c].candy = { id: `cb_${Date.now()}`, type: 0, special: 'color_bomb' };
-      }
-      setBoosters(prev => ({ ...prev, [activeBooster]: prev[activeBooster] - 1 }));
+    const c = Math.floor((x - startX) / TILE_SIZE);
+    const r = Math.floor((y - startY) / TILE_SIZE);
+
+    if (activeBooster === 'hammer') {
+      playSound('hammer');
+      const candy = boardRef.current[r][c].candy;
+      if (candy) spawnParticles(candy.x + TILE_SIZE / 2, candy.y + TILE_SIZE / 2, '#FFE600', 20);
+      boardRef.current[r][c].candy = null;
+      if (boardRef.current[r][c].jelly > 0) boardRef.current[r][c].jelly = 0;
+      setBoosters(prev => ({ ...prev, hammer: prev.hammer - 1 }));
       setActiveBooster(null);
-      setBoard([...cloned]);
-      processCascades(cloned, score, 1);
+      processCascades(score, 1);
       return;
     }
 
-    if (!selectedPos) {
-      setSelectedPos({ r, c });
-      playSfx('swap');
+    if (!selectedRef.current) {
+      selectedRef.current = { r, c };
+      playSound('swap');
     } else {
-      if (selectedPos.r === r && selectedPos.c === c) {
-        setSelectedPos(null);
-      } else {
-        attemptSwap(selectedPos, { r, c });
-        setSelectedPos(null);
+      const p1 = selectedRef.current;
+      const p2 = { r, c };
+      selectedRef.current = null;
+
+      const dr = Math.abs(p1.r - p2.r);
+      const dc = Math.abs(p1.c - p2.c);
+      if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+        // Swap test
+        const grid = boardRef.current;
+        const temp = grid[p1.r][p1.c].candy;
+        grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
+        grid[p2.r][p2.c].candy = temp;
+
+        const { matches } = findMatches(grid);
+        if (matches.length > 0) {
+          setMovesLeft(m => Math.max(0, m - 1));
+          processCascades(score, 1);
+        } else {
+          // Revert
+          const t2 = grid[p1.r][p1.c].candy;
+          grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
+          grid[p2.r][p2.c].candy = t2;
+          playSound('over');
+        }
       }
     }
   };
+
+  // 60fps Main Canvas Game Loop (Matching Flappy Bird / Starfighter High-End Canvas polish)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let active = true;
+    const render = () => {
+      if (!active) return;
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // Background Gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+      bgGrad.addColorStop(0, '#090014');
+      bgGrad.addColorStop(0.5, '#1B0033');
+      bgGrad.addColorStop(1, '#08000D');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // Cyber Grid Lines
+      ctx.strokeStyle = '#2A1C54';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < CANVAS_WIDTH; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, CANVAS_HEIGHT);
+        ctx.stroke();
+      }
+      for (let y = 0; y < CANVAS_HEIGHT; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(CANVAS_WIDTH, y);
+        ctx.stroke();
+      }
+
+      // Render Board & Candies
+      const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+      const startY = 110;
+
+      const grid = boardRef.current;
+      if (grid && grid.length === BOARD_SIZE) {
+        for (let r = 0; r < BOARD_SIZE; r++) {
+          for (let c = 0; c < BOARD_SIZE; c++) {
+            const cell = grid[r][c];
+            const px = startX + c * TILE_SIZE;
+            const py = startY + r * TILE_SIZE;
+
+            // Cell Tile Background
+            ctx.fillStyle = cell.jelly > 0 ? 'rgba(0, 240, 255, 0.15)' : 'rgba(0, 0, 0, 0.4)';
+            ctx.strokeStyle = cell.jelly > 0 ? '#00F0FF' : '#2A1C54';
+            ctx.lineWidth = cell.jelly > 0 ? 2 : 1;
+            ctx.beginPath();
+            ctx.roundRect(px, py, TILE_SIZE - 2, TILE_SIZE - 2, 8);
+            ctx.fill();
+            ctx.stroke();
+
+            // Jelly Glow
+            if (cell.jelly > 0) {
+              ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
+              ctx.font = '10px monospace';
+              ctx.fillText(cell.jelly === 2 ? '⚡' : '✨', px + 4, py + 14);
+            }
+
+            // Candy Item
+            const candy = cell.candy;
+            if (candy) {
+              // Smooth lerp towards target position
+              candy.x += (px - candy.x) * 0.25;
+              candy.y += (py - candy.y) * 0.25;
+
+              const meta = CANDY_METADATA[candy.type];
+              const isSelected = selectedRef.current?.r === r && selectedRef.current?.c === c;
+
+              ctx.save();
+              ctx.translate(candy.x + TILE_SIZE / 2, candy.y + TILE_SIZE / 2);
+              if (isSelected) ctx.scale(1.12, 1.12);
+
+              // Candy Rounded Box
+              ctx.fillStyle = meta.color;
+              ctx.strokeStyle = '#000000';
+              ctx.lineWidth = 2.5;
+              ctx.beginPath();
+              ctx.roundRect(-TILE_SIZE / 2 + 3, -TILE_SIZE / 2 + 3, TILE_SIZE - 8, TILE_SIZE - 8, 10);
+              ctx.fill();
+              ctx.stroke();
+
+              // Specular Glow
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+              ctx.beginPath();
+              ctx.roundRect(-TILE_SIZE / 2 + 5, -TILE_SIZE / 2 + 5, TILE_SIZE - 14, 10, 4);
+              ctx.fill();
+
+              // Symbol
+              ctx.font = '20px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(meta.symbol, 0, 2);
+
+              ctx.restore();
+            }
+          }
+        }
+      }
+
+      // Render Particles
+      const particles = particlesRef.current;
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.2;
+        p.life++;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - p.life / p.maxLife);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        if (p.life >= p.maxLife) particles.splice(i, 1);
+      }
+
+      // Render Floating Texts
+      const ftexts = floatingTextsRef.current;
+      for (let i = ftexts.length - 1; i >= 0; i--) {
+        const ft = ftexts[i];
+        ft.y += ft.vy;
+        ft.alpha -= 0.02;
+        ctx.fillStyle = ft.color;
+        ctx.globalAlpha = Math.max(0, ft.alpha);
+        ctx.font = 'bold 16px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.globalAlpha = 1;
+        if (ft.alpha <= 0) ftexts.splice(i, 1);
+      }
+
+      requestAnimationFrame(render);
+    };
+
+    render();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const currentCfg = CAMPAIGN_LEVELS[currentLevelIdx];
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-full h-full flex-1 justify-center text-slate-100 font-mono">
-      {/* Top Header HUD */}
-      <div className="w-full max-w-[min(100%,calc(min(76vh,640px)*9/16))] flex items-center justify-between bg-portal-surface/90 px-3 py-1.5 rounded-xl border border-portal-border mb-1.5 shadow-md shrink-0">
+    <div className="flex flex-col items-center justify-center w-full h-full flex-1 select-none font-mono text-slate-100">
+      {/* Top HUD */}
+      <div className="w-[380px] flex items-center justify-between bg-portal-surface/90 px-3 py-2 rounded-xl border-2 border-black mb-2 shadow-neo-sm">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-portal-neon" />
-          <span className="text-[10px] text-slate-400 font-extrabold uppercase">LVL {currentCfg.level}</span>
-          <span className="text-sm font-black text-portal-neon">{score.toLocaleString()}</span>
+          <Sparkles className="w-4 h-4 text-portal-cyan" />
+          <span className="text-xs font-black text-portal-neon">LVL {currentCfg.level}</span>
+          <span className="text-sm font-black text-portal-yellow">{score.toLocaleString()} PTS</span>
         </div>
-
-        <div className="flex items-center gap-1.5 bg-black/40 px-2 py-0.5 rounded-lg border border-portal-border/60">
-          <Zap className="w-3 h-3 text-portal-gold" />
-          <span className={`text-[11px] font-black ${movesLeft <= 5 ? 'text-rose-400 animate-bounce' : 'text-portal-gold'}`}>
-            {movesLeft} MOVES
-          </span>
+        <div className="flex items-center gap-2 bg-black/50 px-2.5 py-1 rounded-lg border border-portal-border">
+          <Zap className="w-3.5 h-3.5 text-portal-gold" />
+          <span className="text-xs font-black text-portal-gold">{movesLeft} MOVES</span>
         </div>
-
         <button
           onClick={() => setSoundEnabled(!soundEnabled)}
-          className="p-1 rounded-lg bg-portal-card text-slate-400 hover:text-white border border-portal-border/60 transition-all"
+          className="p-1.5 rounded-lg bg-portal-card text-slate-300 hover:text-white border border-black"
         >
-          {soundEnabled ? <Volume2 className="w-3 h-3 text-portal-cyan" /> : <VolumeX className="w-3 h-3" />}
+          {soundEnabled ? <Volume2 className="w-4 h-4 text-portal-cyan" /> : <VolumeX className="w-4 h-4" />}
         </button>
       </div>
 
-      {/* Main 9:16 Portrait Canvas Frame */}
-      <div className="relative w-auto h-[min(76vh,640px)] max-w-full aspect-[9/16] bg-gradient-to-b from-[#090014] via-[#260021] to-[#08000d] rounded-2xl border-2 border-[#3d1030] p-2.5 shadow-[0_8px_32px_rgba(255,0,127,0.2)] flex flex-col items-center justify-between overflow-hidden shrink-0">
-        <canvas ref={canvasRef} width={360} height={580} className="absolute inset-0 pointer-events-none z-30 w-full h-full" />
-
-        {floatingTexts.map(f => (
-          <div key={f.id} style={{ left: `${f.x}px`, top: `${f.y}px` }} className="absolute z-40 pointer-events-none font-black text-sm animate-bounce">
-            <span style={{ color: f.color }}>{f.text}</span>
-          </div>
-        ))}
-
-        {laserBeams.map(b => (
-          <div
-            key={b.id}
-            className={`absolute z-35 bg-white shadow-[0_0_15px_#00F0FF] pointer-events-none animate-pulse ${
-              b.type === 'row' ? 'w-full h-3 left-0' : 'h-full w-3 top-0'
-            }`}
-            style={b.type === 'row' ? { top: `${b.index * 12.5 + 6.25}%` } : { left: `${b.index * 12.5 + 6.25}%` }}
-          />
-        ))}
-
-        {/* Level Intro / Progression Screen (NO level picker — linear progression only!) */}
+      {/* Main 60fps HTML5 Canvas Container (Matching Flappy Bird & Starfighter arcade engine) */}
+      <div className="relative w-[400px] h-[600px] bg-[#08000D] rounded-3xl border-4 border-black shadow-[8px_8px_0px_#000] flex flex-col items-center justify-center overflow-hidden">
         {isLevelIntro ? (
-          <div className="flex flex-col items-center justify-center w-full h-full p-4 z-20 text-center space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-portal-neon/20 border border-portal-neon flex items-center justify-center text-portal-neon shadow-glow-gold animate-bounce">
-              <Sparkles className="w-8 h-8" />
+          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30 space-y-4 animate-in fade-in">
+            <div className="w-20 h-20 rounded-2xl bg-portal-cyan border-3 border-black shadow-neo flex items-center justify-center text-black animate-bounce">
+              <Sparkles className="w-10 h-10 stroke-[2.5]" />
             </div>
             <div>
-              <span className="text-[10px] text-portal-cyan font-black uppercase tracking-widest">LEVEL {currentCfg.level}</span>
+              <span className="text-xs text-portal-cyan font-black uppercase">LEVEL {currentCfg.level}</span>
               <h2 className="text-2xl font-black text-white">{currentCfg.name}</h2>
-              <p className="text-xs text-slate-300 mt-2 max-w-[240px] leading-relaxed">{currentCfg.description}</p>
+              <p className="text-xs text-slate-300 mt-2 max-w-[260px]">{currentCfg.description}</p>
             </div>
-
-            <div className="bg-black/50 p-3 rounded-xl border border-portal-border w-full space-y-1 text-xs">
-              <div className="flex justify-between"><span className="text-slate-400">Target Score:</span><span className="text-portal-gold font-black">{currentCfg.targetScore.toLocaleString()}</span></div>
-              {currentCfg.targetJellies && <div className="flex justify-between"><span className="text-slate-400">Target Jellies:</span><span className="text-portal-cyan font-black">{currentCfg.targetJellies}</span></div>}
-              <div className="flex justify-between"><span className="text-slate-400">Allowed Moves:</span><span className="text-white font-black">{currentCfg.moves}</span></div>
-            </div>
-
             <button
               onClick={() => startLevel(currentLevelIdx)}
-              className="w-full py-3.5 rounded-xl bg-portal-neon text-black font-black text-sm shadow-glow-gold active:scale-95 transition-all flex items-center justify-center gap-2"
+              className="w-full max-w-[200px] py-3.5 rounded-xl bg-portal-neon text-black font-black text-sm shadow-neo border-3 border-black active:translate-x-0.5 active:translate-y-0.5 transition-all"
             >
-              <Play className="w-4 h-4 fill-black" /> START LEVEL {currentCfg.level}
+              START GAME
             </button>
           </div>
         ) : (
-          <>
-            {/* Objective Bar */}
-            <div className="w-full flex items-center justify-between px-2 py-1 bg-black/40 rounded-lg border border-portal-border/60 text-[10px]">
-              <div className="flex items-center gap-2 truncate">
-                <span className="text-slate-400 font-bold uppercase">Goal:</span>
-                <span className="text-portal-cyan font-bold truncate">
-                  {currentCfg.targetJellies ? `Jellies: ${clearedJellies}/${currentCfg.targetJellies}` : `Score: ${score}/${currentCfg.targetScore}`}
-                </span>
-              </div>
-              {sugarFever && (
-                <div className="flex items-center gap-1 text-portal-gold animate-pulse font-black">
-                  <Flame className="w-3 h-3" /> SUGAR FEVER x2
-                </div>
-              )}
-            </div>
-
-            {/* 8x8 Board */}
-            <div ref={boardRef} className="relative grid grid-cols-8 gap-1 w-full max-w-[340px] aspect-square p-1.5 bg-[#140628] rounded-xl border border-portal-border shadow-inner">
-              {board.map((row, r) =>
-                row.map((cell, c) => {
-                  const isSelected = selectedPos?.r === r && selectedPos?.c === c;
-                  const isHinted = hintPair?.some(p => p.r === r && p.c === c);
-                  const candy = cell.candy;
-                  const cfg = candy ? CANDY_CONFIG[candy.type] : null;
-
-                  return (
-                    <div
-                      key={`${r}-${c}`}
-                      onClick={() => handleCellClick(r, c)}
-                      className={`relative flex items-center justify-center rounded-lg cursor-pointer transition-all ${
-                        cell.jelly > 0 ? 'bg-cyan-950/60 border border-cyan-400/60 shadow-[inset_0_0_6px_#00F0FF]' : 'bg-black/30'
-                      } ${isSelected ? 'ring-2 ring-portal-gold scale-105 z-20' : ''} ${isHinted ? 'animate-pulse ring-1 ring-portal-cyan' : ''}`}
-                    >
-                      {candy && cfg && (
-                        <div
-                          className={`w-full h-full rounded-md flex items-center justify-center font-black ${
-                            candy.special === 'hazard'
-                              ? 'bg-rose-900 border-2 border-rose-400 animate-pulse text-white text-xs'
-                              : candy.special === 'color_bomb'
-                              ? 'bg-black border-2 border-yellow-300 animate-spin-slow'
-                              : `bg-gradient-to-tr ${cfg.bgGrad} border ${cfg.border}`
-                          }`}
-                        >
-                          {candy.special === 'hazard' ? (
-                            <span className="text-[11px] font-black">💣{candy.hazardCountdown}</span>
-                          ) : candy.special === 'color_bomb' ? (
-                            <span>🌈</span>
-                          ) : (
-                            <span className="text-xs sm:text-sm drop-shadow">{cfg.symbol}</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            {/* Boosters */}
-            <div className="w-full grid grid-cols-2 gap-2 px-1">
-              <button
-                onClick={() => setActiveBooster(b => (b === 'hammer' ? null : 'hammer'))}
-                disabled={boosters.hammer <= 0}
-                className={`flex items-center justify-between px-2 py-1.5 rounded-lg border text-xs font-black transition-all ${
-                  activeBooster === 'hammer' ? 'bg-portal-gold text-black border-white' : 'bg-portal-surface/80 text-slate-300 border-portal-border'
-                }`}
-              >
-                <span className="flex items-center gap-1"><Hammer className="w-3.5 h-3.5" /> Hammer</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full">{boosters.hammer}</span>
-              </button>
-              <button
-                onClick={() => setActiveBooster(b => (b === 'color_bomb' ? null : 'color_bomb'))}
-                disabled={boosters.color_bomb <= 0}
-                className={`flex items-center justify-between px-2 py-1.5 rounded-lg border text-xs font-black transition-all ${
-                  activeBooster === 'color_bomb' ? 'bg-portal-cyan text-black border-white' : 'bg-portal-surface/80 text-slate-300 border-portal-border'
-                }`}
-              >
-                <span className="flex items-center gap-1"><Sparkles className="w-3.5 h-3.5" /> Color Bomb</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.2 rounded-full">{boosters.color_bomb}</span>
-              </button>
-            </div>
-          </>
+          <canvas
+            ref={canvasRef}
+            width={CANVAS_WIDTH}
+            height={CANVAS_HEIGHT}
+            onClick={handleCanvasClick}
+            className="cursor-pointer touch-none"
+          />
         )}
 
-        {/* Win / Loss Modal */}
-        {isGameOver && (
-          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 space-y-3 z-50">
-            <span className={`px-3 py-1 rounded-full text-[11px] font-black uppercase border ${isVictory ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' : 'bg-rose-500/20 text-rose-400 border-rose-500/40'}`}>
-              {isVictory ? `LEVEL ${currentCfg.level} CLEARED!` : 'OUT OF MOVES'}
-            </span>
+        {/* Boosters Footer Bar */}
+        {!isLevelIntro && !isGameOver && (
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-portal-surface/90 px-3 py-2 rounded-xl border-2 border-black shadow-neo-sm z-20">
+            <button
+              onClick={() => setActiveBooster(b => (b === 'hammer' ? null : 'hammer'))}
+              disabled={boosters.hammer <= 0}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black text-xs font-black ${
+                activeBooster === 'hammer' ? 'bg-portal-gold text-black shadow-neo-sm' : 'bg-portal-card text-slate-300'
+              }`}
+            >
+              <Hammer className="w-4 h-4" /> Hammer ({boosters.hammer})
+            </button>
+            <span className="text-[10px] text-slate-400 font-bold uppercase">Tap adjacent candies to swap</span>
+          </div>
+        )}
 
-            <h3 className="text-2xl font-black text-white">{isVictory ? 'Sugar Victory!' : 'Defeated!'}</h3>
-            <div className="text-3xl font-black text-portal-neon">{score.toLocaleString()} PTS</div>
+        {/* Game Over / Victory Modal */}
+        {isGameOver && (
+          <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-40 space-y-3">
+            <span className={`px-3 py-1 rounded-full text-xs font-black uppercase border-2 border-black ${isVictory ? 'bg-emerald-500 text-black' : 'bg-rose-500 text-white'}`}>
+              {isVictory ? 'VICTORY!' : 'GAME OVER'}
+            </span>
+            <h3 className="text-2xl font-black text-white">{isVictory ? 'Sugar Crush Mastery!' : 'Out of Moves'}</h3>
+            <div className="text-3xl font-black text-portal-yellow">{score.toLocaleString()} PTS</div>
 
             {isVictory && (
-              <div className="flex items-center gap-1.5 my-2">
+              <div className="flex items-center gap-1 my-2">
                 {[1, 2, 3].map(s => (
                   <Star key={s} className={`w-6 h-6 ${score >= currentCfg.stars[s - 1] ? 'text-portal-gold fill-portal-gold' : 'text-slate-600'}`} />
                 ))}
               </div>
             )}
 
-            <div className="flex items-center gap-2 w-full pt-2">
-              <button onClick={() => setIsLevelIntro(true)} className="flex-1 py-2.5 rounded-xl bg-portal-surface text-slate-300 font-black text-xs border border-portal-border">
-                Menu
+            <div className="flex items-center gap-2 w-full max-w-[240px] pt-2">
+              <button onClick={() => setIsLevelIntro(true)} className="flex-1 py-2.5 rounded-xl bg-portal-card text-slate-300 font-black text-xs border-2 border-black">
+                Levels
               </button>
               {isVictory && currentLevelIdx < CAMPAIGN_LEVELS.length - 1 ? (
                 <button
-                  onClick={() => {
-                    const nextIdx = currentLevelIdx + 1;
-                    setCurrentLevelIdx(nextIdx);
-                    startLevel(nextIdx);
-                  }}
-                  className="flex-1 py-2.5 rounded-xl bg-portal-neon text-black font-black text-xs shadow-glow-gold active:scale-95 transition-all flex items-center justify-center gap-1"
+                  onClick={() => startLevel(currentLevelIdx + 1)}
+                  className="flex-1 py-2.5 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm flex items-center justify-center gap-1"
                 >
-                  Next Level <ChevronRight className="w-4 h-4 stroke-[3]" />
+                  Next <ChevronRight className="w-4 h-4 stroke-[3]" />
                 </button>
               ) : (
-                <button onClick={() => startLevel(currentLevelIdx)} className="flex-1 py-2.5 rounded-xl bg-portal-neon text-black font-black text-xs shadow-glow-gold">
+                <button onClick={() => startLevel(currentLevelIdx)} className="flex-1 py-2.5 rounded-xl bg-portal-neon text-black font-black text-xs border-2 border-black shadow-neo-sm">
                   Replay
                 </button>
               )}
