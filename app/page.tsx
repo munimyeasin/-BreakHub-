@@ -697,7 +697,7 @@ export default function ArcadePortalDashboard() {
         </div>
       </header>
 
-      <div className="flex w-full min-h-[calc(100vh-61px)]">
+      <div className="flex w-full items-start">
         <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
