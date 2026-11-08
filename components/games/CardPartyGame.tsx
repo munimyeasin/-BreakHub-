@@ -570,7 +570,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
             })()}
 
             {/* CIRCULAR FELT TABLE WITH 4 CURVED DIRECTIONAL ARROWS */}
-            <div className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-[#1e2f23] border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_15px_30px_rgba(0,0,0,0.6)] flex items-center justify-center">
+            <div className="relative w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] aspect-square shrink-0 rounded-full bg-[#1e2f23] border-8 border-[#3b2416] shadow-[inset_0_20px_40px_rgba(0,0,0,0.85),0_15px_30px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
               {/* 4 Curved Directional Turn Arrows (Clockwise / Counter) */}
               <div className={`absolute inset-4 rounded-full border-4 border-dashed border-amber-400/70 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.3)] ${direction === 1 ? 'animate-[spin_18s_linear_infinite]' : 'animate-[spin_18s_linear_infinite_reverse]'}`}>
