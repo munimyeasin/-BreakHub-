@@ -668,8 +668,8 @@ export default function FlappyBirdClone({ gameId = "g_flappy_27", onGameOver, on
         ctx.fillStyle = '#FFFFFF';
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 5;
-        ctx.strokeText(String(score), W / 2, 60);
-        ctx.fillText(String(score), W / 2, 60);
+        ctx.strokeText(String(scoreRef.current), W / 2, 60);
+        ctx.fillText(String(scoreRef.current), W / 2, 60);
         ctx.restore();
       }
 
