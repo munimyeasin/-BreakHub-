@@ -594,13 +594,6 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
               <div className="relative w-[200px] h-[150px] sm:w-[360px] sm:h-[360px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-5 sm:border-7 border-[#3b2416] shadow-[inset_0_15px_30px_rgba(0,0,0,0.85),0_10px_20px_rgba(0,0,0,0.6)] flex items-center justify-center">
 
-                {/* 4 Minimalist Dark Curved Directional Turn Arrows */}
-                <div className={`absolute inset-3 rounded-[50%] sm:rounded-full border-4 border-dashed border-amber-400/50 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.2)] ${direction === 1 ? 'animate-[spin_18s_linear_infinite]' : 'animate-[spin_18s_linear_infinite_reverse]'}`}>
-                  <div className="absolute top-1 left-1/2 -translate-x-1/2 text-amber-300 text-[9px] sm:text-sm font-black opacity-80">➔</div>
-                  <div className="absolute right-1 top-1/2 -translate-y-1/2 text-amber-300 text-[9px] sm:text-sm font-black opacity-80">➔</div>
-                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-amber-300 text-[9px] sm:text-sm font-black opacity-80">➔</div>
-                  <div className="absolute left-1 top-1/2 -translate-y-1/2 text-amber-300 text-[9px] sm:text-sm font-black opacity-80">➔</div>
-                </div>
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
                 <div className="flex items-center justify-center gap-4 relative z-10">
