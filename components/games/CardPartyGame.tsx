@@ -433,9 +433,14 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
   }, [turnIndex, gameState, players, winner, direction, isDealing, flyingCard]);
 
   return (
-    <div className="w-full h-full min-h-[660px] flex flex-col items-center justify-between bg-[#22130b] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-sans border-4 border-black shadow-2xl">
-      {/* Warm Brown Felt Texture Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#3b2416_1px,transparent_1px)] [background-size:24px_24px] opacity-90 pointer-events-none" />
+    <div className="w-full h-full min-h-[660px] flex flex-col items-center justify-between bg-[#4ec0ca] p-3 sm:p-5 rounded-3xl select-none relative overflow-hidden font-mono border-4 border-black shadow-2xl">
+      {/* Flappy Bird Retro Sky & Clouds Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(#ffffff_3px,transparent_3px)] [background-size:36px_36px] opacity-60 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-12 bg-[#d7b56d] border-t-4 border-black flex items-center justify-around opacity-90 pointer-events-none">
+        <div className="w-8 h-10 bg-[#73bf2e] border-2 border-black rounded-t-md" />
+        <div className="w-12 h-16 bg-[#73bf2e] border-2 border-black rounded-t-md" />
+        <div className="w-10 h-12 bg-[#73bf2e] border-2 border-black rounded-t-md" />
+      </div>
 
       {/* Flying Card Animation Overlay */}
       {flyingCard && (
@@ -594,7 +599,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                 );
               })()}
 
-              <div className="relative w-[200px] h-[150px] sm:w-[360px] sm:h-[360px] rounded-[50%] sm:rounded-full bg-[#1e2f23] border-5 sm:border-7 border-[#3b2416] shadow-[inset_0_15px_30px_rgba(0,0,0,0.85),0_10px_20px_rgba(0,0,0,0.6)] flex items-center justify-center">
+              <div className="relative w-[220px] h-[160px] sm:w-[380px] sm:h-[380px] rounded-[50%] sm:rounded-full bg-[#52b788] border-5 sm:border-7 border-black shadow-[6px_6px_0px_#000] flex items-center justify-center">
 
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}
@@ -674,7 +679,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </div>
 
               {/* Bottom Protruding "YOU" Tab on Table */}
-              <div className={`mt-[-3px] px-4 py-0.5 rounded-b-xl border-3 border-t-0 border-black font-black uppercase text-[10px] sm:text-xs shadow-md tracking-wider ${turnIndex === 0 ? 'bg-amber-400 text-black animate-bounce' : 'bg-[#a0522d] text-amber-100'}`}>
+              <div className={`mt-[-3px] px-5 py-0.5 rounded-b-xl border-3 border-t-0 border-black font-black uppercase text-[10px] sm:text-xs shadow-md tracking-wider ${turnIndex === 0 ? 'bg-amber-400 text-black animate-bounce' : 'bg-[#d7b56d] text-black'}`}>
                 YOU
               </div>
             </div>
