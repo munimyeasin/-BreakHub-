@@ -323,21 +323,26 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     if (card.type === 'skip') {
       skipNext = true;
       setStatusMessage(`${pname} skipped!`);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
     } else if (card.type === 'reverse') {
       const newDir = (direction * -1) as 1 | -1;
       setDirection(newDir);
       step = newDir;
       setStatusMessage(`${pname} reversed direction!`);
+      confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     } else if (card.type === 'draw_two') {
       cardsToDraw = 2;
       skipNext = true;
       setStatusMessage(`${pname} played +2!`);
+      confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
     } else if (card.type === 'wild_draw_four') {
       cardsToDraw = 4;
       skipNext = true;
       setStatusMessage(`${pname} played +4 (${nextColor.toUpperCase()})!`);
+      confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 } });
     } else if (card.type === 'wild') {
       setStatusMessage(`${pname} played Wild (${nextColor.toUpperCase()})!`);
+      confetti({ particleCount: 90, spread: 90, origin: { y: 0.5 } });
     } else {
       setStatusMessage(`${pname} played.`);
     }
