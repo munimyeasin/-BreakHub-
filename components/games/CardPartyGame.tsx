@@ -398,48 +398,52 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     if (currentPlayer.isAI) {
       setAiThinking(true);
       const timer = setTimeout(() => {
-        const playableCards = currentPlayer.cards.filter(c => isCardPlayable(c));
+        try {
+          const playableCards = currentPlayer.cards.filter(c => isCardPlayable(c));
 
-        if (playableCards.length > 0) {
-          const cardToPlay = playableCards[Math.floor(Math.random() * playableCards.length)];
-          let chosenColor: CardColor = 'red';
-          if (cardToPlay.color === 'wild') {
-            const colorCounts: Record<CardColor, number> = { red: 0, blue: 0, green: 0, yellow: 0, wild: 0 };
-            currentPlayer.cards.forEach(c => {
-              if (c.color !== 'wild') colorCounts[c.color]++;
-            });
-            let maxCount = -1;
-            COLORS.forEach(col => {
-              if (colorCounts[col] > maxCount) {
-                maxCount = colorCounts[col];
-                chosenColor = col;
-              }
-            });
-          }
-          playCard(turnIndex, cardToPlay, chosenColor);
-        } else {
-          const drawn = drawCards(turnIndex, 1);
-          if (drawn.length > 0) {
-            setPlayers(prev => prev.map(p =>
-              p.id === currentPlayer.id ? { ...p, cards: [...p.cards, ...drawn] } : p
-            ));
-            setStatusMessage(`${currentPlayer.name} drew.`);
-            if (isCardPlayable(drawn[0]) && Math.random() > 0.3) {
-              setTimeout(() => {
+          if (playableCards.length > 0) {
+            const cardToPlay = playableCards[Math.floor(Math.random() * playableCards.length)];
+            let chosenColor: CardColor = 'red';
+            if (cardToPlay.color === 'wild') {
+              const colorCounts: Record<CardColor, number> = { red: 0, blue: 0, green: 0, yellow: 0, wild: 0 };
+              currentPlayer.cards.forEach(c => {
+                if (c.color !== 'wild') colorCounts[c.color]++;
+              });
+              let maxCount = -1;
+              COLORS.forEach(col => {
+                if (colorCounts[col] > maxCount) {
+                  maxCount = colorCounts[col];
+                  chosenColor = col;
+                }
+              });
+            }
+            playCard(turnIndex, cardToPlay, chosenColor);
+          } else {
+            const drawn = drawCards(turnIndex, 1);
+            if (drawn.length > 0) {
+              setPlayers(prev => prev.map(p =>
+                p.id === currentPlayer.id ? { ...p, cards: [...p.cards, ...drawn] } : p
+              ));
+              setStatusMessage(`${currentPlayer.name} drew.`);
+              if (isCardPlayable(drawn[0]) && Math.random() > 0.5) {
                 let chosenColor: CardColor = 'red';
                 if (drawn[0].color === 'wild') {
                   chosenColor = COLORS[Math.floor(Math.random() * COLORS.length)];
                 }
                 playCard(turnIndex, drawn[0], chosenColor);
-              }, 400);
-              setAiThinking(false);
-              return;
+              } else {
+                setTurnIndex((turnIndex + direction + players.length) % players.length);
+              }
+            } else {
+              setTurnIndex((turnIndex + direction + players.length) % players.length);
             }
           }
+        } catch {
           setTurnIndex((turnIndex + direction + players.length) % players.length);
+        } finally {
+          setAiThinking(false);
         }
-        setAiThinking(false);
-      }, 900);
+      }, 800);
 
       return () => clearTimeout(timer);
     }
@@ -498,8 +502,17 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           ‹
         </button>
 
-        <div className="text-xs font-black text-amber-200 bg-black/70 px-4 py-2 rounded-xl border-2 border-black shadow-sm">
-          {statusMessage}
+        <div
+          onClick={() => {
+            setAiThinking(false);
+            setFlyingCard(null);
+            setIsDealing(false);
+            setStatusMessage('Turn reset. Your turn!');
+          }}
+          className="text-xs font-black text-amber-200 bg-black/70 px-4 py-2 rounded-xl border-2 border-black shadow-sm cursor-pointer hover:bg-black/90 title='Click to unstick if frozen'"
+          title="Click to unstick if frozen"
+        >
+          {statusMessage} ⚡
         </div>
 
         <div className="flex items-center gap-2">
