@@ -42,11 +42,15 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
-function CardBack({ label = 'CARDS' }: { label?: string }) {
+function CardBack({ label = 'BREAK HUB' }: { label?: string }) {
   return (
-    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-[#252a34] border-2 border-black shadow-sm flex items-center justify-center p-0.5 relative overflow-hidden shrink-0">
-      <div className="w-full h-full rounded bg-[#1b1f28] border border-white/15 flex items-center justify-center p-0.5">
-        <span className="text-[7px] sm:text-[8px] font-black text-white uppercase tracking-tighter text-center leading-tight">
+    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-black shadow-md flex items-center justify-center p-0.5 relative overflow-hidden shrink-0 group">
+      <div className="absolute inset-0 opacity-25 bg-[radial-gradient(#fdd835_1px,transparent_1px)] [background-size:5px_5px]" />
+      <div className="absolute inset-0 border border-amber-400/50 rounded-md m-0.5 flex flex-col items-center justify-center p-0.5 bg-black/50 backdrop-blur-[1px]">
+        <div className="w-3.5 h-3.5 rounded-full bg-amber-400 border border-black flex items-center justify-center text-[7px] shadow-sm mb-0.5">
+          🃏
+        </div>
+        <span className="text-[6px] sm:text-[7px] font-black text-amber-300 uppercase tracking-tighter text-center leading-none">
           {label}
         </span>
       </div>
@@ -458,18 +462,18 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {/* Flying Card Animation Overlay */}
       {flyingCard && (
         <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
-          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-4 border-black shadow-neo-lg flex flex-col justify-between p-2.5 bg-white ${
+          <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-4 border-black shadow-neo-lg flex flex-col justify-between p-2.5 ${
             COLOR_CLASSES[flyingCard.card.color].bg
           } ${
             flyingCard.type === 'deal'
               ? 'animate-card-deal'
               : flyingCard.type === 'play'
-              ? `animate-play-${flyingCard.playerIndex}`
-              : `animate-draw-${flyingCard.playerIndex}`
+              ? `animate-play-${flyingCard.playerIndex ?? 0}`
+              : `animate-draw-${flyingCard.playerIndex ?? 0}`
           }`}>
-            <div className="flex justify-between items-start text-white text-[12px] font-black">
+            <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)] bg-black/30 px-1 py-0.5 rounded-md border border-white/20">
               <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
-              <span>{flyingCard.card.color === 'wild' ? '🌈' : ''}</span>
+              <span>{flyingCard.card.color === 'wild' ? '✨' : ''}</span>
             </div>
             <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
               <span className={`text-xl sm:text-2xl font-black ${flyingCard.card.color === 'yellow' ? 'text-amber-950' : flyingCard.card.color === 'red' ? 'text-rose-600' : flyingCard.card.color === 'blue' ? 'text-cyan-600' : flyingCard.card.color === 'green' ? 'text-emerald-600' : 'text-purple-700'}`}>
@@ -482,11 +486,11 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   : flyingCard.card.type === 'draw_two'
                   ? '+2'
                   : flyingCard.card.type === 'wild_draw_four'
-                  ? '+4'
-                  : '★'}
+                  ? '+4 🎨'
+                  : '🌈 ✨'}
               </span>
             </div>
-            <div className="text-[9px] font-black text-white text-right">
+            <div className="text-[9px] font-black text-white text-right drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">
               {flyingCard.card.color[0]?.toUpperCase()}
             </div>
           </div>
@@ -682,9 +686,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             COLOR_CLASSES[card.color].bg
                           } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                         >
-                          <div className="flex justify-between items-start text-white text-[9px] font-black">
+                          <div className="flex justify-between items-start text-white text-[9px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)] bg-black/30 px-1 py-0.2 rounded-md border border-white/20">
                             <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
-                            <span>{card.color === 'wild' ? '🌈' : ''}</span>
+                            <span>{card.color === 'wild' ? '✨' : ''}</span>
                           </div>
 
                           {/* Distinct White Inner Box */}
@@ -699,8 +703,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                                 : card.type === 'draw_two'
                                 ? '+2'
                                 : card.type === 'wild_draw_four'
-                                ? '+4'
-                                : '★'}
+                                ? '+4 🎨'
+                                : '🌈 ✨'}
                             </span>
                           </div>
 
@@ -807,9 +811,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                         playable ? 'ring-4 ring-amber-400 animate-pulse' : 'opacity-90'
                       }`}
                     >
-                      <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">
+                      <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)] bg-black/30 px-1 py-0.2 rounded-md border border-white/20">
                         <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
-                        <span>{card.color === 'wild' ? '🌈' : ''}</span>
+                        <span>{card.color === 'wild' ? '✨' : ''}</span>
                       </div>
 
                       {/* White Inner Box */}
@@ -824,8 +828,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             : card.type === 'draw_two'
                             ? '+2'
                             : card.type === 'wild_draw_four'
-                            ? '+4'
-                            : '★'}
+                            ? '+4 🎨'
+                            : '🌈 ✨'}
                         </span>
                       </div>
 
