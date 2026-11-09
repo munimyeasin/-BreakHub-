@@ -187,18 +187,20 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     setStatusMessage('Dealing cards...');
 
     let cardIdx = 0;
+    let currentPlayers = updatedPlayers;
     const dealInterval = setInterval(() => {
       if (cardIdx < 7) {
-        updatedPlayers.forEach((p, pIdx) => {
+        currentPlayers = currentPlayers.map((p, pIdx) => {
           if (freshDeck.length > 0) {
             const card = freshDeck.pop()!;
-            p.cards.push(card);
             if (pIdx === 0) {
               setFlyingCard({ id: card.id, card, type: 'deal', isFaceUp: true });
             }
+            return { ...p, cards: [...p.cards, card] };
           }
+          return p;
         });
-        setPlayers([...updatedPlayers]);
+        setPlayers(currentPlayers);
         playSfx('deal');
         cardIdx++;
       } else {
@@ -269,9 +271,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     return drawn;
   };
 
-  const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor) => {
-    const player = players[playerIndex];
-
+  const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor, extraCard?: Card) => {
+    const pname = players[playerIndex].name;
     setFlyingCard({
       id: card.id,
       card,
@@ -280,19 +281,24 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     });
     setTimeout(() => setFlyingCard(null), 350);
 
-    const updatedCards = player.cards.filter(c => c.id !== card.id);
-    const updatedPlayers = [...players];
-    updatedPlayers[playerIndex] = { ...player, cards: updatedCards };
-    setPlayers(updatedPlayers);
+    let winnerPlayer: Player | null = null;
+    setPlayers(prev => {
+      const player = prev[playerIndex];
+      const updatedCards = player.cards.filter(c => c.id !== card.id);
+      const next = [...prev];
+      next[playerIndex] = { ...player, cards: updatedCards };
+      if (updatedCards.length === 0) winnerPlayer = player;
+      return next;
+    });
 
     playSfx('play');
 
-    if (updatedCards.length === 0) {
-      setWinner(player);
+    if (winnerPlayer) {
+      setWinner(winnerPlayer);
       setGameState('gameover');
       playSfx('win');
       confetti({ particleCount: 200, spread: 110, origin: { y: 0.5 } });
-      const finalScore = player.isAI ? 500 : 3500;
+      const finalScore = winnerPlayer.isAI ? 500 : 3500;
       onGameOver?.(finalScore);
       return;
     }
@@ -316,34 +322,35 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
     if (card.type === 'skip') {
       skipNext = true;
-      setStatusMessage(`${player.name} skipped!`);
+      setStatusMessage(`${pname} skipped!`);
     } else if (card.type === 'reverse') {
       const newDir = (direction * -1) as 1 | -1;
       setDirection(newDir);
       step = newDir;
-      setStatusMessage(`${player.name} reversed direction!`);
+      setStatusMessage(`${pname} reversed direction!`);
     } else if (card.type === 'draw_two') {
       cardsToDraw = 2;
       skipNext = true;
-      setStatusMessage(`${player.name} played +2!`);
+      setStatusMessage(`${pname} played +2!`);
     } else if (card.type === 'wild_draw_four') {
       cardsToDraw = 4;
       skipNext = true;
-      setStatusMessage(`${player.name} played +4 (${nextColor.toUpperCase()})!`);
+      setStatusMessage(`${pname} played +4 (${nextColor.toUpperCase()})!`);
     } else if (card.type === 'wild') {
-      setStatusMessage(`${player.name} played Wild (${nextColor.toUpperCase()})!`);
+      setStatusMessage(`${pname} played Wild (${nextColor.toUpperCase()})!`);
     } else {
-      setStatusMessage(`${player.name} played.`);
+      setStatusMessage(`${pname} played.`);
     }
 
-    let nextTurn = (playerIndex + step + updatedPlayers.length) % updatedPlayers.length;
+    let nextTurn = (playerIndex + step + players.length) % players.length;
     if (skipNext) {
       if (cardsToDraw > 0) {
-        const targetPlayer = updatedPlayers[nextTurn];
         const drawn = drawCards(nextTurn, cardsToDraw);
-        targetPlayer.cards.push(...drawn);
+        setPlayers(prev => prev.map((p, i) =>
+          i === nextTurn ? { ...p, cards: [...p.cards, ...drawn] } : p
+        ));
       }
-      nextTurn = (nextTurn + step + updatedPlayers.length) % updatedPlayers.length;
+      nextTurn = (nextTurn + step + players.length) % players.length;
     }
 
     setTurnIndex(nextTurn);
@@ -371,9 +378,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     if (turnIndex !== 0 || aiThinking || isDealing || flyingCard) return;
     const drawn = drawCards(0, 1);
     if (drawn.length > 0) {
-      const updatedPlayers = [...players];
-      updatedPlayers[0].cards.push(...drawn);
-      setPlayers(updatedPlayers);
+      setPlayers(prev => prev.map((p, i) =>
+        i === 0 ? { ...p, cards: [...p.cards, ...drawn] } : p
+      ));
       setStatusMessage(`You drew a card.`);
     }
     setTurnIndex((turnIndex + direction + players.length) % players.length);
@@ -408,8 +415,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         } else {
           const drawn = drawCards(turnIndex, 1);
           if (drawn.length > 0) {
-            currentPlayer.cards.push(...drawn);
-            setPlayers([...players]);
+            setPlayers(prev => prev.map(p =>
+              p.id === currentPlayer.id ? { ...p, cards: [...p.cards, ...drawn] } : p
+            ));
             setStatusMessage(`${currentPlayer.name} drew.`);
             if (isCardPlayable(drawn[0]) && Math.random() > 0.3) {
               setTimeout(() => {

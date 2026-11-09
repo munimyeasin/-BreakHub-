@@ -12,9 +12,9 @@
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=munim",
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
-      "longest_streak": 9,
-      "level": 51,
-      "xp": 36220,
+      "longest_streak": 10,
+      "level": 53,
+      "xp": 37695,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 560,
+        "totalGamesPlayed": 592,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -107,24 +107,26 @@
           "g_snake_01",
           "g_starfighter_1",
           "g_candy_19",
-          "g_dungeon_29"
+          "g_dungeon_29",
+          "g_cardparty_30"
         ],
-        "totalScoreAccumulated": 1937248,
+        "totalScoreAccumulated": 1974640,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
         "rouletteSpins": 6,
-        "questsCompletedCount": 16,
+        "questsCompletedCount": 18,
         "hypeCount": 0,
         "categoriesPlayed": [
           "ARCADE",
           "ACTION",
           "STRATEGY",
-          "PUZZLE"
+          "PUZZLE",
+          "CARD"
         ]
       },
-      "games_played": 560,
-      "total_score": 1937248
+      "games_played": 592,
+      "total_score": 1974640
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -786,6 +788,23 @@
       "thumbnail_url": "/thumbnails/neon-starfighter.svg"
     },
     {
+      "id": "g_dungeon_29",
+      "slug": "dungeon-slice",
+      "title": "Dungeon Slice",
+      "description": "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
+      "category": "ACTION",
+      "status": "coming_soon",
+      "image_url": "/thumbnails/dungeon-slice.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 34,
+      "created_at": "2026-11-08T08:19:52.325024+00:00",
+      "updated_at": "2026-11-08T08:19:52.325024+00:00",
+      "thumbnail_url": "/thumbnails/dungeon-slice.svg"
+    },
+    {
       "id": "g_chess_24",
       "slug": "matrix-chess",
       "title": "Matrix Chess",
@@ -803,21 +822,21 @@
       "thumbnail_url": "/thumbnails/cyber-chess.svg"
     },
     {
-      "id": "g_dungeon_29",
-      "slug": "dungeon-slice",
-      "title": "Dungeon Slice",
-      "description": "Arcade-style defense minigame! Protect the glowing neon core at the center from creeping shadow creatures with fast knife/sword slice combos.",
-      "category": "ACTION",
-      "status": "coming_soon",
-      "image_url": "/thumbnails/dungeon-slice.svg",
+      "id": "g_cardparty_30",
+      "slug": "card-party",
+      "title": "Card Party",
+      "description": "Classic UNO-inspired card showdown! Match colors and numbers, unleash Skip, Reverse, Draw Two (+2), Wild, and Wild Draw Four (+4) against AI opponents Lea, Marie, and Kate.",
+      "category": "CARD",
+      "status": "active",
+      "image_url": "/thumbnails/quantum-xo.svg",
       "game_url": null,
       "rating": 4.5,
       "rating_count": 0,
       "play_count": 0,
-      "hype_count": 35,
-      "created_at": "2026-11-08T08:19:52.325024+00:00",
-      "updated_at": "2026-11-08T08:19:52.325024+00:00",
-      "thumbnail_url": "/thumbnails/dungeon-slice.svg"
+      "hype_count": 0,
+      "created_at": "2026-11-08T18:58:26.606091+00:00",
+      "updated_at": "2026-11-08T18:58:26.606091+00:00",
+      "thumbnail_url": "/thumbnails/quantum-xo.svg"
     },
     {
       "id": "g_knife_28",
@@ -1209,16 +1228,6 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
-    },
-    {
-      "id": "g_cardparty_30",
-      "slug": "card-party",
-      "title": "Card Party",
-      "category": "CARD",
-      "thumbnail_url": "/thumbnails/quantum-xo.svg",
-      "description": "Classic UNO-inspired card showdown! Match colors and numbers, unleash Skip, Reverse, Draw Two (+2), Wild, and Wild Draw Four (+4) against AI opponents Lea, Marie, and Kate.",
-      "status": "active",
-      "featured": true
     }
   ],
   "scores": [
@@ -1914,6 +1923,41 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 7000,
       "created_at": "2026-11-08T08:33:22.901Z"
+    },
+    {
+      "id": "50ef3cb0-cce8-4b32-b5aa-8ae2b346dda0",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-08T19:47:31.867Z"
+    },
+    {
+      "id": "3d2278d4-63e4-4ba3-84de-6cfcd5e6a234",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-08T21:15:00.554Z"
+    },
+    {
+      "id": "56ce23c4-ef25-4cb8-bbaa-1a15f5d925a9",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 3500,
+      "created_at": "2026-11-08T21:34:56.343Z"
+    },
+    {
+      "id": "be78ba0a-2812-47ad-b1dd-94e2e95ca08c",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-08T22:01:12.116Z"
+    },
+    {
+      "id": "aafaba89-bf9c-4938-aa0f-d7769f630d53",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-08T22:29:51.017Z"
     }
   ],
   "ratings": [
