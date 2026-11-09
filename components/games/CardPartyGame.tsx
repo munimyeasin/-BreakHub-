@@ -660,7 +660,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                           key={card.id}
                           style={{
                             transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
-                            zIndex: idx,
+                            zIndex: isTop ? 9999 : idx,
                           }}
                           className={`absolute inset-0 rounded-2xl border-2 border-black flex flex-col justify-between p-2 shadow-neo-sm ${
                             COLOR_CLASSES[card.color].bg
@@ -770,9 +770,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               </button>
             </div>
 
-            {/* Fanned Overlapping Horizontal Hand Layout */}
-            <div className="w-full flex items-center justify-center overflow-x-auto pb-3 pt-2 px-2 custom-scrollbar">
-              <div className="flex items-center -space-x-8 sm:-space-x-12 hover:space-x-1 transition-all duration-300 py-2">
+            {/* Fanned Overlapping Horizontal Hand Layout with generous edge padding so extreme corner cards scroll to the center */}
+            <div className="w-full flex items-center overflow-x-auto pb-4 pt-3 px-16 sm:px-28 custom-scrollbar scroll-smooth">
+              <div className="flex items-center mx-auto -space-x-8 sm:-space-x-12 hover:space-x-1 transition-all duration-300 py-2 px-12">
                 {players[0].cards.map((card, idx, arr) => {
                   const playable = turnIndex === 0 && !aiThinking && !isDealing && !flyingCard && isCardPlayable(card);
                   const total = arr.length;
