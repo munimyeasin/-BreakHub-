@@ -653,7 +653,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
 
                       return (
                         <div
-                          key={card.id}
+                          key={`${card.id}_${idx}`}
                           style={{
                             transform: `translate(${ox}px, ${oy}px) rotate(${rot}deg)`,
                             zIndex: isTop ? 9999 : idx,
@@ -776,7 +776,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                   const rot = (idx - middle) * 3.5;
                   return (
                     <div
-                      key={card.id}
+                      key={`${card.id}_${idx}`}
                       onClick={() => handlePlayerCardClick(card)}
                       style={{
                         transform: `rotate(${rot}deg)`,
