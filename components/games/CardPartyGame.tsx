@@ -78,6 +78,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     id: string;
     card: Card;
     type: 'deal' | 'draw' | 'play';
+    playerIndex?: number;
     isFaceUp: boolean;
   } | null>(null);
 
@@ -260,10 +261,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       if (currentDeck.length > 0) {
         const card = currentDeck.pop()!;
         drawn.push(card);
-        if (playerIdx === 0) {
-          setFlyingCard({ id: card.id, card, type: 'draw', isFaceUp: true });
-          setTimeout(() => setFlyingCard(null), 350);
-        }
+        setFlyingCard({ id: card.id, card, type: 'draw', playerIndex: playerIdx, isFaceUp: true });
+        setTimeout(() => setFlyingCard(null), 350);
       }
     }
     setDeck(currentDeck);
@@ -278,6 +277,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       id: card.id,
       card,
       type: 'play',
+      playerIndex,
       isFaceUp: true,
     });
     setTimeout(() => setFlyingCard(null), 350);
@@ -460,7 +460,13 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
         <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
           <div className={`w-20 h-28 sm:w-24 sm:h-34 rounded-2xl border-4 border-black shadow-neo-lg flex flex-col justify-between p-2.5 bg-white ${
             COLOR_CLASSES[flyingCard.card.color].bg
-          } ${flyingCard.type === 'deal' ? 'animate-card-deal' : 'animate-card-play'}`}>
+          } ${
+            flyingCard.type === 'deal'
+              ? 'animate-card-deal'
+              : flyingCard.type === 'play'
+              ? `animate-play-${flyingCard.playerIndex}`
+              : `animate-draw-${flyingCard.playerIndex}`
+          }`}>
             <div className="flex justify-between items-start text-white text-[12px] font-black">
               <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
               <span>{flyingCard.card.color === 'wild' ? '🌈' : ''}</span>
@@ -623,6 +629,20 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               })()}
 
               <div className="relative w-[220px] h-[210px] sm:w-[380px] sm:h-[440px] rounded-[50%] sm:rounded-full bg-[#52b788] border-5 sm:border-7 border-black shadow-[6px_6px_0px_#000] flex items-center justify-center">
+
+                {/* 4 Curved Directional Direction Arrows on Table Rim */}
+                <div className={`absolute top-3 left-1/2 -translate-x-1/2 text-white/90 font-black text-[10px] sm:text-xs tracking-widest pointer-events-none transition-transform duration-500 ${direction === 1 ? 'rotate-0' : 'scale-x-[-1]'}`}>
+                  {direction === 1 ? '⟳ CLOCKWISE ⟳' : '⟲ COUNTER ⟲'}
+                </div>
+                <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 text-white/90 font-black text-[10px] sm:text-xs tracking-widest pointer-events-none transition-transform duration-500 ${direction === 1 ? 'rotate-180' : 'scale-x-[-1]'}`}>
+                  {direction === 1 ? '⟳ ⟳' : '⟲ ⟲'}
+                </div>
+                <div className={`absolute left-3 top-1/2 -translate-y-1/2 text-white/90 font-black text-xs pointer-events-none transition-transform duration-500 ${direction === 1 ? '-rotate-90' : 'scale-y-[-1]'}`}>
+                  {direction === 1 ? '⟳' : '⟲'}
+                </div>
+                <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-white/90 font-black text-xs pointer-events-none transition-transform duration-500 ${direction === 1 ? 'rotate-90' : 'scale-y-[-1]'}`}>
+                  {direction === 1 ? '⟳' : '⟲'}
+                </div>
 
 
                 {/* Central Piles: Draw Pile on Left, Discard Pile on Right */}

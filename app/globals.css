@@ -672,4 +672,53 @@ html[data-theme="vaporwave-80s"] .game-thumbnail-overlay {
   animation: scaleUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@keyframes playFromBottom {
+  0% { transform: translateY(160px) scale(0.6) rotate(-10deg); opacity: 0; }
+  60% { transform: translateY(-20px) scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes playFromTop {
+  0% { transform: translateY(-160px) scale(0.6) rotate(10deg); opacity: 0; }
+  60% { transform: translateY(20px) scale(1.15) rotate(-5deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes playFromLeft {
+  0% { transform: translateX(-160px) scale(0.6) rotate(-15deg); opacity: 0; }
+  60% { transform: translateX(20px) scale(1.15) rotate(8deg); opacity: 1; }
+  100% { transform: translateX(0) scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes playFromRight {
+  0% { transform: translateX(160px) scale(0.6) rotate(15deg); opacity: 0; }
+  60% { transform: translateX(-20px) scale(1.15) rotate(-8deg); opacity: 1; }
+  100% { transform: translateX(0) scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes drawToBottom {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(160px) scale(0.5); opacity: 0; }
+}
+@keyframes drawToTop {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-160px) scale(0.5); opacity: 0; }
+}
+@keyframes drawToLeft {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateX(-160px) scale(0.5); opacity: 0; }
+}
+@keyframes drawToRight {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateX(160px) scale(0.5); opacity: 0; }
+}
+
+.animate-play-0 { animation: playFromBottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-play-1 { animation: playFromTop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-play-2 { animation: playFromLeft 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-play-3 { animation: playFromRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+.animate-draw-0 { animation: drawToBottom 0.35s ease-in forwards; }
+.animate-draw-1 { animation: drawToTop 0.35s ease-in forwards; }
+.animate-draw-2 { animation: drawToLeft 0.35s ease-in forwards; }
+.animate-draw-3 { animation: drawToRight 0.35s ease-in forwards; }
+
+
 
