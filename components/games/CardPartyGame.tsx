@@ -471,8 +471,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               ? `animate-play-${flyingCard.playerIndex ?? 0}`
               : `animate-draw-${flyingCard.playerIndex ?? 0}`
           }`}>
-            <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">
-              <span className="outline outline-1 outline-offset-2 outline-indigo-600">{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
+            <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_2px_1px_rgba(0,0,0,1)]">
+              <span>{flyingCard.card.type === 'number' ? flyingCard.card.value : flyingCard.card.type[0].toUpperCase()}</span>
               <span>{flyingCard.card.color === 'wild' ? '✨' : ''}</span>
             </div>
             <div className="w-10 h-12 sm:w-12 sm:h-14 bg-white rounded-xl border-2 border-black flex items-center justify-center shadow-inner my-auto mx-auto">
@@ -686,7 +686,7 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                             COLOR_CLASSES[card.color].bg
                           } ${isTop ? 'scale-105 shadow-neo-md animate-fadeIn' : 'opacity-90 pointer-events-none'}`}
                         >
-                          <div className="flex justify-between items-start text-white text-[9px] font-black outline outline-1 outline-offset-2 outline-indigo-600">
+                          <div className="flex justify-between items-start text-white text-[9px] font-black drop-shadow-[0_2px_1px_rgba(0,0,0,1)]">
                             <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
                             <span>{card.color === 'wild' ? '✨' : ''}</span>
                           </div>
@@ -811,8 +811,8 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
                         playable ? 'ring-4 ring-amber-400 animate-pulse' : 'opacity-90'
                       }`}
                     >
-                      <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_1px_1px_rgba(0,0,0,1)]">
-                        <span className="outline outline-1 outline-offset-2 outline-indigo-600">{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
+                      <div className="flex justify-between items-start text-white text-[10px] font-black drop-shadow-[0_2px_1px_rgba(0,0,0,1)]">
+                        <span>{card.type === 'number' ? card.value : card.type[0].toUpperCase()}</span>
                         <span>{card.color === 'wild' ? '✨' : ''}</span>
                       </div>
 
