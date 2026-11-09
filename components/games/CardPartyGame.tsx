@@ -271,8 +271,9 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     return drawn;
   };
 
-  const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor, extraCard?: Card) => {
-    const pname = players[playerIndex].name;
+  const playCard = (playerIndex: number, card: Card, chosenColor?: CardColor) => {
+    const player = players[playerIndex];
+    const pname = player.name;
     setFlyingCard({
       id: card.id,
       card,
@@ -281,24 +282,19 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
     });
     setTimeout(() => setFlyingCard(null), 350);
 
-    let winnerPlayer: Player | null = null;
-    setPlayers(prev => {
-      const player = prev[playerIndex];
-      const updatedCards = player.cards.filter(c => c.id !== card.id);
-      const next = [...prev];
-      next[playerIndex] = { ...player, cards: updatedCards };
-      if (updatedCards.length === 0) winnerPlayer = player;
-      return next;
-    });
+    const updatedCards = player.cards.filter(c => c.id !== card.id);
+    const updatedPlayers = [...players];
+    updatedPlayers[playerIndex] = { ...player, cards: updatedCards };
+    setPlayers(updatedPlayers);
 
     playSfx('play');
 
-    if (winnerPlayer) {
-      setWinner(winnerPlayer);
+    if (updatedCards.length === 0) {
+      setWinner(player);
       setGameState('gameover');
       playSfx('win');
-      confetti({ particleCount: 200, spread: 110, origin: { y: 0.5 } });
-      const finalScore = winnerPlayer.isAI ? 500 : 3500;
+      confetti({ particleCount: 300, spread: 130, origin: { y: 0.5 } });
+      const finalScore = player.isAI ? 500 : 3500;
       onGameOver?.(finalScore);
       return;
     }
