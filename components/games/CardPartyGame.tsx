@@ -42,9 +42,9 @@ const COLOR_CLASSES: Record<CardColor, { bg: string; text: string; hex: string }
   wild: { bg: 'bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500', text: 'text-purple-700', hex: '#8e24aa' },
 };
 
-function CardBack({ label = 'BREAK HUB' }: { label?: string }) {
+function CardBack({ label = 'BREAK HUB', className = '' }: { label?: string; className?: string }) {
   return (
-    <div className="w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-black shadow-md flex items-center justify-center p-0.5 relative overflow-hidden shrink-0 group">
+    <div className={`w-8 h-12 sm:w-9 sm:h-14 rounded-lg bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-black shadow-md flex items-center justify-center p-0.5 relative overflow-hidden shrink-0 group ${className}`}>
       <div className="absolute inset-0 opacity-25 bg-[radial-gradient(#fdd835_1px,transparent_1px)] [background-size:5px_5px]" />
       <div className="absolute inset-0 border border-amber-400/50 rounded-md m-0.5 flex flex-col items-center justify-center p-0.5 bg-black/50 backdrop-blur-[1px]">
         <div className="w-3.5 h-3.5 rounded-full bg-amber-400 border border-black flex items-center justify-center text-[7px] shadow-sm mb-0.5">
@@ -564,27 +564,33 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
       {gameState === 'playing' && (
         <div className="flex-1 w-full max-w-6xl flex flex-col justify-between items-center relative z-10 py-2 px-2">
 
-          {/* TOP AI OPPONENT: LEA (Fanned horizontally in a clean row across the top) */}
+          {/* TOP AI OPPONENT: LEA (Cards fanned horizontally right next to her badge, matching player hand card size) */}
           {(() => {
             const lea = players.find(p => p.id === 'lea')!;
             const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
             return (
               <div className={`flex flex-col items-center gap-1 transition-transform duration-300 ${isTurn ? 'scale-105' : ''}`}>
-                <div className="flex -space-x-4">
-                  {lea.cards.map((_, i) => {
-                    const total = lea.cards.length;
-                    const middle = (total - 1) / 2;
-                    const rot = (i - middle) * 3.5;
-                    return (
-                      <div
-                        key={i}
-                        style={{ transform: `rotate(${rot}deg)` }}
-                        className="transform origin-bottom"
-                      >
-                        <CardBack label={i === 0 ? 'COLOR CARDS' : 'CARDS'} />
-                      </div>
-                    );
-                  })}
+                <div className="flex items-center gap-2">
+                  <div className={`px-2 py-0.5 font-bold flex items-center gap-1.5 shadow-sm scale-90 sm:scale-100 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-amber-100'}`}>
+                    <span className="text-[11px] font-black uppercase tracking-wider">{lea.name}</span>
+                    <span className="bg-black/50 px-1.5 py-0.2 rounded text-[9px]">{lea.cards.length}</span>
+                  </div>
+                  <div className="flex -space-x-3">
+                    {lea.cards.map((_, i) => {
+                      const total = lea.cards.length;
+                      const middle = (total - 1) / 2;
+                      const rot = (i - middle) * 3.5;
+                      return (
+                        <div
+                          key={i}
+                          style={{ transform: `rotate(${rot}deg)` }}
+                          className="transform origin-bottom"
+                        >
+                          <CardBack label={i === 0 ? 'COLOR CARDS' : 'CARDS'} />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             );
@@ -593,45 +599,44 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
           {/* MIDDLE ROW: LEFT AI (Marie) + OVAL/CIRCULAR FELT TABLE + RIGHT AI (Kate) */}
           <div className="w-full flex items-center justify-between my-auto py-1 px-0.5 sm:px-3">
 
-            {/* LEFT AI OPPONENT: MARIE */}
+            {/* LEFT AI OPPONENT: MARIE (Cards fanned vertically right next to her badge, matching player hand card size) */}
             {(() => {
               const marie = players.find(p => p.id === 'marie')!;
               const isTurn = turnIndex === players.findIndex(p => p.id === 'marie');
               return (
                 <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className="flex flex-col -space-y-8 relative py-2">
-                    {marie.cards.map((_, i) => (
-                      <div key={i} className="transform -rotate-3">
-                        <CardBack label="COLOR CARDS" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className={`flex flex-col items-center p-1 font-bold ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white'}`}>
-                    <div className="flex flex-col items-center leading-tight my-1">
+                  {/* Name badge + card count pill on top */}
+                  <div className={`flex flex-col items-center px-2 py-1 font-bold ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white'}`}>
+                    <span className="text-[10px] font-black uppercase flex flex-col items-center leading-tight my-0.5">
                       {marie.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[10px] font-black uppercase">{char}</span>
+                        <span key={idx} className="text-xs">{char}</span>
                       ))}
-                    </div>
-                    <span className="px-1.5 py-0.2 bg-black/50 rounded text-[9px] font-black mt-1">{marie.cards.length}</span>
+                    </span>
+                    <span className="bg-black/60 border border-white/30 px-1.5 py-0.2 rounded text-[9px] font-black">{marie.cards.length}</span>
+                  </div>
+                  {/* Fanned cards stack above the badge */}
+                  <div className="flex flex-col -space-y-3 relative">
+                    {marie.cards.map((_, i) => {
+                      const total = marie.cards.length;
+                      const middle = (total - 1) / 2;
+                      const rot = (i - middle) * 3.5;
+                      return (
+                        <div
+                          key={i}
+                          style={{ transform: `rotate(${rot}deg)` }}
+                          className="transform origin-bottom"
+                        >
+                          <CardBack label="COLOR CARDS" />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
             })()}
 
-            {/* OVAL FELT TABLE (Oval on mobile, Circular on desktop) WITH 4 CURVED DIRECTIONAL ARROWS & LEA BADGE + YOU TAB */}
+            {/* OVAL FELT TABLE (Oval on mobile, Circular on desktop) WITH 4 CURVED DIRECTIONAL ARROWS & YOU TAB */}
             <div className="relative flex flex-col items-center shrink-0">
-              {/* Lea Name Badge sitting right above the table rim */}
-              {(() => {
-                const lea = players.find(p => p.id === 'lea')!;
-                const isTurn = turnIndex === players.findIndex(p => p.id === 'lea');
-                return (
-                  <div className={`mb-1 px-3 py-0.5 font-bold flex items-center gap-1.5 shadow-sm scale-90 sm:scale-100 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-amber-100'}`}>
-                    <span className="text-[11px] font-black uppercase tracking-wider">{lea.name}</span>
-                    <span className="bg-black/50 px-1.5 py-0.2 rounded text-[9px]">{lea.cards.length}</span>
-                  </div>
-                );
-              })()}
-
               <div className="relative w-[220px] h-[210px] sm:w-[380px] sm:h-[440px] rounded-[50%] sm:rounded-full bg-[#52b788] border-5 sm:border-7 border-black shadow-[6px_6px_0px_#000] flex items-center justify-center">
 
                 {/* 4 Curved Directional Direction Arrows on Table Rim */}
@@ -737,20 +742,29 @@ export default function CardPartyGame({ gameId = 'g_cardparty_30', onGameOver }:
               const isTurn = turnIndex === players.findIndex(p => p.id === 'kate');
               return (
                 <div className={`flex items-center gap-2 transition-transform duration-300 scale-85 shrink-0 ${isTurn ? 'scale-105' : ''}`}>
-                  <div className={`flex flex-col items-center justify-center p-1.5 ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white font-bold'}`}>
-                    <div className="flex flex-col items-center leading-tight">
-                      {kate.name.split('').map((char, idx) => (
-                        <span key={idx} className="text-[10px] font-black uppercase">{char}</span>
-                      ))}
-                    </div>
-                    <span className="px-1.5 py-0.5 bg-black/60 rounded text-[9px] font-black mt-1.5">{kate.cards.length}</span>
+                  <div className="flex flex-col -space-y-3 relative">
+                    {kate.cards.map((_, i) => {
+                      const total = kate.cards.length;
+                      const middle = (total - 1) / 2;
+                      const rot = (i - middle) * 3.5;
+                      return (
+                        <div
+                          key={i}
+                          style={{ transform: `rotate(${rot}deg)` }}
+                          className="transform origin-bottom"
+                        >
+                          <CardBack label="COLOR CARDS" />
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="flex flex-col -space-y-8 relative py-2">
-                    {kate.cards.map((_, i) => (
-                      <div key={i} className="transform rotate-3">
-                        <CardBack label="COLOR CARDS" />
-                      </div>
-                    ))}
+                  <div className={`flex flex-col items-center px-2 py-1 font-bold ${isTurn ? 'text-amber-400 animate-bounce font-black' : 'text-white'}`}>
+                    <span className="text-[10px] font-black uppercase flex flex-col items-center leading-tight my-0.5">
+                      {kate.name.split('').map((char, idx) => (
+                        <span key={idx} className="text-xs">{char}</span>
+                      ))}
+                    </span>
+                    <span className="bg-black/60 border border-white/30 px-1.5 py-0.2 rounded text-[9px] font-black">{kate.cards.length}</span>
                   </div>
                 </div>
               );
