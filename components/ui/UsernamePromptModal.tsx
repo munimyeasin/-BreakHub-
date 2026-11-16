@@ -70,8 +70,8 @@ export default function UsernamePromptModal({
   const avatarUrl = getAvatarUrl(currentSeed);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-md bg-portal-surface border-4 border-black rounded-2xl p-6 sm:p-7 shadow-neo-lg flex flex-col space-y-5">
+    <div className="fixed inset-0 z-[60] flex items-start sm:items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-fadeIn">
+      <div className="relative w-full max-w-md bg-portal-surface border-4 border-black rounded-2xl p-5 sm:p-7 shadow-neo-lg flex flex-col space-y-4 my-auto sm:my-0">
         {/* Top Decorative Color Accent Bar */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-portal-cyan via-portal-yellow to-portal-pink border-b-2 border-black" />
 

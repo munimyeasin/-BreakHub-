@@ -828,9 +828,9 @@ export default function ArcadePortalDashboard() {
       <UsernamePromptModal
         isOpen={isUsernameModalOpen}
         initialUsername={playerTag}
-        title={pendingGameToPlay ? "Enter Your Gamer Tag" : (playerTag ? "Update Gamer Tag" : "Create Player Handle")}
-        subtitle="Choose a player handle to record your high scores."
-        confirmText="SAVE HANDLE"
+        title={pendingGameToPlay ? "Enter Your Gamer Tag to Play" : (playerTag ? "Update Gamer Tag" : "Create Player Handle")}
+        subtitle={pendingGameToPlay ? "Type your name or handle below to launch the game and record your high scores!" : "Choose a player handle to record your high scores."}
+        confirmText="SAVE & PLAY"
         onClose={() => {
           setIsUsernameModalOpen(false);
           setPendingGameToPlay(null);
