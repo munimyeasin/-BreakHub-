@@ -480,67 +480,112 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
     await processCascades(updatedScore, comboCount + 1);
   };
 
-  // Click & Swap handling
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isPlaying || isGameOver || isProcessingRef.current) return;
+  // Swap execution helper
+  const trySwap = (p1: { r: number; c: number }, p2: { r: number; c: number }) => {
+    if (p2.r < 0 || p2.r >= BOARD_SIZE || p2.c < 0 || p2.c >= BOARD_SIZE) return;
+    const grid = boardRef.current;
+    const temp = grid[p1.r][p1.c].candy;
+    grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
+    grid[p2.r][p2.c].candy = temp;
+
+    const { matches } = findMatches(grid);
+    if (matches.length > 0) {
+      setMovesLeft(m => Math.max(0, m - 1));
+      processCascades(score, 1);
+    } else {
+      // Revert
+      const t2 = grid[p1.r][p1.c].candy;
+      grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
+      grid[p2.r][p2.c].candy = t2;
+      playSound('over');
+    }
+  };
+
+  // Pointer / Drag & Swipe Handling
+  const dragStartRef = useRef<{ r: number; c: number; x: number; y: number } | null>(null);
+
+  const getCellFromCoords = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
     const scaleX = CANVAS_WIDTH / rect.width;
     const scaleY = CANVAS_HEIGHT / rect.height;
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
     const startY = 110;
 
-    if (x < startX || x > startX + BOARD_SIZE * TILE_SIZE || y < startY || y > startY + BOARD_SIZE * TILE_SIZE) return;
+    if (x < startX || x > startX + BOARD_SIZE * TILE_SIZE || y < startY || y > startY + BOARD_SIZE * TILE_SIZE) return null;
 
     const c = Math.floor((x - startX) / TILE_SIZE);
     const r = Math.floor((y - startY) / TILE_SIZE);
+    return { r, c };
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isPlaying || isGameOver || isProcessingRef.current) return;
+    const cell = getCellFromCoords(e.clientX, e.clientY);
+    if (!cell) return;
+
+    dragStartRef.current = { r: cell.r, c: cell.c, x: e.clientX, y: e.clientY };
 
     if (activeBooster === 'hammer') {
       playSound('hammer');
-      const candy = boardRef.current[r][c].candy;
+      const candy = boardRef.current[cell.r][cell.c].candy;
       if (candy) spawnParticles(candy.x + TILE_SIZE / 2, candy.y + TILE_SIZE / 2, '#FFE600', 20);
-      boardRef.current[r][c].candy = null;
-      if (boardRef.current[r][c].jelly > 0) boardRef.current[r][c].jelly = 0;
+      boardRef.current[cell.r][cell.c].candy = null;
+      if (boardRef.current[cell.r][cell.c].jelly > 0) boardRef.current[cell.r][cell.c].jelly = 0;
       setBoosters(prev => ({ ...prev, hammer: prev.hammer - 1 }));
       setActiveBooster(null);
       processCascades(score, 1);
+      dragStartRef.current = null;
       return;
     }
+  };
 
-    if (!selectedRef.current) {
-      selectedRef.current = { r, c };
-      playSound('swap');
-    } else {
-      const p1 = selectedRef.current;
-      const p2 = { r, c };
+  const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!dragStartRef.current || !isPlaying || isGameOver || isProcessingRef.current) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    const threshold = 25; // px swipe threshold
+
+    if (Math.abs(dx) > threshold || Math.abs(dy) > threshold) {
+      const p1 = { r: dragStartRef.current.r, c: dragStartRef.current.c };
+      const p2 = {
+        r: p1.r + (Math.abs(dy) > Math.abs(dx) ? (dy > 0 ? 1 : -1) : 0),
+        c: p1.c + (Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? 1 : -1) : 0)
+      };
+
+      dragStartRef.current = null;
       selectedRef.current = null;
+      playSound('swap');
+      trySwap(p1, p2);
+    }
+  };
 
-      const dr = Math.abs(p1.r - p2.r);
-      const dc = Math.abs(p1.c - p2.c);
-      if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
-        // Swap test
-        const grid = boardRef.current;
-        const temp = grid[p1.r][p1.c].candy;
-        grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
-        grid[p2.r][p2.c].candy = temp;
+  const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!dragStartRef.current) return;
+    // If it was just a tap without swipe
+    const cell = getCellFromCoords(e.clientX, e.clientY);
+    if (cell && cell.r === dragStartRef.current.r && cell.c === dragStartRef.current.c) {
+      const { r, c } = cell;
+      if (!selectedRef.current) {
+        selectedRef.current = { r, c };
+        playSound('swap');
+      } else {
+        const p1 = selectedRef.current;
+        const p2 = { r, c };
+        selectedRef.current = null;
 
-        const { matches } = findMatches(grid);
-        if (matches.length > 0) {
-          setMovesLeft(m => Math.max(0, m - 1));
-          processCascades(score, 1);
-        } else {
-          // Revert
-          const t2 = grid[p1.r][p1.c].candy;
-          grid[p1.r][p1.c].candy = grid[p2.r][p2.c].candy;
-          grid[p2.r][p2.c].candy = t2;
-          playSound('over');
+        const dr = Math.abs(p1.r - p2.r);
+        const dc = Math.abs(p1.c - p2.c);
+        if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+          trySwap(p1, p2);
         }
       }
     }
+    dragStartRef.current = null;
   };
 
   // Initialize canvas backing store with proper resize handling for mobile high-DPI
@@ -760,8 +805,10 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          onClick={handleCanvasClick}
-          className="w-full h-full block cursor-pointer touch-none"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          className="w-full h-full block cursor-pointer touch-none select-none"
         />
 
         {isLevelIntro && (
