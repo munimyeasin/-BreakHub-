@@ -422,7 +422,7 @@ export default function GameModal({
   onNextGameRoulette
 }: GameModalProps) {
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(true); // Always immersive fullscreen by default, no browser warning banner
   const [showCompanionDeck, setShowCompanionDeck] = useState<boolean>(true);
   const [topScores, setTopScores] = useState<LeaderboardEntry[]>([]);
   const [loadingScores, setLoadingScores] = useState<boolean>(false);
@@ -493,39 +493,6 @@ export default function GameModal({
     } catch {}
   }, [game.id, game.category]);
 
-  // Launch game in fullscreen by default on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      toggleFullscreen();
-    }, 150);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Sync fullscreen state with native browser events
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      const isCurrentlyFullscreen = Boolean(
-        document.fullscreenElement ||
-        (document as any).webkitFullscreenElement ||
-        (document as any).mozFullScreenElement ||
-        (document as any).msFullscreenElement
-      );
-      setIsFullscreen(isCurrentlyFullscreen);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
-    };
-  }, []);
-
   // Physical Keyboard Listener: Tracks live active keypresses for real-time HUD illumination
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -576,44 +543,8 @@ export default function GameModal({
     };
   }, [isFullscreen, onClose]);
 
-  const toggleFullscreen = async () => {
-    try {
-      const isCurrentlyFullscreen = Boolean(
-        document.fullscreenElement ||
-        (document as any).webkitFullscreenElement ||
-        (document as any).mozFullScreenElement ||
-        (document as any).msFullscreenElement
-      );
-
-      if (!isCurrentlyFullscreen) {
-        const target = modalRef.current || document.documentElement;
-        if (target.requestFullscreen) {
-          await target.requestFullscreen();
-        } else if ((target as any).webkitRequestFullscreen) {
-          await (target as any).webkitRequestFullscreen();
-        } else if ((target as any).mozRequestFullScreen) {
-          await (target as any).mozRequestFullScreen();
-        } else if ((target as any).msRequestFullscreen) {
-          await (target as any).msRequestFullscreen();
-        } else {
-          setIsFullscreen(prev => !prev);
-        }
-      } else {
-        if (document.exitFullscreen) {
-          await document.exitFullscreen();
-        } else if ((document as any).webkitExitFullscreen) {
-          await (document as any).webkitExitFullscreen();
-        } else if ((document as any).mozCancelFullScreen) {
-          await (document as any).mozCancelFullScreen();
-        } else if ((document as any).msExitFullscreen) {
-          await (document as any).msExitFullscreen();
-        } else {
-          setIsFullscreen(false);
-        }
-      }
-    } catch {
-      setIsFullscreen(prev => !prev);
-    }
+  const toggleFullscreen = () => {
+    setIsFullscreen(prev => !prev);
   };
 
   const handleScoreSubmit = async (score: number) => {
