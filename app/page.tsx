@@ -775,11 +775,17 @@ export default function ArcadePortalDashboard() {
                 <GameGrid
                   games={filteredGames}
                   isFavoritesTab={activeTab === 'favorites'}
+                  favorites={favorites}
+                  hypedGames={hypedGames}
+                  userRatings={userRatings}
                   onPlayGame={(game) => handleLaunchGame(game)}
                   onViewLeaderboard={(gameId, e) => {
                     e.stopPropagation();
                     handleOpenLeaderboard(gameId);
                   }}
+                  onToggleFavorite={toggleFavorite}
+                  onToggleHype={(gameId, e) => handleToggleHype(gameId, e)}
+                  onRateGame={handleRateGame}
                   onResetFilters={() => {
                     setSearchQuery('');
                     setSelectedCategory('ALL');
