@@ -792,50 +792,9 @@ export default function NeonStarfighterGame({ gameId, onGameOver }: NeonStarfigh
   const handleWatchAdForReviveRef = useRef<() => void>(handleWatchAdForRevive);
   handleWatchAdForReviveRef.current = handleWatchAdForRevive;
 
-  // Fullscreen API toggle with standard & vendor prefix support
+  // Toggle Fullscreen (state-driven immersive mode — never triggers browser warning banner)
   const toggleFullscreen = useCallback(() => {
-    if (typeof document === 'undefined') return;
-    const container = containerRef.current || canvasRef.current;
-    if (!container) return;
-
-    const doc = document as any;
-    const isFull = !!(
-      doc.fullscreenElement ||
-      doc.webkitFullscreenElement ||
-      doc.mozFullScreenElement ||
-      doc.msFullscreenElement
-    );
-
-    if (!isFull) {
-      const el = container as any;
-      if (el.requestFullscreen) {
-        el.requestFullscreen().catch(() => {});
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      } else if (el.mozRequestFullScreen) {
-        el.mozRequestFullScreen();
-      } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen();
-      }
-      if (screen.orientation && (screen.orientation as any).lock) {
-        (screen.orientation as any).lock('landscape').catch(() => {});
-      }
-    } else {
-      if (doc.exitFullscreen) {
-        doc.exitFullscreen().catch(() => {});
-      } else if (doc.webkitExitFullscreen) {
-        doc.webkitExitFullscreen();
-      } else if (doc.mozCancelFullScreen) {
-        doc.mozCancelFullScreen();
-      } else if (doc.msExitFullscreen) {
-        doc.msExitFullscreen();
-      }
-      if (screen.orientation && (screen.orientation as any).unlock) {
-        try {
-          (screen.orientation as any).unlock();
-        } catch {}
-      }
-    }
+    setIsFullscreen(prev => !prev);
   }, []);
 
   // Manual Trigger for Left-Click / Fire Button
