@@ -543,6 +543,34 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
     }
   };
 
+  // Initialize canvas backing store with proper resize handling for mobile high-DPI
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleResize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const displayWidth = canvas.clientWidth || CANVAS_WIDTH;
+      const displayHeight = canvas.clientHeight || CANVAS_HEIGHT;
+      if (displayWidth > 0 && displayHeight > 0) {
+        canvas.width = Math.round(displayWidth * dpr);
+        canvas.height = Math.round(displayHeight * dpr);
+      }
+    };
+
+    const initialTimeout = setTimeout(() => {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+    }, 0);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
+
   // 60fps Main Canvas Game Loop (Matching Flappy Bird / Starfighter High-End Canvas polish)
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -553,7 +581,17 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
     let active = true;
     const render = () => {
       if (!active) return;
-      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      const dpr = window.devicePixelRatio || 1;
+      const renderW = canvas.clientWidth || CANVAS_WIDTH;
+      const renderH = canvas.clientHeight || CANVAS_HEIGHT;
+      const scaleX = renderW / CANVAS_WIDTH;
+      const scaleY = renderH / CANVAS_HEIGHT;
+
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(dpr * scaleX, dpr * scaleY);
 
       // Background Gradient
       const bgGrad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
@@ -579,70 +617,72 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
         ctx.stroke();
       }
 
-      // Render Board & Candies
-      const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
-      const startY = 110;
+      // Render Board & Candies (Only when playing or showing board)
+      if (!isLevelIntro) {
+        const startX = (CANVAS_WIDTH - BOARD_SIZE * TILE_SIZE) / 2 + 20;
+        const startY = 110;
 
-      const grid = boardRef.current;
-      if (grid && grid.length === BOARD_SIZE) {
-        for (let r = 0; r < BOARD_SIZE; r++) {
-          for (let c = 0; c < BOARD_SIZE; c++) {
-            const cell = grid[r][c];
-            const px = startX + c * TILE_SIZE;
-            const py = startY + r * TILE_SIZE;
+        const grid = boardRef.current;
+        if (grid && grid.length === BOARD_SIZE) {
+          for (let r = 0; r < BOARD_SIZE; r++) {
+            for (let c = 0; c < BOARD_SIZE; c++) {
+              const cell = grid[r][c];
+              const px = startX + c * TILE_SIZE;
+              const py = startY + r * TILE_SIZE;
 
-            // Cell Tile Background
-            ctx.fillStyle = cell.jelly > 0 ? 'rgba(0, 240, 255, 0.15)' : 'rgba(0, 0, 0, 0.4)';
-            ctx.strokeStyle = cell.jelly > 0 ? '#00F0FF' : '#2A1C54';
-            ctx.lineWidth = cell.jelly > 0 ? 2 : 1;
-            ctx.beginPath();
-            ctx.roundRect(px, py, TILE_SIZE - 2, TILE_SIZE - 2, 8);
-            ctx.fill();
-            ctx.stroke();
-
-            // Jelly Glow
-            if (cell.jelly > 0) {
-              ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
-              ctx.font = '10px monospace';
-              ctx.fillText(cell.jelly === 2 ? '⚡' : '✨', px + 4, py + 14);
-            }
-
-            // Candy Item
-            const candy = cell.candy;
-            if (candy) {
-              // Smooth lerp towards target position
-              candy.x += (px - candy.x) * 0.25;
-              candy.y += (py - candy.y) * 0.25;
-
-              const meta = CANDY_METADATA[candy.type];
-              const isSelected = selectedRef.current?.r === r && selectedRef.current?.c === c;
-
-              ctx.save();
-              ctx.translate(candy.x + TILE_SIZE / 2, candy.y + TILE_SIZE / 2);
-              if (isSelected) ctx.scale(1.12, 1.12);
-
-              // Candy Rounded Box
-              ctx.fillStyle = meta.color;
-              ctx.strokeStyle = '#000000';
-              ctx.lineWidth = 2.5;
+              // Cell Tile Background
+              ctx.fillStyle = cell.jelly > 0 ? 'rgba(0, 240, 255, 0.15)' : 'rgba(0, 0, 0, 0.4)';
+              ctx.strokeStyle = cell.jelly > 0 ? '#00F0FF' : '#2A1C54';
+              ctx.lineWidth = cell.jelly > 0 ? 2 : 1;
               ctx.beginPath();
-              ctx.roundRect(-TILE_SIZE / 2 + 3, -TILE_SIZE / 2 + 3, TILE_SIZE - 8, TILE_SIZE - 8, 10);
+              ctx.roundRect(px, py, TILE_SIZE - 2, TILE_SIZE - 2, 8);
               ctx.fill();
               ctx.stroke();
 
-              // Specular Glow
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-              ctx.beginPath();
-              ctx.roundRect(-TILE_SIZE / 2 + 5, -TILE_SIZE / 2 + 5, TILE_SIZE - 14, 10, 4);
-              ctx.fill();
+              // Jelly Glow
+              if (cell.jelly > 0) {
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
+                ctx.font = '10px monospace';
+                ctx.fillText(cell.jelly === 2 ? '⚡' : '✨', px + 4, py + 14);
+              }
 
-              // Symbol
-              ctx.font = '20px sans-serif';
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText(meta.symbol, 0, 2);
+              // Candy Item
+              const candy = cell.candy;
+              if (candy) {
+                // Smooth lerp towards target position
+                candy.x += (px - candy.x) * 0.25;
+                candy.y += (py - candy.y) * 0.25;
 
-              ctx.restore();
+                const meta = CANDY_METADATA[candy.type];
+                const isSelected = selectedRef.current?.r === r && selectedRef.current?.c === c;
+
+                ctx.save();
+                ctx.translate(candy.x + TILE_SIZE / 2, candy.y + TILE_SIZE / 2);
+                if (isSelected) ctx.scale(1.12, 1.12);
+
+                // Candy Rounded Box
+                ctx.fillStyle = meta.color;
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.roundRect(-TILE_SIZE / 2 + 3, -TILE_SIZE / 2 + 3, TILE_SIZE - 8, TILE_SIZE - 8, 10);
+                ctx.fill();
+                ctx.stroke();
+
+                // Specular Glow
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.roundRect(-TILE_SIZE / 2 + 5, -TILE_SIZE / 2 + 5, TILE_SIZE - 14, 10, 4);
+                ctx.fill();
+
+                // Symbol
+                ctx.font = '20px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(meta.symbol, 0, 2);
+
+                ctx.restore();
+              }
             }
           }
         }
@@ -680,14 +720,16 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
         if (ft.alpha <= 0) ftexts.splice(i, 1);
       }
 
+      ctx.restore();
       requestAnimationFrame(render);
     };
 
-    render();
+    const animId = requestAnimationFrame(render);
     return () => {
       active = false;
+      cancelAnimationFrame(animId);
     };
-  }, []);
+  }, [isLevelIntro]);
 
   const currentCfg = CAMPAIGN_LEVELS[currentLevelIdx];
 
@@ -714,7 +756,15 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
 
       {/* Main 60fps HTML5 Canvas Container (Matching Flappy Bird & Starfighter arcade engine) */}
       <div className="relative w-[400px] h-[600px] bg-[#08000D] rounded-3xl border-4 border-black shadow-[8px_8px_0px_#000] flex flex-col items-center justify-center overflow-hidden">
-        {isLevelIntro ? (
+        <canvas
+          ref={canvasRef}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+          onClick={handleCanvasClick}
+          className="w-full h-full block cursor-pointer touch-none"
+        />
+
+        {isLevelIntro && (
           <div className="absolute inset-0 bg-portal-bg/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30 space-y-4 animate-in fade-in">
             <div className="w-20 h-20 rounded-2xl bg-portal-cyan border-3 border-black shadow-neo flex items-center justify-center text-black animate-bounce">
               <Sparkles className="w-10 h-10 stroke-[2.5]" />
@@ -731,14 +781,6 @@ export default function CandyCrushGame({ gameId, onGameOver }: CandyCrushGamePro
               START GAME
             </button>
           </div>
-        ) : (
-          <canvas
-            ref={canvasRef}
-            width={CANVAS_WIDTH}
-            height={CANVAS_HEIGHT}
-            onClick={handleCanvasClick}
-            className="cursor-pointer touch-none"
-          />
         )}
 
         {/* Boosters Footer Bar */}
