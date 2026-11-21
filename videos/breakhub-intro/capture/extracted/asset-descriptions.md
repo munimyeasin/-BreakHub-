@@ -1,0 +1,4 @@
+- Home page hero banner and game cards
+- Neon Starfighter gameplay (X-wing vs Vader Capital Ship)
+- Cyber Knife Thrower gameplay (precision wheel throws)
+- Live Leaderboard rankings

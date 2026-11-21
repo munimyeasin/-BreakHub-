@@ -838,26 +838,10 @@ export default function NeonMissileDefenseGame({ gameId, onGameOver }: NeonMissi
     onGameOver(finalScore);
   }, [highScore, gameId, onGameOver, playSfx]);
 
-  // Toggle Fullscreen API
+  // Toggle Fullscreen (state-driven immersive mode — never triggers browser warning banner)
   const toggleFullscreen = useCallback(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    if (!document.fullscreenElement) {
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if ((el as unknown as { webkitRequestFullscreen?: () => Promise<void> }).webkitRequestFullscreen) {
-        (el as unknown as { webkitRequestFullscreen: () => Promise<void> }).webkitRequestFullscreen();
-      }
-      setIsFullscreen(true);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-      setIsFullscreen(false);
-    }
-    setTimeout(handleResize, 60);
-  }, [handleResize]);
+    setIsFullscreen(prev => !prev);
+  }, []);
 
   // Keyboard Shortcuts Listener
   useEffect(() => {

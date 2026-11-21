@@ -13,8 +13,8 @@
       "created_at": "2026-11-02T08:49:14.026+00:00",
       "days_played": 1,
       "longest_streak": 10,
-      "level": 53,
-      "xp": 37695,
+      "level": 55,
+      "xp": 39685,
       "unlocked_trophies": {
         "score_hunter": {
           "unlockedAt": "2026-09-13T11:08:30.093Z"
@@ -78,7 +78,7 @@
         }
       },
       "stats": {
-        "totalGamesPlayed": 592,
+        "totalGamesPlayed": 672,
         "uniqueGamesPlayed": [
           "g_shooter_07",
           "g_missile_21",
@@ -110,12 +110,12 @@
           "g_dungeon_29",
           "g_cardparty_30"
         ],
-        "totalScoreAccumulated": 1974640,
+        "totalScoreAccumulated": 1980640,
         "highestSingleScore": 173115,
         "gamesRated": 2,
         "favoritesCount": 0,
         "rouletteSpins": 6,
-        "questsCompletedCount": 18,
+        "questsCompletedCount": 19,
         "hypeCount": 0,
         "categoriesPlayed": [
           "ARCADE",
@@ -125,8 +125,8 @@
           "CARD"
         ]
       },
-      "games_played": 592,
-      "total_score": 1974640
+      "games_played": 672,
+      "total_score": 1980640
     },
     {
       "id": "a67b1ff4-ca26-47d0-8b92-401016806545",
@@ -767,6 +767,66 @@
       "username": "rm -rf",
       "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=rm%20-rf",
       "created_at": "2026-11-07T17:38:23.305+00:00"
+    },
+    {
+      "id": "12cd0502-a050-4883-bbcd-61e81013a221",
+      "username": "Sahanaj",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Sahanaj",
+      "created_at": "2026-11-08T14:56:49.663+00:00"
+    },
+    {
+      "id": "1864426f-4486-4541-ac6e-7661da7c4522",
+      "username": "Fff",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Fff",
+      "created_at": "2026-11-08T15:02:40.225+00:00"
+    },
+    {
+      "id": "2f76b41e-cb7a-469a-a11f-8c5f46f28c76",
+      "username": "Nazmul",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Nazmul",
+      "created_at": "2026-11-08T15:05:07.937+00:00"
+    },
+    {
+      "id": "37058baf-373e-4592-b0c8-5e39cbc6f673",
+      "username": "Terrorist D95",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Terrorist%20D95",
+      "created_at": "2026-11-08T15:05:37.851+00:00"
+    },
+    {
+      "id": "4da0549b-7cc9-4b5a-abaf-04d0a2d00111",
+      "username": "ArcadePulse_67",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=ArcadePulse_67",
+      "created_at": "2026-11-08T15:09:09.484+00:00"
+    },
+    {
+      "id": "850c7b27-3101-467b-a6ba-8645a2c52d32",
+      "username": "DANIAL",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=DANIAL",
+      "created_at": "2026-11-08T15:14:22.277+00:00"
+    },
+    {
+      "id": "7b9ddb61-b354-4b13-a195-1a43b5b4f644",
+      "username": "Jhu",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Jhu",
+      "created_at": "2026-11-08T15:33:03.115+00:00"
+    },
+    {
+      "id": "bd8f2d6c-fe47-448d-a7cf-c481834818ec",
+      "username": "Nilima",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Nilima",
+      "created_at": "2026-11-08T15:34:48.425+00:00"
+    },
+    {
+      "id": "77bfc47a-b52a-4b99-a694-15b0aef360db",
+      "username": "mnk",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=mnk",
+      "created_at": "2026-11-08T17:07:12.42+00:00"
+    },
+    {
+      "id": "85c76f58-e88c-4cd9-b0ce-f806c68de075",
+      "username": "Levi",
+      "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=Levi",
+      "created_at": "2026-11-08T18:01:10.308+00:00"
     }
   ],
   "games": [
@@ -828,7 +888,7 @@
       "description": "Classic UNO-inspired card showdown! Match colors and numbers, unleash Skip, Reverse, Draw Two (+2), Wild, and Wild Draw Four (+4) against AI opponents Lea, Marie, and Kate.",
       "category": "CARD",
       "status": "active",
-      "image_url": "/thumbnails/quantum-xo.svg",
+      "image_url": "/thumbnails/card-party.svg",
       "game_url": null,
       "rating": 4.5,
       "rating_count": 0,
@@ -836,7 +896,7 @@
       "hype_count": 0,
       "created_at": "2026-11-08T18:58:26.606091+00:00",
       "updated_at": "2026-11-08T18:58:26.606091+00:00",
-      "thumbnail_url": "/thumbnails/quantum-xo.svg"
+      "thumbnail_url": "/thumbnails/card-party.svg"
     },
     {
       "id": "g_knife_28",
@@ -924,57 +984,6 @@
       "thumbnail_url": "/thumbnails/cyber-breaker.svg"
     },
     {
-      "id": "g_merge_25",
-      "slug": "fruit-merge",
-      "title": "Fruit Merge",
-      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
-      "category": "PUZZLE",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-fruit-merge.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T07:28:45.411749+00:00",
-      "updated_at": "2026-11-02T07:28:45.411749+00:00",
-      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
-    },
-    {
-      "id": "g_shooter_07",
-      "slug": "starfighter",
-      "title": "Starfighter",
-      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
-      "category": "ARCADE",
-      "status": "active",
-      "image_url": "/thumbnails/neon-starfighter.svg",
-      "game_url": null,
-      "rating": 4.5,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-05T05:03:12.84575+00:00",
-      "updated_at": "2026-11-05T05:03:12.84575+00:00",
-      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
-    },
-    {
-      "id": "g_tetris_20",
-      "slug": "tetra-matrix",
-      "title": "Tetra Matrix",
-      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
-      "category": "PUZZLE",
-      "status": "active",
-      "image_url": "/thumbnails/tetra-matrix.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:06.705429+00:00",
-      "updated_at": "2026-11-02T09:23:06.705429+00:00",
-      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
-    },
-    {
       "id": "g_maze_15",
       "slug": "labyrinth-escape",
       "title": "Labyrinth Escape",
@@ -1026,6 +1035,57 @@
       "thumbnail_url": "/thumbnails/memory-matrix.svg"
     },
     {
+      "id": "g_merge_25",
+      "slug": "fruit-merge",
+      "title": "Fruit Merge",
+      "description": "Neo-Brutalist 2D Physics Fruit Merge & Suika Fusion! Aim tactical dropper laser, drop fruit spheres, chain ascending merge fusions, and forge the legendary Singularity Watermelon without overflowing the danger line.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-fruit-merge.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T07:28:45.411749+00:00",
+      "updated_at": "2026-11-02T07:28:45.411749+00:00",
+      "thumbnail_url": "/thumbnails/cyber-fruit-merge.svg"
+    },
+    {
+      "id": "g_shooter_07",
+      "slug": "starfighter",
+      "title": "Starfighter",
+      "description": "Arcade space combat simulator with plasma lasers, singularity black holes, and drone swarms.",
+      "category": "ARCADE",
+      "status": "active",
+      "image_url": "/thumbnails/neon-starfighter.svg",
+      "game_url": null,
+      "rating": 4.5,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-05T05:03:12.84575+00:00",
+      "updated_at": "2026-11-05T05:03:12.84575+00:00",
+      "thumbnail_url": "/thumbnails/neon-starfighter.svg"
+    },
+    {
+      "id": "g_tetris_20",
+      "slug": "tetra-matrix",
+      "title": "Tetra Matrix",
+      "description": "Neo-Brutalist Polyomino Matrix Arcade! Master 7-bag rotation physics, Super Rotation System (SRS) wall kicks, hold piece buffers, and chain 4-line Tetra Matrix quad clears with back-to-back multipliers.",
+      "category": "PUZZLE",
+      "status": "active",
+      "image_url": "/thumbnails/tetra-matrix.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:06.705429+00:00",
+      "updated_at": "2026-11-02T09:23:06.705429+00:00",
+      "thumbnail_url": "/thumbnails/tetra-matrix.svg"
+    },
+    {
       "id": "g_sweeper_16",
       "slug": "minefield",
       "title": "Minefield",
@@ -1058,6 +1118,40 @@
       "created_at": "2026-11-02T09:23:09.355793+00:00",
       "updated_at": "2026-11-02T09:23:09.355793+00:00",
       "thumbnail_url": "/thumbnails/chroma-reflex.svg"
+    },
+    {
+      "id": "g_tap_04",
+      "slug": "hyper-tapper",
+      "title": "Hyper Tapper",
+      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/hyper-tapper.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.236062+00:00",
+      "updated_at": "2026-11-02T09:23:08.236062+00:00",
+      "thumbnail_url": "/thumbnails/hyper-tapper.svg"
+    },
+    {
+      "id": "g_action_06",
+      "slug": "dash",
+      "title": "Dash 2077",
+      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
+      "category": "ACTION",
+      "status": "active",
+      "image_url": "/thumbnails/cyber-dash.svg",
+      "game_url": null,
+      "rating": 0,
+      "rating_count": 0,
+      "play_count": 0,
+      "hype_count": 0,
+      "created_at": "2026-11-02T09:23:08.637098+00:00",
+      "updated_at": "2026-11-02T09:23:08.637098+00:00",
+      "thumbnail_url": "/thumbnails/cyber-dash.svg"
     },
     {
       "id": "g_flappy_27",
@@ -1128,40 +1222,6 @@
       "thumbnail_url": "/thumbnails/black-hole.svg"
     },
     {
-      "id": "g_tap_04",
-      "slug": "hyper-tapper",
-      "title": "Hyper Tapper",
-      "description": "Precision reaction-time clicker testing ultra-high APM speeds.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/hyper-tapper.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.236062+00:00",
-      "updated_at": "2026-11-02T09:23:08.236062+00:00",
-      "thumbnail_url": "/thumbnails/hyper-tapper.svg"
-    },
-    {
-      "id": "g_action_06",
-      "slug": "dash",
-      "title": "Dash 2077",
-      "description": "Obstacle-dodging endless runner with laser fences, double jump thrusters, and energy coins.",
-      "category": "ACTION",
-      "status": "active",
-      "image_url": "/thumbnails/cyber-dash.svg",
-      "game_url": null,
-      "rating": 0,
-      "rating_count": 0,
-      "play_count": 0,
-      "hype_count": 0,
-      "created_at": "2026-11-02T09:23:08.637098+00:00",
-      "updated_at": "2026-11-02T09:23:08.637098+00:00",
-      "thumbnail_url": "/thumbnails/cyber-dash.svg"
-    },
-    {
       "id": "g_missile_21",
       "slug": "missile-defense",
       "title": "Missile Defense",
@@ -1228,6 +1288,17 @@
       "created_at": "2026-11-02T09:23:09.478926+00:00",
       "updated_at": "2026-11-02T09:23:09.478926+00:00",
       "thumbnail_url": "/thumbnails/paper-io.svg"
+    },
+    {
+      "id": "g_vertical_merge_30",
+      "slug": "vertical-merge",
+      "title": "Vertical Merge",
+      "category": "PUZZLE",
+      "thumbnail_url": "/thumbnails/vertical-merge.svg",
+      "description": "Vertical number-drop merge puzzle game (2048-drop style). Drop tiles across 5 columns, merge matching values into next power of two. Features chain combos, danger zone alerts, scoring, and undo functionality.",
+      "status": "active",
+      "featured": true,
+      "hasCanvas": true
     }
   ],
   "scores": [
@@ -1958,6 +2029,20 @@
       "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
       "score": 500,
       "created_at": "2026-11-08T22:29:51.017Z"
+    },
+    {
+      "id": "2c8040ac-d57b-4278-ae8d-662979845a4c",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-09T13:56:22.627Z"
+    },
+    {
+      "id": "5f502fd4-f040-46ab-a957-3192a0d0673b",
+      "game_id": "g_cardparty_30",
+      "user_id": "748e109b-61e3-4235-bbdb-bfd77b95f9e5",
+      "score": 500,
+      "created_at": "2026-11-09T14:21:35.163Z"
     }
   ],
   "ratings": [

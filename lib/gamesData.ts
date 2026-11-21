@@ -93,6 +93,16 @@ export const INITIAL_GAMES: Game[] = [
     featured: true
   },
   {
+    id: 'g_vertical_merge_30',
+    slug: 'vertical-merge',
+    title: 'Vertical Merge',
+    category: 'PUZZLE',
+    thumbnail_url: '/thumbnails/vertical-merge.svg',
+    description: 'Vertical number-drop merge puzzle game (2048-drop style). Drop tiles across 5 columns, merge matching values into next power of two. Features chain combos, danger zone alerts, scoring, and undo functionality.',
+    status: 'active',
+    featured: true
+  },
+  {
     id: 'g_multi_xo_13',
     slug: 'multidimension-xo',
     title: 'Multidimension XO',

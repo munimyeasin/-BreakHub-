@@ -1,0 +1,11 @@
+{
+  "provider": "kokoro",
+  "speed": "1.0",
+  "lines": [],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "80s synthwave arcade",
+    "blob": "",
+    "arc": ""
+  }
+}

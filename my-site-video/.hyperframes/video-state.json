@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "historyId": "18a6d59f-a3b9-4cd0-be54-97bb89c5ce44",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "AGENTS.md": {
+      "hash": "18bcca1593d1b29cd7442b3dc91d18ada440affb9b7acd577c1da57446f3d24f",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\18\\18bcca1593d1b29cd7442b3dc91d18ada440affb9b7acd577c1da57446f3d24f"
+    },
+    "CLAUDE.md": {
+      "hash": "18bcca1593d1b29cd7442b3dc91d18ada440affb9b7acd577c1da57446f3d24f",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\18\\18bcca1593d1b29cd7442b3dc91d18ada440affb9b7acd577c1da57446f3d24f"
+    },
+    "assets/figma-cursors.svg": {
+      "hash": "fc502bfd3a3068bdbcf9eae4e6db8d24961ade74c784f2874b087042c24dab2a",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\fc\\fc502bfd3a3068bdbcf9eae4e6db8d24961ade74c784f2874b087042c24dab2a"
+    },
+    "assets/figma-logo-pieces.svg": {
+      "hash": "33d1ccf5e60c6c6860ad0d3817bd1fa21a02e165c96319ee96a56f35b39aafd7",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\33\\33d1ccf5e60c6c6860ad0d3817bd1fa21a02e165c96319ee96a56f35b39aafd7"
+    },
+    "assets/figma-logo-pills.svg": {
+      "hash": "0260247a846428be258ffa69a70cb94cb03de3dd99de9cb30d5df54ae31638ba",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\02\\0260247a846428be258ffa69a70cb94cb03de3dd99de9cb30d5df54ae31638ba"
+    },
+    "compositions/scene1-logo-intro.html": {
+      "hash": "286cb47166409ff8e4568ce06a0c73b056bb843bfa46e0c70bdeff131d87a833",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\28\\286cb47166409ff8e4568ce06a0c73b056bb843bfa46e0c70bdeff131d87a833"
+    },
+    "compositions/scene2-4-canvas.html": {
+      "hash": "4e9ddf830440b5fefffe0deb78e39923cfeb1d09dcc6d9faea84a1604f5b3ca5",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\4e\\4e9ddf830440b5fefffe0deb78e39923cfeb1d09dcc6d9faea84a1604f5b3ca5"
+    },
+    "compositions/scene5-logo-outro.html": {
+      "hash": "2abf2a0e8c52b9539ec1efe0b6cb35bb6c2fff0237b5b5e154a1c3a9f53421f1",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\2a\\2abf2a0e8c52b9539ec1efe0b6cb35bb6c2fff0237b5b5e154a1c3a9f53421f1"
+    },
+    "hyperframes.json": {
+      "hash": "53dbce1e19aa713cbb12ee0bc4d206143b45ab15e6ffbfcaa8f69572d4d24d50",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\53\\53dbce1e19aa713cbb12ee0bc4d206143b45ab15e6ffbfcaa8f69572d4d24d50"
+    },
+    "hyperframes.lock.json": {
+      "hash": "cc4ee70b845e428621a15bbe54ebdf22c9c2497565685c9af5017fcceb2b3b2a",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\cc\\cc4ee70b845e428621a15bbe54ebdf22c9c2497565685c9af5017fcceb2b3b2a"
+    },
+    "index.html": {
+      "hash": "e66d18050fa0863f31a1da06ad8564aed7f09b3c7b9cd59e08ed56f3fecb024e",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\e6\\e66d18050fa0863f31a1da06ad8564aed7f09b3c7b9cd59e08ed56f3fecb024e"
+    },
+    "meta.json": {
+      "hash": "b329b6124a5f42c3f4a30e5776cee5002178b4f6c27692e5651ffa7a8c571bc7",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\b3\\b329b6124a5f42c3f4a30e5776cee5002178b4f6c27692e5651ffa7a8c571bc7"
+    },
+    "package.json": {
+      "hash": "d388ed5580f88636034b5b884b06c056713c1ff8c2610769a1b3b4b49fcf751e",
+      "content": "C:\\Users\\munim\\.cache\\hyperframes\\history\\18a6d59f-a3b9-4cd0-be54-97bb89c5ce44\\blobs\\d3\\d388ed5580f88636034b5b884b06c056713c1ff8c2610769a1b3b4b49fcf751e"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  }
+}
