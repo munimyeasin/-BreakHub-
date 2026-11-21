@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, VolumeX, AlertTriangle, ArrowLeft } from 'lucide-react';
 
 const TILE_COLORS: Record<number, { bg: string; text: string; border: string }> = {
   2: { bg: 'bg-[#EB7A7A]', text: 'text-white', border: 'border-black' },
@@ -20,6 +20,16 @@ const TILE_COLORS: Record<number, { bg: string; text: string; border: string }> 
 const COLS = 5;
 const ROWS = 8;
 
+interface Tile {
+  id: string;
+  val: number;
+  r: number;
+  c: number;
+  isNew?: boolean;
+  isMerging?: boolean;
+  isFalling?: boolean;
+}
+
 interface VerticalMergeGameProps {
   gameId?: string;
   onGameOver?: (score: number) => void;
@@ -29,6 +39,8 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
   const [board, setBoard] = useState<number[][]>(
     Array.from({ length: ROWS }, () => Array(COLS).fill(0))
   );
+  // Track visual metadata per tile for animations (key: `${r}-${c}`)
+  const [animatingTiles, setAnimatingTiles] = useState<Map<string, { isNew: boolean; isMerging: boolean; isFalling: boolean }>>(new Map());
   const [score, setScore] = useState<number>(0);
   const [highScore, setHighScore] = useState<number>(0);
   const [currentCol, setCurrentCol] = useState<number>(2);
@@ -97,7 +109,6 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
     return 8;
   };
 
-  // Save history for undo
   const saveStateForUndo = () => {
     setHistory(prev => [...prev.slice(-10), { board: board.map(r => [...r]), score }]);
   };
@@ -112,74 +123,117 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
     playSfx('undo');
   };
 
-  // Process merges recursively in a column
-  const processMerges = (currentBoard: number[][], col: number): { newBoard: number[][]; addedScore: number } => {
-    let b = currentBoard.map(r => [...r]);
+  // Comprehensive gravity & 4-way matching/merging (Vertical & Horizontal)
+  const processBoardAndMerges = (initialBoard: number[][]): { newBoard: number[][]; addedScore: number; mergedCoords: string[]; fallingCoords: string[] } => {
+    let b = initialBoard.map(r => [...r]);
     let addedScore = 0;
-    let mergedAny = false;
+    let mergedCoordsSet = new Set<string>();
+    let fallingCoordsSet = new Set<string>();
 
-    // Gravity pull down first
-    for (let r = ROWS - 1; r >= 0; r--) {
-      if (b[r][col] === 0) {
-        // find lowest non-zero above
-        let foundRow = -1;
-        for (let above = r - 1; above >= 0; above--) {
-          if (b[above][col] !== 0) {
-            foundRow = above;
-            break;
+    // 1. Apply Vertical Gravity per column (falling down to lowest empty slot)
+    for (let c = 0; c < COLS; c++) {
+      for (let r = ROWS - 1; r >= 0; r--) {
+        if (b[r][c] === 0) {
+          let foundRow = -1;
+          for (let above = r - 1; above >= 0; above--) {
+            if (b[above][c] !== 0) {
+              foundRow = above;
+              break;
+            }
+          }
+          if (foundRow !== -1) {
+            b[r][c] = b[foundRow][c];
+            b[foundRow][c] = 0;
+            fallingCoordsSet.add(`${r}-${c}`);
           }
         }
-        if (foundRow !== -1) {
-          b[r][col] = b[foundRow][col];
-          b[foundRow][col] = 0;
+      }
+    }
+
+    let hasMergedInPass = false;
+
+    // 2. Check Horizontal adjacent matching merges (left to right per row)
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS - 1; c++) {
+        const val1 = b[r][c];
+        const val2 = b[r][c + 1];
+        if (val1 !== 0 && val1 === val2) {
+          const newVal = val1 * 2;
+          // Merge into the right cell (or left cell — let's merge into right and clear left, or vice versa)
+          // Standard merge: right cell takes newVal, left becomes 0
+          b[r][c] = 0;
+          b[r][c + 1] = newVal;
+          addedScore += newVal;
+          mergedCoordsSet.add(`${r}-${c + 1}`);
+          hasMergedInPass = true;
+          playSfx('merge');
+
+          const scoreId = Date.now() + Math.random();
+          setFloatingScores(prev => [...prev, { id: scoreId, text: `+${newVal}`, x: c + 1, y: r }]);
+          setTimeout(() => {
+            setFloatingScores(prev => prev.filter(item => item.id !== scoreId));
+          }, 800);
         }
       }
     }
 
-    // Check adjacent merges from bottom up
-    for (let r = ROWS - 1; r > 0; r--) {
-      const current = b[r][col];
-      const above = b[r - 1][col];
-      if (current !== 0 && current === above) {
-        const newVal = current * 2;
-        b[r][col] = newVal;
-        b[r - 1][col] = 0;
-        addedScore += newVal;
-        mergedAny = true;
-        playSfx('merge');
+    // 3. Check Vertical adjacent matching merges (bottom to top per column)
+    for (let c = 0; c < COLS; c++) {
+      for (let r = ROWS - 1; r > 0; r--) {
+        const val1 = b[r][c];
+        const val2 = b[r - 1][c];
+        if (val1 !== 0 && val1 === val2) {
+          const newVal = val1 * 2;
+          b[r][c] = newVal;
+          b[r - 1][c] = 0;
+          addedScore += newVal;
+          mergedCoordsSet.add(`${r}-${c}`);
+          hasMergedInPass = true;
+          playSfx('merge');
 
-        // Floating score popup
-        const scoreId = Date.now() + Math.random();
-        setFloatingScores(prev => [...prev, { id: scoreId, text: `+${newVal}`, x: col, y: r }]);
-        setTimeout(() => {
-          setFloatingScores(prev => prev.filter(item => item.id !== scoreId));
-        }, 800);
-
-        // Cascade down again after merge
-        const cascadeResult = processMerges(b, col);
-        b = cascadeResult.newBoard;
-        addedScore += cascadeResult.addedScore;
-        break;
+          const scoreId = Date.now() + Math.random();
+          setFloatingScores(prev => [...prev, { id: scoreId, text: `+${newVal}`, x: c, y: r }]);
+          setTimeout(() => {
+            setFloatingScores(prev => prev.filter(item => item.id !== scoreId));
+          }, 800);
+        }
       }
     }
 
-    return { newBoard: b, addedScore };
+    // If any horizontal or vertical merge occurred, run gravity and re-check recursively (cascade)
+    if (hasMergedInfo(hasMergedInPass)) {
+      const cascade = processBoardAndMerges(b);
+      return {
+        newBoard: cascade.newBoard,
+        addedScore: addedScore + cascade.addedScore,
+        mergedCoords: [...Array.from(mergedCoordsSet), ...cascade.mergedCoords],
+        fallingCoords: [...Array.from(fallingCoordsSet), ...cascade.fallingCoords]
+      };
+    }
+
+    return {
+      newBoard: b,
+      addedScore,
+      mergedCoords: Array.from(mergedCoordsSet),
+      fallingCoords: Array.from(fallingCoordsSet)
+    };
   };
+
+  function hasMergedInfo(val: boolean) {
+    return val;
+  }
 
   const dropTile = useCallback((colIndex: number) => {
     if (gameOver) return;
 
-    // Check if column is full
     if (board[0][colIndex] !== 0) {
-      // Column is full
-      return;
+      return; // Column full
     }
 
     saveStateForUndo();
     playSfx('drop');
 
     let newBoard = board.map(r => [...r]);
-    // Find lowest empty row in this column
     let targetRow = -1;
     for (let r = ROWS - 1; r >= 0; r--) {
       if (newBoard[r][colIndex] === 0) {
@@ -192,10 +246,11 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
       newBoard[targetRow][colIndex] = nextTile;
     }
 
-    // Process merges in this column
-    const { newBoard: mergedBoard, addedScore } = processMerges(newBoard, colIndex);
-    newBoard = mergedBoard;
+    // Run board processing (gravity + vertical & horizontal merges)
+    const result = processBoardAndMerges(newBoard);
+    newBoard = result.newBoard;
 
+    const addedScore = result.addedScore;
     const newScore = score + addedScore + (addedScore > 0 ? 10 * (combo + 1) : 0);
     if (addedScore > 0) {
       setCombo(prev => prev + 1);
@@ -211,22 +266,37 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
       } catch {}
     }
 
+    // Set animation states
+    const newAnimMap = new Map<string, { isNew: boolean; isMerging: boolean; isFalling: boolean }>();
+    if (targetRow !== -1) {
+      newAnimMap.set(`${targetRow}-${colIndex}`, { isNew: true, isMerging: false, isFalling: false });
+    }
+    result.mergedCoords.forEach(coord => {
+      const existing = newAnimMap.get(coord) || { isNew: false, isMerging: false, isFalling: false };
+      newAnimMap.set(coord, { ...existing, isMerging: true });
+    });
+    result.fallingCoords.forEach(coord => {
+      const existing = newAnimMap.get(coord) || { isNew: false, isMerging: false, isFalling: false };
+      newAnimMap.set(coord, { ...existing, isFalling: true });
+    });
+    setAnimatingTiles(newAnimMap);
+
+    // Clear animations after 400ms
+    setTimeout(() => {
+      setAnimatingTiles(new Map());
+    }, 400);
+
     setBoard(newBoard);
     setNextTile(spawnRandomTile());
 
-    // Check Game Over (top row has any non-zero value in any column)
+    // Check Game Over
     let isOver = false;
-    for (let c = 0; c < COLS; c++) {
-      if (newBoard[0][c] !== 0) {
-        // Check if all columns are full or no moves
-        let fullCols = 0;
-        for (let colCheck = 0; colCheck < COLS; colCheck++) {
-          if (newBoard[0][colCheck] !== 0) fullCols++;
-        }
-        if (fullCols === COLS) {
-          isOver = true;
-        }
-      }
+    let fullCols = 0;
+    for (let cCheck = 0; cCheck < COLS; cCheck++) {
+      if (newBoard[0][cCheck] !== 0) fullCols++;
+    }
+    if (fullCols === COLS) {
+      isOver = true;
     }
 
     if (isOver) {
@@ -262,6 +332,7 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
     setCombo(0);
     setUndoCharges(3);
     setHistory([]);
+    setAnimatingTiles(new Map());
   };
 
   return (
@@ -358,19 +429,27 @@ export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeG
             row.map((val, cIndex) => {
               const cfg = TILE_COLORS[val];
               const isTopRow = rIndex === 0;
+              const animKey = `${rIndex}-${cIndex}`;
+              const anim = animatingTiles.get(animKey);
+
+              let animClass = '';
+              if (anim?.isMerging) animClass = 'animate-ping-once scale-110 ring-4 ring-portal-yellow';
+              else if (anim?.isFalling) animClass = 'animate-drop-bounce';
+              else if (anim?.isNew) animClass = 'animate-scale-in';
+
               return (
                 <div
-                  key={`${rIndex}-${cIndex}`}
+                  key={animKey}
                   onClick={() => {
                     setCurrentCol(cIndex);
                     dropTile(cIndex);
                   }}
-                  className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 border-black flex items-center justify-center font-black text-base sm:text-lg transition-all cursor-pointer ${
+                  className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 border-black flex items-center justify-center font-black text-base sm:text-lg transition-transform cursor-pointer ${
                     val === 0
                       ? isTopRow
                         ? 'bg-[#181C24]/60 hover:bg-[#252A35]'
                         : 'bg-[#151921] hover:bg-[#1E222B]'
-                      : `${cfg?.bg} ${cfg?.text} shadow-neo-sm hover:scale-105`
+                      : `${cfg?.bg} ${cfg?.text} shadow-neo-sm hover:scale-105 ${animClass}`
                   }`}
                 >
                   {val > 0 ? val : ''}
