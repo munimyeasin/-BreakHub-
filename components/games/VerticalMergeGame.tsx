@@ -1,833 +1,434 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  Play,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-  Grid3X3,
-  Trophy,
-  Flame,
-  Undo2,
-  ArrowDown,
-  ChevronRight,
-  ChevronLeft,
-  ArrowUp,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpDown,
-} from 'lucide-react';
+import { Trophy, RotateCcw, Volume2, VolumeX, Sparkles, AlertTriangle, ArrowLeft } from 'lucide-react';
 
-// Tile color configuration matching the design spec
-const TILE_CONFIG: Record<number, {
-  bg: string;
-  text: string;
-  border: string;
-  glow?: string;
-  scale?: string;
-  colorName: string;
-}> = {
-  2: {
-    bg: 'bg-[#160b20]',
-    text: 'text-slate-200',
-    border: 'border-black',
-    colorName: 'coral/salmon',
-    scale: 'scale-95'
-  },
-  4: {
-    bg: 'bg-[#063d4a]',
-    text: 'text-cyan-200',
-    border: 'border-black',
-    colorName: 'purple/lavender',
-    scale: 'scale-95'
-  },
-  8: {
-    bg: 'bg-blue-950/90',
-    text: 'text-blue-300',
-    border: 'border-blue-600/70',
-    colorName: 'sky-blue',
-    scale: 'scale-95'
-  },
-  16: {
-    bg: 'bg-indigo-950/90',
-    text: 'text-indigo-300',
-    border: 'border-indigo-500/80',
-    colorName: 'royal-blue',
-    scale: 'scale-95'
-  },
-  32: {
-    bg: 'bg-purple-950/90',
-    text: 'text-purple-300',
-    border: 'border-purple-500',
-    colorName: 'sky-blue',
-    scale: 'scale-95'
-  },
-  64: {
-    bg: 'bg-fuchsia-950/90',
-    text: 'text-fuchsia-200',
-    border: 'border-fuchsia-500',
-    colorName: 'peach',
-    scale: 'scale-95'
-  },
-  128: {
-    bg: 'bg-rose-950/90',
-    text: 'text-rose-200',
-    border: 'border-rose-500',
-    colorName: 'royal-blue',
-    scale: 'scale-95'
-  },
-  256: {
-    bg: 'bg-amber-950/90',
-    text: 'text-amber-200',
-    border: 'border-amber-500',
-    colorName: 'warm-peach',
-    scale: 'scale-95'
-  },
-  512: {
-    bg: 'bg-yellow-950/95',
-    text: 'text-yellow-200',
-    border: 'border-yellow-400',
-    colorName: 'teal-green',
-    scale: 'scale-95'
-  },
-  1024: {
-    bg: 'bg-emerald-950/95',
-    text: 'text-emerald-200',
-    border: 'border-emerald-400',
-    colorName: 'emerald',
-    scale: 'scale-95'
-  },
-  2048: {
-    bg: 'bg-gradient-to-tr from-cyan-500 via-yellow-400 to-amber-500',
-    text: 'text-black font-black',
-    border: 'border-white',
-    colorName: 'gold',
-    scale: 'scale-95',
-    glow: 'shadow-[0_0_30px_rgba(250,204,21,0.9)] animate-pulse'
-  }
+const TILE_COLORS: Record<number, { bg: string; text: string; border: string }> = {
+  2: { bg: 'bg-[#EB7A7A]', text: 'text-white', border: 'border-black' },
+  4: { bg: 'bg-[#EB9A6D]', text: 'text-white', border: 'border-black' },
+  8: { bg: 'bg-[#F7B519]', text: 'text-black', border: 'border-black' },
+  16: { bg: 'bg-[#59B85C]', text: 'text-white', border: 'border-black' },
+  32: { bg: 'bg-[#4DA6E8]', text: 'text-white', border: 'border-black' },
+  64: { bg: 'bg-[#9B6CE0]', text: 'text-white', border: 'border-black' },
+  128: { bg: 'bg-[#E06CB3]', text: 'text-white', border: 'border-black' },
+  256: { bg: 'bg-[#1ABC9C]', text: 'text-white', border: 'border-black' },
+  512: { bg: 'bg-[#E67E22]', text: 'text-white', border: 'border-black' },
+  1024: { bg: 'bg-[#9B59B6]', text: 'text-white', border: 'border-black' },
+  2048: { bg: 'bg-[#F1C40F]', text: 'text-black', border: 'border-black' },
 };
 
-const BOARD_WIDTH = 5;
-const BOARD_HEIGHT = 10;
-const DROP_SPEED = 0.08; // seconds per frame for faster drop
-const COMBINE_DELAY = 0.05; // seconds to wait before checking for combines
+const COLS = 5;
+const ROWS = 8;
 
-export interface VerticalMergeGameProps {
+interface VerticalMergeGameProps {
   gameId?: string;
   onGameOver?: (score: number) => void;
 }
 
 export default function VerticalMergeGame({ gameId, onGameOver }: VerticalMergeGameProps) {
-  const [board, setBoard] = useState<number[][]>([]);
-  const [score, setScore] = useState(0);
-  const [highTile, setHighTile] = useState(0);
-  const [nextTile, setNextTile] = useState(4); // Start with '4' as initial tile
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [hasWon, setHasWon] = useState(false);
-  const [dangerSeconds, setDangerSeconds] = useState(0);
-  const [comboMultiplier, setComboMultiplier] = useState(1);
-  const [lastMoveTime, setLastMoveTime] = useState(0);
-  const [lastCombineTime, setLastCombineTime] = useState(0);
-  const [lastSpawnTime, setLastSpawnTime] = useState(0);
-  const [particles, setParticles] = useState<any[]>([]);
-  const [floatingTexts, setFloatingTexts] = useState<any[]>([]);
-  const [isDangerActive, setIsDangerActive] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>(0);
-  const lastFrameTimeRef = useRef(0);
-  const dangerTimerRef = useRef(0);
-  const comboTimerRef = useRef(0);
-  const lastMoveRef = useRef({ x: 0, y: 0, time: 0 });
-  const spawnPositionRef = useRef({ x: 2, y: -1, tile: 4 });
+  const [board, setBoard] = useState<number[][]>(
+    Array.from({ length: ROWS }, () => Array(COLS).fill(0))
+  );
+  const [score, setScore] = useState<number>(0);
+  const [highScore, setHighScore] = useState<number>(0);
+  const [currentCol, setCurrentCol] = useState<number>(2);
+  const [nextTile, setNextTile] = useState<number>(2);
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [combo, setCombo] = useState<number>(0);
+  const [undoCharges, setUndoCharges] = useState<number>(3);
+  const [history, setHistory] = useState<{ board: number[][]; score: number }[]>([]);
+  const [floatingScores, setFloatingScores] = useState<{ id: number; text: string; x: number; y: number }[]>([]);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
-  // Initialize game
-  const initGame = () => {
-    setBoard([
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-    ]);
-    setScore(0);
-    setHighTile(4);
-    setIsPlaying(true);
-    setGameOver(false);
-    setHasWon(false);
-    setDangerSeconds(0);
-    setComboMultiplier(1);
-    setLastMoveTime(0);
-    setLastSpawnTime(0);
-    setParticles([]);
-    setFloatingTexts([]);
-    setIsDangerActive(false);
-  };
-
-  // Load best score
+  // Load high score
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('vertical_merge_best_score');
-      if (saved) setHighTile(parseInt(saved, 10) || 0);
+      const saved = localStorage.getItem('vertical_merge_high_score');
+      if (saved) setHighScore(parseInt(saved, 10));
     } catch {}
   }, []);
 
-  // Add new tile at top of column
-  const addTile = (column: number, value: number) => {
-    setBoard(prev => {
-      const newBoard = prev.map(row => [...row]);
-      newBoard[0][column] = value;
-      return newBoard;
-    });
+  // Play audio helper
+  const playSfx = (type: 'drop' | 'merge' | 'gameover' | 'undo') => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'drop') {
+        osc.frequency.setValueAtTime(300, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      } else if (type === 'merge') {
+        osc.frequency.setValueAtTime(400, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.15);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
+      } else if (type === 'gameover') {
+        osc.frequency.setValueAtTime(200, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } else if (type === 'undo') {
+        osc.frequency.setValueAtTime(500, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      }
+    } catch {}
   };
 
-  // Check for merges and handle them
-  const checkForCombines = useCallback(() => {
-    setTimeout(() => {
-      let hasCombined = false;
-      const newBoard = [...board];
+  const spawnRandomTile = (): number => {
+    const r = Math.random();
+    if (r < 0.65) return 2;
+    if (r < 0.90) return 4;
+    return 8;
+  };
 
-      // Check each column for adjacent matching tiles
-      for (let column = 0; column < BOARD_WIDTH; column++) {
-        for (let row = BOARD_HEIGHT - 1; row > 0; row--) {
-          if (newBoard[row][column] === 0) continue;
+  // Save history for undo
+  const saveStateForUndo = () => {
+    setHistory(prev => [...prev.slice(-10), { board: board.map(r => [...r]), score }]);
+  };
 
-          const currentValue = newBoard[row][column];
-          const aboveValue = newBoard[row - 1][column];
+  const handleUndo = () => {
+    if (undoCharges <= 0 || history.length === 0 || gameOver) return;
+    const lastState = history[history.length - 1];
+    setBoard(lastState.board);
+    setScore(lastState.score);
+    setHistory(prev => prev.slice(0, -1));
+    setUndoCharges(prev => prev - 1);
+    playSfx('undo');
+  };
 
-          if (aboveValue === currentValue && aboveValue > 0) {
-            // Merge tiles
-            newBoard[row][column] = 0;
-            newBoard[row - 1][column] = currentValue * 2;
+  // Process merges recursively in a column
+  const processMerges = (currentBoard: number[][], col: number): { newBoard: number[][]; addedScore: number } => {
+    let b = currentBoard.map(r => [...r]);
+    let addedScore = 0;
+    let mergedAny = false;
 
-            // Update high tile
-            if (currentValue * 2 > highTile) {
-              setHighTile(currentValue * 2);
-            }
-
-            // Add to score
-            const points = currentValue * 2 * comboMultiplier;
-            setScore(prev => prev + points);
-            setHighTile(currentValue * 2);
-
-            // Update combo multiplier
-            setComboMultiplier(prev => prev + 1);
-
-            // Create particles
-            const x = column * 80 + 40;
-            const y = (row - 1) * 80 + 40;
-
-            setParticles(prev => [
-              ...prev,
-              {
-                x,
-                y,
-                vx: (Math.random() - 0.5) * 2,
-                vy: -2,
-                radius: 4,
-                alpha: 1,
-                life: 0,
-                maxLife: 30,
-                type: 'sparkle'
-              }
-            ]);
-
-            // Create floating text
-            setFloatingTexts(prev => [
-              ...prev,
-              {
-                text: `${points}`,
-                x,
-                y,
-                alpha: 1,
-                scale: 1.2,
-                life: 60,
-                speed: 1.5
-              }
-            ]);
-
-            hasCombined = true;
+    // Gravity pull down first
+    for (let r = ROWS - 1; r >= 0; r--) {
+      if (b[r][col] === 0) {
+        // find lowest non-zero above
+        let foundRow = -1;
+        for (let above = r - 1; above >= 0; above--) {
+          if (b[above][col] !== 0) {
+            foundRow = above;
+            break;
           }
         }
-      }
-
-      // Check for danger zone (top 2 rows)
-      const dangerZone = dangerSeconds > 0;
-      if (dangerZone) {
-        for (let column = 0; column < BOARD_WIDTH; column++) {
-          for (let row = 0; row < 2; row++) {
-            if (newBoard[row][column] > 0) {
-              setGameOver(true);
-              onGameOver?.(score);
-              return;
-            }
-          }
+        if (foundRow !== -1) {
+          b[r][col] = b[foundRow][col];
+          b[foundRow][col] = 0;
         }
-      }
-
-      // Fill empty spaces
-      for (let column = 0; column < BOARD_WIDTH; column++) {
-        const nonZero = newBoard.map(row => row[column]).filter(val => val !== 0);
-        const newValues = new Array(BOARD_HEIGHT).fill(0);
-
-        // Fill from top down
-        for (let i = 0; i < nonZero.length; i++) {
-          newValues[i] = nonZero[i];
-        }
-
-        // Fill the rest with zeros from bottom up
-        for (let i = nonZero.length; i < BOARD_HEIGHT; i++) {
-            newValues[i] = 0;
-        }
-
-        // Update board
-        for (let row = 0; row < BOARD_HEIGHT; row++) {
-          newBoard[row][column] = newValues[row];
-        }
-      }
-
-      // Check if game over (no moves possible)
-      const canMove = board.flat().some(val => val > 0);
-
-      if (!gameOver && !canMove) {
-        setGameOver(true);
-        onGameOver?.(score);
-        return;
-      }
-
-      // Update board
-      setBoard(newBoard);
-
-      // Check for new combines after movement
-      if (hasCombined) {
-        checkForCombines();
-      }
-
-      // Spawn next tile
-      const spawnTime = Date.now();
-      if (spawnTime - lastSpawnTime > 1500) {
-        setNextTile(Math.random() < 0.7 ? 4 : 8); // 70% chance of 4, 30% chance of 8
-        setLastSpawnTime(spawnTime);
-      }
-
-      // Update particles
-      setParticles(prev => prev.map(p => ({
-        ...p,
-        life: p.life + 1,
-        alpha: p.life / p.maxLife > 0.9 ? 1 : p.alpha - 0.03
-      })).filter(p => p.life < p.maxLife));
-
-      // Update floating texts
-      setFloatingTexts(prev => prev.map(ft => ({
-        ...ft,
-        y: ft.y - 1.5,
-        alpha: ft.alpha - 0.02,
-        scale: ft.scale - 0.01
-      })).filter(ft => ft.alpha > 0.1));
-
-      // Update danger timer
-      if (dangerSeconds > 0) {
-        dangerTimerRef.current += 1 / 60;
-        setDangerSeconds(dangerTimerRef.current);
-        if (Math.floor(dangerTimerRef.current * 4) % 2 === 0) {
-          setIsDangerActive(true);
-        } else {
-          setIsDangerActive(false);
-        }
-        if (dangerTimerRef.current >= 3) {
-          setGameOver(true);
-          onGameOver?.(score);
-        }
-      }
-
-      // Schedule next frame
-      const frameNow = Date.now();
-      const deltaTime = (frameNow - lastFrameTimeRef.current) / 1000;
-      lastFrameTimeRef.current = frameNow;
-
-      if (isPlaying && !gameOver && !hasWon) {
-        animationRef.current = requestAnimationFrame(render);
-      }
-    }, COMBINE_DELAY * 1000);
-  }, [board, dangerSeconds, isDangerActive, score, highTile, comboMultiplier, isPlaying, gameOver, hasWon, onGameOver]);
-
-  // Handle player input for dropping tile
-  const handleDrop = useCallback((column: number) => {
-    if (!isPlaying || gameOver || hasWon) return;
-
-    const now = Date.now();
-    if (now - lastMoveTime < 100) return; // Prevent rapid drops
-
-    // Check if there's space to drop
-    const columnValues = board.map(row => row[column]).filter(val => val > 0);
-    const emptySpaces = BOARD_HEIGHT - columnValues.length;
-
-    if (emptySpaces === 0) return; // No space to drop
-
-    // Find where the tile should land
-    const landingRow = BOARD_HEIGHT - columnValues.length - 1;
-
-    if (landingRow >= 0) {
-      // Move the active tile to the landing position
-      const newBoard = board.map(row => [...row]);
-      newBoard[landingRow][column] = nextTile;
-
-      // Check for immediate merge
-      if (landingRow > 0 && newBoard[landingRow - 1][column] === nextTile) {
-        // Merge immediately
-        const mergedValue = nextTile * 2;
-        newBoard[landingRow][column] = 0;
-        newBoard[landingRow - 1][column] = mergedValue;
-
-        // Update score
-        const points = nextTile * 2 * comboMultiplier;
-        setScore(prev => prev + points);
-        if (mergedValue > highTile) {
-          setHighTile(mergedValue);
-        }
-
-        // Create merge particles and effects
-        const x = column * 80 + 40;
-        const y = (landingRow - 1) * 80 + 40;
-
-        setParticles(prev => [
-          ...prev,
-          {
-            x,
-            y,
-            vx: (Math.random() - 0.5) * 3,
-            vy: -3,
-            radius: 5,
-            alpha: 1,
-            life: 0,
-            maxLife: 45,
-            type: 'sparkle',
-            merge: true
-          }
-        ]);
-
-        setFloatingTexts(prev => [
-          ...prev,
-          {
-            text: `${points}`,
-            x,
-            y,
-            alpha: 1,
-            scale: 1.5,
-            life: 80,
-            speed: 2
-          }
-        ]);
-
-        // Update combo multiplier
-        setComboMultiplier(prev => prev + 1);
-      }
-
-      // Update board
-      setBoard(newBoard);
-      setLastMoveTime(now);
-      setLastCombineTime(now);
-
-      // Check for game over conditions
-      const isGameOverState = board.flat().some(val => val === 0) &&
-                             columnValues.length === BOARD_HEIGHT;
-
-      if (isGameOverState) {
-        setGameOver(true);
-        onGameOver?.(score);
       }
     }
-  }, [nextTile, isPlaying, gameOver, hasWon, score, comboMultiplier]);
 
-  // Handle column selection
-  const handleSelectColumn = (column: number) => {
-    if (!isPlaying || gameOver || hasWon) return;
+    // Check adjacent merges from bottom up
+    for (let r = ROWS - 1; r > 0; r--) {
+      const current = b[r][col];
+      const above = b[r - 1][col];
+      if (current !== 0 && current === above) {
+        const newVal = current * 2;
+        b[r][col] = newVal;
+        b[r - 1][col] = 0;
+        addedScore += newVal;
+        mergedAny = true;
+        playSfx('merge');
 
-    // Set the aiming position
-    spawnPositionRef.current = { x: column, y: -1, tile: nextTile };
+        // Floating score popup
+        const scoreId = Date.now() + Math.random();
+        setFloatingScores(prev => [...prev, { id: scoreId, text: `+${newVal}`, x: col, y: r }]);
+        setTimeout(() => {
+          setFloatingScores(prev => prev.filter(item => item.id !== scoreId));
+        }, 800);
 
-    // Move the active tile to the selected column
-    const newBoard = board.map(row => [...row]);
-    newBoard[0][column] = nextTile;
-
-    // Check if there's space to drop
-    const columnValues = newBoard.map(row => row[column]).filter(val => val > 0);
-    const emptySpaces = BOARD_HEIGHT - columnValues.length;
-
-    if (emptySpaces > 0) {
-      // Drop the tile
-      const dropRow = BOARD_HEIGHT - columnValues.length - 1;
-      if (dropRow >= 0) {
-        newBoard[dropRow][column] = nextTile;
-        newBoard[0][column] = 0; // Clear top
+        // Cascade down again after merge
+        const cascadeResult = processMerges(b, col);
+        b = cascadeResult.newBoard;
+        addedScore += cascadeResult.addedScore;
+        break;
       }
+    }
+
+    return { newBoard: b, addedScore };
+  };
+
+  const dropTile = useCallback((colIndex: number) => {
+    if (gameOver) return;
+
+    // Check if column is full
+    if (board[0][colIndex] !== 0) {
+      // Column is full
+      return;
+    }
+
+    saveStateForUndo();
+    playSfx('drop');
+
+    let newBoard = board.map(r => [...r]);
+    // Find lowest empty row in this column
+    let targetRow = -1;
+    for (let r = ROWS - 1; r >= 0; r--) {
+      if (newBoard[r][colIndex] === 0) {
+        targetRow = r;
+        break;
+      }
+    }
+
+    if (targetRow !== -1) {
+      newBoard[targetRow][colIndex] = nextTile;
+    }
+
+    // Process merges in this column
+    const { newBoard: mergedBoard, addedScore } = processMerges(newBoard, colIndex);
+    newBoard = mergedBoard;
+
+    const newScore = score + addedScore + (addedScore > 0 ? 10 * (combo + 1) : 0);
+    if (addedScore > 0) {
+      setCombo(prev => prev + 1);
+    } else {
+      setCombo(0);
+    }
+
+    setScore(newScore);
+    if (newScore > highScore) {
+      setHighScore(newScore);
+      try {
+        localStorage.setItem('vertical_merge_high_score', newScore.toString());
+      } catch {}
     }
 
     setBoard(newBoard);
-    setLastMoveTime(Date.now());
-  };
+    setNextTile(spawnRandomTile());
 
-  // Spawn next tile at the top of the column
-  const spawnNextTile = useCallback(() => {
-    if (!isPlaying || gameOver || hasWon) return;
-
-    const column = spawnPositionRef.current.x;
-    const row = spawnPositionRef.current.y + 1;
-
-    if (row >= 0 && row < BOARD_HEIGHT) {
-      const newBoard = board.map(row => [...row]);
-      newBoard[row][column] = nextTile;
-
-      setBoard(newBoard);
-      setLastSpawnTime(Date.now());
-    }
-
-    // Set new next tile
-    setNextTile(Math.random() < 0.7 ? 4 : 8); // 70% chance of 4, 30% chance of 8
-  }, [isPlaying, gameOver, hasWon, nextTile]);
-
-  // Game loop
-  const render = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    if (canvas.width !== BOARD_WIDTH * 80 * dpr || canvas.height !== BOARD_HEIGHT * 80 * dpr) {
-      canvas.width = BOARD_WIDTH * 80 * dpr;
-      canvas.height = BOARD_HEIGHT * 80 * dpr;
-    }
-
-    ctx.resetTransform();
-    ctx.scale(dpr, dpr);
-
-    // Draw background
-    ctx.fillStyle = '#0a0618';
-    ctx.fillRect(0, 0, BOARD_WIDTH * 80, BOARD_HEIGHT * 80);
-
-    // Draw grid lines
-    ctx.strokeStyle = '#1a103c';
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= BOARD_WIDTH * 80; x += 80) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, BOARD_HEIGHT * 80);
-      ctx.stroke();
-    }
-    for (let y = 0; y <= BOARD_HEIGHT * 80; y += 80) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(BOARD_WIDTH * 80, y);
-      ctx.stroke();
-    }
-
-    // Draw container borders
-    ctx.fillStyle = '#05020f';
-    ctx.fillRect(0, 0, BOARD_WIDTH * 80, BOARD_HEIGHT * 80);
-    ctx.fillRect(0, BOARD_HEIGHT * 80, BOARD_WIDTH * 80, 0);
-
-    // Draw column guides
-    for (let column = 0; column < BOARD_WIDTH; column++) {
-      ctx.strokeStyle = '#414750';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(column * 80 + 40, 0);
-      ctx.lineTo(column * 80 + 40, BOARD_HEIGHT * 80);
-      ctx.stroke();
-    }
-
-    // Draw danger zone glow
-    if (isDangerActive) {
-      ctx.save();
-      ctx.setLineDash([8, 6]);
-      ctx.strokeStyle = `rgba(255, 0, 85, 0.6)`;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(0, 2 * 80);
-      ctx.lineTo(BOARD_WIDTH * 80, 2 * 80);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    // Draw board tiles
-    for (let row = 0; row < BOARD_HEIGHT; row++) {
-      for (let column = 0; column < BOARD_WIDTH; column++) {
-        const value = board[row][column];
-        if (value > 0) {
-          const config = TILE_CONFIG[value];
-
-          // Draw tile
-          ctx.fillStyle = config.bg;
-          ctx.fillRect(column * 80 + 5, row * 80 + 5, 70, 70);
-
-          ctx.fillStyle = config.text;
-          ctx.font = '48px "Segoe UI", sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-
-          // Add glow effect
-          if (config.glow) {
-            ctx.shadowColor = config.glow.split('(')[1].split(',')[0].split(')')[0].trim() as unknown as string;
-            ctx.shadowBlur = parseInt(config.glow.split('(')[1].split(',')[1].split(')')[0].split(',')[1].trim()) || 5;
-          }
-
-          ctx.fillText(
-            String(value),
-            column * 80 + 40,
-            row * 80 + 40
-          );
+    // Check Game Over (top row has any non-zero value in any column)
+    let isOver = false;
+    for (let c = 0; c < COLS; c++) {
+      if (newBoard[0][c] !== 0) {
+        // Check if all columns are full or no moves
+        let fullCols = 0;
+        for (let colCheck = 0; colCheck < COLS; colCheck++) {
+          if (newBoard[0][colCheck] !== 0) fullCols++;
+        }
+        if (fullCols === COLS) {
+          isOver = true;
         }
       }
     }
 
-    // Draw active tile
-    if (spawnPositionRef.current.y >= -1) {
-      const { x, y, tile } = spawnPositionRef.current;
-      const column = x;
-      const row = Math.floor(y) + 1;
-
-      if (row >= 0 && row < BOARD_HEIGHT) {
-        const config = TILE_CONFIG[tile];
-
-        // Draw tile with animation
-        ctx.fillStyle = config.bg;
-        ctx.fillRect(column * 80 + 5, row * 80 + 5, 70, 70);
-
-        ctx.fillStyle = config.text;
-        ctx.font = '48px "Segoe UI", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(
-          String(tile),
-          column * 80 + 40,
-          row * 80 + 40
-        );
-
-        // Add glow effect
-        if (config.glow) {
-          ctx.shadowColor = config.glow.split('(')[1].split(',')[0].split(')')[0].trim() as unknown as string;
-          ctx.shadowBlur = parseInt(config.glow.split('(')[1].split(',')[1].split(')')[0].split(',')[1].trim()) || 5;
-        }
-      }
+    if (isOver) {
+      setGameOver(true);
+      playSfx('gameover');
+      onGameOver?.(newScore);
     }
+  }, [board, nextTile, score, combo, highScore, gameOver, history, undoCharges, onGameOver]);
 
-    // Draw particles
-    particles.forEach(p => {
-      ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    // Draw floating texts
-    floatingTexts.forEach(ft => {
-      ctx.fillStyle = `rgba(255, 255, 255, ${ft.alpha})`;
-      ctx.font = 'bold 24px "Segoe UI", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(ft.text, ft.x, ft.y);
-    });
-
-    // Draw danger zone
-    ctx.save();
-    ctx.setLineDash([8, 6]);
-    ctx.strokeStyle = isDangerActive
-      ? `rgba(255, 0, 85, 0.7)`
-      : `rgba(255, 0, 85, 0.4)`;
-    ctx.lineWidth = isDangerActive ? 3 : 2;
-    ctx.beginPath();
-    ctx.moveTo(0, 2 * 80);
-    ctx.lineTo(BOARD_WIDTH * 80, 2 * 80);
-    ctx.stroke();
-    ctx.restore();
-
-    // Schedule next frame
-    animationRef.current = requestAnimationFrame(render);
-  }, [board, isDangerActive, score, highTile, comboMultiplier, isPlaying, gameOver, hasWon, onGameOver, particles, floatingTexts]);
-
-  // Handle keyboard controls
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isPlaying || gameOver || hasWon) return;
-
-      switch (e.key) {
-        case 'ArrowLeft':
-        case 'a':
-        case 'A':
-          handleSelectColumn((spawnPositionRef.current.x - 1 + BOARD_WIDTH) % BOARD_WIDTH);
-          break;
-        case 'ArrowRight':
-        case 'd':
-        case 'D':
-          handleSelectColumn((spawnPositionRef.current.x + 1) % BOARD_WIDTH);
-          break;
-        case 'ArrowUp':
-        case 'w':
-        case 'W':
-          handleDrop(spawnPositionRef.current.x);
-          break;
-        case 'ArrowDown':
-        case 's':
-        case 'S':
-          handleDrop(spawnPositionRef.current.x);
-          break;
+      if (gameOver) return;
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        setCurrentCol(prev => Math.max(0, prev - 1));
+      } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        setCurrentCol(prev => Math.min(COLS - 1, prev + 1));
+      } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === ' ') {
+        e.preventDefault();
+        dropTile(currentCol);
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, gameOver, hasWon, handleSelectColumn, handleDrop]);
+  }, [currentCol, dropTile, gameOver]);
 
-  // Auto-drop functionality
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isPlaying && !gameOver && !hasWon && lastMoveTime > 1000) {
-        // Auto-drop if no input for a while
-        const column = spawnPositionRef.current.x;
-        handleDrop(column);
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [isPlaying, gameOver, hasWon, handleDrop, lastMoveTime]);
-
-  // Danger zone timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (dangerSeconds > 0) {
-        dangerTimerRef.current += 1 / 60;
-        setDangerSeconds(dangerTimerRef.current);
-        if (dangerTimerRef.current >= 3) {
-          setGameOver(true);
-          onGameOver?.(score);
-        }
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [dangerSeconds]);
-
-  // Reset game
-  useEffect(() => {
-    const resetGame = () => {
-      initGame();
-      setNextTile(4);
-    };
-
-    // Listen for game over
-    if (gameOver && !hasWon) {
-      setTimeout(resetGame, 3000);
-    }
-  }, [gameOver, hasWon, initGame]);
+  const restartGame = () => {
+    setBoard(Array.from({ length: ROWS }, () => Array(COLS).fill(0)));
+    setScore(0);
+    setGameOver(false);
+    setCurrentCol(2);
+    setNextTile(2);
+    setCombo(0);
+    setUndoCharges(3);
+    setHistory([]);
+  };
 
   return (
-    <div className="bg-[#333942] min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-[900px]">
-        {/* Top HUD Bar */}
-        <div className="flex justify-between items-center p-4 bg-[#1E2228] rounded-lg">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => window.history.back()}
-              className="w-10 h-10 rounded-full bg-[#8A6B73] text-white flex items-center justify-center"
-              aria-label="Back"
-            >
-              < ChevronLeft className="w-6 h-6" />
-            </button>
-
-            <div className="flex items-center space-x-2">
-              <div className="p-1 rounded-full bg-[#1E2228] text-sm text-[#9AA1AC] uppercase">
-                MEDIUM MODE
-              </div>
-              <div className="text-2xl font-bold text-white">
-                {score}
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="p-1 rounded-full bg-[#1E2228] text-sm text-[#9AA1AC] uppercase">
-                  TODAY
-                </div>
-                <div className="text-xl font-bold text-[#E5A93C]">
-                  22,835
-                </div>
-              </div>
-
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="w-10 h-10 rounded-full bg-[#8A6B73] text-white flex items-center justify-center"
-                aria-label="Restart"
-              >
-                < ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
+    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4 select-none font-sans text-white">
+      {/* Top Header Bar */}
+      <div className="w-full flex items-center justify-between bg-[#222831] border-2 border-black rounded-2xl p-3 mb-3 shadow-neo-sm">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-black uppercase text-portal-yellow tracking-wider">SCORE</span>
+          <span className="text-2xl font-black text-white font-mono">{score.toLocaleString()}</span>
         </div>
-
-        {/* Game Canvas */}
-        <div className="bg-[#3A3F47] rounded-xl border-[#262A30] p-2" style={{ aspectRatio: "1/1" }}>
-          <canvas
-            ref={canvasRef}
-            className="w-full h-full"
-          />
+        <div className="flex flex-col items-end">
+          <span className="text-[10px] font-black uppercase text-portal-cyan tracking-wider">BEST</span>
+          <span className="text-xl font-black text-portal-cyan font-mono">{highScore.toLocaleString()}</span>
         </div>
-
-        {/* Sub-header Action Row */}
-        <div className="flex justify-between items-center p-4 bg-[#1E2228] rounded-lg">
+        <div className="flex items-center gap-1.5">
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="rounded-lg bg-[#F2A91D] p-2 flex items-center justify-center"
-            aria-label="Undo"
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className="p-2 rounded-xl bg-[#393E46] hover:bg-portal-yellow hover:text-black border-2 border-black transition-all"
+            title="Toggle Audio"
           >
-            <RotateCcw className="w-6 h-6 text-[#333]" />
-            <span className="ml-2 text-sm text-white">1</span>
+            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-rose-400" />}
           </button>
+          <button
+            onClick={restartGame}
+            className="p-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white border-2 border-black transition-all shadow-neo-sm"
+            title="Restart Game"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
 
-          <div className="flex items-center space-x-2">
-            <div className="p-1 rounded-full bg-[#1E2228] text-sm text-[#9AA1AC] uppercase">
-              NEXT TILE
-            </div>
-            <div
-              className="w-16 h-16 rounded-lg bg-[#1E2228] p-1 border border-[#414750]"
-              style={{
-                backgroundColor: TILE_CONFIG[nextTile].bg,
-                borderRadius: '8px'
-              }}
-            >
-              <span
-                className="text-2xl font-bold text-white text-center"
-                style={{
-                  fontSize: '1.5rem',
-                  color: '#FFFFFF'
-                }}
-              >
-                {nextTile}
-              </span>
-            </div>
+      {/* Drop Preview Bar & Next Tile */}
+      <div className="w-full flex items-center justify-between bg-[#1E222B] border-2 border-black rounded-xl px-4 py-2 mb-3 shadow-neo-sm">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-black uppercase text-slate-300">NEXT TILE:</span>
+          <div className={`w-9 h-9 rounded-lg ${TILE_COLORS[nextTile]?.bg || 'bg-slate-700'} ${TILE_COLORS[nextTile]?.text || 'text-white'} border-2 border-black flex items-center justify-center font-black text-sm shadow-neo-sm animate-pulse`}>
+            {nextTile}
           </div>
         </div>
 
-        {/* Game Over Screen */}
+        <div className="flex items-center gap-2">
+          {combo > 1 && (
+            <span className="px-2 py-0.5 rounded-full bg-portal-pink text-black font-black text-xs uppercase animate-bounce border border-black">
+              {combo}x COMBO!
+            </span>
+          )}
+          <button
+            onClick={handleUndo}
+            disabled={undoCharges <= 0 || history.length === 0}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border-2 border-black font-black text-xs transition-all shadow-neo-sm ${
+              undoCharges > 0 && history.length > 0
+                ? 'bg-portal-yellow text-black hover:brightness-110 active:translate-x-0.5 active:translate-y-0.5'
+                : 'bg-slate-700 text-slate-400 opacity-50 cursor-not-allowed'
+            }`}
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>UNDO ({undoCharges})</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Drop Columns & Grid Container */}
+      <div className="relative bg-[#11141B] border-3 border-black rounded-2xl p-2 shadow-neo-lg overflow-hidden">
+        {/* Danger Line Indicator */}
+        <div className="absolute top-12 left-0 right-0 h-0.5 border-t-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-2">
+          <span className="text-[9px] font-black text-rose-500 bg-black/80 px-1 rounded uppercase">Danger Line</span>
+        </div>
+
+        {/* Drop Column Buttons Indicator Header */}
+        <div className="grid grid-cols-5 gap-1.5 mb-2">
+          {Array.from({ length: COLS }).map((_, cIndex) => (
+            <button
+              key={cIndex}
+              onClick={() => {
+                setCurrentCol(cIndex);
+                dropTile(cIndex);
+              }}
+              className={`h-10 rounded-xl border-2 border-black font-black text-sm flex flex-col items-center justify-center transition-all shadow-neo-sm ${
+                currentCol === cIndex
+                  ? 'bg-portal-cyan text-black scale-105 ring-2 ring-white'
+                  : 'bg-[#222831] text-slate-300 hover:bg-[#393E46]'
+              }`}
+              title={`Drop in column ${cIndex + 1}`}
+            >
+              <span>↓</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Game Grid */}
+        <div className="grid grid-cols-5 gap-1.5 bg-[#0A0D14] p-1.5 rounded-xl border-2 border-black">
+          {board.map((row, rIndex) =>
+            row.map((val, cIndex) => {
+              const cfg = TILE_COLORS[val];
+              const isTopRow = rIndex === 0;
+              return (
+                <div
+                  key={`${rIndex}-${cIndex}`}
+                  onClick={() => {
+                    setCurrentCol(cIndex);
+                    dropTile(cIndex);
+                  }}
+                  className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 border-black flex items-center justify-center font-black text-base sm:text-lg transition-all cursor-pointer ${
+                    val === 0
+                      ? isTopRow
+                        ? 'bg-[#181C24]/60 hover:bg-[#252A35]'
+                        : 'bg-[#151921] hover:bg-[#1E222B]'
+                      : `${cfg?.bg} ${cfg?.text} shadow-neo-sm hover:scale-105`
+                  }`}
+                >
+                  {val > 0 ? val : ''}
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Floating Scores Overlay */}
+        {floatingScores.map(item => (
+          <div
+            key={item.id}
+            className="absolute z-30 pointer-events-none text-portal-yellow font-black text-lg animate-fade-up"
+            style={{
+              left: `${item.x * 20 + 10}%`,
+              top: `${item.y * 11 + 20}%`,
+              textShadow: '0 2px 4px rgba(0,0,0,0.8)'
+            }}
+          >
+            {item.text}
+          </div>
+        ))}
+
+        {/* Game Over Modal Overlay */}
         {gameOver && (
-          <div className="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center">
-            <div className="text-center p-8 bg-[#1E2228] rounded-xl text-white">
-              <h1 className="text-4xl font-bold mb-4">GAME OVER</h1>
-              <p className="text-xl mb-6">
-                Final Score: {score}
-              </p>
-              <button
-                onClick={() => window.history.back()}
-                className="rounded-lg bg-[#8A6B73] text-white px-6 py-3 font-bold"
-              >
-                Play Again
-              </button>
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
+            <div className="w-16 h-16 rounded-2xl bg-rose-600 border-2 border-black flex items-center justify-center mb-3 shadow-neo-sm animate-bounce">
+              <AlertTriangle className="w-8 h-8 text-white" />
             </div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-wider mb-1">GRID OVERFLOW</h2>
+            <p className="text-slate-400 text-xs mb-4">The vertical chamber breached the danger line!</p>
+
+            <div className="bg-[#1E222B] border-2 border-black rounded-2xl p-4 w-full max-w-xs mb-5 shadow-neo-sm space-y-2">
+              <div className="flex justify-between text-xs font-bold text-slate-300">
+                <span>Final Score:</span>
+                <span className="text-portal-yellow font-mono text-sm">{score.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-xs font-bold text-slate-300">
+                <span>High Score:</span>
+                <span className="text-portal-cyan font-mono text-sm">{highScore.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <button
+              onClick={restartGame}
+              className="px-6 py-3 rounded-xl bg-portal-yellow text-black font-black text-sm border-2 border-black shadow-neo-lg hover:brightness-110 active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>PLAY AGAIN</span>
+            </button>
           </div>
         )}
+      </div>
+
+      {/* Controls Footer */}
+      <div className="w-full mt-3 p-3 bg-[#1E222B] border-2 border-black rounded-xl text-center text-[11px] text-slate-400 shadow-neo-sm">
+        <span className="font-black text-white">← / A</span> & <span className="font-black text-white">→ / D</span> to move column • <span className="font-black text-white">↓ / Space</span> to drop tile
       </div>
     </div>
   );
